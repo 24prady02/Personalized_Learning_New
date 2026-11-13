@@ -1,0 +1,208 @@
+{
+ "concept": "string_concatenation",
+ "label": "string_concatenation",
+ "graph_version": "3.9.8 (3.9.7 + one primary per misconception (S9c) and the four remaining sibling edges (S9b), 2026-11-04; listed in revision_3_9_8)",
+ "nodes": [
+  {
+   "id": "arithmetic_operators",
+   "kind": "concept",
+   "label": "arithmetic_operators"
+  },
+  {
+   "id": "char",
+   "kind": "concept",
+   "label": "char"
+  },
+  {
+   "id": "char_arithmetic",
+   "kind": "concept",
+   "label": "char_arithmetic"
+  },
+  {
+   "id": "escape_sequences",
+   "kind": "concept",
+   "label": "escape_sequences"
+  },
+  {
+   "id": "operator_precedence",
+   "kind": "concept",
+   "label": "operator_precedence"
+  },
+  {
+   "id": "string_concatenation",
+   "kind": "concept",
+   "label": "string_concatenation"
+  },
+  {
+   "id": "string_conversion",
+   "kind": "concept",
+   "label": "string_conversion"
+  },
+  {
+   "id": "string_type",
+   "kind": "concept",
+   "label": "string_type"
+  },
+  {
+   "id": "string_concatenation@L0",
+   "kind": "learning_level",
+   "label": "L0"
+  },
+  {
+   "id": "string_concatenation@L1",
+   "kind": "learning_level",
+   "label": "L1"
+  },
+  {
+   "id": "string_concatenation@L2",
+   "kind": "learning_level",
+   "label": "L2"
+  },
+  {
+   "id": "string_concatenation@L3",
+   "kind": "learning_level",
+   "label": "L3"
+  },
+  {
+   "id": "string_concatenation@L4",
+   "kind": "learning_level",
+   "label": "L4"
+  },
+  {
+   "id": "ArithmeticPlusPrecedes",
+   "kind": "misconception",
+   "label": "ArithmeticPlusPrecedes"
+  },
+  {
+   "id": "StringPlusLeftToRight",
+   "kind": "misconception",
+   "label": "StringPlusLeftToRight"
+  },
+  {
+   "id": "StringPlusStringifiesExpression",
+   "kind": "misconception",
+   "label": "StringPlusStringifiesExpression"
+  },
+  {
+   "id": "topic1.2.b",
+   "kind": "topic",
+   "label": "Characters and strings"
+  }
+ ],
+ "edges": [
+  {
+   "from": "topic1.2.b",
+   "to": "char",
+   "type": "contains",
+   "label": "The topic 'Characters and strings' introduces char."
+  },
+  {
+   "from": "topic1.2.b",
+   "to": "char_arithmetic",
+   "type": "contains",
+   "label": "The topic 'Characters and strings' introduces char_arithmetic."
+  },
+  {
+   "from": "topic1.2.b",
+   "to": "escape_sequences",
+   "type": "contains",
+   "label": "The topic 'Characters and strings' introduces escape_sequences."
+  },
+  {
+   "from": "topic1.2.b",
+   "to": "string_concatenation",
+   "type": "contains",
+   "label": "The topic 'Characters and strings' introduces string_concatenation."
+  },
+  {
+   "from": "topic1.2.b",
+   "to": "string_type",
+   "type": "contains",
+   "label": "The topic 'Characters and strings' introduces string_type."
+  },
+  {
+   "from": "string_concatenation",
+   "to": "string_concatenation@L0",
+   "type": "has_level",
+   "label": "[0] everyday_reading (E): In arithmetic, + always means 'add', and 'plus' combines quantities, so novices expect \"1\" + 2 to be 3. In Java, + with a String operand joins text end to end, and a chain of + is processed left to right, one operator at a time.\n[1] misconception (M) -> StringPlusStringifiesExpression: wrong rule: + with a String turns the whole other side into a string first. Right rule: The expression (a + b) is evaluated first, and its value is then turned into text and joined to s.\n[2] misconception (M) -> StringPlusLeftToRight: wrong rule: 2 + 3 + \"bc\" and \"bc\" + 2 + 3 give the same text. Right rule: + is evaluated left to right: 2 + 3 + \"bc\" is \"5bc\" but \"bc\" + 2 + 3 is \"bc23\".\n[3] inconsistent_trace (T) -> StringPlusStringifiesExpression: Points to LT (left to right, and each + adds or concatenates according to its operands at that moment). Applied unevenly, a student keeps adding numbers after a String has appeared, or concatenates before any String appears (1 + 2 + \"x\" as \"12x\"). (here mixing in: \"+ with a String turns the whole other side into a string first\")\n[4] misconception (M) -> ArithmeticPlusPrecedes: wrong rule: arithmetic + binds tighter than string-concatenation +. Right rule: Both uses of + have the same precedence and are evaluated left to right, so \"s\" + a + b joins a and then b as text; only \"s\" + (a + b) adds them first."
+  },
+  {
+   "from": "string_concatenation",
+   "to": "string_concatenation@L1",
+   "type": "has_level",
+   "label": "[0] names_the_element (N): String concatenation: the + operator with a String operand, which joins two values end to end into a new String.\n[1] states_the_rule (S): If either operand of + is a String, the other is converted to a String, and the result is a new String made of the first operand's characters followed by the second's."
+  },
+  {
+   "from": "string_concatenation",
+   "to": "string_concatenation@L2",
+   "type": "has_level",
+   "label": "[0] line_by_line_trace (LT): A chain of + is evaluated left to right, after any parenthesized parts. At each + the current operand types decide: two numbers are added, otherwise the values are concatenated.\n[1] output_prediction (OP): The result is a String: 2 + \"bc\" is \"2bc\", 2 + 3 + \"bc\" is \"5bc\", \"bc\" + 2 + 3 is \"bc23\", and \"bc\" + (2+3) is \"bc5\".\n[2] one_step_execution (OS): Concatenation creates a new String and changes no operand. A variable changes only if the result is assigned, as in ruler = ruler + i + ruler;."
+  },
+  {
+   "from": "string_concatenation",
+   "to": "string_concatenation@L3",
+   "type": "has_level",
+   "label": "[0] relation_to_neighbour (R): Concatenation always yields a String, even when one operand is a number, so its result cannot be used in arithmetic without parsing.\n[1] relation_to_neighbour (R): The non-String operand is converted to its printed form (int 99 to \"99\", double 1.0 to \"1.0\", char 'a' to \"a\") before joining.\n[2] relation_to_neighbour (R): + adds when both operands are numbers and concatenates when either operand is a String, converting the other operand to a String. It is left-associative, so 1 + 2 + \"3\" is \"33\" but \"1\" + 2 + 3 is \"123\".\n[3] purpose_of_the_whole (P): Concatenation builds output lines and labels from computed values (a + \" + \" + b + \" = \" + c). Repeated s = s + piece makes s a gatherer of text."
+  },
+  {
+   "from": "string_concatenation",
+   "to": "string_concatenation@L4",
+   "type": "has_level",
+   "label": "[0] predict_a_change (C) -> StringPlusStringifiesExpression: Parenthesizing numeric parts changes the result (\"sum \" + (a + b) adds before joining). Moving numbers before or after the first String changes whether they are added. Concatenating into a printf format string removes the separate argument printf needs.\n[1] transfer_to_a_new_program (X): Use + concatenation for simple output and labels, putting parentheses around any arithmetic inside. Use printf when numbers need formatting, and parse Strings before using them as numbers.\n[2] diagnose_an_error (D): rule broken: Once a String appears in a + chain, every later + concatenates. Kind: silent logic error. Trigger class: \"Sum: \" + a + b with numbers a and b prints both digit strings side by side (e.g. Sum: 23).\n[3] diagnose_an_error (D): rule broken: char + char is numeric addition, not concatenation. Kind: silent logic error. Trigger class: Joining two chars with + when no String is involved ('b' + 'c' prints 197).\n[4] diagnose_an_error (D): rule broken: printf needs its values as separate arguments matching the format specifiers. Kind: run-time exception. Trigger class: Concatenating the value into the format (printf(\"inches = %d\" + inch)): MissingFormatArgumentException."
+  },
+  {
+   "from": "operator_precedence",
+   "to": "ArithmeticPlusPrecedes",
+   "type": "misconception",
+   "label": "wrong: In \"s\" + a + b, the numbers a and b are added first and their sum is joined to s. | right: Both uses of + have the same precedence and are evaluated left to right, so \"s\" + a + b joins a and then b as text; only \"s\" + (a + b) adds them first."
+  },
+  {
+   "from": "operator_precedence",
+   "to": "StringPlusLeftToRight",
+   "type": "misconception",
+   "label": "wrong: 2 + 3 + \"bc\" and \"bc\" + 2 + 3 give the same text. | right: + is evaluated left to right: 2 + 3 + \"bc\" is \"5bc\" but \"bc\" + 2 + 3 is \"bc23\"."
+  },
+  {
+   "from": "string_concatenation",
+   "to": "ArithmeticPlusPrecedes",
+   "type": "misconception",
+   "label": "wrong: In \"s\" + a + b, the numbers a and b are added first and their sum is joined to s. | right: Both uses of + have the same precedence and are evaluated left to right, so \"s\" + a + b joins a and then b as text; only \"s\" + (a + b) adds them first."
+  },
+  {
+   "from": "string_concatenation",
+   "to": "StringPlusLeftToRight",
+   "type": "misconception",
+   "label": "wrong: 2 + 3 + \"bc\" and \"bc\" + 2 + 3 give the same text. | right: + is evaluated left to right: 2 + 3 + \"bc\" is \"5bc\" but \"bc\" + 2 + 3 is \"bc23\"."
+  },
+  {
+   "from": "string_concatenation",
+   "to": "StringPlusStringifiesExpression",
+   "type": "misconception",
+   "label": "wrong: In \"s\" + (a + b), the text a + b is joined to s instead of its value. | right: The expression (a + b) is evaluated first, and its value is then turned into text and joined to s."
+  },
+  {
+   "from": "string_conversion",
+   "to": "StringPlusLeftToRight",
+   "type": "misconception",
+   "label": "wrong: 2 + 3 + \"bc\" and \"bc\" + 2 + 3 give the same text. | right: + is evaluated left to right: 2 + 3 + \"bc\" is \"5bc\" but \"bc\" + 2 + 3 is \"bc23\"."
+  },
+  {
+   "from": "string_concatenation",
+   "to": "arithmetic_operators",
+   "type": "parallel",
+   "label": "+ adds when both operands are numbers and concatenates when either operand is a String, converting the other operand to a String. It is left-associative, so 1 + 2 + \"3\" is \"33\" but \"1\" + 2 + 3 is \"123\"."
+  },
+  {
+   "from": "string_concatenation",
+   "to": "string_conversion",
+   "type": "prerequisite",
+   "label": "When one operand of + is a String, Java converts the other operand to a String before concatenating."
+  },
+  {
+   "from": "string_type",
+   "to": "string_concatenation",
+   "type": "prerequisite",
+   "label": "+ builds a new String whenever at least one of its operands is a String."
+  }
+ ]
+}

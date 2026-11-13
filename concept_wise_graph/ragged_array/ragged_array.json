@@ -1,0 +1,175 @@
+{
+ "concept": "ragged_array",
+ "label": "ragged_array",
+ "graph_version": "3.9.8 (3.9.7 + one primary per misconception (S9c) and the four remaining sibling edges (S9b), 2026-11-04; listed in revision_3_9_8)",
+ "nodes": [
+  {
+   "id": "matrix_operations",
+   "kind": "concept",
+   "label": "matrix_operations"
+  },
+  {
+   "id": "multidimensional_array",
+   "kind": "concept",
+   "label": "multidimensional_array"
+  },
+  {
+   "id": "ragged_array",
+   "kind": "concept",
+   "label": "ragged_array"
+  },
+  {
+   "id": "row_major_order",
+   "kind": "concept",
+   "label": "Row-major and column-major order"
+  },
+  {
+   "id": "transition_matrix",
+   "kind": "concept",
+   "label": "transition_matrix"
+  },
+  {
+   "id": "two_dimensional_array",
+   "kind": "concept",
+   "label": "two_dimensional_array"
+  },
+  {
+   "id": "ragged_array@L0",
+   "kind": "learning_level",
+   "label": "L0"
+  },
+  {
+   "id": "ragged_array@L1",
+   "kind": "learning_level",
+   "label": "L1"
+  },
+  {
+   "id": "ragged_array@L2",
+   "kind": "learning_level",
+   "label": "L2"
+  },
+  {
+   "id": "ragged_array@L3",
+   "kind": "learning_level",
+   "label": "L3"
+  },
+  {
+   "id": "ragged_array@L4",
+   "kind": "learning_level",
+   "label": "L4"
+  },
+  {
+   "id": "NoJaggedArrays",
+   "kind": "misconception",
+   "label": "NoJaggedArrays"
+  },
+  {
+   "id": "RaggedRowsSameLength",
+   "kind": "misconception",
+   "label": "RaggedRowsSameLength"
+  },
+  {
+   "id": "topic1.4.g",
+   "kind": "topic",
+   "label": "Two-dimensional arrays (ragged, matrix operations)"
+  }
+ ],
+ "edges": [
+  {
+   "from": "topic1.4.g",
+   "to": "matrix_operations",
+   "type": "contains",
+   "label": "The topic 'Two-dimensional arrays (ragged, matrix operations)' introduces matrix_operations."
+  },
+  {
+   "from": "topic1.4.g",
+   "to": "multidimensional_array",
+   "type": "contains",
+   "label": "The topic 'Two-dimensional arrays (ragged, matrix operations)' introduces multidimensional_array."
+  },
+  {
+   "from": "topic1.4.g",
+   "to": "ragged_array",
+   "type": "contains",
+   "label": "The topic 'Two-dimensional arrays (ragged, matrix operations)' introduces ragged_array."
+  },
+  {
+   "from": "topic1.4.g",
+   "to": "row_major_order",
+   "type": "contains",
+   "label": "Row-major and column-major order is taught under \"Two-dimensional arrays (ragged, matrix operations)\"."
+  },
+  {
+   "from": "topic1.4.g",
+   "to": "two_dimensional_array",
+   "type": "contains",
+   "label": "The topic 'Two-dimensional arrays (ragged, matrix operations)' introduces two_dimensional_array."
+  },
+  {
+   "from": "ragged_array",
+   "to": "ragged_array@L0",
+   "type": "has_level",
+   "label": "[0] everyday_reading (E): Folk meaning: a 'table' has the same number of columns in every row, so one width N serves all rows. Java rule: each row is a separate array, so rows may have different lengths, and code must use a[i].length for row i.\n[1] misconception (M) -> RaggedRowsSameLength: wrong rule: All rows of a 2-D array have the same length, so one N works for every row. Right rule: Rows may differ in length; use a[i].length for row i.\n[2] misconception (M) -> NoJaggedArrays: wrong rule: Multi-dimensional arrays must be rectangular. Right rule: Each row a[i] is its own array, so rows can have different lengths a[i].length.\n[3] inconsistent_trace (T) -> RaggedRowsSameLength: Points to LT: the inner bound a[i].length is re-evaluated for each row. Inconsistent application: the trace uses row 0's length (or N) for every row, sometimes over-running a short row and sometimes stopping early in a long one. (here mixing in: \"All rows of a 2-D array have the same length, so one N works for every row\")"
+  },
+  {
+   "from": "ragged_array",
+   "to": "ragged_array@L1",
+   "type": "has_level",
+   "label": "[0] names_the_element (N): Identity: a ragged array is a two-dimensional array whose rows have different (nonuniform) lengths.\n[1] states_the_rule (S): Declarative: there is no requirement that rows have the same length. Process row i up to a[i].length: for (i < a.length) for (j < a[i].length)."
+  },
+  {
+   "from": "ragged_array",
+   "to": "ragged_array@L2",
+   "type": "has_level",
+   "label": "[0] line_by_line_trace (LT): Sequencing: the outer loop runs i over 0..a.length-1; for each i the inner loop bound a[i].length is read for that row, and then j runs over 0..a[i].length-1.\n[1] output_prediction (OP): Result: rows of different widths, e.g. a Pascal's-triangle array whose row N has N+1 entries; a[i].length differs from row to row.\n[2] one_step_execution (OS): State transition: creating a row with a[i] = new double[i+1] sets the length of that row only; element writes change one entry."
+  },
+  {
+   "from": "ragged_array",
+   "to": "ragged_array@L3",
+   "type": "has_level",
+   "label": "[0] relation_to_neighbour (R): Ragged arrays exist because a 2-D array is an array of arrays: each row is an independent 1-D array with its own length.\n[1] purpose_of_the_whole (P): Plan/role: store triangular or uneven data (binomial coefficients, lists of varying length) without wasting space on unused entries."
+  },
+  {
+   "from": "ragged_array",
+   "to": "ragged_array@L4",
+   "type": "has_level",
+   "label": "[0] predict_a_change (C) -> RaggedRowsSameLength: Conservation: code written with a[i].length also works for rectangular arrays, but code written with a fixed N breaks on ragged ones; each later solution should still work for the earlier cases.\n[1] transfer_to_a_new_program (X): Applicability: use a ragged array when rows naturally differ in length. When all rows have equal length, a rectangular array with M and N is simpler, and the book normally uses that.\n[2] diagnose_an_error (D): rule broken: Each row must be processed up to its own length. Kind: run-time exception. Trigger class: the inner loop uses N or a[0].length, and a shorter row is indexed past its end (ArrayIndexOutOfBoundsException)\n[3] diagnose_an_error (D): rule broken: Each row must be processed up to its own length. Kind: silent logic error. Trigger class: the inner bound is shorter than a longer row, so its last entries are silently skipped"
+  },
+  {
+   "from": "ragged_array",
+   "to": "NoJaggedArrays",
+   "type": "misconception",
+   "label": "wrong: multi-dimensional arrays must be rectangular | right: Each row a[i] is its own array, so rows can have different lengths a[i].length."
+  },
+  {
+   "from": "ragged_array",
+   "to": "RaggedRowsSameLength",
+   "type": "misconception",
+   "label": "wrong: All rows of a 2-D array have the same length, so one N works for every row. | right: Rows may differ in length; use a[i].length for row i."
+  },
+  {
+   "from": "transition_matrix",
+   "to": "NoJaggedArrays",
+   "type": "misconception",
+   "label": "wrong: Every row of the transition matrix must be stored with the same length because 2-D arrays are always rectangular. | right: Each p[i] is its own row array; the surfer's matrix is square only because every page has a row of n probabilities."
+  },
+  {
+   "from": "two_dimensional_array",
+   "to": "NoJaggedArrays",
+   "type": "misconception",
+   "label": "wrong: Every row of a 2-D array must have the same length. | right: Each row a[i] is its own array, so rows can have different lengths a[i].length."
+  },
+  {
+   "from": "two_dimensional_array",
+   "to": "RaggedRowsSameLength",
+   "type": "misconception",
+   "label": "wrong: All rows of a 2-D array have the same length, so one N works for every row. | right: Rows may differ in length; use a[i].length for row i."
+  },
+  {
+   "from": "two_dimensional_array",
+   "to": "ragged_array",
+   "type": "prerequisite",
+   "label": "There is no requirement that all rows in a two-dimensional array have the same length; an array with rows of nonuniform length is known as a ragged array."
+  }
+ ]
+}

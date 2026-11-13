@@ -1,0 +1,274 @@
+{
+ "concept": "loop_guard",
+ "label": "Loop test as a guard",
+ "graph_version": "3.9.8 (3.9.7 + one primary per misconception (S9c) and the four remaining sibling edges (S9b), 2026-11-04; listed in revision_3_9_8)",
+ "nodes": [
+  {
+   "id": "array_aliasing",
+   "kind": "concept",
+   "label": "array_aliasing"
+  },
+  {
+   "id": "array_bounds",
+   "kind": "concept",
+   "label": "array_bounds"
+  },
+  {
+   "id": "array_copy",
+   "kind": "concept",
+   "label": "array_copy"
+  },
+  {
+   "id": "array_reference",
+   "kind": "concept",
+   "label": "Array name holds a memory address"
+  },
+  {
+   "id": "comparison_operators",
+   "kind": "concept",
+   "label": "comparison_operators"
+  },
+  {
+   "id": "infinite_loop",
+   "kind": "concept",
+   "label": "infinite_loop"
+  },
+  {
+   "id": "loop_guard",
+   "kind": "concept",
+   "label": "Loop test as a guard"
+  },
+  {
+   "id": "loop_variable",
+   "kind": "concept",
+   "label": "loop_variable"
+  },
+  {
+   "id": "primitive_vs_reference",
+   "kind": "concept",
+   "label": "primitive_vs_reference"
+  },
+  {
+   "id": "printing_array_reference",
+   "kind": "concept",
+   "label": "printing_array_reference"
+  },
+  {
+   "id": "program_state",
+   "kind": "concept",
+   "label": "Program state"
+  },
+  {
+   "id": "while_loop",
+   "kind": "concept",
+   "label": "while_loop"
+  },
+  {
+   "id": "loop_guard@L0",
+   "kind": "learning_level",
+   "label": "L0"
+  },
+  {
+   "id": "loop_guard@L1",
+   "kind": "learning_level",
+   "label": "L1"
+  },
+  {
+   "id": "loop_guard@L2",
+   "kind": "learning_level",
+   "label": "L2"
+  },
+  {
+   "id": "loop_guard@L3",
+   "kind": "learning_level",
+   "label": "L3"
+  },
+  {
+   "id": "loop_guard@L4",
+   "kind": "learning_level",
+   "label": "L4"
+  },
+  {
+   "id": "BodyChangeIgnoredByCondition",
+   "kind": "misconception",
+   "label": "BodyChangeIgnoredByCondition"
+  },
+  {
+   "id": "LessGreaterSwapped",
+   "kind": "misconception",
+   "label": "LessGreaterSwapped"
+  },
+  {
+   "id": "LoopConditionValidatedLater",
+   "kind": "misconception",
+   "label": "LoopConditionValidatedLater"
+  },
+  {
+   "id": "LoopCountByIntent",
+   "kind": "misconception",
+   "label": "LoopCountByIntent"
+  },
+  {
+   "id": "LoopVariableNotUpdated",
+   "kind": "misconception",
+   "label": "LoopVariableNotUpdated"
+  },
+  {
+   "id": "topic1.4.b",
+   "kind": "topic",
+   "label": "Memory representation and bounds checking"
+  }
+ ],
+ "edges": [
+  {
+   "from": "topic1.4.b",
+   "to": "array_aliasing",
+   "type": "contains",
+   "label": "The topic 'Memory representation and bounds checking' introduces array_aliasing."
+  },
+  {
+   "from": "topic1.4.b",
+   "to": "array_bounds",
+   "type": "contains",
+   "label": "The topic 'Memory representation and bounds checking' introduces array_bounds."
+  },
+  {
+   "from": "topic1.4.b",
+   "to": "array_copy",
+   "type": "contains",
+   "label": "Topic 'Memory representation and bounds checking' of section 1.4 holds the concept array copy."
+  },
+  {
+   "from": "topic1.4.b",
+   "to": "array_reference",
+   "type": "contains",
+   "label": "Array name holds a memory address is taught under \"Memory representation and bounds checking\"."
+  },
+  {
+   "from": "topic1.4.b",
+   "to": "loop_guard",
+   "type": "contains",
+   "label": "Loop test as a guard is taught under \"Memory representation and bounds checking\"."
+  },
+  {
+   "from": "topic1.4.b",
+   "to": "primitive_vs_reference",
+   "type": "contains",
+   "label": "Topic 'Memory representation and bounds checking' of section 1.4 holds the concept primitive vs reference."
+  },
+  {
+   "from": "topic1.4.b",
+   "to": "printing_array_reference",
+   "type": "contains",
+   "label": "The topic 'Memory representation and bounds checking' introduces printing_array_reference."
+  },
+  {
+   "from": "topic1.4.b",
+   "to": "program_state",
+   "type": "contains",
+   "label": "Program state is taught under \"Memory representation and bounds checking\"."
+  },
+  {
+   "from": "loop_guard",
+   "to": "loop_guard@L0",
+   "type": "has_level",
+   "label": "[0] everyday_reading (E): Folk meaning: in English, 'while the dog is in the city, keep walking' is monitored continuously, so the walk stops the instant it leaves. Java rule: the while condition is tested only before each pass, so the guard must make every index used in the body legal at that moment.\n[1] misconception (M) -> LoopVariableNotUpdated: wrong rule: A while loop ends by itself even if nothing in the body changes the variable tested in the condition. Right rule: If no statement in the body changes a variable in the condition, a condition that was true stays true and the loop never ends.\n[2] inconsistent_trace (T) -> LoopVariableNotUpdated: Points to LT: the guard is tested before every pass, and the body runs only if it is true. Inconsistent application: the trace applies the bounds test only at the first pass, or after the body has already used the out-of-range index. (here mixing in: \"A while loop ends by itself even if nothing in the body changes the variable tested in the condition\")\n[3] misconception (M) -> BodyChangeIgnoredByCondition: wrong rule: Changing the loop variable inside the body does not affect the loop condition; the loop still runs its planned number of times. Right rule: The condition is tested with the current value of the variable, including changes made in the body.\n[4] misconception (M) -> LoopCountByIntent: wrong rule: How many times a loop runs is decided by what the program is meant to do, so it may go on after its condition is false. Right rule: The loop runs only while its condition is true when tested; it stops at the first false test.\n[5] misconception (M) -> LoopConditionValidatedLater: wrong rule: If a loop condition is false at first but would become true later, the loop still runs. Right rule: A while loop whose condition is false at the first test runs zero times; nothing later revives it.\n[6] misconception (M) -> LessGreaterSwapped: wrong rule: < and > mean the same thing (or a < b means a is greater than b). Right rule: a < b is true when a is smaller than b; a > b when a is larger."
+  },
+  {
+   "from": "loop_guard",
+   "to": "loop_guard@L1",
+   "type": "has_level",
+   "label": "[0] names_the_element (N): Identity: a loop guard is a loop-continuation test that also guards the body against an illegal statement, typically an out-of-bounds array access.\n[1] states_the_rule (S): Declarative: code the loop exit test so that whenever the body runs, all indices it uses are legal, e.g. while (x > 0 && x < N-1 && y > 0 && y < N-1) before reading a[x-1][y], a[x+1][y], ..."
+  },
+  {
+   "from": "loop_guard",
+   "to": "loop_guard@L2",
+   "type": "has_level",
+   "label": "[0] line_by_line_trace (LT): Sequencing: before each pass the guard is evaluated left to right, and && stops at the first false operand; the body runs only if the whole guard is true; after the body the guard is tested again with the updated values.\n[1] output_prediction (OP): Result: the loop ends normally, with no exception, when an index reaches the boundary; in SelfAvoidingWalk that means the dog has escaped.\n[2] one_step_execution (OS): State transition: one guard evaluation changes no variable; it either admits one more pass with legal indices or ends the loop."
+  },
+  {
+   "from": "loop_guard",
+   "to": "loop_guard@L3",
+   "type": "has_level",
+   "label": "[0] relation_to_neighbour (R): Because an out-of-bounds index stops the program, the guard tests the bounds before the body uses the index, and it must cover every neighbour index (x-1, x+1) the body reads.\n[1] purpose_of_the_whole (P): Plan/role: the guard-before-use plan. A single test both terminates the loop (event: reached the edge) and protects every array access in the body."
+  },
+  {
+   "from": "loop_guard",
+   "to": "loop_guard@L4",
+   "type": "has_level",
+   "label": "[0] predict_a_change (C) -> LoopVariableNotUpdated: Conservation: inside the body the guard's invariant holds (0 < x < N-1, so x-1 and x+1 are legal indices). Weakening the guard (x >= 0) or putting the array test before the bounds test in && breaks it.\n[1] transfer_to_a_new_program (X): Applicability: use a guarded while loop when iteration continues until a data-dependent event and the body indexes an array with a moving position (walks, searches). For a full traversal, a for loop with i < a.length is the simpler guard.\n[2] diagnose_an_error (D): rule broken: The guard must make every index in the body legal. Kind: run-time exception. Trigger class: the guard is missing, too weak (x >= 0 && x < N while the body reads a[x+1]), or ordered wrongly (a[i] != 0 && i < n) so the access happens before the bounds test (ArrayIndexOutOfBoundsException)\n[3] diagnose_an_error (D): rule broken: The body must change a variable in the guard. Kind: silent logic error. Trigger class: no statement in the body updates the guarded index, so the loop never ends (infinite loop)\n[4] diagnose_an_error (D): rule broken: The relational operators must express the intended bound. Kind: silent logic error. Trigger class: < and > (or < and <=) are swapped, so the loop runs zero times or one pass too many"
+  },
+  {
+   "from": "comparison_operators",
+   "to": "LessGreaterSwapped",
+   "type": "misconception",
+   "label": "wrong: < and > mean the same thing (or a < b means a is greater than b). | right: a < b is true when a is smaller than b; a > b when a is larger."
+  },
+  {
+   "from": "infinite_loop",
+   "to": "LoopVariableNotUpdated",
+   "type": "misconception",
+   "label": "wrong: A while loop ends by itself even if nothing in the body changes the variable tested in the condition. | right: If no statement in the body changes a variable in the condition, a condition that was true stays true and the loop never ends."
+  },
+  {
+   "from": "loop_guard",
+   "to": "BodyChangeIgnoredByCondition",
+   "type": "misconception",
+   "label": "wrong: Changing the loop variable inside the body does not affect the loop condition; the loop still runs its planned number of times. | right: The condition is tested with the current value of the variable, including changes made in the body."
+  },
+  {
+   "from": "loop_guard",
+   "to": "LessGreaterSwapped",
+   "type": "misconception",
+   "label": "wrong: < and > mean the same thing (or a < b means a is greater than b). | right: a < b is true when a is smaller than b; a > b when a is larger."
+  },
+  {
+   "from": "loop_guard",
+   "to": "LoopConditionValidatedLater",
+   "type": "misconception",
+   "label": "wrong: If a loop condition is false at first but would become true later, the loop still runs (it repeats or skips until the condition is true, then runs until it is false). | right: A while loop whose condition is false at the first test runs zero times; nothing later revives it."
+  },
+  {
+   "from": "loop_guard",
+   "to": "LoopCountByIntent",
+   "type": "misconception",
+   "label": "wrong: How many times a loop runs is decided by what the program is meant to do, so it may go on after its condition is false. | right: The loop runs only while its condition is true when tested; it stops at the first false test."
+  },
+  {
+   "from": "loop_guard",
+   "to": "LoopVariableNotUpdated",
+   "type": "misconception",
+   "label": "wrong: A while loop ends by itself even if nothing in the body changes the variable tested in the condition. | right: If no statement in the body changes a variable in the condition, a condition that was true stays true and the loop never ends."
+  },
+  {
+   "from": "loop_variable",
+   "to": "BodyChangeIgnoredByCondition",
+   "type": "misconception",
+   "label": "wrong: Changing the loop variable inside the body does not affect the loop condition; the loop still runs its planned number of times. | right: The condition is tested with the current value of the variable, including changes made in the body."
+  },
+  {
+   "from": "while_loop",
+   "to": "LoopConditionValidatedLater",
+   "type": "misconception",
+   "label": "wrong: If a loop condition is false at first but would become true later, the loop still runs (it repeats or skips until the condition is true, then runs until it is false). | right: A while loop whose condition is false at the first test runs zero times; nothing later revives it."
+  },
+  {
+   "from": "while_loop",
+   "to": "LoopCountByIntent",
+   "type": "misconception",
+   "label": "wrong: How many times a loop runs is decided by what the program is meant to do, so it may go on after its condition is false. | right: The loop runs only while its condition is true when tested; it stops at the first false test."
+  },
+  {
+   "from": "while_loop",
+   "to": "LoopVariableNotUpdated",
+   "type": "misconception",
+   "label": "wrong: A while loop ends by itself even if nothing in the body changes the variable tested in the condition. | right: If no statement in the body changes a variable in the condition, a condition that was true stays true and the loop never ends."
+  },
+  {
+   "from": "array_bounds",
+   "to": "loop_guard",
+   "type": "prerequisite",
+   "label": "Because an out-of-bounds index stops the program, the while test checks the bounds before the body uses the index."
+  }
+ ]
+}

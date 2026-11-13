@@ -1,0 +1,163 @@
+{
+ "concept": "string_conversion",
+ "label": "string_conversion",
+ "graph_version": "3.9.8 (3.9.7 + one primary per misconception (S9c) and the four remaining sibling edges (S9b), 2026-11-04; listed in revision_3_9_8)",
+ "nodes": [
+  {
+   "id": "explicit_cast",
+   "kind": "concept",
+   "label": "explicit_cast"
+  },
+  {
+   "id": "operator_precedence",
+   "kind": "concept",
+   "label": "operator_precedence"
+  },
+  {
+   "id": "parsing",
+   "kind": "concept",
+   "label": "parsing"
+  },
+  {
+   "id": "string_concatenation",
+   "kind": "concept",
+   "label": "string_concatenation"
+  },
+  {
+   "id": "string_conversion",
+   "kind": "concept",
+   "label": "string_conversion"
+  },
+  {
+   "id": "type_conversion",
+   "kind": "concept",
+   "label": "type_conversion"
+  },
+  {
+   "id": "widening_conversion",
+   "kind": "concept",
+   "label": "widening_conversion"
+  },
+  {
+   "id": "string_conversion@L0",
+   "kind": "learning_level",
+   "label": "L0"
+  },
+  {
+   "id": "string_conversion@L1",
+   "kind": "learning_level",
+   "label": "L1"
+  },
+  {
+   "id": "string_conversion@L2",
+   "kind": "learning_level",
+   "label": "L2"
+  },
+  {
+   "id": "string_conversion@L3",
+   "kind": "learning_level",
+   "label": "L3"
+  },
+  {
+   "id": "string_conversion@L4",
+   "kind": "learning_level",
+   "label": "L4"
+  },
+  {
+   "id": "StringPlusLeftToRight",
+   "kind": "misconception",
+   "label": "StringPlusLeftToRight"
+  },
+  {
+   "id": "topic1.2.h",
+   "kind": "topic",
+   "label": "Type conversion (automatic, cast, parsing)"
+  }
+ ],
+ "edges": [
+  {
+   "from": "topic1.2.h",
+   "to": "explicit_cast",
+   "type": "contains",
+   "label": "The topic 'Type conversion (automatic, cast, parsing)' introduces explicit_cast."
+  },
+  {
+   "from": "topic1.2.h",
+   "to": "parsing",
+   "type": "contains",
+   "label": "The topic 'Type conversion (automatic, cast, parsing)' introduces parsing."
+  },
+  {
+   "from": "topic1.2.h",
+   "to": "string_conversion",
+   "type": "contains",
+   "label": "The topic 'Type conversion (automatic, cast, parsing)' introduces string_conversion."
+  },
+  {
+   "from": "topic1.2.h",
+   "to": "type_conversion",
+   "type": "contains",
+   "label": "The topic 'Type conversion (automatic, cast, parsing)' introduces type_conversion."
+  },
+  {
+   "from": "topic1.2.h",
+   "to": "widening_conversion",
+   "type": "contains",
+   "label": "The topic 'Type conversion (automatic, cast, parsing)' introduces widening_conversion."
+  },
+  {
+   "from": "string_conversion",
+   "to": "string_conversion@L0",
+   "type": "has_level",
+   "label": "[0] everyday_reading (E): Folk meaning: + is addition, which is commutative and associative, so 2 + 3 + \"bc\" and \"bc\" + 2 + 3 must give the same thing. Java rule: when one operand of + is a String the other is converted to a String and concatenated, and + is evaluated left to right, so 2 + 3 + \"bc\" is \"5bc\" but \"bc\" + 2 + 3 is \"bc23\".\n[1] misconception (M) -> StringPlusLeftToRight: wrong rule: 2 + 3 + \"bc\" and \"bc\" + 2 + 3 give the same text. Right rule: + is evaluated left to right: 2 + 3 + \"bc\" is \"5bc\" but \"bc\" + 2 + 3 is \"bc23\".\n[2] inconsistent_trace (T) -> StringPlusLeftToRight: Points to LT (+ is applied left to right, each + deciding between addition and concatenation from its two operands at that moment). Applied unevenly: once a String has appeared the student goes back to numeric addition for later terms, or concatenates two numbers that come before any String. (here mixing in: \"2 + 3 + \"bc\" and \"bc\" + 2 + 3 give the same text\")"
+  },
+  {
+   "from": "string_conversion",
+   "to": "string_conversion@L1",
+   "type": "has_level",
+   "label": "[0] names_the_element (N): String conversion is the automatic conversion of a non-String operand of + into its String form when the other operand is a String (also done for print/println arguments).\n[1] states_the_rule (S): When either operand of + is a String, the other operand is converted to a String and the result is the characters of the first followed by those of the second; System.out.print and println also convert any argument to a String."
+  },
+  {
+   "from": "string_conversion",
+   "to": "string_conversion@L2",
+   "type": "has_level",
+   "label": "[0] line_by_line_trace (LT): Evaluate + operators left to right (same precedence, left-associative): at each +, if either current operand is a String, convert the other and concatenate; otherwise add numerically. Parenthesized parts are evaluated first.\n[1] output_prediction (OP): A String: 2 + \"bc\" is \"2bc\", 2 + 3 + \"bc\" is \"5bc\", \"bc\" + (2+3) is \"bc5\", \"bc\" + 2 + 3 is \"bc23\", \"1234\" + 99 is \"123499\".\n[2] one_step_execution (OS): Concatenation creates a new String and changes no variable; state changes only by assignment, e.g. String c = a + b; with a = \"1234\" and int b = 99 gives c the value \"123499\"."
+  },
+  {
+   "from": "string_conversion",
+   "to": "string_conversion@L3",
+   "type": "has_level",
+   "label": "[0] relation_to_neighbour (R): Conversion happens first, then concatenation: the non-String operand is turned into its characters before the two Strings are joined.\n[1] purpose_of_the_whole (P): Used to build output messages and labels from computed values, e.g. System.out.println(a + \" + \" + b + \" = \" + c);."
+  },
+  {
+   "from": "string_conversion",
+   "to": "string_conversion@L4",
+   "type": "has_level",
+   "label": "[0] predict_a_change (C) -> StringPlusLeftToRight: Adding parentheses around the numeric part changes \"bc23\" into \"bc5\"; moving a String operand earlier turns every later + into concatenation; the order of operands matters, unlike numeric addition.\n[1] transfer_to_a_new_program (X): Use string conversion with + to produce output and labels; do not use it to do arithmetic on numeric text (parse first), and parenthesize numeric parts that must be added before concatenation.\n[2] diagnose_an_error (D): rule broken: + is left-associative, so terms after a String are concatenated, not added. Kind: silent logic error. Trigger class: A numeric sum written after a String without parentheses, e.g. \"Sum: \" + a + b printing \"Sum: 34\" for a = 3, b = 4.\n[3] diagnose_an_error (D): rule broken: Only + converts to String; other arithmetic operators are not defined on Strings. Kind: compile-time. Trigger class: Using -, *, / with a String operand, e.g. \"Hello\" - 1 or \"12\" * 2."
+  },
+  {
+   "from": "operator_precedence",
+   "to": "StringPlusLeftToRight",
+   "type": "misconception",
+   "label": "wrong: 2 + 3 + \"bc\" and \"bc\" + 2 + 3 give the same text. | right: + is evaluated left to right: 2 + 3 + \"bc\" is \"5bc\" but \"bc\" + 2 + 3 is \"bc23\"."
+  },
+  {
+   "from": "string_concatenation",
+   "to": "StringPlusLeftToRight",
+   "type": "misconception",
+   "label": "wrong: 2 + 3 + \"bc\" and \"bc\" + 2 + 3 give the same text. | right: + is evaluated left to right: 2 + 3 + \"bc\" is \"5bc\" but \"bc\" + 2 + 3 is \"bc23\"."
+  },
+  {
+   "from": "string_conversion",
+   "to": "StringPlusLeftToRight",
+   "type": "misconception",
+   "label": "wrong: 2 + 3 + \"bc\" and \"bc\" + 2 + 3 give the same text. | right: + is evaluated left to right: 2 + 3 + \"bc\" is \"5bc\" but \"bc\" + 2 + 3 is \"bc23\"."
+  },
+  {
+   "from": "string_concatenation",
+   "to": "string_conversion",
+   "type": "prerequisite",
+   "label": "When one operand of + is a String, Java converts the other operand to a String before concatenating."
+  }
+ ]
+}

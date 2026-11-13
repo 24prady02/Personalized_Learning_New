@@ -1,0 +1,319 @@
+{
+ "concept": "logical_error",
+ "label": "logical_error",
+ "graph_version": "3.9.8 (3.9.7 + one primary per misconception (S9c) and the four remaining sibling edges (S9b), 2026-11-04; listed in revision_3_9_8)",
+ "nodes": [
+  {
+   "id": "accumulator_pattern",
+   "kind": "concept",
+   "label": "accumulator_pattern"
+  },
+  {
+   "id": "compile",
+   "kind": "concept",
+   "label": "compile"
+  },
+  {
+   "id": "compile_time_error",
+   "kind": "concept",
+   "label": "compile_time_error"
+  },
+  {
+   "id": "counter_pattern",
+   "kind": "concept",
+   "label": "counter_pattern"
+  },
+  {
+   "id": "debugging",
+   "kind": "concept",
+   "label": "debugging"
+  },
+  {
+   "id": "empty_statement",
+   "kind": "concept",
+   "label": "empty_statement"
+  },
+  {
+   "id": "flag_search_loop",
+   "kind": "concept",
+   "label": "flag_search_loop"
+  },
+  {
+   "id": "for_loop",
+   "kind": "concept",
+   "label": "for_loop"
+  },
+  {
+   "id": "if_statement",
+   "kind": "concept",
+   "label": "if_statement"
+  },
+  {
+   "id": "logical_error",
+   "kind": "concept",
+   "label": "logical_error"
+  },
+  {
+   "id": "loop_scope",
+   "kind": "concept",
+   "label": "loop_scope"
+  },
+  {
+   "id": "reading_error_messages",
+   "kind": "concept",
+   "label": "reading_error_messages"
+  },
+  {
+   "id": "run",
+   "kind": "concept",
+   "label": "run"
+  },
+  {
+   "id": "run_time_error",
+   "kind": "concept",
+   "label": "run_time_error"
+  },
+  {
+   "id": "testing",
+   "kind": "concept",
+   "label": "testing"
+  },
+  {
+   "id": "while_loop",
+   "kind": "concept",
+   "label": "while_loop"
+  },
+  {
+   "id": "AccumulatorDeclaredInLoop",
+   "kind": "error",
+   "label": "AccumulatorDeclaredInLoop"
+  },
+  {
+   "id": "LoopIgnoresCodeBefore",
+   "kind": "error",
+   "label": "LoopIgnoresCodeBefore"
+  },
+  {
+   "id": "SemicolonAfterIfHeader",
+   "kind": "error",
+   "label": "SemicolonAfterIfHeader"
+  },
+  {
+   "id": "logical_error@L0",
+   "kind": "learning_level",
+   "label": "L0"
+  },
+  {
+   "id": "logical_error@L1",
+   "kind": "learning_level",
+   "label": "L1"
+  },
+  {
+   "id": "logical_error@L2",
+   "kind": "learning_level",
+   "label": "L2"
+  },
+  {
+   "id": "logical_error@L3",
+   "kind": "learning_level",
+   "label": "L3"
+  },
+  {
+   "id": "logical_error@L4",
+   "kind": "learning_level",
+   "label": "L4"
+  },
+  {
+   "id": "CompilesMeansWorks",
+   "kind": "misconception",
+   "label": "CompilesMeansWorks"
+  },
+  {
+   "id": "topic1.1.c",
+   "kind": "topic",
+   "label": "Errors"
+  }
+ ],
+ "edges": [
+  {
+   "from": "topic1.1.c",
+   "to": "compile_time_error",
+   "type": "contains",
+   "label": "The topic 'Errors' introduces compile_time_error."
+  },
+  {
+   "from": "topic1.1.c",
+   "to": "logical_error",
+   "type": "contains",
+   "label": "The topic 'Errors' introduces logical_error."
+  },
+  {
+   "from": "topic1.1.c",
+   "to": "reading_error_messages",
+   "type": "contains",
+   "label": "The topic 'Errors' introduces reading_error_messages."
+  },
+  {
+   "from": "topic1.1.c",
+   "to": "run_time_error",
+   "type": "contains",
+   "label": "The topic 'Errors' introduces run_time_error."
+  },
+  {
+   "from": "accumulator_pattern",
+   "to": "AccumulatorDeclaredInLoop",
+   "type": "error",
+   "label": "wrong: Declaring sum inside the loop body keeps a running total across passes. | right: The accumulator must be declared and initialised before the loop."
+  },
+  {
+   "from": "counter_pattern",
+   "to": "AccumulatorDeclaredInLoop",
+   "type": "error",
+   "label": "wrong: Declaring sum inside the loop body keeps a running total across passes. | right: The accumulator must be declared and initialised before the loop."
+  },
+  {
+   "from": "empty_statement",
+   "to": "SemicolonAfterIfHeader",
+   "type": "error",
+   "label": "wrong: if (x > 0); System.out.println(\"positive\"); prints only for positive x. | right: The ; ends the if with an empty statement, so the next line always runs."
+  },
+  {
+   "from": "flag_search_loop",
+   "to": "LoopIgnoresCodeBefore",
+   "type": "error",
+   "label": "wrong: Initializes the flag before the loop so that the loop condition is already false, and the loop body never runs. | right: A while loop tests its condition before the first pass: if the values set before the loop make the condition false, the body never runs."
+  },
+  {
+   "from": "for_loop",
+   "to": "SemicolonAfterIfHeader",
+   "type": "error",
+   "label": "wrong: if (x > 0); System.out.println(\"positive\"); prints only for positive x. | right: The ; ends the if with an empty statement, so the next line always runs."
+  },
+  {
+   "from": "if_statement",
+   "to": "SemicolonAfterIfHeader",
+   "type": "error",
+   "label": "wrong: if (x > 0); System.out.println(\"positive\"); prints only for positive x. | right: The ; ends the if with an empty statement, so the next line always runs."
+  },
+  {
+   "from": "logical_error",
+   "to": "AccumulatorDeclaredInLoop",
+   "type": "error",
+   "label": "wrong: Declaring sum inside the loop body keeps a running total across passes. | right: The accumulator must be declared and initialised before the loop."
+  },
+  {
+   "from": "logical_error",
+   "to": "LoopIgnoresCodeBefore",
+   "type": "error",
+   "label": "wrong: Initializes the flag before the loop so that the loop condition is already false, and the loop body never runs. | right: A while loop tests its condition before the first pass: if the values set before the loop make the condition false, the body never runs."
+  },
+  {
+   "from": "logical_error",
+   "to": "SemicolonAfterIfHeader",
+   "type": "error",
+   "label": "wrong: if (x > 0); System.out.println(\"positive\"); prints only for positive x. | right: The ; ends the if with an empty statement, so the next line always runs."
+  },
+  {
+   "from": "loop_scope",
+   "to": "AccumulatorDeclaredInLoop",
+   "type": "error",
+   "label": "wrong: Declaring sum inside the loop body keeps a running total across passes. | right: The accumulator must be declared and initialised before the loop."
+  },
+  {
+   "from": "while_loop",
+   "to": "LoopIgnoresCodeBefore",
+   "type": "error",
+   "label": "wrong: Initializes the flag before the loop so that the loop condition is already false, and the loop body never runs. | right: A while loop tests its condition before the first pass: if the values set before the loop make the condition false, the body never runs."
+  },
+  {
+   "from": "while_loop",
+   "to": "SemicolonAfterIfHeader",
+   "type": "error",
+   "label": "wrong: if (x > 0); System.out.println(\"positive\"); prints only for positive x. | right: The ; ends the if with an empty statement, so the next line always runs."
+  },
+  {
+   "from": "logical_error",
+   "to": "logical_error@L0",
+   "type": "has_level",
+   "label": "[0] everyday_reading (E): Everyday reading: the computer understands what you meant and will complain if the program is wrong. Java rule: a program with a logic error compiles and runs without any message and does exactly what the code says, which differs from what was intended.\n[1] misconception (M) -> CompilesMeansWorks: wrong rule: Code that compiles is code that works. Right rule: Code that compiles and runs can still compute the wrong result (a logic error).\n[2] inconsistent_trace (T) -> CompilesMeansWorks: Applies the 'computer does exactly what is written' rule unevenly: traces some lines literally but reads the intended meaning into the faulty line, and so does not see the bug. (here mixing in: \"Code that compiles is code that works\")"
+  },
+  {
+   "from": "logical_error",
+   "to": "logical_error@L1",
+   "type": "has_level",
+   "label": "[0] names_the_element (N): A logic error is an error that makes a program do something other than what the programmer intended, without any compiler or run-time message.\n[1] states_the_rule (S): If a program has a logic error, it will compile and run without generating error messages, but it will not do the right thing; the compiler and JVM cannot detect it since they don't know what the right thing is."
+  },
+  {
+   "from": "logical_error",
+   "to": "logical_error@L2",
+   "type": "has_level",
+   "label": "[0] line_by_line_trace (LT): Execution proceeds normally, statement by statement; the faulty statement executes without complaint and passes a wrong value or output onward.\n[1] output_prediction (OP): Result is a normal-looking but wrong output, e.g. println(\"Hello, \"); println(\"World!\"); prints two lines where one was intended.\n[2] one_step_execution (OS): Each step makes a legal state change (e.g. an empty statement after if, or resetting sum each pass), but not the intended one."
+  },
+  {
+   "from": "logical_error",
+   "to": "logical_error@L3",
+   "type": "has_level",
+   "label": "[0] relation_to_neighbour (R): A logic error is seen only by running the program and comparing its output with the intended output.\n[1] relation_to_neighbour (R): A run-time error stops the program with an exception; a logic error lets it finish with wrong output.\n[2] relation_to_neighbour (R): Debugging is mostly the search for logic errors, which give wrong output without any message.\n[3] purpose_of_the_whole (P): Purpose (of the category): name the errors that only testing against the intended behaviour can find, so they are found by tracing, test cases and added print statements."
+  },
+  {
+   "from": "logical_error",
+   "to": "logical_error@L4",
+   "type": "has_level",
+   "label": "[0] predict_a_change (C) -> CompilesMeansWorks: A logic error survives recompiling and rerunning unchanged; changing input may hide or reveal it; fixing it changes output only on the inputs it affected.\n[1] diagnose_an_error (D): rule broken: A ; right after if (...) is an empty statement that forms the whole if body. Kind: silent logic error. Trigger class: if (x > 0); System.out.println(\"positive\"); prints for every x\n[2] diagnose_an_error (D): rule broken: The accumulator must be declared and initialized before the loop. Kind: silent logic error. Trigger class: int sum = 0; written inside the loop body: sum is reset each pass (and is out of scope after the loop)\n[3] transfer_to_a_new_program (X): Suspect a logic error when the program compiles and runs to the end but the output is wrong for some inputs; locate it by hand tracing, minimal test cases and print statements, since tools give no message.\n[4] diagnose_an_error (D): rule broken: A while loop tests its condition before the first pass. Kind: silent logic error. Trigger class: values set before the loop already make the condition false, so the body never runs\n[5] diagnose_an_error (D): rule broken: print vs println decides line breaks. Kind: silent logic error. Trigger class: println used where print was meant (or the reverse)"
+  },
+  {
+   "from": "compile",
+   "to": "CompilesMeansWorks",
+   "type": "misconception",
+   "label": "wrong: Code that compiles is code that works. | right: Code that compiles can still have run-time and logical errors."
+  },
+  {
+   "from": "compile_time_error",
+   "to": "CompilesMeansWorks",
+   "type": "misconception",
+   "label": "wrong: Code that compiles is code that works. | right: Code that compiles can still have run-time and logical errors."
+  },
+  {
+   "from": "logical_error",
+   "to": "CompilesMeansWorks",
+   "type": "misconception",
+   "label": "wrong: Code that compiles is code that works. | right: Code that compiles can still have run-time and logical errors."
+  },
+  {
+   "from": "run_time_error",
+   "to": "CompilesMeansWorks",
+   "type": "misconception",
+   "label": "wrong: Code that compiles is code that works. | right: Code that compiles can still have run-time and logical errors."
+  },
+  {
+   "from": "testing",
+   "to": "CompilesMeansWorks",
+   "type": "misconception",
+   "label": "wrong: Code that compiles is code that works. | right: Code that compiles can still have run-time and logical errors."
+  },
+  {
+   "from": "run_time_error",
+   "to": "logical_error",
+   "type": "parallel",
+   "label": "A run-time error stops the program with an exception; a logical error lets it finish with wrong output."
+  },
+  {
+   "from": "empty_statement",
+   "to": "logical_error",
+   "type": "prerequisite",
+   "label": "A ; right after an if or loop header is an empty statement, so the header controls nothing and the next line always runs: the program compiles but computes the wrong result."
+  },
+  {
+   "from": "logical_error",
+   "to": "debugging",
+   "type": "prerequisite",
+   "label": "Debugging is mostly the search for logic errors, which give wrong output without any message."
+  },
+  {
+   "from": "run",
+   "to": "logical_error",
+   "type": "prerequisite",
+   "label": "A logical error is seen only by running the program and comparing its output with the intended output."
+  }
+ ]
+}

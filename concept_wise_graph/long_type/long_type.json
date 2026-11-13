@@ -1,0 +1,191 @@
+{
+ "concept": "long_type",
+ "label": "long_type",
+ "graph_version": "3.9.8 (3.9.7 + one primary per misconception (S9c) and the four remaining sibling edges (S9b), 2026-11-04; listed in revision_3_9_8)",
+ "nodes": [
+  {
+   "id": "arithmetic_operators",
+   "kind": "concept",
+   "label": "arithmetic_operators"
+  },
+  {
+   "id": "int",
+   "kind": "concept",
+   "label": "int"
+  },
+  {
+   "id": "int_literal_limit",
+   "kind": "concept",
+   "label": "int_literal_limit"
+  },
+  {
+   "id": "integer_constants",
+   "kind": "concept",
+   "label": "integer_constants"
+  },
+  {
+   "id": "integer_division",
+   "kind": "concept",
+   "label": "integer_division"
+  },
+  {
+   "id": "literal",
+   "kind": "concept",
+   "label": "literal"
+  },
+  {
+   "id": "long_type",
+   "kind": "concept",
+   "label": "long_type"
+  },
+  {
+   "id": "overflow",
+   "kind": "concept",
+   "label": "overflow"
+  },
+  {
+   "id": "remainder_operator",
+   "kind": "concept",
+   "label": "remainder_operator"
+  },
+  {
+   "id": "long_type@L0",
+   "kind": "learning_level",
+   "label": "L0"
+  },
+  {
+   "id": "long_type@L1",
+   "kind": "learning_level",
+   "label": "L1"
+  },
+  {
+   "id": "long_type@L2",
+   "kind": "learning_level",
+   "label": "L2"
+  },
+  {
+   "id": "long_type@L3",
+   "kind": "learning_level",
+   "label": "L3"
+  },
+  {
+   "id": "long_type@L4",
+   "kind": "learning_level",
+   "label": "L4"
+  },
+  {
+   "id": "LargeIntegerLong",
+   "kind": "misconception",
+   "label": "LargeIntegerLong"
+  },
+  {
+   "id": "topic1.2.c",
+   "kind": "topic",
+   "label": "Integers"
+  }
+ ],
+ "edges": [
+  {
+   "from": "topic1.2.c",
+   "to": "arithmetic_operators",
+   "type": "contains",
+   "label": "The topic 'Integers' introduces arithmetic_operators."
+  },
+  {
+   "from": "topic1.2.c",
+   "to": "int",
+   "type": "contains",
+   "label": "The topic 'Integers' introduces int."
+  },
+  {
+   "from": "topic1.2.c",
+   "to": "int_literal_limit",
+   "type": "contains",
+   "label": "The topic 'Integers' introduces int_literal_limit."
+  },
+  {
+   "from": "topic1.2.c",
+   "to": "integer_constants",
+   "type": "contains",
+   "label": "The topic 'Integers' introduces integer_constants."
+  },
+  {
+   "from": "topic1.2.c",
+   "to": "integer_division",
+   "type": "contains",
+   "label": "The topic 'Integers' introduces integer_division."
+  },
+  {
+   "from": "topic1.2.c",
+   "to": "long_type",
+   "type": "contains",
+   "label": "The topic 'Integers' introduces long_type."
+  },
+  {
+   "from": "topic1.2.c",
+   "to": "overflow",
+   "type": "contains",
+   "label": "The topic 'Integers' introduces overflow."
+  },
+  {
+   "from": "topic1.2.c",
+   "to": "remainder_operator",
+   "type": "contains",
+   "label": "The topic 'Integers' introduces remainder_operator."
+  },
+  {
+   "from": "long_type",
+   "to": "long_type@L0",
+   "type": "has_level",
+   "label": "[0] everyday_reading (E): In English 'long' just means lengthy, so novices expect any big number to become a long automatically. In Java long is a separate 64-bit type that must be declared, and an integer literal outside the int range needs the L suffix.\n[1] misconception (M) -> LargeIntegerLong: wrong rule: a large integer literal is automatically long. Right rule: A sequence of digits is an int literal only if its value falls within the int range; for larger values the book advises the long type.\n[2] inconsistent_trace (T) -> LargeIntegerLong: Points to LT (only operations with a long operand run in 64 bits). Applied unevenly, a student treats long x = a * b (int a, b) as 64-bit because the target is long. (here mixing in: \"a large integer literal is automatically long\")"
+  },
+  {
+   "from": "long_type",
+   "to": "long_type@L1",
+   "type": "has_level",
+   "label": "[0] names_the_element (N): long: Java's 64-bit signed integer primitive type.\n[1] states_the_rule (S): long ranges from -9223372036854775808 to 9223372036854775807, and its literals end in L. An integer operation with at least one long operand is done in 64 bits and gives a long. int widens to long automatically, but long to int needs a cast."
+  },
+  {
+   "from": "long_type",
+   "to": "long_type@L2",
+   "type": "has_level",
+   "label": "[0] line_by_line_trace (LT): In a mixed expression each operation checks its own operands. Only operations with a long operand run in 64 bits, so pure-int subexpressions that came earlier were already computed in 32 bits.\n[1] output_prediction (OP): 2147483647L + 1 is the long 2147483648. Math.round(3.14159) has type long and value 3.\n[2] one_step_execution (OS): Assigning to a long variable stores a 64-bit value. Storing a long in an int requires an (int) cast, which keeps only the low 32 bits."
+  },
+  {
+   "from": "long_type",
+   "to": "long_type@L3",
+   "type": "has_level",
+   "label": "[0] relation_to_neighbour (R): long is the wider integer type: an int widens to long automatically, and mixing an int with a long in an operation gives a long.\n[1] purpose_of_the_whole (P): long holds huge integers: counts or sums beyond 2 billion, factorials up to 20!, products of large ints, and times in milliseconds."
+  },
+  {
+   "from": "long_type",
+   "to": "long_type@L4",
+   "type": "has_level",
+   "label": "[0] predict_a_change (C) -> LargeIntegerLong: Changing int to long removes overflow below about 9.2e18, but a literal product is still computed in int unless one operand is long (1000000 * 1000000 overflows, while 1000000L * 1000000 does not).\n[1] transfer_to_a_new_program (X): Use long when integer values may reach ten digits or more, and int otherwise. Use BigInteger beyond long's range, and double for non-integers.\n[2] diagnose_an_error (D): rule broken: A long value needs an explicit cast to be stored in an int. Kind: compile-time. Trigger class: int r = Math.round(x); or int n = someLong;: 'possible lossy conversion from long to int'.\n[3] diagnose_an_error (D): rule broken: An integer literal outside the int range needs an L suffix. Kind: compile-time. Trigger class: long big = 3000000000;: 'integer number too large'.\n[4] diagnose_an_error (D): rule broken: A long target does not make int operands 64-bit. Kind: silent logic error. Trigger class: long x = a * b; with int a and b whose product exceeds the int range."
+  },
+  {
+   "from": "int_literal_limit",
+   "to": "LargeIntegerLong",
+   "type": "misconception",
+   "label": "wrong: a large integer literal is automatically long | right: A sequence of digits is an int literal only if its value falls within the int range; for larger values the book advises the long type."
+  },
+  {
+   "from": "literal",
+   "to": "LargeIntegerLong",
+   "type": "misconception",
+   "label": "wrong: A whole-number literal that is too big for an int automatically becomes a long. | right: A sequence of digits is an int literal only if its value falls within the int range; for larger values the book advises the long type."
+  },
+  {
+   "from": "long_type",
+   "to": "LargeIntegerLong",
+   "type": "misconception",
+   "label": "wrong: a large integer literal is automatically long | right: A sequence of digits is an int literal only if its value falls within the int range; for larger values the book advises the long type."
+  },
+  {
+   "from": "int",
+   "to": "long_type",
+   "type": "prerequisite",
+   "label": "long is the wider integer type used when int's range is too small."
+  }
+ ]
+}

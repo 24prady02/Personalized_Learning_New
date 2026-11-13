@@ -1,0 +1,141 @@
+{
+ "concept": "incremental_development",
+ "label": "incremental_development",
+ "graph_version": "3.9.8 (3.9.7 + one primary per misconception (S9c) and the four remaining sibling edges (S9b), 2026-11-04; listed in revision_3_9_8)",
+ "nodes": [
+  {
+   "id": "compile",
+   "kind": "concept",
+   "label": "compile"
+  },
+  {
+   "id": "debugging",
+   "kind": "concept",
+   "label": "debugging"
+  },
+  {
+   "id": "incremental_development",
+   "kind": "concept",
+   "label": "incremental_development"
+  },
+  {
+   "id": "program_text",
+   "kind": "concept",
+   "label": "program_text"
+  },
+  {
+   "id": "run",
+   "kind": "concept",
+   "label": "run"
+  },
+  {
+   "id": "incremental_development@L0",
+   "kind": "learning_level",
+   "label": "L0"
+  },
+  {
+   "id": "incremental_development@L1",
+   "kind": "learning_level",
+   "label": "L1"
+  },
+  {
+   "id": "incremental_development@L2",
+   "kind": "learning_level",
+   "label": "L2"
+  },
+  {
+   "id": "incremental_development@L3",
+   "kind": "learning_level",
+   "label": "L3"
+  },
+  {
+   "id": "incremental_development@L4",
+   "kind": "learning_level",
+   "label": "L4"
+  },
+  {
+   "id": "WriteAllThenTest",
+   "kind": "misconception",
+   "label": "WriteAllThenTest"
+  },
+  {
+   "id": "topic1.1.a",
+   "kind": "topic",
+   "label": "Programming in Java: create, compile, execute"
+  }
+ ],
+ "edges": [
+  {
+   "from": "topic1.1.a",
+   "to": "compile",
+   "type": "contains",
+   "label": "The topic 'Programming in Java: create, compile, execute' introduces compile."
+  },
+  {
+   "from": "topic1.1.a",
+   "to": "incremental_development",
+   "type": "contains",
+   "label": "Topic 'Programming in Java: create, compile, execute' of section 1.1 holds the concept incremental development."
+  },
+  {
+   "from": "topic1.1.a",
+   "to": "program_text",
+   "type": "contains",
+   "label": "The topic 'Programming in Java: create, compile, execute' introduces program_text."
+  },
+  {
+   "from": "topic1.1.a",
+   "to": "run",
+   "type": "contains",
+   "label": "The topic 'Programming in Java: create, compile, execute' introduces run."
+  },
+  {
+   "from": "incremental_development",
+   "to": "incremental_development@L0",
+   "type": "has_level",
+   "label": "[0] everyday_reading (E): Everyday writing is drafted all at once and revised at the end. A program is grown in small steps from a version that already works, compiling and running after each step.\n[1] misconception (M) -> WriteAllThenTest: wrong rule: Write the whole program first, then compile and test it all at the end. Right rule: Start with a working program and make small changes, compiling and testing after each one, so an error is always in the last change.\n[2] inconsistent_trace (T) -> WriteAllThenTest: Applies incremental development unevenly: tests the first few steps one at a time, then adds a large block of untested code at once. (here mixing in: \"Write the whole program first, then compile and test it all at the end\")"
+  },
+  {
+   "from": "incremental_development",
+   "to": "incremental_development@L1",
+   "type": "has_level",
+   "label": "[0] names_the_element (N): Incremental development: growing a program in small, tested steps from a version that works.\n[1] states_the_rule (S): Start with a working program and make small, incremental changes; at any point, if there is an error, you will know where to look. Use variables for intermediate values so you can check them."
+  },
+  {
+   "from": "incremental_development",
+   "to": "incremental_development@L2",
+   "type": "has_level",
+   "label": "[0] line_by_line_trace (LT): Sequencing: write a few lines, compile, run and check them, then add the next few; never more than one untested change at a time.\n[1] output_prediction (OP): Result: after every step there is a program that compiles and runs, and does a little more than before.\n[2] one_step_execution (OS): State transition: one step adds a small piece of code and ends with the program compiling and passing its checks again."
+  },
+  {
+   "from": "incremental_development",
+   "to": "incremental_development@L3",
+   "type": "has_level",
+   "label": "[0] relation_to_neighbour (R): Running after each step shows at once whether the new lines do what was intended.\n[1] relation_to_neighbour (R): Small steps make debugging local: the newest change is the first suspect.\n[2] purpose_of_the_whole (P): Plan: keep a working program at all times so that errors are found where they are made."
+  },
+  {
+   "from": "incremental_development",
+   "to": "incremental_development@L4",
+   "type": "has_level",
+   "label": "[0] predict_a_change (C) -> WriteAllThenTest: Conservation: each step must keep everything that already worked; if a step breaks it, that step is undone or fixed before going on.\n[1] transfer_to_a_new_program (X): For any new program: get a minimal version running first (even just printing the inputs), then add one feature at a time, testing each.\n[2] diagnose_an_error (D): rule broken: Compile and test after each small change. Kind: compile-time or logic error. Trigger class: many lines are written before the first compile, so the messages and wrong outputs cannot be traced to one change"
+  },
+  {
+   "from": "incremental_development",
+   "to": "WriteAllThenTest",
+   "type": "misconception",
+   "label": "wrong: Write the whole program first, then compile and test it all at the end. | right: Start with a working program and make small changes, compiling and testing after each one, so an error is always in the last change."
+  },
+  {
+   "from": "incremental_development",
+   "to": "debugging",
+   "type": "prerequisite",
+   "label": "Developing in small steps keeps debugging local: an error is in the change just made."
+  },
+  {
+   "from": "run",
+   "to": "incremental_development",
+   "type": "prerequisite",
+   "label": "Each small step is run and checked before the next one is added."
+  }
+ ]
+}

@@ -1,0 +1,158 @@
+{
+ "concept": "mouse_interaction",
+ "label": "mouse_interaction",
+ "graph_version": "3.9.8 (3.9.7 + one primary per misconception (S9c) and the four remaining sibling edges (S9b), 2026-11-04; listed in revision_3_9_8)",
+ "nodes": [
+  {
+   "id": "animation",
+   "kind": "concept",
+   "label": "animation"
+  },
+  {
+   "id": "coordinate_scaling",
+   "kind": "concept",
+   "label": "coordinate_scaling"
+  },
+  {
+   "id": "drawing_shapes",
+   "kind": "concept",
+   "label": "drawing_shapes"
+  },
+  {
+   "id": "function_plotting",
+   "kind": "concept",
+   "label": "function_plotting"
+  },
+  {
+   "id": "mouse_interaction",
+   "kind": "concept",
+   "label": "mouse_interaction"
+  },
+  {
+   "id": "standard_drawing",
+   "kind": "concept",
+   "label": "standard_drawing"
+  },
+  {
+   "id": "mouse_interaction@L0",
+   "kind": "learning_level",
+   "label": "L0"
+  },
+  {
+   "id": "mouse_interaction@L1",
+   "kind": "learning_level",
+   "label": "L1"
+  },
+  {
+   "id": "mouse_interaction@L2",
+   "kind": "learning_level",
+   "label": "L2"
+  },
+  {
+   "id": "mouse_interaction@L3",
+   "kind": "learning_level",
+   "label": "L3"
+  },
+  {
+   "id": "mouse_interaction@L4",
+   "kind": "learning_level",
+   "label": "L4"
+  },
+  {
+   "id": "MouseIsEvent",
+   "kind": "misconception",
+   "label": "MouseIsEvent"
+  },
+  {
+   "id": "topic1.5.e",
+   "kind": "topic",
+   "label": "Standard drawing and animation"
+  }
+ ],
+ "edges": [
+  {
+   "from": "topic1.5.e",
+   "to": "animation",
+   "type": "contains",
+   "label": "The topic 'Standard drawing and animation' introduces animation."
+  },
+  {
+   "from": "topic1.5.e",
+   "to": "coordinate_scaling",
+   "type": "contains",
+   "label": "The topic 'Standard drawing and animation' introduces coordinate_scaling."
+  },
+  {
+   "from": "topic1.5.e",
+   "to": "drawing_shapes",
+   "type": "contains",
+   "label": "The topic 'Standard drawing and animation' introduces drawing_shapes."
+  },
+  {
+   "from": "topic1.5.e",
+   "to": "function_plotting",
+   "type": "contains",
+   "label": "The topic 'Standard drawing and animation' introduces function_plotting."
+  },
+  {
+   "from": "topic1.5.e",
+   "to": "mouse_interaction",
+   "type": "contains",
+   "label": "The topic 'Standard drawing and animation' introduces mouse_interaction."
+  },
+  {
+   "from": "topic1.5.e",
+   "to": "standard_drawing",
+   "type": "contains",
+   "label": "The topic 'Standard drawing and animation' introduces standard_drawing."
+  },
+  {
+   "from": "mouse_interaction",
+   "to": "mouse_interaction@L0",
+   "type": "has_level",
+   "label": "[0] everyday_reading (E): In the everyday sense, 'mouse pressed' is an event the program waits for. StdDraw.mousePressed() only reports whether the button is down at the moment of the call.\n[1] misconception (M) -> MouseIsEvent: wrong rule: StdDraw.mousePressed() waits until the user clicks. Right rule: mousePressed() returns immediately with true or false for that moment. To catch clicks, poll it on every frame of a loop.\n[2] inconsistent_trace (T) -> MouseIsEvent: Points to LT (each frame polls mousePressed, mouseX and mouseY once). An uneven trace treats one poll as blocking, or reuses an old position on some frames. (here mixing in: \"StdDraw.mousePressed() waits until the user clicks\")"
+  },
+  {
+   "from": "mouse_interaction",
+   "to": "mouse_interaction@L1",
+   "type": "has_level",
+   "label": "[0] names_the_element (N): Mouse interaction is the StdDraw input methods mousePressed(), mouseX() and mouseY(), which report the mouse state in user coordinates.\n[1] states_the_rule (S): mousePressed() returns whether the button is currently pressed. mouseX() and mouseY() return the latest pointer position in the current x/y scale."
+  },
+  {
+   "from": "mouse_interaction",
+   "to": "mouse_interaction@L2",
+   "type": "has_level",
+   "label": "[0] line_by_line_trace (LT): Inside the animation loop: poll the mouse, update state from it, clear, draw, show(t). The mouse is sampled once per frame.\n[1] output_prediction (OP): mousePressed() returns a boolean, and mouseX()/mouseY() return doubles in drawing coordinates (e.g. 0.5, 0.5 at the centre of the default canvas).\n[2] one_step_execution (OS): A poll changes no state and does not wait. It returns the current mouse state."
+  },
+  {
+   "from": "mouse_interaction",
+   "to": "mouse_interaction@L3",
+   "type": "has_level",
+   "label": "[0] relation_to_neighbour (R): Mouse checks run inside the frame loop. A click shorter than one frame (show(t) pause) can be missed.\n[1] purpose_of_the_whole (P): Plan: polling loop. The mouse coordinates are most-recent holders updated every frame."
+  },
+  {
+   "from": "mouse_interaction",
+   "to": "mouse_interaction@L4",
+   "type": "has_level",
+   "label": "[0] predict_a_change (C) -> MouseIsEvent: Changing the frame pause changes how responsive the program is to clicks, but not what a click does.\n[1] transfer_to_a_new_program (X): Use mouse polling for interactive drawings and games built on StdDraw. For text dialogue, use StdIn.\n[2] diagnose_an_error (D): rule broken: mousePressed() does not block. Kind: silent logic error. Trigger class: Calling mousePressed() once outside a loop: it returns false before the user can click, and the click is ignored."
+  },
+  {
+   "from": "mouse_interaction",
+   "to": "MouseIsEvent",
+   "type": "misconception",
+   "label": "wrong: StdDraw.mousePressed() waits until the user clicks. | right: mousePressed() only reports whether the button is down at that moment, so it is checked repeatedly in a loop."
+  },
+  {
+   "from": "animation",
+   "to": "mouse_interaction",
+   "type": "prerequisite",
+   "label": "Mouse checks run inside the animation loop."
+  },
+  {
+   "from": "standard_drawing",
+   "to": "mouse_interaction",
+   "type": "prerequisite",
+   "label": "Mouse position and clicks are read through StdDraw methods such as StdDraw.mousePressed()."
+  }
+ ]
+}

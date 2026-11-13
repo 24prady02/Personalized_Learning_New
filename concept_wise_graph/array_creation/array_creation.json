@@ -1,0 +1,388 @@
+{
+ "concept": "array_creation",
+ "label": "array_creation",
+ "graph_version": "3.9.8 (3.9.7 + one primary per misconception (S9c) and the four remaining sibling edges (S9b), 2026-11-04; listed in revision_3_9_8)",
+ "nodes": [
+  {
+   "id": "args_length",
+   "kind": "concept",
+   "label": "args_length"
+  },
+  {
+   "id": "array_aliasing",
+   "kind": "concept",
+   "label": "array_aliasing"
+  },
+  {
+   "id": "array_creation",
+   "kind": "concept",
+   "label": "array_creation"
+  },
+  {
+   "id": "array_declaration",
+   "kind": "concept",
+   "label": "array_declaration"
+  },
+  {
+   "id": "array_default_values",
+   "kind": "concept",
+   "label": "array_default_values"
+  },
+  {
+   "id": "array_initializer",
+   "kind": "concept",
+   "label": "array_initializer"
+  },
+  {
+   "id": "array_reference",
+   "kind": "concept",
+   "label": "Array name holds a memory address"
+  },
+  {
+   "id": "data_structure",
+   "kind": "concept",
+   "label": "Data structure"
+  },
+  {
+   "id": "indexing",
+   "kind": "concept",
+   "label": "indexing"
+  },
+  {
+   "id": "length_field",
+   "kind": "concept",
+   "label": "length_field"
+  },
+  {
+   "id": "multidimensional_array",
+   "kind": "concept",
+   "label": "multidimensional_array"
+  },
+  {
+   "id": "off_by_one_error",
+   "kind": "concept",
+   "label": "off_by_one_error"
+  },
+  {
+   "id": "run_time_error",
+   "kind": "concept",
+   "label": "run_time_error"
+  },
+  {
+   "id": "sampling_without_replacement",
+   "kind": "concept",
+   "label": "sampling_without_replacement"
+  },
+  {
+   "id": "NegativeArraySize",
+   "kind": "error",
+   "label": "NegativeArraySize"
+  },
+  {
+   "id": "array_creation@L0",
+   "kind": "learning_level",
+   "label": "L0"
+  },
+  {
+   "id": "array_creation@L1",
+   "kind": "learning_level",
+   "label": "L1"
+  },
+  {
+   "id": "array_creation@L2",
+   "kind": "learning_level",
+   "label": "L2"
+  },
+  {
+   "id": "array_creation@L3",
+   "kind": "learning_level",
+   "label": "L3"
+  },
+  {
+   "id": "array_creation@L4",
+   "kind": "learning_level",
+   "label": "L4"
+  },
+  {
+   "id": "ArrayAllocationWithoutNew",
+   "kind": "misconception",
+   "label": "ArrayAllocationWithoutNew"
+  },
+  {
+   "id": "ArrayBracketCountIsLength",
+   "kind": "misconception",
+   "label": "ArrayBracketCountIsLength"
+  },
+  {
+   "id": "ArrayCreationIsFree",
+   "kind": "misconception",
+   "label": "ArrayCreationIsFree"
+  },
+  {
+   "id": "ArrayLengthCannotBeZero",
+   "kind": "misconception",
+   "label": "ArrayLengthCannotBeZero"
+  },
+  {
+   "id": "ArrayListIsArray",
+   "kind": "misconception",
+   "label": "ArrayListIsArray"
+  },
+  {
+   "id": "ArrayRangeInclusive",
+   "kind": "misconception",
+   "label": "ArrayRangeInclusive"
+  },
+  {
+   "id": "ArraysGrow",
+   "kind": "misconception",
+   "label": "ArraysGrow"
+  },
+  {
+   "id": "DeclarationCreatesArray",
+   "kind": "misconception",
+   "label": "DeclarationCreatesArray"
+  },
+  {
+   "id": "topic1.4.a",
+   "kind": "topic",
+   "label": "Arrays in Java (declare, create, initialize; indexing; length; default values)"
+  }
+ ],
+ "edges": [
+  {
+   "from": "topic1.4.a",
+   "to": "args_length",
+   "type": "contains",
+   "label": "The topic 'Arrays in Java (declare, create, initialize; indexing; length; default values)' introduces args_length."
+  },
+  {
+   "from": "topic1.4.a",
+   "to": "array_creation",
+   "type": "contains",
+   "label": "The topic 'Arrays in Java (declare, create, initialize; indexing; length; default values)' introduces array_creation."
+  },
+  {
+   "from": "topic1.4.a",
+   "to": "array_declaration",
+   "type": "contains",
+   "label": "The topic 'Arrays in Java (declare, create, initialize; indexing; length; default values)' introduces array_declaration."
+  },
+  {
+   "from": "topic1.4.a",
+   "to": "array_default_values",
+   "type": "contains",
+   "label": "The topic 'Arrays in Java (declare, create, initialize; indexing; length; default values)' introduces array_default_values."
+  },
+  {
+   "from": "topic1.4.a",
+   "to": "data_structure",
+   "type": "contains",
+   "label": "Data structure is taught under \"Arrays in Java (declare, create, initialize; indexing; length; default values)\"."
+  },
+  {
+   "from": "topic1.4.a",
+   "to": "indexing",
+   "type": "contains",
+   "label": "The topic 'Arrays in Java (declare, create, initialize; indexing; length; default values)' introduces indexing."
+  },
+  {
+   "from": "topic1.4.a",
+   "to": "length_field",
+   "type": "contains",
+   "label": "The topic 'Arrays in Java (declare, create, initialize; indexing; length; default values)' introduces length_field."
+  },
+  {
+   "from": "topic1.4.a",
+   "to": "off_by_one_error",
+   "type": "contains",
+   "label": "Topic 'Arrays in Java (declare, create, initialize; indexing; length; default values)' of section 1.4 holds the concept off by one error."
+  },
+  {
+   "from": "array_creation",
+   "to": "NegativeArraySize",
+   "type": "error",
+   "label": "wrong: new int[n] with a negative n creates an empty array. | right: Creating an array with a negative length throws NegativeArraySizeException at run time."
+  },
+  {
+   "from": "run_time_error",
+   "to": "NegativeArraySize",
+   "type": "error",
+   "label": "wrong: new int[n] with a negative n creates an empty array. | right: Creating an array with a negative length throws NegativeArraySizeException at run time."
+  },
+  {
+   "from": "array_creation",
+   "to": "array_creation@L0",
+   "type": "has_level",
+   "label": "[0] everyday_reading (E): Folk meaning: in maths, a[5] or a_5 names element 5, and 'new' means 'fresh, empty, ready to fill', so 'new int[5]' is read as 'element 5' or as an empty list that grows. Java rule: new int[n] allocates exactly n elements, indexed 0 to n-1, each already set to the default value, and the length can never change.\n[1] misconception (M) -> ArraysGrow: wrong rule: An array grows as you add elements. Right rule: An array's length is fixed when it is created, so writing to a[n] throws an exception instead of adding a slot.\n[2] misconception (M) -> ArrayAllocationWithoutNew: wrong rule: Arrays are created without the new keyword. Right rule: An array exists only after new T[n] (or an initializer list in a declaration, which implies creation) has run.\n[3] misconception (M) -> ArrayLengthCannotBeZero: wrong rule: An array cannot have length 0. Right rule: new int[0] is a legal array with a.length == 0 (no element can be indexed).\n[4] misconception (M) -> ArrayCreationIsFree: wrong rule: Creating a big array with new takes no time because the elements are not set yet. Right rule: Java initializes every element when the array is created, so creation takes time proportional to its length.\n[5] inconsistent_trace (T) -> ArraysGrow: Points to LT: evaluate the size, allocate the array, fill it with defaults, return the reference, then assign it. Inconsistent application: the size n is treated as the last index on some lines, or the array is assumed to exist already at its declaration. (here mixing in: \"an array grows as you add elements\")\n[6] misconception (M) -> ArrayRangeInclusive: wrong rule: new int[n] has slots 0 to n, inclusive. Right rule: new int[n] has exactly n slots, a[0] through a[n-1]; a[n] does not exist.\n[7] misconception (M) -> DeclarationCreatesArray: wrong rule: int[] a; already makes an array that can be indexed. Right rule: Only new (or an initializer) creates the array; before that, using a[i] is the compile-time error 'variable a might not have been initialized'.\n[8] misconception (M) -> ArrayBracketCountIsLength: wrong rule: The number of brackets in new int[][] is the array's length. Right rule: Bracket pairs give the number of dimensions; the length is the value of the dimension expression inside them."
+  },
+  {
+   "from": "array_creation",
+   "to": "array_creation@L1",
+   "type": "has_level",
+   "label": "[0] names_the_element (N): Identity: an array creation expression; new T[n] makes a new array object with n elements of type T and yields a reference to it.\n[1] states_the_rule (S): Declarative: 'new T[expr]', where expr is any int-valued expression evaluated at run time; the resulting length is fixed for the array's lifetime."
+  },
+  {
+   "from": "array_creation",
+   "to": "array_creation@L2",
+   "type": "has_level",
+   "label": "[0] line_by_line_trace (LT): Sequencing: (1) the dimension expression is evaluated; (2) if it is negative, NegativeArraySizeException is thrown; (3) space for n elements is reserved and every element is set to its default; (4) the expression yields the reference, which an enclosing assignment then stores.\n[1] output_prediction (OP): Result: a value of type T[], namely a reference to a new array of length n whose elements all hold the default (0, 0.0, false or null). It produces no output; printing it shows an address, not the elements.\n[2] one_step_execution (OS): State transition: one execution creates one new array object (n new element variables at their defaults) and returns its reference. No existing variable changes until that reference is assigned."
+  },
+  {
+   "from": "array_creation",
+   "to": "array_creation@L3",
+   "type": "has_level",
+   "label": "[0] relation_to_neighbour (R): The declared element type must match the created one; in 'double[] a = new double[N];' the left side is the declaration and the right side is the creation.\n[1] relation_to_neighbour (R): Elements can be indexed only after creation, and the n given to new fixes the valid index range 0..n-1.\n[2] relation_to_neighbour (R): Creation is what puts the default value (0, 0.0, false, null) in every slot; each execution of new gives fresh defaults.\n[3] relation_to_neighbour (R): The size n given to new becomes a.length and never changes for that array object.\n[4] relation_to_neighbour (R): An initializer {v0, ..., vk} implies creation of an array of length k+1, so new is not written.\n[5] relation_to_neighbour (R): Only new makes a distinct array. Assignment copies the reference, so a separate copy needs new plus an element-by-element copy.\n[6] relation_to_neighbour (R): new yields the reference (address) of the array, and the array variable stores that reference, not the elements.\n[7] purpose_of_the_whole (P): Plan/role: reserve storage for a number of values that may be known only at run time (e.g. N from the command line), before any value is stored."
+  },
+  {
+   "from": "array_creation",
+   "to": "array_creation@L4",
+   "type": "has_level",
+   "label": "[0] predict_a_change (C) -> ArraysGrow: Conservation: changing n changes a.length and the valid index range but not the element type. Moving 'new' inside a loop gives a fresh array of defaults on every pass (SelfAvoidingWalk relies on this). Re-creating an array never changes arrays that other variables already refer to.\n[1] diagnose_an_error (D): rule broken: The dimension expression of new must be >= 0. Kind: run-time exception. Trigger class: the size evaluates to a negative int, e.g. a negative command-line value, or int overflow such as new int[N*N*N*N] with N = 1000 (NegativeArraySizeException)\n[2] transfer_to_a_new_program (X): Applicability: use new T[n] when the number of values is known (at least at run time) before they are stored and stays fixed. Use an initializer when the values are compile-time constants, and a resizing structure when the count is unknown in advance.\n[3] diagnose_an_error (D): rule broken: An array must be allocated with new before its elements are accessed. Kind: compile-time. Trigger class: 'int[] a;' followed by a[i] = ... with no creation (variable a might not have been initialized)\n[4] diagnose_an_error (D): rule broken: The dimension expression must have an integral type (int after promotion). Kind: compile-time. Trigger class: a double or long size such as new int[2.5] or new int[n] with long n (incompatible types: possible lossy conversion)\n[5] diagnose_an_error (D): rule broken: The requested array must fit in the memory available to Java. Kind: run-time exception. Trigger class: a very large n such as new boolean[N+1] for huge N in PrimeSieve (OutOfMemoryError)"
+  },
+  {
+   "from": "array_aliasing",
+   "to": "ArrayListIsArray",
+   "type": "misconception",
+   "label": "wrong: An ArrayList is just an array, so it has a fixed length and is indexed with []. | right: An array has a fixed length and uses [] and .length; an ArrayList can grow and uses get, set and size()."
+  },
+  {
+   "from": "array_creation",
+   "to": "ArrayAllocationWithoutNew",
+   "type": "misconception",
+   "label": "wrong: Arrays are created without the new keyword. | right: An array is created with new (or with an initializer list in a declaration)."
+  },
+  {
+   "from": "array_creation",
+   "to": "ArrayBracketCountIsLength",
+   "type": "misconception",
+   "label": "wrong: The number of brackets in an array type or initializer is the array's length. | right: Brackets give the number of dimensions; the length is set at creation."
+  },
+  {
+   "from": "array_creation",
+   "to": "ArrayCreationIsFree",
+   "type": "misconception",
+   "label": "wrong: Creating a big array with new takes no time because the elements are not set yet. | right: Java initializes every element when the array is created, so creation takes time proportional to its length."
+  },
+  {
+   "from": "array_creation",
+   "to": "ArrayLengthCannotBeZero",
+   "type": "misconception",
+   "label": "wrong: An array cannot have length 0. | right: new int[0] is a legal array of length 0."
+  },
+  {
+   "from": "array_creation",
+   "to": "ArrayListIsArray",
+   "type": "misconception",
+   "label": "wrong: an ArrayList is an array (borderline; beyond Chapter 1 CS1) | right: An array has a fixed length and uses [] and .length; an ArrayList can grow and uses get, set and size()."
+  },
+  {
+   "from": "array_creation",
+   "to": "ArrayRangeInclusive",
+   "type": "misconception",
+   "label": "wrong: new int[n] has slots 0 to n, inclusive. | right: The slots are 0 to n - 1."
+  },
+  {
+   "from": "array_creation",
+   "to": "ArraysGrow",
+   "type": "misconception",
+   "label": "wrong: Storing a value at a[n] in an array of length n makes the array grow. | right: An array's length is fixed when it is created, so a[n] throws an exception."
+  },
+  {
+   "from": "array_creation",
+   "to": "DeclarationCreatesArray",
+   "type": "misconception",
+   "label": "wrong: int[] a; already makes an array that can be indexed. | right: The declaration only names the array; until new (or an initializer) creates it, using a[i] gives a 'variable might not have been initialized' compile-time error."
+  },
+  {
+   "from": "array_declaration",
+   "to": "ArrayBracketCountIsLength",
+   "type": "misconception",
+   "label": "wrong: The number of brackets in an array type or initializer is the array's length. | right: Brackets give the number of dimensions; the length is set at creation."
+  },
+  {
+   "from": "array_declaration",
+   "to": "DeclarationCreatesArray",
+   "type": "misconception",
+   "label": "wrong: int[] a; already makes an array that can be indexed. | right: The declaration only names the array; until new (or an initializer) creates it, using a[i] gives a 'variable might not have been initialized' compile-time error."
+  },
+  {
+   "from": "array_default_values",
+   "to": "ArrayCreationIsFree",
+   "type": "misconception",
+   "label": "wrong: Creating a big array with new takes no time because the elements are not set yet. | right: Java initializes every element when the array is created, so creation takes time proportional to its length."
+  },
+  {
+   "from": "array_initializer",
+   "to": "ArrayBracketCountIsLength",
+   "type": "misconception",
+   "label": "wrong: The number of brackets in an array type or initializer is the array's length. | right: Brackets give the number of dimensions; the length is set at creation."
+  },
+  {
+   "from": "indexing",
+   "to": "ArrayRangeInclusive",
+   "type": "misconception",
+   "label": "wrong: new int[n] has slots 0 to n, inclusive. | right: The slots are 0 to n - 1."
+  },
+  {
+   "from": "length_field",
+   "to": "ArrayLengthCannotBeZero",
+   "type": "misconception",
+   "label": "wrong: An array cannot have length 0. | right: new int[0] is a legal array of length 0."
+  },
+  {
+   "from": "multidimensional_array",
+   "to": "ArrayBracketCountIsLength",
+   "type": "misconception",
+   "label": "wrong: The number of brackets in an array type or initializer is the array's length. | right: Brackets give the number of dimensions; the length is set at creation."
+  },
+  {
+   "from": "array_creation",
+   "to": "array_aliasing",
+   "type": "prerequisite",
+   "label": "Because new creates one array and the variable stores only a reference to it, assigning that variable to another makes both names refer to the same array."
+  },
+  {
+   "from": "array_creation",
+   "to": "array_default_values",
+   "type": "prerequisite",
+   "label": "new fills every slot with the type's default value: 0, 0.0, false or null."
+  },
+  {
+   "from": "array_creation",
+   "to": "array_initializer",
+   "type": "prerequisite",
+   "label": "{v0, v1, ..., vk} is a shorthand that creates an array of length k + 1 and fills it in one step."
+  },
+  {
+   "from": "array_creation",
+   "to": "array_reference",
+   "type": "prerequisite",
+   "label": "When an array is created, the array name stores the memory address of its values; a[i] is found by adding i to that address."
+  },
+  {
+   "from": "array_creation",
+   "to": "indexing",
+   "type": "prerequisite",
+   "label": "An array must be created with new before any of its elements a[i] can be accessed."
+  },
+  {
+   "from": "array_creation",
+   "to": "length_field",
+   "type": "prerequisite",
+   "label": "The size n given to new becomes a.length and stays fixed for the array's lifetime."
+  },
+  {
+   "from": "array_creation",
+   "to": "sampling_without_replacement",
+   "type": "prerequisite",
+   "label": "Sampling without replacement first creates an array of all candidates (perm), then picks from the part not yet chosen."
+  },
+  {
+   "from": "array_declaration",
+   "to": "array_creation",
+   "type": "prerequisite",
+   "label": "double[] a; declares the array name and type; a = new double[N]; then creates the array."
+  }
+ ]
+}

@@ -1,0 +1,209 @@
+{
+ "concept": "math_round",
+ "label": "math_round",
+ "graph_version": "3.9.8 (3.9.7 + one primary per misconception (S9c) and the four remaining sibling edges (S9b), 2026-11-04; listed in revision_3_9_8)",
+ "nodes": [
+  {
+   "id": "api",
+   "kind": "concept",
+   "label": "Application programming interface (API)"
+  },
+  {
+   "id": "explicit_cast",
+   "kind": "concept",
+   "label": "explicit_cast"
+  },
+  {
+   "id": "math_library",
+   "kind": "concept",
+   "label": "math_library"
+  },
+  {
+   "id": "math_random",
+   "kind": "concept",
+   "label": "math_random"
+  },
+  {
+   "id": "math_round",
+   "kind": "concept",
+   "label": "math_round"
+  },
+  {
+   "id": "method_call",
+   "kind": "concept",
+   "label": "method_call"
+  },
+  {
+   "id": "trig_functions",
+   "kind": "concept",
+   "label": "trig_functions"
+  },
+  {
+   "id": "DiscardedReturnValue",
+   "kind": "error",
+   "label": "DiscardedReturnValue"
+  },
+  {
+   "id": "RoundReturnsInt",
+   "kind": "error",
+   "label": "RoundReturnsInt"
+  },
+  {
+   "id": "math_round@L0",
+   "kind": "learning_level",
+   "label": "L0"
+  },
+  {
+   "id": "math_round@L1",
+   "kind": "learning_level",
+   "label": "L1"
+  },
+  {
+   "id": "math_round@L2",
+   "kind": "learning_level",
+   "label": "L2"
+  },
+  {
+   "id": "math_round@L3",
+   "kind": "learning_level",
+   "label": "L3"
+  },
+  {
+   "id": "math_round@L4",
+   "kind": "learning_level",
+   "label": "L4"
+  },
+  {
+   "id": "CastRounds",
+   "kind": "misconception",
+   "label": "CastRounds"
+  },
+  {
+   "id": "topic1.2.g",
+   "kind": "topic",
+   "label": "Library methods and APIs (Math)"
+  }
+ ],
+ "edges": [
+  {
+   "from": "topic1.2.g",
+   "to": "api",
+   "type": "contains",
+   "label": "Application programming interface (API) is taught under \"Library methods and APIs (Math)\"."
+  },
+  {
+   "from": "topic1.2.g",
+   "to": "math_library",
+   "type": "contains",
+   "label": "The topic 'Library methods and APIs (Math)' introduces math_library."
+  },
+  {
+   "from": "topic1.2.g",
+   "to": "math_random",
+   "type": "contains",
+   "label": "The topic 'Library methods and APIs (Math)' introduces math_random."
+  },
+  {
+   "from": "topic1.2.g",
+   "to": "math_round",
+   "type": "contains",
+   "label": "The topic 'Library methods and APIs (Math)' introduces math_round."
+  },
+  {
+   "from": "topic1.2.g",
+   "to": "method_call",
+   "type": "contains",
+   "label": "The topic 'Library methods and APIs (Math)' introduces method_call."
+  },
+  {
+   "from": "topic1.2.g",
+   "to": "trig_functions",
+   "type": "contains",
+   "label": "The topic 'Library methods and APIs (Math)' introduces trig_functions."
+  },
+  {
+   "from": "explicit_cast",
+   "to": "RoundReturnsInt",
+   "type": "error",
+   "label": "wrong: Writes int n = Math.round(x); because Math.round gives an int. | right: Math.round(double) returns a long, so storing it in an int needs a cast: int n = (int) Math.round(x);"
+  },
+  {
+   "from": "math_round",
+   "to": "DiscardedReturnValue",
+   "type": "error",
+   "label": "wrong: Writes Math.round(x); on its own line expecting x to be rounded. | right: Math.round(x) returns a value; that value has to be stored or used (e.g. long r = Math.round(x);), because the call on its own line does nothing with it."
+  },
+  {
+   "from": "math_round",
+   "to": "RoundReturnsInt",
+   "type": "error",
+   "label": "wrong: Writes int n = Math.round(x); because Math.round gives an int. | right: Math.round(double) returns a long, so storing it in an int needs a cast: int n = (int) Math.round(x);"
+  },
+  {
+   "from": "method_call",
+   "to": "DiscardedReturnValue",
+   "type": "error",
+   "label": "wrong: Writes Math.round(x); on its own line expecting x to be rounded. | right: Math.round(x) returns a value; that value has to be stored or used (e.g. long r = Math.round(x);), because the call on its own line does nothing with it."
+  },
+  {
+   "from": "math_round",
+   "to": "math_round@L0",
+   "type": "has_level",
+   "label": "[0] everyday_reading (E): Folk meaning: 'round x' (as in school or on a calculator) changes x itself into a whole number, of the ordinary integer kind. Java rule: Math.round(x) leaves x unchanged and returns a new value, the nearest integer, of type long (ties go up, so Math.round(2.5) is 3 and Math.round(-2.5) is -2).\n[1] misconception (M) -> CastRounds: wrong rule: (int) 2.7 evaluates to 3. Right rule: A cast to int discards the fractional part (rounds toward zero, so (int) -2.7 is -2); Math.round rounds to the nearest integer.\n[2] inconsistent_trace (T) -> CastRounds: Points to LT (evaluate the argument, round it, return a long that must be stored or used). Applied unevenly: the student stores the rounded value in one step but on another line assumes the call itself changed x, or treats the result as an int in one place and as a long elsewhere. (here mixing in: \"(int) 2.7 evaluates to 3\")"
+  },
+  {
+   "from": "math_round",
+   "to": "math_round@L1",
+   "type": "has_level",
+   "label": "[0] names_the_element (N): Math.round is a Math library (explicit conversion) method that takes a double and returns the nearest integer as a long.\n[1] states_the_rule (S): Signature long round(double a): round to the nearest integer; the result is long, so storing it in an int requires an explicit cast, as in (int) Math.round(x)."
+  },
+  {
+   "from": "math_round",
+   "to": "math_round@L2",
+   "type": "has_level",
+   "label": "[0] line_by_line_trace (LT): In int n = (int) Math.round(x * 10): evaluate x * 10, call Math.round on that double, which returns a long, apply the (int) cast, then assign to n.\n[1] output_prediction (OP): Type long: Math.round(3.14159) and Math.round(2.71828) are both 3; Math.round(Math.PI * 20.0) is 63; (int) Math.round(2.71828) is int 3.\n[2] one_step_execution (OS): The call changes no variable: x keeps its value; the only state change is the assignment of the returned long, e.g. long r = Math.round(x);."
+  },
+  {
+   "from": "math_round",
+   "to": "math_round@L3",
+   "type": "has_level",
+   "label": "[0] relation_to_neighbour (R): Math.round is listed in the Math API with return type long, which is what forces the cast when the result goes to an int (unlike the other Math methods, which return double).\n[1] relation_to_neighbour (R): (int) 2.71828 truncates toward zero and gives 2; Math.round(2.71828) rounds to the nearest integer and gives 3, as a long that needs (int) to become an int.\n[2] purpose_of_the_whole (P): Converts a computed real value to the nearest whole number for counting, display or pixel coordinates, typically as (int) Math.round(x)."
+  },
+  {
+   "from": "math_round",
+   "to": "math_round@L4",
+   "type": "has_level",
+   "label": "[0] predict_a_change (C) -> CastRounds: Replacing Math.round(x) with (int) x changes the result whenever the fractional part is .5 or more (and for negative values), because the cast truncates toward zero; adding the (int) cast keeps the value as long as it fits in the int range.\n[1] diagnose_an_error (D): rule broken: Math.round(double) returns a long, so storing it in an int needs a cast: int n = (int) Math.round(x);. Kind: compile-time. Trigger class: int n = Math.round(x); with a double x (possible lossy conversion from long to int).\n[2] transfer_to_a_new_program (X): Use Math.round when the nearest integer is wanted; use a cast when truncation toward zero is wanted; to round only what is printed (e.g. two decimals), use printf instead of changing the value.\n[3] diagnose_an_error (D): rule broken: Math.round(x) returns a value and does not change x; the value must be stored or used. Kind: silent logic error. Trigger class: Math.round(x); written as a statement on its own, then x used as if rounded."
+  },
+  {
+   "from": "explicit_cast",
+   "to": "CastRounds",
+   "type": "misconception",
+   "label": "wrong: (int) 2.7 evaluates to 3. | right: A cast to int discards the fractional part (rounds toward zero, so (int) -2.7 is -2); Math.round rounds to the nearest integer."
+  },
+  {
+   "from": "math_library",
+   "to": "CastRounds",
+   "type": "misconception",
+   "label": "wrong: (int) 2.7 evaluates to 3. | right: A cast to int discards the fractional part (rounds toward zero, so (int) -2.7 is -2); Math.round rounds to the nearest integer."
+  },
+  {
+   "from": "math_round",
+   "to": "CastRounds",
+   "type": "misconception",
+   "label": "wrong: (int) 2.7 evaluates to 3. | right: A cast to int discards the fractional part (rounds toward zero, so (int) -2.7 is -2); Math.round rounds to the nearest integer."
+  },
+  {
+   "from": "math_round",
+   "to": "explicit_cast",
+   "type": "parallel",
+   "label": "(int) 2.71828 truncates toward zero and gives 2; Math.round(2.71828) rounds to the nearest integer and gives 3, as a long that needs (int) to become an int."
+  },
+  {
+   "from": "math_library",
+   "to": "math_round",
+   "type": "prerequisite",
+   "label": "Math.round is a Math library method."
+  }
+ ]
+}

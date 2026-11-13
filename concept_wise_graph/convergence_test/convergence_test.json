@@ -1,0 +1,229 @@
+{
+ "concept": "convergence_test",
+ "label": "convergence_test",
+ "graph_version": "3.9.8 (3.9.7 + one primary per misconception (S9c) and the four remaining sibling edges (S9b), 2026-11-04; listed in revision_3_9_8)",
+ "nodes": [
+  {
+   "id": "accumulator_pattern",
+   "kind": "concept",
+   "label": "accumulator_pattern"
+  },
+  {
+   "id": "convergence_test",
+   "kind": "concept",
+   "label": "convergence_test"
+  },
+  {
+   "id": "counter_pattern",
+   "kind": "concept",
+   "label": "counter_pattern"
+  },
+  {
+   "id": "debugging",
+   "kind": "concept",
+   "label": "debugging"
+  },
+  {
+   "id": "double",
+   "kind": "concept",
+   "label": "double"
+  },
+  {
+   "id": "fencepost_loop",
+   "kind": "concept",
+   "label": "fencepost_loop"
+  },
+  {
+   "id": "flag_search_loop",
+   "kind": "concept",
+   "label": "flag_search_loop"
+  },
+  {
+   "id": "floating_point_precision",
+   "kind": "concept",
+   "label": "floating_point_precision"
+  },
+  {
+   "id": "loop_performance",
+   "kind": "concept",
+   "label": "Loop performance"
+  },
+  {
+   "id": "monte_carlo_simulation",
+   "kind": "concept",
+   "label": "monte_carlo_simulation"
+  },
+  {
+   "id": "number_conversion",
+   "kind": "concept",
+   "label": "Number conversion (binary)"
+  },
+  {
+   "id": "testing",
+   "kind": "concept",
+   "label": "testing"
+  },
+  {
+   "id": "while_loop",
+   "kind": "concept",
+   "label": "while_loop"
+  },
+  {
+   "id": "convergence_test@L0",
+   "kind": "learning_level",
+   "label": "L0"
+  },
+  {
+   "id": "convergence_test@L1",
+   "kind": "learning_level",
+   "label": "L1"
+  },
+  {
+   "id": "convergence_test@L2",
+   "kind": "learning_level",
+   "label": "L2"
+  },
+  {
+   "id": "convergence_test@L3",
+   "kind": "learning_level",
+   "label": "L3"
+  },
+  {
+   "id": "convergence_test@L4",
+   "kind": "learning_level",
+   "label": "L4"
+  },
+  {
+   "id": "FloatingPointIsExact",
+   "kind": "misconception",
+   "label": "FloatingPointIsExact"
+  },
+  {
+   "id": "topic1.3.f",
+   "kind": "topic",
+   "label": "Applications (finite sums, Newton, conversion, gambler's ruin, factoring)"
+  }
+ ],
+ "edges": [
+  {
+   "from": "topic1.3.f",
+   "to": "accumulator_pattern",
+   "type": "contains",
+   "label": "The topic 'Applications (finite sums, Newton, conversion, gambler's ruin, factoring)' introduces accumulator_pattern."
+  },
+  {
+   "from": "topic1.3.f",
+   "to": "convergence_test",
+   "type": "contains",
+   "label": "The topic 'Applications (finite sums, Newton, conversion, gambler's ruin, factoring)' introduces convergence_test."
+  },
+  {
+   "from": "topic1.3.f",
+   "to": "counter_pattern",
+   "type": "contains",
+   "label": "The topic 'Applications (finite sums, Newton, conversion, gambler's ruin, factoring)' introduces counter_pattern."
+  },
+  {
+   "from": "topic1.3.f",
+   "to": "debugging",
+   "type": "contains",
+   "label": "Topic 'Applications (finite sums, Newton, conversion, gambler's ruin, factoring)' of section 1.3 holds the concept debugging."
+  },
+  {
+   "from": "topic1.3.f",
+   "to": "fencepost_loop",
+   "type": "contains",
+   "label": "The topic 'Applications (finite sums, Newton, conversion, gambler's ruin, factoring)' introduces fencepost_loop."
+  },
+  {
+   "from": "topic1.3.f",
+   "to": "flag_search_loop",
+   "type": "contains",
+   "label": "The topic 'Applications (finite sums, Newton, conversion, gambler's ruin, factoring)' introduces flag_search_loop."
+  },
+  {
+   "from": "topic1.3.f",
+   "to": "loop_performance",
+   "type": "contains",
+   "label": "Loop performance is taught under \"Applications (finite sums, Newton, conversion, gambler's ruin, factoring)\"."
+  },
+  {
+   "from": "topic1.3.f",
+   "to": "monte_carlo_simulation",
+   "type": "contains",
+   "label": "The topic 'Applications (finite sums, Newton, conversion, gambler's ruin, factoring)' introduces monte_carlo_simulation."
+  },
+  {
+   "from": "topic1.3.f",
+   "to": "number_conversion",
+   "type": "contains",
+   "label": "Number conversion (binary) is taught under \"Applications (finite sums, Newton, conversion, gambler's ruin, factoring)\"."
+  },
+  {
+   "from": "topic1.3.f",
+   "to": "testing",
+   "type": "contains",
+   "label": "Topic 'Applications (finite sums, Newton, conversion, gambler's ruin, factoring)' of section 1.3 holds the concept testing."
+  },
+  {
+   "from": "convergence_test",
+   "to": "convergence_test@L0",
+   "type": "has_level",
+   "label": "[0] everyday_reading (E): Folk meaning: in maths a converging sequence reaches its limit, and 'equal' means exactly equal, so a novice writes `while (t != c/t)` and expects it to stop at the root. Java doubles are approximations, so exact equality may never occur and the test has to be 'close enough': `Math.abs(t - c/t) > epsilon * t`.\n[1] misconception (M) -> FloatingPointIsExact: wrong rule: `Math.sqrt(2) * Math.sqrt(2) == 2` is true. Right rule: A double is an approximation, so the product is close to 2 but not equal to it (the expression is false). Loop tests on doubles therefore compare an error against a tolerance instead of testing equality.\n[2] inconsistent_trace (T) -> FloatingPointIsExact: Applies the LT rule (compute the error, compare it with the tolerance, then refine) unevenly: refines once more after the test has gone false, or tests the old estimate against the new c/t, so the traced number of iterations or the final t is wrong. (here mixing in: \"Math.sqrt(2) * Math.sqrt(2) == 2 is true\")"
+  },
+  {
+   "from": "convergence_test",
+   "to": "convergence_test@L1",
+   "type": "has_level",
+   "label": "[0] names_the_element (N): Loop-termination idiom: a while condition that keeps refining a floating-point estimate until its error falls below a tolerance epsilon.\n[1] states_the_rule (S): Stop on a relative-error tolerance, not on equality: `while (Math.abs(t - c/t) > epsilon * t) t = (c/t + t) / 2.0;` with `epsilon = 1e-15`."
+  },
+  {
+   "from": "convergence_test",
+   "to": "convergence_test@L2",
+   "type": "has_level",
+   "label": "[0] line_by_line_trace (LT): Before each pass: evaluate c/t, then t - c/t, then Math.abs, then epsilon * t, then compare. If the error is greater, run the body once (replace t) and test again. If it is not greater, leave the loop with the current t.\n[1] output_prediction (OP): The loop leaves a double t whose relative error is at most epsilon. For Sqrt 2.0 it prints 1.414213562373095 after 5 iterations; the result is not exactly the mathematical value.\n[2] one_step_execution (OS): One pass changes only the estimate t, replacing it by (c/t + t)/2.0 (2.0 becomes 1.5, then 1.4166666666666665). c and epsilon stay fixed. The test itself changes nothing and yields a boolean."
+  },
+  {
+   "from": "convergence_test",
+   "to": "convergence_test@L3",
+   "type": "has_level",
+   "label": "[0] relation_to_neighbour (R): Because doubles are approximate, the stopping condition has to be a tolerance test, and the tolerance has to be relative (`epsilon * t`). An absolute 1e-15 is smaller than the spacing between doubles near large values such as 1595.16, so the test might never succeed (t and c/t can keep differing by one unit in the last place).\n[1] relation_to_neighbour (R): The convergence test is the while condition, evaluated before every pass. The body must move the estimate closer (t = (c/t + t)/2.0), or the condition stays true and the loop never ends.\n[2] purpose_of_the_whole (P): Plan: iterate-until-converged (Newton's method). The estimate t is repeatedly replaced by a better one until it is close enough. Used to compute functions like sqrt, kth roots and Taylor sums."
+  },
+  {
+   "from": "convergence_test",
+   "to": "convergence_test@L4",
+   "type": "has_level",
+   "label": "[0] predict_a_change (C) -> FloatingPointIsExact: Making epsilon smaller adds a few iterations and keeps the answer; making it 0, or replacing the test with `t != c/t`, may stop the loop from ever ending. Switching the relative test `epsilon * t` to an absolute `epsilon` keeps behaviour for small c but can hang for large c. Changing the starting t changes only the iteration count.\n[1] transfer_to_a_new_program (X): Use a convergence test when an iterative numeric method has no fixed number of steps (Newton's method, series that are summed until `sum == sum + term`). For a known number of steps use a counted for loop, and in practice call the library method (Math.sqrt) when one exists.\n[2] diagnose_an_error (D): rule broken: Do not test doubles for exact equality in a loop condition. Kind: silent logic error. Trigger class: A condition like `while (t != c/t)` or `for (double x = 0.0; x != 1.0; x += 0.1)`, where rounding means the values never match exactly: the loop runs forever or one time too many.\n[3] diagnose_an_error (D): rule broken: The tolerance must be achievable at the magnitude of the result (relative error). Kind: silent logic error. Trigger class: An absolute tolerance much smaller than the spacing between doubles near the answer (e.g. `> 1e-15` for c = 2544545): when t and c/t settle one unit in the last place apart, the loop never terminates.\n[4] diagnose_an_error (D): rule broken: The iteration converges only for inputs that have a root. Kind: silent logic error. Trigger class: A negative argument to Sqrt: epsilon * t is negative, so the condition stays true and the loop does not terminate."
+  },
+  {
+   "from": "convergence_test",
+   "to": "FloatingPointIsExact",
+   "type": "misconception",
+   "label": "wrong: Math.sqrt(2) * Math.sqrt(2) == 2 is true. | right: A double is an approximation, so the product is close to 2 but not equal to 2."
+  },
+  {
+   "from": "double",
+   "to": "FloatingPointIsExact",
+   "type": "misconception",
+   "label": "wrong: Math.sqrt(2) * Math.sqrt(2) == 2 is true. | right: A double is an approximation, so the product is close to 2 but not equal to 2."
+  },
+  {
+   "from": "floating_point_precision",
+   "to": "FloatingPointIsExact",
+   "type": "misconception",
+   "label": "wrong: Math.sqrt(2) * Math.sqrt(2) == 2 is true. | right: A double is an approximation, so the product is close to 2 but not equal to 2."
+  },
+  {
+   "from": "floating_point_precision",
+   "to": "convergence_test",
+   "type": "prerequisite",
+   "label": "An equality test between double values may not give the result you expect, so Sqrt stops when t is within a relative error tolerance epsilon (Math.abs(t - c/t) > epsilon * t) rather than when t equals c/t."
+  },
+  {
+   "from": "while_loop",
+   "to": "convergence_test",
+   "type": "prerequisite",
+   "label": "The convergence test is the condition of a while loop that keeps refining an estimate until the error is below a tolerance."
+  }
+ ]
+}

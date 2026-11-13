@@ -1,0 +1,174 @@
+{
+ "concept": "interactive_input",
+ "label": "interactive_input",
+ "graph_version": "3.9.8 (3.9.7 + one primary per misconception (S9c) and the four remaining sibling edges (S9b), 2026-11-04; listed in revision_3_9_8)",
+ "nodes": [
+  {
+   "id": "end_of_input",
+   "kind": "concept",
+   "label": "end_of_input"
+  },
+  {
+   "id": "input_format",
+   "kind": "concept",
+   "label": "input_format"
+  },
+  {
+   "id": "input_validation",
+   "kind": "concept",
+   "label": "input_validation"
+  },
+  {
+   "id": "interactive_input",
+   "kind": "concept",
+   "label": "interactive_input"
+  },
+  {
+   "id": "read_loop_idiom",
+   "kind": "concept",
+   "label": "read_loop_idiom"
+  },
+  {
+   "id": "sentinel_loop",
+   "kind": "concept",
+   "label": "sentinel_loop"
+  },
+  {
+   "id": "standard_input",
+   "kind": "concept",
+   "label": "standard_input"
+  },
+  {
+   "id": "token_vs_line_input",
+   "kind": "concept",
+   "label": "token_vs_line_input"
+  },
+  {
+   "id": "interactive_input@L0",
+   "kind": "learning_level",
+   "label": "L0"
+  },
+  {
+   "id": "interactive_input@L1",
+   "kind": "learning_level",
+   "label": "L1"
+  },
+  {
+   "id": "interactive_input@L2",
+   "kind": "learning_level",
+   "label": "L2"
+  },
+  {
+   "id": "interactive_input@L3",
+   "kind": "learning_level",
+   "label": "L3"
+  },
+  {
+   "id": "interactive_input@L4",
+   "kind": "learning_level",
+   "label": "L4"
+  },
+  {
+   "id": "InputFixedBeforeRun",
+   "kind": "misconception",
+   "label": "InputFixedBeforeRun"
+  },
+  {
+   "id": "topic1.5.c",
+   "kind": "topic",
+   "label": "Standard input"
+  }
+ ],
+ "edges": [
+  {
+   "from": "topic1.5.c",
+   "to": "end_of_input",
+   "type": "contains",
+   "label": "The topic 'Standard input' introduces end_of_input."
+  },
+  {
+   "from": "topic1.5.c",
+   "to": "input_format",
+   "type": "contains",
+   "label": "The topic 'Standard input' introduces input_format."
+  },
+  {
+   "from": "topic1.5.c",
+   "to": "input_validation",
+   "type": "contains",
+   "label": "The topic 'Standard input' introduces input_validation."
+  },
+  {
+   "from": "topic1.5.c",
+   "to": "interactive_input",
+   "type": "contains",
+   "label": "The topic 'Standard input' introduces interactive_input."
+  },
+  {
+   "from": "topic1.5.c",
+   "to": "read_loop_idiom",
+   "type": "contains",
+   "label": "The topic 'Standard input' introduces read_loop_idiom."
+  },
+  {
+   "from": "topic1.5.c",
+   "to": "sentinel_loop",
+   "type": "contains",
+   "label": "The topic 'Standard input' introduces sentinel_loop."
+  },
+  {
+   "from": "topic1.5.c",
+   "to": "standard_input",
+   "type": "contains",
+   "label": "The topic 'Standard input' introduces standard_input."
+  },
+  {
+   "from": "topic1.5.c",
+   "to": "token_vs_line_input",
+   "type": "contains",
+   "label": "The topic 'Standard input' introduces token_vs_line_input."
+  },
+  {
+   "from": "interactive_input",
+   "to": "interactive_input@L0",
+   "type": "has_level",
+   "label": "[0] everyday_reading (E): Novices read a program as if it already knew all its inputs, e.g. treating AREA = HEIGHT*WIDTH written before the input as using the typed values. In fact each read happens only when execution reaches it, and the typed value can change what runs next.\n[1] misconception (M) -> InputFixedBeforeRun: wrong rule: All input to a program is fixed before it starts running. Right rule: With StdIn, the user types values while the program runs, and each value can change the control flow. Only command-line arguments are fixed at launch.\n[2] inconsistent_trace (T) -> InputFixedBeforeRun: Points to LT (prompt, block for input, test, respond, loop). An uneven trace answers before the guess is read, or reads all the guesses at once. (here mixing in: \"All input to a program is fixed before it starts running\")"
+  },
+  {
+   "from": "interactive_input",
+   "to": "interactive_input@L1",
+   "type": "has_level",
+   "label": "[0] names_the_element (N): Interactive input is user dialogue through standard I/O: the program prints a prompt, reads the user's reply, and its control flow depends on that reply.\n[1] states_the_rule (S): A value can be read from standard input at any time during execution, and each read blocks until the user enters input."
+  },
+  {
+   "from": "interactive_input",
+   "to": "interactive_input@L2",
+   "type": "has_level",
+   "label": "[0] line_by_line_trace (LT): Each round prints the prompt, then readInt() blocks until the user types a number and <return>. The value is compared, a response is printed, and the loop test (m != N) runs again.\n[1] output_prediction (OP): The terminal shows prompts, typed replies and responses interleaved: What's your guess? 500000 / Too high / What's your guess? 250000 / Too low ... and finally You win!.\n[2] one_step_execution (OS): One round sets m to the typed value and prints exactly one of You win!, Too low or Too high. N does not change."
+  },
+  {
+   "from": "interactive_input",
+   "to": "interactive_input@L3",
+   "type": "has_level",
+   "label": "[0] relation_to_neighbour (R): Because a StdIn read can run at any point, a read placed inside the game loop lets each reply choose the branch taken in that round.\n[1] purpose_of_the_whole (P): Plan: the prompt-read-respond loop (a guessing game or menu). m is a most-recent holder and N a fixed value. The programmer must plan for every possible user reply."
+  },
+  {
+   "from": "interactive_input",
+   "to": "interactive_input@L4",
+   "type": "has_level",
+   "label": "[0] predict_a_change (C) -> InputFixedBeforeRun: Redirecting a file of replies instead of typing keeps the same control flow, because the program cannot tell the difference. Only the echo of the typed input disappears from the screen.\n[1] transfer_to_a_new_program (X): Use interactive input when later questions depend on earlier answers (games, menus, tutoring dialogues). For bulk data use files and redirection; modern applications take user input through a GUI.\n[2] diagnose_an_error (D): rule broken: Each reply must be a token of the expected type. Kind: run-time exception. Trigger class: The user types a non-integer (abc, 12.5) at a readInt() prompt: NumberFormatException.\n[3] diagnose_an_error (D): rule broken: No reads after the input ends. Kind: run-time exception. Trigger class: The user sends end-of-file (<ctrl-d>) before the loop ends, so the next readInt() fails."
+  },
+  {
+   "from": "interactive_input",
+   "to": "InputFixedBeforeRun",
+   "type": "misconception",
+   "label": "wrong: All input to a program is fixed before it starts running. | right: With interactive input the user can change the control flow while the program is executing."
+  },
+  {
+   "from": "standard_input",
+   "to": "interactive_input",
+   "type": "prerequisite",
+   "label": "Standard input can be read at any time while the program runs, so the user can type values that change its control flow during execution."
+  }
+ ]
+}

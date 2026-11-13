@@ -1,0 +1,225 @@
+{
+ "concept": "overflow",
+ "label": "overflow",
+ "graph_version": "3.9.8 (3.9.7 + one primary per misconception (S9c) and the four remaining sibling edges (S9b), 2026-11-04; listed in revision_3_9_8)",
+ "nodes": [
+  {
+   "id": "arithmetic_operators",
+   "kind": "concept",
+   "label": "arithmetic_operators"
+  },
+  {
+   "id": "floating_point_precision",
+   "kind": "concept",
+   "label": "floating_point_precision"
+  },
+  {
+   "id": "int",
+   "kind": "concept",
+   "label": "int"
+  },
+  {
+   "id": "int_literal_limit",
+   "kind": "concept",
+   "label": "int_literal_limit"
+  },
+  {
+   "id": "integer_constants",
+   "kind": "concept",
+   "label": "integer_constants"
+  },
+  {
+   "id": "integer_division",
+   "kind": "concept",
+   "label": "integer_division"
+  },
+  {
+   "id": "long_type",
+   "kind": "concept",
+   "label": "long_type"
+  },
+  {
+   "id": "math_library",
+   "kind": "concept",
+   "label": "math_library"
+  },
+  {
+   "id": "overflow",
+   "kind": "concept",
+   "label": "overflow"
+  },
+  {
+   "id": "remainder_operator",
+   "kind": "concept",
+   "label": "remainder_operator"
+  },
+  {
+   "id": "overflow@L0",
+   "kind": "learning_level",
+   "label": "L0"
+  },
+  {
+   "id": "overflow@L1",
+   "kind": "learning_level",
+   "label": "L1"
+  },
+  {
+   "id": "overflow@L2",
+   "kind": "learning_level",
+   "label": "L2"
+  },
+  {
+   "id": "overflow@L3",
+   "kind": "learning_level",
+   "label": "L3"
+  },
+  {
+   "id": "overflow@L4",
+   "kind": "learning_level",
+   "label": "L4"
+  },
+  {
+   "id": "AbsAlwaysNonNegative",
+   "kind": "misconception",
+   "label": "AbsAlwaysNonNegative"
+  },
+  {
+   "id": "IntOverflowWidensAutomatically",
+   "kind": "misconception",
+   "label": "IntOverflowWidensAutomatically"
+  },
+  {
+   "id": "topic1.2.c",
+   "kind": "topic",
+   "label": "Integers"
+  }
+ ],
+ "edges": [
+  {
+   "from": "topic1.2.c",
+   "to": "arithmetic_operators",
+   "type": "contains",
+   "label": "The topic 'Integers' introduces arithmetic_operators."
+  },
+  {
+   "from": "topic1.2.c",
+   "to": "int",
+   "type": "contains",
+   "label": "The topic 'Integers' introduces int."
+  },
+  {
+   "from": "topic1.2.c",
+   "to": "int_literal_limit",
+   "type": "contains",
+   "label": "The topic 'Integers' introduces int_literal_limit."
+  },
+  {
+   "from": "topic1.2.c",
+   "to": "integer_constants",
+   "type": "contains",
+   "label": "The topic 'Integers' introduces integer_constants."
+  },
+  {
+   "from": "topic1.2.c",
+   "to": "integer_division",
+   "type": "contains",
+   "label": "The topic 'Integers' introduces integer_division."
+  },
+  {
+   "from": "topic1.2.c",
+   "to": "long_type",
+   "type": "contains",
+   "label": "The topic 'Integers' introduces long_type."
+  },
+  {
+   "from": "topic1.2.c",
+   "to": "overflow",
+   "type": "contains",
+   "label": "The topic 'Integers' introduces overflow."
+  },
+  {
+   "from": "topic1.2.c",
+   "to": "remainder_operator",
+   "type": "contains",
+   "label": "The topic 'Integers' introduces remainder_operator."
+  },
+  {
+   "from": "overflow",
+   "to": "overflow@L0",
+   "type": "has_level",
+   "label": "[0] everyday_reading (E): Everyday arithmetic assumes a bigger result just takes more digits. A Java int keeps only 32 bits, so a result that is too large wraps silently to a wrong (often negative) value.\n[1] misconception (M) -> IntOverflowWidensAutomatically: wrong rule: An int result that is too large is automatically stored as a bigger number. Right rule: int arithmetic is 32-bit; a result outside the range wraps around.\n[2] inconsistent_trace (T) -> IntOverflowWidensAutomatically: Points to LT (each int operation wraps as soon as it leaves the range). Applied unevenly, a student wraps one step but writes a + 1 for a = Integer.MAX_VALUE as 2147483648. (here mixing in: \"An int result that is too large is automatically stored as a bigger number\")"
+  },
+  {
+   "from": "overflow",
+   "to": "overflow@L1",
+   "type": "has_level",
+   "label": "[0] names_the_element (N): Overflow: the situation where an integer result is too large or too small for its type's fixed bits and is truncated, wrapping around.\n[1] states_the_rule (S): int and long arithmetic is done in 32-bit and 64-bit two's complement. An out-of-range result keeps only its low-order bits, and no error or exception is raised."
+  },
+  {
+   "from": "overflow",
+   "to": "overflow@L2",
+   "type": "has_level",
+   "label": "[0] line_by_line_trace (LT): Overflow happens in the single operation whose result leaves the range, before any later widening. With int a and b, long x = a * b; overflows in 32-bit int arithmetic before the result is converted to long.\n[1] output_prediction (OP): Integer.MAX_VALUE + 1 is -2147483648, 2 * Integer.MAX_VALUE is -2, and Math.abs(-2147483648) is -2147483648.\n[2] one_step_execution (OS): The variable receives the wrapped value and nothing signals the error, so later statements carry on with it."
+  },
+  {
+   "from": "overflow",
+   "to": "overflow@L3",
+   "type": "has_level",
+   "label": "[0] relation_to_neighbour (R): Overflow is possible because int has a fixed 32-bit range, -2^31 to 2^31 - 1.\n[1] relation_to_neighbour (R): Integer.MAX_VALUE and Integer.MIN_VALUE mark the edges of the range. Testing a > Integer.MAX_VALUE - b before computing a + b avoids overflow.\n[2] relation_to_neighbour (R): Both come from finite representations: an int result too large for 32 bits wraps around silently (overflow), while a double keeps about 15 significant digits so most results are approximations (5.0/3.0 is 1.6666666666666667). Neither raises an error.\n[3] purpose_of_the_whole (P): Knowing about overflow lets you guard against it: use long for products, factorials and large sums, or check against MAX_VALUE before computing."
+  },
+  {
+   "from": "overflow",
+   "to": "overflow@L4",
+   "type": "has_level",
+   "label": "[0] predict_a_change (C) -> IntOverflowWidensAutomatically: Changing int to long moves the overflow point (to about 9.2e18) but does not remove it. Dividing before multiplying can avoid overflow at the cost of truncation. Casting a result that has already overflowed does not repair it.\n[1] transfer_to_a_new_program (X): Think about overflow whenever values can reach the billions. Use long (or a long operand, such as 1000L) for those, BigInteger for unbounded integers, and plain int for small counts and indices.\n[2] diagnose_an_error (D): rule broken: int results are limited to 32 bits, and overflow is not reported. Kind: silent logic error. Trigger class: Values that reach into the billions: factorials above 12!, large products or powers, sums of many large values, Math.abs(Integer.MIN_VALUE).\n[3] diagnose_an_error (D): rule broken: An all-int expression is computed in int even when its result is stored in a long. Kind: silent logic error. Trigger class: long total = a * b; or long ms = days * 24 * 60 * 60 * 1000; with int operands."
+  },
+  {
+   "from": "int",
+   "to": "IntOverflowWidensAutomatically",
+   "type": "misconception",
+   "label": "wrong: An int result that is too large is automatically stored as a bigger number. | right: int arithmetic is 32-bit; a result outside the range wraps around."
+  },
+  {
+   "from": "integer_constants",
+   "to": "AbsAlwaysNonNegative",
+   "type": "misconception",
+   "label": "wrong: Math.abs always returns a non-negative number. | right: Math.abs(Integer.MIN_VALUE) returns Integer.MIN_VALUE, which is negative."
+  },
+  {
+   "from": "math_library",
+   "to": "AbsAlwaysNonNegative",
+   "type": "misconception",
+   "label": "wrong: Math.abs always returns a non-negative number. | right: Math.abs(Integer.MIN_VALUE) returns Integer.MIN_VALUE, which is negative."
+  },
+  {
+   "from": "overflow",
+   "to": "AbsAlwaysNonNegative",
+   "type": "misconception",
+   "label": "wrong: Math.abs always returns a non-negative number. | right: Math.abs(Integer.MIN_VALUE) returns Integer.MIN_VALUE, which is negative."
+  },
+  {
+   "from": "overflow",
+   "to": "IntOverflowWidensAutomatically",
+   "type": "misconception",
+   "label": "wrong: An int result that is too large is automatically stored as a bigger number. | right: int arithmetic is 32-bit; a result outside the range wraps around."
+  },
+  {
+   "from": "overflow",
+   "to": "floating_point_precision",
+   "type": "parallel",
+   "label": "Both come from finite representations: an int result too large for 32 bits wraps around silently (overflow), while a double keeps about 15 significant digits so most results are approximations (5.0/3.0 is 1.6666666666666667). Neither raises an error."
+  },
+  {
+   "from": "int",
+   "to": "overflow",
+   "type": "prerequisite",
+   "label": "Overflow happens because an int has a fixed 32-bit range."
+  },
+  {
+   "from": "overflow",
+   "to": "integer_constants",
+   "type": "prerequisite",
+   "label": "Integer.MAX_VALUE is used to test for overflow: an int result that would go past it wraps around to a negative value."
+  }
+ ]
+}

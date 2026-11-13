@@ -1,0 +1,136 @@
+{
+ "concept": "lookup_table",
+ "label": "lookup_table",
+ "graph_version": "3.9.8 (3.9.7 + one primary per misconception (S9c) and the four remaining sibling edges (S9b), 2026-11-04; listed in revision_3_9_8)",
+ "nodes": [
+  {
+   "id": "array_initializer",
+   "kind": "concept",
+   "label": "array_initializer"
+  },
+  {
+   "id": "indexing",
+   "kind": "concept",
+   "label": "indexing"
+  },
+  {
+   "id": "lookup_table",
+   "kind": "concept",
+   "label": "lookup_table"
+  },
+  {
+   "id": "space_time_tradeoff",
+   "kind": "concept",
+   "label": "Space-time tradeoff"
+  },
+  {
+   "id": "lookup_table@L0",
+   "kind": "learning_level",
+   "label": "L0"
+  },
+  {
+   "id": "lookup_table@L1",
+   "kind": "learning_level",
+   "label": "L1"
+  },
+  {
+   "id": "lookup_table@L2",
+   "kind": "learning_level",
+   "label": "L2"
+  },
+  {
+   "id": "lookup_table@L3",
+   "kind": "learning_level",
+   "label": "L3"
+  },
+  {
+   "id": "lookup_table@L4",
+   "kind": "learning_level",
+   "label": "L4"
+  },
+  {
+   "id": "ArrayIndexStartsAtOne",
+   "kind": "misconception",
+   "label": "ArrayIndexStartsAtOne"
+  },
+  {
+   "id": "topic1.4.e",
+   "kind": "topic",
+   "label": "Precomputed values and simplifying repetitive code"
+  }
+ ],
+ "edges": [
+  {
+   "from": "topic1.4.e",
+   "to": "lookup_table",
+   "type": "contains",
+   "label": "The topic 'Precomputed values and simplifying repetitive code' introduces lookup_table."
+  },
+  {
+   "from": "topic1.4.e",
+   "to": "space_time_tradeoff",
+   "type": "contains",
+   "label": "Space-time tradeoff is taught under \"Precomputed values and simplifying repetitive code\"."
+  },
+  {
+   "from": "lookup_table",
+   "to": "lookup_table@L0",
+   "type": "has_level",
+   "label": "[0] everyday_reading (E): Folk meaning: everyday tables are numbered from 1 (month 1 is January) and are looked up by scanning. Java rule: array tables are 0-origin and are read directly by index, so either waste slot 0 (months[0] = \"\") or subtract 1 from the key.\n[1] misconception (M) -> ArrayIndexStartsAtOne: wrong rule: The first element of a is a[1]. Right rule: Numbering begins with 0; a 1-based key needs a padding slot at index 0 or the index key-1.\n[2] inconsistent_trace (T) -> ArrayIndexStartsAtOne: Points to LT: compute the index from the data, then read the table entry. Inconsistent application: 1 is subtracted from the key on some lookups but not on others, or the padding slot is counted as January. (here mixing in: \"The first element of a is a[1]\")"
+  },
+  {
+   "from": "lookup_table",
+   "to": "lookup_table@L1",
+   "type": "has_level",
+   "label": "[0] names_the_element (N): Identity: a lookup table is an array whose element i holds a precomputed value or name for i, read by indexing.\n[1] states_the_rule (S): Declarative: build the table once (initializer or loop), e.g. String[] months = {\"\", \"Jan\", ..., \"Dec\"}; or H[i] = H[i-1] + 1.0/i; then use months[m] or H[i] in place of recomputing."
+  },
+  {
+   "from": "lookup_table",
+   "to": "lookup_table@L2",
+   "type": "has_level",
+   "label": "[0] line_by_line_trace (LT): Sequencing: the whole table is built before the first lookup. Each lookup evaluates the index expression, checks the bounds and reads one element.\n[1] output_prediction (OP): Result: months[m] is the name of month m for m = 1..12 (months[0] is the empty string); H[i] is the i-th harmonic number.\n[2] one_step_execution (OS): State transition: a lookup changes nothing; only the building phase stores values (one element per step)."
+  },
+  {
+   "from": "lookup_table",
+   "to": "lookup_table@L3",
+   "type": "has_level",
+   "label": "[0] relation_to_neighbour (R): The key itself is the index (months[m], rank[i]), so keys must fall in 0..length-1.\n[1] relation_to_neighbour (R): Storing precomputed values trades memory for time: each value is computed once and then looked up.\n[2] purpose_of_the_whole (P): Plan/role: the table is a fixed value (Sajaniemi). It replaces long if-else chains or repeated computation with one indexed read."
+  },
+  {
+   "from": "lookup_table",
+   "to": "lookup_table@L4",
+   "type": "has_level",
+   "label": "[0] predict_a_change (C) -> ArrayIndexStartsAtOne: Conservation: adding entries at the end keeps existing lookups valid. Removing the padding slot shifts every entry down one, so months[1] becomes Feb (off by one). Changing a stored value changes every lookup of it.\n[1] transfer_to_a_new_program (X): Applicability: use a table when the same values are needed many times for small integer keys. It is not effective for huge key ranges, for values needed only once, or for keys that are not small integers.\n[2] diagnose_an_error (D): rule broken: Keys must map to legal indices. Kind: run-time exception. Trigger class: a key outside the table, e.g. months[13] or months[0-1] (ArrayIndexOutOfBoundsException)\n[3] diagnose_an_error (D): rule broken: The key-to-index mapping must match the table layout. Kind: silent logic error. Trigger class: a 1-based key used with a table that has no padding slot, so every lookup returns the next entry"
+  },
+  {
+   "from": "indexing",
+   "to": "ArrayIndexStartsAtOne",
+   "type": "misconception",
+   "label": "wrong: The first element of a is a[1]. | right: Numbering begins with 0; the first element is a[0]."
+  },
+  {
+   "from": "lookup_table",
+   "to": "ArrayIndexStartsAtOne",
+   "type": "misconception",
+   "label": "wrong: The first element of a is a[1]. | right: Numbering begins with 0; the first element is a[0]."
+  },
+  {
+   "from": "array_initializer",
+   "to": "lookup_table",
+   "type": "prerequisite",
+   "label": "A lookup table is usually an array of fixed values written as a literal and read by index."
+  },
+  {
+   "from": "indexing",
+   "to": "lookup_table",
+   "type": "prerequisite",
+   "label": "A lookup table is read by index, a[i]."
+  },
+  {
+   "from": "lookup_table",
+   "to": "space_time_tradeoff",
+   "type": "prerequisite",
+   "label": "Saving precomputed values in an array trades memory for time: each value is computed once and then looked up."
+  }
+ ]
+}

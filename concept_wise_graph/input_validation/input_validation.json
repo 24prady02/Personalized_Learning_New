@@ -1,0 +1,225 @@
+{
+ "concept": "input_validation",
+ "label": "input_validation",
+ "graph_version": "3.9.8 (3.9.7 + one primary per misconception (S9c) and the four remaining sibling edges (S9b), 2026-11-04; listed in revision_3_9_8)",
+ "nodes": [
+  {
+   "id": "end_of_input",
+   "kind": "concept",
+   "label": "end_of_input"
+  },
+  {
+   "id": "filter",
+   "kind": "concept",
+   "label": "filter"
+  },
+  {
+   "id": "input_format",
+   "kind": "concept",
+   "label": "input_format"
+  },
+  {
+   "id": "input_validation",
+   "kind": "concept",
+   "label": "input_validation"
+  },
+  {
+   "id": "interactive_input",
+   "kind": "concept",
+   "label": "interactive_input"
+  },
+  {
+   "id": "read_loop_idiom",
+   "kind": "concept",
+   "label": "read_loop_idiom"
+  },
+  {
+   "id": "run_time_error",
+   "kind": "concept",
+   "label": "run_time_error"
+  },
+  {
+   "id": "sentinel_loop",
+   "kind": "concept",
+   "label": "sentinel_loop"
+  },
+  {
+   "id": "standard_input",
+   "kind": "concept",
+   "label": "standard_input"
+  },
+  {
+   "id": "token_vs_line_input",
+   "kind": "concept",
+   "label": "token_vs_line_input"
+  },
+  {
+   "id": "InputTypeMismatch",
+   "kind": "error",
+   "label": "InputTypeMismatch"
+  },
+  {
+   "id": "NegativeNotFiltered",
+   "kind": "error",
+   "label": "NegativeNotFiltered"
+  },
+  {
+   "id": "input_validation@L0",
+   "kind": "learning_level",
+   "label": "L0"
+  },
+  {
+   "id": "input_validation@L1",
+   "kind": "learning_level",
+   "label": "L1"
+  },
+  {
+   "id": "input_validation@L2",
+   "kind": "learning_level",
+   "label": "L2"
+  },
+  {
+   "id": "input_validation@L3",
+   "kind": "learning_level",
+   "label": "L3"
+  },
+  {
+   "id": "input_validation@L4",
+   "kind": "learning_level",
+   "label": "L4"
+  },
+  {
+   "id": "topic1.5.c",
+   "kind": "topic",
+   "label": "Standard input"
+  }
+ ],
+ "edges": [
+  {
+   "from": "topic1.5.c",
+   "to": "end_of_input",
+   "type": "contains",
+   "label": "The topic 'Standard input' introduces end_of_input."
+  },
+  {
+   "from": "topic1.5.c",
+   "to": "input_format",
+   "type": "contains",
+   "label": "The topic 'Standard input' introduces input_format."
+  },
+  {
+   "from": "topic1.5.c",
+   "to": "input_validation",
+   "type": "contains",
+   "label": "The topic 'Standard input' introduces input_validation."
+  },
+  {
+   "from": "topic1.5.c",
+   "to": "interactive_input",
+   "type": "contains",
+   "label": "The topic 'Standard input' introduces interactive_input."
+  },
+  {
+   "from": "topic1.5.c",
+   "to": "read_loop_idiom",
+   "type": "contains",
+   "label": "The topic 'Standard input' introduces read_loop_idiom."
+  },
+  {
+   "from": "topic1.5.c",
+   "to": "sentinel_loop",
+   "type": "contains",
+   "label": "The topic 'Standard input' introduces sentinel_loop."
+  },
+  {
+   "from": "topic1.5.c",
+   "to": "standard_input",
+   "type": "contains",
+   "label": "The topic 'Standard input' introduces standard_input."
+  },
+  {
+   "from": "topic1.5.c",
+   "to": "token_vs_line_input",
+   "type": "contains",
+   "label": "The topic 'Standard input' introduces token_vs_line_input."
+  },
+  {
+   "from": "filter",
+   "to": "NegativeNotFiltered",
+   "type": "error",
+   "label": "wrong: Adds negative rainfall values to the total. | right: Values outside the range of interest must be filtered out (for example with if (t >= lo && t <= hi)) before they are processed."
+  },
+  {
+   "from": "input_format",
+   "to": "InputTypeMismatch",
+   "type": "error",
+   "label": "wrong: StdIn.readInt() accepts any typed text such as abc or 12.2. | right: If the next token is not an int (e.g. abc, 12.2, true), StdIn.readInt() throws a NumberFormatException at run time (Scanner.nextInt throws InputMismatchException)."
+  },
+  {
+   "from": "input_validation",
+   "to": "InputTypeMismatch",
+   "type": "error",
+   "label": "wrong: StdIn.readInt() accepts any typed text such as abc or 12.2. | right: If the next token is not an int (e.g. abc, 12.2, true), StdIn.readInt() throws a NumberFormatException at run time (Scanner.nextInt throws InputMismatchException)."
+  },
+  {
+   "from": "input_validation",
+   "to": "NegativeNotFiltered",
+   "type": "error",
+   "label": "wrong: Adds negative rainfall values to the total. | right: Values outside the range of interest must be filtered out (for example with if (t >= lo && t <= hi)) before they are processed."
+  },
+  {
+   "from": "run_time_error",
+   "to": "InputTypeMismatch",
+   "type": "error",
+   "label": "wrong: StdIn.readInt() accepts any typed text such as abc or 12.2. | right: If the next token is not an int (e.g. abc, 12.2, true), StdIn.readInt() throws a NumberFormatException at run time (Scanner.nextInt throws InputMismatchException)."
+  },
+  {
+   "from": "sentinel_loop",
+   "to": "NegativeNotFiltered",
+   "type": "error",
+   "label": "wrong: Adds negative rainfall values to the total. | right: Values outside the range of interest must be filtered out (for example with if (t >= lo && t <= hi)) before they are processed."
+  },
+  {
+   "from": "standard_input",
+   "to": "InputTypeMismatch",
+   "type": "error",
+   "label": "wrong: StdIn.readInt() accepts any typed text such as abc or 12.2. | right: If the next token is not an int (e.g. abc, 12.2, true), StdIn.readInt() throws a NumberFormatException at run time (Scanner.nextInt throws InputMismatchException)."
+  },
+  {
+   "from": "input_validation",
+   "to": "input_validation@L0",
+   "type": "has_level",
+   "label": "[0] everyday_reading (E): In everyday checking, something is checked after it has been accepted and stored. Novices place the check after the assignment. In code, the check must come before the value is read or stored, or a bad token has already thrown or polluted the data."
+  },
+  {
+   "from": "input_validation",
+   "to": "input_validation@L1",
+   "type": "has_level",
+   "label": "[0] names_the_element (N): Input validation is guard code that checks that input is available, well-formed and in range before the program uses it (StdIn.isEmpty(), Scanner.hasNextDouble(), range tests).\n[1] states_the_rule (S): Test before reading: StdIn.isEmpty() tells whether more input is available, and hasNextDouble() tells whether the next token can be read as a double. If the test fails, report the error or prompt again instead of reading."
+  },
+  {
+   "from": "input_validation",
+   "to": "input_validation@L2",
+   "type": "has_level",
+   "label": "[0] line_by_line_trace (LT): Order: availability check, then type check, then read, then range check, then use. On failure, skip or re-prompt (a while loop when the number of wrong tries is unknown).\n[1] output_prediction (OP): The checks return booleans. A validated program prints an error message, or prompts again, on bad input instead of crashing with an exception.\n[2] one_step_execution (OS): A check (isEmpty, hasNextDouble) consumes nothing. Only the read that follows, or an explicit in.next() that discards a bad token, advances the stream."
+  },
+  {
+   "from": "input_validation",
+   "to": "input_validation@L3",
+   "type": "has_level",
+   "label": "[0] relation_to_neighbour (R): Format errors throw at the read, so the type test must run before it. StdIn has no hasNextInt, so either read a String and parse it, or rely on the file's format.\n[1] purpose_of_the_whole (P): Role: a guard. Plan: the input-validation (re-prompt) loop, which keeps asking until the value is acceptable."
+  },
+  {
+   "from": "input_validation",
+   "to": "input_validation@L4",
+   "type": "has_level",
+   "label": "[0] predict_a_change (C): Adding validation leaves the output for valid input unchanged and changes behaviour only for invalid input.\n[1] transfer_to_a_new_program (X): Validate at the boundary where external data (users, files) enter the program, especially in interactive programs, where every possible input must be planned for. It is unnecessary for values the program itself generated.\n[2] diagnose_an_error (D): rule broken: Check the token type before reading it as a number. Kind: run-time exception. Trigger class: Non-numeric or wrongly typed tokens (abc, 12.2 for an int) reach readInt()/nextInt().\n[3] diagnose_an_error (D): rule broken: Values outside the valid range must be filtered out before use. Kind: silent logic error. Trigger class: Out-of-range data (negative rainfall, values outside lo..hi) are processed because no range test comes before the update."
+  },
+  {
+   "from": "input_format",
+   "to": "input_validation",
+   "type": "prerequisite",
+   "label": "Validation guards against input-format errors."
+  }
+ ]
+}

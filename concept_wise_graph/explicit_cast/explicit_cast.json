@@ -1,0 +1,298 @@
+{
+ "concept": "explicit_cast",
+ "label": "explicit_cast",
+ "graph_version": "3.9.8 (3.9.7 + one primary per misconception (S9c) and the four remaining sibling edges (S9b), 2026-11-04; listed in revision_3_9_8)",
+ "nodes": [
+  {
+   "id": "compound_assignment",
+   "kind": "concept",
+   "label": "compound_assignment"
+  },
+  {
+   "id": "explicit_cast",
+   "kind": "concept",
+   "label": "explicit_cast"
+  },
+  {
+   "id": "integer_division",
+   "kind": "concept",
+   "label": "integer_division"
+  },
+  {
+   "id": "math_library",
+   "kind": "concept",
+   "label": "math_library"
+  },
+  {
+   "id": "math_random",
+   "kind": "concept",
+   "label": "math_random"
+  },
+  {
+   "id": "math_round",
+   "kind": "concept",
+   "label": "math_round"
+  },
+  {
+   "id": "operator_precedence",
+   "kind": "concept",
+   "label": "operator_precedence"
+  },
+  {
+   "id": "parsing",
+   "kind": "concept",
+   "label": "parsing"
+  },
+  {
+   "id": "string_conversion",
+   "kind": "concept",
+   "label": "string_conversion"
+  },
+  {
+   "id": "type_conversion",
+   "kind": "concept",
+   "label": "type_conversion"
+  },
+  {
+   "id": "widening_conversion",
+   "kind": "concept",
+   "label": "widening_conversion"
+  },
+  {
+   "id": "RoundReturnsInt",
+   "kind": "error",
+   "label": "RoundReturnsInt"
+  },
+  {
+   "id": "explicit_cast@L0",
+   "kind": "learning_level",
+   "label": "L0"
+  },
+  {
+   "id": "explicit_cast@L1",
+   "kind": "learning_level",
+   "label": "L1"
+  },
+  {
+   "id": "explicit_cast@L2",
+   "kind": "learning_level",
+   "label": "L2"
+  },
+  {
+   "id": "explicit_cast@L3",
+   "kind": "learning_level",
+   "label": "L3"
+  },
+  {
+   "id": "explicit_cast@L4",
+   "kind": "learning_level",
+   "label": "L4"
+  },
+  {
+   "id": "CastAfterIntDivision",
+   "kind": "misconception",
+   "label": "CastAfterIntDivision"
+  },
+  {
+   "id": "CastAppliesToWholeExpression",
+   "kind": "misconception",
+   "label": "CastAppliesToWholeExpression"
+  },
+  {
+   "id": "CastParsesString",
+   "kind": "misconception",
+   "label": "CastParsesString"
+  },
+  {
+   "id": "CastRounds",
+   "kind": "misconception",
+   "label": "CastRounds"
+  },
+  {
+   "id": "LaterDoubleLiteralFixesDivision",
+   "kind": "misconception",
+   "label": "LaterDoubleLiteralFixesDivision"
+  },
+  {
+   "id": "topic1.2.h",
+   "kind": "topic",
+   "label": "Type conversion (automatic, cast, parsing)"
+  }
+ ],
+ "edges": [
+  {
+   "from": "topic1.2.h",
+   "to": "explicit_cast",
+   "type": "contains",
+   "label": "The topic 'Type conversion (automatic, cast, parsing)' introduces explicit_cast."
+  },
+  {
+   "from": "topic1.2.h",
+   "to": "parsing",
+   "type": "contains",
+   "label": "The topic 'Type conversion (automatic, cast, parsing)' introduces parsing."
+  },
+  {
+   "from": "topic1.2.h",
+   "to": "string_conversion",
+   "type": "contains",
+   "label": "The topic 'Type conversion (automatic, cast, parsing)' introduces string_conversion."
+  },
+  {
+   "from": "topic1.2.h",
+   "to": "type_conversion",
+   "type": "contains",
+   "label": "The topic 'Type conversion (automatic, cast, parsing)' introduces type_conversion."
+  },
+  {
+   "from": "topic1.2.h",
+   "to": "widening_conversion",
+   "type": "contains",
+   "label": "The topic 'Type conversion (automatic, cast, parsing)' introduces widening_conversion."
+  },
+  {
+   "from": "explicit_cast",
+   "to": "RoundReturnsInt",
+   "type": "error",
+   "label": "wrong: Writes int n = Math.round(x); because Math.round gives an int. | right: Math.round(double) returns a long, so storing it in an int needs a cast: int n = (int) Math.round(x);"
+  },
+  {
+   "from": "math_round",
+   "to": "RoundReturnsInt",
+   "type": "error",
+   "label": "wrong: Writes int n = Math.round(x); because Math.round gives an int. | right: Math.round(double) returns a long, so storing it in an int needs a cast: int n = (int) Math.round(x);"
+  },
+  {
+   "from": "explicit_cast",
+   "to": "explicit_cast@L0",
+   "type": "has_level",
+   "label": "[0] everyday_reading (E): Folk meaning: 'convert 2.7 to a whole number' means round it to 3, and (int) looks like a function label that applies to everything written after it. Java rule: a cast to int truncates toward zero ((int) 2.7 is 2) and, having higher precedence than arithmetic, applies only to the value immediately following it.\n[1] misconception (M) -> CastRounds: wrong rule: (int) 2.7 evaluates to 3. Right rule: A cast to int discards the fractional part (rounds toward zero, so (int) -2.7 is -2); Math.round rounds to the nearest integer.\n[2] misconception (M) -> CastAfterIntDivision: wrong rule: (double) (3 / 5) is 0.6. Right rule: The integer division 3 / 5 = 0 happens inside the parentheses before the cast, so the result is 0.0; write (double) 3 / 5 to get 0.6.\n[3] misconception (M) -> CastAppliesToWholeExpression: wrong rule: (int) 2.5 / 0.15 casts the whole quotient to int. Right rule: The cast applies only to what comes right after it, here 2.5, so the expression is 2 / 0.15 (a double); write (int) (2.5 / 0.15) to cast the quotient.\n[4] inconsistent_trace (T) -> CastRounds: Points to LT (the cast is a unary operator applied to the operand right after it, before * and /). Applied unevenly: in one line the student casts only the first operand, and in another applies the same cast to the whole expression. (here mixing in: \"(int) 2.7 evaluates to 3\")\n[5] misconception (M) -> CastParsesString: wrong rule: (int) args[0] converts the text \"34\" into the number 34. Right rule: A cast cannot convert a String; a String argument that represents a number must be converted with a method such as Integer.parseInt.\n[6] misconception (M) -> LaterDoubleLiteralFixesDivision: wrong rule: Changing a later literal to 100.0 fixes an earlier int division. Right rule: The int division happens first, when its own operands are both ints; a double must appear in that division itself (or one operand must be cast before it)."
+  },
+  {
+   "from": "explicit_cast",
+   "to": "explicit_cast@L1",
+   "type": "has_level",
+   "label": "[0] names_the_element (N): A cast is a unary operator, written (type) expression, that converts a value of one primitive type to another, used when the conversion may lose information.\n[1] states_the_rule (S): (T) e converts the value of e to type T; a double-to-int cast discards the fraction by rounding toward zero; a cast is required for narrowing conversions; it has higher precedence than arithmetic; casts between boolean and numbers, or from String to int, are not allowed."
+  },
+  {
+   "from": "explicit_cast",
+   "to": "explicit_cast@L2",
+   "type": "has_level",
+   "label": "[0] line_by_line_trace (LT): Evaluate the operand immediately to the right of the cast (a parenthesized expression is evaluated completely first), convert that value, then continue with the remaining operators of the expression.\n[1] output_prediction (OP): (int) 2.71828 is int 2; (int) -2.7 is -2; (int) 11 * 0.3 is double 3.3; (int) (11 * 0.3) is int 3; (double) 3 / 5 is 0.6 but (double) (3 / 5) is 0.0; (char) ('a' + 4) is 'e'.\n[2] one_step_execution (OS): A cast yields a new value and changes nothing else: neither the type nor the value of the variable being cast changes (after int x = (int) pi; pi is still 3.14159)."
+  },
+  {
+   "from": "explicit_cast",
+   "to": "explicit_cast@L3",
+   "type": "has_level",
+   "label": "[0] relation_to_neighbour (R): A cast is the explicit conversion between primitive types, needed exactly where automatic conversion is refused because information may be lost.\n[1] relation_to_neighbour (R): To turn Math.random()'s double into a random int from 0 to N-1, the cast must enclose the product: (int) (Math.random() * N); casting first gives 0.\n[2] relation_to_neighbour (R): x op= e contains an implicit cast back to the type of x, so with int x, x += 0.5 compiles (x = (int) (x + 0.5)) while x = x + 0.5 is a compile-time error.\n[3] relation_to_neighbour (R): Widening (promotion) happens automatically when a value goes to a type with a larger range (int to double) and loses nothing; a narrowing conversion (double to int) is never automatic and needs an explicit cast, which truncates toward zero.\n[4] relation_to_neighbour (R): (int) 2.71828 truncates toward zero and gives 2; Math.round(2.71828) rounds to the nearest integer and gives 3, as a long that needs (int) to become an int.\n[5] purpose_of_the_whole (P): Used to discard information on purpose: truncating a scaled random number to an index, taking the integer part, converting between char and int codes ((char) ('a' + k)), or forcing real division with (double) sum / n."
+  },
+  {
+   "from": "explicit_cast",
+   "to": "explicit_cast@L4",
+   "type": "has_level",
+   "label": "[0] predict_a_change (C) -> CastRounds: Moving the parentheses changes when truncation happens ((int) (a * b) vs (int) a * b); removing a cast from a narrowing assignment turns it into a compile-time error; int to double to int restores the value, but double to int to double loses the fraction.\n[1] transfer_to_a_new_program (X): Use a cast when you intend to truncate or narrow (random indices, integer parts, char codes); use Math.round to round, Integer.parseInt for Strings, and put a double into the division itself rather than casting its int result.\n[2] diagnose_an_error (D): rule broken: Math.round(double) returns a long, so storing it in an int needs a cast: int n = (int) Math.round(x);. Kind: compile-time. Trigger class: int n = Math.round(x); with double x.\n[3] diagnose_an_error (D): rule broken: A cast applies only to the value right after it. Kind: compile-time. Trigger class: int n = (int) 11 * 0.3; the product is still a double (possible loss of precision); in a double context the same mistake is a silent logic error ((int) pi * 20.0 gives 60.0).\n[4] diagnose_an_error (D): rule broken: Casts require compatible types. Kind: compile-time. Trigger class: (int) \"3\" or (int) args[0] on a String, or a cast between boolean and a number.\n[5] diagnose_an_error (D): rule broken: A narrowing cast may lose magnitude, not just the fraction. Kind: silent logic error. Trigger class: Casting a value outside the target range, e.g. (int) of a long above 2147483647 or of a huge double."
+  },
+  {
+   "from": "explicit_cast",
+   "to": "CastAfterIntDivision",
+   "type": "misconception",
+   "label": "wrong: (double) (3 / 5) is 0.6. | right: The integer division 3 / 5 = 0 happens before the cast, so the result is 0.0."
+  },
+  {
+   "from": "explicit_cast",
+   "to": "CastAppliesToWholeExpression",
+   "type": "misconception",
+   "label": "wrong: (int) 2.5 / 0.15 casts the whole quotient to int. | right: The cast applies only to what comes right after it, here 2.5."
+  },
+  {
+   "from": "explicit_cast",
+   "to": "CastParsesString",
+   "type": "misconception",
+   "label": "wrong: (int) args[0] converts the text \"34\" into the number 34. | right: A String argument that represents a number must be converted with a method such as Integer.parseInt."
+  },
+  {
+   "from": "explicit_cast",
+   "to": "CastRounds",
+   "type": "misconception",
+   "label": "wrong: (int) 2.7 evaluates to 3. | right: A cast to int discards the fractional part (rounds toward zero, so (int) -2.7 is -2); Math.round rounds to the nearest integer."
+  },
+  {
+   "from": "explicit_cast",
+   "to": "LaterDoubleLiteralFixesDivision",
+   "type": "misconception",
+   "label": "wrong: Changing a later literal to 100.0 fixes an earlier int division. | right: The int division happens first; the double must be in the division itself."
+  },
+  {
+   "from": "integer_division",
+   "to": "CastAfterIntDivision",
+   "type": "misconception",
+   "label": "wrong: (double) (3 / 5) is 0.6. | right: The integer division 3 / 5 = 0 happens before the cast, so the result is 0.0."
+  },
+  {
+   "from": "integer_division",
+   "to": "LaterDoubleLiteralFixesDivision",
+   "type": "misconception",
+   "label": "wrong: Changing a later literal to 100.0 fixes an earlier int division. | right: The int division happens first; the double must be in the division itself."
+  },
+  {
+   "from": "math_library",
+   "to": "CastRounds",
+   "type": "misconception",
+   "label": "wrong: (int) 2.7 evaluates to 3. | right: A cast to int discards the fractional part (rounds toward zero, so (int) -2.7 is -2); Math.round rounds to the nearest integer."
+  },
+  {
+   "from": "math_round",
+   "to": "CastRounds",
+   "type": "misconception",
+   "label": "wrong: (int) 2.7 evaluates to 3. | right: A cast to int discards the fractional part (rounds toward zero, so (int) -2.7 is -2); Math.round rounds to the nearest integer."
+  },
+  {
+   "from": "operator_precedence",
+   "to": "CastAppliesToWholeExpression",
+   "type": "misconception",
+   "label": "wrong: (int) 2.5 / 0.15 casts the whole quotient to int. | right: The cast applies only to what comes right after it, here 2.5."
+  },
+  {
+   "from": "parsing",
+   "to": "CastParsesString",
+   "type": "misconception",
+   "label": "wrong: (int) args[0] converts the text \"34\" into the number 34. | right: A String argument that represents a number must be converted with a method such as Integer.parseInt."
+  },
+  {
+   "from": "math_round",
+   "to": "explicit_cast",
+   "type": "parallel",
+   "label": "(int) 2.71828 truncates toward zero and gives 2; Math.round(2.71828) rounds to the nearest integer and gives 3, as a long that needs (int) to become an int."
+  },
+  {
+   "from": "widening_conversion",
+   "to": "explicit_cast",
+   "type": "parallel",
+   "label": "Widening (promotion) happens automatically when a value goes to a type with a larger range (int to double) and loses nothing; a narrowing conversion (double to int) is never automatic and needs an explicit cast, which truncates toward zero."
+  },
+  {
+   "from": "explicit_cast",
+   "to": "compound_assignment",
+   "type": "prerequisite",
+   "label": "x op= e means x = (T)(x op e), where T is the type of x, so the result is cast back to the type of x."
+  },
+  {
+   "from": "explicit_cast",
+   "to": "math_random",
+   "type": "prerequisite",
+   "label": "To turn Math.random()'s double in [0, 1) into a random int from 0 to N-1, multiply it by N and cast the result to int."
+  },
+  {
+   "from": "integer_division",
+   "to": "explicit_cast",
+   "type": "prerequisite",
+   "label": "To divide two ints and keep the fraction, one operand is cast to double before the division, as in (double) freq[i] / T; casting the finished quotient comes too late."
+  },
+  {
+   "from": "type_conversion",
+   "to": "explicit_cast",
+   "type": "prerequisite",
+   "label": "A cast is the explicit form of type conversion between primitive types, required when the conversion may lose information (e.g. (int) 2.71828 is 2)."
+  }
+ ]
+}

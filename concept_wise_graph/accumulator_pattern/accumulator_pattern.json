@@ -1,0 +1,358 @@
+{
+ "concept": "accumulator_pattern",
+ "label": "accumulator_pattern",
+ "graph_version": "3.9.8 (3.9.7 + one primary per misconception (S9c) and the four remaining sibling edges (S9b), 2026-11-04; listed in revision_3_9_8)",
+ "nodes": [
+  {
+   "id": "accumulator_pattern",
+   "kind": "concept",
+   "label": "accumulator_pattern"
+  },
+  {
+   "id": "compound_assignment",
+   "kind": "concept",
+   "label": "compound_assignment"
+  },
+  {
+   "id": "convergence_test",
+   "kind": "concept",
+   "label": "convergence_test"
+  },
+  {
+   "id": "counter_pattern",
+   "kind": "concept",
+   "label": "counter_pattern"
+  },
+  {
+   "id": "debugging",
+   "kind": "concept",
+   "label": "debugging"
+  },
+  {
+   "id": "fencepost_loop",
+   "kind": "concept",
+   "label": "fencepost_loop"
+  },
+  {
+   "id": "flag_search_loop",
+   "kind": "concept",
+   "label": "flag_search_loop"
+  },
+  {
+   "id": "logical_error",
+   "kind": "concept",
+   "label": "logical_error"
+  },
+  {
+   "id": "loop_body",
+   "kind": "concept",
+   "label": "loop_body"
+  },
+  {
+   "id": "loop_performance",
+   "kind": "concept",
+   "label": "Loop performance"
+  },
+  {
+   "id": "loop_scope",
+   "kind": "concept",
+   "label": "loop_scope"
+  },
+  {
+   "id": "monte_carlo_simulation",
+   "kind": "concept",
+   "label": "monte_carlo_simulation"
+  },
+  {
+   "id": "number_conversion",
+   "kind": "concept",
+   "label": "Number conversion (binary)"
+  },
+  {
+   "id": "program_state",
+   "kind": "concept",
+   "label": "Program state"
+  },
+  {
+   "id": "running_extreme",
+   "kind": "concept",
+   "label": "running_extreme"
+  },
+  {
+   "id": "sentinel_loop",
+   "kind": "concept",
+   "label": "sentinel_loop"
+  },
+  {
+   "id": "simulation_loop",
+   "kind": "concept",
+   "label": "simulation_loop"
+  },
+  {
+   "id": "testing",
+   "kind": "concept",
+   "label": "testing"
+  },
+  {
+   "id": "variable",
+   "kind": "concept",
+   "label": "variable"
+  },
+  {
+   "id": "AccumulatorDeclaredInLoop",
+   "kind": "error",
+   "label": "AccumulatorDeclaredInLoop"
+  },
+  {
+   "id": "accumulator_pattern@L0",
+   "kind": "learning_level",
+   "label": "L0"
+  },
+  {
+   "id": "accumulator_pattern@L1",
+   "kind": "learning_level",
+   "label": "L1"
+  },
+  {
+   "id": "accumulator_pattern@L2",
+   "kind": "learning_level",
+   "label": "L2"
+  },
+  {
+   "id": "accumulator_pattern@L3",
+   "kind": "learning_level",
+   "label": "L3"
+  },
+  {
+   "id": "accumulator_pattern@L4",
+   "kind": "learning_level",
+   "label": "L4"
+  },
+  {
+   "id": "LoopBodyScopeImpliesLoopLifetime",
+   "kind": "misconception",
+   "label": "LoopBodyScopeImpliesLoopLifetime"
+  },
+  {
+   "id": "StateChangeIgnoredAcrossPasses",
+   "kind": "misconception",
+   "label": "StateChangeIgnoredAcrossPasses"
+  },
+  {
+   "id": "VariableRolesInferred",
+   "kind": "misconception",
+   "label": "VariableRolesInferred"
+  },
+  {
+   "id": "topic1.3.f",
+   "kind": "topic",
+   "label": "Applications (finite sums, Newton, conversion, gambler's ruin, factoring)"
+  }
+ ],
+ "edges": [
+  {
+   "from": "topic1.3.f",
+   "to": "accumulator_pattern",
+   "type": "contains",
+   "label": "The topic 'Applications (finite sums, Newton, conversion, gambler's ruin, factoring)' introduces accumulator_pattern."
+  },
+  {
+   "from": "topic1.3.f",
+   "to": "convergence_test",
+   "type": "contains",
+   "label": "The topic 'Applications (finite sums, Newton, conversion, gambler's ruin, factoring)' introduces convergence_test."
+  },
+  {
+   "from": "topic1.3.f",
+   "to": "counter_pattern",
+   "type": "contains",
+   "label": "The topic 'Applications (finite sums, Newton, conversion, gambler's ruin, factoring)' introduces counter_pattern."
+  },
+  {
+   "from": "topic1.3.f",
+   "to": "debugging",
+   "type": "contains",
+   "label": "Topic 'Applications (finite sums, Newton, conversion, gambler's ruin, factoring)' of section 1.3 holds the concept debugging."
+  },
+  {
+   "from": "topic1.3.f",
+   "to": "fencepost_loop",
+   "type": "contains",
+   "label": "The topic 'Applications (finite sums, Newton, conversion, gambler's ruin, factoring)' introduces fencepost_loop."
+  },
+  {
+   "from": "topic1.3.f",
+   "to": "flag_search_loop",
+   "type": "contains",
+   "label": "The topic 'Applications (finite sums, Newton, conversion, gambler's ruin, factoring)' introduces flag_search_loop."
+  },
+  {
+   "from": "topic1.3.f",
+   "to": "loop_performance",
+   "type": "contains",
+   "label": "Loop performance is taught under \"Applications (finite sums, Newton, conversion, gambler's ruin, factoring)\"."
+  },
+  {
+   "from": "topic1.3.f",
+   "to": "monte_carlo_simulation",
+   "type": "contains",
+   "label": "The topic 'Applications (finite sums, Newton, conversion, gambler's ruin, factoring)' introduces monte_carlo_simulation."
+  },
+  {
+   "from": "topic1.3.f",
+   "to": "number_conversion",
+   "type": "contains",
+   "label": "Number conversion (binary) is taught under \"Applications (finite sums, Newton, conversion, gambler's ruin, factoring)\"."
+  },
+  {
+   "from": "topic1.3.f",
+   "to": "testing",
+   "type": "contains",
+   "label": "Topic 'Applications (finite sums, Newton, conversion, gambler's ruin, factoring)' of section 1.3 holds the concept testing."
+  },
+  {
+   "from": "accumulator_pattern",
+   "to": "AccumulatorDeclaredInLoop",
+   "type": "error",
+   "label": "wrong: Declaring sum inside the loop body keeps a running total across passes. | right: The accumulator must be declared and initialised before the loop."
+  },
+  {
+   "from": "counter_pattern",
+   "to": "AccumulatorDeclaredInLoop",
+   "type": "error",
+   "label": "wrong: Declaring sum inside the loop body keeps a running total across passes. | right: The accumulator must be declared and initialised before the loop."
+  },
+  {
+   "from": "logical_error",
+   "to": "AccumulatorDeclaredInLoop",
+   "type": "error",
+   "label": "wrong: Declaring sum inside the loop body keeps a running total across passes. | right: The accumulator must be declared and initialised before the loop."
+  },
+  {
+   "from": "loop_scope",
+   "to": "AccumulatorDeclaredInLoop",
+   "type": "error",
+   "label": "wrong: Declaring sum inside the loop body keeps a running total across passes. | right: The accumulator must be declared and initialised before the loop."
+  },
+  {
+   "from": "accumulator_pattern",
+   "to": "accumulator_pattern@L0",
+   "type": "has_level",
+   "label": "[0] everyday_reading (E): Folk meaning: 'the sum' is a single mathematical quantity that simply exists, and a person adding numbers keeps the running total in mind automatically. In Java the total is a variable that must be declared and initialized before the loop and explicitly updated on every pass (sum += x).\n[1] misconception (M) -> LoopBodyScopeImpliesLoopLifetime: wrong rule: a variable declared in the loop body lives across all iterations. Right rule: A variable declared inside the body is in scope only to the end of the body, so each pass declares and initializes it afresh and it does not keep the previous pass's value.\n[2] inconsistent_trace (T) -> LoopBodyScopeImpliesLoopLifetime: Applies the update rule (LT) unevenly: adds the new value to the previous total on some passes but restarts from the initial value (or forgets to add) on others. (here mixing in: \"a variable declared in the loop body lives across all iterations\")\n[3] misconception (M) -> VariableRolesInferred: wrong rule: The computer recognises that one variable plays two roles, e.g. input value and running total, and keeps the values apart; it knows which variable is the counter and which the sum. Right rule: A variable holds one value at a time; each role (input, counter, running total) needs its own variable and explicit update.\n[4] misconception (M) -> StateChangeIgnoredAcrossPasses: wrong rule: Values changed by one pass of a loop (other than the loop variable) do not affect later passes. Right rule: Each pass starts from the state left by the previous pass, so a change in one pass carries into the next ones."
+  },
+  {
+   "from": "accumulator_pattern",
+   "to": "accumulator_pattern@L1",
+   "type": "has_level",
+   "label": "[0] names_the_element (N): An accumulator is a variable used to accumulate results during a traversal, e.g. the running total of a sum.\n[1] states_the_rule (S): Initialize the accumulator before the loop (0 for a sum, 1 for a product), update it once per pass in the body (total += array[i]), and use it after the loop."
+  },
+  {
+   "from": "accumulator_pattern",
+   "to": "accumulator_pattern@L2",
+   "type": "has_level",
+   "label": "[0] line_by_line_trace (LT): Before the loop: total = initial value. Each pass: read total, combine with the current item, store back. After the loop: total holds the combination of all items.\n[1] output_prediction (OP): After the loop the accumulator holds the reduce result: sum of 1..N is N(N+1)/2; Harmonic(2) = 1.5; the product loop gives N!.\n[2] one_step_execution (OS): One pass changes only the accumulator (and the loop variable): sum += x[i] turns sum = 1 into 5 when x[i] = 4."
+  },
+  {
+   "from": "accumulator_pattern",
+   "to": "accumulator_pattern@L3",
+   "type": "has_level",
+   "label": "[0] relation_to_neighbour (R): The update sum += x sits inside the body so it runs once per pass, while the declaration and initialization stay before the loop.\n[1] relation_to_neighbour (R): A counter is an accumulator that adds 1 on each pass that matches (count++), whereas an accumulator adds the current value itself (sum += x).\n[2] relation_to_neighbour (R): In a sentinel loop the sum and the count of the values read are both accumulators, updated only for values that are not the sentinel.\n[3] relation_to_neighbour (R): Both make one pass over the values with one variable kept across passes. An accumulator (gatherer role) combines every value into it (sum += a[i]), so it starts at the identity 0.0; a running extreme (most-wanted holder) replaces it only when a better value is found (if (a[i] > max) max = a[i]), so it starts at Double.NEGATIVE_INFINITY or the first value.\n[4] purpose_of_the_whole (P): Role: gatherer - a data item accumulating the effect of individual values (running total, product, concatenated string)."
+  },
+  {
+   "from": "accumulator_pattern",
+   "to": "accumulator_pattern@L4",
+   "type": "has_level",
+   "label": "[0] predict_a_change (C) -> LoopBodyScopeImpliesLoopLifetime: Changing the initial value shifts the result by that amount (sum starts at 1 gives sum + 1); a product starting at 0 stays 0; reordering the items does not change an integer sum (addition is commutative) but may change a floating-point sum slightly.\n[1] diagnose_an_error (D): rule broken: A variable declared in the body is in scope only to the end of the body and is re-declared and re-initialized on every pass. Kind: silent logic error. Trigger class: for (...) { int sum = 0; sum += a[i]; }: sum restarts at 0 each pass, so only the last term survives; printing sum after the loop is a compile-time error (cannot find symbol) because sum is out of scope.\n[2] transfer_to_a_new_program (X): Use an accumulator whenever many values must be reduced to one (sum, product, average, string); for a maximum or minimum use a most-wanted holder updated by an if instead.\n[3] diagnose_an_error (D): rule broken: The accumulator must be initialized before the loop. Kind: compile-time. Trigger class: Declaring int sum; and then sum += x in the loop: 'variable sum might not have been initialized'.\n[4] diagnose_an_error (D): rule broken: A sum must start at 0 and a product at 1. Kind: silent logic error. Trigger class: product initialized to 0 (result always 0) or sum initialized to the first element and then adding it again (first element counted twice)."
+  },
+  {
+   "from": "accumulator_pattern",
+   "to": "LoopBodyScopeImpliesLoopLifetime",
+   "type": "misconception",
+   "label": "wrong: a variable declared in the loop body lives across all iterations | right: A variable declared inside the body is created anew on every pass and does not keep the previous pass's value."
+  },
+  {
+   "from": "accumulator_pattern",
+   "to": "StateChangeIgnoredAcrossPasses",
+   "type": "misconception",
+   "label": "wrong: Values changed by one pass of a loop (other than the loop variable) do not affect later passes. | right: Each pass starts from the state left by the previous pass, so a change in one pass carries into the next ones."
+  },
+  {
+   "from": "accumulator_pattern",
+   "to": "VariableRolesInferred",
+   "type": "misconception",
+   "label": "wrong: The computer recognises that one variable plays two roles, e.g. input value and running total, and keeps the values apart; it knows which variable is the counter and which the sum. | right: A variable holds one value at a time; each role (input, counter, running total) needs its own variable and explicit update."
+  },
+  {
+   "from": "counter_pattern",
+   "to": "VariableRolesInferred",
+   "type": "misconception",
+   "label": "wrong: The computer recognises that one variable plays two roles, e.g. input value and running total, and keeps the values apart; it knows which variable is the counter and which the sum. | right: A variable holds one value at a time; each role (input, counter, running total) needs its own variable and explicit update."
+  },
+  {
+   "from": "loop_body",
+   "to": "StateChangeIgnoredAcrossPasses",
+   "type": "misconception",
+   "label": "wrong: Values changed by one pass of a loop (other than the loop variable) do not affect later passes. | right: Each pass starts from the state left by the previous pass, so a change in one pass carries into the next ones."
+  },
+  {
+   "from": "loop_scope",
+   "to": "LoopBodyScopeImpliesLoopLifetime",
+   "type": "misconception",
+   "label": "wrong: A variable declared inside the loop body keeps its value from one pass to the next. | right: A variable declared inside the body is created anew on every pass and does not keep the previous pass's value."
+  },
+  {
+   "from": "program_state",
+   "to": "StateChangeIgnoredAcrossPasses",
+   "type": "misconception",
+   "label": "wrong: Values changed by one pass of a loop (other than the loop variable) do not affect later passes. | right: Each pass starts from the state left by the previous pass, so a change in one pass carries into the next ones."
+  },
+  {
+   "from": "simulation_loop",
+   "to": "LoopBodyScopeImpliesLoopLifetime",
+   "type": "misconception",
+   "label": "wrong: Declaring page inside the simulation loop still lets the surfer continue from the previous page. | right: If page is declared inside the loop body it is recreated each pass, so it must be declared before the loop to carry the walk forward."
+  },
+  {
+   "from": "variable",
+   "to": "LoopBodyScopeImpliesLoopLifetime",
+   "type": "misconception",
+   "label": "wrong: a variable declared in the loop body lives across all iterations | right: A variable declared inside the body is created anew on every pass and does not keep the previous pass's value."
+  },
+  {
+   "from": "variable",
+   "to": "VariableRolesInferred",
+   "type": "misconception",
+   "label": "wrong: The computer recognises that one variable plays two roles, e.g. input value and running total, and keeps the values apart; it knows which variable is the counter and which the sum. | right: A variable holds one value at a time; each role (input, counter, running total) needs its own variable and explicit update."
+  },
+  {
+   "from": "accumulator_pattern",
+   "to": "counter_pattern",
+   "type": "parallel",
+   "label": "An accumulator adds the current value itself on each pass (sum += x); a counter adds 1 on each pass that matches (count++)."
+  },
+  {
+   "from": "running_extreme",
+   "to": "accumulator_pattern",
+   "type": "parallel",
+   "label": "Both make one pass over the values with one variable kept across passes. An accumulator (gatherer role) combines every value into it (sum += a[i]), so it starts at the identity 0.0; a running extreme (most-wanted holder) replaces it only when a better value is found (if (a[i] > max) max = a[i]), so it starts at Double.NEGATIVE_INFINITY or the first value."
+  },
+  {
+   "from": "accumulator_pattern",
+   "to": "sentinel_loop",
+   "type": "prerequisite",
+   "label": "Sum and count are accumulators."
+  },
+  {
+   "from": "compound_assignment",
+   "to": "accumulator_pattern",
+   "type": "prerequisite",
+   "label": "sum += x is the usual way a running total is updated on each pass."
+  },
+  {
+   "from": "loop_body",
+   "to": "accumulator_pattern",
+   "type": "prerequisite",
+   "label": "The accumulator update sum += x sits inside the body, so it runs once on every pass."
+  }
+ ]
+}

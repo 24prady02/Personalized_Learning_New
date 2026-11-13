@@ -1,0 +1,376 @@
+{
+ "concept": "array_traversal",
+ "label": "array_traversal",
+ "graph_version": "3.9.8 (3.9.7 + one primary per misconception (S9c) and the four remaining sibling edges (S9b), 2026-11-04; listed in revision_3_9_8)",
+ "nodes": [
+  {
+   "id": "array_bounds",
+   "kind": "concept",
+   "label": "array_bounds"
+  },
+  {
+   "id": "array_copy",
+   "kind": "concept",
+   "label": "array_copy"
+  },
+  {
+   "id": "array_initializer",
+   "kind": "concept",
+   "label": "array_initializer"
+  },
+  {
+   "id": "array_reversal",
+   "kind": "concept",
+   "label": "array_reversal"
+  },
+  {
+   "id": "array_traversal",
+   "kind": "concept",
+   "label": "array_traversal"
+  },
+  {
+   "id": "boolean_flag_array",
+   "kind": "concept",
+   "label": "boolean_flag_array"
+  },
+  {
+   "id": "enhanced_for",
+   "kind": "concept",
+   "label": "enhanced_for"
+  },
+  {
+   "id": "for_loop",
+   "kind": "concept",
+   "label": "for_loop"
+  },
+  {
+   "id": "function_plotting",
+   "kind": "concept",
+   "label": "function_plotting"
+  },
+  {
+   "id": "increment_operators",
+   "kind": "concept",
+   "label": "increment_operators"
+  },
+  {
+   "id": "indexing",
+   "kind": "concept",
+   "label": "indexing"
+  },
+  {
+   "id": "length_field",
+   "kind": "concept",
+   "label": "length_field"
+  },
+  {
+   "id": "loop_control",
+   "kind": "concept",
+   "label": "loop_control"
+  },
+  {
+   "id": "matrix_operations",
+   "kind": "concept",
+   "label": "matrix_operations"
+  },
+  {
+   "id": "off_by_one_error",
+   "kind": "concept",
+   "label": "off_by_one_error"
+  },
+  {
+   "id": "running_extreme",
+   "kind": "concept",
+   "label": "running_extreme"
+  },
+  {
+   "id": "simulation_loop",
+   "kind": "concept",
+   "label": "simulation_loop"
+  },
+  {
+   "id": "EarlyReturnInLoop",
+   "kind": "error",
+   "label": "EarlyReturnInLoop"
+  },
+  {
+   "id": "array_traversal@L0",
+   "kind": "learning_level",
+   "label": "L0"
+  },
+  {
+   "id": "array_traversal@L1",
+   "kind": "learning_level",
+   "label": "L1"
+  },
+  {
+   "id": "array_traversal@L2",
+   "kind": "learning_level",
+   "label": "L2"
+  },
+  {
+   "id": "array_traversal@L3",
+   "kind": "learning_level",
+   "label": "L3"
+  },
+  {
+   "id": "array_traversal@L4",
+   "kind": "learning_level",
+   "label": "L4"
+  },
+  {
+   "id": "ArrayUseScansAllCells",
+   "kind": "misconception",
+   "label": "ArrayUseScansAllCells"
+  },
+  {
+   "id": "ElementBoundToOldIndex",
+   "kind": "misconception",
+   "label": "ElementBoundToOldIndex"
+  },
+  {
+   "id": "IdiomOverridesCode",
+   "kind": "misconception",
+   "label": "IdiomOverridesCode"
+  },
+  {
+   "id": "OffByOneBound",
+   "kind": "misconception",
+   "label": "OffByOneBound"
+  },
+  {
+   "id": "WholeArrayArithmetic",
+   "kind": "misconception",
+   "label": "WholeArrayArithmetic"
+  },
+  {
+   "id": "topic1.4.c",
+   "kind": "topic",
+   "label": "Setting array values at compile time and at run time"
+  }
+ ],
+ "edges": [
+  {
+   "from": "topic1.4.c",
+   "to": "array_initializer",
+   "type": "contains",
+   "label": "The topic 'Setting array values at compile time and at run time' introduces array_initializer."
+  },
+  {
+   "from": "topic1.4.c",
+   "to": "array_reversal",
+   "type": "contains",
+   "label": "The topic 'Setting array values at compile time and at run time' introduces array_reversal."
+  },
+  {
+   "from": "topic1.4.c",
+   "to": "array_traversal",
+   "type": "contains",
+   "label": "The topic 'Setting array values at compile time and at run time' introduces array_traversal."
+  },
+  {
+   "from": "topic1.4.c",
+   "to": "enhanced_for",
+   "type": "contains",
+   "label": "The topic 'Setting array values at compile time and at run time' introduces enhanced_for."
+  },
+  {
+   "from": "topic1.4.c",
+   "to": "running_extreme",
+   "type": "contains",
+   "label": "The topic 'Standard input' introduces running_extreme."
+  },
+  {
+   "from": "array_traversal",
+   "to": "EarlyReturnInLoop",
+   "type": "error",
+   "label": "wrong: Leaves a traversal loop with return before every element has been processed. | right: A result that depends on all elements is known only after the loop ends."
+  },
+  {
+   "from": "array_traversal",
+   "to": "array_traversal@L0",
+   "type": "has_level",
+   "label": "[0] everyday_reading (E): Folk meaning: 'go through the list' in English means look at every item once, first to last, so an array loop is assumed to process the whole array whatever its code says. Java rule: the loop visits exactly the indices its initialization, guard and update generate, in that order.\n[1] misconception (M) -> WholeArrayArithmetic: wrong rule: a = a + b adds the arrays element by element. Right rule: Java has no arithmetic on whole arrays; write a loop that adds a[i] + b[i] for each i.\n[2] misconception (M) -> IdiomOverridesCode: wrong rule: An array loop processes the whole array from index 0 to length-1 and increments its index at the end of the body, whatever the code says. Right rule: The loop visits exactly the indices that its initialisation, guard and update produce, in the order in which its statements are written.\n[3] misconception (M) -> ArrayUseScansAllCells: wrong rule: Using an array means every cell must be scanned. Right rule: A traversal may cover only part of the array or stop early (as in a search); indexing reaches single elements directly.\n[4] inconsistent_trace (T) -> WholeArrayArithmetic: Points to LT: initialize i, test, run the body with the current i, update, test again. Inconsistent application: on some passes the update is applied before the body, or a[i] is traced with the previous i. (here mixing in: \"a = a + b adds the arrays element by element\")\n[5] misconception (M) -> OffByOneBound: wrong rule: < vs <= and 0..n vs 0..n-1 are interchangeable. Right rule: for (i = 0; i < n; i++) runs n times with i going up to n - 1; with <= it runs n + 1 times and reaches i = n.\n[6] misconception (M) -> ElementBoundToOldIndex: wrong rule: After i changes, X[i] still refers to the element at the old value of i. Right rule: a[i] is evaluated with the current value of i each time it is used."
+  },
+  {
+   "from": "array_traversal",
+   "to": "array_traversal@L1",
+   "type": "has_level",
+   "label": "[0] names_the_element (N): Identity: a traversal is a loop that steps an index through the array and performs the same operation on each element it visits.\n[1] states_the_rule (S): Declarative: the canonical traversal is 'for (int i = 0; i < a.length; i++) { ... a[i] ... }', which gives i every valid index exactly once, in increasing order; the for loop is equivalent to initialize; while (test) { body; increment; }."
+  },
+  {
+   "from": "array_traversal",
+   "to": "array_traversal@L2",
+   "type": "has_level",
+   "label": "[0] line_by_line_trace (LT): Sequencing: i = 0; test i < a.length; body using a[i]; i++; test; ... When i == a.length the test fails and the body is not executed, so a[a.length] is never touched.\n[1] output_prediction (OP): Result: the body runs a.length times, and the result depends on the body. Squaring each element of {1, 2, 3, 4, 5} leaves {1, 4, 9, 16, 25}; summing leaves the total in the accumulator.\n[2] one_step_execution (OS): State transition: one pass applies the body to element i (reading or writing a[i] and possibly updating an accumulator), then i increases by 1; no other element is touched unless the body indexes it."
+  },
+  {
+   "from": "array_traversal",
+   "to": "array_traversal@L3",
+   "type": "has_level",
+   "label": "[0] relation_to_neighbour (R): The loop variable is used as the index, so a[i] reaches a different element on each pass.\n[1] relation_to_neighbour (R): for (int x : a) is a traversal that hands the body each value a[i] and hides the index i.\n[2] relation_to_neighbour (R): for (int i = 0; i < a.length; i++) gives i every valid index exactly once, in increasing order; the bound must be < a.length, not <=.\n[3] relation_to_neighbour (R): The sieve traverses isPrime[] once to set every flag to true and again at the end to count the flags still true.\n[4] relation_to_neighbour (R): Reversal traverses only the first half (i < N/2), exchanging each a[i] with its mirror a[N-1-i].\n[5] relation_to_neighbour (R): Sample points are computed into x[] and y[] by one traversal and drawn by another.\n[6] relation_to_neighbour (R): The running maximum is found in one traversal that keeps the largest value seen so far, starting from Double.NEGATIVE_INFINITY.\n[7] relation_to_neighbour (R): The elements are copied one at a time by a loop over every index.\n[8] purpose_of_the_whole (P): Plan/role: the index is a stepper, and the loop carries out a Soloway-style plan (accumulate/sum with a gatherer, count, search, find the extreme, copy) once for each element."
+  },
+  {
+   "from": "array_traversal",
+   "to": "array_traversal@L4",
+   "type": "has_level",
+   "label": "[0] predict_a_change (C) -> WholeArrayArithmetic: Conservation: running the index downward (a.length-1 to 0) visits the same set of elements in reverse order, harmless for a sum but not for a shift. Starting at 1 or stopping at a.length-1 drops an element. Invariant: before pass i, elements 0..i-1 have been processed.\n[1] diagnose_an_error (D): rule broken: A result that depends on all elements is known only after the loop ends. Kind: silent logic error. Trigger class: a return (or break) placed inside the loop body fires on the first element, e.g. returning false/-1 in the else branch of a search, or returning the sum inside the loop\n[2] transfer_to_a_new_program (X): Applicability: use an index traversal when every element (or a contiguous range) must be processed and the index matters (writing a[i], comparing neighbours, reporting positions). Use enhanced for when only the values matter, and stop early when one element settles the answer (search).\n[3] diagnose_an_error (D): rule broken: The guard must be i < a.length. Kind: run-time exception. Trigger class: i <= a.length (or a body that reads a[i+1]) makes the last pass index a.length (ArrayIndexOutOfBoundsException)\n[4] diagnose_an_error (D): rule broken: The traversal must cover every element it is meant to process. Kind: silent logic error. Trigger class: the loop starts at 1 or stops at a.length-1, so an end element is skipped\n[5] diagnose_an_error (D): rule broken: Arithmetic operators do not apply to whole arrays. Kind: compile-time. Trigger class: a + b or a * 2 written for arrays (bad operand types for binary operator)"
+  },
+  {
+   "from": "array_bounds",
+   "to": "OffByOneBound",
+   "type": "misconception",
+   "label": "wrong: < vs <= and 0..n vs 0..n-1 are interchangeable | right: for (i = 0; i < n; i++) runs n times with i going up to n - 1; with <= it runs n + 1 times and reaches i = n."
+  },
+  {
+   "from": "array_reversal",
+   "to": "OffByOneBound",
+   "type": "misconception",
+   "label": "wrong: < vs <= and 0..n vs 0..n-1 are interchangeable | right: for (i = 0; i < n; i++) runs n times with i going up to n - 1; with <= it runs n + 1 times and reaches i = n."
+  },
+  {
+   "from": "array_traversal",
+   "to": "ArrayUseScansAllCells",
+   "type": "misconception",
+   "label": "wrong: Using an array means every cell must be scanned. | right: Arrays allow random access: a[i] reaches one element directly, and a loop visits only the elements the task needs."
+  },
+  {
+   "from": "array_traversal",
+   "to": "ElementBoundToOldIndex",
+   "type": "misconception",
+   "label": "wrong: After i changes, X[i] still refers to the element at the old value of i. | right: a[i] is evaluated with the current value of i each time it is used."
+  },
+  {
+   "from": "array_traversal",
+   "to": "IdiomOverridesCode",
+   "type": "misconception",
+   "label": "wrong: An array loop processes the whole array from index 0 to length-1 and increments its index at the end of the body, whatever the code says. | right: The loop visits exactly the indices that its initialisation, guard and update produce, in the order in which its statements are written."
+  },
+  {
+   "from": "array_traversal",
+   "to": "OffByOneBound",
+   "type": "misconception",
+   "label": "wrong: < vs <= and 0..n vs 0..n-1 are interchangeable | right: for (i = 0; i < n; i++) runs n times with i going up to n - 1; with <= it runs n + 1 times and reaches i = n."
+  },
+  {
+   "from": "array_traversal",
+   "to": "WholeArrayArithmetic",
+   "type": "misconception",
+   "label": "wrong: a = a + b adds the arrays element by element. | right: Java has no arithmetic on whole arrays; write a loop that adds a[i] + b[i] for each i."
+  },
+  {
+   "from": "boolean_flag_array",
+   "to": "OffByOneBound",
+   "type": "misconception",
+   "label": "wrong: < vs <= and 0..n vs 0..n-1 are interchangeable | right: for (i = 0; i < n; i++) runs n times with i going up to n - 1; with <= it runs n + 1 times and reaches i = n."
+  },
+  {
+   "from": "for_loop",
+   "to": "IdiomOverridesCode",
+   "type": "misconception",
+   "label": "wrong: An array loop processes the whole array from index 0 to length-1 and increments its index at the end of the body, whatever the code says. | right: The loop visits exactly the indices that its initialisation, guard and update produce, in the order in which its statements are written."
+  },
+  {
+   "from": "increment_operators",
+   "to": "IdiomOverridesCode",
+   "type": "misconception",
+   "label": "wrong: An array loop processes the whole array from index 0 to length-1 and increments its index at the end of the body, whatever the code says. | right: The loop visits exactly the indices that its initialisation, guard and update produce, in the order in which its statements are written."
+  },
+  {
+   "from": "indexing",
+   "to": "ArrayUseScansAllCells",
+   "type": "misconception",
+   "label": "wrong: Using an array means every cell must be scanned. | right: Arrays allow random access: a[i] reaches one element directly, and a loop visits only the elements the task needs."
+  },
+  {
+   "from": "indexing",
+   "to": "ElementBoundToOldIndex",
+   "type": "misconception",
+   "label": "wrong: After i changes, X[i] still refers to the element at the old value of i. | right: a[i] is evaluated with the current value of i each time it is used."
+  },
+  {
+   "from": "loop_control",
+   "to": "IdiomOverridesCode",
+   "type": "misconception",
+   "label": "wrong: An array loop processes the whole array from index 0 to length-1 and increments its index at the end of the body, whatever the code says. | right: The loop visits exactly the indices that its initialisation, guard and update produce, in the order in which its statements are written."
+  },
+  {
+   "from": "loop_control",
+   "to": "OffByOneBound",
+   "type": "misconception",
+   "label": "wrong: i < n and i <= n mean the same, so the loop runs until i equals n and the last pass can use a[n]. | right: for (i = 0; i < n; i++) runs n times with i going up to n - 1; with <= it runs n + 1 times and reaches i = n."
+  },
+  {
+   "from": "matrix_operations",
+   "to": "WholeArrayArithmetic",
+   "type": "misconception",
+   "label": "wrong: a = a + b adds the arrays element by element. | right: Java has no arithmetic on whole arrays; write a loop that adds a[i] + b[i] for each i."
+  },
+  {
+   "from": "off_by_one_error",
+   "to": "OffByOneBound",
+   "type": "misconception",
+   "label": "wrong: < vs <= and 0..n vs 0..n-1 are interchangeable | right: for (i = 0; i < n; i++) runs n times with i going up to n - 1; with <= it runs n + 1 times and reaches i = n."
+  },
+  {
+   "from": "simulation_loop",
+   "to": "OffByOneBound",
+   "type": "misconception",
+   "label": "wrong: t < T and t <= T give the same number of moves. | right: for (t = 0; t < T; t++) makes exactly T moves; with <= it makes T + 1."
+  },
+  {
+   "from": "array_traversal",
+   "to": "array_copy",
+   "type": "prerequisite",
+   "label": "The elements are copied one at a time by a loop over every index."
+  },
+  {
+   "from": "array_traversal",
+   "to": "array_reversal",
+   "type": "prerequisite",
+   "label": "Reversal traverses only the first half of the array (i < N/2), exchanging each a[i] with its mirror a[N-1-i]."
+  },
+  {
+   "from": "array_traversal",
+   "to": "boolean_flag_array",
+   "type": "prerequisite",
+   "label": "The sieve traverses isPrime[] to set every flag to true and later traverses it again to count the flags that are still true."
+  },
+  {
+   "from": "array_traversal",
+   "to": "enhanced_for",
+   "type": "prerequisite",
+   "label": "for (int x : a) is a traversal that hands the body each value a[i] instead of the index i."
+  },
+  {
+   "from": "array_traversal",
+   "to": "function_plotting",
+   "type": "prerequisite",
+   "label": "The sample points are kept in arrays and traversed."
+  },
+  {
+   "from": "array_traversal",
+   "to": "running_extreme",
+   "type": "prerequisite",
+   "label": "The running maximum is found by traversing the array once, keeping the largest value seen so far (starting from Double.NEGATIVE_INFINITY)."
+  },
+  {
+   "from": "for_loop",
+   "to": "array_traversal",
+   "type": "prerequisite",
+   "label": "for (int i = 0; i < a.length; i++) gives i every valid index exactly once, in increasing order."
+  },
+  {
+   "from": "indexing",
+   "to": "array_traversal",
+   "type": "prerequisite",
+   "label": "A traversal uses the loop variable i as the index, so a[i] reaches a different element on each pass."
+  },
+  {
+   "from": "length_field",
+   "to": "array_traversal",
+   "type": "prerequisite",
+   "label": "A traversal loop runs its index from 0 while it is below a.length, so it visits every element once."
+  }
+ ]
+}

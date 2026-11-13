@@ -1,0 +1,249 @@
+{
+ "concept": "transition_matrix",
+ "label": "transition_matrix",
+ "graph_version": "3.9.8 (3.9.7 + one primary per misconception (S9c) and the four remaining sibling edges (S9b), 2026-11-04; listed in revision_3_9_8)",
+ "nodes": [
+  {
+   "id": "dangling_pages",
+   "kind": "concept",
+   "label": "dangling_pages"
+  },
+  {
+   "id": "input_graph",
+   "kind": "concept",
+   "label": "input_graph"
+  },
+  {
+   "id": "markov_chain",
+   "kind": "concept",
+   "label": "markov_chain"
+  },
+  {
+   "id": "normalization",
+   "kind": "concept",
+   "label": "normalization"
+  },
+  {
+   "id": "ragged_array",
+   "kind": "concept",
+   "label": "ragged_array"
+  },
+  {
+   "id": "random_move",
+   "kind": "concept",
+   "label": "random_move"
+  },
+  {
+   "id": "teleportation",
+   "kind": "concept",
+   "label": "teleportation"
+  },
+  {
+   "id": "transition_matrix",
+   "kind": "concept",
+   "label": "transition_matrix"
+  },
+  {
+   "id": "two_dimensional_array",
+   "kind": "concept",
+   "label": "two_dimensional_array"
+  },
+  {
+   "id": "transition_matrix@L0",
+   "kind": "learning_level",
+   "label": "L0"
+  },
+  {
+   "id": "transition_matrix@L1",
+   "kind": "learning_level",
+   "label": "L1"
+  },
+  {
+   "id": "transition_matrix@L2",
+   "kind": "learning_level",
+   "label": "L2"
+  },
+  {
+   "id": "transition_matrix@L3",
+   "kind": "learning_level",
+   "label": "L3"
+  },
+  {
+   "id": "transition_matrix@L4",
+   "kind": "learning_level",
+   "label": "L4"
+  },
+  {
+   "id": "MultidimensionalArray",
+   "kind": "misconception",
+   "label": "MultidimensionalArray"
+  },
+  {
+   "id": "NoJaggedArrays",
+   "kind": "misconception",
+   "label": "NoJaggedArrays"
+  },
+  {
+   "id": "RowsNeedNotSumToOne",
+   "kind": "misconception",
+   "label": "RowsNeedNotSumToOne"
+  },
+  {
+   "id": "topic1.6.a",
+   "kind": "topic",
+   "label": "Input format and transition matrix"
+  }
+ ],
+ "edges": [
+  {
+   "from": "topic1.6.a",
+   "to": "dangling_pages",
+   "type": "contains",
+   "label": "The topic 'Input format and transition matrix' introduces dangling_pages."
+  },
+  {
+   "from": "topic1.6.a",
+   "to": "input_graph",
+   "type": "contains",
+   "label": "The topic 'Input format and transition matrix' introduces input_graph."
+  },
+  {
+   "from": "topic1.6.a",
+   "to": "normalization",
+   "type": "contains",
+   "label": "The topic 'Input format and transition matrix' introduces normalization."
+  },
+  {
+   "from": "topic1.6.a",
+   "to": "teleportation",
+   "type": "contains",
+   "label": "The topic 'Input format and transition matrix' introduces teleportation."
+  },
+  {
+   "from": "topic1.6.a",
+   "to": "transition_matrix",
+   "type": "contains",
+   "label": "The topic 'Input format and transition matrix' introduces transition_matrix."
+  },
+  {
+   "from": "transition_matrix",
+   "to": "transition_matrix@L0",
+   "type": "has_level",
+   "label": "[0] everyday_reading (E): In maths classes a transition matrix is often written column-wise (column = from), and \"matrix\" suggests a table of counts; in SW p[i][j] is a probability, row i = the page the surfer is on, column j = the page moved to, and each row sums to 1.\n[1] misconception (M) -> MultidimensionalArray: wrong rule: A 2-D array is one thing, not an array of arrays. Right rule: Java represents p[][] as an array of N row arrays; p[page] is itself a 1-D double array (the distribution used by the random move).\n[2] misconception (M) -> NoJaggedArrays: wrong rule: Multi-dimensional arrays must be rectangular. Right rule: Each row is its own array, so rows can differ in length (a ragged array); the transition matrix is created square with new double[N][N].\n[3] misconception (M) -> RowsNeedNotSumToOne: wrong rule: A page with no outgoing links can have an all-zero row. Right rule: Every row must be a probability distribution summing to 1; a page with no links gets 1/N in every column."
+  },
+  {
+   "from": "transition_matrix",
+   "to": "transition_matrix@L1",
+   "type": "has_level",
+   "label": "[0] names_the_element (N): A data structure: an N-by-N two-dimensional double array p[][] (a stochastic matrix) whose entry p[i][j] is the probability of moving from page i to page j.\n[1] states_the_rule (S): Entry (i, j) is the probability that the surfer on page i moves to page j; by the 90-10 rule it is .90*counts[i][j]/outDegree[i] + .10/N, and every row is a discrete probability distribution summing to 1."
+  },
+  {
+   "from": "transition_matrix",
+   "to": "transition_matrix@L2",
+   "type": "has_level",
+   "label": "[0] line_by_line_trace (LT): Three steps in order: read N and create counts[][] and outDegree[]; read all links and accumulate counts; then, row by row (outer i) and column by column (inner j), compute and print one probability; the header \"N N\" is printed before the rows.\n[1] output_prediction (OP): Output is a matrix file: the row and column counts, then N rows of N doubles printed with %8.5f; for tiny.txt row 0 is 0.02000 0.92000 0.02000 0.02000 0.02000 and row 1 is 0.02000 0.02000 0.38000 0.38000 0.20000.\n[2] one_step_execution (OS): One inner-loop pass evaluates one double p for the current (i, j) from counts[i][j], outDegree[i] and N, and prints it; no array is modified by this phase."
+  },
+  {
+   "from": "transition_matrix",
+   "to": "transition_matrix@L3",
+   "type": "has_level",
+   "label": "[0] relation_to_neighbour (R): Row i depends only on the tallies read for page i (counts[i][] and outDegree[i]); the matrix cannot be computed until all links have been read.\n[1] relation_to_neighbour (R): Dividing counts[i][j] by outDegree[i] (after scaling by .90) and adding .10/N is the normalisation that makes row i sum to 1; the double operand .90 keeps the division from being integer division.\n[2] relation_to_neighbour (R): The random move reads one row p[page] as a 1-D array and accumulates its entries; it only works if that row sums to 1.\n[3] relation_to_neighbour (R): The matrix is double[N][N]: p[i] is the row array for page i and p[i][j] an element; indices must be in 0..N-1 and the first index is the row (from-page).\n[4] relation_to_neighbour (R): A matrix whose rows are probability distributions defines a Markov chain: the next page depends only on the current page's row.\n[5] relation_to_neighbour (R): Transition's formula is valid only if every outDegree[i] > 0; a page with no outlinks must have its row filled with 1/N.\n[6] relation_to_neighbour (R): The .10/N term, added to every entry, is the teleport (random-page) part of each row; the .90 factor scales the link part so the two parts sum to 1.\n[7] purpose_of_the_whole (P): Specifies completely the surfer's behaviour as data; Transition is a filter turning the list-of-links representation into a matrix that RandomSurfer and Markov both read."
+  },
+  {
+   "from": "transition_matrix",
+   "to": "transition_matrix@L4",
+   "type": "has_level",
+   "label": "[0] predict_a_change (C): Invariant: every row sums to 1. Changing the split to 80-20 or 95-5 keeps it (the two weights still sum to 1) but changes the ranks; changing .10/N to .10, or omitting the leap term, breaks it.\n[1] transfer_to_a_new_program (X): Right tool when the model has few enough pages that N*N doubles fit in memory and both simulation and the power method need per-pair probabilities; not for millions of pages (trillions of entries).\n[2] diagnose_an_error (D): rule broken: outDegree[i] must be > 0 (no dangling pages). Kind: silent logic error. Trigger class: A page with no outlinks: .90*counts[i][j] is the double 0.0 and 0.0/0 gives NaN, so the whole row prints NaN with no exception.\n[3] diagnose_an_error (D): rule broken: Each row must sum to 1. Kind: silent logic error. Trigger class: Any row whose entries do not sum to 1 (wrong scaling, missing leap term, unhandled dangling page) makes the RandomSurfer move fail.\n[4] diagnose_an_error (D): rule broken: Indices i, j must be in 0..N-1. Kind: run-time exception. Trigger class: Link with page >= N, or loop bound <= N: ArrayIndexOutOfBoundsException."
+  },
+  {
+   "from": "dangling_pages",
+   "to": "RowsNeedNotSumToOne",
+   "type": "misconception",
+   "label": "wrong: A page with no outgoing links can have an all-zero row. | right: Each row is a probability distribution; a page with no links is made equally likely to move to every page."
+  },
+  {
+   "from": "normalization",
+   "to": "RowsNeedNotSumToOne",
+   "type": "misconception",
+   "label": "wrong: A page with no outgoing links can have an all-zero row. | right: Each row is a probability distribution; a page with no links is made equally likely to move to every page."
+  },
+  {
+   "from": "ragged_array",
+   "to": "NoJaggedArrays",
+   "type": "misconception",
+   "label": "wrong: multi-dimensional arrays must be rectangular | right: Each row a[i] is its own array, so rows can have different lengths a[i].length."
+  },
+  {
+   "from": "transition_matrix",
+   "to": "MultidimensionalArray",
+   "type": "misconception",
+   "label": "wrong: The transition matrix is one block of n * n numbers, so p[i] on its own means nothing. | right: p[i] is the row array of page i, holding the probabilities of moving from page i to every page."
+  },
+  {
+   "from": "transition_matrix",
+   "to": "NoJaggedArrays",
+   "type": "misconception",
+   "label": "wrong: Every row of the transition matrix must be stored with the same length because 2-D arrays are always rectangular. | right: Each p[i] is its own row array; the surfer's matrix is square only because every page has a row of n probabilities."
+  },
+  {
+   "from": "transition_matrix",
+   "to": "RowsNeedNotSumToOne",
+   "type": "misconception",
+   "label": "wrong: A page with no outgoing links can have an all-zero row. | right: Each row is a probability distribution; a page with no links is made equally likely to move to every page."
+  },
+  {
+   "from": "two_dimensional_array",
+   "to": "MultidimensionalArray",
+   "type": "misconception",
+   "label": "wrong: int[m][n] is one block of m * n values, so a[i] on its own means nothing. | right: A 2-D array is an array of m row arrays, so a[i] is a 1-D array of length n."
+  },
+  {
+   "from": "two_dimensional_array",
+   "to": "NoJaggedArrays",
+   "type": "misconception",
+   "label": "wrong: Every row of a 2-D array must have the same length. | right: Each row a[i] is its own array, so rows can have different lengths a[i].length."
+  },
+  {
+   "from": "input_graph",
+   "to": "transition_matrix",
+   "type": "prerequisite",
+   "label": "The links read from input fill counts[i][j], and each row of the transition matrix is built from those counts."
+  },
+  {
+   "from": "teleportation",
+   "to": "transition_matrix",
+   "type": "prerequisite",
+   "label": "The 90-10 rule says the surfer follows a random link 90 percent of the time and jumps to a random page 10 percent of the time, and each transition-matrix entry is computed from it."
+  },
+  {
+   "from": "transition_matrix",
+   "to": "dangling_pages",
+   "type": "prerequisite",
+   "label": "Transition assumes that every page has an outgoing link; Exercise 1.6.3 handles a page with no outgoing links by filling its row of the transition matrix with 1/N."
+  },
+  {
+   "from": "transition_matrix",
+   "to": "markov_chain",
+   "type": "prerequisite",
+   "label": "The transition matrix specifies the probability of each move, and the random process those probabilities define is a Markov chain."
+  },
+  {
+   "from": "transition_matrix",
+   "to": "normalization",
+   "type": "prerequisite",
+   "label": "Each row of the transition matrix must be a probability distribution, so counts[i][j] is divided by outDegree[i] (scaled by .90, plus .10/N) to make row i sum to 1."
+  },
+  {
+   "from": "transition_matrix",
+   "to": "random_move",
+   "type": "prerequisite",
+   "label": "Row p[i] is the probability distribution used to choose the next page when the surfer is on page i."
+  },
+  {
+   "from": "two_dimensional_array",
+   "to": "transition_matrix",
+   "type": "prerequisite",
+   "label": "The transition matrix is a 2-D double array p[i][j], with one row array per page."
+  }
+ ]
+}

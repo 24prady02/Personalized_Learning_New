@@ -1,0 +1,264 @@
+{
+ "concept": "print",
+ "label": "print",
+ "graph_version": "3.9.8 (3.9.7 + one primary per misconception (S9c) and the four remaining sibling edges (S9b), 2026-11-04; listed in revision_3_9_8)",
+ "nodes": [
+  {
+   "id": "block",
+   "kind": "concept",
+   "label": "block"
+  },
+  {
+   "id": "class_declaration",
+   "kind": "concept",
+   "label": "class_declaration"
+  },
+  {
+   "id": "comment",
+   "kind": "concept",
+   "label": "comment"
+  },
+  {
+   "id": "expression",
+   "kind": "concept",
+   "label": "expression"
+  },
+  {
+   "id": "main_method",
+   "kind": "concept",
+   "label": "main_method"
+  },
+  {
+   "id": "method_call",
+   "kind": "concept",
+   "label": "method_call"
+  },
+  {
+   "id": "print",
+   "kind": "concept",
+   "label": "print"
+  },
+  {
+   "id": "println",
+   "kind": "concept",
+   "label": "println"
+  },
+  {
+   "id": "program_layout",
+   "kind": "concept",
+   "label": "program_layout"
+  },
+  {
+   "id": "standard_output",
+   "kind": "concept",
+   "label": "standard_output"
+  },
+  {
+   "id": "statement",
+   "kind": "concept",
+   "label": "statement"
+  },
+  {
+   "id": "string_literal",
+   "kind": "concept",
+   "label": "string_literal"
+  },
+  {
+   "id": "PrintWithoutFinalNewline",
+   "kind": "error",
+   "label": "PrintWithoutFinalNewline"
+  },
+  {
+   "id": "print@L0",
+   "kind": "learning_level",
+   "label": "L0"
+  },
+  {
+   "id": "print@L1",
+   "kind": "learning_level",
+   "label": "L1"
+  },
+  {
+   "id": "print@L2",
+   "kind": "learning_level",
+   "label": "L2"
+  },
+  {
+   "id": "print@L3",
+   "kind": "learning_level",
+   "label": "L3"
+  },
+  {
+   "id": "print@L4",
+   "kind": "learning_level",
+   "label": "L4"
+  },
+  {
+   "id": "ParenthesesOnlyIfArgument",
+   "kind": "misconception",
+   "label": "ParenthesesOnlyIfArgument"
+  },
+  {
+   "id": "RepeatedOutputVariablePrintedOnce",
+   "kind": "misconception",
+   "label": "RepeatedOutputVariablePrintedOnce"
+  },
+  {
+   "id": "topic1.1.b",
+   "kind": "topic",
+   "label": "Understanding a program (HelloWorld)"
+  }
+ ],
+ "edges": [
+  {
+   "from": "topic1.1.b",
+   "to": "block",
+   "type": "contains",
+   "label": "The topic 'Understanding a program (HelloWorld)' introduces block."
+  },
+  {
+   "from": "topic1.1.b",
+   "to": "class_declaration",
+   "type": "contains",
+   "label": "The topic 'Understanding a program (HelloWorld)' introduces class_declaration."
+  },
+  {
+   "from": "topic1.1.b",
+   "to": "comment",
+   "type": "contains",
+   "label": "The topic 'Understanding a program (HelloWorld)' introduces comment."
+  },
+  {
+   "from": "topic1.1.b",
+   "to": "main_method",
+   "type": "contains",
+   "label": "The topic 'Understanding a program (HelloWorld)' introduces main_method."
+  },
+  {
+   "from": "topic1.1.b",
+   "to": "print",
+   "type": "contains",
+   "label": "The topic 'Understanding a program (HelloWorld)' introduces print."
+  },
+  {
+   "from": "topic1.1.b",
+   "to": "println",
+   "type": "contains",
+   "label": "The topic 'Understanding a program (HelloWorld)' introduces println."
+  },
+  {
+   "from": "topic1.1.b",
+   "to": "program_layout",
+   "type": "contains",
+   "label": "The topic 'Understanding a program (HelloWorld)' introduces program_layout."
+  },
+  {
+   "from": "topic1.1.b",
+   "to": "statement",
+   "type": "contains",
+   "label": "The topic 'Understanding a program (HelloWorld)' introduces statement."
+  },
+  {
+   "from": "topic1.1.b",
+   "to": "string_literal",
+   "type": "contains",
+   "label": "The topic 'Understanding a program (HelloWorld)' introduces string_literal."
+  },
+  {
+   "from": "print",
+   "to": "PrintWithoutFinalNewline",
+   "type": "error",
+   "label": "wrong: Ends the output with print and expects it to appear right away. | right: Finish a line of print calls with println; some systems hold print output until a newline is printed."
+  },
+  {
+   "from": "println",
+   "to": "PrintWithoutFinalNewline",
+   "type": "error",
+   "label": "wrong: Ends the output with print and expects it to appear right away. | right: Finish a line of print calls with println; some systems hold print output until a newline is printed."
+  },
+  {
+   "from": "print",
+   "to": "print@L0",
+   "type": "has_level",
+   "label": "[0] everyday_reading (E): Everyday meaning: 'print' means send to a printer, and an output command lists each distinct name once. Java rule: System.out.print(x) displays x's characters in the terminal at the current position, with no newline, every time it runs.\n[1] misconception (M) -> RepeatedOutputVariablePrintedOnce: wrong rule: An output statement that names the same variable twice prints it only once. Right rule: Each expression in the output is printed, so a repeated variable prints its value each time.\n[2] inconsistent_trace (T) -> RepeatedOutputVariablePrintedOnce: Applies the print rule (LT) unevenly: inserts a line break after a print on one line but not another, or drops a repeated value. (here mixing in: \"An output statement that names the same variable twice (WRITE y, x, y) prints it only once\")\n[3] misconception (M) -> ParenthesesOnlyIfArgument: wrong rule: () are optional on a call with no argument. Right rule: A method call always needs parentheses after the name."
+  },
+  {
+   "from": "print",
+   "to": "print@L1",
+   "type": "has_level",
+   "label": "[0] names_the_element (N): System.out.print(x) is a library method call (on the PrintStream System.out) that displays x in the terminal without ending the line.\n[1] states_the_rule (S): print(String s) prints the string (or \"null\" for a null reference); print(int) etc. print the value's string form; no line terminator is written."
+  },
+  {
+   "from": "print",
+   "to": "print@L2",
+   "type": "has_level",
+   "label": "[0] line_by_line_trace (LT): The argument expression is evaluated first, converted to a string, then its characters are written at the current output position; the next output continues right after them.\n[1] output_prediction (OP): Output is exactly the characters of the value (a string literal without its quotes, a number in decimal) and nothing else: print(\"Goodbye, \"); println(\"cruel world\"); prints Goodbye, cruel world on one line.\n[2] one_step_execution (OS): One call appends the value's characters to the output and leaves the cursor on the same line; it changes no variable and returns nothing (void)."
+  },
+  {
+   "from": "print",
+   "to": "print@L3",
+   "type": "has_level",
+   "label": "[0] relation_to_neighbour (R): System.out.print(s); is a statement, so its output appears at its place in the statement sequence.\n[1] relation_to_neighbour (R): print(\"s\") outputs exactly the characters between the quotes, without the quotes; spaces inside the quotes are printed.\n[2] relation_to_neighbour (R): print leaves the cursor on the same line; println ends the line; a line built from several prints should end with println.\n[3] purpose_of_the_whole (P): Purpose: build one line of output from several pieces (a prompt, labels and values) before ending it with println."
+  },
+  {
+   "from": "print",
+   "to": "print@L4",
+   "type": "has_level",
+   "label": "[0] predict_a_change (C) -> RepeatedOutputVariablePrintedOnce: Changing print to println (or back) moves the following output to a new line (or the same line) but keeps the characters printed; swapping two print statements swaps their text.\n[1] diagnose_an_error (D): rule broken: Finish a line of print calls with println. Kind: silent logic error. Trigger class: the last output of the program is a print: on some systems the text is held and not shown, or the prompt appears on the same line\n[2] transfer_to_a_new_program (X): Use print when more output must follow on the same line (prompts, items in a row); use println to end a line, and printf when the number format matters.\n[3] diagnose_an_error (D): rule broken: A method call needs parentheses and correct case. Kind: compile-time. Trigger class: System.out.print \"x\"; or System.out.Print(x)"
+  },
+  {
+   "from": "expression",
+   "to": "ParenthesesOnlyIfArgument",
+   "type": "misconception",
+   "label": "wrong: () are optional on a no-argument call like println | right: A method call always needs parentheses, so an empty line is printed with System.out.println();."
+  },
+  {
+   "from": "method_call",
+   "to": "ParenthesesOnlyIfArgument",
+   "type": "misconception",
+   "label": "wrong: () are optional on a no-argument call like println | right: A method call always needs parentheses, so an empty line is printed with System.out.println();."
+  },
+  {
+   "from": "print",
+   "to": "ParenthesesOnlyIfArgument",
+   "type": "misconception",
+   "label": "wrong: println with nothing to print can be written System.out.println; without the parentheses. | right: A method call always needs parentheses, so an empty line is printed with System.out.println();."
+  },
+  {
+   "from": "print",
+   "to": "RepeatedOutputVariablePrintedOnce",
+   "type": "misconception",
+   "label": "wrong: An output statement that names the same variable twice (WRITE y, x, y) prints it only once. | right: Each expression in the output list is printed, so a repeated variable prints its value each time."
+  },
+  {
+   "from": "println",
+   "to": "ParenthesesOnlyIfArgument",
+   "type": "misconception",
+   "label": "wrong: println with nothing to print can be written System.out.println; without the parentheses. | right: A method call always needs parentheses, so an empty line is printed with System.out.println();."
+  },
+  {
+   "from": "standard_output",
+   "to": "RepeatedOutputVariablePrintedOnce",
+   "type": "misconception",
+   "label": "wrong: An output statement that names the same variable twice (WRITE y, x, y) prints it only once. | right: Each expression in the output list is printed, so a repeated variable prints its value each time."
+  },
+  {
+   "from": "print",
+   "to": "println",
+   "type": "parallel",
+   "label": "print leaves the cursor on the same line after printing; println moves the cursor to the next line after printing."
+  },
+  {
+   "from": "statement",
+   "to": "print",
+   "type": "prerequisite",
+   "label": "System.out.print(s); is itself a statement, so it runs at its own place in the sequence of statements."
+  },
+  {
+   "from": "string_literal",
+   "to": "print",
+   "type": "prerequisite",
+   "label": "print(\"s\") outputs exactly the characters between the quotes, without the quotes."
+  }
+ ]
+}

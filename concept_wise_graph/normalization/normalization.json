@@ -1,0 +1,175 @@
+{
+ "concept": "normalization",
+ "label": "normalization",
+ "graph_version": "3.9.8 (3.9.7 + one primary per misconception (S9c) and the four remaining sibling edges (S9b), 2026-11-04; listed in revision_3_9_8)",
+ "nodes": [
+  {
+   "id": "dangling_pages",
+   "kind": "concept",
+   "label": "dangling_pages"
+  },
+  {
+   "id": "input_graph",
+   "kind": "concept",
+   "label": "input_graph"
+  },
+  {
+   "id": "integer_division",
+   "kind": "concept",
+   "label": "integer_division"
+  },
+  {
+   "id": "normalization",
+   "kind": "concept",
+   "label": "normalization"
+  },
+  {
+   "id": "teleportation",
+   "kind": "concept",
+   "label": "teleportation"
+  },
+  {
+   "id": "transition_matrix",
+   "kind": "concept",
+   "label": "transition_matrix"
+  },
+  {
+   "id": "normalization@L0",
+   "kind": "learning_level",
+   "label": "L0"
+  },
+  {
+   "id": "normalization@L1",
+   "kind": "learning_level",
+   "label": "L1"
+  },
+  {
+   "id": "normalization@L2",
+   "kind": "learning_level",
+   "label": "L2"
+  },
+  {
+   "id": "normalization@L3",
+   "kind": "learning_level",
+   "label": "L3"
+  },
+  {
+   "id": "normalization@L4",
+   "kind": "learning_level",
+   "label": "L4"
+  },
+  {
+   "id": "IntegerProbability",
+   "kind": "misconception",
+   "label": "IntegerProbability"
+  },
+  {
+   "id": "RowsNeedNotSumToOne",
+   "kind": "misconception",
+   "label": "RowsNeedNotSumToOne"
+  },
+  {
+   "id": "topic1.6.a",
+   "kind": "topic",
+   "label": "Input format and transition matrix"
+  }
+ ],
+ "edges": [
+  {
+   "from": "topic1.6.a",
+   "to": "dangling_pages",
+   "type": "contains",
+   "label": "The topic 'Input format and transition matrix' introduces dangling_pages."
+  },
+  {
+   "from": "topic1.6.a",
+   "to": "input_graph",
+   "type": "contains",
+   "label": "The topic 'Input format and transition matrix' introduces input_graph."
+  },
+  {
+   "from": "topic1.6.a",
+   "to": "normalization",
+   "type": "contains",
+   "label": "The topic 'Input format and transition matrix' introduces normalization."
+  },
+  {
+   "from": "topic1.6.a",
+   "to": "teleportation",
+   "type": "contains",
+   "label": "The topic 'Input format and transition matrix' introduces teleportation."
+  },
+  {
+   "from": "topic1.6.a",
+   "to": "transition_matrix",
+   "type": "contains",
+   "label": "The topic 'Input format and transition matrix' introduces transition_matrix."
+  },
+  {
+   "from": "normalization",
+   "to": "normalization@L0",
+   "type": "has_level",
+   "label": "[0] everyday_reading (E): In maths, a/b of two whole numbers is a fraction (2/5 = 0.4); in Java, if both operands are int, / discards the fractional part (2/5 is 0), so a probability computed as counts[i][j]/outDegree[i] is 0 or 1.\n[1] misconception (M) -> IntegerProbability: wrong rule: Probabilities computed with integer division stay correct. Right rule: counts[i][j]/outDegree[i] with two int operands truncates (0 whenever counts < outDegree); Transition multiplies by .90 first so the division is double, and RandomSurfer casts with (double) freq[i] / T.\n[2] inconsistent_trace (T) -> IntegerProbability: Applies LT (left to right: .90*counts, then / outDegree, then + .10/N) unevenly: e.g. dividing before the double factor on some entries (int division), or adding .10/N once per row instead of to every entry. (here mixing in: \"probabilities computed with integer division stay correct\")\n[3] misconception (M) -> RowsNeedNotSumToOne: wrong rule: A page with no outgoing links can have an all-zero row. Right rule: Normalising requires a non-zero total; a page with no links is given 1/N in every column so its row still sums to 1."
+  },
+  {
+   "from": "normalization",
+   "to": "normalization@L1",
+   "type": "has_level",
+   "label": "[0] names_the_element (N): A computation: scaling the non-negative weights of a row by their total so that the row becomes a discrete probability distribution summing to 1.\n[1] states_the_rule (S): Multiply counts[i][j] by .90/outDegree[i] and add .10/N to each entry; the resulting entries of each row sum to 1."
+  },
+  {
+   "from": "normalization",
+   "to": "normalization@L2",
+   "type": "has_level",
+   "label": "[0] line_by_line_trace (LT): In .90*counts[i][j]/outDegree[i] + .10/N, * and / evaluate left to right before +: .90*counts[i][j] first (int promoted to double), then divided by outDegree[i], then .10/N is computed and added.\n[1] output_prediction (OP): Produces a double in [0, 1]; for tiny.txt page 1 (counts 0 0 2 2 1, outDegree 5) the row is .02 .02 .38 .38 .20, and the row sums to 1 up to floating-point rounding.\n[2] one_step_execution (OS): One evaluation reads counts[i][j], outDegree[i] and N and yields one double p; nothing in counts or outDegree changes."
+  },
+  {
+   "from": "normalization",
+   "to": "normalization@L3",
+   "type": "has_level",
+   "label": "[0] relation_to_neighbour (R): Normalisation is applied row by row: every entry of row i is divided by the same total outDegree[i], which is what makes the row a distribution the matrix requires.\n[1] relation_to_neighbour (R): Type flow decides the result: with a double operand anywhere to the left (.90*...) the division is floating-point; with two ints it truncates (2/5 == 0).\n[2] purpose_of_the_whole (P): Turn raw counts into probabilities (the \"divide each count by the total\" plan); the same plan turns visit counts freq[i] into rank estimates freq[i]/T."
+  },
+  {
+   "from": "normalization",
+   "to": "normalization@L4",
+   "type": "has_level",
+   "label": "[0] predict_a_change (C) -> IntegerProbability: Invariant: weights sum to 1, since .90*(sum of counts/outDegree) + N*(.10/N) = .90 + .10. Changing .90 to .80 without changing .10 breaks it; reordering to counts[i][j]/outDegree[i]*.90 breaks it silently via int division.\n[1] transfer_to_a_new_program (X): Use whenever counts or weights must become probabilities (matrix rows, visit frequencies); not needed when the values already form a distribution, and not possible for a zero total (dangling page) without a special case.\n[2] diagnose_an_error (D): rule broken: Division of two ints truncates. Kind: silent logic error. Trigger class: counts[i][j]/outDegree[i] or freq[i]/T written with two int operands: every probability with numerator < denominator becomes 0.\n[3] diagnose_an_error (D): rule broken: Divisor (total) must be non-zero. Kind: silent logic error. Trigger class: outDegree[i] == 0 in the double expression .90*counts[i][j]/outDegree[i]: result NaN, no exception.\n[4] diagnose_an_error (D): rule broken: Integer division by zero is undefined. Kind: run-time exception. Trigger class: An all-int version counts[i][j]/outDegree[i] with outDegree[i] == 0 throws ArithmeticException."
+  },
+  {
+   "from": "dangling_pages",
+   "to": "RowsNeedNotSumToOne",
+   "type": "misconception",
+   "label": "wrong: A page with no outgoing links can have an all-zero row. | right: Each row is a probability distribution; a page with no links is made equally likely to move to every page."
+  },
+  {
+   "from": "normalization",
+   "to": "IntegerProbability",
+   "type": "misconception",
+   "label": "wrong: counts[i][j] / degree[i] gives the correct probability because the result is stored in a double. | right: counts[i][j] / outDegree[i] with two int operands is integer division and gives 0 whenever counts < outDegree; SW's Transition avoids it by multiplying by .90 first, and RandomSurfer casts with (double) freq[i] / T."
+  },
+  {
+   "from": "normalization",
+   "to": "RowsNeedNotSumToOne",
+   "type": "misconception",
+   "label": "wrong: A page with no outgoing links can have an all-zero row. | right: Each row is a probability distribution; a page with no links is made equally likely to move to every page."
+  },
+  {
+   "from": "transition_matrix",
+   "to": "RowsNeedNotSumToOne",
+   "type": "misconception",
+   "label": "wrong: A page with no outgoing links can have an all-zero row. | right: Each row is a probability distribution; a page with no links is made equally likely to move to every page."
+  },
+  {
+   "from": "integer_division",
+   "to": "normalization",
+   "type": "prerequisite",
+   "label": "Normalising must divide as doubles, because with two ints counts / total truncates to 0 whenever counts < total."
+  },
+  {
+   "from": "transition_matrix",
+   "to": "normalization",
+   "type": "prerequisite",
+   "label": "Each row of the transition matrix must be a probability distribution, so counts[i][j] is divided by outDegree[i] (scaled by .90, plus .10/N) to make row i sum to 1."
+  }
+ ]
+}

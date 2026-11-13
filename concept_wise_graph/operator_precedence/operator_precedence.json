@@ -1,0 +1,356 @@
+{
+ "concept": "operator_precedence",
+ "label": "operator_precedence",
+ "graph_version": "3.9.8 (3.9.7 + one primary per misconception (S9c) and the four remaining sibling edges (S9b), 2026-11-04; listed in revision_3_9_8)",
+ "nodes": [
+  {
+   "id": "assignment",
+   "kind": "concept",
+   "label": "assignment"
+  },
+  {
+   "id": "chained_assignment",
+   "kind": "concept",
+   "label": "chained_assignment"
+  },
+  {
+   "id": "data_type",
+   "kind": "concept",
+   "label": "data_type"
+  },
+  {
+   "id": "declaration",
+   "kind": "concept",
+   "label": "declaration"
+  },
+  {
+   "id": "definite_assignment",
+   "kind": "concept",
+   "label": "definite_assignment"
+  },
+  {
+   "id": "explicit_cast",
+   "kind": "concept",
+   "label": "explicit_cast"
+  },
+  {
+   "id": "expression",
+   "kind": "concept",
+   "label": "expression"
+  },
+  {
+   "id": "identifier",
+   "kind": "concept",
+   "label": "identifier"
+  },
+  {
+   "id": "literal",
+   "kind": "concept",
+   "label": "literal"
+  },
+  {
+   "id": "logical_operators",
+   "kind": "concept",
+   "label": "logical_operators"
+  },
+  {
+   "id": "named_constants",
+   "kind": "concept",
+   "label": "named_constants"
+  },
+  {
+   "id": "naming_convention",
+   "kind": "concept",
+   "label": "naming_convention"
+  },
+  {
+   "id": "operator_precedence",
+   "kind": "concept",
+   "label": "operator_precedence"
+  },
+  {
+   "id": "primitive_type",
+   "kind": "concept",
+   "label": "primitive_type"
+  },
+  {
+   "id": "program_trace",
+   "kind": "concept",
+   "label": "Trace (table of variable values)"
+  },
+  {
+   "id": "string_concatenation",
+   "kind": "concept",
+   "label": "string_concatenation"
+  },
+  {
+   "id": "string_conversion",
+   "kind": "concept",
+   "label": "string_conversion"
+  },
+  {
+   "id": "variable",
+   "kind": "concept",
+   "label": "variable"
+  },
+  {
+   "id": "variable_swap",
+   "kind": "concept",
+   "label": "variable_swap"
+  },
+  {
+   "id": "operator_precedence@L0",
+   "kind": "learning_level",
+   "label": "L0"
+  },
+  {
+   "id": "operator_precedence@L1",
+   "kind": "learning_level",
+   "label": "L1"
+  },
+  {
+   "id": "operator_precedence@L2",
+   "kind": "learning_level",
+   "label": "L2"
+  },
+  {
+   "id": "operator_precedence@L3",
+   "kind": "learning_level",
+   "label": "L3"
+  },
+  {
+   "id": "operator_precedence@L4",
+   "kind": "learning_level",
+   "label": "L4"
+  },
+  {
+   "id": "ArithmeticPlusPrecedes",
+   "kind": "misconception",
+   "label": "ArithmeticPlusPrecedes"
+  },
+  {
+   "id": "BooleanPrecedence",
+   "kind": "misconception",
+   "label": "BooleanPrecedence"
+  },
+  {
+   "id": "CastAppliesToWholeExpression",
+   "kind": "misconception",
+   "label": "CastAppliesToWholeExpression"
+  },
+  {
+   "id": "MissingClarifyingParentheses",
+   "kind": "misconception",
+   "label": "MissingClarifyingParentheses"
+  },
+  {
+   "id": "StringPlusLeftToRight",
+   "kind": "misconception",
+   "label": "StringPlusLeftToRight"
+  },
+  {
+   "id": "WrongOperatorOrder",
+   "kind": "misconception",
+   "label": "WrongOperatorOrder"
+  },
+  {
+   "id": "topic1.2.a",
+   "kind": "topic",
+   "label": "Data types and terminology (literals, identifiers, variables, declarations, assignment, expressions)"
+  }
+ ],
+ "edges": [
+  {
+   "from": "topic1.2.a",
+   "to": "assignment",
+   "type": "contains",
+   "label": "The topic 'Data types and terminology (literals, identifiers, variables, declarations, assignment, expressions)' introduces assignment."
+  },
+  {
+   "from": "topic1.2.a",
+   "to": "chained_assignment",
+   "type": "contains",
+   "label": "The topic 'Data types and terminology (literals, identifiers, variables, declarations, assignment, expressions)' introduces chained_assignment."
+  },
+  {
+   "from": "topic1.2.a",
+   "to": "data_type",
+   "type": "contains",
+   "label": "The topic 'Data types and terminology (literals, identifiers, variables, declarations, assignment, expressions)' introduces data_type."
+  },
+  {
+   "from": "topic1.2.a",
+   "to": "declaration",
+   "type": "contains",
+   "label": "The topic 'Data types and terminology (literals, identifiers, variables, declarations, assignment, expressions)' introduces declaration."
+  },
+  {
+   "from": "topic1.2.a",
+   "to": "definite_assignment",
+   "type": "contains",
+   "label": "The topic 'Data types and terminology (literals, identifiers, variables, declarations, assignment, expressions)' introduces definite_assignment."
+  },
+  {
+   "from": "topic1.2.a",
+   "to": "expression",
+   "type": "contains",
+   "label": "The topic 'Data types and terminology (literals, identifiers, variables, declarations, assignment, expressions)' introduces expression."
+  },
+  {
+   "from": "topic1.2.a",
+   "to": "identifier",
+   "type": "contains",
+   "label": "The topic 'Data types and terminology (literals, identifiers, variables, declarations, assignment, expressions)' introduces identifier."
+  },
+  {
+   "from": "topic1.2.a",
+   "to": "literal",
+   "type": "contains",
+   "label": "The topic 'Data types and terminology (literals, identifiers, variables, declarations, assignment, expressions)' introduces literal."
+  },
+  {
+   "from": "topic1.2.a",
+   "to": "named_constants",
+   "type": "contains",
+   "label": "The topic 'Data types and terminology (literals, identifiers, variables, declarations, assignment, expressions)' introduces named_constants."
+  },
+  {
+   "from": "topic1.2.a",
+   "to": "naming_convention",
+   "type": "contains",
+   "label": "The topic 'Data types and terminology (literals, identifiers, variables, declarations, assignment, expressions)' introduces naming_convention."
+  },
+  {
+   "from": "topic1.2.a",
+   "to": "operator_precedence",
+   "type": "contains",
+   "label": "The topic 'Data types and terminology (literals, identifiers, variables, declarations, assignment, expressions)' introduces operator_precedence."
+  },
+  {
+   "from": "topic1.2.a",
+   "to": "primitive_type",
+   "type": "contains",
+   "label": "The topic 'Data types and terminology (literals, identifiers, variables, declarations, assignment, expressions)' introduces primitive_type."
+  },
+  {
+   "from": "topic1.2.a",
+   "to": "program_trace",
+   "type": "contains",
+   "label": "Trace (table of variable values) is taught under \"Data types and terminology (literals, identifiers, variables, declarations, assignment, expressions)\"."
+  },
+  {
+   "from": "topic1.2.a",
+   "to": "variable",
+   "type": "contains",
+   "label": "The topic 'Data types and terminology (literals, identifiers, variables, declarations, assignment, expressions)' introduces variable."
+  },
+  {
+   "from": "topic1.2.a",
+   "to": "variable_swap",
+   "type": "contains",
+   "label": "The topic 'Data types and terminology (literals, identifiers, variables, declarations, assignment, expressions)' introduces variable_swap."
+  },
+  {
+   "from": "operator_precedence",
+   "to": "operator_precedence@L0",
+   "type": "has_level",
+   "label": "[0] everyday_reading (E): School order of operations (PEMDAS/BODMAS) covers only arithmetic, so novices read other operators left to right as in English, or treat ^ as a power. Java's precedence table also places casts above * / %, comparisons below + -, && above ||, and = lowest.\n[1] misconception (M) -> ArithmeticPlusPrecedes: wrong rule: arithmetic + binds tighter than string-concatenation +. Right rule: Both uses of + have the same precedence and are evaluated left to right, so \"s\" + a + b joins a and then b as text; only \"s\" + (a + b) adds them first.\n[2] misconception (M) -> WrongOperatorOrder: wrong rule: G * m1 * m2 / r * r divides by r squared. Right rule: * and / are applied left to right, so it divides by r and then multiplies by r; use / (r * r).\n[3] inconsistent_trace (T) -> ArithmeticPlusPrecedes: Points to LT (group by precedence, then left to right for operators of equal precedence). Applied unevenly, a student applies * before + in one place but reads G * m1 * m2 / r * r as dividing by r squared. (here mixing in: \"arithmetic + binds tighter than string-concatenation +\")\n[4] misconception (M) -> BooleanPrecedence: wrong rule: a || b && c is evaluated left to right as (a || b) && c. Right rule: && binds tighter than ||, so it is a || (b && c).\n[5] misconception (M) -> CastAppliesToWholeExpression: wrong rule: (int) 2.5 / 0.15 casts the whole quotient to int. Right rule: The cast applies only to what comes right after it, here 2.5.\n[6] misconception (M) -> StringPlusLeftToRight: wrong rule: 2 + 3 + \"bc\" and \"bc\" + 2 + 3 give the same text. Right rule: + is evaluated left to right: 2 + 3 + \"bc\" is \"5bc\" but \"bc\" + 2 + 3 is \"bc23\"."
+  },
+  {
+   "from": "operator_precedence",
+   "to": "operator_precedence@L1",
+   "type": "has_level",
+   "label": "[0] names_the_element (N): Operator precedence (order of operations): the rules that decide which operator binds its operands first, with associativity breaking ties.\n[1] states_the_rule (S): * / % bind before + -, and operators of equal precedence group left to right (a-b-c is (a-b)-c). Casts bind tighter than arithmetic, comparisons are below arithmetic and above && and ||, and parentheses override everything. Operators of equal precedence are applied left to right: a-b-c is (a-b)-c, 1 + 2 + \"Hello\" is \"3Hello\" but \"Hello\" + 1 + 2 is \"Hello12\"."
+  },
+  {
+   "from": "operator_precedence",
+   "to": "operator_precedence@L2",
+   "type": "has_level",
+   "label": "[0] line_by_line_trace (LT): Grouping is fixed first: innermost parentheses, then casts and unary operators, * / %, + -, comparisons, &&, ||, and finally =. Within a level grouping goes left to right, and operands are then evaluated left to right inside that grouping.\n[1] output_prediction (OP): 1 + 2 * 3 is 7. 3 + 5 / 2 is 5. 3 - 5 - 2 is -4. 2 + 3 + \"bc\" is \"5bc\" but \"bc\" + 2 + 3 is \"bc23\".\n[2] one_step_execution (OS): Precedence changes no variable. It only decides which intermediate value is computed next: in minute * 100 / 60 with minute = 59, 5900 is computed before the division."
+  },
+  {
+   "from": "operator_precedence",
+   "to": "operator_precedence@L3",
+   "type": "has_level",
+   "label": "[0] relation_to_neighbour (R): Precedence decides the grouping of a multi-operator expression, and a parenthesized subexpression is evaluated as one unit with its own value.\n[1] purpose_of_the_whole (P): Precedence lets compact formulas read like maths notation. Programmers add parentheses to state the intended grouping, e.g. (a + b) / 2 for an average."
+  },
+  {
+   "from": "operator_precedence",
+   "to": "operator_precedence@L4",
+   "type": "has_level",
+   "label": "[0] predict_a_change (C) -> ArithmeticPlusPrecedes: Adding parentheses that match precedence keeps the value ((minute * 100) / 60). Parentheses that change the grouping change it (3 - (5 - 2) is 0, not -4). Reordering equal-precedence int operations can also change it (59 / 60 * 100 is 0).\n[1] transfer_to_a_new_program (X): Rely on precedence for ordinary arithmetic. Add parentheses whenever the expression mixes levels that readers may not know (casts, && with ||, + with Strings, chains of * and /). Break very long formulas into named intermediate variables.\n[2] diagnose_an_error (D): rule broken: * and / have equal precedence and group left to right; + binds weaker than / . Kind: silent logic error. Trigger class: Maths formulas typed without parentheses: G * m1 * m2 / r * r, (a + b / 2) for an average, or x / 2 * pi.\n[3] diagnose_an_error (D): rule broken: Comparisons yield booleans, and < is not defined between a boolean and an int. Kind: compile-time. Trigger class: Chained comparisons such as a < b < c: 'bad operand types for binary operator <'.\n[4] diagnose_an_error (D): rule broken: + groups left to right, so once a String appears, later + operators concatenate. Kind: silent logic error. Trigger class: Printing \"sum: \" + a + b without parentheses around a + b."
+  },
+  {
+   "from": "explicit_cast",
+   "to": "CastAppliesToWholeExpression",
+   "type": "misconception",
+   "label": "wrong: (int) 2.5 / 0.15 casts the whole quotient to int. | right: The cast applies only to what comes right after it, here 2.5."
+  },
+  {
+   "from": "logical_operators",
+   "to": "BooleanPrecedence",
+   "type": "misconception",
+   "label": "wrong: a || b && c is evaluated left to right as (a || b) && c. | right: && binds tighter than ||, so it is a || (b && c)."
+  },
+  {
+   "from": "operator_precedence",
+   "to": "ArithmeticPlusPrecedes",
+   "type": "misconception",
+   "label": "wrong: In \"s\" + a + b, the numbers a and b are added first and their sum is joined to s. | right: Both uses of + have the same precedence and are evaluated left to right, so \"s\" + a + b joins a and then b as text; only \"s\" + (a + b) adds them first."
+  },
+  {
+   "from": "operator_precedence",
+   "to": "BooleanPrecedence",
+   "type": "misconception",
+   "label": "wrong: a || b && c is evaluated left to right as (a || b) && c. | right: && binds tighter than ||, so it is a || (b && c)."
+  },
+  {
+   "from": "operator_precedence",
+   "to": "CastAppliesToWholeExpression",
+   "type": "misconception",
+   "label": "wrong: (int) 2.5 / 0.15 casts the whole quotient to int. | right: The cast applies only to what comes right after it, here 2.5."
+  },
+  {
+   "from": "operator_precedence",
+   "to": "MissingClarifyingParentheses",
+   "type": "misconception",
+   "label": "wrong: Writes compound expressions such as a + b * c / d - e % f with no parentheses, relying on the reader to know precedence. | right: When writing compound expressions, be explicit and indicate with parentheses which operators should be evaluated first."
+  },
+  {
+   "from": "operator_precedence",
+   "to": "StringPlusLeftToRight",
+   "type": "misconception",
+   "label": "wrong: 2 + 3 + \"bc\" and \"bc\" + 2 + 3 give the same text. | right: + is evaluated left to right: 2 + 3 + \"bc\" is \"5bc\" but \"bc\" + 2 + 3 is \"bc23\"."
+  },
+  {
+   "from": "operator_precedence",
+   "to": "WrongOperatorOrder",
+   "type": "misconception",
+   "label": "wrong: G * m1 * m2 / r * r divides by r squared. | right: * and / are applied left to right, so it divides by r and then multiplies by r; use / (r * r)."
+  },
+  {
+   "from": "string_concatenation",
+   "to": "ArithmeticPlusPrecedes",
+   "type": "misconception",
+   "label": "wrong: In \"s\" + a + b, the numbers a and b are added first and their sum is joined to s. | right: Both uses of + have the same precedence and are evaluated left to right, so \"s\" + a + b joins a and then b as text; only \"s\" + (a + b) adds them first."
+  },
+  {
+   "from": "string_concatenation",
+   "to": "StringPlusLeftToRight",
+   "type": "misconception",
+   "label": "wrong: 2 + 3 + \"bc\" and \"bc\" + 2 + 3 give the same text. | right: + is evaluated left to right: 2 + 3 + \"bc\" is \"5bc\" but \"bc\" + 2 + 3 is \"bc23\"."
+  },
+  {
+   "from": "string_conversion",
+   "to": "StringPlusLeftToRight",
+   "type": "misconception",
+   "label": "wrong: 2 + 3 + \"bc\" and \"bc\" + 2 + 3 give the same text. | right: + is evaluated left to right: 2 + 3 + \"bc\" is \"5bc\" but \"bc\" + 2 + 3 is \"bc23\"."
+  },
+  {
+   "from": "expression",
+   "to": "operator_precedence",
+   "type": "prerequisite",
+   "label": "When an expression has several operators, precedence decides which operands are combined first, and equal-precedence operators go left to right."
+  }
+ ]
+}

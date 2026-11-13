@@ -1,0 +1,259 @@
+{
+ "concept": "read_loop_idiom",
+ "label": "read_loop_idiom",
+ "graph_version": "3.9.8 (3.9.7 + one primary per misconception (S9c) and the four remaining sibling edges (S9b), 2026-11-04; listed in revision_3_9_8)",
+ "nodes": [
+  {
+   "id": "assignment",
+   "kind": "concept",
+   "label": "assignment"
+  },
+  {
+   "id": "chained_assignment",
+   "kind": "concept",
+   "label": "chained_assignment"
+  },
+  {
+   "id": "end_of_input",
+   "kind": "concept",
+   "label": "end_of_input"
+  },
+  {
+   "id": "expression",
+   "kind": "concept",
+   "label": "expression"
+  },
+  {
+   "id": "input_format",
+   "kind": "concept",
+   "label": "input_format"
+  },
+  {
+   "id": "input_validation",
+   "kind": "concept",
+   "label": "input_validation"
+  },
+  {
+   "id": "interactive_input",
+   "kind": "concept",
+   "label": "interactive_input"
+  },
+  {
+   "id": "read_loop_idiom",
+   "kind": "concept",
+   "label": "read_loop_idiom"
+  },
+  {
+   "id": "sentinel_loop",
+   "kind": "concept",
+   "label": "sentinel_loop"
+  },
+  {
+   "id": "standard_input",
+   "kind": "concept",
+   "label": "standard_input"
+  },
+  {
+   "id": "token_vs_line_input",
+   "kind": "concept",
+   "label": "token_vs_line_input"
+  },
+  {
+   "id": "ReadPastEndOfInput",
+   "kind": "error",
+   "label": "ReadPastEndOfInput"
+  },
+  {
+   "id": "read_loop_idiom@L0",
+   "kind": "learning_level",
+   "label": "L0"
+  },
+  {
+   "id": "read_loop_idiom@L1",
+   "kind": "learning_level",
+   "label": "L1"
+  },
+  {
+   "id": "read_loop_idiom@L2",
+   "kind": "learning_level",
+   "label": "L2"
+  },
+  {
+   "id": "read_loop_idiom@L3",
+   "kind": "learning_level",
+   "label": "L3"
+  },
+  {
+   "id": "read_loop_idiom@L4",
+   "kind": "learning_level",
+   "label": "L4"
+  },
+  {
+   "id": "AssignmentNotExpression",
+   "kind": "misconception",
+   "label": "AssignmentNotExpression"
+  },
+  {
+   "id": "InputReadOnceBeforeLoop",
+   "kind": "misconception",
+   "label": "InputReadOnceBeforeLoop"
+  },
+  {
+   "id": "topic1.5.c",
+   "kind": "topic",
+   "label": "Standard input"
+  }
+ ],
+ "edges": [
+  {
+   "from": "topic1.5.c",
+   "to": "end_of_input",
+   "type": "contains",
+   "label": "The topic 'Standard input' introduces end_of_input."
+  },
+  {
+   "from": "topic1.5.c",
+   "to": "input_format",
+   "type": "contains",
+   "label": "The topic 'Standard input' introduces input_format."
+  },
+  {
+   "from": "topic1.5.c",
+   "to": "input_validation",
+   "type": "contains",
+   "label": "The topic 'Standard input' introduces input_validation."
+  },
+  {
+   "from": "topic1.5.c",
+   "to": "interactive_input",
+   "type": "contains",
+   "label": "The topic 'Standard input' introduces interactive_input."
+  },
+  {
+   "from": "topic1.5.c",
+   "to": "read_loop_idiom",
+   "type": "contains",
+   "label": "The topic 'Standard input' introduces read_loop_idiom."
+  },
+  {
+   "from": "topic1.5.c",
+   "to": "sentinel_loop",
+   "type": "contains",
+   "label": "The topic 'Standard input' introduces sentinel_loop."
+  },
+  {
+   "from": "topic1.5.c",
+   "to": "standard_input",
+   "type": "contains",
+   "label": "The topic 'Standard input' introduces standard_input."
+  },
+  {
+   "from": "topic1.5.c",
+   "to": "token_vs_line_input",
+   "type": "contains",
+   "label": "The topic 'Standard input' introduces token_vs_line_input."
+  },
+  {
+   "from": "end_of_input",
+   "to": "ReadPastEndOfInput",
+   "type": "error",
+   "label": "wrong: Calls StdIn.readInt() again after the input has run out. | right: Reading after standard input is exhausted is a run-time error; test StdIn.isEmpty() before each read."
+  },
+  {
+   "from": "read_loop_idiom",
+   "to": "ReadPastEndOfInput",
+   "type": "error",
+   "label": "wrong: Calls StdIn.readInt() again after the input has run out. | right: Reading after standard input is exhausted is a run-time error; test StdIn.isEmpty() before each read."
+  },
+  {
+   "from": "standard_input",
+   "to": "ReadPastEndOfInput",
+   "type": "error",
+   "label": "wrong: Calls StdIn.readInt() again after the input has run out. | right: Reading after standard input is exhausted is a run-time error; test StdIn.isEmpty() before each read."
+  },
+  {
+   "from": "read_loop_idiom",
+   "to": "read_loop_idiom@L0",
+   "type": "has_level",
+   "label": "[0] everyday_reading (E): Everyday 'read until the end' assumes you know how long the text is, and 'empty' suggests a blank screen or line. The stream's length is unknown to the program, and isEmpty() is true only when no more tokens remain.\n[1] misconception (M) -> InputReadOnceBeforeLoop: wrong rule: Reading a value once before the loop is enough; the loop will process each new input value. Right rule: The read must be inside the loop body so that every pass consumes a new value.\n[2] inconsistent_trace (T) -> InputReadOnceBeforeLoop: Points to LT (test !isEmpty(), then read, then process, on every pass). An uneven trace processes the old value before reading on some passes, or reads twice on one pass. (here mixing in: \"Reading a value once before the loop is enough; the loop will process each new input value\")\n[3] misconception (M) -> AssignmentNotExpression: wrong rule: An assignment cannot be used inside a larger expression. Right rule: An assignment is an expression whose value is the value assigned, so (x = v) both stores v in x and yields v. This is used, for example, in while ((line = in.readLine()) != null)."
+  },
+  {
+   "from": "read_loop_idiom",
+   "to": "read_loop_idiom@L1",
+   "type": "has_level",
+   "label": "[0] names_the_element (N): The read loop is an input idiom: a while loop whose condition is !StdIn.isEmpty() and whose body reads one value and processes it.\n[1] states_the_rule (S): Before each read, call StdIn.isEmpty() to check whether more values remain. isEmpty() is true when only whitespace is left."
+  },
+  {
+   "from": "read_loop_idiom",
+   "to": "read_loop_idiom@L2",
+   "type": "has_level",
+   "label": "[0] line_by_line_trace (LT): Each pass: evaluate !StdIn.isEmpty(). If it is true, read one value, then process it (e.g. sum += value; cnt++;) and go back to the test. If it is false, leave the loop and run the code after it (e.g. compute and print the average).\n[1] output_prediction (OP): After the loop, every value has been read exactly once and the accumulators hold their totals. Average with input 10.0 5.0 6.0 3.0 7.0 32.0 <ctrl-d> prints Average is 10.5.\n[2] one_step_execution (OS): One pass consumes exactly one value (or one fixed group, e.g. an x, y pair) and updates the loop's accumulators. The isEmpty() test consumes nothing."
+  },
+  {
+   "from": "read_loop_idiom",
+   "to": "read_loop_idiom@L3",
+   "type": "has_level",
+   "label": "[0] relation_to_neighbour (R): isEmpty() false guarantees only one more token. A body that reads k values per pass assumes the input count is a multiple of k.\n[1] relation_to_neighbour (R): The loop ends only when isEmpty() becomes true: at the end of a redirected file, or after the end-of-file keystroke (<ctrl-d>, or <ctrl-z> on some systems).\n[2] relation_to_neighbour (R): A sentinel loop keeps the read-then-test structure but stops on a special data value instead of, or as well as, isEmpty(). The sentinel must be tested before it is processed.\n[3] purpose_of_the_whole (P): Plan: the process-all-input loop (Soloway's read/process loop). sum is a gatherer and cnt a counter (stepper), and value is a most-recent holder."
+  },
+  {
+   "from": "read_loop_idiom",
+   "to": "read_loop_idiom@L4",
+   "type": "has_level",
+   "label": "[0] predict_a_change (C) -> InputReadOnceBeforeLoop: The loop works for any input length, including 0 (the body is skipped). With empty input, though, Average's sum / cnt is 0.0/0 = NaN. Moving the read out of the loop breaks it, so one value is reused forever.\n[1] transfer_to_a_new_program (X): Use the read loop when the number of values is unknown and all input should be processed. When N is given first, use a counted for loop (AddInts). Use a sentinel loop when a stop value marks the end.\n[2] diagnose_an_error (D): rule broken: Every read needs a preceding isEmpty() check that guarantees a value. Kind: run-time exception. Trigger class: A body that reads more values than remain (two reads per pass with an odd count), or a condition that does not test isEmpty().\n[3] diagnose_an_error (D): rule broken: Do not divide by a count of 0. Kind: silent logic error. Trigger class: Empty input: the double average sum / cnt evaluates to NaN instead of stopping (it would be ArithmeticException if both were int)."
+  },
+  {
+   "from": "assignment",
+   "to": "AssignmentNotExpression",
+   "type": "misconception",
+   "label": "wrong: An assignment cannot be used inside a larger expression, so a condition like (x = read()) != v is not allowed. | right: An assignment is an expression whose value is the value assigned, so (x = v) both stores v in x and gives v."
+  },
+  {
+   "from": "chained_assignment",
+   "to": "AssignmentNotExpression",
+   "type": "misconception",
+   "label": "wrong: an assignment cannot be used inside a larger expression | right: An assignment is an expression whose value is the value assigned, so (x = v) both stores v in x and gives v."
+  },
+  {
+   "from": "expression",
+   "to": "AssignmentNotExpression",
+   "type": "misconception",
+   "label": "wrong: An assignment cannot be used inside a larger expression, so a condition like (x = read()) != v is not allowed. | right: An assignment is an expression whose value is the value assigned, so (x = v) both stores v in x and gives v."
+  },
+  {
+   "from": "read_loop_idiom",
+   "to": "AssignmentNotExpression",
+   "type": "misconception",
+   "label": "wrong: A read and a test cannot be combined, so while ((x = read()) != end) is not allowed. | right: while ((x = read()) != end) reads a value into x and tests that same value in one expression."
+  },
+  {
+   "from": "read_loop_idiom",
+   "to": "InputReadOnceBeforeLoop",
+   "type": "misconception",
+   "label": "wrong: Reading a value once before the loop is enough; the loop will process each new input value. | right: A read loop must read the next value inside the body on every pass; otherwise it keeps processing the same value."
+  },
+  {
+   "from": "standard_input",
+   "to": "InputReadOnceBeforeLoop",
+   "type": "misconception",
+   "label": "wrong: Reading a value once before the loop is enough; the loop will process each new input value. | right: A read loop must read the next value inside the body on every pass; otherwise it keeps processing the same value."
+  },
+  {
+   "from": "read_loop_idiom",
+   "to": "end_of_input",
+   "type": "prerequisite",
+   "label": "The read loop runs until StdIn.isEmpty() returns true, which happens when the user types the end-of-file sequence (<ctrl-d>)."
+  },
+  {
+   "from": "read_loop_idiom",
+   "to": "sentinel_loop",
+   "type": "prerequisite",
+   "label": "The sentinel loop is a read loop with its own stop value."
+  },
+  {
+   "from": "standard_input",
+   "to": "read_loop_idiom",
+   "type": "prerequisite",
+   "label": "The read loop repeats StdIn reads until StdIn.isEmpty() returns true."
+  }
+ ]
+}

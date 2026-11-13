@@ -1,0 +1,273 @@
+{
+ "concept": "testing",
+ "label": "testing",
+ "graph_version": "3.9.8 (3.9.7 + one primary per misconception (S9c) and the four remaining sibling edges (S9b), 2026-11-04; listed in revision_3_9_8)",
+ "nodes": [
+  {
+   "id": "accumulator_pattern",
+   "kind": "concept",
+   "label": "accumulator_pattern"
+  },
+  {
+   "id": "compile",
+   "kind": "concept",
+   "label": "compile"
+  },
+  {
+   "id": "compile_time_error",
+   "kind": "concept",
+   "label": "compile_time_error"
+  },
+  {
+   "id": "convergence_test",
+   "kind": "concept",
+   "label": "convergence_test"
+  },
+  {
+   "id": "counter_pattern",
+   "kind": "concept",
+   "label": "counter_pattern"
+  },
+  {
+   "id": "debugging",
+   "kind": "concept",
+   "label": "debugging"
+  },
+  {
+   "id": "fencepost_loop",
+   "kind": "concept",
+   "label": "fencepost_loop"
+  },
+  {
+   "id": "flag_search_loop",
+   "kind": "concept",
+   "label": "flag_search_loop"
+  },
+  {
+   "id": "logical_error",
+   "kind": "concept",
+   "label": "logical_error"
+  },
+  {
+   "id": "loop_performance",
+   "kind": "concept",
+   "label": "Loop performance"
+  },
+  {
+   "id": "monte_carlo_simulation",
+   "kind": "concept",
+   "label": "monte_carlo_simulation"
+  },
+  {
+   "id": "number_conversion",
+   "kind": "concept",
+   "label": "Number conversion (binary)"
+  },
+  {
+   "id": "program_trace",
+   "kind": "concept",
+   "label": "Trace (table of variable values)"
+  },
+  {
+   "id": "run",
+   "kind": "concept",
+   "label": "run"
+  },
+  {
+   "id": "run_time_error",
+   "kind": "concept",
+   "label": "run_time_error"
+  },
+  {
+   "id": "testing",
+   "kind": "concept",
+   "label": "testing"
+  },
+  {
+   "id": "testing@L0",
+   "kind": "learning_level",
+   "label": "L0"
+  },
+  {
+   "id": "testing@L1",
+   "kind": "learning_level",
+   "label": "L1"
+  },
+  {
+   "id": "testing@L2",
+   "kind": "learning_level",
+   "label": "L2"
+  },
+  {
+   "id": "testing@L3",
+   "kind": "learning_level",
+   "label": "L3"
+  },
+  {
+   "id": "testing@L4",
+   "kind": "learning_level",
+   "label": "L4"
+  },
+  {
+   "id": "CompilesMeansWorks",
+   "kind": "misconception",
+   "label": "CompilesMeansWorks"
+  },
+  {
+   "id": "OneTestProvesCorrect",
+   "kind": "misconception",
+   "label": "OneTestProvesCorrect"
+  },
+  {
+   "id": "topic1.3.f",
+   "kind": "topic",
+   "label": "Applications (finite sums, Newton, conversion, gambler's ruin, factoring)"
+  }
+ ],
+ "edges": [
+  {
+   "from": "topic1.3.f",
+   "to": "accumulator_pattern",
+   "type": "contains",
+   "label": "The topic 'Applications (finite sums, Newton, conversion, gambler's ruin, factoring)' introduces accumulator_pattern."
+  },
+  {
+   "from": "topic1.3.f",
+   "to": "convergence_test",
+   "type": "contains",
+   "label": "The topic 'Applications (finite sums, Newton, conversion, gambler's ruin, factoring)' introduces convergence_test."
+  },
+  {
+   "from": "topic1.3.f",
+   "to": "counter_pattern",
+   "type": "contains",
+   "label": "The topic 'Applications (finite sums, Newton, conversion, gambler's ruin, factoring)' introduces counter_pattern."
+  },
+  {
+   "from": "topic1.3.f",
+   "to": "debugging",
+   "type": "contains",
+   "label": "Topic 'Applications (finite sums, Newton, conversion, gambler's ruin, factoring)' of section 1.3 holds the concept debugging."
+  },
+  {
+   "from": "topic1.3.f",
+   "to": "fencepost_loop",
+   "type": "contains",
+   "label": "The topic 'Applications (finite sums, Newton, conversion, gambler's ruin, factoring)' introduces fencepost_loop."
+  },
+  {
+   "from": "topic1.3.f",
+   "to": "flag_search_loop",
+   "type": "contains",
+   "label": "The topic 'Applications (finite sums, Newton, conversion, gambler's ruin, factoring)' introduces flag_search_loop."
+  },
+  {
+   "from": "topic1.3.f",
+   "to": "loop_performance",
+   "type": "contains",
+   "label": "Loop performance is taught under \"Applications (finite sums, Newton, conversion, gambler's ruin, factoring)\"."
+  },
+  {
+   "from": "topic1.3.f",
+   "to": "monte_carlo_simulation",
+   "type": "contains",
+   "label": "The topic 'Applications (finite sums, Newton, conversion, gambler's ruin, factoring)' introduces monte_carlo_simulation."
+  },
+  {
+   "from": "topic1.3.f",
+   "to": "number_conversion",
+   "type": "contains",
+   "label": "Number conversion (binary) is taught under \"Applications (finite sums, Newton, conversion, gambler's ruin, factoring)\"."
+  },
+  {
+   "from": "topic1.3.f",
+   "to": "testing",
+   "type": "contains",
+   "label": "Topic 'Applications (finite sums, Newton, conversion, gambler's ruin, factoring)' of section 1.3 holds the concept testing."
+  },
+  {
+   "from": "testing",
+   "to": "testing@L0",
+   "type": "has_level",
+   "label": "[0] everyday_reading (E): Everyday 'test' means trying something once to see whether it works. A program test runs the program on several chosen inputs, each with an expected output worked out in advance, and compares the two.\n[1] misconception (M) -> OneTestProvesCorrect: wrong rule: If a program gives the right output for one input, it is correct. Right rule: One passing run shows only that this input works; check the program on numerous inputs, including boundary and unusual ones.\n[2] inconsistent_trace (T) -> OneTestProvesCorrect: Applies the testing rule unevenly: checks the output for one input against an expected value, but accepts the output for another input without working out what it should be. (here mixing in: \"If a program gives the right output for one input, it is correct\")\n[3] misconception (M) -> CompilesMeansWorks: wrong rule: Code that compiles is code that works. Right rule: Compiling checks only the form of the code; whether it does the right thing is found by running and testing it."
+  },
+  {
+   "from": "testing",
+   "to": "testing@L1",
+   "type": "has_level",
+   "label": "[0] names_the_element (N): Testing: running the program on chosen inputs and comparing each output with the expected output.\n[1] states_the_rule (S): Write the program, then run and test it: choose inputs, work out the expected output of each in advance, run the program on each, and compare. Include the boundary cases (0, 1, the largest value, an empty input)."
+  },
+  {
+   "from": "testing",
+   "to": "testing@L2",
+   "type": "has_level",
+   "label": "[0] line_by_line_trace (LT): Sequencing: first decide the inputs and expected outputs, then run the program once per input, then compare each output with its expectation; a mismatch is recorded before anything is changed.\n[1] output_prediction (OP): Result: for each input the test gives pass (output equals expectation) or fail; the program is accepted only when every chosen input passes.\n[2] one_step_execution (OS): State transition: one test run leaves the program unchanged and adds one pass or fail to what is known about it."
+  },
+  {
+   "from": "testing",
+   "to": "testing@L3",
+   "type": "has_level",
+   "label": "[0] relation_to_neighbour (R): Each test is one run with one input: java Name followed by the test arguments (or with input redirected from a file).\n[1] relation_to_neighbour (R): The expected output of a test comes from a hand trace of what the program should do for that input.\n[2] relation_to_neighbour (R): A failing test starts debugging; after the fix, the same test is run again to confirm it.\n[3] purpose_of_the_whole (P): Plan: tests give evidence that a program does what it should for the inputs that matter, and catch the cases where it does not."
+  },
+  {
+   "from": "testing",
+   "to": "testing@L4",
+   "type": "has_level",
+   "label": "[0] predict_a_change (C) -> OneTestProvesCorrect: Conservation: after any change to the program, the earlier tests must still pass; a fix for one input that breaks another is caught by re-running them all.\n[1] transfer_to_a_new_program (X): Test every program you write, before using its output: on the given example, on the boundary values, and on an input whose answer you can work out by hand.\n[2] diagnose_an_error (D): rule broken: A program is checked on several inputs, including the boundary cases. Kind: silent logic error. Trigger class: only the example input is tried, so a bug that shows for 0, 1, a negative value, the largest value or an empty input is never seen"
+  },
+  {
+   "from": "compile",
+   "to": "CompilesMeansWorks",
+   "type": "misconception",
+   "label": "wrong: Code that compiles is code that works. | right: Code that compiles can still have run-time and logical errors."
+  },
+  {
+   "from": "compile_time_error",
+   "to": "CompilesMeansWorks",
+   "type": "misconception",
+   "label": "wrong: Code that compiles is code that works. | right: Code that compiles can still have run-time and logical errors."
+  },
+  {
+   "from": "logical_error",
+   "to": "CompilesMeansWorks",
+   "type": "misconception",
+   "label": "wrong: Code that compiles is code that works. | right: Code that compiles can still have run-time and logical errors."
+  },
+  {
+   "from": "run_time_error",
+   "to": "CompilesMeansWorks",
+   "type": "misconception",
+   "label": "wrong: Code that compiles is code that works. | right: Code that compiles can still have run-time and logical errors."
+  },
+  {
+   "from": "testing",
+   "to": "CompilesMeansWorks",
+   "type": "misconception",
+   "label": "wrong: Code that compiles is code that works. | right: Code that compiles can still have run-time and logical errors."
+  },
+  {
+   "from": "testing",
+   "to": "OneTestProvesCorrect",
+   "type": "misconception",
+   "label": "wrong: If a program gives the right output for one input, it is correct. | right: One passing run shows only that this input works; a program is checked by running it on numerous inputs, including boundary and unusual ones."
+  },
+  {
+   "from": "program_trace",
+   "to": "testing",
+   "type": "prerequisite",
+   "label": "A test needs an expected result, and the expected result comes from tracing what the program should do, step by step."
+  },
+  {
+   "from": "run",
+   "to": "testing",
+   "type": "prerequisite",
+   "label": "A program is tested by running it on chosen inputs and comparing what it prints with what it should print."
+  },
+  {
+   "from": "testing",
+   "to": "debugging",
+   "type": "prerequisite",
+   "label": "A failing test is what starts debugging: testing finds that something is wrong, debugging finds why."
+  }
+ ]
+}

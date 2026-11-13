@@ -1,0 +1,175 @@
+{
+ "concept": "animation",
+ "label": "animation",
+ "graph_version": "3.9.8 (3.9.7 + one primary per misconception (S9c) and the four remaining sibling edges (S9b), 2026-11-04; listed in revision_3_9_8)",
+ "nodes": [
+  {
+   "id": "animation",
+   "kind": "concept",
+   "label": "animation"
+  },
+  {
+   "id": "coordinate_scaling",
+   "kind": "concept",
+   "label": "coordinate_scaling"
+  },
+  {
+   "id": "drawing_shapes",
+   "kind": "concept",
+   "label": "drawing_shapes"
+  },
+  {
+   "id": "function_plotting",
+   "kind": "concept",
+   "label": "function_plotting"
+  },
+  {
+   "id": "mouse_interaction",
+   "kind": "concept",
+   "label": "mouse_interaction"
+  },
+  {
+   "id": "standard_drawing",
+   "kind": "concept",
+   "label": "standard_drawing"
+  },
+  {
+   "id": "while_loop",
+   "kind": "concept",
+   "label": "while_loop"
+  },
+  {
+   "id": "animation@L0",
+   "kind": "learning_level",
+   "label": "L0"
+  },
+  {
+   "id": "animation@L1",
+   "kind": "learning_level",
+   "label": "L1"
+  },
+  {
+   "id": "animation@L2",
+   "kind": "learning_level",
+   "label": "L2"
+  },
+  {
+   "id": "animation@L3",
+   "kind": "learning_level",
+   "label": "L3"
+  },
+  {
+   "id": "animation@L4",
+   "kind": "learning_level",
+   "label": "L4"
+  },
+  {
+   "id": "DrawWithoutShow",
+   "kind": "misconception",
+   "label": "DrawWithoutShow"
+  },
+  {
+   "id": "topic1.5.e",
+   "kind": "topic",
+   "label": "Standard drawing and animation"
+  }
+ ],
+ "edges": [
+  {
+   "from": "topic1.5.e",
+   "to": "animation",
+   "type": "contains",
+   "label": "The topic 'Standard drawing and animation' introduces animation."
+  },
+  {
+   "from": "topic1.5.e",
+   "to": "coordinate_scaling",
+   "type": "contains",
+   "label": "The topic 'Standard drawing and animation' introduces coordinate_scaling."
+  },
+  {
+   "from": "topic1.5.e",
+   "to": "drawing_shapes",
+   "type": "contains",
+   "label": "The topic 'Standard drawing and animation' introduces drawing_shapes."
+  },
+  {
+   "from": "topic1.5.e",
+   "to": "function_plotting",
+   "type": "contains",
+   "label": "The topic 'Standard drawing and animation' introduces function_plotting."
+  },
+  {
+   "from": "topic1.5.e",
+   "to": "mouse_interaction",
+   "type": "contains",
+   "label": "The topic 'Standard drawing and animation' introduces mouse_interaction."
+  },
+  {
+   "from": "topic1.5.e",
+   "to": "standard_drawing",
+   "type": "contains",
+   "label": "The topic 'Standard drawing and animation' introduces standard_drawing."
+  },
+  {
+   "from": "animation",
+   "to": "animation@L0",
+   "type": "has_level",
+   "label": "[0] everyday_reading (E): Everyday drawing (pen on paper) appears as you draw, and 'show' sounds like 'display what I drew'. In StdDraw animation mode, drawings are collected off-screen and appear all at once when show(t) is called, which then pauses t ms.\n[1] misconception (M) -> DrawWithoutShow: wrong rule: With double buffering on, each drawing command appears on screen immediately. Right rule: Once show(t) has turned off per-command display, nothing new appears until the next show(t). Each frame must end with show(t).\n[2] inconsistent_trace (T) -> DrawWithoutShow: Points to LT (update the position, clear, draw, show and pause, in each frame). An uneven trace draws before updating on some frames, or checks the bounce after moving. (here mixing in: \"With double buffering on, each drawing command appears on screen immediately\")"
+  },
+  {
+   "from": "animation",
+   "to": "animation@L1",
+   "type": "has_level",
+   "label": "[0] names_the_element (N): Animation is a StdDraw technique: a loop that repeatedly erases the canvas, draws the next frame and shows it with a pause, which creates the illusion of motion.\n[1] states_the_rule (S): clear() and show() support dynamic images. Each frame: erase the drawing (without showing it), draw the new frame, then show the result and wait briefly."
+  },
+  {
+   "from": "animation",
+   "to": "animation@L2",
+   "type": "has_level",
+   "label": "[0] line_by_line_trace (LT): In BouncingBall each pass of while (true) reverses vx or vy if the next position would cross a wall, then updates rx += vx and ry += vy, calls clear(), draws filledCircle(rx, ry, radius), and calls show(20), which displays the frame and pauses 20 ms.\n[1] output_prediction (OP): The output is a sequence of frames: the ball appears to move in a straight line and bounce off the walls of the 2-by-2 box. Starting at rx = .480 with vx = .015, the x-positions are .495, .510, ... until a bounce.\n[2] one_step_execution (OS): One frame changes rx and ry by the velocity (flipping the sign of vx or vy at a wall) and replaces the displayed image with the ball at its new position."
+  },
+  {
+   "from": "animation",
+   "to": "animation@L3",
+   "type": "has_level",
+   "label": "[0] relation_to_neighbour (R): Animation uses StdDraw's drawing commands plus clear() and show(t). show(t) switches off the default show-after-every-command.\n[1] relation_to_neighbour (R): The frame loop is while (true): it never ends by its condition, so the animation runs until the window or program is closed.\n[2] relation_to_neighbour (R): Mouse state is polled once per frame inside the animation loop, so it is checked about every dt milliseconds.\n[3] purpose_of_the_whole (P): Plan: the simulation (time-step) loop. rx and ry are steppers (they advance by a fixed velocity each frame), and vx and vy change only by sign at a bounce."
+  },
+  {
+   "from": "animation",
+   "to": "animation@L4",
+   "type": "has_level",
+   "label": "[0] predict_a_change (C) -> DrawWithoutShow: Changing the pause dt changes the speed but not the path. Removing clear() leaves a track of the ball (Exercise 1.5.34). Dropping show(t) and its pause makes the image flicker.\n[1] transfer_to_a_new_program (X): Use animation to show how something evolves over time (simulations, clocks, games). For a static plot, draw once without clear() or show(t).\n[2] diagnose_an_error (D): rule broken: In animation mode, each frame must end with show(t). Kind: silent logic error. Trigger class: show(t) is missing inside the loop after it has been called once, so the screen stops updating.\n[3] diagnose_an_error (D): rule broken: Without the show/pause control the frames flicker. Kind: silent logic error. Trigger class: clear() and drawing without show(t) (in default mode), so the ball flickers between black and white.\n[4] diagnose_an_error (D): rule broken: Each frame must erase the previous one. Kind: silent logic error. Trigger class: clear() is missing, so a trail of balls builds up."
+  },
+  {
+   "from": "animation",
+   "to": "DrawWithoutShow",
+   "type": "misconception",
+   "label": "wrong: With double buffering on, each drawing command appears on screen immediately. | right: By default each drawing command appears at once; after StdDraw.show(t) turns animation mode on, drawing is collected and appears only at the next show(t), which then pauses t milliseconds; show() with no argument turns per-command display back on."
+  },
+  {
+   "from": "standard_drawing",
+   "to": "DrawWithoutShow",
+   "type": "misconception",
+   "label": "wrong: With double buffering on, each drawing command appears on screen immediately. | right: By default each drawing command appears at once; after StdDraw.show(t) turns animation mode on, drawing is collected and appears only at the next show(t), which then pauses t milliseconds; show() with no argument turns per-command display back on."
+  },
+  {
+   "from": "animation",
+   "to": "mouse_interaction",
+   "type": "prerequisite",
+   "label": "Mouse checks run inside the animation loop."
+  },
+  {
+   "from": "standard_drawing",
+   "to": "animation",
+   "type": "prerequisite",
+   "label": "Animation uses StdDraw's clear() and show() methods to make dynamic changes to the image on the screen."
+  },
+  {
+   "from": "while_loop",
+   "to": "animation",
+   "type": "prerequisite",
+   "label": "BouncingBall repeats erase, draw at the new position, and show with a pause inside a while (true) loop."
+  }
+ ]
+}

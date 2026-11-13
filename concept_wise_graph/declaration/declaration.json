@@ -1,0 +1,372 @@
+{
+ "concept": "declaration",
+ "label": "declaration",
+ "graph_version": "3.9.8 (3.9.7 + one primary per misconception (S9c) and the four remaining sibling edges (S9b), 2026-11-04; listed in revision_3_9_8)",
+ "nodes": [
+  {
+   "id": "assignment",
+   "kind": "concept",
+   "label": "assignment"
+  },
+  {
+   "id": "chained_assignment",
+   "kind": "concept",
+   "label": "chained_assignment"
+  },
+  {
+   "id": "data_type",
+   "kind": "concept",
+   "label": "data_type"
+  },
+  {
+   "id": "declaration",
+   "kind": "concept",
+   "label": "declaration"
+  },
+  {
+   "id": "definite_assignment",
+   "kind": "concept",
+   "label": "definite_assignment"
+  },
+  {
+   "id": "expression",
+   "kind": "concept",
+   "label": "expression"
+  },
+  {
+   "id": "identifier",
+   "kind": "concept",
+   "label": "identifier"
+  },
+  {
+   "id": "literal",
+   "kind": "concept",
+   "label": "literal"
+  },
+  {
+   "id": "named_constants",
+   "kind": "concept",
+   "label": "named_constants"
+  },
+  {
+   "id": "naming_convention",
+   "kind": "concept",
+   "label": "naming_convention"
+  },
+  {
+   "id": "operator_precedence",
+   "kind": "concept",
+   "label": "operator_precedence"
+  },
+  {
+   "id": "primitive_type",
+   "kind": "concept",
+   "label": "primitive_type"
+  },
+  {
+   "id": "program_trace",
+   "kind": "concept",
+   "label": "Trace (table of variable values)"
+  },
+  {
+   "id": "variable",
+   "kind": "concept",
+   "label": "variable"
+  },
+  {
+   "id": "variable_swap",
+   "kind": "concept",
+   "label": "variable_swap"
+  },
+  {
+   "id": "DeclarationWithoutType",
+   "kind": "error",
+   "label": "DeclarationWithoutType"
+  },
+  {
+   "id": "RedeclareToReassign",
+   "kind": "error",
+   "label": "RedeclareToReassign"
+  },
+  {
+   "id": "UndeclaredOrRenamedVariable",
+   "kind": "error",
+   "label": "UndeclaredOrRenamedVariable"
+  },
+  {
+   "id": "declaration@L0",
+   "kind": "learning_level",
+   "label": "L0"
+  },
+  {
+   "id": "declaration@L1",
+   "kind": "learning_level",
+   "label": "L1"
+  },
+  {
+   "id": "declaration@L2",
+   "kind": "learning_level",
+   "label": "L2"
+  },
+  {
+   "id": "declaration@L3",
+   "kind": "learning_level",
+   "label": "L3"
+  },
+  {
+   "id": "declaration@L4",
+   "kind": "learning_level",
+   "label": "L4"
+  },
+  {
+   "id": "AnyValueInAnyVariable",
+   "kind": "misconception",
+   "label": "AnyValueInAnyVariable"
+  },
+  {
+   "id": "DeclaredVariableHasNoMemory",
+   "kind": "misconception",
+   "label": "DeclaredVariableHasNoMemory"
+  },
+  {
+   "id": "LocalVariablesAutoInitialized",
+   "kind": "misconception",
+   "label": "LocalVariablesAutoInitialized"
+  },
+  {
+   "id": "topic1.2.a",
+   "kind": "topic",
+   "label": "Data types and terminology (literals, identifiers, variables, declarations, assignment, expressions)"
+  }
+ ],
+ "edges": [
+  {
+   "from": "topic1.2.a",
+   "to": "assignment",
+   "type": "contains",
+   "label": "The topic 'Data types and terminology (literals, identifiers, variables, declarations, assignment, expressions)' introduces assignment."
+  },
+  {
+   "from": "topic1.2.a",
+   "to": "chained_assignment",
+   "type": "contains",
+   "label": "The topic 'Data types and terminology (literals, identifiers, variables, declarations, assignment, expressions)' introduces chained_assignment."
+  },
+  {
+   "from": "topic1.2.a",
+   "to": "data_type",
+   "type": "contains",
+   "label": "The topic 'Data types and terminology (literals, identifiers, variables, declarations, assignment, expressions)' introduces data_type."
+  },
+  {
+   "from": "topic1.2.a",
+   "to": "declaration",
+   "type": "contains",
+   "label": "The topic 'Data types and terminology (literals, identifiers, variables, declarations, assignment, expressions)' introduces declaration."
+  },
+  {
+   "from": "topic1.2.a",
+   "to": "definite_assignment",
+   "type": "contains",
+   "label": "The topic 'Data types and terminology (literals, identifiers, variables, declarations, assignment, expressions)' introduces definite_assignment."
+  },
+  {
+   "from": "topic1.2.a",
+   "to": "expression",
+   "type": "contains",
+   "label": "The topic 'Data types and terminology (literals, identifiers, variables, declarations, assignment, expressions)' introduces expression."
+  },
+  {
+   "from": "topic1.2.a",
+   "to": "identifier",
+   "type": "contains",
+   "label": "The topic 'Data types and terminology (literals, identifiers, variables, declarations, assignment, expressions)' introduces identifier."
+  },
+  {
+   "from": "topic1.2.a",
+   "to": "literal",
+   "type": "contains",
+   "label": "The topic 'Data types and terminology (literals, identifiers, variables, declarations, assignment, expressions)' introduces literal."
+  },
+  {
+   "from": "topic1.2.a",
+   "to": "named_constants",
+   "type": "contains",
+   "label": "The topic 'Data types and terminology (literals, identifiers, variables, declarations, assignment, expressions)' introduces named_constants."
+  },
+  {
+   "from": "topic1.2.a",
+   "to": "naming_convention",
+   "type": "contains",
+   "label": "The topic 'Data types and terminology (literals, identifiers, variables, declarations, assignment, expressions)' introduces naming_convention."
+  },
+  {
+   "from": "topic1.2.a",
+   "to": "operator_precedence",
+   "type": "contains",
+   "label": "The topic 'Data types and terminology (literals, identifiers, variables, declarations, assignment, expressions)' introduces operator_precedence."
+  },
+  {
+   "from": "topic1.2.a",
+   "to": "primitive_type",
+   "type": "contains",
+   "label": "The topic 'Data types and terminology (literals, identifiers, variables, declarations, assignment, expressions)' introduces primitive_type."
+  },
+  {
+   "from": "topic1.2.a",
+   "to": "program_trace",
+   "type": "contains",
+   "label": "Trace (table of variable values) is taught under \"Data types and terminology (literals, identifiers, variables, declarations, assignment, expressions)\"."
+  },
+  {
+   "from": "topic1.2.a",
+   "to": "variable",
+   "type": "contains",
+   "label": "The topic 'Data types and terminology (literals, identifiers, variables, declarations, assignment, expressions)' introduces variable."
+  },
+  {
+   "from": "topic1.2.a",
+   "to": "variable_swap",
+   "type": "contains",
+   "label": "The topic 'Data types and terminology (literals, identifiers, variables, declarations, assignment, expressions)' introduces variable_swap."
+  },
+  {
+   "from": "assignment",
+   "to": "RedeclareToReassign",
+   "type": "error",
+   "label": "wrong: Writes int x = 5; ... int x = 10; to change x. | right: A declaration gives a variable its name and type; a later change of value is an assignment statement such as x = 10;, not a second declaration."
+  },
+  {
+   "from": "declaration",
+   "to": "DeclarationWithoutType",
+   "type": "error",
+   "label": "wrong: Writes name = value; to declare a new variable. | right: A declaration needs a type: type name = value;"
+  },
+  {
+   "from": "declaration",
+   "to": "RedeclareToReassign",
+   "type": "error",
+   "label": "wrong: Writes int x = 5; ... int x = 10; to change x. | right: A declaration gives a variable its name and type; a later change of value is an assignment statement such as x = 10;, not a second declaration."
+  },
+  {
+   "from": "declaration",
+   "to": "UndeclaredOrRenamedVariable",
+   "type": "error",
+   "label": "wrong: Uses a variable that was never declared, or under a different name (studentTotal vs total). | right: Every variable must be declared, and used with exactly the declared name."
+  },
+  {
+   "from": "identifier",
+   "to": "UndeclaredOrRenamedVariable",
+   "type": "error",
+   "label": "wrong: Uses a variable that was never declared, or under a different name (studentTotal vs total). | right: Every variable must be declared, and used with exactly the declared name."
+  },
+  {
+   "from": "variable",
+   "to": "UndeclaredOrRenamedVariable",
+   "type": "error",
+   "label": "wrong: Uses a variable that was never declared, or under a different name (studentTotal vs total). | right: Every variable must be declared, and used with exactly the declared name."
+  },
+  {
+   "from": "declaration",
+   "to": "declaration@L0",
+   "type": "has_level",
+   "label": "[0] everyday_reading (E): In English, to 'declare' something announces a fact or gives it a value, so novices think int x; already sets x to 0, or that x = 5; alone creates x. In Java a declaration creates the variable with a type, and a local variable has no usable value until it is assigned.\n[1] misconception (M) -> DeclaredVariableHasNoMemory: wrong rule: int x; without a value sets aside no memory; the variable only exists once something is assigned. Right rule: A declaration creates the variable (its storage) with its type; assignment later puts a value in it.\n[2] inconsistent_trace (T) -> DeclaredVariableHasNoMemory: Points to LT (a declaration runs once when reached and creates the variable, and later assignments only update it). Applied unevenly, a student re-creates or zeroes the variable on some passes but not others, or treats a declaration further down as already in effect. (here mixing in: \"int x; without a value sets aside no memory; the variable only exists once something is assigned\")\n[3] misconception (M) -> AnyValueInAnyVariable: wrong rule: A variable declared int can hold 2.5 or \"hi\"; the type is only a label. Right rule: A data type is a set of values and a set of operations defined on them, so an int variable holds only int values.\n[4] misconception (M) -> LocalVariablesAutoInitialized: wrong rule: local variables get a default value on their own. Right rule: A local variable has no value until it is assigned, and using it before then does not compile."
+  },
+  {
+   "from": "declaration",
+   "to": "declaration@L1",
+   "type": "has_level",
+   "label": "[0] names_the_element (N): Declaration statement: a statement that introduces a variable by giving its type and name, such as int count; or double x = 0.5;.\n[1] states_the_rule (S): Syntax: type name; or type name = expression; or type a, b, c;. Each variable must be declared before it is used, only once per scope, and its type never changes."
+  },
+  {
+   "from": "declaration",
+   "to": "declaration@L2",
+   "type": "has_level",
+   "label": "[0] line_by_line_trace (LT): When execution reaches the declaration, the variable comes into being. If there is an initializer, it is evaluated and stored. The variable's scope runs from there to the end of the enclosing block, and statements in the block run first to last.\n[1] output_prediction (OP): A declaration produces no value and no output. Its effect is to fix the variable's name and type for every later compile-time check.\n[2] one_step_execution (OS): int x; adds x to the program state with an undefined (unassigned) value. int x = 5; adds x holding 5."
+  },
+  {
+   "from": "declaration",
+   "to": "declaration@L3",
+   "type": "has_level",
+   "label": "[0] relation_to_neighbour (R): A declaration binds a legal identifier to a type, and that identifier must not already be declared in the same scope.\n[1] relation_to_neighbour (R): An assignment can store into a variable only after the variable's declaration, and only a value of a compatible type.\n[2] relation_to_neighbour (R): A declaration without an initializer leaves a local unassigned, and any read before an assignment on every path is a compile error.\n[3] relation_to_neighbour (R): Adding final to a declaration makes the variable a constant that can be assigned only once.\n[4] purpose_of_the_whole (P): Declarations make the programmer's intent explicit (names and types) so the compiler can check consistency. The usual plan is to declare each variable at its point of first use."
+  },
+  {
+   "from": "declaration",
+   "to": "declaration@L4",
+   "type": "has_level",
+   "label": "[0] predict_a_change (C) -> DeclaredVariableHasNoMemory: Moving a declaration into an inner block (such as a loop body) shrinks its scope and re-creates the variable on each pass, so an accumulated value is lost. Moving it out widens its scope. Changing its type changes which values and operations are legal.\n[1] diagnose_an_error (D): rule broken: A local variable may be declared only once in its scope; later changes use an assignment without the type. Kind: compile-time. Trigger class: A second 'int x = ...' for a name already declared in the same or an enclosing block: 'variable x is already defined'.\n[2] diagnose_an_error (D): rule broken: A declaration must begin with a type (type name = value;); name = value; is only an assignment to an existing variable. Kind: compile-time. Trigger class: First use of a new variable written without its type (total = 0;): 'cannot find symbol' because no variable total exists.\n[3] transfer_to_a_new_program (X): Declare every variable exactly once, in the narrowest block that covers all its uses, with an initializer when the first value is known. Declare it before (outside) a loop when its value must last across iterations or be used after the loop.\n[4] diagnose_an_error (D): rule broken: Every variable must be declared (with a type) before use and referred to by exactly the declared name, inside its scope. Kind: compile-time. Trigger class: Use of a name that was never declared, was declared under another name, or is used outside the block where it was declared: 'cannot find symbol' (one missing declaration can produce several errors).\n[5] diagnose_an_error (D): rule broken: The initializer's type must be assignable to the declared type. Kind: compile-time. Trigger class: Declaring int x = 1.1; or String s = 123;: 'incompatible types'."
+  },
+  {
+   "from": "data_type",
+   "to": "AnyValueInAnyVariable",
+   "type": "misconception",
+   "label": "wrong: A variable declared int can hold 2.5 or \"hi\"; the type is only a label. | right: A data type is a set of values and a set of operations defined on them, so an int variable holds only int values."
+  },
+  {
+   "from": "declaration",
+   "to": "AnyValueInAnyVariable",
+   "type": "misconception",
+   "label": "wrong: A variable declared int can hold 2.5 or \"hi\"; the type is only a label. | right: A data type is a set of values and a set of operations defined on them, so an int variable holds only int values."
+  },
+  {
+   "from": "declaration",
+   "to": "DeclaredVariableHasNoMemory",
+   "type": "misconception",
+   "label": "wrong: int x; without a value sets aside no memory; the variable only exists once something is assigned. | right: A declaration creates the variable (its storage) with its type; assignment later puts a value in it."
+  },
+  {
+   "from": "declaration",
+   "to": "LocalVariablesAutoInitialized",
+   "type": "misconception",
+   "label": "wrong: local variables get a default value on their own | right: A local variable has no value until it is assigned, and using it before then does not compile."
+  },
+  {
+   "from": "definite_assignment",
+   "to": "LocalVariablesAutoInitialized",
+   "type": "misconception",
+   "label": "wrong: local variables get a default value on their own | right: A local variable has no value until it is assigned, and using it before then does not compile."
+  },
+  {
+   "from": "variable",
+   "to": "AnyValueInAnyVariable",
+   "type": "misconception",
+   "label": "wrong: A variable declared int can hold 2.5 or \"hi\"; the type is only a label. | right: A data type is a set of values and a set of operations defined on them, so an int variable holds only int values."
+  },
+  {
+   "from": "variable",
+   "to": "DeclaredVariableHasNoMemory",
+   "type": "misconception",
+   "label": "wrong: int x; without a value sets aside no memory; the variable only exists once something is assigned. | right: A declaration creates the variable (its storage) with its type; assignment later puts a value in it."
+  },
+  {
+   "from": "variable",
+   "to": "LocalVariablesAutoInitialized",
+   "type": "misconception",
+   "label": "wrong: int x; inside main starts at 0, so x can be used before anything is assigned to it. | right: A local variable has no value until it is assigned, and using it before then does not compile."
+  },
+  {
+   "from": "declaration",
+   "to": "assignment",
+   "type": "prerequisite",
+   "label": "A variable must be declared before an assignment can store a value into it."
+  },
+  {
+   "from": "declaration",
+   "to": "definite_assignment",
+   "type": "prerequisite",
+   "label": "A declared local variable has no defined value until it is assigned, and the compiler rejects any read before that assignment."
+  },
+  {
+   "from": "declaration",
+   "to": "named_constants",
+   "type": "prerequisite",
+   "label": "A constant is a declaration marked final."
+  },
+  {
+   "from": "identifier",
+   "to": "declaration",
+   "type": "prerequisite",
+   "label": "A declaration pairs a type with an identifier, e.g. int count;."
+  }
+ ]
+}

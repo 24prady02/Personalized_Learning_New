@@ -1,0 +1,370 @@
+{
+ "concept": "method_call",
+ "label": "method_call",
+ "graph_version": "3.9.8 (3.9.7 + one primary per misconception (S9c) and the four remaining sibling edges (S9b), 2026-11-04; listed in revision_3_9_8)",
+ "nodes": [
+  {
+   "id": "api",
+   "kind": "concept",
+   "label": "Application programming interface (API)"
+  },
+  {
+   "id": "comparison_operators",
+   "kind": "concept",
+   "label": "comparison_operators"
+  },
+  {
+   "id": "compile_time_error",
+   "kind": "concept",
+   "label": "compile_time_error"
+  },
+  {
+   "id": "expression",
+   "kind": "concept",
+   "label": "expression"
+  },
+  {
+   "id": "length_field",
+   "kind": "concept",
+   "label": "length_field"
+  },
+  {
+   "id": "math_library",
+   "kind": "concept",
+   "label": "math_library"
+  },
+  {
+   "id": "math_random",
+   "kind": "concept",
+   "label": "math_random"
+  },
+  {
+   "id": "math_round",
+   "kind": "concept",
+   "label": "math_round"
+  },
+  {
+   "id": "method_call",
+   "kind": "concept",
+   "label": "method_call"
+  },
+  {
+   "id": "print",
+   "kind": "concept",
+   "label": "print"
+  },
+  {
+   "id": "println",
+   "kind": "concept",
+   "label": "println"
+  },
+  {
+   "id": "string_type",
+   "kind": "concept",
+   "label": "string_type"
+  },
+  {
+   "id": "trig_functions",
+   "kind": "concept",
+   "label": "trig_functions"
+  },
+  {
+   "id": "DiscardedReturnValue",
+   "kind": "error",
+   "label": "DiscardedReturnValue"
+  },
+  {
+   "id": "MathMethodWithoutClassName",
+   "kind": "error",
+   "label": "MathMethodWithoutClassName"
+  },
+  {
+   "id": "WrongArgumentType",
+   "kind": "error",
+   "label": "WrongArgumentType"
+  },
+  {
+   "id": "method_call@L0",
+   "kind": "learning_level",
+   "label": "L0"
+  },
+  {
+   "id": "method_call@L1",
+   "kind": "learning_level",
+   "label": "L1"
+  },
+  {
+   "id": "method_call@L2",
+   "kind": "learning_level",
+   "label": "L2"
+  },
+  {
+   "id": "method_call@L3",
+   "kind": "learning_level",
+   "label": "L3"
+  },
+  {
+   "id": "method_call@L4",
+   "kind": "learning_level",
+   "label": "L4"
+  },
+  {
+   "id": "ArgumentOrderInferred",
+   "kind": "misconception",
+   "label": "ArgumentOrderInferred"
+  },
+  {
+   "id": "ArrayHasLengthMethod",
+   "kind": "misconception",
+   "label": "ArrayHasLengthMethod"
+  },
+  {
+   "id": "EqualsComparesReferences",
+   "kind": "misconception",
+   "label": "EqualsComparesReferences"
+  },
+  {
+   "id": "OutsideInMethodNesting",
+   "kind": "misconception",
+   "label": "OutsideInMethodNesting"
+  },
+  {
+   "id": "ParameterTypesInCall",
+   "kind": "misconception",
+   "label": "ParameterTypesInCall"
+  },
+  {
+   "id": "ParenthesesOnlyIfArgument",
+   "kind": "misconception",
+   "label": "ParenthesesOnlyIfArgument"
+  },
+  {
+   "id": "StringMethodChangesString",
+   "kind": "misconception",
+   "label": "StringMethodChangesString"
+  },
+  {
+   "id": "topic1.2.g",
+   "kind": "topic",
+   "label": "Library methods and APIs (Math)"
+  }
+ ],
+ "edges": [
+  {
+   "from": "topic1.2.g",
+   "to": "api",
+   "type": "contains",
+   "label": "Application programming interface (API) is taught under \"Library methods and APIs (Math)\"."
+  },
+  {
+   "from": "topic1.2.g",
+   "to": "math_library",
+   "type": "contains",
+   "label": "The topic 'Library methods and APIs (Math)' introduces math_library."
+  },
+  {
+   "from": "topic1.2.g",
+   "to": "math_random",
+   "type": "contains",
+   "label": "The topic 'Library methods and APIs (Math)' introduces math_random."
+  },
+  {
+   "from": "topic1.2.g",
+   "to": "math_round",
+   "type": "contains",
+   "label": "The topic 'Library methods and APIs (Math)' introduces math_round."
+  },
+  {
+   "from": "topic1.2.g",
+   "to": "method_call",
+   "type": "contains",
+   "label": "The topic 'Library methods and APIs (Math)' introduces method_call."
+  },
+  {
+   "from": "topic1.2.g",
+   "to": "trig_functions",
+   "type": "contains",
+   "label": "The topic 'Library methods and APIs (Math)' introduces trig_functions."
+  },
+  {
+   "from": "compile_time_error",
+   "to": "MathMethodWithoutClassName",
+   "type": "error",
+   "label": "wrong: sqrt(x) calls the square-root method. | right: Library methods are called with the class name, e.g. Math.sqrt(x)."
+  },
+  {
+   "from": "math_library",
+   "to": "MathMethodWithoutClassName",
+   "type": "error",
+   "label": "wrong: sqrt(x) calls the square-root method. | right: Library methods are called with the class name, e.g. Math.sqrt(x)."
+  },
+  {
+   "from": "math_library",
+   "to": "WrongArgumentType",
+   "type": "error",
+   "label": "wrong: Calls a method with arguments of the wrong type, e.g. Math.sqrt(\"2\"). | right: Each argument must have the type the method's API lists."
+  },
+  {
+   "from": "math_round",
+   "to": "DiscardedReturnValue",
+   "type": "error",
+   "label": "wrong: Writes Math.round(x); on its own line expecting x to be rounded. | right: Math.round(x) returns a value; that value has to be stored or used (e.g. long r = Math.round(x);), because the call on its own line does nothing with it."
+  },
+  {
+   "from": "method_call",
+   "to": "DiscardedReturnValue",
+   "type": "error",
+   "label": "wrong: Writes Math.round(x); on its own line expecting x to be rounded. | right: Math.round(x) returns a value; that value has to be stored or used (e.g. long r = Math.round(x);), because the call on its own line does nothing with it."
+  },
+  {
+   "from": "method_call",
+   "to": "MathMethodWithoutClassName",
+   "type": "error",
+   "label": "wrong: sqrt(x) calls the square-root method. | right: Library methods are called with the class name, e.g. Math.sqrt(x)."
+  },
+  {
+   "from": "method_call",
+   "to": "WrongArgumentType",
+   "type": "error",
+   "label": "wrong: Calls a method with arguments of the wrong type, e.g. Math.sqrt(\"2\"). | right: Each argument must have the type the method's API lists."
+  },
+  {
+   "from": "method_call",
+   "to": "method_call@L0",
+   "type": "has_level",
+   "label": "[0] everyday_reading (E): Folk meaning: maths function notation f(x) or sqrt(x), where the name alone suffices, a constant needs no brackets, and the reader infers which argument is which from meaning. Java rule: a library method is called as ClassName.name(arguments) (Math.sqrt(x)), the parentheses are always required, and arguments are matched to parameters by position and type.\n[1] misconception (M) -> ParenthesesOnlyIfArgument: wrong rule: () are optional on a no-argument call like println. Right rule: A method call always needs parentheses, so an empty line is printed with System.out.println(); and a random number is Math.random().\n[2] misconception (M) -> OutsideInMethodNesting: wrong rule: Nested calls run outside-in, not arguments-first. Right rule: In f(g(x)), g(x) is evaluated first and its result is passed to f.\n[3] misconception (M) -> ArgumentOrderInferred: wrong rule: Java works out from the variable names which argument goes where, so Math.pow(n, 2) and Math.pow(2, n) mean the same. Right rule: Arguments are matched to parameters by position, in the order the signature lists them; Math.pow(a, b) raises a to the bth power.\n[4] misconception (M) -> ParameterTypesInCall: wrong rule: A method call lists the parameter types, as in Math.pow(double a, double b). Right rule: A call passes only argument expressions, e.g. Math.pow(a, b); types appear only in the signature/declaration.\n[5] inconsistent_trace (T) -> ParenthesesOnlyIfArgument: Points to LT (arguments are evaluated left to right, then the method runs, then its return value replaces the call). Applied unevenly: in f(g(x)) the student calls the outer method before the inner one on some lines, or keeps the argument expression unevaluated in one trace step. (here mixing in: \"() are optional on a no-argument call like println\")\n[6] misconception (M) -> ArrayHasLengthMethod: wrong rule: You call length() instead of using the length field. Right rule: An array's size is the field a.length, written without parentheses (String has the method s.length()).\n[7] misconception (M) -> EqualsComparesReferences: wrong rule: .equals() compares references, not contents. Right rule: s.equals(t) checks whether the two Strings contain the same characters."
+  },
+  {
+   "from": "method_call",
+   "to": "method_call@L1",
+   "type": "has_level",
+   "label": "[0] names_the_element (N): A method call is an expression that invokes a (library) method by its name, with arguments in parentheses, and evaluates to the value the method returns.\n[1] states_the_rule (S): A library method is used by typing its (class-qualified) name followed by arguments of the specified types, in parentheses and separated by commas; the call can be used in expressions like a variable or literal; void methods return no value."
+  },
+  {
+   "from": "method_call",
+   "to": "method_call@L2",
+   "type": "has_level",
+   "label": "[0] line_by_line_trace (LT): Evaluate the argument expressions from left to right (inner calls first), convert each to its parameter type if needed, transfer control to the method, and when it returns substitute the returned value for the call in the enclosing expression.\n[1] output_prediction (OP): The call's value has the method's return type: Math.sqrt(5.0*5.0 - 4.0*4.0) is double 3.0, Math.round(3.14159) is long 3, Integer.parseInt(\"123\") is int 123; a void method such as println has no value.\n[2] one_step_execution (OS): Calling a Math method changes none of the caller's variables (arguments are passed as values); the program's state changes only if the returned value is stored or used, e.g. double d = Math.sqrt(x);."
+  },
+  {
+   "from": "method_call",
+   "to": "method_call@L3",
+   "type": "has_level",
+   "label": "[0] relation_to_neighbour (R): Arguments may be arbitrary expressions of the right type, and the call itself is an expression usable inside larger ones (Math.sin(x) * Math.cos(y)).\n[1] relation_to_neighbour (R): Math methods are called through the class name, Math.sqrt(x); without the prefix the compiler looks for the method in the current class and reports cannot find symbol.\n[2] relation_to_neighbour (R): The call must match a signature in the API (name, number, order and types of arguments), and the API's return type tells how the value can be used.\n[3] purpose_of_the_whole (P): Delegates a computation to existing library code used as a black box, and composes computations by passing one call's result into another, e.g. Math.exp(Math.log(10.0))."
+  },
+  {
+   "from": "method_call",
+   "to": "method_call@L4",
+   "type": "has_level",
+   "label": "[0] predict_a_change (C) -> ParenthesesOnlyIfArgument: Changing an argument changes only the returned value, never the argument variable; swapping arguments changes the meaning (Math.pow(2, n) vs Math.pow(n, 2)); replacing a call by its value keeps behaviour for mathematical functions but not for Math.random().\n[1] diagnose_an_error (D): rule broken: Each argument must have (or automatically widen to) the type the method's API lists. Kind: compile-time. Trigger class: An argument whose type cannot be converted to the parameter type, e.g. Math.sqrt(\"2\"), or the wrong number of arguments.\n[2] diagnose_an_error (D): rule broken: A value-returning call does not change its argument; its result must be stored or used. Kind: silent logic error. Trigger class: A non-void call written as a statement on its own, e.g. Math.round(x); or Math.abs(d); expecting x or d to change.\n[3] transfer_to_a_new_program (X): Call a library method whenever a well-specified computation exists in an API (square roots, powers, conversions); write your own code only when no method fits; store a result in a variable rather than repeating an identical call.\n[4] diagnose_an_error (D): rule broken: Library methods are called with the class name, e.g. Math.sqrt(x). Kind: compile-time. Trigger class: Calling sqrt(x), pow(a, b) etc. without the Math. prefix from another class (cannot find symbol).\n[5] diagnose_an_error (D): rule broken: A call needs parentheses and passes only argument expressions. Kind: compile-time. Trigger class: Omitting () on a call (Math.random) or writing parameter types in the call (Math.pow(double a, double b))."
+  },
+  {
+   "from": "comparison_operators",
+   "to": "EqualsComparesReferences",
+   "type": "misconception",
+   "label": "wrong: .equals() compares references, not contents | right: s.equals(t) checks whether the two Strings contain the same characters."
+  },
+  {
+   "from": "expression",
+   "to": "OutsideInMethodNesting",
+   "type": "misconception",
+   "label": "wrong: In f(g(x)), f runs first and then g runs. | right: In f(g(x)), g(x) is evaluated first and its result is passed to f."
+  },
+  {
+   "from": "expression",
+   "to": "ParenthesesOnlyIfArgument",
+   "type": "misconception",
+   "label": "wrong: () are optional on a no-argument call like println | right: A method call always needs parentheses, so an empty line is printed with System.out.println();."
+  },
+  {
+   "from": "length_field",
+   "to": "ArrayHasLengthMethod",
+   "type": "misconception",
+   "label": "wrong: The size of an array is found by calling a.length(). | right: An array's size is the field a.length, written without parentheses."
+  },
+  {
+   "from": "method_call",
+   "to": "ArgumentOrderInferred",
+   "type": "misconception",
+   "label": "wrong: Java works out from the variable names which argument goes where, so Math.pow(n, 2) and Math.pow(2, n) mean the same. | right: Arguments are written in the order the method's signature lists them; for example, Math.pow(a, b) raises a to the bth power."
+  },
+  {
+   "from": "method_call",
+   "to": "ArrayHasLengthMethod",
+   "type": "misconception",
+   "label": "wrong: you call length() instead of using the length field | right: An array's size is the field a.length, written without parentheses."
+  },
+  {
+   "from": "method_call",
+   "to": "EqualsComparesReferences",
+   "type": "misconception",
+   "label": "wrong: .equals() compares references, not contents | right: s.equals(t) checks whether the two Strings contain the same characters."
+  },
+  {
+   "from": "method_call",
+   "to": "OutsideInMethodNesting",
+   "type": "misconception",
+   "label": "wrong: nested calls run outside-in, not arguments-first | right: In f(g(x)), g(x) is evaluated first and its result is passed to f."
+  },
+  {
+   "from": "method_call",
+   "to": "ParameterTypesInCall",
+   "type": "misconception",
+   "label": "wrong: A method call lists the parameter types, as in Math.pow(double a, double b). | right: A call passes only argument expressions, e.g. Math.pow(a, b); types appear only in the method declaration."
+  },
+  {
+   "from": "method_call",
+   "to": "ParenthesesOnlyIfArgument",
+   "type": "misconception",
+   "label": "wrong: () are optional on a no-argument call like println | right: A method call always needs parentheses, so an empty line is printed with System.out.println();."
+  },
+  {
+   "from": "method_call",
+   "to": "StringMethodChangesString",
+   "type": "misconception",
+   "label": "wrong: name.toUpperCase(); changes name. | right: Strings are immutable: String methods return a new String, which must be assigned, e.g. name = name.toUpperCase();"
+  },
+  {
+   "from": "print",
+   "to": "ParenthesesOnlyIfArgument",
+   "type": "misconception",
+   "label": "wrong: println with nothing to print can be written System.out.println; without the parentheses. | right: A method call always needs parentheses, so an empty line is printed with System.out.println();."
+  },
+  {
+   "from": "println",
+   "to": "ParenthesesOnlyIfArgument",
+   "type": "misconception",
+   "label": "wrong: println with nothing to print can be written System.out.println; without the parentheses. | right: A method call always needs parentheses, so an empty line is printed with System.out.println();."
+  },
+  {
+   "from": "string_type",
+   "to": "EqualsComparesReferences",
+   "type": "misconception",
+   "label": "wrong: s.equals(t) checks whether s and t are the same object. | right: s.equals(t) checks whether the two Strings contain the same characters."
+  },
+  {
+   "from": "string_type",
+   "to": "StringMethodChangesString",
+   "type": "misconception",
+   "label": "wrong: name.toUpperCase(); changes name. | right: Strings are immutable: String methods return a new String, which must be assigned, e.g. name = name.toUpperCase();"
+  },
+  {
+   "from": "expression",
+   "to": "method_call",
+   "type": "prerequisite",
+   "label": "Method arguments may be expressions, and a method call can be used in expressions in the same way as variables and literals."
+  },
+  {
+   "from": "method_call",
+   "to": "api",
+   "type": "prerequisite",
+   "label": "An API lists, for each library method, the signature you need in order to call it: name, argument types and return type."
+  },
+  {
+   "from": "method_call",
+   "to": "math_library",
+   "type": "prerequisite",
+   "label": "Math.sqrt(x) and other Math methods are used through method calls."
+  }
+ ]
+}

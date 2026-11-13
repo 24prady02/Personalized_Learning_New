@@ -1,0 +1,359 @@
+{
+ "concept": "boolean_expression",
+ "label": "boolean_expression",
+ "graph_version": "3.9.8 (3.9.7 + one primary per misconception (S9c) and the four remaining sibling edges (S9b), 2026-11-04; listed in revision_3_9_8)",
+ "nodes": [
+  {
+   "id": "boolean",
+   "kind": "concept",
+   "label": "boolean"
+  },
+  {
+   "id": "boolean_expression",
+   "kind": "concept",
+   "label": "boolean_expression"
+  },
+  {
+   "id": "comparison_operators",
+   "kind": "concept",
+   "label": "comparison_operators"
+  },
+  {
+   "id": "conditional_operator",
+   "kind": "concept",
+   "label": "conditional_operator"
+  },
+  {
+   "id": "de_morgan",
+   "kind": "concept",
+   "label": "de_morgan"
+  },
+  {
+   "id": "exclusive_or",
+   "kind": "concept",
+   "label": "exclusive_or"
+  },
+  {
+   "id": "if_else_statement",
+   "kind": "concept",
+   "label": "if_else_statement"
+  },
+  {
+   "id": "if_statement",
+   "kind": "concept",
+   "label": "if_statement"
+  },
+  {
+   "id": "logical_operators",
+   "kind": "concept",
+   "label": "logical_operators"
+  },
+  {
+   "id": "nested_conditionals",
+   "kind": "concept",
+   "label": "nested_conditionals"
+  },
+  {
+   "id": "random_move",
+   "kind": "concept",
+   "label": "random_move"
+  },
+  {
+   "id": "short_circuit",
+   "kind": "concept",
+   "label": "short_circuit"
+  },
+  {
+   "id": "syntax_template",
+   "kind": "concept",
+   "label": "Template notation"
+  },
+  {
+   "id": "while_loop",
+   "kind": "concept",
+   "label": "while_loop"
+  },
+  {
+   "id": "ElseWithCondition",
+   "kind": "error",
+   "label": "ElseWithCondition"
+  },
+  {
+   "id": "boolean_expression@L0",
+   "kind": "learning_level",
+   "label": "L0"
+  },
+  {
+   "id": "boolean_expression@L1",
+   "kind": "learning_level",
+   "label": "L1"
+  },
+  {
+   "id": "boolean_expression@L2",
+   "kind": "learning_level",
+   "label": "L2"
+  },
+  {
+   "id": "boolean_expression@L3",
+   "kind": "learning_level",
+   "label": "L3"
+  },
+  {
+   "id": "boolean_expression@L4",
+   "kind": "learning_level",
+   "label": "L4"
+  },
+  {
+   "id": "ArithmeticInsteadOfBoolean",
+   "kind": "misconception",
+   "label": "ArithmeticInsteadOfBoolean"
+  },
+  {
+   "id": "ChainedComparison",
+   "kind": "misconception",
+   "label": "ChainedComparison"
+  },
+  {
+   "id": "ComparisonWithBooleanLiteral",
+   "kind": "misconception",
+   "label": "ComparisonWithBooleanLiteral"
+  },
+  {
+   "id": "LoopForOneTimeTest",
+   "kind": "misconception",
+   "label": "LoopForOneTimeTest"
+  },
+  {
+   "id": "MapToBooleanWithConditionalOperator",
+   "kind": "misconception",
+   "label": "MapToBooleanWithConditionalOperator"
+  },
+  {
+   "id": "MapToBooleanWithIf",
+   "kind": "misconception",
+   "label": "MapToBooleanWithIf"
+  },
+  {
+   "id": "NestedIfsInsteadOfLogicalOperators",
+   "kind": "misconception",
+   "label": "NestedIfsInsteadOfLogicalOperators"
+  },
+  {
+   "id": "topic1.2.e",
+   "kind": "topic",
+   "label": "Booleans"
+  }
+ ],
+ "edges": [
+  {
+   "from": "topic1.2.e",
+   "to": "boolean",
+   "type": "contains",
+   "label": "The topic 'Booleans' introduces boolean."
+  },
+  {
+   "from": "topic1.2.e",
+   "to": "boolean_expression",
+   "type": "contains",
+   "label": "The topic 'Booleans' introduces boolean_expression."
+  },
+  {
+   "from": "topic1.2.e",
+   "to": "de_morgan",
+   "type": "contains",
+   "label": "The topic 'Booleans' introduces de_morgan."
+  },
+  {
+   "from": "topic1.2.e",
+   "to": "exclusive_or",
+   "type": "contains",
+   "label": "The topic 'Booleans' introduces exclusive_or."
+  },
+  {
+   "from": "topic1.2.e",
+   "to": "logical_operators",
+   "type": "contains",
+   "label": "The topic 'Booleans' introduces logical_operators."
+  },
+  {
+   "from": "topic1.2.e",
+   "to": "short_circuit",
+   "type": "contains",
+   "label": "The topic 'Booleans' introduces short_circuit."
+  },
+  {
+   "from": "boolean_expression",
+   "to": "ElseWithCondition",
+   "type": "error",
+   "label": "wrong: Writes else (x > 0) with a condition but no if. | right: else takes no condition; use else if (x > 0)."
+  },
+  {
+   "from": "if_else_statement",
+   "to": "ElseWithCondition",
+   "type": "error",
+   "label": "wrong: Writes else (x > 0) with a condition but no if. | right: else takes no condition; use else if (x > 0)."
+  },
+  {
+   "from": "boolean_expression",
+   "to": "boolean_expression@L0",
+   "type": "has_level",
+   "label": "[0] everyday_reading (E): Folk meaning: maths writes a range as 90 <= grade <= 100 and English says 'if x is 1 or 2'. Java rule: each comparison is a separate boolean expression and they must be joined explicitly: 90 <= grade && grade <= 100, x == 1 || x == 2; 90 <= grade <= 100 does not compile because 90 <= grade is already a boolean.\n[1] misconception (M) -> ComparisonWithBooleanLiteral: wrong rule: You must write == true / == false to test a boolean. Right rule: if (b) already tests b, and if (!b) tests that it is false, so == true adds nothing.\n[2] misconception (M) -> MapToBooleanWithIf: wrong rule: You need an if to turn a boolean expression into a boolean. Right rule: ok = (x > y); stores the result of the comparison directly.\n[3] misconception (M) -> MapToBooleanWithConditionalOperator: wrong rule: You need ? : to turn a boolean expression into a boolean (ok = x > y ? true : false). Right rule: ok = (x > y); already gives the boolean, so the ? : is unnecessary.\n[4] misconception (M) -> ArithmeticInsteadOfBoolean: wrong rule: A true/false question is answered with arithmetic (e.g. 1 for true). Right rule: A logic question is written as a boolean expression whose value is true or false, e.g. (year % 4 == 0).\n[5] inconsistent_trace (T) -> ComparisonWithBooleanLiteral: Points to LT (arithmetic first, then comparisons, then !, &&, ||, left to right, with short-circuit). Applied unevenly: the student evaluates && before a comparison in one sub-expression, or evaluates the right operand of && on a pass where the left was already false. (here mixing in: \"you must write == true / == false to test a boolean\")\n[6] misconception (M) -> ChainedComparison: wrong rule: 90 <= grade <= 100 tests whether grade is between 90 and 100. Right rule: a < b < c does not compile (a < b is a boolean, which cannot be compared with <); a range test is written 90 <= grade && grade <= 100.\n[7] misconception (M) -> LoopForOneTimeTest: wrong rule: Uses a loop where a condition needs to be tested only once. Right rule: A test made once is an if; a while re-tests its condition and repeats its body for as long as the condition is true.\n[8] misconception (M) -> NestedIfsInsteadOfLogicalOperators: wrong rule: A condition on several values has to be written as nested if statements, one value per if. Right rule: Several conditions combine into one boolean expression with && and ||, e.g. if (x == 0 && y == 0)."
+  },
+  {
+   "from": "boolean_expression",
+   "to": "boolean_expression@L1",
+   "type": "has_level",
+   "label": "[0] names_the_element (N): A boolean expression is any expression whose type is boolean: a boolean literal or variable, a comparison, or such parts combined with &&, || and !.\n[1] states_the_rule (S): A boolean expression has value true or false; it is built from comparisons (lower precedence than arithmetic, higher than boolean operators) and boolean operators; the condition of if, while and for must be one."
+  },
+  {
+   "from": "boolean_expression",
+   "to": "boolean_expression@L2",
+   "type": "has_level",
+   "label": "[0] line_by_line_trace (LT): Operands are evaluated left to right; arithmetic sub-expressions first, then comparisons, then !, then &&, then ||; && and || evaluate their right operand only when the left has not decided the result.\n[1] output_prediction (OP): The value is true or false: with year = 1900, (year % 4 == 0) && (year % 100 != 0) || (year % 400 == 0) is false, so LeapYear prints false.\n[2] one_step_execution (OS): Evaluating a boolean expression changes no variable (unless it contains an assignment, ++ or a method with side effects); state changes only when its value is stored, as in isLeapYear = isLeapYear && (year % 100 != 0);."
+  },
+  {
+   "from": "boolean_expression",
+   "to": "boolean_expression@L3",
+   "type": "has_level",
+   "label": "[0] relation_to_neighbour (R): Comparisons are the atoms of boolean expressions; because they bind tighter than && and ||, month >= 1 && month <= 12 groups as (month >= 1) && (month <= 12) without parentheses.\n[1] relation_to_neighbour (R): &&, || and ! combine boolean sub-expressions into a larger one; ! binds tighter than comparisons, so negating a comparison needs parentheses: !(x > 0).\n[2] relation_to_neighbour (R): The if statement evaluates its boolean expression once and runs its block only when the value is true; the expression must have type boolean, so if (x = 5) with int x does not compile.\n[3] relation_to_neighbour (R): The while loop re-evaluates its boolean expression before every pass and stops the first time it is false, so some variable in the expression must change in the body or the loop never ends.\n[4] relation_to_neighbour (R): In RandomSurfer the boolean expression r < sum is evaluated for each candidate page j in turn, as sum grows; the first j for which it is true is the chosen page.\n[5] relation_to_neighbour (R): In the template if (<boolean expression>) { <statements> } the placeholder may be filled by any boolean-typed expression: a literal, a boolean variable, a comparison or a combination with logical operators.\n[6] purpose_of_the_whole (P): Expresses a decision condition or guard (which branch runs, whether a loop continues) or computes a flag; common plans: range test lo <= x && x <= hi, divisibility test n % k == 0, combined rule as in LeapYear."
+  },
+  {
+   "from": "boolean_expression",
+   "to": "boolean_expression@L4",
+   "type": "has_level",
+   "label": "[0] predict_a_change (C) -> ComparisonWithBooleanLiteral: Rewriting with De Morgan (!(a && b) as !a || !b) keeps the value for every input; swapping the operands of && keeps the truth value but can change whether the right operand is evaluated (and whether a guard still protects it); changing < to <= changes the result only at the boundary value.\n[1] diagnose_an_error (D): rule broken: else takes no condition; a second condition needs else if (...). Kind: compile-time. Trigger class: Writing else (x > 0) { ... } after an if block (the compiler reports e.g. 'not a statement' or '; expected').\n[2] transfer_to_a_new_program (X): Use a boolean expression wherever code must decide or record a yes/no condition, and store it directly (ok = x > y) rather than via if or ? :; when different outcomes are needed for several cases use an if-else chain of such expressions.\n[3] diagnose_an_error (D): rule broken: The condition must be a boolean expression; = assigns, == compares. Kind: compile-time. Trigger class: if (a = b) with int a and b (with boolean variables it compiles and silently assigns).\n[4] diagnose_an_error (D): rule broken: Comparisons cannot be chained; each must be joined with && or ||. Kind: compile-time. Trigger class: Range written as a < b < c or 90 <= grade <= 100."
+  },
+  {
+   "from": "boolean",
+   "to": "ArithmeticInsteadOfBoolean",
+   "type": "misconception",
+   "label": "wrong: A true/false question is answered with arithmetic (e.g. 1 for true). | right: A logic question is written as a boolean expression whose value is true or false."
+  },
+  {
+   "from": "boolean_expression",
+   "to": "ArithmeticInsteadOfBoolean",
+   "type": "misconception",
+   "label": "wrong: A true/false question is answered with arithmetic (e.g. 1 for true). | right: A logic question is written as a boolean expression whose value is true or false."
+  },
+  {
+   "from": "boolean_expression",
+   "to": "ChainedComparison",
+   "type": "misconception",
+   "label": "wrong: 90 <= grade <= 100 tests whether grade is between 90 and 100. | right: a < b < c does not compile (a < b is a boolean); a range test is written 90 <= grade && grade <= 100."
+  },
+  {
+   "from": "boolean_expression",
+   "to": "ComparisonWithBooleanLiteral",
+   "type": "misconception",
+   "label": "wrong: To test a boolean b you must write if (b == true). | right: if (b) already tests b, so writing == true adds nothing."
+  },
+  {
+   "from": "boolean_expression",
+   "to": "LoopForOneTimeTest",
+   "type": "misconception",
+   "label": "wrong: Uses a loop where a condition needs to be tested only once. | right: A test made once is an if; a loop repeats."
+  },
+  {
+   "from": "boolean_expression",
+   "to": "MapToBooleanWithConditionalOperator",
+   "type": "misconception",
+   "label": "wrong: To get a boolean from x > y you need ok = (x > y) ? true : false;. | right: ok = (x > y); already gives the boolean, so the ? : is unnecessary."
+  },
+  {
+   "from": "boolean_expression",
+   "to": "MapToBooleanWithIf",
+   "type": "misconception",
+   "label": "wrong: To store whether x > y in a boolean you need if (x > y) ok = true; else ok = false;. | right: ok = (x > y); stores the result of the comparison directly."
+  },
+  {
+   "from": "boolean_expression",
+   "to": "NestedIfsInsteadOfLogicalOperators",
+   "type": "misconception",
+   "label": "wrong: A condition on several values has to be written as nested if statements, one value per if. | right: Several conditions combine into one boolean expression with && and ||, e.g. if (x == 0 && y == 0)."
+  },
+  {
+   "from": "comparison_operators",
+   "to": "ChainedComparison",
+   "type": "misconception",
+   "label": "wrong: 90 <= grade <= 100 tests whether grade is between 90 and 100. | right: a < b < c does not compile (a < b is a boolean); a range test is written 90 <= grade && grade <= 100."
+  },
+  {
+   "from": "comparison_operators",
+   "to": "ComparisonWithBooleanLiteral",
+   "type": "misconception",
+   "label": "wrong: you must write == true / == false to test a boolean | right: if (b) already tests b, so writing == true adds nothing."
+  },
+  {
+   "from": "conditional_operator",
+   "to": "MapToBooleanWithConditionalOperator",
+   "type": "misconception",
+   "label": "wrong: you need ? : to do the same | right: ok = (x > y); already gives the boolean, so the ? : is unnecessary."
+  },
+  {
+   "from": "if_statement",
+   "to": "LoopForOneTimeTest",
+   "type": "misconception",
+   "label": "wrong: Uses a loop where a condition needs to be tested only once. | right: A test made once is an if; a loop repeats."
+  },
+  {
+   "from": "if_statement",
+   "to": "MapToBooleanWithIf",
+   "type": "misconception",
+   "label": "wrong: you need an if to turn a boolean expression into a boolean | right: ok = (x > y); stores the result of the comparison directly."
+  },
+  {
+   "from": "logical_operators",
+   "to": "NestedIfsInsteadOfLogicalOperators",
+   "type": "misconception",
+   "label": "wrong: A condition on several values has to be written as nested if statements, one value per if. | right: Several conditions combine into one boolean expression with && and ||, e.g. if (x == 0 && y == 0)."
+  },
+  {
+   "from": "nested_conditionals",
+   "to": "NestedIfsInsteadOfLogicalOperators",
+   "type": "misconception",
+   "label": "wrong: A condition on several values has to be written as nested if statements, one value per if. | right: Several conditions combine into one boolean expression with && and ||, e.g. if (x == 0 && y == 0)."
+  },
+  {
+   "from": "while_loop",
+   "to": "LoopForOneTimeTest",
+   "type": "misconception",
+   "label": "wrong: Uses a loop where a condition needs to be tested only once. | right: A test made once is an if; a loop repeats."
+  },
+  {
+   "from": "boolean_expression",
+   "to": "if_statement",
+   "type": "prerequisite",
+   "label": "An if runs its block only when its boolean expression evaluates to true."
+  },
+  {
+   "from": "boolean_expression",
+   "to": "random_move",
+   "type": "prerequisite",
+   "label": "The next page is chosen by testing the condition r < sum for each candidate page j in turn."
+  },
+  {
+   "from": "boolean_expression",
+   "to": "syntax_template",
+   "type": "prerequisite",
+   "label": "In the template if (<boolean expression>) { <statements> }, <boolean expression> stands for any expression of type boolean."
+  },
+  {
+   "from": "boolean_expression",
+   "to": "while_loop",
+   "type": "prerequisite",
+   "label": "A while tests its boolean condition before every pass and stops the first time it evaluates to false."
+  },
+  {
+   "from": "comparison_operators",
+   "to": "boolean_expression",
+   "type": "prerequisite",
+   "label": "A comparison such as x < y produces a boolean result; comparisons together with boolean logic provide the basis for decision-making."
+  },
+  {
+   "from": "logical_operators",
+   "to": "boolean_expression",
+   "type": "prerequisite",
+   "label": "&&, || and ! combine conditions p and q into one larger condition that is still true or false."
+  }
+ ]
+}

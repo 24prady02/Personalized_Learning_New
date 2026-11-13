@@ -1,0 +1,380 @@
+{
+ "concept": "block",
+ "label": "block",
+ "graph_version": "3.9.8 (3.9.7 + one primary per misconception (S9c) and the four remaining sibling edges (S9b), 2026-11-04; listed in revision_3_9_8)",
+ "nodes": [
+  {
+   "id": "block",
+   "kind": "concept",
+   "label": "block"
+  },
+  {
+   "id": "class_declaration",
+   "kind": "concept",
+   "label": "class_declaration"
+  },
+  {
+   "id": "comment",
+   "kind": "concept",
+   "label": "comment"
+  },
+  {
+   "id": "compile_time_error",
+   "kind": "concept",
+   "label": "compile_time_error"
+  },
+  {
+   "id": "for_loop",
+   "kind": "concept",
+   "label": "for_loop"
+  },
+  {
+   "id": "if_statement",
+   "kind": "concept",
+   "label": "if_statement"
+  },
+  {
+   "id": "loop_body",
+   "kind": "concept",
+   "label": "loop_body"
+  },
+  {
+   "id": "loop_scope",
+   "kind": "concept",
+   "label": "loop_scope"
+  },
+  {
+   "id": "main_method",
+   "kind": "concept",
+   "label": "main_method"
+  },
+  {
+   "id": "nested_conditionals",
+   "kind": "concept",
+   "label": "nested_conditionals"
+  },
+  {
+   "id": "nested_loops",
+   "kind": "concept",
+   "label": "nested_loops"
+  },
+  {
+   "id": "print",
+   "kind": "concept",
+   "label": "print"
+  },
+  {
+   "id": "println",
+   "kind": "concept",
+   "label": "println"
+  },
+  {
+   "id": "program_layout",
+   "kind": "concept",
+   "label": "program_layout"
+  },
+  {
+   "id": "statement",
+   "kind": "concept",
+   "label": "statement"
+  },
+  {
+   "id": "string_literal",
+   "kind": "concept",
+   "label": "string_literal"
+  },
+  {
+   "id": "variable",
+   "kind": "concept",
+   "label": "variable"
+  },
+  {
+   "id": "while_loop",
+   "kind": "concept",
+   "label": "while_loop"
+  },
+  {
+   "id": "UnbalancedBraces",
+   "kind": "error",
+   "label": "UnbalancedBraces"
+  },
+  {
+   "id": "block@L0",
+   "kind": "learning_level",
+   "label": "L0"
+  },
+  {
+   "id": "block@L1",
+   "kind": "learning_level",
+   "label": "L1"
+  },
+  {
+   "id": "block@L2",
+   "kind": "learning_level",
+   "label": "L2"
+  },
+  {
+   "id": "block@L3",
+   "kind": "learning_level",
+   "label": "L3"
+  },
+  {
+   "id": "block@L4",
+   "kind": "learning_level",
+   "label": "L4"
+  },
+  {
+   "id": "InconsistentIndentation",
+   "kind": "misconception",
+   "label": "InconsistentIndentation"
+  },
+  {
+   "id": "LocalVarOutsideScope",
+   "kind": "misconception",
+   "label": "LocalVarOutsideScope"
+  },
+  {
+   "id": "LoopBodyStatementOutsideLoop",
+   "kind": "misconception",
+   "label": "LoopBodyStatementOutsideLoop"
+  },
+  {
+   "id": "MissingBraces",
+   "kind": "misconception",
+   "label": "MissingBraces"
+  },
+  {
+   "id": "StatementAfterIfInBranch",
+   "kind": "misconception",
+   "label": "StatementAfterIfInBranch"
+  },
+  {
+   "id": "StatementAfterLoopInBody",
+   "kind": "misconception",
+   "label": "StatementAfterLoopInBody"
+  },
+  {
+   "id": "topic1.1.b",
+   "kind": "topic",
+   "label": "Understanding a program (HelloWorld)"
+  }
+ ],
+ "edges": [
+  {
+   "from": "topic1.1.b",
+   "to": "block",
+   "type": "contains",
+   "label": "The topic 'Understanding a program (HelloWorld)' introduces block."
+  },
+  {
+   "from": "topic1.1.b",
+   "to": "class_declaration",
+   "type": "contains",
+   "label": "The topic 'Understanding a program (HelloWorld)' introduces class_declaration."
+  },
+  {
+   "from": "topic1.1.b",
+   "to": "comment",
+   "type": "contains",
+   "label": "The topic 'Understanding a program (HelloWorld)' introduces comment."
+  },
+  {
+   "from": "topic1.1.b",
+   "to": "main_method",
+   "type": "contains",
+   "label": "The topic 'Understanding a program (HelloWorld)' introduces main_method."
+  },
+  {
+   "from": "topic1.1.b",
+   "to": "print",
+   "type": "contains",
+   "label": "The topic 'Understanding a program (HelloWorld)' introduces print."
+  },
+  {
+   "from": "topic1.1.b",
+   "to": "println",
+   "type": "contains",
+   "label": "The topic 'Understanding a program (HelloWorld)' introduces println."
+  },
+  {
+   "from": "topic1.1.b",
+   "to": "program_layout",
+   "type": "contains",
+   "label": "The topic 'Understanding a program (HelloWorld)' introduces program_layout."
+  },
+  {
+   "from": "topic1.1.b",
+   "to": "statement",
+   "type": "contains",
+   "label": "The topic 'Understanding a program (HelloWorld)' introduces statement."
+  },
+  {
+   "from": "topic1.1.b",
+   "to": "string_literal",
+   "type": "contains",
+   "label": "The topic 'Understanding a program (HelloWorld)' introduces string_literal."
+  },
+  {
+   "from": "block",
+   "to": "UnbalancedBraces",
+   "type": "error",
+   "label": "wrong: A missing { or } is harmless. | right: Every { must be matched by a } so the class body and the method body are well formed."
+  },
+  {
+   "from": "class_declaration",
+   "to": "UnbalancedBraces",
+   "type": "error",
+   "label": "wrong: A missing { or } is harmless. | right: Every { must be matched by a } so the class body and the method body are well formed."
+  },
+  {
+   "from": "compile_time_error",
+   "to": "UnbalancedBraces",
+   "type": "error",
+   "label": "wrong: A missing { or } is harmless. | right: Every { must be matched by a } so the class body and the method body are well formed."
+  },
+  {
+   "from": "block",
+   "to": "block@L0",
+   "type": "has_level",
+   "label": "[0] everyday_reading (E): Everyday/visual reading: indentation or line position tells you what belongs together, as in an outline. Java rule: only braces delimit a block; indentation is ignored, and without braces an if or loop body is just the next single statement.\n[1] misconception (M) -> LocalVarOutsideScope: wrong rule: A variable declared inside a block can be used anywhere in the program, like a global. Right rule: A local variable's scope runs from its declaration to the end of the enclosing block.\n[2] inconsistent_trace (T) -> LocalVarOutsideScope: Applies the block rule (LT: all statements of the block in order, the whole block as one unit) unevenly: includes the statement after the closing brace in the body on one pass but not another, or runs only part of the body. (here mixing in: \"A variable declared inside a block can be used anywhere in the program, like a global\")\n[3] misconception (M) -> StatementAfterIfInBranch: wrong rule: A statement placed after the if statement belongs to its branch, so it runs only when the condition is true. Right rule: The branch ends at its closing brace (or after its single statement); the next statement runs whatever the condition was.\n[4] misconception (M) -> LoopBodyStatementOutsideLoop: wrong rule: Some statements inside the loop braces are not repeated; they run once, before or after the loop. Right rule: Every statement inside the loop braces is part of the body and runs on every pass.\n[5] misconception (M) -> StatementAfterLoopInBody: wrong rule: A statement written after the loop is repeated with the loop body. Right rule: The body ends at the closing brace (or after its single statement); code after it runs once, after the loop ends."
+  },
+  {
+   "from": "block",
+   "to": "block@L1",
+   "type": "has_level",
+   "label": "[0] names_the_element (N): A block (statement block) is a sequence of statements enclosed in braces { }; it counts as one statement where a single statement is expected.\n[1] states_the_rule (S): A block is a sequence of statements and local variable declarations within braces; a variable declared in a block is in scope only from its declaration to the end of that block."
+  },
+  {
+   "from": "block",
+   "to": "block@L2",
+   "type": "has_level",
+   "label": "[0] line_by_line_trace (LT): A block executes each of its statements in order from first to last; if a statement completes abruptly, the rest of the block is skipped.\n[1] output_prediction (OP): A block has no value; its result is the combined effect of its statements, in order.\n[2] one_step_execution (OS): Entering a block makes room for its local variables; leaving it (at the closing brace) ends their scope, so they can no longer be used."
+  },
+  {
+   "from": "block",
+   "to": "block@L3",
+   "type": "has_level",
+   "label": "[0] relation_to_neighbour (R): A block is built from statements, each ended by ;, and is itself usable as a single statement (e.g. a loop body).\n[1] relation_to_neighbour (R): Indentation should show block nesting, but only braces define it; layout that disagrees with the braces misleads the reader, not the compiler.\n[2] purpose_of_the_whole (P): Purpose: group several statements so they act as one body (of main, an if branch or a loop) and limit the scope of variables to where they are needed."
+  },
+  {
+   "from": "block",
+   "to": "block@L4",
+   "type": "has_level",
+   "label": "[0] predict_a_change (C) -> LocalVarOutsideScope: Adding braces around a single-statement body keeps behaviour; adding a second statement to a braceless body changes it (the new statement runs outside); moving a declaration into a block makes later uses outside the block fail to compile.\n[1] diagnose_an_error (D): rule broken: Every { must be matched by a }. Kind: compile-time. Trigger class: a missing or extra brace: javac reports '{' expected, 'class' or 'interface' expected, or reached end of file while parsing, often on a later line\n[2] transfer_to_a_new_program (X): Use a block whenever a body has more than one statement (S&W and TJ advise braces even for one), and declare variables in the innermost block that needs them.\n[3] diagnose_an_error (D): rule broken: Without braces only one statement is the body. Kind: silent logic error. Trigger class: a multi-statement body written without braces, indented as if all were inside\n[4] diagnose_an_error (D): rule broken: A local variable is visible only inside its block. Kind: compile-time. Trigger class: using a variable after the block that declared it has closed (cannot find symbol)"
+  },
+  {
+   "from": "block",
+   "to": "InconsistentIndentation",
+   "type": "misconception",
+   "label": "wrong: Indents nested blocks inconsistently, so the visual nesting differs from the real nesting. | right: Indent consistently, one level deeper for each nested block, so the layout shows the real nesting; the compiler ignores indentation."
+  },
+  {
+   "from": "block",
+   "to": "LocalVarOutsideScope",
+   "type": "misconception",
+   "label": "wrong: A variable declared inside a block can be used anywhere in the program, like a global. | right: A local variable exists only from its declaration to the end of its block."
+  },
+  {
+   "from": "block",
+   "to": "LoopBodyStatementOutsideLoop",
+   "type": "misconception",
+   "label": "wrong: Some statements inside the braces of a loop body are not repeated; they run once, before or after the loop. | right: Every statement inside the loop braces is part of the body and runs on every pass."
+  },
+  {
+   "from": "block",
+   "to": "MissingBraces",
+   "type": "misconception",
+   "label": "wrong: Omits braces around a single-statement body of if, for or while. | right: Braces are optional for a single-statement body, but using them anyway avoids bugs when statements are added later."
+  },
+  {
+   "from": "block",
+   "to": "StatementAfterIfInBranch",
+   "type": "misconception",
+   "label": "wrong: A statement placed after the if statement belongs to its branch, so it runs only when the condition is true. | right: The branch ends at its closing brace (or after its single statement); the next statement runs whatever the condition was."
+  },
+  {
+   "from": "block",
+   "to": "StatementAfterLoopInBody",
+   "type": "misconception",
+   "label": "wrong: A statement written after the loop is repeated with the loop body. | right: The body ends at the closing brace (or after its single statement); code after it runs once, after the loop ends."
+  },
+  {
+   "from": "for_loop",
+   "to": "MissingBraces",
+   "type": "misconception",
+   "label": "wrong: Omits braces around a single-statement body of if, for or while. | right: Braces are optional for a single-statement body, but using them anyway avoids bugs when statements are added later."
+  },
+  {
+   "from": "if_statement",
+   "to": "MissingBraces",
+   "type": "misconception",
+   "label": "wrong: Omits braces around a single-statement body of if, for or while. | right: Braces are optional for a single-statement body, but using them anyway avoids bugs when statements are added later."
+  },
+  {
+   "from": "if_statement",
+   "to": "StatementAfterIfInBranch",
+   "type": "misconception",
+   "label": "wrong: A statement placed after the if statement belongs to its branch, so it runs only when the condition is true. | right: The branch ends at its closing brace (or after its single statement); the next statement runs whatever the condition was."
+  },
+  {
+   "from": "loop_body",
+   "to": "LoopBodyStatementOutsideLoop",
+   "type": "misconception",
+   "label": "wrong: Some statements inside the braces of a loop body are not repeated; they run once, before or after the loop. | right: Every statement inside the loop braces is part of the body and runs on every pass."
+  },
+  {
+   "from": "loop_body",
+   "to": "StatementAfterLoopInBody",
+   "type": "misconception",
+   "label": "wrong: A statement written after the loop is repeated with the loop body. | right: The body ends at the closing brace (or after its single statement); code after it runs once, after the loop ends."
+  },
+  {
+   "from": "loop_scope",
+   "to": "LocalVarOutsideScope",
+   "type": "misconception",
+   "label": "wrong: A variable declared inside a block can be used anywhere in the program, like a global. | right: A local variable exists only from its declaration to the end of its block."
+  },
+  {
+   "from": "nested_conditionals",
+   "to": "InconsistentIndentation",
+   "type": "misconception",
+   "label": "wrong: Indents nested blocks inconsistently, so the visual nesting differs from the real nesting. | right: Indent consistently, one level deeper for each nested block, so the layout shows the real nesting; the compiler ignores indentation."
+  },
+  {
+   "from": "nested_loops",
+   "to": "InconsistentIndentation",
+   "type": "misconception",
+   "label": "wrong: Indents nested blocks inconsistently, so the visual nesting differs from the real nesting. | right: Indent consistently, one level deeper for each nested block, so the layout shows the real nesting; the compiler ignores indentation."
+  },
+  {
+   "from": "program_layout",
+   "to": "InconsistentIndentation",
+   "type": "misconception",
+   "label": "wrong: Indents nested blocks inconsistently, so the visual nesting differs from the real nesting. | right: Indent consistently, one level deeper for each nested block, so the layout shows the real nesting; the compiler ignores indentation."
+  },
+  {
+   "from": "variable",
+   "to": "LocalVarOutsideScope",
+   "type": "misconception",
+   "label": "wrong: A variable declared inside a block can be used anywhere in the program, like a global. | right: A local variable exists only from its declaration to the end of its block."
+  },
+  {
+   "from": "while_loop",
+   "to": "MissingBraces",
+   "type": "misconception",
+   "label": "wrong: Omits braces around a single-statement body of if, for or while. | right: Braces are optional for a single-statement body, but using them anyway avoids bugs when statements are added later."
+  },
+  {
+   "from": "block",
+   "to": "program_layout",
+   "type": "prerequisite",
+   "label": "Indentation makes the nesting of blocks visible, so the reader can see which statements belong to which block."
+  },
+  {
+   "from": "statement",
+   "to": "block",
+   "type": "prerequisite",
+   "label": "A statement block is a sequence of statements, each terminated by a semicolon, enclosed in braces; the body of main() is such a sequence."
+  }
+ ]
+}

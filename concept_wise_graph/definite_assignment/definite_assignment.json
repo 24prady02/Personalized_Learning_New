@@ -1,0 +1,274 @@
+{
+ "concept": "definite_assignment",
+ "label": "definite_assignment",
+ "graph_version": "3.9.8 (3.9.7 + one primary per misconception (S9c) and the four remaining sibling edges (S9b), 2026-11-04; listed in revision_3_9_8)",
+ "nodes": [
+  {
+   "id": "array_default_values",
+   "kind": "concept",
+   "label": "array_default_values"
+  },
+  {
+   "id": "assignment",
+   "kind": "concept",
+   "label": "assignment"
+  },
+  {
+   "id": "chained_assignment",
+   "kind": "concept",
+   "label": "chained_assignment"
+  },
+  {
+   "id": "data_type",
+   "kind": "concept",
+   "label": "data_type"
+  },
+  {
+   "id": "declaration",
+   "kind": "concept",
+   "label": "declaration"
+  },
+  {
+   "id": "definite_assignment",
+   "kind": "concept",
+   "label": "definite_assignment"
+  },
+  {
+   "id": "expression",
+   "kind": "concept",
+   "label": "expression"
+  },
+  {
+   "id": "identifier",
+   "kind": "concept",
+   "label": "identifier"
+  },
+  {
+   "id": "literal",
+   "kind": "concept",
+   "label": "literal"
+  },
+  {
+   "id": "named_constants",
+   "kind": "concept",
+   "label": "named_constants"
+  },
+  {
+   "id": "naming_convention",
+   "kind": "concept",
+   "label": "naming_convention"
+  },
+  {
+   "id": "operator_precedence",
+   "kind": "concept",
+   "label": "operator_precedence"
+  },
+  {
+   "id": "primitive_type",
+   "kind": "concept",
+   "label": "primitive_type"
+  },
+  {
+   "id": "program_trace",
+   "kind": "concept",
+   "label": "Trace (table of variable values)"
+  },
+  {
+   "id": "variable",
+   "kind": "concept",
+   "label": "variable"
+  },
+  {
+   "id": "variable_swap",
+   "kind": "concept",
+   "label": "variable_swap"
+  },
+  {
+   "id": "definite_assignment@L0",
+   "kind": "learning_level",
+   "label": "L0"
+  },
+  {
+   "id": "definite_assignment@L1",
+   "kind": "learning_level",
+   "label": "L1"
+  },
+  {
+   "id": "definite_assignment@L2",
+   "kind": "learning_level",
+   "label": "L2"
+  },
+  {
+   "id": "definite_assignment@L3",
+   "kind": "learning_level",
+   "label": "L3"
+  },
+  {
+   "id": "definite_assignment@L4",
+   "kind": "learning_level",
+   "label": "L4"
+  },
+  {
+   "id": "LocalVariablesAutoInitialized",
+   "kind": "misconception",
+   "label": "LocalVariablesAutoInitialized"
+  },
+  {
+   "id": "topic1.2.a",
+   "kind": "topic",
+   "label": "Data types and terminology (literals, identifiers, variables, declarations, assignment, expressions)"
+  }
+ ],
+ "edges": [
+  {
+   "from": "topic1.2.a",
+   "to": "assignment",
+   "type": "contains",
+   "label": "The topic 'Data types and terminology (literals, identifiers, variables, declarations, assignment, expressions)' introduces assignment."
+  },
+  {
+   "from": "topic1.2.a",
+   "to": "chained_assignment",
+   "type": "contains",
+   "label": "The topic 'Data types and terminology (literals, identifiers, variables, declarations, assignment, expressions)' introduces chained_assignment."
+  },
+  {
+   "from": "topic1.2.a",
+   "to": "data_type",
+   "type": "contains",
+   "label": "The topic 'Data types and terminology (literals, identifiers, variables, declarations, assignment, expressions)' introduces data_type."
+  },
+  {
+   "from": "topic1.2.a",
+   "to": "declaration",
+   "type": "contains",
+   "label": "The topic 'Data types and terminology (literals, identifiers, variables, declarations, assignment, expressions)' introduces declaration."
+  },
+  {
+   "from": "topic1.2.a",
+   "to": "definite_assignment",
+   "type": "contains",
+   "label": "The topic 'Data types and terminology (literals, identifiers, variables, declarations, assignment, expressions)' introduces definite_assignment."
+  },
+  {
+   "from": "topic1.2.a",
+   "to": "expression",
+   "type": "contains",
+   "label": "The topic 'Data types and terminology (literals, identifiers, variables, declarations, assignment, expressions)' introduces expression."
+  },
+  {
+   "from": "topic1.2.a",
+   "to": "identifier",
+   "type": "contains",
+   "label": "The topic 'Data types and terminology (literals, identifiers, variables, declarations, assignment, expressions)' introduces identifier."
+  },
+  {
+   "from": "topic1.2.a",
+   "to": "literal",
+   "type": "contains",
+   "label": "The topic 'Data types and terminology (literals, identifiers, variables, declarations, assignment, expressions)' introduces literal."
+  },
+  {
+   "from": "topic1.2.a",
+   "to": "named_constants",
+   "type": "contains",
+   "label": "The topic 'Data types and terminology (literals, identifiers, variables, declarations, assignment, expressions)' introduces named_constants."
+  },
+  {
+   "from": "topic1.2.a",
+   "to": "naming_convention",
+   "type": "contains",
+   "label": "The topic 'Data types and terminology (literals, identifiers, variables, declarations, assignment, expressions)' introduces naming_convention."
+  },
+  {
+   "from": "topic1.2.a",
+   "to": "operator_precedence",
+   "type": "contains",
+   "label": "The topic 'Data types and terminology (literals, identifiers, variables, declarations, assignment, expressions)' introduces operator_precedence."
+  },
+  {
+   "from": "topic1.2.a",
+   "to": "primitive_type",
+   "type": "contains",
+   "label": "The topic 'Data types and terminology (literals, identifiers, variables, declarations, assignment, expressions)' introduces primitive_type."
+  },
+  {
+   "from": "topic1.2.a",
+   "to": "program_trace",
+   "type": "contains",
+   "label": "Trace (table of variable values) is taught under \"Data types and terminology (literals, identifiers, variables, declarations, assignment, expressions)\"."
+  },
+  {
+   "from": "topic1.2.a",
+   "to": "variable",
+   "type": "contains",
+   "label": "The topic 'Data types and terminology (literals, identifiers, variables, declarations, assignment, expressions)' introduces variable."
+  },
+  {
+   "from": "topic1.2.a",
+   "to": "variable_swap",
+   "type": "contains",
+   "label": "The topic 'Data types and terminology (literals, identifiers, variables, declarations, assignment, expressions)' introduces variable_swap."
+  },
+  {
+   "from": "definite_assignment",
+   "to": "definite_assignment@L0",
+   "type": "has_level",
+   "label": "[0] everyday_reading (E): Everyday intuition, and some older languages, treat a new or empty quantity as zero (\"nothing yet means 0\"). A Java local variable has no value at all until it is assigned, and the compiler rejects any read before that.\n[1] misconception (M) -> LocalVariablesAutoInitialized: wrong rule: local variables get a default value on their own. Right rule: A local variable has no value until it is assigned, and using it before then does not compile.\n[2] inconsistent_trace (T) -> LocalVariablesAutoInitialized: Points to LT (along every control-flow path, an assignment must come before each read). Applied unevenly, a student checks straight-line code but assumes a variable assigned in only one branch of an if, or inside a loop, is assigned afterwards. (here mixing in: \"local variables get a default value on their own\")"
+  },
+  {
+   "from": "definite_assignment",
+   "to": "definite_assignment@L1",
+   "type": "has_level",
+   "label": "[0] names_the_element (N): Definite assignment: the compile-time rule that a local variable must certainly have been assigned before any read of it.\n[1] states_the_rule (S): Every access of a local variable must be preceded by an assignment on every possible path, or the program does not compile. The analysis ignores run-time values, except for constant booleans and the operators && || ?:."
+  },
+  {
+   "from": "definite_assignment",
+   "to": "definite_assignment@L2",
+   "type": "has_level",
+   "label": "[0] line_by_line_trace (LT): The compiler walks the control flow. After a declaration with no initializer the variable is unassigned, and an assignment makes it assigned on that path. Where paths merge (after if/else) it counts as assigned only if every incoming path assigned it, and an assignment inside a while body does not count after the loop.\n[1] output_prediction (OP): The result appears at compile time: the code either compiles or reports 'variable x might not have been initialized'. No default value is ever produced for a local variable.\n[2] one_step_execution (OS): The first assignment (initialization) moves a variable from unassigned to holding a value, and only then may it be read."
+  },
+  {
+   "from": "definite_assignment",
+   "to": "definite_assignment@L3",
+   "type": "has_level",
+   "label": "[0] relation_to_neighbour (R): A declaration without an initializer leaves the local unassigned. Writing = value in the declaration satisfies the rule at once.\n[1] relation_to_neighbour (R): A local variable has no value until it is assigned: using it first is a compile-time error. An array element is given a default value (0, 0.0, false) when the array is created with new, so it can be read before any assignment.\n[2] purpose_of_the_whole (P): The rule guarantees that no program reads a meaningless value. The matching plan is to initialize counters and accumulators before the loop that updates them (int sum = 0; then sum += i inside the loop)."
+  },
+  {
+   "from": "definite_assignment",
+   "to": "definite_assignment@L4",
+   "type": "has_level",
+   "label": "[0] predict_a_change (C) -> LocalVariablesAutoInitialized: Moving an initialization into one branch of an if, or into a loop body, breaks compilation of the reads that follow. Adding an else branch that also assigns, or initializing at the declaration, restores it.\n[1] transfer_to_a_new_program (X): Initialize at the declaration whenever a sensible first value exists (0 for counters and sums). Leave the declaration bare only when every branch that follows assigns it. The rule covers local variables only: array elements and fields get default values.\n[2] diagnose_an_error (D): rule broken: A local variable must be definitely assigned before it is read. Kind: compile-time. Trigger class: A read reachable on a path with no assignment: declared without initializer, or assigned only inside an if without else, a loop body, or a switch case: 'variable might not have been initialized'.\n[3] diagnose_an_error (D): rule broken: A blank final variable must be assigned at most once. Kind: compile-time. Trigger class: Assigning a final local on two paths that can both run, or again inside a loop: 'variable might already have been assigned'."
+  },
+  {
+   "from": "declaration",
+   "to": "LocalVariablesAutoInitialized",
+   "type": "misconception",
+   "label": "wrong: local variables get a default value on their own | right: A local variable has no value until it is assigned, and using it before then does not compile."
+  },
+  {
+   "from": "definite_assignment",
+   "to": "LocalVariablesAutoInitialized",
+   "type": "misconception",
+   "label": "wrong: local variables get a default value on their own | right: A local variable has no value until it is assigned, and using it before then does not compile."
+  },
+  {
+   "from": "variable",
+   "to": "LocalVariablesAutoInitialized",
+   "type": "misconception",
+   "label": "wrong: int x; inside main starts at 0, so x can be used before anything is assigned to it. | right: A local variable has no value until it is assigned, and using it before then does not compile."
+  },
+  {
+   "from": "definite_assignment",
+   "to": "array_default_values",
+   "type": "parallel",
+   "label": "A local variable has no value until it is assigned: using it first is a compile-time error. An array element is given a default value (0, 0.0, false) when the array is created with new, so it can be read before any assignment."
+  },
+  {
+   "from": "declaration",
+   "to": "definite_assignment",
+   "type": "prerequisite",
+   "label": "A declared local variable has no defined value until it is assigned, and the compiler rejects any read before that assignment."
+  }
+ ]
+}

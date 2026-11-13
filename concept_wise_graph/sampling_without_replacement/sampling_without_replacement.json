@@ -1,0 +1,130 @@
+{
+ "concept": "sampling_without_replacement",
+ "label": "sampling_without_replacement",
+ "graph_version": "3.9.8 (3.9.7 + one primary per misconception (S9c) and the four remaining sibling edges (S9b), 2026-11-04; listed in revision_3_9_8)",
+ "nodes": [
+  {
+   "id": "array_creation",
+   "kind": "concept",
+   "label": "array_creation"
+  },
+  {
+   "id": "array_exchange",
+   "kind": "concept",
+   "label": "array_exchange"
+  },
+  {
+   "id": "sampling_without_replacement",
+   "kind": "concept",
+   "label": "sampling_without_replacement"
+  },
+  {
+   "id": "shuffle",
+   "kind": "concept",
+   "label": "shuffle"
+  },
+  {
+   "id": "sampling_without_replacement@L0",
+   "kind": "learning_level",
+   "label": "L0"
+  },
+  {
+   "id": "sampling_without_replacement@L1",
+   "kind": "learning_level",
+   "label": "L1"
+  },
+  {
+   "id": "sampling_without_replacement@L2",
+   "kind": "learning_level",
+   "label": "L2"
+  },
+  {
+   "id": "sampling_without_replacement@L3",
+   "kind": "learning_level",
+   "label": "L3"
+  },
+  {
+   "id": "sampling_without_replacement@L4",
+   "kind": "learning_level",
+   "label": "L4"
+  },
+  {
+   "id": "SampleMayRepeat",
+   "kind": "misconception",
+   "label": "SampleMayRepeat"
+  },
+  {
+   "id": "topic1.4.d",
+   "kind": "topic",
+   "label": "Exchange, shuffling and sampling"
+  }
+ ],
+ "edges": [
+  {
+   "from": "topic1.4.d",
+   "to": "array_exchange",
+   "type": "contains",
+   "label": "The topic 'Exchange, shuffling and sampling' introduces array_exchange."
+  },
+  {
+   "from": "topic1.4.d",
+   "to": "sampling_without_replacement",
+   "type": "contains",
+   "label": "The topic 'Exchange, shuffling and sampling' introduces sampling_without_replacement."
+  },
+  {
+   "from": "topic1.4.d",
+   "to": "shuffle",
+   "type": "contains",
+   "label": "The topic 'Exchange, shuffling and sampling' introduces shuffle."
+  },
+  {
+   "from": "sampling_without_replacement",
+   "to": "sampling_without_replacement@L0",
+   "type": "has_level",
+   "label": "[0] everyday_reading (E): Folk meaning: 'pick M random items' is read as M independent random picks, so repeats seem acceptable. Rule: in sampling without replacement each member of the set appears at most once, like lottery balls not put back.\n[1] misconception (M) -> SampleMayRepeat: wrong rule: A sample drawn without replacement may contain the same item twice. Right rule: Each member of the set appears at most once in the sample.\n[2] inconsistent_trace (T) -> SampleMayRepeat: Points to LT: perm[] is first filled with 0..N-1, then the first M shuffle passes run, then perm[0..M-1] is printed. Inconsistent application: the sample is read before all M exchanges are done, or the identity fill is skipped on a trace. (here mixing in: \"A sample drawn without replacement may contain the same item twice\")"
+  },
+  {
+   "from": "sampling_without_replacement",
+   "to": "sampling_without_replacement@L1",
+   "type": "has_level",
+   "label": "[0] names_the_element (N): Identity: sampling without replacement draws a random sample of M items from N in which no item can be chosen twice.\n[1] states_the_rule (S): Declarative (Program 1.4.1): perm[j] = j for all j; for i < M, r = i + (int) (Math.random() * (N-i)) and exchange perm[i] with perm[r]; perm[0..M-1] is the sample."
+  },
+  {
+   "from": "sampling_without_replacement",
+   "to": "sampling_without_replacement@L2",
+   "type": "has_level",
+   "label": "[0] line_by_line_trace (LT): Sequencing: read M and N, create perm, fill it with the identity, run M exchange passes left to right, then print perm[0] .. perm[M-1].\n[1] output_prediction (OP): Result: M distinct integers from 0..N-1 (e.g. java Sample 6 16 prints 9 5 13 1 11 8). If M == N the result is a random permutation; if M > N the program throws ArrayIndexOutOfBoundsException.\n[2] one_step_execution (OS): State transition: each pass exchanges perm[i] with one element to its right, fixing perm[i] as the next sampled item; perm stays a permutation of 0..N-1."
+  },
+  {
+   "from": "sampling_without_replacement",
+   "to": "sampling_without_replacement@L3",
+   "type": "has_level",
+   "label": "[0] relation_to_neighbour (R): The sample is the first M passes of the shuffle applied to the identity permutation.\n[1] purpose_of_the_whole (P): Plan/role: draw lottery numbers or deal a hand. The permutation can also serve as indices into another array (deck[perm[i]]) to sample it without rearranging it."
+  },
+  {
+   "from": "sampling_without_replacement",
+   "to": "sampling_without_replacement@L4",
+   "type": "has_level",
+   "label": "[0] predict_a_change (C) -> SampleMayRepeat: Conservation: perm remains a permutation of 0..N-1 after every exchange, so no value can appear twice for any M <= N; changing M changes only how many passes run.\n[1] transfer_to_a_new_program (X): Applicability: use it when the sample must contain distinct items (lotteries, card hands, survey samples). When repeats are allowed (sampling with replacement), independent random indices are simpler.\n[2] diagnose_an_error (D): rule broken: The sample size cannot exceed the population size. Kind: run-time exception. Trigger class: M > N on the command line, so perm[i] is indexed at i = N (ArrayIndexOutOfBoundsException)\n[3] diagnose_an_error (D): rule broken: Each pick must come from the items not yet sampled. Kind: silent logic error. Trigger class: independent picks (int) (Math.random() * N) without exchanging, which can repeat an item"
+  },
+  {
+   "from": "sampling_without_replacement",
+   "to": "SampleMayRepeat",
+   "type": "misconception",
+   "label": "wrong: A sample drawn without replacement may contain the same item twice. | right: Each member of the set appears at most once in the sample."
+  },
+  {
+   "from": "array_creation",
+   "to": "sampling_without_replacement",
+   "type": "prerequisite",
+   "label": "Sampling without replacement first creates an array of all candidates (perm), then picks from the part not yet chosen."
+  },
+  {
+   "from": "shuffle",
+   "to": "sampling_without_replacement",
+   "type": "prerequisite",
+   "label": "Sample uses the basic operation underlying shuffling: for each of the first M positions it exchanges perm[i] with a random element to its right."
+  }
+ ]
+}

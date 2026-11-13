@@ -1,0 +1,97 @@
+{
+ "concept": "black_box_model",
+ "label": "Program as a black box",
+ "graph_version": "3.9.8 (3.9.7 + one primary per misconception (S9c) and the four remaining sibling edges (S9b), 2026-11-04; listed in revision_3_9_8)",
+ "nodes": [
+  {
+   "id": "black_box_model",
+   "kind": "concept",
+   "label": "Program as a black box"
+  },
+  {
+   "id": "command_line_args",
+   "kind": "concept",
+   "label": "command_line_args"
+  },
+  {
+   "id": "black_box_model@L0",
+   "kind": "learning_level",
+   "label": "L0"
+  },
+  {
+   "id": "black_box_model@L1",
+   "kind": "learning_level",
+   "label": "L1"
+  },
+  {
+   "id": "black_box_model@L2",
+   "kind": "learning_level",
+   "label": "L2"
+  },
+  {
+   "id": "black_box_model@L3",
+   "kind": "learning_level",
+   "label": "L3"
+  },
+  {
+   "id": "black_box_model@L4",
+   "kind": "learning_level",
+   "label": "L4"
+  },
+  {
+   "id": "topic1.1.d",
+   "kind": "topic",
+   "label": "Input and output (command-line arguments)"
+  }
+ ],
+ "edges": [
+  {
+   "from": "topic1.1.d",
+   "to": "black_box_model",
+   "type": "contains",
+   "label": "Program as a black box is taught under \"Input and output (command-line arguments)\"."
+  },
+  {
+   "from": "topic1.1.d",
+   "to": "command_line_args",
+   "type": "contains",
+   "label": "The topic 'Input and output (command-line arguments)' introduces command_line_args."
+  },
+  {
+   "from": "black_box_model",
+   "to": "black_box_model@L0",
+   "type": "has_level",
+   "label": "[0] everyday_reading (E): Everyday meaning: a 'black box' is something mysterious or a flight recorder. Here it means treating a program purely as a function from its input string (the command-line argument) to its output string, ignoring how it works inside."
+  },
+  {
+   "from": "black_box_model",
+   "to": "black_box_model@L1",
+   "type": "has_level",
+   "label": "[0] names_the_element (N): The black-box model is the view of a Java program as a box that converts an input string (the command-line argument) into an output string (what it prints).\n[1] states_the_rule (S): A program like UseArgument implements a function that maps a string of characters (the argument) into another string of characters (the message printed); the model is general enough, in principle, for any computational task."
+  },
+  {
+   "from": "black_box_model",
+   "to": "black_box_model@L2",
+   "type": "has_level",
+   "label": "[0] line_by_line_trace (LT): Input is supplied at launch, the program computes, output is produced; the model hides the order of internal steps.\n[1] output_prediction (OP): Prediction at this level is input-output: for UseArgument, input Alice gives output Hi, Alice. How are you?\n[2] one_step_execution (OS): One run maps one input string to one output string; nothing persists between runs."
+  },
+  {
+   "from": "black_box_model",
+   "to": "black_box_model@L3",
+   "type": "has_level",
+   "label": "[0] relation_to_neighbour (R): The command-line argument is the box's input string, and what the program prints is its output string; parseInt lets the strings be read as numbers.\n[1] purpose_of_the_whole (P): Purpose: describe what a program does (its specification, input to output) separately from how it does it; the compiler itself fits the model (.java text in, .class out)."
+  },
+  {
+   "from": "black_box_model",
+   "to": "black_box_model@L4",
+   "type": "has_level",
+   "label": "[0] predict_a_change (C): Any change inside the box that keeps every input-output pair the same keeps the program's behaviour; a change that alters any pair is a behaviour change.\n[1] transfer_to_a_new_program (X): Use the black-box view to specify and test programs by input/output pairs; it extends in 1.5 to standard input, standard output, drawing and audio. It does not help to locate an error inside the box; for that, trace the code.\n[2] diagnose_an_error (D): rule broken: The output depends only on the input given. Kind: run-time exception. Trigger class: running the box with missing input (no argument): the box fails with ArrayIndexOutOfBoundsException rather than mapping input to output\n[3] diagnose_an_error (D): rule broken: Input and output in 1.1 are limited to strings of limited size. Kind: silent logic error. Trigger class: expecting numeric or long input to be used directly without parsing or standard input"
+  },
+  {
+   "from": "command_line_args",
+   "to": "black_box_model",
+   "type": "prerequisite",
+   "label": "The black-box view treats the command-line argument as the input string and what the program prints as the output string."
+  }
+ ]
+}

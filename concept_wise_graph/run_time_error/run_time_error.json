@@ -1,0 +1,363 @@
+{
+ "concept": "run_time_error",
+ "label": "run_time_error",
+ "graph_version": "3.9.8 (3.9.7 + one primary per misconception (S9c) and the four remaining sibling edges (S9b), 2026-11-04; listed in revision_3_9_8)",
+ "nodes": [
+  {
+   "id": "args_length",
+   "kind": "concept",
+   "label": "args_length"
+  },
+  {
+   "id": "array_bounds",
+   "kind": "concept",
+   "label": "array_bounds"
+  },
+  {
+   "id": "array_creation",
+   "kind": "concept",
+   "label": "array_creation"
+  },
+  {
+   "id": "command_line_args",
+   "kind": "concept",
+   "label": "command_line_args"
+  },
+  {
+   "id": "compile",
+   "kind": "concept",
+   "label": "compile"
+  },
+  {
+   "id": "compile_time_error",
+   "kind": "concept",
+   "label": "compile_time_error"
+  },
+  {
+   "id": "division_by_zero",
+   "kind": "concept",
+   "label": "division_by_zero"
+  },
+  {
+   "id": "input_format",
+   "kind": "concept",
+   "label": "input_format"
+  },
+  {
+   "id": "input_validation",
+   "kind": "concept",
+   "label": "input_validation"
+  },
+  {
+   "id": "logical_error",
+   "kind": "concept",
+   "label": "logical_error"
+  },
+  {
+   "id": "main_method",
+   "kind": "concept",
+   "label": "main_method"
+  },
+  {
+   "id": "parsing",
+   "kind": "concept",
+   "label": "parsing"
+  },
+  {
+   "id": "reading_error_messages",
+   "kind": "concept",
+   "label": "reading_error_messages"
+  },
+  {
+   "id": "run",
+   "kind": "concept",
+   "label": "run"
+  },
+  {
+   "id": "run_time_error",
+   "kind": "concept",
+   "label": "run_time_error"
+  },
+  {
+   "id": "standard_input",
+   "kind": "concept",
+   "label": "standard_input"
+  },
+  {
+   "id": "testing",
+   "kind": "concept",
+   "label": "testing"
+  },
+  {
+   "id": "ArgsAlwaysPresent",
+   "kind": "error",
+   "label": "ArgsAlwaysPresent"
+  },
+  {
+   "id": "InputTypeMismatch",
+   "kind": "error",
+   "label": "InputTypeMismatch"
+  },
+  {
+   "id": "MainWithoutStringArgs",
+   "kind": "error",
+   "label": "MainWithoutStringArgs"
+  },
+  {
+   "id": "NegativeArraySize",
+   "kind": "error",
+   "label": "NegativeArraySize"
+  },
+  {
+   "id": "run_time_error@L0",
+   "kind": "learning_level",
+   "label": "L0"
+  },
+  {
+   "id": "run_time_error@L1",
+   "kind": "learning_level",
+   "label": "L1"
+  },
+  {
+   "id": "run_time_error@L2",
+   "kind": "learning_level",
+   "label": "L2"
+  },
+  {
+   "id": "run_time_error@L3",
+   "kind": "learning_level",
+   "label": "L3"
+  },
+  {
+   "id": "run_time_error@L4",
+   "kind": "learning_level",
+   "label": "L4"
+  },
+  {
+   "id": "CompilesMeansWorks",
+   "kind": "misconception",
+   "label": "CompilesMeansWorks"
+  },
+  {
+   "id": "DivisionByZeroIsCompileError",
+   "kind": "misconception",
+   "label": "DivisionByZeroIsCompileError"
+  },
+  {
+   "id": "ParseAnyString",
+   "kind": "misconception",
+   "label": "ParseAnyString"
+  },
+  {
+   "id": "topic1.1.c",
+   "kind": "topic",
+   "label": "Errors"
+  }
+ ],
+ "edges": [
+  {
+   "from": "topic1.1.c",
+   "to": "compile_time_error",
+   "type": "contains",
+   "label": "The topic 'Errors' introduces compile_time_error."
+  },
+  {
+   "from": "topic1.1.c",
+   "to": "logical_error",
+   "type": "contains",
+   "label": "The topic 'Errors' introduces logical_error."
+  },
+  {
+   "from": "topic1.1.c",
+   "to": "reading_error_messages",
+   "type": "contains",
+   "label": "The topic 'Errors' introduces reading_error_messages."
+  },
+  {
+   "from": "topic1.1.c",
+   "to": "run_time_error",
+   "type": "contains",
+   "label": "The topic 'Errors' introduces run_time_error."
+  },
+  {
+   "from": "args_length",
+   "to": "ArgsAlwaysPresent",
+   "type": "error",
+   "label": "wrong: args[0] can always be read. | right: If you run the program without typing the command-line argument it expects, reading args[0] fails with java.lang.ArrayIndexOutOfBoundsException: 0."
+  },
+  {
+   "from": "array_creation",
+   "to": "NegativeArraySize",
+   "type": "error",
+   "label": "wrong: new int[n] with a negative n creates an empty array. | right: Creating an array with a negative length throws NegativeArraySizeException at run time."
+  },
+  {
+   "from": "command_line_args",
+   "to": "ArgsAlwaysPresent",
+   "type": "error",
+   "label": "wrong: args[0] can always be read. | right: If you run the program without typing the command-line argument it expects, reading args[0] fails with java.lang.ArrayIndexOutOfBoundsException: 0."
+  },
+  {
+   "from": "input_format",
+   "to": "InputTypeMismatch",
+   "type": "error",
+   "label": "wrong: StdIn.readInt() accepts any typed text such as abc or 12.2. | right: If the next token is not an int (e.g. abc, 12.2, true), StdIn.readInt() throws a NumberFormatException at run time (Scanner.nextInt throws InputMismatchException)."
+  },
+  {
+   "from": "input_validation",
+   "to": "InputTypeMismatch",
+   "type": "error",
+   "label": "wrong: StdIn.readInt() accepts any typed text such as abc or 12.2. | right: If the next token is not an int (e.g. abc, 12.2, true), StdIn.readInt() throws a NumberFormatException at run time (Scanner.nextInt throws InputMismatchException)."
+  },
+  {
+   "from": "main_method",
+   "to": "MainWithoutStringArgs",
+   "type": "error",
+   "label": "wrong: public static void main() is an acceptable entry point. | right: main is written public static void main(String[] args); these keywords and the args parameter are required."
+  },
+  {
+   "from": "run_time_error",
+   "to": "ArgsAlwaysPresent",
+   "type": "error",
+   "label": "wrong: args[0] can always be read. | right: If you run the program without typing the command-line argument it expects, reading args[0] fails with java.lang.ArrayIndexOutOfBoundsException: 0."
+  },
+  {
+   "from": "run_time_error",
+   "to": "InputTypeMismatch",
+   "type": "error",
+   "label": "wrong: StdIn.readInt() accepts any typed text such as abc or 12.2. | right: If the next token is not an int (e.g. abc, 12.2, true), StdIn.readInt() throws a NumberFormatException at run time (Scanner.nextInt throws InputMismatchException)."
+  },
+  {
+   "from": "run_time_error",
+   "to": "MainWithoutStringArgs",
+   "type": "error",
+   "label": "wrong: public static void main() is an acceptable entry point. | right: main is written public static void main(String[] args); these keywords and the args parameter are required."
+  },
+  {
+   "from": "run_time_error",
+   "to": "NegativeArraySize",
+   "type": "error",
+   "label": "wrong: new int[n] with a negative n creates an empty array. | right: Creating an array with a negative length throws NegativeArraySizeException at run time."
+  },
+  {
+   "from": "standard_input",
+   "to": "InputTypeMismatch",
+   "type": "error",
+   "label": "wrong: StdIn.readInt() accepts any typed text such as abc or 12.2. | right: If the next token is not an int (e.g. abc, 12.2, true), StdIn.readInt() throws a NumberFormatException at run time (Scanner.nextInt throws InputMismatchException)."
+  },
+  {
+   "from": "run_time_error",
+   "to": "run_time_error@L0",
+   "type": "has_level",
+   "label": "[0] everyday_reading (E): Everyday reading: if the program compiled, the computer has accepted it, so any problem would have been reported then. Java rule: run-time errors are detected only while the program executes, on particular data (e.g. no argument, a divisor of 0), and stop it with an exception.\n[1] misconception (M) -> CompilesMeansWorks: wrong rule: Code that compiles is code that works. Right rule: Code that compiles can still fail at run time (an exception) or give wrong output.\n[2] misconception (M) -> DivisionByZeroIsCompileError: wrong rule: System.out.println(5 / 0); is rejected by the compiler. Right rule: It compiles; integer division by zero throws ArithmeticException when the statement runs.\n[3] inconsistent_trace (T) -> CompilesMeansWorks: Applies the exception rule (LT: execution stops at the faulty statement) unevenly: lets the program keep printing after the failing statement on one trace, or reports the error before any earlier output on another. (here mixing in: \"Code that compiles is code that works\")\n[4] misconception (M) -> ParseAnyString: wrong rule: Integer.parseInt works on any text, e.g. \"five\" or \"12.2\". Right rule: Integer.parseInt throws a NumberFormatException at run time when the string is not an integer written in digits."
+  },
+  {
+   "from": "run_time_error",
+   "to": "run_time_error@L1",
+   "type": "has_level",
+   "label": "[0] names_the_element (N): A run-time error (exception) is an error that does not show up until the program is executed and makes it impossible to run to completion.\n[1] states_the_rule (S): When a run-time error occurs, the program 'crashes' (terminates) and the JVM prints the exception name, a message, and the method, file and line where it happened."
+  },
+  {
+   "from": "run_time_error",
+   "to": "run_time_error@L2",
+   "type": "has_level",
+   "label": "[0] line_by_line_trace (LT): Statements before the faulty one run normally (their output appears); the faulty statement throws; no later statement runs.\n[1] output_prediction (OP): Output: any earlier output, then Exception in thread \"main\" java.lang.<Name>: <detail> at Class.main(Class.java:<line>).\n[2] one_step_execution (OS): The throwing step changes no variable it was meant to set (the operation does not complete) and transfers control out of main, ending the program."
+  },
+  {
+   "from": "run_time_error",
+   "to": "run_time_error@L3",
+   "type": "has_level",
+   "label": "[0] relation_to_neighbour (R): A run-time error appears only while java Name executes, after compiling has succeeded.\n[1] relation_to_neighbour (R): javac cannot detect it because it depends on run-time values (the argument typed, the divisor's value).\n[2] relation_to_neighbour (R): A run-time error stops the program with an exception message; a logic error lets it finish with wrong output and no message.\n[3] purpose_of_the_whole (P): Purpose (of exceptions): stop the program at the point where something impossible was asked, instead of continuing with an undefined value, and report what and where."
+  },
+  {
+   "from": "run_time_error",
+   "to": "run_time_error@L4",
+   "type": "has_level",
+   "label": "[0] predict_a_change (C) -> CompilesMeansWorks: The same compiled program may run fine on one input and throw on another (UseArgument with and without an argument); adding a guard such as checking args.length removes the trigger without changing correct runs.\n[1] diagnose_an_error (D): rule broken: main is written public static void main(String[] args). Kind: launch error. Trigger class: header public static void main(): compiles, but java Name cannot find the main method\n[2] diagnose_an_error (D): rule broken: Array length must be >= 0. Kind: run-time exception. Trigger class: new int[n] with n < 0: NegativeArraySizeException\n[3] diagnose_an_error (D): rule broken: args[k] exists only if at least k+1 arguments were typed. Kind: run-time exception. Trigger class: running without the expected argument: java.lang.ArrayIndexOutOfBoundsException: 0\n[4] transfer_to_a_new_program (X): Expect a run-time error when correctness depends on data (array indices, divisors, parsed input, presence of arguments); validate such data before use. Errors that depend only on the text are compile-time; wrong-but-legal results are logic errors.\n[5] diagnose_an_error (D): rule broken: StdIn.readInt() needs the next token to be an int. Kind: run-time exception. Trigger class: next token abc, 12.2 or true (StdIn: InputMismatchException/NumberFormatException depending on version; Scanner.nextInt: InputMismatchException)\n[6] diagnose_an_error (D): rule broken: Integer division and remainder by zero are undefined. Kind: run-time exception. Trigger class: a / b or a % b with int b == 0: ArithmeticException: / by zero\n[7] diagnose_an_error (D): rule broken: Integer.parseInt needs an integer written in digits. Kind: run-time exception. Trigger class: parsing \"five\" or \"12.2\": NumberFormatException"
+  },
+  {
+   "from": "compile",
+   "to": "CompilesMeansWorks",
+   "type": "misconception",
+   "label": "wrong: Code that compiles is code that works. | right: Code that compiles can still have run-time and logical errors."
+  },
+  {
+   "from": "compile_time_error",
+   "to": "CompilesMeansWorks",
+   "type": "misconception",
+   "label": "wrong: Code that compiles is code that works. | right: Code that compiles can still have run-time and logical errors."
+  },
+  {
+   "from": "division_by_zero",
+   "to": "DivisionByZeroIsCompileError",
+   "type": "misconception",
+   "label": "wrong: System.out.println(5 / 0); is rejected by the compiler. | right: It compiles; the ArithmeticException happens when the program runs."
+  },
+  {
+   "from": "logical_error",
+   "to": "CompilesMeansWorks",
+   "type": "misconception",
+   "label": "wrong: Code that compiles is code that works. | right: Code that compiles can still have run-time and logical errors."
+  },
+  {
+   "from": "parsing",
+   "to": "ParseAnyString",
+   "type": "misconception",
+   "label": "wrong: Integer.parseInt works on any text, e.g. \"five\" or \"12.2\". | right: Integer.parseInt throws a NumberFormatException at run time when the string is not an integer written in digits."
+  },
+  {
+   "from": "run_time_error",
+   "to": "CompilesMeansWorks",
+   "type": "misconception",
+   "label": "wrong: Code that compiles is code that works. | right: Code that compiles can still have run-time and logical errors."
+  },
+  {
+   "from": "run_time_error",
+   "to": "DivisionByZeroIsCompileError",
+   "type": "misconception",
+   "label": "wrong: System.out.println(5 / 0); is rejected by the compiler. | right: It compiles; the ArithmeticException happens when the program runs."
+  },
+  {
+   "from": "run_time_error",
+   "to": "ParseAnyString",
+   "type": "misconception",
+   "label": "wrong: Integer.parseInt works on any text, e.g. \"five\" or \"12.2\". | right: Integer.parseInt throws a NumberFormatException at run time when the string is not an integer written in digits."
+  },
+  {
+   "from": "testing",
+   "to": "CompilesMeansWorks",
+   "type": "misconception",
+   "label": "wrong: Code that compiles is code that works. | right: Code that compiles can still have run-time and logical errors."
+  },
+  {
+   "from": "compile_time_error",
+   "to": "run_time_error",
+   "type": "parallel",
+   "label": "A compile-time error is found by javac before the program runs; a run-time error is found while it runs."
+  },
+  {
+   "from": "run_time_error",
+   "to": "logical_error",
+   "type": "parallel",
+   "label": "A run-time error stops the program with an exception; a logical error lets it finish with wrong output."
+  },
+  {
+   "from": "array_bounds",
+   "to": "run_time_error",
+   "type": "prerequisite",
+   "label": "An index outside 0 .. length-1 is not caught by the compiler; the access is checked when the program runs and stops it with ArrayIndexOutOfBoundsException."
+  },
+  {
+   "from": "division_by_zero",
+   "to": "run_time_error",
+   "type": "prerequisite",
+   "label": "Dividing an int by zero compiles but throws ArithmeticException when the program runs: a run-time error."
+  },
+  {
+   "from": "run",
+   "to": "run_time_error",
+   "type": "prerequisite",
+   "label": "A run-time error appears only while java Name executes, after compiling has succeeded."
+  }
+ ]
+}

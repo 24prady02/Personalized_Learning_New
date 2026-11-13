@@ -1,0 +1,202 @@
+{
+ "concept": "standard_output",
+ "label": "standard_output",
+ "graph_version": "3.9.8 (3.9.7 + one primary per misconception (S9c) and the four remaining sibling edges (S9b), 2026-11-04; listed in revision_3_9_8)",
+ "nodes": [
+  {
+   "id": "formatted_output",
+   "kind": "concept",
+   "label": "formatted_output"
+  },
+  {
+   "id": "print",
+   "kind": "concept",
+   "label": "print"
+  },
+  {
+   "id": "println",
+   "kind": "concept",
+   "label": "println"
+  },
+  {
+   "id": "redirection",
+   "kind": "concept",
+   "label": "redirection"
+  },
+  {
+   "id": "standard_drawing",
+   "kind": "concept",
+   "label": "standard_drawing"
+  },
+  {
+   "id": "standard_input",
+   "kind": "concept",
+   "label": "standard_input"
+  },
+  {
+   "id": "standard_output",
+   "kind": "concept",
+   "label": "standard_output"
+  },
+  {
+   "id": "stream_model",
+   "kind": "concept",
+   "label": "stream_model"
+  },
+  {
+   "id": "standard_output@L0",
+   "kind": "learning_level",
+   "label": "L0"
+  },
+  {
+   "id": "standard_output@L1",
+   "kind": "learning_level",
+   "label": "L1"
+  },
+  {
+   "id": "standard_output@L2",
+   "kind": "learning_level",
+   "label": "L2"
+  },
+  {
+   "id": "standard_output@L3",
+   "kind": "learning_level",
+   "label": "L3"
+  },
+  {
+   "id": "standard_output@L4",
+   "kind": "learning_level",
+   "label": "L4"
+  },
+  {
+   "id": "PrintEqualsPrintln",
+   "kind": "misconception",
+   "label": "PrintEqualsPrintln"
+  },
+  {
+   "id": "PrintfAddsNewline",
+   "kind": "misconception",
+   "label": "PrintfAddsNewline"
+  },
+  {
+   "id": "RepeatedOutputVariablePrintedOnce",
+   "kind": "misconception",
+   "label": "RepeatedOutputVariablePrintedOnce"
+  },
+  {
+   "id": "topic1.5.b",
+   "kind": "topic",
+   "label": "Standard output and formatted printing"
+  }
+ ],
+ "edges": [
+  {
+   "from": "topic1.5.b",
+   "to": "formatted_output",
+   "type": "contains",
+   "label": "The topic 'Standard output and formatted printing' introduces formatted_output."
+  },
+  {
+   "from": "topic1.5.b",
+   "to": "standard_output",
+   "type": "contains",
+   "label": "The topic 'Standard output and formatted printing' introduces standard_output."
+  },
+  {
+   "from": "standard_output",
+   "to": "standard_output@L0",
+   "type": "has_level",
+   "label": "[0] everyday_reading (E): Novices take output text literally, as if it acted on the program: printing \"The value of X is 1\" is read as setting X to 1. They also take 'print' to mean producing a finished line. In Java, print only appends characters to the output stream; it changes no variables and ends the line only for println.\n[1] misconception (M) -> PrintEqualsPrintln: wrong rule: print and println behave the same (no newline difference). Right rule: println(s) prints s and then ends the line, but print(s) does not, so print(\"a\"); print(\"b\"); gives ab on one line.\n[2] inconsistent_trace (T) -> PrintEqualsPrintln: Points to LT (output appears in the order the output calls execute, with a line break only after println). An uneven trace drops a repeated value, puts output lines out of order, or adds line breaks after print on some calls. (here mixing in: \"print and println behave the same (no newline difference)\")\n[3] misconception (M) -> PrintfAddsNewline: wrong rule: printf() ends the line like println(). Right rule: printf() adds no newline. Put \\n (or %n) in the format string to end the line.\n[4] misconception (M) -> RepeatedOutputVariablePrintedOnce: wrong rule: An output statement that names the same variable twice (WRITE y, x, y) prints it only once. Right rule: Every expression in the output is printed, so System.out.println(y + \" \" + x + \" \" + y) with x=6, y=9 prints 9 6 9."
+  },
+  {
+   "from": "standard_output",
+   "to": "standard_output@L1",
+   "type": "has_level",
+   "label": "[0] names_the_element (N): Standard output (System.out, StdOut) is the library abstraction for a program's text output: an output stream of characters written by print, println and printf.\n[1] states_the_rule (S): print(s) writes s. println(s) writes s and then the line separator. println() only ends the line. A null String prints as \"null\". By default the stream goes to the terminal window."
+  },
+  {
+   "from": "standard_output",
+   "to": "standard_output@L2",
+   "type": "has_level",
+   "label": "[0] line_by_line_trace (LT): First the argument expression is evaluated, e.g. the concatenation \"Sum is \" + sum. Then its string form is appended, and println appends the line separator after it. Successive calls appear in execution order.\n[1] output_prediction (OP): The output is the argument's string form. System.out.println(Math.PI) prints 3.141592653589793 (all digits), and println(\"Sum is \" + 1778) prints Sum is 1778 followed by a newline. The methods return void.\n[2] one_step_execution (OS): One call appends text to the output (println also appends the line separator). It changes no variables and returns nothing."
+  },
+  {
+   "from": "standard_output",
+   "to": "standard_output@L3",
+   "type": "has_level",
+   "label": "[0] relation_to_neighbour (R): Each output call appends to the end of the single output stream, so the order of output is the order of execution.\n[1] relation_to_neighbour (R): With `> file`, every print/println/printf writes to the file and nothing appears in the terminal. The program code is unchanged.\n[2] relation_to_neighbour (R): A prompt printed with print (not println) shows on the same line where the user then types, before the following StdIn read blocks. Output and input are separate streams.\n[3] relation_to_neighbour (R): StdOut text and StdDraw pictures are independent outputs: printing does not draw, and drawing does not print.\n[4] relation_to_neighbour (R): printf writes to the same stream as print and println, so mixed calls appear in call order. Unlike println, printf ends a line only when the format contains \\n.\n[5] purpose_of_the_whole (P): Standard output reports results (to a person, or to a file or program further down the line). Plan: an 'output' step after a computation, or one println per item inside a loop to list values."
+  },
+  {
+   "from": "standard_output",
+   "to": "standard_output@L4",
+   "type": "has_level",
+   "label": "[0] predict_a_change (C) -> PrintEqualsPrintln: Switching System.out.print/println to StdOut.print/println keeps the output. Changing println to print keeps every character but removes the line break, so lines join.\n[1] transfer_to_a_new_program (X): Use standard output for text results meant for a reader or for the next program in a pipeline. Use printf when digits or column widths matter, and StdDraw/StdAudio for pictures and sound.\n[2] diagnose_an_error (D): rule broken: Output order and line breaks follow the order of the calls and the print/println choice. Kind: silent logic error. Trigger class: Output statements in the wrong order, or a missing println, so text fragments run together (e.g. the next prompt ends up on the same line).\n[3] diagnose_an_error (D): rule broken: PrintStream methods never throw IOException; a write failure only sets an internal flag. Kind: silent logic error. Trigger class: Output to a closed or failing destination: nothing is reported unless checkError() is called.\n[4] diagnose_an_error (D): rule broken: println/print take a single argument; pieces must be joined with +. Kind: compile-time. Trigger class: Calls like System.out.println(\"x =\", x) with a comma-separated argument list: 'no suitable method found'."
+  },
+  {
+   "from": "formatted_output",
+   "to": "PrintfAddsNewline",
+   "type": "misconception",
+   "label": "wrong: printf() ends the line like println(). | right: printf() does not add a newline; put \\n in the format string to end the line."
+  },
+  {
+   "from": "print",
+   "to": "RepeatedOutputVariablePrintedOnce",
+   "type": "misconception",
+   "label": "wrong: An output statement that names the same variable twice (WRITE y, x, y) prints it only once. | right: Each expression in the output list is printed, so a repeated variable prints its value each time."
+  },
+  {
+   "from": "println",
+   "to": "PrintEqualsPrintln",
+   "type": "misconception",
+   "label": "wrong: print and println do the same thing, so print(s1); print(s2); puts s1 and s2 on separate lines. | right: println ends the line after printing and print does not, so print(s1); print(s2); puts s1 and s2 on the same line."
+  },
+  {
+   "from": "standard_output",
+   "to": "PrintEqualsPrintln",
+   "type": "misconception",
+   "label": "wrong: print and println behave the same (no newline difference) | right: println ends the line after printing and print does not, so print(s1); print(s2); puts s1 and s2 on the same line."
+  },
+  {
+   "from": "standard_output",
+   "to": "PrintfAddsNewline",
+   "type": "misconception",
+   "label": "wrong: printf() ends the line like println(). | right: printf() does not add a newline; put \\n in the format string to end the line."
+  },
+  {
+   "from": "standard_output",
+   "to": "RepeatedOutputVariablePrintedOnce",
+   "type": "misconception",
+   "label": "wrong: An output statement that names the same variable twice (WRITE y, x, y) prints it only once. | right: Each expression in the output list is printed, so a repeated variable prints its value each time."
+  },
+  {
+   "from": "standard_input",
+   "to": "standard_output",
+   "type": "parallel",
+   "label": "StdIn takes values in from the input stream; StdOut sends values out to the output stream."
+  },
+  {
+   "from": "standard_output",
+   "to": "standard_drawing",
+   "type": "parallel",
+   "label": "StdOut writes text to the output stream; StdDraw draws shapes at (x, y) coordinates in a window."
+  },
+  {
+   "from": "standard_output",
+   "to": "formatted_output",
+   "type": "prerequisite",
+   "label": "printf writes to standard output, like print, but formats each value first."
+  },
+  {
+   "from": "standard_output",
+   "to": "redirection",
+   "type": "prerequisite",
+   "label": "> file sends everything written to standard output into the file instead of the screen."
+  },
+  {
+   "from": "stream_model",
+   "to": "standard_output",
+   "type": "prerequisite",
+   "label": "StdOut writes a stream: each print appends its text to the end of the output."
+  }
+ ]
+}

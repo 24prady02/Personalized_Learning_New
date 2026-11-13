@@ -1,0 +1,190 @@
+{
+ "concept": "standard_audio",
+ "label": "standard_audio",
+ "graph_version": "3.9.8 (3.9.7 + one primary per misconception (S9c) and the four remaining sibling edges (S9b), 2026-11-04; listed in revision_3_9_8)",
+ "nodes": [
+  {
+   "id": "api",
+   "kind": "concept",
+   "label": "Application programming interface (API)"
+  },
+  {
+   "id": "function_plotting",
+   "kind": "concept",
+   "label": "function_plotting"
+  },
+  {
+   "id": "math_library",
+   "kind": "concept",
+   "label": "math_library"
+  },
+  {
+   "id": "run",
+   "kind": "concept",
+   "label": "run"
+  },
+  {
+   "id": "standard_audio",
+   "kind": "concept",
+   "label": "standard_audio"
+  },
+  {
+   "id": "standard_drawing",
+   "kind": "concept",
+   "label": "standard_drawing"
+  },
+  {
+   "id": "standard_input",
+   "kind": "concept",
+   "label": "standard_input"
+  },
+  {
+   "id": "AudioProgramHangs",
+   "kind": "error",
+   "label": "AudioProgramHangs"
+  },
+  {
+   "id": "StdLibraryNotInDirectory",
+   "kind": "error",
+   "label": "StdLibraryNotInDirectory"
+  },
+  {
+   "id": "standard_audio@L0",
+   "kind": "learning_level",
+   "label": "L0"
+  },
+  {
+   "id": "standard_audio@L1",
+   "kind": "learning_level",
+   "label": "L1"
+  },
+  {
+   "id": "standard_audio@L2",
+   "kind": "learning_level",
+   "label": "L2"
+  },
+  {
+   "id": "standard_audio@L3",
+   "kind": "learning_level",
+   "label": "L3"
+  },
+  {
+   "id": "standard_audio@L4",
+   "kind": "learning_level",
+   "label": "L4"
+  },
+  {
+   "id": "AmplitudeIsPitch",
+   "kind": "misconception",
+   "label": "AmplitudeIsPitch"
+  },
+  {
+   "id": "AnyFrequencyPlayable",
+   "kind": "misconception",
+   "label": "AnyFrequencyPlayable"
+  },
+  {
+   "id": "topic1.5.f",
+   "kind": "topic",
+   "label": "Standard audio"
+  }
+ ],
+ "edges": [
+  {
+   "from": "topic1.5.f",
+   "to": "standard_audio",
+   "type": "contains",
+   "label": "The topic 'Standard audio' introduces standard_audio."
+  },
+  {
+   "from": "run",
+   "to": "AudioProgramHangs",
+   "type": "error",
+   "label": "wrong: Ends a StdAudio program with no System.exit(0), so the terminal hangs and needs <ctrl-c>. | right: In the book's setup, a program that uses StdAudio should end main() with System.exit(0)."
+  },
+  {
+   "from": "standard_audio",
+   "to": "AudioProgramHangs",
+   "type": "error",
+   "label": "wrong: Ends a StdAudio program with no System.exit(0), so the terminal hangs and needs <ctrl-c>. | right: In the book's setup, a program that uses StdAudio should end main() with System.exit(0)."
+  },
+  {
+   "from": "standard_audio",
+   "to": "StdLibraryNotInDirectory",
+   "type": "error",
+   "label": "wrong: Uses StdIn (or StdDraw/StdAudio) without StdIn.java in the working directory. | right: The Std* libraries are not built into Java; StdIn.java etc. must be in the same directory (or on the classpath), otherwise Java reports NoClassDefFoundError."
+  },
+  {
+   "from": "standard_drawing",
+   "to": "StdLibraryNotInDirectory",
+   "type": "error",
+   "label": "wrong: Uses StdIn (or StdDraw/StdAudio) without StdIn.java in the working directory. | right: The Std* libraries are not built into Java; StdIn.java etc. must be in the same directory (or on the classpath), otherwise Java reports NoClassDefFoundError."
+  },
+  {
+   "from": "standard_input",
+   "to": "StdLibraryNotInDirectory",
+   "type": "error",
+   "label": "wrong: Uses StdIn (or StdDraw/StdAudio) without StdIn.java in the working directory. | right: The Std* libraries are not built into Java; StdIn.java etc. must be in the same directory (or on the classpath), otherwise Java reports NoClassDefFoundError."
+  },
+  {
+   "from": "standard_audio",
+   "to": "standard_audio@L0",
+   "type": "has_level",
+   "label": "[0] everyday_reading (E): Everyday intuition links 'bigger numbers' with a 'higher note'. In digital sound the sample amplitude (y-value) sets the volume, and the frequency of oscillation sets the pitch (doubling it raises the note an octave).\n[1] misconception (M) -> AmplitudeIsPitch: wrong rule: Making the sample values larger raises the pitch of the note. Right rule: The amplitude (y-value) corresponds to the volume, and the frequency sets the pitch.\n[2] misconception (M) -> AnyFrequencyPlayable: wrong rule: A sine wave of any frequency, e.g. 30,000 Hz, plays correctly with StdAudio. Right rule: At 44,100 samples per second the highest reproducible frequency is the Nyquist frequency, 22,050 Hz.\n[3] inconsistent_trace (T) -> AmplitudeIsPitch: Points to LT (compute N, allocate N+1 samples, fill a[i] = sin(2*pi*i*hz/sps), then play). An uneven trace uses i/sps on some samples and i*hz/sps on others, or plays before filling. (here mixing in: \"Making the sample values larger raises the pitch of the note\")"
+  },
+  {
+   "from": "standard_audio",
+   "to": "standard_audio@L1",
+   "type": "has_level",
+   "label": "[0] names_the_element (N): StdAudio is a booksite library for playing, saving and reading sound, which it represents as an array of samples.\n[1] states_the_rule (S): Sound is an array of doubles between -1 and +1, sampled 44,100 times per second. StdAudio.play(double[] a) plays the sound that the array represents."
+  },
+  {
+   "from": "standard_audio",
+   "to": "standard_audio@L2",
+   "type": "has_level",
+   "label": "[0] line_by_line_trace (LT): N = (int) (sps * duration), a = new double[N+1], then for i = 0..N a[i] = Math.sin(2*Math.PI*i*hz/sps), then StdAudio.play(a). The samples sound in index order, 44,100 per second.\n[1] output_prediction (OP): Ten seconds of concert A (440 Hz) needs 441,001 sample values, and each one is in [-1, 1]. play is void: its result is sound.\n[2] one_step_execution (OS): play(a) plays a.length/44,100 seconds of sound and leaves a unchanged. play(double x) plays one sample for 1/44,100 second. save writes a .wav file and read returns an array."
+  },
+  {
+   "from": "standard_audio",
+   "to": "standard_audio@L3",
+   "type": "has_level",
+   "label": "[0] relation_to_neighbour (R): Each sample is computed with Math.sin at evenly spaced times t = i/sps. The note's frequency comes from Math.pow(2, pitch/12.0).\n[1] relation_to_neighbour (R): Sampling for sound is the same as sampling for a plot. The same array can be sent to StdDraw and to StdAudio.\n[2] purpose_of_the_whole (P): Plan: sample-and-play synthesis. In PlayThatTune it is driven by data: a loop reads (pitch, duration) pairs and plays each note."
+  },
+  {
+   "from": "standard_audio",
+   "to": "standard_audio@L4",
+   "type": "has_level",
+   "label": "[0] predict_a_change (C) -> AmplitudeIsPitch: Doubling hz moves the note up an octave and keeps the duration. Multiplying all samples by a factor below 1 changes only the volume. Writing pitch / 12 (integer division) instead of pitch / 12.0 breaks the pitch.\n[1] diagnose_an_error (D): rule broken: In the book's setup a StdAudio program should end main() with System.exit(0). Kind: silent logic error. Trigger class: A StdAudio program without System.exit(0): after the sound ends, the terminal does not return to a prompt and needs <ctrl-c>.\n[2] transfer_to_a_new_program (X): Use StdAudio to synthesize or sonify sampled data (tones, tunes, signal processing). Long recordings are stored in binary .wav files, not as text streams.\n[3] diagnose_an_error (D): rule broken: StdAudio.java must be in the working directory or on the classpath. Kind: run-time exception. Trigger class: StdAudio.class is absent at run time: NoClassDefFoundError (javac reports 'cannot find symbol' at compile time).\n[4] diagnose_an_error (D): rule broken: Frequencies must stay below the Nyquist frequency, 22,050 Hz. Kind: silent logic error. Trigger class: Sonifying a 30,000 Hz sine wave gives weird (aliased) sound."
+  },
+  {
+   "from": "standard_audio",
+   "to": "AmplitudeIsPitch",
+   "type": "misconception",
+   "label": "wrong: Making the sample values larger raises the pitch of the note. | right: The amplitude (y-value) corresponds to the volume; the frequency sets the pitch."
+  },
+  {
+   "from": "standard_audio",
+   "to": "AnyFrequencyPlayable",
+   "type": "misconception",
+   "label": "wrong: A sine wave of any frequency, e.g. 30,000 Hz, plays correctly with StdAudio. | right: With 44,100 samples per second the highest frequency that can be reproduced is the Nyquist frequency, 22,050 Hz."
+  },
+  {
+   "from": "api",
+   "to": "standard_audio",
+   "type": "prerequisite",
+   "label": "StdAudio is a library used through its API of static methods."
+  },
+  {
+   "from": "function_plotting",
+   "to": "standard_audio",
+   "type": "prerequisite",
+   "label": "A sound wave is sampled at regular intervals exactly as a function is sampled for plotting, giving the array of samples that StdAudio plays."
+  },
+  {
+   "from": "math_library",
+   "to": "standard_audio",
+   "type": "prerequisite",
+   "label": "To play a tone, each sample a[i] of the sound array is computed with Math.sin at evenly spaced times."
+  }
+ ]
+}

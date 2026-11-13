@@ -1,0 +1,296 @@
+{
+ "concept": "simulation_loop",
+ "label": "simulation_loop",
+ "graph_version": "3.9.8 (3.9.7 + one primary per misconception (S9c) and the four remaining sibling edges (S9b), 2026-11-04; listed in revision_3_9_8)",
+ "nodes": [
+  {
+   "id": "accumulator_pattern",
+   "kind": "concept",
+   "label": "accumulator_pattern"
+  },
+  {
+   "id": "array_bounds",
+   "kind": "concept",
+   "label": "array_bounds"
+  },
+  {
+   "id": "array_reversal",
+   "kind": "concept",
+   "label": "array_reversal"
+  },
+  {
+   "id": "array_traversal",
+   "kind": "concept",
+   "label": "array_traversal"
+  },
+  {
+   "id": "boolean_flag_array",
+   "kind": "concept",
+   "label": "boolean_flag_array"
+  },
+  {
+   "id": "for_loop",
+   "kind": "concept",
+   "label": "for_loop"
+  },
+  {
+   "id": "frequency_counting",
+   "kind": "concept",
+   "label": "frequency_counting"
+  },
+  {
+   "id": "loop_control",
+   "kind": "concept",
+   "label": "loop_control"
+  },
+  {
+   "id": "loop_scope",
+   "kind": "concept",
+   "label": "loop_scope"
+  },
+  {
+   "id": "monte_carlo_simulation",
+   "kind": "concept",
+   "label": "monte_carlo_simulation"
+  },
+  {
+   "id": "off_by_one_error",
+   "kind": "concept",
+   "label": "off_by_one_error"
+  },
+  {
+   "id": "power_method",
+   "kind": "concept",
+   "label": "power_method"
+  },
+  {
+   "id": "random_move",
+   "kind": "concept",
+   "label": "random_move"
+  },
+  {
+   "id": "simulation_loop",
+   "kind": "concept",
+   "label": "simulation_loop"
+  },
+  {
+   "id": "two_models",
+   "kind": "concept",
+   "label": "two_models"
+  },
+  {
+   "id": "variable",
+   "kind": "concept",
+   "label": "variable"
+  },
+  {
+   "id": "simulation_loop@L0",
+   "kind": "learning_level",
+   "label": "L0"
+  },
+  {
+   "id": "simulation_loop@L1",
+   "kind": "learning_level",
+   "label": "L1"
+  },
+  {
+   "id": "simulation_loop@L2",
+   "kind": "learning_level",
+   "label": "L2"
+  },
+  {
+   "id": "simulation_loop@L3",
+   "kind": "learning_level",
+   "label": "L3"
+  },
+  {
+   "id": "simulation_loop@L4",
+   "kind": "learning_level",
+   "label": "L4"
+  },
+  {
+   "id": "FewTrialsAreExact",
+   "kind": "misconception",
+   "label": "FewTrialsAreExact"
+  },
+  {
+   "id": "LoopBodyScopeImpliesLoopLifetime",
+   "kind": "misconception",
+   "label": "LoopBodyScopeImpliesLoopLifetime"
+  },
+  {
+   "id": "OffByOneBound",
+   "kind": "misconception",
+   "label": "OffByOneBound"
+  },
+  {
+   "id": "topic1.6.b",
+   "kind": "topic",
+   "label": "Simulation (one random move, page ranks)"
+  }
+ ],
+ "edges": [
+  {
+   "from": "topic1.6.b",
+   "to": "frequency_counting",
+   "type": "contains",
+   "label": "The topic 'Simulation (one random move, page ranks)' introduces frequency_counting."
+  },
+  {
+   "from": "topic1.6.b",
+   "to": "random_move",
+   "type": "contains",
+   "label": "The topic 'Simulation (one random move, page ranks)' introduces random_move."
+  },
+  {
+   "from": "topic1.6.b",
+   "to": "simulation_loop",
+   "type": "contains",
+   "label": "The topic 'Simulation (one random move, page ranks)' introduces simulation_loop."
+  },
+  {
+   "from": "simulation_loop",
+   "to": "simulation_loop@L0",
+   "type": "has_level",
+   "label": "[0] everyday_reading (E): Everyday \"simulate\" suggests replaying a known process to get its answer; here each run of RandomSurfer draws fresh random numbers and gives different estimates (100 moves: 0.24 0.23 0.16 0.25 0.12), which only approach the page ranks as T grows.\n[1] misconception (M) -> OffByOneBound: wrong rule: < vs <= and 0..n vs 0..n-1 are interchangeable. Right rule: for (int t = 0; t < T; t++) makes exactly T moves; with <= it makes T + 1, while the ranks are still divided by T.\n[2] misconception (M) -> FewTrialsAreExact: wrong rule: A short simulation gives the exact page ranks. Right rule: A simulation only estimates the ranks: about 10^n moves for n-digit precision, tens of thousands of moves for two accurate places and millions for three.\n[3] inconsistent_trace (T) -> OffByOneBound: Applies LT (draw r, find next page, then freq[page]++) unevenly: e.g. counting the current page before the move on some passes, or resetting sum only on the first pass. (here mixing in: \"< vs <= and 0..n vs 0..n-1 are interchangeable\")\n[4] misconception (M) -> LoopBodyScopeImpliesLoopLifetime: wrong rule: A variable declared in the loop body lives across all iterations. Right rule: r and sum are declared inside the t-loop body and are created anew on every move; freq and page must be declared before the loop to persist."
+  },
+  {
+   "from": "simulation_loop",
+   "to": "simulation_loop@L1",
+   "type": "has_level",
+   "label": "[0] names_the_element (N): A Monte Carlo simulation: a for loop over t = 0..T-1 that makes one random move per pass and tallies the page reached.\n[1] states_the_rule (S): RandomSurfer reads a transition matrix, starts at page 0, makes T moves (T from the command line) according to the matrix, and counts the visits to each page."
+  },
+  {
+   "from": "simulation_loop",
+   "to": "simulation_loop@L2",
+   "type": "has_level",
+   "label": "[0] line_by_line_trace (LT): Per pass: r = Math.random(); sum = 0.0; inner j loop picks the next page; freq[page]++; t++ and test t < T. After the loop, each freq[i] is divided by T and printed.\n[1] output_prediction (OP): Prints N doubles (%8.5f) that sum to about 1 and vary between runs; 1,000,000 moves on tiny.txt gave 0.27324 0.26568 0.14581 0.24737 0.06790.\n[2] one_step_execution (OS): One pass changes page (to the next page) and increases freq[page] by 1; t increases by 1."
+  },
+  {
+   "from": "simulation_loop",
+   "to": "simulation_loop@L3",
+   "type": "has_level",
+   "label": "[0] relation_to_neighbour (R): The loop body is one random move; page carries state from one pass to the next, so each move uses the row of the page reached last.\n[1] relation_to_neighbour (R): freq[page]++ must come after the move and inside the loop, once per pass, so the counts total T.\n[2] relation_to_neighbour (R): A counted for loop with t < T fixes the number of moves at T; the loop variable t is scoped to the loop.\n[3] relation_to_neighbour (R): Both compute the same page ranks; the power method gets them exactly with far fewer iterations.\n[4] purpose_of_the_whole (P): Monte Carlo estimation plan: repeat a random experiment many times and count outcomes; t is a stepper, page a most-recent holder, freq[] the per-page gatherers."
+  },
+  {
+   "from": "simulation_loop",
+   "to": "simulation_loop@L4",
+   "type": "has_level",
+   "label": "[0] predict_a_change (C) -> OffByOneBound: Changing the start page keeps the limit (mixing); increasing T keeps the estimates but makes them more accurate (about 10x moves per extra digit); changing < to <= or the division by T breaks the normalisation.\n[1] transfer_to_a_new_program (X): Use when the process is easy to simulate and a rough estimate suffices (or no matrix is available); not for accurate ranks or large models, where a huge number of trials is needed and the power method is far more efficient.\n[2] diagnose_an_error (D): rule broken: Loop must run t = 0..T-1. Kind: silent logic error. Trigger class: t <= T makes T+1 moves but ranks are divided by T, so they sum to slightly more than 1.\n[3] diagnose_an_error (D): rule broken: A variable declared in the body is recreated each pass. Kind: silent logic error. Trigger class: int[] freq = new int[N] declared inside the loop body: counts reset every move (and freq is out of scope after the loop, a compile-time error if printed there).\n[4] diagnose_an_error (D): rule broken: freq[i] / T must be floating-point division. Kind: silent logic error. Trigger class: Printing freq[i] / T without the (double) cast: every rank prints as 0 (or 1).\n[5] diagnose_an_error (D): rule broken: The number of moves is args[0]. Kind: run-time exception. Trigger class: Run without a command-line argument: args[0] throws ArrayIndexOutOfBoundsException; a non-numeric argument makes Integer.parseInt throw NumberFormatException."
+  },
+  {
+   "from": "accumulator_pattern",
+   "to": "LoopBodyScopeImpliesLoopLifetime",
+   "type": "misconception",
+   "label": "wrong: a variable declared in the loop body lives across all iterations | right: A variable declared inside the body is created anew on every pass and does not keep the previous pass's value."
+  },
+  {
+   "from": "array_bounds",
+   "to": "OffByOneBound",
+   "type": "misconception",
+   "label": "wrong: < vs <= and 0..n vs 0..n-1 are interchangeable | right: for (i = 0; i < n; i++) runs n times with i going up to n - 1; with <= it runs n + 1 times and reaches i = n."
+  },
+  {
+   "from": "array_reversal",
+   "to": "OffByOneBound",
+   "type": "misconception",
+   "label": "wrong: < vs <= and 0..n vs 0..n-1 are interchangeable | right: for (i = 0; i < n; i++) runs n times with i going up to n - 1; with <= it runs n + 1 times and reaches i = n."
+  },
+  {
+   "from": "array_traversal",
+   "to": "OffByOneBound",
+   "type": "misconception",
+   "label": "wrong: < vs <= and 0..n vs 0..n-1 are interchangeable | right: for (i = 0; i < n; i++) runs n times with i going up to n - 1; with <= it runs n + 1 times and reaches i = n."
+  },
+  {
+   "from": "boolean_flag_array",
+   "to": "OffByOneBound",
+   "type": "misconception",
+   "label": "wrong: < vs <= and 0..n vs 0..n-1 are interchangeable | right: for (i = 0; i < n; i++) runs n times with i going up to n - 1; with <= it runs n + 1 times and reaches i = n."
+  },
+  {
+   "from": "frequency_counting",
+   "to": "FewTrialsAreExact",
+   "type": "misconception",
+   "label": "wrong: A short simulation gives the exact page ranks. | right: A simulation only estimates the page ranks: RandomSurfer needs 10^n moves to get answers precise to n decimal places and many more moves for those answers to become accurate (tens of thousands of moves for two accurate places, millions for three)."
+  },
+  {
+   "from": "loop_control",
+   "to": "OffByOneBound",
+   "type": "misconception",
+   "label": "wrong: i < n and i <= n mean the same, so the loop runs until i equals n and the last pass can use a[n]. | right: for (i = 0; i < n; i++) runs n times with i going up to n - 1; with <= it runs n + 1 times and reaches i = n."
+  },
+  {
+   "from": "loop_scope",
+   "to": "LoopBodyScopeImpliesLoopLifetime",
+   "type": "misconception",
+   "label": "wrong: A variable declared inside the loop body keeps its value from one pass to the next. | right: A variable declared inside the body is created anew on every pass and does not keep the previous pass's value."
+  },
+  {
+   "from": "monte_carlo_simulation",
+   "to": "FewTrialsAreExact",
+   "type": "misconception",
+   "label": "wrong: A short simulation gives the exact page ranks. | right: A simulation only estimates the page ranks: RandomSurfer needs 10^n moves to get answers precise to n decimal places and many more moves for those answers to become accurate (tens of thousands of moves for two accurate places, millions for three)."
+  },
+  {
+   "from": "off_by_one_error",
+   "to": "OffByOneBound",
+   "type": "misconception",
+   "label": "wrong: < vs <= and 0..n vs 0..n-1 are interchangeable | right: for (i = 0; i < n; i++) runs n times with i going up to n - 1; with <= it runs n + 1 times and reaches i = n."
+  },
+  {
+   "from": "simulation_loop",
+   "to": "FewTrialsAreExact",
+   "type": "misconception",
+   "label": "wrong: A short simulation gives the exact page ranks. | right: A simulation only estimates the page ranks: RandomSurfer needs 10^n moves to get answers precise to n decimal places and many more moves for those answers to become accurate (tens of thousands of moves for two accurate places, millions for three)."
+  },
+  {
+   "from": "simulation_loop",
+   "to": "LoopBodyScopeImpliesLoopLifetime",
+   "type": "misconception",
+   "label": "wrong: Declaring page inside the simulation loop still lets the surfer continue from the previous page. | right: If page is declared inside the loop body it is recreated each pass, so it must be declared before the loop to carry the walk forward."
+  },
+  {
+   "from": "simulation_loop",
+   "to": "OffByOneBound",
+   "type": "misconception",
+   "label": "wrong: t < T and t <= T give the same number of moves. | right: for (t = 0; t < T; t++) makes exactly T moves; with <= it makes T + 1."
+  },
+  {
+   "from": "two_models",
+   "to": "FewTrialsAreExact",
+   "type": "misconception",
+   "label": "wrong: A short simulation gives the exact page ranks. | right: A simulation only estimates the page ranks: RandomSurfer needs 10^n moves to get answers precise to n decimal places and many more moves for those answers to become accurate (tens of thousands of moves for two accurate places, millions for three)."
+  },
+  {
+   "from": "variable",
+   "to": "LoopBodyScopeImpliesLoopLifetime",
+   "type": "misconception",
+   "label": "wrong: a variable declared in the loop body lives across all iterations | right: A variable declared inside the body is created anew on every pass and does not keep the previous pass's value."
+  },
+  {
+   "from": "simulation_loop",
+   "to": "power_method",
+   "type": "parallel",
+   "label": "The power method used in Markov is far more efficient than simulating the behavior of a random surfer."
+  },
+  {
+   "from": "for_loop",
+   "to": "simulation_loop",
+   "type": "prerequisite",
+   "label": "The simulation is a for loop over t = 0 ... T - 1 that makes one random move per pass."
+  },
+  {
+   "from": "random_move",
+   "to": "simulation_loop",
+   "type": "prerequisite",
+   "label": "The simulation repeats the random move T times, each move starting from the page the previous move reached."
+  },
+  {
+   "from": "simulation_loop",
+   "to": "frequency_counting",
+   "type": "prerequisite",
+   "label": "On each pass the simulation adds 1 to freq[page] for the page just reached."
+  }
+ ]
+}

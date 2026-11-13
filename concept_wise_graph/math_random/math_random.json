@@ -1,0 +1,191 @@
+{
+ "concept": "math_random",
+ "label": "math_random",
+ "graph_version": "3.9.8 (3.9.7 + one primary per misconception (S9c) and the four remaining sibling edges (S9b), 2026-11-04; listed in revision_3_9_8)",
+ "nodes": [
+  {
+   "id": "api",
+   "kind": "concept",
+   "label": "Application programming interface (API)"
+  },
+  {
+   "id": "explicit_cast",
+   "kind": "concept",
+   "label": "explicit_cast"
+  },
+  {
+   "id": "math_library",
+   "kind": "concept",
+   "label": "math_library"
+  },
+  {
+   "id": "math_random",
+   "kind": "concept",
+   "label": "math_random"
+  },
+  {
+   "id": "math_round",
+   "kind": "concept",
+   "label": "math_round"
+  },
+  {
+   "id": "method_call",
+   "kind": "concept",
+   "label": "method_call"
+  },
+  {
+   "id": "monte_carlo_simulation",
+   "kind": "concept",
+   "label": "monte_carlo_simulation"
+  },
+  {
+   "id": "trig_functions",
+   "kind": "concept",
+   "label": "trig_functions"
+  },
+  {
+   "id": "math_random@L0",
+   "kind": "learning_level",
+   "label": "L0"
+  },
+  {
+   "id": "math_random@L1",
+   "kind": "learning_level",
+   "label": "L1"
+  },
+  {
+   "id": "math_random@L2",
+   "kind": "learning_level",
+   "label": "L2"
+  },
+  {
+   "id": "math_random@L3",
+   "kind": "learning_level",
+   "label": "L3"
+  },
+  {
+   "id": "math_random@L4",
+   "kind": "learning_level",
+   "label": "L4"
+  },
+  {
+   "id": "ProbabilityIsPrediction",
+   "kind": "misconception",
+   "label": "ProbabilityIsPrediction"
+  },
+  {
+   "id": "RandomCanReturnOne",
+   "kind": "misconception",
+   "label": "RandomCanReturnOne"
+  },
+  {
+   "id": "topic1.2.g",
+   "kind": "topic",
+   "label": "Library methods and APIs (Math)"
+  }
+ ],
+ "edges": [
+  {
+   "from": "topic1.2.g",
+   "to": "api",
+   "type": "contains",
+   "label": "Application programming interface (API) is taught under \"Library methods and APIs (Math)\"."
+  },
+  {
+   "from": "topic1.2.g",
+   "to": "math_library",
+   "type": "contains",
+   "label": "The topic 'Library methods and APIs (Math)' introduces math_library."
+  },
+  {
+   "from": "topic1.2.g",
+   "to": "math_random",
+   "type": "contains",
+   "label": "The topic 'Library methods and APIs (Math)' introduces math_random."
+  },
+  {
+   "from": "topic1.2.g",
+   "to": "math_round",
+   "type": "contains",
+   "label": "The topic 'Library methods and APIs (Math)' introduces math_round."
+  },
+  {
+   "from": "topic1.2.g",
+   "to": "method_call",
+   "type": "contains",
+   "label": "The topic 'Library methods and APIs (Math)' introduces method_call."
+  },
+  {
+   "from": "topic1.2.g",
+   "to": "trig_functions",
+   "type": "contains",
+   "label": "The topic 'Library methods and APIs (Math)' introduces trig_functions."
+  },
+  {
+   "from": "math_random",
+   "to": "math_random@L0",
+   "type": "has_level",
+   "label": "[0] everyday_reading (E): Folk meaning: 'a random number between 0 and 1' includes both ends, and a 70% chance means the event will happen next time. Java rule: Math.random() returns a double in the half-open interval [0, 1) (0 possible, 1 never), and a probability only describes long-run frequencies over many calls.\n[1] misconception (M) -> RandomCanReturnOne: wrong rule: Math.random() can return exactly 1.0. Right rule: Math.random() returns a value in [0, 1): 0 is possible, 1 is not; hence (int) (Math.random() * N) is at most N-1.\n[2] misconception (M) -> ProbabilityIsPrediction: wrong rule: A probability (e.g. 70%) predicts what the next single trial will do. Right rule: A probability describes the long-run frequency over many trials, not one outcome; Math.random() < 0.7 is true on about 70% of many calls, and any single call can go either way.\n[3] inconsistent_trace (T) -> RandomCanReturnOne: Points to LT (each call produces a fresh value, which is then scaled and cast). Applied unevenly: the student reuses one random value for two separate Math.random() calls on some lines (e.g. assumes the x and y coordinates are equal) or scales without casting on one pass. (here mixing in: \"Math.random() can return exactly 1.0\")"
+  },
+  {
+   "from": "math_random",
+   "to": "math_random@L1",
+   "type": "has_level",
+   "label": "[0] names_the_element (N): Math.random() is a Math library method with no argument that returns a (pseudo-)random double uniformly distributed in [0, 1).\n[1] states_the_rule (S): Each call returns a new double r with 0 <= r < 1; multiplying by N gives a value in [0, N), and casting truncates it to an int between 0 and N-1."
+  },
+  {
+   "from": "math_random",
+   "to": "math_random@L2",
+   "type": "has_level",
+   "label": "[0] line_by_line_trace (LT): In int n = (int) (r * N) with r = Math.random(): the call produces r, the product r * N is computed in double (N promoted), the parenthesized cast truncates it, then n is assigned.\n[1] output_prediction (OP): A double in [0, 1) that differs from call to call and run to run (e.g. RandomInt 1000 prints 548, then 141); (int) (Math.random() * 6) + 1 is an int from 1 to 6; Math.random() < 0.5 is true about half the time.\n[2] one_step_execution (OS): A call changes none of the program's variables, but each call advances the library's hidden generator state, so the next call returns a different value; the drawn value persists only if stored (double r = Math.random();)."
+  },
+  {
+   "from": "math_random",
+   "to": "math_random@L3",
+   "type": "has_level",
+   "label": "[0] relation_to_neighbour (R): Math.random() is the Math method that takes no argument and, unlike the others, is not a function of its input: it returns a random double in [0, 1).\n[1] relation_to_neighbour (R): Converting to a random int requires the cast to apply to the whole product: (int) (Math.random() * N); (int) Math.random() * N casts first and is always 0.\n[2] relation_to_neighbour (R): Each trial of a Monte Carlo simulation draws fresh values with Math.random(); estimates become reliable only over many trials.\n[3] purpose_of_the_whole (P): Plans: simulate an event of probability p with if (Math.random() < p); pick a random index with (int) (Math.random() * N); generate random points or samples (Sajaniemi role of the drawn value: most-recent holder, overwritten each trial)."
+  },
+  {
+   "from": "math_random",
+   "to": "math_random@L4",
+   "type": "has_level",
+   "label": "[0] predict_a_change (C) -> RandomCanReturnOne: Changing N in (int) (Math.random() * N) changes the range to 0..N-1, and adding a constant shifts it; the output changes from run to run, so a program using Math.random() cannot be checked by comparing exact outputs, only by statistics over many runs.\n[1] transfer_to_a_new_program (X): Use Math.random() for simulations, games, random sampling and shuffling, where 'every value equally likely' in [0, 1) is the model; it is not suitable when results must be reproducible or follow another distribution without further transformation.\n[2] diagnose_an_error (D): rule broken: The scaled range of (int) (Math.random() * N) is 0..N-1. Kind: silent logic error. Trigger class: Expecting N to be possible, or 1..N, without adding 1; or scaling by (b - a) instead of (b - a + 1) for an inclusive range a..b.\n[3] diagnose_an_error (D): rule broken: A cast applies only to the value immediately after it. Kind: silent logic error. Trigger class: Writing (int) Math.random() * N, which always gives 0.\n[4] diagnose_an_error (D): rule broken: A double cannot be assigned to an int without a cast. Kind: compile-time. Trigger class: int n = Math.random() * N;"
+  },
+  {
+   "from": "math_random",
+   "to": "ProbabilityIsPrediction",
+   "type": "misconception",
+   "label": "wrong: A probability (e.g. 70%) predicts what the next single trial will do. | right: A probability describes the long-run frequency over many trials, not one outcome."
+  },
+  {
+   "from": "math_random",
+   "to": "RandomCanReturnOne",
+   "type": "misconception",
+   "label": "wrong: Math.random() can return exactly 1.0. | right: Math.random() returns a value in [0, 1): 0 is possible, 1 is not."
+  },
+  {
+   "from": "monte_carlo_simulation",
+   "to": "ProbabilityIsPrediction",
+   "type": "misconception",
+   "label": "wrong: A probability (e.g. 70%) predicts what the next single trial will do. | right: A probability describes the long-run frequency over many trials, not one outcome."
+  },
+  {
+   "from": "explicit_cast",
+   "to": "math_random",
+   "type": "prerequisite",
+   "label": "To turn Math.random()'s double in [0, 1) into a random int from 0 to N-1, multiply it by N and cast the result to int."
+  },
+  {
+   "from": "math_library",
+   "to": "math_random",
+   "type": "prerequisite",
+   "label": "Math.random() is a Math library method; unlike the others it takes no argument and returns a random double in [0, 1)."
+  },
+  {
+   "from": "math_random",
+   "to": "monte_carlo_simulation",
+   "type": "prerequisite",
+   "label": "Each trial uses Math.random()."
+  }
+ ]
+}

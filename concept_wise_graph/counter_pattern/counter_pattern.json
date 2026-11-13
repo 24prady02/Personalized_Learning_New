@@ -1,0 +1,291 @@
+{
+ "concept": "counter_pattern",
+ "label": "counter_pattern",
+ "graph_version": "3.9.8 (3.9.7 + one primary per misconception (S9c) and the four remaining sibling edges (S9b), 2026-11-04; listed in revision_3_9_8)",
+ "nodes": [
+  {
+   "id": "accumulator_pattern",
+   "kind": "concept",
+   "label": "accumulator_pattern"
+  },
+  {
+   "id": "convergence_test",
+   "kind": "concept",
+   "label": "convergence_test"
+  },
+  {
+   "id": "counter_pattern",
+   "kind": "concept",
+   "label": "counter_pattern"
+  },
+  {
+   "id": "debugging",
+   "kind": "concept",
+   "label": "debugging"
+  },
+  {
+   "id": "fencepost_loop",
+   "kind": "concept",
+   "label": "fencepost_loop"
+  },
+  {
+   "id": "flag_search_loop",
+   "kind": "concept",
+   "label": "flag_search_loop"
+  },
+  {
+   "id": "frequency_counting",
+   "kind": "concept",
+   "label": "frequency_counting"
+  },
+  {
+   "id": "increment_operators",
+   "kind": "concept",
+   "label": "increment_operators"
+  },
+  {
+   "id": "logical_error",
+   "kind": "concept",
+   "label": "logical_error"
+  },
+  {
+   "id": "loop_body",
+   "kind": "concept",
+   "label": "loop_body"
+  },
+  {
+   "id": "loop_performance",
+   "kind": "concept",
+   "label": "Loop performance"
+  },
+  {
+   "id": "loop_scope",
+   "kind": "concept",
+   "label": "loop_scope"
+  },
+  {
+   "id": "monte_carlo_simulation",
+   "kind": "concept",
+   "label": "monte_carlo_simulation"
+  },
+  {
+   "id": "number_conversion",
+   "kind": "concept",
+   "label": "Number conversion (binary)"
+  },
+  {
+   "id": "testing",
+   "kind": "concept",
+   "label": "testing"
+  },
+  {
+   "id": "variable",
+   "kind": "concept",
+   "label": "variable"
+  },
+  {
+   "id": "AccumulatorDeclaredInLoop",
+   "kind": "error",
+   "label": "AccumulatorDeclaredInLoop"
+  },
+  {
+   "id": "counter_pattern@L0",
+   "kind": "learning_level",
+   "label": "L0"
+  },
+  {
+   "id": "counter_pattern@L1",
+   "kind": "learning_level",
+   "label": "L1"
+  },
+  {
+   "id": "counter_pattern@L2",
+   "kind": "learning_level",
+   "label": "L2"
+  },
+  {
+   "id": "counter_pattern@L3",
+   "kind": "learning_level",
+   "label": "L3"
+  },
+  {
+   "id": "counter_pattern@L4",
+   "kind": "learning_level",
+   "label": "L4"
+  },
+  {
+   "id": "VariableRolesInferred",
+   "kind": "misconception",
+   "label": "VariableRolesInferred"
+  },
+  {
+   "id": "topic1.3.f",
+   "kind": "topic",
+   "label": "Applications (finite sums, Newton, conversion, gambler's ruin, factoring)"
+  }
+ ],
+ "edges": [
+  {
+   "from": "topic1.3.f",
+   "to": "accumulator_pattern",
+   "type": "contains",
+   "label": "The topic 'Applications (finite sums, Newton, conversion, gambler's ruin, factoring)' introduces accumulator_pattern."
+  },
+  {
+   "from": "topic1.3.f",
+   "to": "convergence_test",
+   "type": "contains",
+   "label": "The topic 'Applications (finite sums, Newton, conversion, gambler's ruin, factoring)' introduces convergence_test."
+  },
+  {
+   "from": "topic1.3.f",
+   "to": "counter_pattern",
+   "type": "contains",
+   "label": "The topic 'Applications (finite sums, Newton, conversion, gambler's ruin, factoring)' introduces counter_pattern."
+  },
+  {
+   "from": "topic1.3.f",
+   "to": "debugging",
+   "type": "contains",
+   "label": "Topic 'Applications (finite sums, Newton, conversion, gambler's ruin, factoring)' of section 1.3 holds the concept debugging."
+  },
+  {
+   "from": "topic1.3.f",
+   "to": "fencepost_loop",
+   "type": "contains",
+   "label": "The topic 'Applications (finite sums, Newton, conversion, gambler's ruin, factoring)' introduces fencepost_loop."
+  },
+  {
+   "from": "topic1.3.f",
+   "to": "flag_search_loop",
+   "type": "contains",
+   "label": "The topic 'Applications (finite sums, Newton, conversion, gambler's ruin, factoring)' introduces flag_search_loop."
+  },
+  {
+   "from": "topic1.3.f",
+   "to": "loop_performance",
+   "type": "contains",
+   "label": "Loop performance is taught under \"Applications (finite sums, Newton, conversion, gambler's ruin, factoring)\"."
+  },
+  {
+   "from": "topic1.3.f",
+   "to": "monte_carlo_simulation",
+   "type": "contains",
+   "label": "The topic 'Applications (finite sums, Newton, conversion, gambler's ruin, factoring)' introduces monte_carlo_simulation."
+  },
+  {
+   "from": "topic1.3.f",
+   "to": "number_conversion",
+   "type": "contains",
+   "label": "Number conversion (binary) is taught under \"Applications (finite sums, Newton, conversion, gambler's ruin, factoring)\"."
+  },
+  {
+   "from": "topic1.3.f",
+   "to": "testing",
+   "type": "contains",
+   "label": "Topic 'Applications (finite sums, Newton, conversion, gambler's ruin, factoring)' of section 1.3 holds the concept testing."
+  },
+  {
+   "from": "accumulator_pattern",
+   "to": "AccumulatorDeclaredInLoop",
+   "type": "error",
+   "label": "wrong: Declaring sum inside the loop body keeps a running total across passes. | right: The accumulator must be declared and initialised before the loop."
+  },
+  {
+   "from": "counter_pattern",
+   "to": "AccumulatorDeclaredInLoop",
+   "type": "error",
+   "label": "wrong: Declaring sum inside the loop body keeps a running total across passes. | right: The accumulator must be declared and initialised before the loop."
+  },
+  {
+   "from": "logical_error",
+   "to": "AccumulatorDeclaredInLoop",
+   "type": "error",
+   "label": "wrong: Declaring sum inside the loop body keeps a running total across passes. | right: The accumulator must be declared and initialised before the loop."
+  },
+  {
+   "from": "loop_scope",
+   "to": "AccumulatorDeclaredInLoop",
+   "type": "error",
+   "label": "wrong: Declaring sum inside the loop body keeps a running total across passes. | right: The accumulator must be declared and initialised before the loop."
+  },
+  {
+   "from": "counter_pattern",
+   "to": "counter_pattern@L0",
+   "type": "has_level",
+   "label": "[0] everyday_reading (E): Folk meaning: 'count' in everyday speech is done by looking at the whole collection at once, so a novice expects `count` to 'know' how many items matched. In Java a counter is just an int that changes only when `count++` executes, once per matching pass, starting from the value it was given before the loop.\n[1] misconception (M) -> VariableRolesInferred: wrong rule: Java recognises which variable is the counter and which is the running total, and keeps their values apart even if one variable is used for both. Right rule: A variable holds one value at a time and Java infers no roles: a counter needs its own variable, initialised before the loop (`int wins = 0;`) and updated only by its own statement (`wins++`)."
+  },
+  {
+   "from": "counter_pattern",
+   "to": "counter_pattern@L1",
+   "type": "has_level",
+   "label": "[0] names_the_element (N): Loop plan (Soloway counter plan): an int variable set to 0 before a loop and increased by 1 on each pass that meets a condition, so it ends holding the number of matches.\n[1] states_the_rule (S): Declare and initialise the counter before the loop (`int wins = 0;`); inside the loop guard `wins++` with the condition being counted (`if (cash == goal) wins++;`); read it after the loop."
+  },
+  {
+   "from": "counter_pattern",
+   "to": "counter_pattern@L2",
+   "type": "has_level",
+   "label": "[0] line_by_line_trace (LT): Order: the initialisation `count = 0` runs once before the loop; then on each pass the loop test, the guard (`if (...)`) and, only when the guard is true, `count++`; the counter is read once after the loop ends.\n[1] output_prediction (OP): The result is an int equal to the number of passes on which the guard was true (0 if none); it is between 0 and the number of passes. Turning it into a rate with ints truncates: `100*wins/T` with wins = 503, T = 1000 prints 50.\n[2] one_step_execution (OS): One matching pass changes only the counter, by exactly +1 (`wins++` turns 7 into 8); a non-matching pass leaves it unchanged. `count++` as a statement returns nothing that is used."
+  },
+  {
+   "from": "counter_pattern",
+   "to": "counter_pattern@L3",
+   "type": "has_level",
+   "label": "[0] relation_to_neighbour (R): The `count++` (with its guard) must be inside the loop body, while the declaration `int count = 0;` must be outside and before it. Inside the body it runs once for each matching pass. After the loop it runs only once, so the count is at most 1.\n[1] relation_to_neighbour (R): Same skeleton (initialise before, update inside, read after); the accumulator adds the current value (`sum += x`), the counter adds the constant 1 on matching passes (`count++`). The two are often combined to compute an average `sum / count`, which needs a guard against `count == 0`.\n[2] relation_to_neighbour (R): A Monte Carlo estimate is the counter divided by the number of trials (`(double) wins / T`). So the counter has to be initialised once, before the trial loop, and must not be reset inside it.\n[3] purpose_of_the_whole (P): Plan: counting plan; the counter variable plays a Sajaniemi 'stepper'-like counting role (Soloway's counter variable). Its job is to answer 'how many passes satisfied P?', e.g. wins or number of bets."
+  },
+  {
+   "from": "counter_pattern",
+   "to": "counter_pattern@L4",
+   "type": "has_level",
+   "label": "[0] predict_a_change (C): Invariant: after k passes, count equals the number of matching passes among those k. Moving the guard or the update changes the count. Moving `count++` out of the `if` turns it into a pass counter. Starting at 1 instead of 0 makes every result one too high. Reordering statements that do not touch count leaves it unchanged.\n[1] diagnose_an_error (D): rule broken: The counter/accumulator must be declared and initialised before the loop. `int count = 0;` inside the body re-creates and resets it on every pass. Kind: silent logic error. Trigger class: Any loop with two or more passes: the count never exceeds 1 (or holds only the last pass).\n[2] transfer_to_a_new_program (X): Use a counter when the question is 'how many' (wins, bets, primes, distinct values); use an accumulator when it is 'how much in total', and a boolean flag when you only need 'whether any'. When you need a count for each of many values, use an array of counters (a histogram) instead of many separate variables.\n[3] diagnose_an_error (D): rule broken: A variable declared inside the loop body is out of scope after the loop. Kind: compile-time. Trigger class: Printing or using a counter after the loop when it was declared inside the body (cannot find symbol).\n[4] diagnose_an_error (D): rule broken: Integer division truncates: a rate computed as `count / total` with ints is 0 whenever count < total. Kind: silent logic error. Trigger class: Converting a count to a fraction or percentage with int operands (e.g. `wins / T`) instead of `(double) wins / T` or `100*wins/T`.\n[5] diagnose_an_error (D): rule broken: A local counter must be definitely assigned before it is read. Kind: compile-time. Trigger class: Declaring `int count;` without `= 0` and then executing `count++` (variable might not have been initialized)."
+  },
+  {
+   "from": "accumulator_pattern",
+   "to": "VariableRolesInferred",
+   "type": "misconception",
+   "label": "wrong: The computer recognises that one variable plays two roles, e.g. input value and running total, and keeps the values apart; it knows which variable is the counter and which the sum. | right: A variable holds one value at a time; each role (input, counter, running total) needs its own variable and explicit update."
+  },
+  {
+   "from": "counter_pattern",
+   "to": "VariableRolesInferred",
+   "type": "misconception",
+   "label": "wrong: The computer recognises that one variable plays two roles, e.g. input value and running total, and keeps the values apart; it knows which variable is the counter and which the sum. | right: A variable holds one value at a time; each role (input, counter, running total) needs its own variable and explicit update."
+  },
+  {
+   "from": "variable",
+   "to": "VariableRolesInferred",
+   "type": "misconception",
+   "label": "wrong: The computer recognises that one variable plays two roles, e.g. input value and running total, and keeps the values apart; it knows which variable is the counter and which the sum. | right: A variable holds one value at a time; each role (input, counter, running total) needs its own variable and explicit update."
+  },
+  {
+   "from": "accumulator_pattern",
+   "to": "counter_pattern",
+   "type": "parallel",
+   "label": "An accumulator adds the current value itself on each pass (sum += x); a counter adds 1 on each pass that matches (count++)."
+  },
+  {
+   "from": "counter_pattern",
+   "to": "frequency_counting",
+   "type": "prerequisite",
+   "label": "Frequency counting keeps one counter per value in an array, freq[page]++."
+  },
+  {
+   "from": "counter_pattern",
+   "to": "monte_carlo_simulation",
+   "type": "prerequisite",
+   "label": "Counting successes is the counter pattern."
+  },
+  {
+   "from": "increment_operators",
+   "to": "counter_pattern",
+   "type": "prerequisite",
+   "label": "A counter is updated with count++, adding one on each pass that matches."
+  },
+  {
+   "from": "loop_body",
+   "to": "counter_pattern",
+   "type": "prerequisite",
+   "label": "count++ sits inside the body, usually under an if, so it runs once on every pass that matches."
+  }
+ ]
+}

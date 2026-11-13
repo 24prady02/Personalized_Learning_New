@@ -1,0 +1,214 @@
+{
+ "concept": "remainder_operator",
+ "label": "remainder_operator",
+ "graph_version": "3.9.8 (3.9.7 + one primary per misconception (S9c) and the four remaining sibling edges (S9b), 2026-11-04; listed in revision_3_9_8)",
+ "nodes": [
+  {
+   "id": "arithmetic_operators",
+   "kind": "concept",
+   "label": "arithmetic_operators"
+  },
+  {
+   "id": "int",
+   "kind": "concept",
+   "label": "int"
+  },
+  {
+   "id": "int_literal_limit",
+   "kind": "concept",
+   "label": "int_literal_limit"
+  },
+  {
+   "id": "integer_constants",
+   "kind": "concept",
+   "label": "integer_constants"
+  },
+  {
+   "id": "integer_division",
+   "kind": "concept",
+   "label": "integer_division"
+  },
+  {
+   "id": "long_type",
+   "kind": "concept",
+   "label": "long_type"
+  },
+  {
+   "id": "overflow",
+   "kind": "concept",
+   "label": "overflow"
+  },
+  {
+   "id": "remainder_operator",
+   "kind": "concept",
+   "label": "remainder_operator"
+  },
+  {
+   "id": "remainder_operator@L0",
+   "kind": "learning_level",
+   "label": "L0"
+  },
+  {
+   "id": "remainder_operator@L1",
+   "kind": "learning_level",
+   "label": "L1"
+  },
+  {
+   "id": "remainder_operator@L2",
+   "kind": "learning_level",
+   "label": "L2"
+  },
+  {
+   "id": "remainder_operator@L3",
+   "kind": "learning_level",
+   "label": "L3"
+  },
+  {
+   "id": "remainder_operator@L4",
+   "kind": "learning_level",
+   "label": "L4"
+  },
+  {
+   "id": "NegativeRemainderSign",
+   "kind": "misconception",
+   "label": "NegativeRemainderSign"
+  },
+  {
+   "id": "RemainderIsQuotient",
+   "kind": "misconception",
+   "label": "RemainderIsQuotient"
+  },
+  {
+   "id": "RemainderIsSubtraction",
+   "kind": "misconception",
+   "label": "RemainderIsSubtraction"
+  },
+  {
+   "id": "topic1.2.c",
+   "kind": "topic",
+   "label": "Integers"
+  }
+ ],
+ "edges": [
+  {
+   "from": "topic1.2.c",
+   "to": "arithmetic_operators",
+   "type": "contains",
+   "label": "The topic 'Integers' introduces arithmetic_operators."
+  },
+  {
+   "from": "topic1.2.c",
+   "to": "int",
+   "type": "contains",
+   "label": "The topic 'Integers' introduces int."
+  },
+  {
+   "from": "topic1.2.c",
+   "to": "int_literal_limit",
+   "type": "contains",
+   "label": "The topic 'Integers' introduces int_literal_limit."
+  },
+  {
+   "from": "topic1.2.c",
+   "to": "integer_constants",
+   "type": "contains",
+   "label": "The topic 'Integers' introduces integer_constants."
+  },
+  {
+   "from": "topic1.2.c",
+   "to": "integer_division",
+   "type": "contains",
+   "label": "The topic 'Integers' introduces integer_division."
+  },
+  {
+   "from": "topic1.2.c",
+   "to": "long_type",
+   "type": "contains",
+   "label": "The topic 'Integers' introduces long_type."
+  },
+  {
+   "from": "topic1.2.c",
+   "to": "overflow",
+   "type": "contains",
+   "label": "The topic 'Integers' introduces overflow."
+  },
+  {
+   "from": "topic1.2.c",
+   "to": "remainder_operator",
+   "type": "contains",
+   "label": "The topic 'Integers' introduces remainder_operator."
+  },
+  {
+   "from": "remainder_operator",
+   "to": "remainder_operator@L0",
+   "type": "has_level",
+   "label": "[0] everyday_reading (E): In everyday use % means percent (50% of x), and in maths 'mod' always gives a non-negative result. In Java % is the remainder of truncating division, and its sign follows the left operand (-14 % 3 is -2).\n[1] misconception (M) -> RemainderIsQuotient: wrong rule: 17 % 5 is 3 (the quotient). Right rule: % returns the remainder, so 17 % 5 is 2.\n[2] misconception (M) -> NegativeRemainderSign: wrong rule: a % b is never negative, and integer division of a negative number rounds down. Right rule: a / b rounds toward 0 and a % b takes the sign of a: -14 / 3 is -4 and -14 % 3 is -2.\n[3] inconsistent_trace (T) -> RemainderIsQuotient: Points to LT (compute the truncated quotient, then the remainder). Applied unevenly, a student gives the remainder for positive operands but the mathematical mod for negatives, or swaps quotient and remainder (17 % 5 as 3). (here mixing in: \"17 % 5 is 3 (the quotient)\")"
+  },
+  {
+   "from": "remainder_operator",
+   "to": "remainder_operator@L1",
+   "type": "has_level",
+   "label": "[0] names_the_element (N): Remainder operator %: the binary operator that gives the remainder after dividing a by b.\n[1] states_the_rule (S): For ints, a % b is defined so that (a / b) * b + a % b equals a. The result takes the sign of a, % by zero throws ArithmeticException, and % also works on doubles."
+  },
+  {
+   "from": "remainder_operator",
+   "to": "remainder_operator@L2",
+   "type": "has_level",
+   "label": "[0] line_by_line_trace (LT): Evaluate a, then b, take the quotient rounded toward 0, and give what is left over. % has the same precedence as * and /, and they group left to right.\n[1] output_prediction (OP): 17 % 3 is 2, 76 % 12 is 4, 1234 % 99 is 46, -14 % 3 is -2, and 14 % -3 is 2.\n[2] one_step_execution (OS): r = a % b stores a remainder smaller in size than b and leaves a and b unchanged. If b is 0, ArithmeticException is thrown before anything is stored."
+  },
+  {
+   "from": "remainder_operator",
+   "to": "remainder_operator@L3",
+   "type": "has_level",
+   "label": "[0] relation_to_neighbour (R): % is the companion of integer division, since a == (a / b) * b + a % b. Both use the same quotient rounded toward 0.\n[1] purpose_of_the_whole (P): Plans: divisibility and parity tests (x % 2 == 0), digit extraction (x % 10), cyclic wrap-around ((i + 1) % n), leap-year rules, and splitting units (76 % 12 inches)."
+  },
+  {
+   "from": "remainder_operator",
+   "to": "remainder_operator@L4",
+   "type": "has_level",
+   "label": "[0] predict_a_change (C) -> RemainderIsQuotient: Negating a flips the remainder's sign, so n % 2 == 1 fails for negative odd n while n % 2 != 0 still works. Changing the divisor changes the cycle length. Swapping % with / swaps the remainder for the quotient.\n[1] transfer_to_a_new_program (X): Use % for divisibility, parity, digits, cyclic indices and unit splitting. Do not use it for percentages (use * / 100.0), and do not use it where a non-negative mathematical mod is needed for negative values (adjust the result or use Math.floorMod).\n[2] diagnose_an_error (D): rule broken: int remainder by zero is undefined. Kind: run-time exception. Trigger class: x % 0, or a divisor variable that is 0: ArithmeticException: / by zero.\n[3] diagnose_an_error (D): rule broken: The remainder takes the sign of the dividend. Kind: silent logic error. Trigger class: Negative inputs in an odd test written as x % 2 == 1, or in a wrap-around index computed as (i - 1) % n.\n[4] diagnose_an_error (D): rule broken: % is the remainder, not a percentage. Kind: silent logic error. Trigger class: Writing price % 15 for 15 percent of price."
+  },
+  {
+   "from": "arithmetic_operators",
+   "to": "RemainderIsSubtraction",
+   "type": "misconception",
+   "label": "wrong: 9 % 5 means 9 minus 5 (a % b subtracts b from a). | right: % gives the remainder after integer division: 9 % 5 is 4 because 9 = 1 * 5 + 4, and 17 % 5 is 2, not 12."
+  },
+  {
+   "from": "integer_division",
+   "to": "NegativeRemainderSign",
+   "type": "misconception",
+   "label": "wrong: a % b is never negative, and integer division of a negative number rounds down. | right: a / b rounds toward 0 and a % b takes the sign of a: -14 / 3 is -4 and -14 % 3 is -2."
+  },
+  {
+   "from": "remainder_operator",
+   "to": "NegativeRemainderSign",
+   "type": "misconception",
+   "label": "wrong: a % b is never negative, and integer division of a negative number rounds down. | right: a / b rounds toward 0 and a % b takes the sign of a: -14 / 3 is -4 and -14 % 3 is -2."
+  },
+  {
+   "from": "remainder_operator",
+   "to": "RemainderIsQuotient",
+   "type": "misconception",
+   "label": "wrong: 17 % 5 is 3 (the quotient). | right: % returns the remainder, so 17 % 5 is 2."
+  },
+  {
+   "from": "remainder_operator",
+   "to": "RemainderIsSubtraction",
+   "type": "misconception",
+   "label": "wrong: 9 % 5 means 9 minus 5 (a % b subtracts b from a). | right: % gives the remainder after integer division: 9 % 5 is 4 because 9 = 1 * 5 + 4, and 17 % 5 is 2, not 12."
+  },
+  {
+   "from": "arithmetic_operators",
+   "to": "remainder_operator",
+   "type": "prerequisite",
+   "label": "% is one of the int arithmetic operators; it gives the remainder of the division."
+  },
+  {
+   "from": "integer_division",
+   "to": "remainder_operator",
+   "type": "prerequisite",
+   "label": "% is the companion of integer division: a = (a / b) * b + a % b."
+  }
+ ]
+}

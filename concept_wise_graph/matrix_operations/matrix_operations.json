@@ -1,0 +1,219 @@
+{
+ "concept": "matrix_operations",
+ "label": "matrix_operations",
+ "graph_version": "3.9.8 (3.9.7 + one primary per misconception (S9c) and the four remaining sibling edges (S9b), 2026-11-04; listed in revision_3_9_8)",
+ "nodes": [
+  {
+   "id": "array_traversal",
+   "kind": "concept",
+   "label": "array_traversal"
+  },
+  {
+   "id": "matrix_operations",
+   "kind": "concept",
+   "label": "matrix_operations"
+  },
+  {
+   "id": "multidimensional_array",
+   "kind": "concept",
+   "label": "multidimensional_array"
+  },
+  {
+   "id": "nested_loops",
+   "kind": "concept",
+   "label": "nested_loops"
+  },
+  {
+   "id": "power_method",
+   "kind": "concept",
+   "label": "power_method"
+  },
+  {
+   "id": "ragged_array",
+   "kind": "concept",
+   "label": "ragged_array"
+  },
+  {
+   "id": "row_major_order",
+   "kind": "concept",
+   "label": "Row-major and column-major order"
+  },
+  {
+   "id": "two_dimensional_array",
+   "kind": "concept",
+   "label": "two_dimensional_array"
+  },
+  {
+   "id": "matrix_operations@L0",
+   "kind": "learning_level",
+   "label": "L0"
+  },
+  {
+   "id": "matrix_operations@L1",
+   "kind": "learning_level",
+   "label": "L1"
+  },
+  {
+   "id": "matrix_operations@L2",
+   "kind": "learning_level",
+   "label": "L2"
+  },
+  {
+   "id": "matrix_operations@L3",
+   "kind": "learning_level",
+   "label": "L3"
+  },
+  {
+   "id": "matrix_operations@L4",
+   "kind": "learning_level",
+   "label": "L4"
+  },
+  {
+   "id": "ColumnLikeRow",
+   "kind": "misconception",
+   "label": "ColumnLikeRow"
+  },
+  {
+   "id": "MatrixProductCommutes",
+   "kind": "misconception",
+   "label": "MatrixProductCommutes"
+  },
+  {
+   "id": "MatrixProductIsElementwise",
+   "kind": "misconception",
+   "label": "MatrixProductIsElementwise"
+  },
+  {
+   "id": "WholeArrayArithmetic",
+   "kind": "misconception",
+   "label": "WholeArrayArithmetic"
+  },
+  {
+   "id": "topic1.4.g",
+   "kind": "topic",
+   "label": "Two-dimensional arrays (ragged, matrix operations)"
+  }
+ ],
+ "edges": [
+  {
+   "from": "topic1.4.g",
+   "to": "matrix_operations",
+   "type": "contains",
+   "label": "The topic 'Two-dimensional arrays (ragged, matrix operations)' introduces matrix_operations."
+  },
+  {
+   "from": "topic1.4.g",
+   "to": "multidimensional_array",
+   "type": "contains",
+   "label": "The topic 'Two-dimensional arrays (ragged, matrix operations)' introduces multidimensional_array."
+  },
+  {
+   "from": "topic1.4.g",
+   "to": "ragged_array",
+   "type": "contains",
+   "label": "The topic 'Two-dimensional arrays (ragged, matrix operations)' introduces ragged_array."
+  },
+  {
+   "from": "topic1.4.g",
+   "to": "row_major_order",
+   "type": "contains",
+   "label": "Row-major and column-major order is taught under \"Two-dimensional arrays (ragged, matrix operations)\"."
+  },
+  {
+   "from": "topic1.4.g",
+   "to": "two_dimensional_array",
+   "type": "contains",
+   "label": "The topic 'Two-dimensional arrays (ragged, matrix operations)' introduces two_dimensional_array."
+  },
+  {
+   "from": "matrix_operations",
+   "to": "matrix_operations@L0",
+   "type": "has_level",
+   "label": "[0] everyday_reading (E): Folk meaning: 'multiply two tables' suggests multiplying matching entries (as addition adds them), and ordinary multiplication commutes. Rule: each product entry c[i][j] is the dot product of row i of a and column j of b, and AB generally differs from BA.\n[1] misconception (M) -> MatrixProductIsElementwise: wrong rule: c[i][j] = a[i][j] * b[i][j] computes the matrix product. Right rule: c[i][j] is the dot product of row i of a with column j of b: the sum over k of a[i][k]*b[k][j].\n[2] misconception (M) -> MatrixProductCommutes: wrong rule: A * B and B * A are the same matrix. Right rule: Matrix multiplication is not commutative; changing the order may change the product, and for non-square matrices one order may not even be defined.\n[3] inconsistent_trace (T) -> MatrixProductIsElementwise: Points to LT: the innermost k loop finishes accumulating c[i][j] before j moves on. Inconsistent application: c[i][j] is reset inside the k loop on some passes, or a[k][i] is used instead of a[i][k]. (here mixing in: \"c[i][j] = a[i][j] * b[i][j] computes the matrix product\")\n[4] misconception (M) -> WholeArrayArithmetic: wrong rule: a = a + b adds the arrays element by element. Right rule: Java has no arithmetic on whole arrays; write nested loops that compute c[i][j] = a[i][j] + b[i][j].\n[5] misconception (M) -> ColumnLikeRow: wrong rule: Column j of a 2-D array can be picked out as a 1-D array, just like row a[i]. Right rule: There is no column expression; the product reads column j of b element by element as b[k][j] in the k loop."
+  },
+  {
+   "from": "matrix_operations",
+   "to": "matrix_operations@L1",
+   "type": "has_level",
+   "label": "[0] names_the_element (N): Identity: matrix addition and multiplication implemented with nested for loops over 2-D arrays.\n[1] states_the_rule (S): Declarative: sum c[i][j] = a[i][j] + b[i][j]; product c[i][j] = sum over k of a[i][k]*b[k][j]; the product is defined only when the columns of a equal the rows of b."
+  },
+  {
+   "from": "matrix_operations",
+   "to": "matrix_operations@L2",
+   "type": "has_level",
+   "label": "[0] line_by_line_trace (LT): Sequencing: create c (all 0.0); for each i, for each j, for k = 0..N-1 add a[i][k]*b[k][j] into c[i][j]. The k loop completes for each (i, j) before j increases.\n[1] output_prediction (OP): Result: a new N-by-N double matrix c. In the book's example c[1][2] = .3*.5 + .6*.1 + .1*.4 = .25.\n[2] one_step_execution (OS): State transition: one innermost step adds one product a[i][k]*b[k][j] to c[i][j]; nothing else changes."
+  },
+  {
+   "from": "matrix_operations",
+   "to": "matrix_operations@L3",
+   "type": "has_level",
+   "label": "[0] relation_to_neighbour (R): Matrices are stored as 2-D arrays and read entry by entry as a[i][j].\n[1] relation_to_neighbour (R): Addition uses two nested loops (i, j); multiplication adds a third inner loop over k for each dot product.\n[2] relation_to_neighbour (R): The power method repeats vector-matrix multiplication rather than matrix-matrix multiplication, because that is all it needs.\n[3] purpose_of_the_whole (P): Plan/role: c[i][j] is a gatherer (running sum) for one dot product. The whole computation implements linear-algebra operations used throughout science and engineering."
+  },
+  {
+   "from": "matrix_operations",
+   "to": "matrix_operations@L4",
+   "type": "has_level",
+   "label": "[0] predict_a_change (C) -> MatrixProductIsElementwise: Conservation: reordering the i, j, k loops keeps the product (only the summation order changes); swapping a and b changes it. Reusing a c that is not zeroed adds the old values in.\n[1] transfer_to_a_new_program (X): Applicability: use nested-loop matrix code for small and moderate matrices. When only a vector times a matrix is needed (power method), use vector-matrix multiplication, which is far cheaper than matrix-matrix.\n[2] diagnose_an_error (D): rule broken: The product sums a[i][k]*b[k][j] over k. Kind: silent logic error. Trigger class: the element-wise c[i][j] = a[i][j]*b[i][j] is used for the product\n[3] diagnose_an_error (D): rule broken: Columns of a must equal rows of b. Kind: run-time exception. Trigger class: non-square matrices with mismatched inner dimensions, or loop bounds swapped (ArrayIndexOutOfBoundsException)\n[4] diagnose_an_error (D): rule broken: Arrays have no arithmetic operators. Kind: compile-time. Trigger class: c = a + b or a * b written for 2-D arrays (bad operand types)"
+  },
+  {
+   "from": "array_traversal",
+   "to": "WholeArrayArithmetic",
+   "type": "misconception",
+   "label": "wrong: a = a + b adds the arrays element by element. | right: Java has no arithmetic on whole arrays; write a loop that adds a[i] + b[i] for each i."
+  },
+  {
+   "from": "matrix_operations",
+   "to": "ColumnLikeRow",
+   "type": "misconception",
+   "label": "wrong: Column j of a 2-D array can be picked out as a 1-D array, just like row a[i]. | right: a[i] is row i (a 1-D array), but there is no expression for a column; loop over i and use a[i][j]."
+  },
+  {
+   "from": "matrix_operations",
+   "to": "MatrixProductCommutes",
+   "type": "misconception",
+   "label": "wrong: A * B and B * A are the same matrix. | right: Matrix multiplication is not commutative; changing the order may change the product."
+  },
+  {
+   "from": "matrix_operations",
+   "to": "MatrixProductIsElementwise",
+   "type": "misconception",
+   "label": "wrong: c[i][j] = a[i][j] * b[i][j] computes the matrix product. | right: c[i][j] is the dot product of row i of a with column j of b."
+  },
+  {
+   "from": "matrix_operations",
+   "to": "WholeArrayArithmetic",
+   "type": "misconception",
+   "label": "wrong: a = a + b adds the arrays element by element. | right: Java has no arithmetic on whole arrays; write a loop that adds a[i] + b[i] for each i."
+  },
+  {
+   "from": "power_method",
+   "to": "MatrixProductCommutes",
+   "type": "misconception",
+   "label": "wrong: A * B and B * A are the same matrix. | right: Matrix multiplication is not commutative; changing the order may change the product."
+  },
+  {
+   "from": "two_dimensional_array",
+   "to": "ColumnLikeRow",
+   "type": "misconception",
+   "label": "wrong: Column j of a 2-D array can be picked out as a 1-D array, just like row a[i]. | right: a[i] is row i (a 1-D array), but there is no expression for a column; loop over i and use a[i][j]."
+  },
+  {
+   "from": "matrix_operations",
+   "to": "power_method",
+   "type": "prerequisite",
+   "label": "The power method is repeated vector-matrix multiplication."
+  },
+  {
+   "from": "nested_loops",
+   "to": "matrix_operations",
+   "type": "prerequisite",
+   "label": "Matrix addition uses two nested loops over i and j, and matrix multiplication adds a third inner loop over k to compute each dot product c[i][j]."
+  },
+  {
+   "from": "two_dimensional_array",
+   "to": "matrix_operations",
+   "type": "prerequisite",
+   "label": "Matrix operations index a[i][j] in nested loops."
+  }
+ ]
+}

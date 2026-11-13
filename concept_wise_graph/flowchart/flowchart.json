@@ -1,0 +1,114 @@
+{
+ "concept": "flowchart",
+ "label": "Flowchart",
+ "graph_version": "3.9.8 (3.9.7 + one primary per misconception (S9c) and the four remaining sibling edges (S9b), 2026-11-04; listed in revision_3_9_8)",
+ "nodes": [
+  {
+   "id": "algorithm_pseudocode",
+   "kind": "concept",
+   "label": "algorithm_pseudocode"
+  },
+  {
+   "id": "control_flow",
+   "kind": "concept",
+   "label": "control_flow"
+  },
+  {
+   "id": "flowchart",
+   "kind": "concept",
+   "label": "Flowchart"
+  },
+  {
+   "id": "flowchart@L0",
+   "kind": "learning_level",
+   "label": "L0"
+  },
+  {
+   "id": "flowchart@L1",
+   "kind": "learning_level",
+   "label": "L1"
+  },
+  {
+   "id": "flowchart@L2",
+   "kind": "learning_level",
+   "label": "L2"
+  },
+  {
+   "id": "flowchart@L3",
+   "kind": "learning_level",
+   "label": "L3"
+  },
+  {
+   "id": "flowchart@L4",
+   "kind": "learning_level",
+   "label": "L4"
+  },
+  {
+   "id": "topic1.3.a",
+   "kind": "topic",
+   "label": "Control flow"
+  }
+ ],
+ "edges": [
+  {
+   "from": "topic1.3.a",
+   "to": "algorithm_pseudocode",
+   "type": "contains",
+   "label": "Topic 'Control flow' of section 1.3 holds the concept algorithm pseudocode."
+  },
+  {
+   "from": "topic1.3.a",
+   "to": "control_flow",
+   "type": "contains",
+   "label": "The topic 'Control flow' introduces control_flow."
+  },
+  {
+   "from": "topic1.3.a",
+   "to": "flowchart",
+   "type": "contains",
+   "label": "Flowchart is taught under \"Control flow\"."
+  },
+  {
+   "from": "flowchart",
+   "to": "flowchart@L0",
+   "type": "has_level",
+   "label": "[0] everyday_reading (E): Folk meaning: an everyday flowchart is a static picture or a decision tree read top to bottom once, so a novice reads a loop-back arrow as decoration and the diamond as a one-time question. In a program flowchart, each path is a possible execution, and an arrow returning to a diamond means the test is evaluated again."
+  },
+  {
+   "from": "flowchart",
+   "to": "flowchart@L1",
+   "type": "has_level",
+   "label": "[0] names_the_element (N): Diagram: a flowchart is a diagram of control flow. Boxes are statements, diamonds are boolean tests with yes/no exits, and arrows show the order of execution.\n[1] states_the_rule (S): Every path through the flowchart corresponds to a flow-of-control path through the program. An if is a diamond whose branches rejoin; a while is a diamond whose yes branch runs the body and returns to the diamond."
+  },
+  {
+   "from": "flowchart",
+   "to": "flowchart@L2",
+   "type": "has_level",
+   "label": "[0] line_by_line_trace (LT): Execution order: start at the entry; execute each box when reached; at a diamond evaluate the condition and follow the yes or no arrow; follow back arrows to re-test; stop at the exit.\n[1] output_prediction (OP): The result of reading a flowchart for given inputs is the path taken (the sequence of boxes and branch choices) and so the output. For `if (x > y) max = x; else max = y;` with x = 2, y = 5, the path goes to the no branch and sets max = 5.\n[2] one_step_execution (OS): One step moves along one arrow: either execute one box (changing the variables it assigns) or evaluate one diamond (changing nothing, choosing yes or no)."
+  },
+  {
+   "from": "flowchart",
+   "to": "flowchart@L3",
+   "type": "has_level",
+   "label": "[0] relation_to_neighbour (R): The flowchart's arrows are the program's control flow: sequence = a straight chain, if = branch and rejoin, loop = a back arrow to the test. Nesting a loop draws a loop inside a loop, and the diagram quickly becomes complex.\n[1] relation_to_neighbour (R): Both describe an algorithm before it is code: a flowchart draws the flow of control as boxes and arrows, pseudocode writes the steps as English and Java text.\n[2] purpose_of_the_whole (P): Purpose: to visualise and understand the control flow of basic building blocks (if, while, for) and to check where each path leads. It is not a way to design whole modern programs."
+  },
+  {
+   "from": "flowchart",
+   "to": "flowchart@L4",
+   "type": "has_level",
+   "label": "[0] predict_a_change (C): Moving the back arrow from the diamond to the body box changes a while into a do-while (test after). Removing the back arrow turns the loop into an if. Swapping the yes and no labels swaps the branches.\n[1] transfer_to_a_new_program (X): Use a flowchart to understand a single if, while, for or a small nesting. For larger programs, use indentation, traces and a limited set of structured constructs instead: flowcharts of complex control flow are hard to read.\n[2] diagnose_an_error (D): rule broken: A loop's back arrow must return to the test, not straight to the body. Kind: silent logic error. Trigger class: Drawing or tracing the while body as repeating without re-checking the diamond: the body runs again after the condition is false.\n[3] diagnose_an_error (D): rule broken: A diamond must have both yes and no exits. Kind: silent logic error. Trigger class: Omitting the no path (e.g. for an if without else, or a loop exit): the diagram has no path for the false case."
+  },
+  {
+   "from": "algorithm_pseudocode",
+   "to": "flowchart",
+   "type": "parallel",
+   "label": "Both describe an algorithm before it is code: a flowchart draws the flow of control as boxes and arrows, pseudocode writes the steps as English and Java text."
+  },
+  {
+   "from": "control_flow",
+   "to": "flowchart",
+   "type": "prerequisite",
+   "label": "A flowchart draws the flow of control: each path through the diagram is a path the program can take."
+  }
+ ]
+}

@@ -1,0 +1,253 @@
+{
+ "concept": "int",
+ "label": "int",
+ "graph_version": "3.9.8 (3.9.7 + one primary per misconception (S9c) and the four remaining sibling edges (S9b), 2026-11-04; listed in revision_3_9_8)",
+ "nodes": [
+  {
+   "id": "arithmetic_operators",
+   "kind": "concept",
+   "label": "arithmetic_operators"
+  },
+  {
+   "id": "boolean",
+   "kind": "concept",
+   "label": "boolean"
+  },
+  {
+   "id": "char",
+   "kind": "concept",
+   "label": "char"
+  },
+  {
+   "id": "double",
+   "kind": "concept",
+   "label": "double"
+  },
+  {
+   "id": "int",
+   "kind": "concept",
+   "label": "int"
+  },
+  {
+   "id": "int_literal_limit",
+   "kind": "concept",
+   "label": "int_literal_limit"
+  },
+  {
+   "id": "integer_constants",
+   "kind": "concept",
+   "label": "integer_constants"
+  },
+  {
+   "id": "integer_division",
+   "kind": "concept",
+   "label": "integer_division"
+  },
+  {
+   "id": "long_type",
+   "kind": "concept",
+   "label": "long_type"
+  },
+  {
+   "id": "overflow",
+   "kind": "concept",
+   "label": "overflow"
+  },
+  {
+   "id": "primitive_type",
+   "kind": "concept",
+   "label": "primitive_type"
+  },
+  {
+   "id": "remainder_operator",
+   "kind": "concept",
+   "label": "remainder_operator"
+  },
+  {
+   "id": "int@L0",
+   "kind": "learning_level",
+   "label": "L0"
+  },
+  {
+   "id": "int@L1",
+   "kind": "learning_level",
+   "label": "L1"
+  },
+  {
+   "id": "int@L2",
+   "kind": "learning_level",
+   "label": "L2"
+  },
+  {
+   "id": "int@L3",
+   "kind": "learning_level",
+   "label": "L3"
+  },
+  {
+   "id": "int@L4",
+   "kind": "learning_level",
+   "label": "L4"
+  },
+  {
+   "id": "IntOverflowWidensAutomatically",
+   "kind": "misconception",
+   "label": "IntOverflowWidensAutomatically"
+  },
+  {
+   "id": "IntegerDivisionGivesFraction",
+   "kind": "misconception",
+   "label": "IntegerDivisionGivesFraction"
+  },
+  {
+   "id": "topic1.2.c",
+   "kind": "topic",
+   "label": "Integers"
+  }
+ ],
+ "edges": [
+  {
+   "from": "topic1.2.c",
+   "to": "arithmetic_operators",
+   "type": "contains",
+   "label": "The topic 'Integers' introduces arithmetic_operators."
+  },
+  {
+   "from": "topic1.2.c",
+   "to": "int",
+   "type": "contains",
+   "label": "The topic 'Integers' introduces int."
+  },
+  {
+   "from": "topic1.2.c",
+   "to": "int_literal_limit",
+   "type": "contains",
+   "label": "The topic 'Integers' introduces int_literal_limit."
+  },
+  {
+   "from": "topic1.2.c",
+   "to": "integer_constants",
+   "type": "contains",
+   "label": "The topic 'Integers' introduces integer_constants."
+  },
+  {
+   "from": "topic1.2.c",
+   "to": "integer_division",
+   "type": "contains",
+   "label": "The topic 'Integers' introduces integer_division."
+  },
+  {
+   "from": "topic1.2.c",
+   "to": "long_type",
+   "type": "contains",
+   "label": "The topic 'Integers' introduces long_type."
+  },
+  {
+   "from": "topic1.2.c",
+   "to": "overflow",
+   "type": "contains",
+   "label": "The topic 'Integers' introduces overflow."
+  },
+  {
+   "from": "topic1.2.c",
+   "to": "remainder_operator",
+   "type": "contains",
+   "label": "The topic 'Integers' introduces remainder_operator."
+  },
+  {
+   "from": "int",
+   "to": "int@L0",
+   "type": "has_level",
+   "label": "[0] everyday_reading (E): In maths integers are unbounded, and dividing two integers can give a fraction (10 / 3 = 3.33...). A Java int has a fixed 32-bit range, its / discards the fraction, and results outside the range wrap around.\n[1] misconception (M) -> IntegerDivisionGivesFraction: wrong rule: 10 / 3 evaluates to 3.333. Right rule: Dividing two ints gives an int: the fractional part is discarded.\n[2] misconception (M) -> IntOverflowWidensAutomatically: wrong rule: An int result that is too large is automatically stored as a bigger number. Right rule: int arithmetic is 32-bit; a result outside the range wraps around.\n[3] inconsistent_trace (T) -> IntegerDivisionGivesFraction: Points to LT (each int operation is done immediately in 32-bit integer arithmetic). Applied unevenly, a student truncates 10 / 3 to 3 in one step but computes 10 / 3 * 3 as 10, or wraps on one overflow but not another. (here mixing in: \"10 / 3 evaluates to 3.333\")"
+  },
+  {
+   "from": "int",
+   "to": "int@L1",
+   "type": "has_level",
+   "label": "[0] names_the_element (N): int: Java's 32-bit signed integer primitive type.\n[1] states_the_rule (S): int values run from -2147483648 to 2147483647. + - * / % take two ints and produce an int. / discards the fraction, and division or remainder by zero is not allowed."
+  },
+  {
+   "from": "int",
+   "to": "int@L2",
+   "type": "has_level",
+   "label": "[0] line_by_line_trace (LT): An int expression evaluates its operands left to right and applies * / % before + -. Each operation is done at once in 32-bit precision, so every intermediate result is already truncated or wrapped.\n[1] output_prediction (OP): The result is an int: 5 + 3 is 8, 5 / 3 is 1, 5 % 3 is 2, 3 * 5 - 2 is 13, and 1 / 0 is a run-time error.\n[2] one_step_execution (OS): An assignment like n = n + 1 changes n by exactly 1, with no rounding. A result outside the range is stored wrapped around."
+  },
+  {
+   "from": "int",
+   "to": "int@L3",
+   "type": "has_level",
+   "label": "[0] relation_to_neighbour (R): int op double promotes the int and gives a double. A double becomes an int only through a cast, which truncates toward zero.\n[1] relation_to_neighbour (R): int and boolean do not convert into each other. Comparing ints gives a boolean (x > 0), and an int cannot itself be used as a condition.\n[2] relation_to_neighbour (R): In arithmetic a char is promoted to its int code. An int becomes a char only through a cast.\n[3] relation_to_neighbour (R): Because int has a fixed 32-bit range, results outside it wrap around silently.\n[4] relation_to_neighbour (R): If either operand is long, the operation is 64-bit and the result is long. Storing a long into an int needs a cast.\n[5] relation_to_neighbour (R): An int literal must lie in int's range, so larger digit strings need an L (long) literal.\n[6] relation_to_neighbour (R): int is the 32-bit integral primitive type, and the default type for integer literals and arithmetic.\n[7] purpose_of_the_whole (P): int is used for counting and indexing: counters, loop steppers, array indices, sizes, and exact whole quantities (cents)."
+  },
+  {
+   "from": "int",
+   "to": "int@L4",
+   "type": "has_level",
+   "label": "[0] predict_a_change (C) -> IntegerDivisionGivesFraction: Changing a variable from int to double changes / from truncating to fractional, and output from 3 to 3.0. Multiplying before dividing keeps precision (59 * 100 / 60 is 98, but 59 / 60 * 100 is 0).\n[1] transfer_to_a_new_program (X): Use int for whole quantities that stay under about 2 billion (counts, indices, cents). Use long beyond that, BigInteger when values are unbounded, and double for measurements or fractions.\n[2] diagnose_an_error (D): rule broken: int division and remainder by zero are undefined. Kind: run-time exception. Trigger class: Any int / or % whose divisor evaluates to 0: ArithmeticException: / by zero.\n[3] diagnose_an_error (D): rule broken: int results are only 32 bits and overflow is not reported. Kind: silent logic error. Trigger class: Results beyond about plus or minus 2.1 billion (big products, factorials above 12!, sums of large values): a wrapped, often negative, value.\n[4] diagnose_an_error (D): rule broken: A double cannot be stored in an int without a cast. Kind: compile-time. Trigger class: int x = 1.1; or int avg = sum / 2.0;: 'possible lossy conversion from double to int'."
+  },
+  {
+   "from": "int",
+   "to": "IntOverflowWidensAutomatically",
+   "type": "misconception",
+   "label": "wrong: An int result that is too large is automatically stored as a bigger number. | right: int arithmetic is 32-bit; a result outside the range wraps around."
+  },
+  {
+   "from": "int",
+   "to": "IntegerDivisionGivesFraction",
+   "type": "misconception",
+   "label": "wrong: 10 / 3 evaluates to 3.333.... | right: Dividing two ints gives an int: the fractional part is discarded."
+  },
+  {
+   "from": "integer_division",
+   "to": "IntegerDivisionGivesFraction",
+   "type": "misconception",
+   "label": "wrong: 10 / 3 evaluates to 3.333.... | right: Dividing two ints gives an int: the fractional part is discarded."
+  },
+  {
+   "from": "overflow",
+   "to": "IntOverflowWidensAutomatically",
+   "type": "misconception",
+   "label": "wrong: An int result that is too large is automatically stored as a bigger number. | right: int arithmetic is 32-bit; a result outside the range wraps around."
+  },
+  {
+   "from": "int",
+   "to": "boolean",
+   "type": "parallel",
+   "label": "An int holds an integer and is a numeric type for computing with numbers; a boolean holds only true or false and is used for computing with logical values."
+  },
+  {
+   "from": "int",
+   "to": "char",
+   "type": "parallel",
+   "label": "An int holds a whole number; a char holds one character, which Java stores as its numeric code."
+  },
+  {
+   "from": "int",
+   "to": "double",
+   "type": "parallel",
+   "label": "With two ints, a / b drops the fractional part; if either a or b is a double, a / b keeps the fractional part."
+  },
+  {
+   "from": "int",
+   "to": "int_literal_limit",
+   "type": "prerequisite",
+   "label": "The limit on int literals is int's 32-bit range, -2147483648 to 2147483647."
+  },
+  {
+   "from": "int",
+   "to": "long_type",
+   "type": "prerequisite",
+   "label": "long is the wider integer type used when int's range is too small."
+  },
+  {
+   "from": "int",
+   "to": "overflow",
+   "type": "prerequisite",
+   "label": "Overflow happens because an int has a fixed 32-bit range."
+  },
+  {
+   "from": "primitive_type",
+   "to": "int",
+   "type": "prerequisite",
+   "label": "int is one of the eight primitive types, the one used for integers."
+  }
+ ]
+}

@@ -1,0 +1,169 @@
+{
+ "concept": "algorithm_pseudocode",
+ "label": "algorithm_pseudocode",
+ "graph_version": "3.9.8 (3.9.7 + one primary per misconception (S9c) and the four remaining sibling edges (S9b), 2026-11-04; listed in revision_3_9_8)",
+ "nodes": [
+  {
+   "id": "algorithm_pseudocode",
+   "kind": "concept",
+   "label": "algorithm_pseudocode"
+  },
+  {
+   "id": "control_flow",
+   "kind": "concept",
+   "label": "control_flow"
+  },
+  {
+   "id": "flowchart",
+   "kind": "concept",
+   "label": "Flowchart"
+  },
+  {
+   "id": "loop_body",
+   "kind": "concept",
+   "label": "loop_body"
+  },
+  {
+   "id": "program_text",
+   "kind": "concept",
+   "label": "program_text"
+  },
+  {
+   "id": "statement",
+   "kind": "concept",
+   "label": "statement"
+  },
+  {
+   "id": "algorithm_pseudocode@L0",
+   "kind": "learning_level",
+   "label": "L0"
+  },
+  {
+   "id": "algorithm_pseudocode@L1",
+   "kind": "learning_level",
+   "label": "L1"
+  },
+  {
+   "id": "algorithm_pseudocode@L2",
+   "kind": "learning_level",
+   "label": "L2"
+  },
+  {
+   "id": "algorithm_pseudocode@L3",
+   "kind": "learning_level",
+   "label": "L3"
+  },
+  {
+   "id": "algorithm_pseudocode@L4",
+   "kind": "learning_level",
+   "label": "L4"
+  },
+  {
+   "id": "ComputerFillsInIntent",
+   "kind": "misconception",
+   "label": "ComputerFillsInIntent"
+  },
+  {
+   "id": "PseudocodeRunsAsIs",
+   "kind": "misconception",
+   "label": "PseudocodeRunsAsIs"
+  },
+  {
+   "id": "topic1.3.a",
+   "kind": "topic",
+   "label": "Control flow"
+  }
+ ],
+ "edges": [
+  {
+   "from": "topic1.3.a",
+   "to": "algorithm_pseudocode",
+   "type": "contains",
+   "label": "Topic 'Control flow' of section 1.3 holds the concept algorithm pseudocode."
+  },
+  {
+   "from": "topic1.3.a",
+   "to": "control_flow",
+   "type": "contains",
+   "label": "The topic 'Control flow' introduces control_flow."
+  },
+  {
+   "from": "topic1.3.a",
+   "to": "flowchart",
+   "type": "contains",
+   "label": "Flowchart is taught under \"Control flow\"."
+  },
+  {
+   "from": "algorithm_pseudocode",
+   "to": "algorithm_pseudocode@L0",
+   "type": "has_level",
+   "label": "[0] everyday_reading (E): Everyday instructions leave steps to the reader's common sense. An algorithm lists every step that specifies how to solve the problem, and the computer does exactly those steps in order.\n[1] misconception (M) -> PseudocodeRunsAsIs: wrong rule: Pseudocode can be compiled and run as it is. Right rule: Pseudocode mixes Java and English to outline the algorithm; every English step must still be written as Java statements before the program compiles.\n[2] inconsistent_trace (T) -> PseudocodeRunsAsIs: Applies the algorithm idea unevenly: spells out every step for one part of the problem but leaves another part as a single vague step that the computer is expected to understand. (here mixing in: \"Pseudocode can be compiled and run as it is\")\n[3] misconception (M) -> ComputerFillsInIntent: wrong rule: The computer fills in omitted steps or values that the programmer meant. Right rule: The computer executes exactly the statements written, once each in the order given; nothing that was meant but not written happens."
+  },
+  {
+   "from": "algorithm_pseudocode",
+   "to": "algorithm_pseudocode@L1",
+   "type": "has_level",
+   "label": "[0] names_the_element (N): Algorithm: a sequence of steps that specifies how to solve a problem; pseudocode: an outline of it in English and Java.\n[1] states_the_rule (S): An algorithm is a sequence of steps that specifies how to solve a problem. Pseudocode outlines it with a mix of Java statements and English comments, and shows which smaller steps still have to be written."
+  },
+  {
+   "from": "algorithm_pseudocode",
+   "to": "algorithm_pseudocode@L2",
+   "type": "has_level",
+   "label": "[0] line_by_line_trace (LT): Sequencing: state the problem, write the steps in order in pseudocode, refine each English step until it is one or a few Java statements, then code and test.\n[1] output_prediction (OP): Result: the outcome of an algorithm on an input is found by carrying out its steps by hand; Euclid's algorithm on 1440 and 408 gives 24.\n[2] one_step_execution (OS): State transition: one step of an algorithm changes the values it works on in one defined way, as one statement does in the program."
+  },
+  {
+   "from": "algorithm_pseudocode",
+   "to": "algorithm_pseudocode@L3",
+   "type": "has_level",
+   "label": "[0] relation_to_neighbour (R): Each step of the algorithm becomes one or more statements, executed in the same order.\n[1] relation_to_neighbour (R): A flowchart and pseudocode describe the same algorithm: one as a diagram of the flow of control, the other as text.\n[2] purpose_of_the_whole (P): Plan: decide what the program must do, step by step, before writing Java, so that the code only translates the steps."
+  },
+  {
+   "from": "algorithm_pseudocode",
+   "to": "algorithm_pseudocode@L4",
+   "type": "has_level",
+   "label": "[0] predict_a_change (C) -> PseudocodeRunsAsIs: Conservation: refining a pseudocode step into Java keeps its meaning; a different algorithm for the same problem (for example Euclid versus trying every divisor) keeps the answer but changes the number of steps.\n[1] transfer_to_a_new_program (X): Before coding a non-trivial problem, write the algorithm as pseudocode, check it by hand on a small input, then translate each step into Java.\n[2] diagnose_an_error (D): rule broken: Every step of an algorithm must be stated. Kind: logic error. Trigger class: a step that was left implicit in the outline (an initialization, the last case, an exit test) is missing from the code"
+  },
+  {
+   "from": "algorithm_pseudocode",
+   "to": "ComputerFillsInIntent",
+   "type": "misconception",
+   "label": "wrong: The computer fills in omitted steps or values that the programmer meant, e.g. REPEAT 4 [FORWARD 30] draws a square without a turn command. | right: The computer executes only what the code states; every needed step and value must be written."
+  },
+  {
+   "from": "algorithm_pseudocode",
+   "to": "PseudocodeRunsAsIs",
+   "type": "misconception",
+   "label": "wrong: Pseudocode can be compiled and run as it is. | right: Pseudocode mixes Java and English to outline the algorithm; every English step must still be written as Java statements before the program compiles."
+  },
+  {
+   "from": "loop_body",
+   "to": "ComputerFillsInIntent",
+   "type": "misconception",
+   "label": "wrong: The computer fills in omitted steps or values that the programmer meant, e.g. REPEAT 4 [FORWARD 30] draws a square without a turn command. | right: The computer executes only what the code states; every needed step and value must be written."
+  },
+  {
+   "from": "program_text",
+   "to": "ComputerFillsInIntent",
+   "type": "misconception",
+   "label": "wrong: The computer fills in omitted steps or values that the programmer meant, e.g. REPEAT 4 [FORWARD 30] draws a square without a turn command. | right: The computer executes only what the code states; every needed step and value must be written."
+  },
+  {
+   "from": "statement",
+   "to": "ComputerFillsInIntent",
+   "type": "misconception",
+   "label": "wrong: The computer fills in omitted steps or values that the programmer meant, e.g. REPEAT 4 [FORWARD 30] draws a square without a turn command. | right: The computer executes only what the code states; every needed step and value must be written."
+  },
+  {
+   "from": "algorithm_pseudocode",
+   "to": "flowchart",
+   "type": "parallel",
+   "label": "Both describe an algorithm before it is code: a flowchart draws the flow of control as boxes and arrows, pseudocode writes the steps as English and Java text."
+  },
+  {
+   "from": "statement",
+   "to": "algorithm_pseudocode",
+   "type": "prerequisite",
+   "label": "An algorithm becomes a program as a sequence of statements, executed once each in the order given."
+  }
+ ]
+}

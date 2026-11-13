@@ -1,0 +1,136 @@
+{
+ "concept": "shuffle",
+ "label": "shuffle",
+ "graph_version": "3.9.8 (3.9.7 + one primary per misconception (S9c) and the four remaining sibling edges (S9b), 2026-11-04; listed in revision_3_9_8)",
+ "nodes": [
+  {
+   "id": "array_exchange",
+   "kind": "concept",
+   "label": "array_exchange"
+  },
+  {
+   "id": "math_library",
+   "kind": "concept",
+   "label": "math_library"
+  },
+  {
+   "id": "sampling_without_replacement",
+   "kind": "concept",
+   "label": "sampling_without_replacement"
+  },
+  {
+   "id": "shuffle",
+   "kind": "concept",
+   "label": "shuffle"
+  },
+  {
+   "id": "shuffle@L0",
+   "kind": "learning_level",
+   "label": "L0"
+  },
+  {
+   "id": "shuffle@L1",
+   "kind": "learning_level",
+   "label": "L1"
+  },
+  {
+   "id": "shuffle@L2",
+   "kind": "learning_level",
+   "label": "L2"
+  },
+  {
+   "id": "shuffle@L3",
+   "kind": "learning_level",
+   "label": "L3"
+  },
+  {
+   "id": "shuffle@L4",
+   "kind": "learning_level",
+   "label": "L4"
+  },
+  {
+   "id": "BiasedShuffle",
+   "kind": "misconception",
+   "label": "BiasedShuffle"
+  },
+  {
+   "id": "topic1.4.d",
+   "kind": "topic",
+   "label": "Exchange, shuffling and sampling"
+  }
+ ],
+ "edges": [
+  {
+   "from": "topic1.4.d",
+   "to": "array_exchange",
+   "type": "contains",
+   "label": "The topic 'Exchange, shuffling and sampling' introduces array_exchange."
+  },
+  {
+   "from": "topic1.4.d",
+   "to": "sampling_without_replacement",
+   "type": "contains",
+   "label": "The topic 'Exchange, shuffling and sampling' introduces sampling_without_replacement."
+  },
+  {
+   "from": "topic1.4.d",
+   "to": "shuffle",
+   "type": "contains",
+   "label": "The topic 'Exchange, shuffling and sampling' introduces shuffle."
+  },
+  {
+   "from": "shuffle",
+   "to": "shuffle@L0",
+   "type": "has_level",
+   "label": "[0] everyday_reading (E): Folk meaning: 'shuffle' means mix randomly, so any random swapping seems good enough. Java/algorithm rule: picking the partner r uniformly from i..N-1 makes all N! orders equally likely; picking from 0..N-1 does not.\n[1] misconception (M) -> BiasedShuffle: wrong rule: Swapping each a[i] with a random element from the whole array gives a uniformly random order. Right rule: r must be chosen between i and n - 1 for every ordering to be equally likely.\n[2] inconsistent_trace (T) -> BiasedShuffle: Points to LT: for each i from left to right, compute r in i..N-1 and then exchange deck[i] and deck[r]. Inconsistent application: r is drawn from the whole range on some passes, or the exchange is skipped when r == i. (here mixing in: \"Swapping each a[i] with a random element from the whole array gives a uniformly random order\")"
+  },
+  {
+   "from": "shuffle",
+   "to": "shuffle@L1",
+   "type": "has_level",
+   "label": "[0] names_the_element (N): Identity: the Knuth (Fisher-Yates) shuffle, which produces a random permutation by exchanging each position, left to right, with a uniformly chosen position at or to its right.\n[1] states_the_rule (S): Declarative: for (int i = 0; i < N; i++) { int r = i + (int) (Math.random() * (N-i)); exchange deck[i] and deck[r]; }."
+  },
+  {
+   "from": "shuffle",
+   "to": "shuffle@L2",
+   "type": "has_level",
+   "label": "[0] line_by_line_trace (LT): Sequencing: N = deck.length is read once; on each pass r is computed first (Math.random(), times N-i, cast to int, plus i), then the three-step exchange runs, then i increases.\n[1] output_prediction (OP): Result: a permutation of the original elements with every one of the N! orders equally likely; the output differs from run to run.\n[2] one_step_execution (OS): State transition: one pass picks r and exchanges deck[i] with deck[r]; afterwards deck[0..i] is fixed for the rest of the shuffle."
+  },
+  {
+   "from": "shuffle",
+   "to": "shuffle@L3",
+   "type": "has_level",
+   "label": "[0] relation_to_neighbour (R): Using the exchange idiom guarantees the deck holds the same cards after the shuffle.\n[1] relation_to_neighbour (R): (int) (Math.random() * (N-i)) is a uniform int in 0..N-i-1, so r = i + that value is uniform in i..N-1.\n[2] relation_to_neighbour (R): Stopping the shuffle after the first M passes leaves a uniform random sample in positions 0..M-1.\n[3] purpose_of_the_whole (P): Plan/role: randomize the order of an array in place in linear time (dealing cards, random permutations); the array is an organizer."
+  },
+  {
+   "from": "shuffle",
+   "to": "shuffle@L4",
+   "type": "has_level",
+   "label": "[0] predict_a_change (C) -> BiasedShuffle: Conservation: the set of cards is invariant (exchanges only), and after pass i, deck[0..i] is a uniform random sample. Widening r's range to 0..N-1 keeps the set but breaks uniformity.\n[1] transfer_to_a_new_program (X): Applicability: use it to randomize a whole array in place. For only M random items, run the first M passes. When the original order must be kept, shuffle an index permutation and use it to index the data.\n[2] diagnose_an_error (D): rule broken: r must be uniform over i..N-1. Kind: silent logic error. Trigger class: r = (int) (Math.random() * N): the shuffle runs and looks random, but some orders are more likely than others\n[3] diagnose_an_error (D): rule broken: The cast applies to the scaled product. Kind: silent logic error. Trigger class: (int) Math.random() * (N-i) casts first and is always 0, so r == i and nothing moves\n[4] diagnose_an_error (D): rule broken: r must stay within 0..N-1. Kind: run-time exception. Trigger class: r = i + (int) (Math.random() * N) can exceed N-1 (ArrayIndexOutOfBoundsException)"
+  },
+  {
+   "from": "shuffle",
+   "to": "BiasedShuffle",
+   "type": "misconception",
+   "label": "wrong: Swapping each a[i] with a random element from the whole array gives a uniformly random order. | right: r must be chosen between i and n - 1 for every ordering to be equally likely."
+  },
+  {
+   "from": "array_exchange",
+   "to": "shuffle",
+   "type": "prerequisite",
+   "label": "Shuffling is a loop of exchanges with randomly chosen positions."
+  },
+  {
+   "from": "math_library",
+   "to": "shuffle",
+   "type": "prerequisite",
+   "label": "The random position r between i and N-1 is computed with Math.random(), so each remaining card is equally likely to be chosen."
+  },
+  {
+   "from": "shuffle",
+   "to": "sampling_without_replacement",
+   "type": "prerequisite",
+   "label": "Sample uses the basic operation underlying shuffling: for each of the first M positions it exchanges perm[i] with a random element to its right."
+  }
+ ]
+}

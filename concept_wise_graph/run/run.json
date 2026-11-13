@@ -1,0 +1,219 @@
+{
+ "concept": "run",
+ "label": "run",
+ "graph_version": "3.9.8 (3.9.7 + one primary per misconception (S9c) and the four remaining sibling edges (S9b), 2026-11-04; listed in revision_3_9_8)",
+ "nodes": [
+  {
+   "id": "compile",
+   "kind": "concept",
+   "label": "compile"
+  },
+  {
+   "id": "incremental_development",
+   "kind": "concept",
+   "label": "incremental_development"
+  },
+  {
+   "id": "logical_error",
+   "kind": "concept",
+   "label": "logical_error"
+  },
+  {
+   "id": "piping",
+   "kind": "concept",
+   "label": "piping"
+  },
+  {
+   "id": "program_text",
+   "kind": "concept",
+   "label": "program_text"
+  },
+  {
+   "id": "redirection",
+   "kind": "concept",
+   "label": "redirection"
+  },
+  {
+   "id": "run",
+   "kind": "concept",
+   "label": "run"
+  },
+  {
+   "id": "run_time_error",
+   "kind": "concept",
+   "label": "run_time_error"
+  },
+  {
+   "id": "standard_audio",
+   "kind": "concept",
+   "label": "standard_audio"
+  },
+  {
+   "id": "testing",
+   "kind": "concept",
+   "label": "testing"
+  },
+  {
+   "id": "AudioProgramHangs",
+   "kind": "error",
+   "label": "AudioProgramHangs"
+  },
+  {
+   "id": "run@L0",
+   "kind": "learning_level",
+   "label": "L0"
+  },
+  {
+   "id": "run@L1",
+   "kind": "learning_level",
+   "label": "L1"
+  },
+  {
+   "id": "run@L2",
+   "kind": "learning_level",
+   "label": "L2"
+  },
+  {
+   "id": "run@L3",
+   "kind": "learning_level",
+   "label": "L3"
+  },
+  {
+   "id": "run@L4",
+   "kind": "learning_level",
+   "label": "L4"
+  },
+  {
+   "id": "CompileRunsProgram",
+   "kind": "misconception",
+   "label": "CompileRunsProgram"
+  },
+  {
+   "id": "topic1.1.a",
+   "kind": "topic",
+   "label": "Programming in Java: create, compile, execute"
+  }
+ ],
+ "edges": [
+  {
+   "from": "topic1.1.a",
+   "to": "compile",
+   "type": "contains",
+   "label": "The topic 'Programming in Java: create, compile, execute' introduces compile."
+  },
+  {
+   "from": "topic1.1.a",
+   "to": "incremental_development",
+   "type": "contains",
+   "label": "Topic 'Programming in Java: create, compile, execute' of section 1.1 holds the concept incremental development."
+  },
+  {
+   "from": "topic1.1.a",
+   "to": "program_text",
+   "type": "contains",
+   "label": "The topic 'Programming in Java: create, compile, execute' introduces program_text."
+  },
+  {
+   "from": "topic1.1.a",
+   "to": "run",
+   "type": "contains",
+   "label": "The topic 'Programming in Java: create, compile, execute' introduces run."
+  },
+  {
+   "from": "run",
+   "to": "AudioProgramHangs",
+   "type": "error",
+   "label": "wrong: Ends a StdAudio program with no System.exit(0), so the terminal hangs and needs <ctrl-c>. | right: In the book's setup, a program that uses StdAudio should end main() with System.exit(0)."
+  },
+  {
+   "from": "standard_audio",
+   "to": "AudioProgramHangs",
+   "type": "error",
+   "label": "wrong: Ends a StdAudio program with no System.exit(0), so the terminal hangs and needs <ctrl-c>. | right: In the book's setup, a program that uses StdAudio should end main() with System.exit(0)."
+  },
+  {
+   "from": "run",
+   "to": "run@L0",
+   "type": "has_level",
+   "label": "[0] everyday_reading (E): Everyday meaning: 'run the program' as if the file ran itself, or the program 'looks at all of itself at once'. Java rule: java Name starts the JVM, which calls Name's main() and executes its statements one at a time, in order.\n[1] misconception (M) -> CompileRunsProgram: wrong rule: Compiling also executes the program. Right rule: The program runs only when java Name is typed; javac only translates it.\n[2] inconsistent_trace (T) -> CompileRunsProgram: Applies the run rule (LT: main's statements execute in order, one by one, each once) unevenly: e.g. executes the print statements in written order on one trace but skips one or reorders them on another. (here mixing in: \"compiling also executes the program\")"
+  },
+  {
+   "from": "run",
+   "to": "run@L1",
+   "type": "has_level",
+   "label": "[0] names_the_element (N): Running (executing) a program is launching it with java Name so that the Java Virtual Machine follows its instructions.\n[1] states_the_rule (S): Typing java followed by a class name makes the system call the main() method defined in that class and execute its statements; java Name args... also passes the command-line arguments to main. The development cycle is the same in any environment (terminal or IDE): edit the .java file, compile it with javac, run it with java."
+  },
+  {
+   "from": "run",
+   "to": "run@L2",
+   "type": "has_level",
+   "label": "[0] line_by_line_trace (LT): The JVM starts at the first statement of main and ends when it finishes the last statement; statements run one by one, in order, and control returns to the system when main finishes.\n[1] output_prediction (OP): The result of a run is what the program prints to the terminal (for java HelloWorld: Hello, World), or an exception message if a run-time error occurs.\n[2] one_step_execution (OS): One execution step runs one statement of main, which changes the program state (a variable or the output) and passes control to the next statement."
+  },
+  {
+   "from": "run",
+   "to": "run@L3",
+   "type": "has_level",
+   "label": "[0] relation_to_neighbour (R): java Name runs the Name.class that javac produced, so compiling must succeed first; the run reflects the source as of the last successful compile.\n[1] relation_to_neighbour (R): A run-time error appears only while java Name executes; the JVM stops the program and prints the exception.\n[2] relation_to_neighbour (R): A logic error is seen only by running the program and comparing its output with the intended output.\n[3] relation_to_neighbour (R): A program is tested by running it on chosen inputs and comparing what it prints with what it should print.\n[4] relation_to_neighbour (R): Each small step is run and checked before the next one is added.\n[5] purpose_of_the_whole (P): Purpose: make the computer carry out the program on particular inputs; running the same compiled program with different command-line arguments gives different results."
+  },
+  {
+   "from": "run",
+   "to": "run@L4",
+   "type": "has_level",
+   "label": "[0] predict_a_change (C) -> CompileRunsProgram: Running again with the same arguments reproduces the same output (for programs without randomness or input); changing the arguments changes the output without recompiling; editing the source changes nothing until recompiled.\n[1] transfer_to_a_new_program (X): Run the program to test it on chosen inputs and to see run-time and logic errors that compiling cannot find; adding print statements and rerunning is a simple way to check what is actually executing.\n[2] diagnose_an_error (D): rule broken: In the book's setup a StdAudio program should end main() with System.exit(0). Kind: silent logic error. Trigger class: a program that uses StdAudio and finishes main without System.exit(0): the terminal hangs and needs <ctrl-c>\n[3] diagnose_an_error (D): rule broken: Run only after a successful compile; java takes a class name. Kind: launch error. Trigger class: running java Name when Name.class is missing or stale, or typing java Name.java\n[4] diagnose_an_error (D): rule broken: A required command-line argument must be typed. Kind: run-time exception. Trigger class: running a program that reads args[0] with no argument"
+  },
+  {
+   "from": "compile",
+   "to": "CompileRunsProgram",
+   "type": "misconception",
+   "label": "wrong: If javac Name.java finishes without errors, the program already works and has run. | right: javac only translates Name.java into Name.class; the program runs only with java Name, and run-time errors can still appear then."
+  },
+  {
+   "from": "run",
+   "to": "CompileRunsProgram",
+   "type": "misconception",
+   "label": "wrong: If javac Name.java finishes without errors, the program already works and has run. | right: javac only translates Name.java into Name.class; the program runs only with java Name, and run-time errors can still appear then."
+  },
+  {
+   "from": "compile",
+   "to": "run",
+   "type": "prerequisite",
+   "label": "java Name runs the Name.class file that javac produced, so compiling must succeed before the program can run."
+  },
+  {
+   "from": "run",
+   "to": "incremental_development",
+   "type": "prerequisite",
+   "label": "Each small step is run and checked before the next one is added."
+  },
+  {
+   "from": "run",
+   "to": "logical_error",
+   "type": "prerequisite",
+   "label": "A logical error is seen only by running the program and comparing its output with the intended output."
+  },
+  {
+   "from": "run",
+   "to": "piping",
+   "type": "prerequisite",
+   "label": "Piping joins the commands that run two programs, so one program's output becomes the other's input."
+  },
+  {
+   "from": "run",
+   "to": "redirection",
+   "type": "prerequisite",
+   "label": "Redirection is written on the command that runs a program, with < or >."
+  },
+  {
+   "from": "run",
+   "to": "run_time_error",
+   "type": "prerequisite",
+   "label": "A run-time error appears only while java Name executes, after compiling has succeeded."
+  },
+  {
+   "from": "run",
+   "to": "testing",
+   "type": "prerequisite",
+   "label": "A program is tested by running it on chosen inputs and comparing what it prints with what it should print."
+  }
+ ]
+}

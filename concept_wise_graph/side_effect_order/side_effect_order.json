@@ -1,0 +1,175 @@
+{
+ "concept": "side_effect_order",
+ "label": "side_effect_order",
+ "graph_version": "3.9.8 (3.9.7 + one primary per misconception (S9c) and the four remaining sibling edges (S9b), 2026-11-04; listed in revision_3_9_8)",
+ "nodes": [
+  {
+   "id": "compound_assignment",
+   "kind": "concept",
+   "label": "compound_assignment"
+  },
+  {
+   "id": "for_loop",
+   "kind": "concept",
+   "label": "for_loop"
+  },
+  {
+   "id": "increment_operators",
+   "kind": "concept",
+   "label": "increment_operators"
+  },
+  {
+   "id": "loop_scope",
+   "kind": "concept",
+   "label": "loop_scope"
+  },
+  {
+   "id": "loop_variable",
+   "kind": "concept",
+   "label": "loop_variable"
+  },
+  {
+   "id": "side_effect_order",
+   "kind": "concept",
+   "label": "side_effect_order"
+  },
+  {
+   "id": "side_effect_order@L0",
+   "kind": "learning_level",
+   "label": "L0"
+  },
+  {
+   "id": "side_effect_order@L1",
+   "kind": "learning_level",
+   "label": "L1"
+  },
+  {
+   "id": "side_effect_order@L2",
+   "kind": "learning_level",
+   "label": "L2"
+  },
+  {
+   "id": "side_effect_order@L3",
+   "kind": "learning_level",
+   "label": "L3"
+  },
+  {
+   "id": "side_effect_order@L4",
+   "kind": "learning_level",
+   "label": "L4"
+  },
+  {
+   "id": "PostIncrementAssignsLater",
+   "kind": "misconception",
+   "label": "PostIncrementAssignsLater"
+  },
+  {
+   "id": "PrePostIncrementSameValue",
+   "kind": "misconception",
+   "label": "PrePostIncrementSameValue"
+  },
+  {
+   "id": "topic1.3.d",
+   "kind": "topic",
+   "label": "For loops (including i++ and scope)"
+  }
+ ],
+ "edges": [
+  {
+   "from": "topic1.3.d",
+   "to": "compound_assignment",
+   "type": "contains",
+   "label": "The topic 'For loops (including i++ and scope)' introduces compound_assignment."
+  },
+  {
+   "from": "topic1.3.d",
+   "to": "for_loop",
+   "type": "contains",
+   "label": "The topic 'For loops (including i++ and scope)' introduces for_loop."
+  },
+  {
+   "from": "topic1.3.d",
+   "to": "increment_operators",
+   "type": "contains",
+   "label": "The topic 'For loops (including i++ and scope)' introduces increment_operators."
+  },
+  {
+   "from": "topic1.3.d",
+   "to": "loop_scope",
+   "type": "contains",
+   "label": "The topic 'For loops (including i++ and scope)' introduces loop_scope."
+  },
+  {
+   "from": "topic1.3.d",
+   "to": "loop_variable",
+   "type": "contains",
+   "label": "The topic 'For loops (including i++ and scope)' introduces loop_variable."
+  },
+  {
+   "from": "topic1.3.d",
+   "to": "side_effect_order",
+   "type": "contains",
+   "label": "The topic 'For loops (including i++ and scope)' introduces side_effect_order."
+  },
+  {
+   "from": "side_effect_order",
+   "to": "side_effect_order@L0",
+   "type": "has_level",
+   "label": "[0] everyday_reading (E): Folk meaning: in maths an expression has no effects, so i = i++ and x = ++i look like statements about equal quantities. In Java ++ changes i as soon as it is evaluated, and the expression's value (old or new) is then used by the rest of the expression.\n[1] misconception (M) -> PostIncrementAssignsLater: wrong rule: i = i++ increases i by 1. Right rule: i++ evaluates to the old value, so i = i++ stores the old value back.\n[2] inconsistent_trace (T) -> PostIncrementAssignsLater: Applies left-to-right evaluation (LT) unevenly: lets an increment happen 'at the end of the statement' in one place but immediately in another. (here mixing in: \"i = i++ increases i by 1\")\n[3] misconception (M) -> PrePostIncrementSameValue: wrong rule: x = i++ and x = ++i store the same value in x. Right rule: Both increment i, but ++i has the value after the increment and i++ the value before."
+  },
+  {
+   "from": "side_effect_order",
+   "to": "side_effect_order@L1",
+   "type": "has_level",
+   "label": "[0] names_the_element (N): A side effect is a change to a variable's value made while evaluating an expression, e.g. by ++, -- or an assignment used inside a larger expression.\n[1] states_the_rule (S): Java evaluates the left operand of a binary operator fully before the right, and all operands (except &&, ||, ?:) before the operation; ++i yields the new value and i++ the old one."
+  },
+  {
+   "from": "side_effect_order",
+   "to": "side_effect_order@L2",
+   "type": "has_level",
+   "label": "[0] line_by_line_trace (LT): Evaluate operands left to right, applying each side effect at the moment its operand is evaluated; then apply the operator; for an assignment, the right side's value is stored last.\n[1] output_prediction (OP): With i = 5: i = i++ leaves 5 (old value stored back after the increment); x = i++ + i gives 5 + 6 = 11; j += j++ with j = 1 gives 2.\n[2] one_step_execution (OS): One evaluation of i++ changes i by 1 and returns the old value; a later assignment in the same statement can overwrite that change."
+  },
+  {
+   "from": "side_effect_order",
+   "to": "side_effect_order@L3",
+   "type": "has_level",
+   "label": "[0] relation_to_neighbour (R): The result of an expression with a side effect depends on the value the increment expression evaluates to: old for i++, new for ++i.\n[1] purpose_of_the_whole (P): Plan: avoid it - write each change as its own statement (x = i; i++;) so the order of effects is visible; the book avoids statements like x = ++i."
+  },
+  {
+   "from": "side_effect_order",
+   "to": "side_effect_order@L4",
+   "type": "has_level",
+   "label": "[0] predict_a_change (C) -> PostIncrementAssignsLater: Splitting x = i++; into x = i; i++; preserves behaviour; splitting it into i++; x = i; changes x by 1. Reordering the operands of an expression that contains a side effect can change the result.\n[1] transfer_to_a_new_program (X): Rely on side-effect order only when reading other people's code; in your own code keep at most one side effect per statement and never read and modify the same variable in one expression.\n[2] diagnose_an_error (D): rule broken: i++ yields the old value; assigning it back undoes the increment. Kind: silent logic error. Trigger class: i = i++ (or j = j++) used as an update: the variable never changes.\n[3] diagnose_an_error (D): rule broken: Pre- and post-increment yield different values. Kind: silent logic error. Trigger class: Using x = ++i where x = i++ was meant (or vice versa): x is off by one."
+  },
+  {
+   "from": "increment_operators",
+   "to": "PostIncrementAssignsLater",
+   "type": "misconception",
+   "label": "wrong: i = i++ increases i by 1. | right: i++ evaluates to the old value, so i = i++ stores the old value back."
+  },
+  {
+   "from": "increment_operators",
+   "to": "PrePostIncrementSameValue",
+   "type": "misconception",
+   "label": "wrong: x = i++ and x = ++i store the same value in x. | right: Both increment i, but ++i has the value after the increment and i++ the value before."
+  },
+  {
+   "from": "side_effect_order",
+   "to": "PostIncrementAssignsLater",
+   "type": "misconception",
+   "label": "wrong: i = i++ increases i by 1. | right: i++ evaluates to the old value, so i = i++ stores the old value back."
+  },
+  {
+   "from": "side_effect_order",
+   "to": "PrePostIncrementSameValue",
+   "type": "misconception",
+   "label": "wrong: x = i++ and x = ++i store the same value in x. | right: Both increment i, but ++i has the value after the increment and i++ the value before."
+  },
+  {
+   "from": "increment_operators",
+   "to": "side_effect_order",
+   "type": "prerequisite",
+   "label": "The result depends on the value an increment expression evaluates to."
+  }
+ ]
+}

@@ -1,0 +1,119 @@
+{
+ "concept": "stream_model",
+ "label": "stream_model",
+ "graph_version": "3.9.8 (3.9.7 + one primary per misconception (S9c) and the four remaining sibling edges (S9b), 2026-11-04; listed in revision_3_9_8)",
+ "nodes": [
+  {
+   "id": "standard_input",
+   "kind": "concept",
+   "label": "standard_input"
+  },
+  {
+   "id": "standard_output",
+   "kind": "concept",
+   "label": "standard_output"
+  },
+  {
+   "id": "stream_model",
+   "kind": "concept",
+   "label": "stream_model"
+  },
+  {
+   "id": "stream_model@L0",
+   "kind": "learning_level",
+   "label": "L0"
+  },
+  {
+   "id": "stream_model@L1",
+   "kind": "learning_level",
+   "label": "L1"
+  },
+  {
+   "id": "stream_model@L2",
+   "kind": "learning_level",
+   "label": "L2"
+  },
+  {
+   "id": "stream_model@L3",
+   "kind": "learning_level",
+   "label": "L3"
+  },
+  {
+   "id": "stream_model@L4",
+   "kind": "learning_level",
+   "label": "L4"
+  },
+  {
+   "id": "StdInRereads",
+   "kind": "misconception",
+   "label": "StdInRereads"
+  },
+  {
+   "id": "topic1.5.a",
+   "kind": "topic",
+   "label": "Bird's-eye view: command-line arguments and streams"
+  }
+ ],
+ "edges": [
+  {
+   "from": "topic1.5.a",
+   "to": "stream_model",
+   "type": "contains",
+   "label": "The topic 'Bird's-eye view: command-line arguments and streams' introduces stream_model."
+  },
+  {
+   "from": "stream_model",
+   "to": "stream_model@L0",
+   "type": "has_level",
+   "label": "[0] everyday_reading (E): Everyday 'reading' (a page, a list) leaves the text in place so you can glance back at it; a Java input stream is consumed: each read removes the next value, and there is no going back.\n[1] misconception (M) -> StdInRereads: wrong rule: Calling StdIn.readInt() twice returns the same value twice. Right rule: Each read consumes the value it returns, so a second StdIn.readInt() returns the next value in the stream (input 3 5 gives 3, then 5).\n[2] inconsistent_trace (T) -> StdInRereads: Points to LT (reads take values from the front in order; prints append at the end in order). An uneven trace reuses an already-consumed value on some reads, or writes some output out of execution order. (here mixing in: \"Calling StdIn.readInt() twice returns the same value twice\")"
+  },
+  {
+   "from": "stream_model",
+   "to": "stream_model@L1",
+   "type": "has_level",
+   "label": "[0] names_the_element (N): A stream is an I/O abstraction: an ordered sequence of values or characters, with no length limit from the program's point of view. Input is read from the front and output is appended at the end.\n[1] states_the_rule (S): A Java program turns a standard input stream and command-line arguments into a standard output stream (plus drawing and audio). It consumes values when it reads them, so it cannot back up."
+  },
+  {
+   "from": "stream_model",
+   "to": "stream_model@L2",
+   "type": "has_level",
+   "label": "[0] line_by_line_trace (LT): Input values are delivered strictly in stream order: each read removes the next value from the front. Output appears in the order the output calls execute, because each call appends to the end.\n[1] output_prediction (OP): A read returns the next unread value, converted to the requested type. With input `3 5 7`, three StdIn.readInt() calls return 3, 5, 7. The output stream is the concatenation of all printed text in execution order.\n[2] one_step_execution (OS): One read advances the input position past exactly one value and returns it. One print appends its text to the output and returns nothing (void). No other state changes."
+  },
+  {
+   "from": "stream_model",
+   "to": "stream_model@L3",
+   "type": "has_level",
+   "label": "[0] relation_to_neighbour (R): All StdIn calls in a program share one input position. A read before a loop and reads inside the loop therefore take successive values, never the same one.\n[1] relation_to_neighbour (R): All StdOut/System.out calls write to one output stream in execution order, and text already written cannot be taken back.\n[2] purpose_of_the_whole (P): Streams let a program process an amount of data that is unbounded and not known in advance. They also decouple the program from the device. Plan: input-process-output (the 'filter' plan)."
+  },
+  {
+   "from": "stream_model",
+   "to": "stream_model@L4",
+   "type": "has_level",
+   "label": "[0] predict_a_change (C) -> StdInRereads: Changing where a stream comes from or goes to (keyboard, file, pipe, another device) keeps the program's behaviour. Changing the order of two reads swaps which value lands in which variable.\n[1] transfer_to_a_new_program (X): Use the stream model when data are processed in one sequential pass, possibly of unknown or huge length. If the program must revisit values (sorting, k-th smallest), first save them in an array.\n[2] diagnose_an_error (D): rule broken: A read must be preceded by available input (the stream is finite and cannot be re-read). Kind: run-time exception. Trigger class: More read calls than values in the stream, e.g. reading 3 values from input `4 7`.\n[3] diagnose_an_error (D): rule broken: Values are consumed once; to use a value again it must be stored in a variable or array. Kind: silent logic error. Trigger class: Code that calls a read a second time expecting the same value (e.g. readInt() in a test and again in the body), so it silently skips values."
+  },
+  {
+   "from": "standard_input",
+   "to": "StdInRereads",
+   "type": "misconception",
+   "label": "wrong: Calling StdIn.readInt() twice returns the same value twice. | right: The program consumes values when it reads them, so each call returns the next value."
+  },
+  {
+   "from": "stream_model",
+   "to": "StdInRereads",
+   "type": "misconception",
+   "label": "wrong: Calling StdIn.readInt() twice returns the same value twice. | right: The program consumes values when it reads them, so each call returns the next value."
+  },
+  {
+   "from": "stream_model",
+   "to": "standard_input",
+   "type": "prerequisite",
+   "label": "StdIn reads a stream: values arrive in order and each value is consumed once."
+  },
+  {
+   "from": "stream_model",
+   "to": "standard_output",
+   "type": "prerequisite",
+   "label": "StdOut writes a stream: each print appends its text to the end of the output."
+  }
+ ]
+}

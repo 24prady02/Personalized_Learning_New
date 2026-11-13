@@ -1,0 +1,203 @@
+{
+ "concept": "empty_statement",
+ "label": "empty_statement",
+ "graph_version": "3.9.8 (3.9.7 + one primary per misconception (S9c) and the four remaining sibling edges (S9b), 2026-11-04; listed in revision_3_9_8)",
+ "nodes": [
+  {
+   "id": "empty_statement",
+   "kind": "concept",
+   "label": "empty_statement"
+  },
+  {
+   "id": "for_loop",
+   "kind": "concept",
+   "label": "for_loop"
+  },
+  {
+   "id": "if_else_statement",
+   "kind": "concept",
+   "label": "if_else_statement"
+  },
+  {
+   "id": "if_statement",
+   "kind": "concept",
+   "label": "if_statement"
+  },
+  {
+   "id": "logical_error",
+   "kind": "concept",
+   "label": "logical_error"
+  },
+  {
+   "id": "statement",
+   "kind": "concept",
+   "label": "statement"
+  },
+  {
+   "id": "syntax_template",
+   "kind": "concept",
+   "label": "Template notation"
+  },
+  {
+   "id": "while_loop",
+   "kind": "concept",
+   "label": "while_loop"
+  },
+  {
+   "id": "SemicolonAfterIfHeader",
+   "kind": "error",
+   "label": "SemicolonAfterIfHeader"
+  },
+  {
+   "id": "SemicolonAfterLoopHeader",
+   "kind": "error",
+   "label": "SemicolonAfterLoopHeader"
+  },
+  {
+   "id": "empty_statement@L0",
+   "kind": "learning_level",
+   "label": "L0"
+  },
+  {
+   "id": "empty_statement@L1",
+   "kind": "learning_level",
+   "label": "L1"
+  },
+  {
+   "id": "empty_statement@L2",
+   "kind": "learning_level",
+   "label": "L2"
+  },
+  {
+   "id": "empty_statement@L3",
+   "kind": "learning_level",
+   "label": "L3"
+  },
+  {
+   "id": "empty_statement@L4",
+   "kind": "learning_level",
+   "label": "L4"
+  },
+  {
+   "id": "topic1.3.b",
+   "kind": "topic",
+   "label": "If statements"
+  }
+ ],
+ "edges": [
+  {
+   "from": "topic1.3.b",
+   "to": "empty_statement",
+   "type": "contains",
+   "label": "The topic 'If statements' introduces empty_statement."
+  },
+  {
+   "from": "topic1.3.b",
+   "to": "if_else_statement",
+   "type": "contains",
+   "label": "The topic 'If statements' introduces if_else_statement."
+  },
+  {
+   "from": "topic1.3.b",
+   "to": "if_statement",
+   "type": "contains",
+   "label": "The topic 'If statements' introduces if_statement."
+  },
+  {
+   "from": "topic1.3.b",
+   "to": "syntax_template",
+   "type": "contains",
+   "label": "Template notation is taught under \"If statements\"."
+  },
+  {
+   "from": "empty_statement",
+   "to": "SemicolonAfterIfHeader",
+   "type": "error",
+   "label": "wrong: if (x > 0); System.out.println(\"positive\"); prints only for positive x. | right: The ; ends the if with an empty statement, so the next line always runs."
+  },
+  {
+   "from": "empty_statement",
+   "to": "SemicolonAfterLoopHeader",
+   "type": "error",
+   "label": "wrong: Puts a ; right after for (...) or while (...). | right: A ; right after the loop header is a null (empty) loop body, so the statements written after it are not repeated by the loop."
+  },
+  {
+   "from": "for_loop",
+   "to": "SemicolonAfterIfHeader",
+   "type": "error",
+   "label": "wrong: if (x > 0); System.out.println(\"positive\"); prints only for positive x. | right: The ; ends the if with an empty statement, so the next line always runs."
+  },
+  {
+   "from": "for_loop",
+   "to": "SemicolonAfterLoopHeader",
+   "type": "error",
+   "label": "wrong: Puts a ; right after for (...) or while (...). | right: A ; right after the loop header is a null (empty) loop body, so the statements written after it are not repeated by the loop."
+  },
+  {
+   "from": "if_statement",
+   "to": "SemicolonAfterIfHeader",
+   "type": "error",
+   "label": "wrong: if (x > 0); System.out.println(\"positive\"); prints only for positive x. | right: The ; ends the if with an empty statement, so the next line always runs."
+  },
+  {
+   "from": "logical_error",
+   "to": "SemicolonAfterIfHeader",
+   "type": "error",
+   "label": "wrong: if (x > 0); System.out.println(\"positive\"); prints only for positive x. | right: The ; ends the if with an empty statement, so the next line always runs."
+  },
+  {
+   "from": "while_loop",
+   "to": "SemicolonAfterIfHeader",
+   "type": "error",
+   "label": "wrong: if (x > 0); System.out.println(\"positive\"); prints only for positive x. | right: The ; ends the if with an empty statement, so the next line always runs."
+  },
+  {
+   "from": "while_loop",
+   "to": "SemicolonAfterLoopHeader",
+   "type": "error",
+   "label": "wrong: Puts a ; right after for (...) or while (...). | right: A ; right after the loop header is a null (empty) loop body, so the statements written after it are not repeated by the loop."
+  },
+  {
+   "from": "empty_statement",
+   "to": "empty_statement@L0",
+   "type": "has_level",
+   "label": "[0] everyday_reading (E): Folk meaning: in English a semicolon just separates or ends a clause, so 'if (x > 0);' still reads as 'if x is positive, do the next thing'. In Java a lone ; is a complete statement that does nothing, and it becomes the whole body of the if or loop."
+  },
+  {
+   "from": "empty_statement",
+   "to": "empty_statement@L1",
+   "type": "has_level",
+   "label": "[0] names_the_element (N): The empty (null) statement is a lone semicolon: a statement that does nothing.\n[1] states_the_rule (S): An empty statement does nothing, and its execution always completes normally; any part of a for loop, including its body, may be left empty, but a while loop is better style than null statements."
+  },
+  {
+   "from": "empty_statement",
+   "to": "empty_statement@L2",
+   "type": "has_level",
+   "label": "[0] line_by_line_trace (LT): Executing ; does nothing and passes control to the next statement; as a loop body it means each pass is just test (then update, for a for loop).\n[1] output_prediction (OP): An empty statement produces no value and no output; e.g. for (int v = 1; v <= N/2; v *= 2) ; computes the same final v as the while version, but v is out of scope afterwards.\n[2] one_step_execution (OS): One execution changes no variable and returns nothing; only the header parts around it (test, update) change state."
+  },
+  {
+   "from": "empty_statement",
+   "to": "empty_statement@L3",
+   "type": "has_level",
+   "label": "[0] relation_to_neighbour (R): The empty statement can stand wherever a statement is required (if body, loop body, for slots), and a block { } can stand alone; a ; after a header therefore silently becomes the body.\n[1] purpose_of_the_whole (P): Plan: placeholder - an intentionally empty body when the loop header does all the work; the book avoids it and prefers a while loop."
+  },
+  {
+   "from": "empty_statement",
+   "to": "empty_statement@L4",
+   "type": "has_level",
+   "label": "[0] predict_a_change (C): Deleting a ; that stands right after an if or loop header changes the program: the next statement becomes the body. Adding or removing an extra ; between ordinary statements changes nothing.\n[1] diagnose_an_error (D): rule broken: A ; right after if (...) is an empty statement that forms the whole then branch; the following statement or block is no longer part of the if. Kind: silent logic error. Trigger class: Any if (cond); followed by a statement or block: that statement runs for every input, whatever cond is (it compiles without error).\n[2] diagnose_an_error (D): rule broken: A ; right after while (...) or for (...) is an empty statement that is the whole loop body; the block written next is not repeated. Kind: silent logic error. Trigger class: for (...); { body } runs the body once after the loop ends; while (cond); with a cond that the empty body cannot change hangs forever (infinite loop) when cond starts true.\n[3] transfer_to_a_new_program (X): Use an empty statement only for a loop whose header does all the work, and comment it; otherwise write { } or restructure as a while loop. Never put ; directly after if (...), while (...) or for (...) by habit."
+  },
+  {
+   "from": "empty_statement",
+   "to": "logical_error",
+   "type": "prerequisite",
+   "label": "A ; right after an if or loop header is an empty statement, so the header controls nothing and the next line always runs: the program compiles but computes the wrong result."
+  },
+  {
+   "from": "statement",
+   "to": "empty_statement",
+   "type": "prerequisite",
+   "label": "Any part of a for loop, including its body, can be left empty (a null statement, a lone ;); the book prefers a while loop to null statements."
+  }
+ ]
+}

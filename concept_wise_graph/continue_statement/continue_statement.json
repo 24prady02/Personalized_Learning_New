@@ -1,0 +1,191 @@
+{
+ "concept": "continue_statement",
+ "label": "continue_statement",
+ "graph_version": "3.9.8 (3.9.7 + one primary per misconception (S9c) and the four remaining sibling edges (S9b), 2026-11-04; listed in revision_3_9_8)",
+ "nodes": [
+  {
+   "id": "break_statement",
+   "kind": "concept",
+   "label": "break_statement"
+  },
+  {
+   "id": "conditional_operator",
+   "kind": "concept",
+   "label": "conditional_operator"
+  },
+  {
+   "id": "continue_statement",
+   "kind": "concept",
+   "label": "continue_statement"
+  },
+  {
+   "id": "do_while_loop",
+   "kind": "concept",
+   "label": "do_while_loop"
+  },
+  {
+   "id": "for_loop",
+   "kind": "concept",
+   "label": "for_loop"
+  },
+  {
+   "id": "labeled_break",
+   "kind": "concept",
+   "label": "labeled_break"
+  },
+  {
+   "id": "switch_statement",
+   "kind": "concept",
+   "label": "switch_statement"
+  },
+  {
+   "id": "while_loop",
+   "kind": "concept",
+   "label": "while_loop"
+  },
+  {
+   "id": "continue_statement@L0",
+   "kind": "learning_level",
+   "label": "L0"
+  },
+  {
+   "id": "continue_statement@L1",
+   "kind": "learning_level",
+   "label": "L1"
+  },
+  {
+   "id": "continue_statement@L2",
+   "kind": "learning_level",
+   "label": "L2"
+  },
+  {
+   "id": "continue_statement@L3",
+   "kind": "learning_level",
+   "label": "L3"
+  },
+  {
+   "id": "continue_statement@L4",
+   "kind": "learning_level",
+   "label": "L4"
+  },
+  {
+   "id": "ContinueExitsLoop",
+   "kind": "misconception",
+   "label": "ContinueExitsLoop"
+  },
+  {
+   "id": "ContinueIgnored",
+   "kind": "misconception",
+   "label": "ContinueIgnored"
+  },
+  {
+   "id": "topic1.3.g",
+   "kind": "topic",
+   "label": "Other conditional and loop constructs (break, continue, switch, do-while, ?:)"
+  }
+ ],
+ "edges": [
+  {
+   "from": "topic1.3.g",
+   "to": "break_statement",
+   "type": "contains",
+   "label": "The topic 'Other conditional and loop constructs (break, continue, switch, do-while, ?:)' introduces break_statement."
+  },
+  {
+   "from": "topic1.3.g",
+   "to": "conditional_operator",
+   "type": "contains",
+   "label": "The topic 'Other conditional and loop constructs (break, continue, switch, do-while, ?:)' introduces conditional_operator."
+  },
+  {
+   "from": "topic1.3.g",
+   "to": "continue_statement",
+   "type": "contains",
+   "label": "The topic 'Other conditional and loop constructs (break, continue, switch, do-while, ?:)' introduces continue_statement."
+  },
+  {
+   "from": "topic1.3.g",
+   "to": "do_while_loop",
+   "type": "contains",
+   "label": "The topic 'Other conditional and loop constructs (break, continue, switch, do-while, ?:)' introduces do_while_loop."
+  },
+  {
+   "from": "topic1.3.g",
+   "to": "labeled_break",
+   "type": "contains",
+   "label": "The topic 'Other conditional and loop constructs (break, continue, switch, do-while, ?:)' introduces labeled_break."
+  },
+  {
+   "from": "topic1.3.g",
+   "to": "switch_statement",
+   "type": "contains",
+   "label": "The topic 'Other conditional and loop constructs (break, continue, switch, do-while, ?:)' introduces switch_statement."
+  },
+  {
+   "from": "continue_statement",
+   "to": "continue_statement@L0",
+   "type": "has_level",
+   "label": "[0] everyday_reading (E): Folk meaning: in English 'continue' means carry on with what you are doing, so a novice reads `continue;` as 'keep executing the rest of the body' (no effect) or as 'continue after the loop'. In Java it abandons the rest of the current pass and goes straight to the next iteration.\n[1] misconception (M) -> ContinueExitsLoop: wrong rule: continue ends the loop. Right rule: continue skips only the rest of the current pass: in a for loop, control transfers directly to the increment and then the next test, and the loop goes on while the test is true.\n[2] misconception (M) -> ContinueIgnored: wrong rule: continue means carry on with the rest of the loop body, so it has no effect. Right rule: continue skips every statement after it in the current pass.\n[3] inconsistent_trace (T) -> ContinueExitsLoop: Applies the LT rule unevenly: on some passes the trace runs the statements after continue, or skips the for-loop increment, so the traced counts or outputs include items that should be skipped. (here mixing in: \"continue ends the loop\")"
+  },
+  {
+   "from": "continue_statement",
+   "to": "continue_statement@L1",
+   "type": "has_level",
+   "label": "[0] names_the_element (N): Jump statement: `continue;` ends the current iteration of the innermost enclosing loop and starts the next one.\n[1] states_the_rule (S): `continue;` may appear only inside a loop. When executed, the rest of the body is skipped. In a for loop control goes to the increment; in a while or do-while it goes to the condition test. (Spec: JLS §14.16.)"
+  },
+  {
+   "from": "continue_statement",
+   "to": "continue_statement@L2",
+   "type": "has_level",
+   "label": "[0] line_by_line_trace (LT): Order after continue in `for (init; test; inc) body`: skip the remaining body statements, execute inc, evaluate test, and run the next pass if it is true. In a while loop there is no separate inc, so control goes directly to the test.\n[1] output_prediction (OP): continue produces no value. Its effect is on what the loop outputs: `for (int i = 0; i < 5; i++) { if (i % 2 == 0) continue; System.out.print(i); }` prints 13.\n[2] one_step_execution (OS): One execution changes no variable; it only moves control to the increment (for) or the test (while). The variables keep their values, and the statements skipped in this pass make no changes."
+  },
+  {
+   "from": "continue_statement",
+   "to": "continue_statement@L3",
+   "type": "has_level",
+   "label": "[0] relation_to_neighbour (R): In a for loop the increment still runs after continue, so the loop always advances. This is why the for/while equivalence has an exception: in the rewritten while, a continue jumps past the `<increment>;` at the end of the body.\n[1] relation_to_neighbour (R): Both abandon the rest of the body; continue proceeds to the next pass (increment and test), break leaves the loop with no increment or test.\n[2] purpose_of_the_whole (P): Plan: skip/filter plan. It guards the rest of the body against items that should not be processed (e.g. skip non-matching or invalid entries), avoiding a deeply nested if."
+  },
+  {
+   "from": "continue_statement",
+   "to": "continue_statement@L4",
+   "type": "has_level",
+   "label": "[0] predict_a_change (C) -> ContinueExitsLoop: Replacing `if (c) continue; rest;` with `if (!c) { rest; }` keeps the behaviour. Moving the continue below the update in a while loop, or the update below the continue, changes whether the loop advances.\n[1] transfer_to_a_new_program (X): Use continue to skip items early in a long loop body when the alternative is a deeply nested if. Avoid it in while loops whose update is at the end of the body, and avoid it when a simple if around the work is clearer. S&W rarely use it.\n[2] diagnose_an_error (D): rule broken: continue must be inside a loop. Kind: compile-time. Trigger class: `continue;` in a switch or if that is not inside any loop (continue outside of loop).\n[3] diagnose_an_error (D): rule broken: In a while loop continue goes straight to the test, skipping an update placed later in the body. Kind: silent logic error. Trigger class: `while (i < n) { if (skip(i)) continue; ...; i++; }`: once a skipped i is reached, i never changes and the loop runs forever.\n[4] diagnose_an_error (D): rule broken: Statements after continue in the same block can never run. Kind: compile-time. Trigger class: Code directly after `continue;` in the same block (unreachable statement)."
+  },
+  {
+   "from": "continue_statement",
+   "to": "ContinueExitsLoop",
+   "type": "misconception",
+   "label": "wrong: continue ends the loop. | right: continue skips the rest of the current pass: control transfers directly to the increment statement for the next iteration of the loop."
+  },
+  {
+   "from": "continue_statement",
+   "to": "ContinueIgnored",
+   "type": "misconception",
+   "label": "wrong: continue means carry on with the rest of the loop body, so it has no effect. | right: continue skips the rest of the current iteration."
+  },
+  {
+   "from": "break_statement",
+   "to": "continue_statement",
+   "type": "parallel",
+   "label": "break ends the whole loop; continue ends only the current pass."
+  },
+  {
+   "from": "do_while_loop",
+   "to": "continue_statement",
+   "type": "prerequisite",
+   "label": "continue ends the current pass of the do-while loop and goes on to the loop test."
+  },
+  {
+   "from": "for_loop",
+   "to": "continue_statement",
+   "type": "prerequisite",
+   "label": "continue skips the rest of the loop body; in a for loop control goes straight to the increment statement and then the next test."
+  },
+  {
+   "from": "while_loop",
+   "to": "continue_statement",
+   "type": "prerequisite",
+   "label": "continue ends the current pass of the while loop and goes straight back to the loop test."
+  }
+ ]
+}

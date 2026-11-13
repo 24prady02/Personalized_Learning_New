@@ -1,0 +1,202 @@
+{
+ "concept": "boolean_flag_array",
+ "label": "boolean_flag_array",
+ "graph_version": "3.9.8 (3.9.7 + one primary per misconception (S9c) and the four remaining sibling edges (S9b), 2026-11-04; listed in revision_3_9_8)",
+ "nodes": [
+  {
+   "id": "array_bounds",
+   "kind": "concept",
+   "label": "array_bounds"
+  },
+  {
+   "id": "array_default_values",
+   "kind": "concept",
+   "label": "array_default_values"
+  },
+  {
+   "id": "array_reversal",
+   "kind": "concept",
+   "label": "array_reversal"
+  },
+  {
+   "id": "array_traversal",
+   "kind": "concept",
+   "label": "array_traversal"
+  },
+  {
+   "id": "boolean_flag_array",
+   "kind": "concept",
+   "label": "boolean_flag_array"
+  },
+  {
+   "id": "loop_control",
+   "kind": "concept",
+   "label": "loop_control"
+  },
+  {
+   "id": "off_by_one_error",
+   "kind": "concept",
+   "label": "off_by_one_error"
+  },
+  {
+   "id": "primitive_type",
+   "kind": "concept",
+   "label": "primitive_type"
+  },
+  {
+   "id": "simulation_loop",
+   "kind": "concept",
+   "label": "simulation_loop"
+  },
+  {
+   "id": "boolean_flag_array@L0",
+   "kind": "learning_level",
+   "label": "L0"
+  },
+  {
+   "id": "boolean_flag_array@L1",
+   "kind": "learning_level",
+   "label": "L1"
+  },
+  {
+   "id": "boolean_flag_array@L2",
+   "kind": "learning_level",
+   "label": "L2"
+  },
+  {
+   "id": "boolean_flag_array@L3",
+   "kind": "learning_level",
+   "label": "L3"
+  },
+  {
+   "id": "boolean_flag_array@L4",
+   "kind": "learning_level",
+   "label": "L4"
+  },
+  {
+   "id": "NewArrayHoldsGarbage",
+   "kind": "misconception",
+   "label": "NewArrayHoldsGarbage"
+  },
+  {
+   "id": "OffByOneBound",
+   "kind": "misconception",
+   "label": "OffByOneBound"
+  },
+  {
+   "id": "topic1.4.f",
+   "kind": "topic",
+   "label": "Applications (coupon collector, sieve of Eratosthenes)"
+  }
+ ],
+ "edges": [
+  {
+   "from": "topic1.4.f",
+   "to": "boolean_flag_array",
+   "type": "contains",
+   "label": "The topic 'Applications (coupon collector, sieve of Eratosthenes)' introduces boolean_flag_array."
+  },
+  {
+   "from": "boolean_flag_array",
+   "to": "boolean_flag_array@L0",
+   "type": "has_level",
+   "label": "[0] everyday_reading (E): Folk meaning: using a value (a card number) as a position is not how everyday checklists work; people search a list to see whether they have seen something. Java rule: found[val] is the flag stored at index val, so one indexed read answers 'seen val?'.\n[1] misconception (M) -> OffByOneBound: wrong rule: < vs <= and 0..n vs 0..n-1 are interchangeable. Right rule: To use the value N itself as an index, the array must have length N+1 (new boolean[N+1]), and loops over values 2..N use i <= N.\n[2] misconception (M) -> NewArrayHoldsGarbage: wrong rule: The slots of a new boolean[n] hold unpredictable values until assigned. Right rule: new boolean[n] starts every flag at false.\n[3] inconsistent_trace (T) -> OffByOneBound: Points to LT: for each new value, test found[val] and, only if it is false, count it and set the flag. Inconsistent application: the flag is set before the test on some passes, so a new value is counted as already seen. (here mixing in: \"< vs <= and 0..n vs 0..n-1 are interchangeable\")"
+  },
+  {
+   "from": "boolean_flag_array",
+   "to": "boolean_flag_array@L1",
+   "type": "has_level",
+   "label": "[0] names_the_element (N): Identity: a boolean array indexed by value, in which flag[v] records whether v has been seen or has a property.\n[1] states_the_rule (S): Declarative: create boolean[] flags = new boolean[N] (all false); mark v with flags[v] = true; test with if (!flags[v]). Values must lie in 0..N-1."
+  },
+  {
+   "from": "boolean_flag_array",
+   "to": "boolean_flag_array@L2",
+   "type": "has_level",
+   "label": "[0] line_by_line_trace (LT): Sequencing (CouponCollector): generate val, increment cardcnt, test found[val], and if it is false increment valcnt and set found[val] = true; repeat while valcnt < N.\n[1] output_prediction (OP): Result: the count derived from the flags, e.g. CouponCollector prints the number of cards drawn, and PrimeSieve 25 prints 9; at the end of the collector found[] is all true.\n[2] one_step_execution (OS): State transition: one step sets at most one flag from false to true and never back, so each element is a one-way flag."
+  },
+  {
+   "from": "boolean_flag_array",
+   "to": "boolean_flag_array@L3",
+   "type": "has_level",
+   "label": "[0] relation_to_neighbour (R): new boolean[n] starts every flag at false, which CouponCollector relies on; PrimeSieve needs true and so sets it with a loop.\n[1] relation_to_neighbour (R): The sieve traverses isPrime[] to set every flag to true and later traverses it again to count the flags still true.\n[2] purpose_of_the_whole (P): Plan/role: set membership by direct indexing. Each element is a one-way flag (Sajaniemi), and the array lets data index into the array, turning 'have I seen v?' into one step."
+  },
+  {
+   "from": "boolean_flag_array",
+   "to": "boolean_flag_array@L4",
+   "type": "has_level",
+   "label": "[0] predict_a_change (C) -> OffByOneBound: Conservation: in CouponCollector, valcnt always equals the number of true entries in found[]. Enlarging the value range requires enlarging the array (N+1 when N itself is an index).\n[1] transfer_to_a_new_program (X): Applicability: use a flag array when the values are small non-negative integers (card values, numbers up to N) and memory for N flags is affordable. Do not use one for huge, negative or non-integer keys.\n[2] diagnose_an_error (D): rule broken: Values used as indices must lie in 0..length-1. Kind: run-time exception. Trigger class: new boolean[N] used with value N as an index (the sieve needs N+1), or a negative value (ArrayIndexOutOfBoundsException)\n[3] diagnose_an_error (D): rule broken: A start value other than false must be set explicitly. Kind: silent logic error. Trigger class: PrimeSieve without its initial isPrime[i] = true loop: no number is ever prime, so it prints 0\n[4] diagnose_an_error (D): rule broken: Test the flag before setting it. Kind: silent logic error. Trigger class: found[val] = true written before if (!found[val]), so valcnt never increases and the loop never ends"
+  },
+  {
+   "from": "array_bounds",
+   "to": "OffByOneBound",
+   "type": "misconception",
+   "label": "wrong: < vs <= and 0..n vs 0..n-1 are interchangeable | right: for (i = 0; i < n; i++) runs n times with i going up to n - 1; with <= it runs n + 1 times and reaches i = n."
+  },
+  {
+   "from": "array_default_values",
+   "to": "NewArrayHoldsGarbage",
+   "type": "misconception",
+   "label": "wrong: The slots of a new int[n] hold unpredictable values until assigned. | right: new fills every element with a default: 0 for numeric types, false for boolean, null for String and other non-primitive types."
+  },
+  {
+   "from": "array_reversal",
+   "to": "OffByOneBound",
+   "type": "misconception",
+   "label": "wrong: < vs <= and 0..n vs 0..n-1 are interchangeable | right: for (i = 0; i < n; i++) runs n times with i going up to n - 1; with <= it runs n + 1 times and reaches i = n."
+  },
+  {
+   "from": "array_traversal",
+   "to": "OffByOneBound",
+   "type": "misconception",
+   "label": "wrong: < vs <= and 0..n vs 0..n-1 are interchangeable | right: for (i = 0; i < n; i++) runs n times with i going up to n - 1; with <= it runs n + 1 times and reaches i = n."
+  },
+  {
+   "from": "boolean_flag_array",
+   "to": "NewArrayHoldsGarbage",
+   "type": "misconception",
+   "label": "wrong: The slots of a new int[n] hold unpredictable values until assigned. | right: new fills every element with a default: 0 for numeric types, false for boolean, null for String and other non-primitive types."
+  },
+  {
+   "from": "boolean_flag_array",
+   "to": "OffByOneBound",
+   "type": "misconception",
+   "label": "wrong: < vs <= and 0..n vs 0..n-1 are interchangeable | right: for (i = 0; i < n; i++) runs n times with i going up to n - 1; with <= it runs n + 1 times and reaches i = n."
+  },
+  {
+   "from": "loop_control",
+   "to": "OffByOneBound",
+   "type": "misconception",
+   "label": "wrong: i < n and i <= n mean the same, so the loop runs until i equals n and the last pass can use a[n]. | right: for (i = 0; i < n; i++) runs n times with i going up to n - 1; with <= it runs n + 1 times and reaches i = n."
+  },
+  {
+   "from": "off_by_one_error",
+   "to": "OffByOneBound",
+   "type": "misconception",
+   "label": "wrong: < vs <= and 0..n vs 0..n-1 are interchangeable | right: for (i = 0; i < n; i++) runs n times with i going up to n - 1; with <= it runs n + 1 times and reaches i = n."
+  },
+  {
+   "from": "primitive_type",
+   "to": "NewArrayHoldsGarbage",
+   "type": "misconception",
+   "label": "wrong: The slots of a new int[n] hold unpredictable values until assigned. | right: new fills every element with a default: 0 for numeric types, false for boolean, null for String and other non-primitive types."
+  },
+  {
+   "from": "simulation_loop",
+   "to": "OffByOneBound",
+   "type": "misconception",
+   "label": "wrong: t < T and t <= T give the same number of moves. | right: for (t = 0; t < T; t++) makes exactly T moves; with <= it makes T + 1."
+  },
+  {
+   "from": "array_default_values",
+   "to": "boolean_flag_array",
+   "type": "prerequisite",
+   "label": "new boolean[n] starts every flag at false."
+  },
+  {
+   "from": "array_traversal",
+   "to": "boolean_flag_array",
+   "type": "prerequisite",
+   "label": "The sieve traverses isPrime[] to set every flag to true and later traverses it again to count the flags that are still true."
+  }
+ ]
+}

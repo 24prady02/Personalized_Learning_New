@@ -1,0 +1,152 @@
+{
+ "concept": "random_move",
+ "label": "random_move",
+ "graph_version": "3.9.8 (3.9.7 + one primary per misconception (S9c) and the four remaining sibling edges (S9b), 2026-11-04; listed in revision_3_9_8)",
+ "nodes": [
+  {
+   "id": "boolean_expression",
+   "kind": "concept",
+   "label": "boolean_expression"
+  },
+  {
+   "id": "frequency_counting",
+   "kind": "concept",
+   "label": "frequency_counting"
+  },
+  {
+   "id": "math_library",
+   "kind": "concept",
+   "label": "math_library"
+  },
+  {
+   "id": "random_move",
+   "kind": "concept",
+   "label": "random_move"
+  },
+  {
+   "id": "simulation_loop",
+   "kind": "concept",
+   "label": "simulation_loop"
+  },
+  {
+   "id": "transition_matrix",
+   "kind": "concept",
+   "label": "transition_matrix"
+  },
+  {
+   "id": "random_move@L0",
+   "kind": "learning_level",
+   "label": "L0"
+  },
+  {
+   "id": "random_move@L1",
+   "kind": "learning_level",
+   "label": "L1"
+  },
+  {
+   "id": "random_move@L2",
+   "kind": "learning_level",
+   "label": "L2"
+  },
+  {
+   "id": "random_move@L3",
+   "kind": "learning_level",
+   "label": "L3"
+  },
+  {
+   "id": "random_move@L4",
+   "kind": "learning_level",
+   "label": "L4"
+  },
+  {
+   "id": "CumulativeOffByOne",
+   "kind": "misconception",
+   "label": "CumulativeOffByOne"
+  },
+  {
+   "id": "topic1.6.b",
+   "kind": "topic",
+   "label": "Simulation (one random move, page ranks)"
+  }
+ ],
+ "edges": [
+  {
+   "from": "topic1.6.b",
+   "to": "frequency_counting",
+   "type": "contains",
+   "label": "The topic 'Simulation (one random move, page ranks)' introduces frequency_counting."
+  },
+  {
+   "from": "topic1.6.b",
+   "to": "random_move",
+   "type": "contains",
+   "label": "The topic 'Simulation (one random move, page ranks)' introduces random_move."
+  },
+  {
+   "from": "topic1.6.b",
+   "to": "simulation_loop",
+   "type": "contains",
+   "label": "The topic 'Simulation (one random move, page ranks)' introduces simulation_loop."
+  },
+  {
+   "from": "random_move",
+   "to": "random_move@L0",
+   "type": "has_level",
+   "label": "[0] everyday_reading (E): Everyday \"random\" means every outcome equally likely, which is what Math.random() gives; the random move must instead pick page j with the unequal probability p[page][j].\n[1] misconception (M) -> CumulativeOffByOne: wrong rule: The cumulative-probability boundary test is inclusive/exclusive interchangeably. Right rule: Add p[page][j] to sum first and then test r < sum; sum is the right endpoint of interval j, so r lands in interval j with probability equal to its length.\n[2] inconsistent_trace (T) -> CumulativeOffByOne: Applies LT (r drawn once; for each j: add p[page][j] to sum, then test r < sum) unevenly: e.g. testing before adding on some passes, or drawing a new r for each j. (here mixing in: \"the cumulative-probability boundary test is inclusive/exclusive interchangeably\")"
+  },
+  {
+   "from": "random_move",
+   "to": "random_move@L1",
+   "type": "has_level",
+   "label": "[0] names_the_element (N): An algorithm: generating a random integer from a discrete distribution (row p[page]) by locating a uniform random number in cumulative intervals.\n[1] states_the_rule (S): Think of row p[page] as N intervals of (0, 1) whose lengths are the probabilities; a uniform r from Math.random() falls into interval j with probability p[page][j], and the surfer moves to j."
+  },
+  {
+   "from": "random_move",
+   "to": "random_move@L2",
+   "type": "has_level",
+   "label": "[0] line_by_line_trace (LT): r = Math.random() is drawn once; sum = 0.0; j goes 0, 1, ...; on each pass sum += p[page][j] and then if (r < sum) set page = j and break, so the first interval whose right end exceeds r wins.\n[1] output_prediction (OP): Returns (through page) one integer 0..N-1; at page 4 of tiny.txt sum takes 0.47, 0.49, 0.96, ... and r = .71 gives page 2.\n[2] one_step_execution (OS): One move changes page from its current value to j (and leaves freq and p unchanged); the locals r, sum and j live only for that move."
+  },
+  {
+   "from": "random_move",
+   "to": "random_move@L3",
+   "type": "has_level",
+   "label": "[0] relation_to_neighbour (R): Reads exactly one row p[page]; the row must sum to 1, otherwise r can exceed the final sum and no j is chosen.\n[1] relation_to_neighbour (R): Each move starts from the page the previous move produced, and the simulation repeats it T times; the next row used is p[new page].\n[2] relation_to_neighbour (R): The relational test r < sum decides both the chosen page and the early break; < (not <=) matches the half-open interval endpoint tracked by sum.\n[3] relation_to_neighbour (R): Math.random() supplies one uniform double in [0, 1) per move; it must be called once before the j loop, not inside it.\n[4] purpose_of_the_whole (P): Sampling plan (search the cumulative sums): sum is a gatherer, j a stepper, and page a most-recent holder of the current location; break ends the search as soon as the interval is found."
+  },
+  {
+   "from": "random_move",
+   "to": "random_move@L4",
+   "type": "has_level",
+   "label": "[0] predict_a_change (C) -> CumulativeOffByOne: Changing the search (linear to binary) or the order of pages keeps the distribution of outcomes; replacing r < sum with r <= sum changes it only on a zero-probability event; moving Math.random() into the loop breaks it.\n[1] transfer_to_a_new_program (X): Use to draw from any non-uniform discrete distribution (one row of probabilities); for uniform choice Math.random() scaled is enough, and for large N a binary search over the cumulative sums is faster.\n[2] diagnose_an_error (D): rule broken: Add the entry to sum before testing r < sum. Kind: silent logic error. Trigger class: Test placed before sum += p[page][j]: the first test is r < 0.0 (always false) and every page is chosen from the previous interval, shifting probabilities by one page.\n[3] diagnose_an_error (D): rule broken: Row p[page] must sum to 1. Kind: silent logic error. Trigger class: Row sum < 1 (e.g. dangling page, NaN): when r exceeds the final sum the loop ends with no break and page is unchanged.\n[4] diagnose_an_error (D): rule broken: break must exit the search once the interval is found. Kind: silent logic error. Trigger class: break omitted: page is reassigned on every later j, so the surfer always moves to page N-1 (or the last j with r < sum)."
+  },
+  {
+   "from": "random_move",
+   "to": "CumulativeOffByOne",
+   "type": "misconception",
+   "label": "wrong: Whether the test is r < s or r <= s, or whether p[i][j] is added before or after the test, the same page is picked. | right: Add p[page][j] to sum and then test r < sum: sum tracks the endpoints of the intervals defined by row p[page], so the loop finds the interval containing r, and r falls into each interval with probability precisely specified by its length."
+  },
+  {
+   "from": "boolean_expression",
+   "to": "random_move",
+   "type": "prerequisite",
+   "label": "The next page is chosen by testing the condition r < sum for each candidate page j in turn."
+  },
+  {
+   "from": "math_library",
+   "to": "random_move",
+   "type": "prerequisite",
+   "label": "The random move draws r with Math.random() and then finds the interval of row p[page] that contains r."
+  },
+  {
+   "from": "random_move",
+   "to": "simulation_loop",
+   "type": "prerequisite",
+   "label": "The simulation repeats the random move T times, each move starting from the page the previous move reached."
+  },
+  {
+   "from": "transition_matrix",
+   "to": "random_move",
+   "type": "prerequisite",
+   "label": "Row p[i] is the probability distribution used to choose the next page when the surfer is on page i."
+  }
+ ]
+}

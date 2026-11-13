@@ -1,0 +1,159 @@
+{
+ "concept": "piping",
+ "label": "piping",
+ "graph_version": "3.9.8 (3.9.7 + one primary per misconception (S9c) and the four remaining sibling edges (S9b), 2026-11-04; listed in revision_3_9_8)",
+ "nodes": [
+  {
+   "id": "data_driven_code",
+   "kind": "concept",
+   "label": "Data-driven code"
+  },
+  {
+   "id": "filter",
+   "kind": "concept",
+   "label": "filter"
+  },
+  {
+   "id": "piping",
+   "kind": "concept",
+   "label": "piping"
+  },
+  {
+   "id": "redirection",
+   "kind": "concept",
+   "label": "redirection"
+  },
+  {
+   "id": "run",
+   "kind": "concept",
+   "label": "run"
+  },
+  {
+   "id": "piping@L0",
+   "kind": "learning_level",
+   "label": "L0"
+  },
+  {
+   "id": "piping@L1",
+   "kind": "learning_level",
+   "label": "L1"
+  },
+  {
+   "id": "piping@L2",
+   "kind": "learning_level",
+   "label": "L2"
+  },
+  {
+   "id": "piping@L3",
+   "kind": "learning_level",
+   "label": "L3"
+  },
+  {
+   "id": "piping@L4",
+   "kind": "learning_level",
+   "label": "L4"
+  },
+  {
+   "id": "RedirectionIsArgument",
+   "kind": "misconception",
+   "label": "RedirectionIsArgument"
+  },
+  {
+   "id": "topic1.5.d",
+   "kind": "topic",
+   "label": "Redirection and piping (filters)"
+  }
+ ],
+ "edges": [
+  {
+   "from": "topic1.5.d",
+   "to": "data_driven_code",
+   "type": "contains",
+   "label": "Data-driven code is taught under \"Redirection and piping (filters)\"."
+  },
+  {
+   "from": "topic1.5.d",
+   "to": "filter",
+   "type": "contains",
+   "label": "The topic 'Redirection and piping (filters)' introduces filter."
+  },
+  {
+   "from": "topic1.5.d",
+   "to": "piping",
+   "type": "contains",
+   "label": "The topic 'Redirection and piping (filters)' introduces piping."
+  },
+  {
+   "from": "topic1.5.d",
+   "to": "redirection",
+   "type": "contains",
+   "label": "The topic 'Redirection and piping (filters)' introduces redirection."
+  },
+  {
+   "from": "piping",
+   "to": "piping@L0",
+   "type": "has_level",
+   "label": "[0] everyday_reading (E): In maths `|` means 'divides', absolute value or 'or'. In a command line, `A | B` connects A's standard output to B's standard input.\n[1] misconception (M) -> RedirectionIsArgument: wrong rule: A redirected (piped) stream shows up in args[]. Right rule: With `A | B`, B's standard input is A's output stream. It is not an argument, and B just reads standard input as if someone were typing it.\n[2] inconsistent_trace (T) -> RedirectionIsArgument: Points to LT (A's writes are added to the end of the shared stream and B's reads take from its front, interleaved by the OS). An uneven trace runs A to completion into a file first, or sends B's output back into A. (here mixing in: \"a redirected file shows up in args[]\")"
+  },
+  {
+   "from": "piping",
+   "to": "piping@L1",
+   "type": "has_level",
+   "label": "[0] names_the_element (N): Piping is an operating-system mechanism (`|`) that makes one program's standard output the next program's standard input.\n[1] states_the_rule (S): `java RandomSeq 1000 | java Average` specifies that RandomSeq's standard output and Average's standard input are the same stream."
+  },
+  {
+   "from": "piping",
+   "to": "piping@L2",
+   "type": "has_level",
+   "label": "[0] line_by_line_trace (LT): The two programs run together. Each println in A adds a string to the end of the stream, and each read in B removes one from the beginning. The OS decides the interleaving, and the result does not depend on it.\n[1] output_prediction (OP): Only the last program's standard output appears. `java RandomSeq 100000 | java Average` prints a single line such as Average is 0.5000499417963857.\n[2] one_step_execution (OS): One write by A makes one more item available to B. One read by B consumes it. No file is created."
+  },
+  {
+   "from": "piping",
+   "to": "piping@L3",
+   "type": "has_level",
+   "label": "[0] relation_to_neighbour (R): A pipe has the same effect as `> file` then `< file`, but there is no intermediate file, so the data size is not limited by disk space.\n[1] relation_to_neighbour (R): Filters are the components and the pipe is the connector: `A | F1 | F2` passes the stream through each filter in turn.\n[2] purpose_of_the_whole (P): Piping composes small programs into a pipeline and removes the limit on stream size."
+  },
+  {
+   "from": "piping",
+   "to": "piping@L4",
+   "type": "has_level",
+   "label": "[0] predict_a_change (C) -> RedirectionIsArgument: Replacing `A | B` with `A > f; B < f` keeps the result. Changing A's output format (e.g. adding a label) breaks B's typed reads.\n[1] transfer_to_a_new_program (X): Use a pipe when one program's output is exactly the next program's input and the intermediate data need not be kept. Use redirection to a file when it must be saved or reused.\n[2] diagnose_an_error (D): rule broken: The upstream output must match the downstream input format. Kind: run-time exception. Trigger class: A prints labels such as `Average is 0.5`, and B reads them with readDouble(): NumberFormatException on the token `Average`."
+  },
+  {
+   "from": "filter",
+   "to": "RedirectionIsArgument",
+   "type": "misconception",
+   "label": "wrong: a redirected file shows up in args[] | right: With < data.txt the operating system implements the standard input stream by reading from the file; the program just reads standard input and has no dependence on the source of the input stream."
+  },
+  {
+   "from": "piping",
+   "to": "RedirectionIsArgument",
+   "type": "misconception",
+   "label": "wrong: a redirected file shows up in args[] | right: With < data.txt the operating system implements the standard input stream by reading from the file; the program just reads standard input and has no dependence on the source of the input stream."
+  },
+  {
+   "from": "redirection",
+   "to": "RedirectionIsArgument",
+   "type": "misconception",
+   "label": "wrong: java Prog < in.txt puts the name in.txt into args[0]. | right: With < data.txt the operating system implements the standard input stream by reading from the file; the program just reads standard input and has no dependence on the source of the input stream."
+  },
+  {
+   "from": "piping",
+   "to": "filter",
+   "type": "prerequisite",
+   "label": "A filter converts a standard input stream to a standard output stream, and piping is the mechanism that connects filters together."
+  },
+  {
+   "from": "redirection",
+   "to": "piping",
+   "type": "prerequisite",
+   "label": "A pipe A | B connects A's standard output directly to B's standard input, with no file in between."
+  },
+  {
+   "from": "run",
+   "to": "piping",
+   "type": "prerequisite",
+   "label": "Piping joins the commands that run two programs, so one program's output becomes the other's input."
+  }
+ ]
+}

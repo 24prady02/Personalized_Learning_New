@@ -1,0 +1,124 @@
+{
+ "concept": "syntax_template",
+ "label": "Template notation",
+ "graph_version": "3.9.8 (3.9.7 + one primary per misconception (S9c) and the four remaining sibling edges (S9b), 2026-11-04; listed in revision_3_9_8)",
+ "nodes": [
+  {
+   "id": "boolean_expression",
+   "kind": "concept",
+   "label": "boolean_expression"
+  },
+  {
+   "id": "empty_statement",
+   "kind": "concept",
+   "label": "empty_statement"
+  },
+  {
+   "id": "if_else_statement",
+   "kind": "concept",
+   "label": "if_else_statement"
+  },
+  {
+   "id": "if_statement",
+   "kind": "concept",
+   "label": "if_statement"
+  },
+  {
+   "id": "syntax_template",
+   "kind": "concept",
+   "label": "Template notation"
+  },
+  {
+   "id": "syntax_template@L0",
+   "kind": "learning_level",
+   "label": "L0"
+  },
+  {
+   "id": "syntax_template@L1",
+   "kind": "learning_level",
+   "label": "L1"
+  },
+  {
+   "id": "syntax_template@L2",
+   "kind": "learning_level",
+   "label": "L2"
+  },
+  {
+   "id": "syntax_template@L3",
+   "kind": "learning_level",
+   "label": "L3"
+  },
+  {
+   "id": "syntax_template@L4",
+   "kind": "learning_level",
+   "label": "L4"
+  },
+  {
+   "id": "topic1.3.b",
+   "kind": "topic",
+   "label": "If statements"
+  }
+ ],
+ "edges": [
+  {
+   "from": "topic1.3.b",
+   "to": "empty_statement",
+   "type": "contains",
+   "label": "The topic 'If statements' introduces empty_statement."
+  },
+  {
+   "from": "topic1.3.b",
+   "to": "if_else_statement",
+   "type": "contains",
+   "label": "The topic 'If statements' introduces if_else_statement."
+  },
+  {
+   "from": "topic1.3.b",
+   "to": "if_statement",
+   "type": "contains",
+   "label": "The topic 'If statements' introduces if_statement."
+  },
+  {
+   "from": "topic1.3.b",
+   "to": "syntax_template",
+   "type": "contains",
+   "label": "Template notation is taught under \"If statements\"."
+  },
+  {
+   "from": "syntax_template",
+   "to": "syntax_template@L0",
+   "type": "has_level",
+   "label": "[0] everyday_reading (E): Folk meaning: angle brackets read as the less-than and greater-than signs, or as text to be typed. In a template, `<boolean expression>` is a placeholder that is replaced by any instance of that construct; only the other tokens (if, parentheses, braces) are typed literally."
+  },
+  {
+   "from": "syntax_template",
+   "to": "syntax_template@L1",
+   "type": "has_level",
+   "label": "[0] names_the_element (N): Notation (metalanguage): a template is S&W's pattern for the form of a Java construct. Fixed tokens are written literally, and a name in angle brackets stands for any instance of a previously defined construct.\n[1] states_the_rule (S): In `if (<boolean expression>) { <statements> }`, `if`, `(`, `)`, `{`, `}` must appear as written. `<boolean expression>` may be any expression of type boolean, and `<statements>` any statement block. The braces are optional for a single statement. Syntax is the form a statement must have, checked by the compiler (syntax errors); semantics is what the statement means when it runs, which the compiler does not check."
+  },
+  {
+   "from": "syntax_template",
+   "to": "syntax_template@L2",
+   "type": "has_level",
+   "label": "[0] line_by_line_trace (LT): Reading order: match the template's fixed tokens left to right against the code, then for each placeholder check that the code in that position is an instance of the named construct, recursively (a boolean expression may itself contain sub-expressions).\n[1] output_prediction (OP): Filling a template produces one concrete, legal Java construct. For example, if (<boolean expression>) <statements> becomes `if (x < 0) x = -x;`.\n[2] one_step_execution (OS): One substitution step replaces one placeholder with one instance of its construct and leaves the rest of the template unchanged."
+  },
+  {
+   "from": "syntax_template",
+   "to": "syntax_template@L3",
+   "type": "has_level",
+   "label": "[0] relation_to_neighbour (R): The `<boolean expression>` slot accepts only expressions of type boolean (`x > y`, `found`, `a && b`). An int expression or an assignment such as `x = y` with int x is a compile error in that slot.\n[1] purpose_of_the_whole (P): Purpose: to describe compactly what every instance of a construct looks like (if, while, for, do-while), so that you can write new instances and check existing code against the form."
+  },
+  {
+   "from": "syntax_template",
+   "to": "syntax_template@L4",
+   "type": "has_level",
+   "label": "[0] predict_a_change (C): Changing what fills a placeholder (any other boolean expression) keeps the code legal. Changing or omitting a fixed token (dropping the parentheses, adding `then`) breaks it.\n[1] transfer_to_a_new_program (X): Use templates to learn or check the form of a new construct. They show syntax, not meaning (the meaning of while vs if is not in the template), and they leave out details such as optional braces, so read them together with the semantic rule.\n[2] diagnose_an_error (D): rule broken: Fixed tokens of the template must appear exactly. Kind: compile-time. Trigger class: Dropping the parentheses (`if a > b { c = 0; }`) or adding a word (`if (a > b) then c = 0;`).\n[3] diagnose_an_error (D): rule broken: A placeholder must be filled by an instance of the named construct. Kind: compile-time. Trigger class: Putting an int expression in a `<boolean expression>` slot (`if (x)` with int x, `if (t = goal)`): incompatible types.\n[4] diagnose_an_error (D): rule broken: Angle brackets are notation, not code. Kind: compile-time. Trigger class: Typing the template text literally (`if (<boolean expression>)`)."
+  },
+  {
+   "from": "boolean_expression",
+   "to": "syntax_template",
+   "type": "prerequisite",
+   "label": "In the template if (<boolean expression>) { <statements> }, <boolean expression> stands for any expression of type boolean."
+  }
+ ]
+}

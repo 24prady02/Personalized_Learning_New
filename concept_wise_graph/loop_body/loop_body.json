@@ -1,0 +1,437 @@
+{
+ "concept": "loop_body",
+ "label": "loop_body",
+ "graph_version": "3.9.8 (3.9.7 + one primary per misconception (S9c) and the four remaining sibling edges (S9b), 2026-11-04; listed in revision_3_9_8)",
+ "nodes": [
+  {
+   "id": "accumulator_pattern",
+   "kind": "concept",
+   "label": "accumulator_pattern"
+  },
+  {
+   "id": "algorithm_pseudocode",
+   "kind": "concept",
+   "label": "algorithm_pseudocode"
+  },
+  {
+   "id": "block",
+   "kind": "concept",
+   "label": "block"
+  },
+  {
+   "id": "counter_pattern",
+   "kind": "concept",
+   "label": "counter_pattern"
+  },
+  {
+   "id": "do_while_loop",
+   "kind": "concept",
+   "label": "do_while_loop"
+  },
+  {
+   "id": "for_loop",
+   "kind": "concept",
+   "label": "for_loop"
+  },
+  {
+   "id": "if_statement",
+   "kind": "concept",
+   "label": "if_statement"
+  },
+  {
+   "id": "loop_body",
+   "kind": "concept",
+   "label": "loop_body"
+  },
+  {
+   "id": "loop_control",
+   "kind": "concept",
+   "label": "loop_control"
+  },
+  {
+   "id": "loop_invariant_reasoning",
+   "kind": "concept",
+   "label": "Reasoning about loops"
+  },
+  {
+   "id": "loop_variable",
+   "kind": "concept",
+   "label": "loop_variable"
+  },
+  {
+   "id": "nested_loops",
+   "kind": "concept",
+   "label": "nested_loops"
+  },
+  {
+   "id": "program_state",
+   "kind": "concept",
+   "label": "Program state"
+  },
+  {
+   "id": "program_text",
+   "kind": "concept",
+   "label": "program_text"
+  },
+  {
+   "id": "statement",
+   "kind": "concept",
+   "label": "statement"
+  },
+  {
+   "id": "while_loop",
+   "kind": "concept",
+   "label": "while_loop"
+  },
+  {
+   "id": "BracelessMultiStatementBody",
+   "kind": "error",
+   "label": "BracelessMultiStatementBody"
+  },
+  {
+   "id": "loop_body@L0",
+   "kind": "learning_level",
+   "label": "L0"
+  },
+  {
+   "id": "loop_body@L1",
+   "kind": "learning_level",
+   "label": "L1"
+  },
+  {
+   "id": "loop_body@L2",
+   "kind": "learning_level",
+   "label": "L2"
+  },
+  {
+   "id": "loop_body@L3",
+   "kind": "learning_level",
+   "label": "L3"
+  },
+  {
+   "id": "loop_body@L4",
+   "kind": "learning_level",
+   "label": "L4"
+  },
+  {
+   "id": "ComputerFillsInIntent",
+   "kind": "misconception",
+   "label": "ComputerFillsInIntent"
+  },
+  {
+   "id": "ForLoopPartSkipped",
+   "kind": "misconception",
+   "label": "ForLoopPartSkipped"
+  },
+  {
+   "id": "IfInLoopUnchecked",
+   "kind": "misconception",
+   "label": "IfInLoopUnchecked"
+  },
+  {
+   "id": "LoopBodyAlwaysOnce",
+   "kind": "misconception",
+   "label": "LoopBodyAlwaysOnce"
+  },
+  {
+   "id": "LoopBodyStatementOutsideLoop",
+   "kind": "misconception",
+   "label": "LoopBodyStatementOutsideLoop"
+  },
+  {
+   "id": "LoopCountIsStatementCount",
+   "kind": "misconception",
+   "label": "LoopCountIsStatementCount"
+  },
+  {
+   "id": "LoopOutputSameEachPass",
+   "kind": "misconception",
+   "label": "LoopOutputSameEachPass"
+  },
+  {
+   "id": "LoopRunsStatementsSeparately",
+   "kind": "misconception",
+   "label": "LoopRunsStatementsSeparately"
+  },
+  {
+   "id": "StateChangeIgnoredAcrossPasses",
+   "kind": "misconception",
+   "label": "StateChangeIgnoredAcrossPasses"
+  },
+  {
+   "id": "StatementAfterLoopInBody",
+   "kind": "misconception",
+   "label": "StatementAfterLoopInBody"
+  },
+  {
+   "id": "WhileStopsMidBody",
+   "kind": "misconception",
+   "label": "WhileStopsMidBody"
+  },
+  {
+   "id": "topic1.3.c",
+   "kind": "topic",
+   "label": "While loops"
+  }
+ ],
+ "edges": [
+  {
+   "from": "topic1.3.c",
+   "to": "loop_body",
+   "type": "contains",
+   "label": "The topic 'While loops' introduces loop_body."
+  },
+  {
+   "from": "topic1.3.c",
+   "to": "loop_control",
+   "type": "contains",
+   "label": "The topic 'While loops' introduces loop_control."
+  },
+  {
+   "from": "topic1.3.c",
+   "to": "loop_invariant_reasoning",
+   "type": "contains",
+   "label": "Reasoning about loops is taught under \"While loops\"."
+  },
+  {
+   "from": "topic1.3.c",
+   "to": "while_loop",
+   "type": "contains",
+   "label": "The topic 'While loops' introduces while_loop."
+  },
+  {
+   "from": "for_loop",
+   "to": "BracelessMultiStatementBody",
+   "type": "error",
+   "label": "wrong: Indenting several statements under an if or for makes them all part of its body, even without braces. | right: Without braces only the first statement belongs to the if/for; the rest run once, after it."
+  },
+  {
+   "from": "if_statement",
+   "to": "BracelessMultiStatementBody",
+   "type": "error",
+   "label": "wrong: Indenting several statements under an if or for makes them all part of its body, even without braces. | right: Without braces only the first statement belongs to the if/for; the rest run once, after it."
+  },
+  {
+   "from": "loop_body",
+   "to": "BracelessMultiStatementBody",
+   "type": "error",
+   "label": "wrong: Indenting several statements under an if or for makes them all part of its body, even without braces. | right: Without braces only the first statement belongs to the if/for; the rest run once, after it."
+  },
+  {
+   "from": "nested_loops",
+   "to": "BracelessMultiStatementBody",
+   "type": "error",
+   "label": "wrong: Indenting several statements under an if or for makes them all part of its body, even without braces. | right: Without braces only the first statement belongs to the if/for; the rest run once, after it."
+  },
+  {
+   "from": "loop_body",
+   "to": "loop_body@L0",
+   "type": "has_level",
+   "label": "[0] everyday_reading (E): Folk meaning: an everyday 'repeat this' instruction can be read loosely - a helper fills in missing steps, does each step N times in turn, or stops partway. A Java loop body is exactly the statements inside its braces (or one statement), all executed in order on every pass.\n[1] misconception (M) -> LoopBodyAlwaysOnce: wrong rule: The loop body always runs at least once, even if the condition is false at the start. Right rule: A while or for body runs zero times when the condition is false at the start.\n[2] misconception (M) -> LoopBodyStatementOutsideLoop: wrong rule: Some statements inside the braces of a loop body are not repeated; they run once, before or after the loop. Right rule: Every statement inside the loop braces is part of the body and runs on every pass.\n[3] misconception (M) -> StatementAfterLoopInBody: wrong rule: A statement written after the loop is repeated with the loop body. Right rule: The body ends at the closing brace (or after its single statement); code after it runs once, after the loop ends.\n[4] misconception (M) -> LoopRunsStatementsSeparately: wrong rule: A loop runs its first body statement all N times, then its second body statement all N times. Right rule: Each pass runs the whole body in order, so the body statements interleave: S1, S2, S1, S2, ...\n[5] misconception (M) -> StateChangeIgnoredAcrossPasses: wrong rule: Values changed by one pass of a loop (other than the loop variable) do not affect later passes. Right rule: Each pass starts from the state left by the previous pass, so a change in one pass carries into the next ones.\n[6] inconsistent_trace (T) -> LoopBodyAlwaysOnce: Applies the body rule (LT) unevenly: runs all body statements on some passes but only some on others, includes the statement after the loop on some passes, or uses stale values from the first pass later. (here mixing in: \"The loop body always runs at least once, even if the condition is false at the start\")\n[7] misconception (M) -> WhileStopsMidBody: wrong rule: The loop stops the moment the condition becomes false, even in the middle of the body. Right rule: The condition is tested only before each pass, so the whole body finishes before the loop can stop.\n[8] misconception (M) -> ComputerFillsInIntent: wrong rule: The computer fills in omitted steps or values that the programmer meant, e.g. REPEAT 4 [FORWARD 30] draws a square without a turn command. Right rule: The computer executes only what the code states; every needed step and value must be written.\n[9] misconception (M) -> IfInLoopUnchecked: wrong rule: An if inside a loop body runs its branch on every pass without testing its condition. Right rule: The if condition is tested again on every pass, with the current values, so the branch runs only on passes where it is true.\n[10] misconception (M) -> LoopCountIsStatementCount: wrong rule: The repeat count of a counted loop says how many of the body statements are executed. Right rule: The repeat count is how many times the whole body runs; every pass runs all body statements.\n[11] misconception (M) -> ForLoopPartSkipped: wrong rule: A pass of a loop may leave out one of its parts (the condition test, the body, the update, or the initialization). Right rule: Each pass of a for loop runs test, then body, then update, every time; the initialization runs once, at the start.\n[12] misconception (M) -> LoopOutputSameEachPass: wrong rule: A loop prints the same thing on every pass; the changing loop variable does not affect what the body does. Right rule: The body uses the current value of the loop variable, so its output can differ on each pass."
+  },
+  {
+   "from": "loop_body",
+   "to": "loop_body@L1",
+   "type": "has_level",
+   "label": "[0] names_the_element (N): The loop body is the statement block that a loop repeats on each pass.\n[1] states_the_rule (S): The body is the block after the loop header; braces are optional only if it is a single statement, in which case only that one statement is repeated."
+  },
+  {
+   "from": "loop_body",
+   "to": "loop_body@L2",
+   "type": "has_level",
+   "label": "[0] line_by_line_trace (LT): On each pass the body's statements run in order, first to last, after a true test (and, in a for loop, before the update); the next pass starts from the state left by this one.\n[1] output_prediction (OP): The body's output on each pass depends on the current values, so successive passes can print different lines: TenHellos prints '4th Hello', '5th Hello', ...; the number of executions of each body statement equals the number of passes.\n[2] one_step_execution (OS): One pass of the body changes exactly the variables it assigns (e.g. print i and v, double v, increment i) and these changes carry into the next test and pass."
+  },
+  {
+   "from": "loop_body",
+   "to": "loop_body@L3",
+   "type": "has_level",
+   "label": "[0] relation_to_neighbour (R): The accumulator update (sum += x) is placed inside the body so it runs once per pass, while the accumulator is declared and initialized before the loop.\n[1] relation_to_neighbour (R): count++ sits inside the body, often under an if, so it runs once on each pass that matches; the counter is declared before the loop.\n[2] relation_to_neighbour (R): The body is what the while repeats; the condition is tested only between complete executions of it.\n[3] purpose_of_the_whole (P): Plan: the body is the 'process one item / one step' part of a loop plan: each pass performs the same process on a new value (next element, next bet, next term)."
+  },
+  {
+   "from": "loop_body",
+   "to": "loop_body@L4",
+   "type": "has_level",
+   "label": "[0] predict_a_change (C) -> LoopBodyAlwaysOnce: Moving a statement from inside the body to after the loop changes it from running once per pass to once in total (and vice versa); reordering two body statements that share a variable changes the results (e.g. increment before vs after use).\n[1] diagnose_an_error (D): rule broken: Without braces, the body of an if, while or for is exactly one statement; indentation does not add statements to it. Kind: silent logic error. Trigger class: A braceless header followed by two or more indented statements: only the first is controlled, the others run once, after the if/loop, on every input.\n[2] transfer_to_a_new_program (X): Put inside the body exactly what must happen once per pass; put set-up before the loop and final reporting after it. Always brace a multi-statement body."
+  },
+  {
+   "from": "accumulator_pattern",
+   "to": "StateChangeIgnoredAcrossPasses",
+   "type": "misconception",
+   "label": "wrong: Values changed by one pass of a loop (other than the loop variable) do not affect later passes. | right: Each pass starts from the state left by the previous pass, so a change in one pass carries into the next ones."
+  },
+  {
+   "from": "algorithm_pseudocode",
+   "to": "ComputerFillsInIntent",
+   "type": "misconception",
+   "label": "wrong: The computer fills in omitted steps or values that the programmer meant, e.g. REPEAT 4 [FORWARD 30] draws a square without a turn command. | right: The computer executes only what the code states; every needed step and value must be written."
+  },
+  {
+   "from": "block",
+   "to": "LoopBodyStatementOutsideLoop",
+   "type": "misconception",
+   "label": "wrong: Some statements inside the braces of a loop body are not repeated; they run once, before or after the loop. | right: Every statement inside the loop braces is part of the body and runs on every pass."
+  },
+  {
+   "from": "block",
+   "to": "StatementAfterLoopInBody",
+   "type": "misconception",
+   "label": "wrong: A statement written after the loop is repeated with the loop body. | right: The body ends at the closing brace (or after its single statement); code after it runs once, after the loop ends."
+  },
+  {
+   "from": "for_loop",
+   "to": "ForLoopPartSkipped",
+   "type": "misconception",
+   "label": "wrong: A pass of a loop may leave out one of its parts (the condition test, the body, the update, or the initialization). | right: Each pass of a for loop runs test, then body, then update, every time; the initialization runs once, at the start."
+  },
+  {
+   "from": "for_loop",
+   "to": "LoopCountIsStatementCount",
+   "type": "misconception",
+   "label": "wrong: The repeat count of a counted loop says how many of the body statements are executed. | right: The repeat count is how many times the whole body runs; every pass runs all body statements."
+  },
+  {
+   "from": "if_statement",
+   "to": "IfInLoopUnchecked",
+   "type": "misconception",
+   "label": "wrong: An if inside a loop body runs its branch on every pass without testing its condition. | right: The if condition is tested again on every pass, with the current values, so the branch runs only on passes where it is true."
+  },
+  {
+   "from": "loop_body",
+   "to": "ComputerFillsInIntent",
+   "type": "misconception",
+   "label": "wrong: The computer fills in omitted steps or values that the programmer meant, e.g. REPEAT 4 [FORWARD 30] draws a square without a turn command. | right: The computer executes only what the code states; every needed step and value must be written."
+  },
+  {
+   "from": "loop_body",
+   "to": "ForLoopPartSkipped",
+   "type": "misconception",
+   "label": "wrong: A pass of a loop may leave out one of its parts (the condition test, the body, the update, or the initialization). | right: Each pass of a for loop runs test, then body, then update, every time; the initialization runs once, at the start."
+  },
+  {
+   "from": "loop_body",
+   "to": "IfInLoopUnchecked",
+   "type": "misconception",
+   "label": "wrong: An if inside a loop body runs its branch on every pass without testing its condition. | right: The if condition is tested again on every pass, with the current values, so the branch runs only on passes where it is true."
+  },
+  {
+   "from": "loop_body",
+   "to": "LoopBodyAlwaysOnce",
+   "type": "misconception",
+   "label": "wrong: The loop body always runs at least once, even if the condition is false at the start. | right: A while or for body runs zero times when the condition is false at the start."
+  },
+  {
+   "from": "loop_body",
+   "to": "LoopBodyStatementOutsideLoop",
+   "type": "misconception",
+   "label": "wrong: Some statements inside the braces of a loop body are not repeated; they run once, before or after the loop. | right: Every statement inside the loop braces is part of the body and runs on every pass."
+  },
+  {
+   "from": "loop_body",
+   "to": "LoopCountIsStatementCount",
+   "type": "misconception",
+   "label": "wrong: The repeat count of a counted loop says how many of the body statements are executed. | right: The repeat count is how many times the whole body runs; every pass runs all body statements."
+  },
+  {
+   "from": "loop_body",
+   "to": "LoopOutputSameEachPass",
+   "type": "misconception",
+   "label": "wrong: A loop prints the same thing on every pass; the changing loop variable does not affect what the body does. | right: The body uses the current value of the loop variable, so its output can differ on each pass."
+  },
+  {
+   "from": "loop_body",
+   "to": "LoopRunsStatementsSeparately",
+   "type": "misconception",
+   "label": "wrong: A loop runs its first body statement all N times, then its second body statement all N times. | right: Each pass runs the whole body in order, so the body statements interleave: S1, S2, S1, S2, ..."
+  },
+  {
+   "from": "loop_body",
+   "to": "StateChangeIgnoredAcrossPasses",
+   "type": "misconception",
+   "label": "wrong: Values changed by one pass of a loop (other than the loop variable) do not affect later passes. | right: Each pass starts from the state left by the previous pass, so a change in one pass carries into the next ones."
+  },
+  {
+   "from": "loop_body",
+   "to": "StatementAfterLoopInBody",
+   "type": "misconception",
+   "label": "wrong: A statement written after the loop is repeated with the loop body. | right: The body ends at the closing brace (or after its single statement); code after it runs once, after the loop ends."
+  },
+  {
+   "from": "loop_body",
+   "to": "WhileStopsMidBody",
+   "type": "misconception",
+   "label": "wrong: The loop stops the moment the condition becomes false, even in the middle of the body. | right: The condition is tested only before each pass, so the whole body finishes before the loop can stop."
+  },
+  {
+   "from": "loop_control",
+   "to": "ForLoopPartSkipped",
+   "type": "misconception",
+   "label": "wrong: A pass of a loop may leave out one of its parts (the condition test, the body, the update, or the initialization). | right: Each pass of a for loop runs test, then body, then update, every time; the initialization runs once, at the start."
+  },
+  {
+   "from": "loop_variable",
+   "to": "LoopOutputSameEachPass",
+   "type": "misconception",
+   "label": "wrong: A loop prints the same thing on every pass; the changing loop variable does not affect what the body does. | right: The body uses the current value of the loop variable, so its output can differ on each pass."
+  },
+  {
+   "from": "program_state",
+   "to": "StateChangeIgnoredAcrossPasses",
+   "type": "misconception",
+   "label": "wrong: Values changed by one pass of a loop (other than the loop variable) do not affect later passes. | right: Each pass starts from the state left by the previous pass, so a change in one pass carries into the next ones."
+  },
+  {
+   "from": "program_text",
+   "to": "ComputerFillsInIntent",
+   "type": "misconception",
+   "label": "wrong: The computer fills in omitted steps or values that the programmer meant, e.g. REPEAT 4 [FORWARD 30] draws a square without a turn command. | right: The computer executes only what the code states; every needed step and value must be written."
+  },
+  {
+   "from": "statement",
+   "to": "ComputerFillsInIntent",
+   "type": "misconception",
+   "label": "wrong: The computer fills in omitted steps or values that the programmer meant, e.g. REPEAT 4 [FORWARD 30] draws a square without a turn command. | right: The computer executes only what the code states; every needed step and value must be written."
+  },
+  {
+   "from": "while_loop",
+   "to": "LoopBodyAlwaysOnce",
+   "type": "misconception",
+   "label": "wrong: The loop body always runs at least once, even if the condition is false at the start. | right: A while or for body runs zero times when the condition is false at the start."
+  },
+  {
+   "from": "while_loop",
+   "to": "WhileStopsMidBody",
+   "type": "misconception",
+   "label": "wrong: The loop stops the moment the condition becomes false, even in the middle of the body. | right: The condition is tested only before each pass, so the whole body finishes before the loop can stop."
+  },
+  {
+   "from": "do_while_loop",
+   "to": "loop_body",
+   "type": "prerequisite",
+   "label": "The block between do and while is the loop body; it runs first and is repeated while the condition holds."
+  },
+  {
+   "from": "for_loop",
+   "to": "loop_body",
+   "type": "prerequisite",
+   "label": "The statements in braces after the for header are the loop body; they run once on every pass, between the test and the increment, exactly as in a while loop."
+  },
+  {
+   "from": "loop_body",
+   "to": "accumulator_pattern",
+   "type": "prerequisite",
+   "label": "The accumulator update sum += x sits inside the body, so it runs once on every pass."
+  },
+  {
+   "from": "loop_body",
+   "to": "counter_pattern",
+   "type": "prerequisite",
+   "label": "count++ sits inside the body, usually under an if, so it runs once on every pass that matches."
+  },
+  {
+   "from": "while_loop",
+   "to": "loop_body",
+   "type": "prerequisite",
+   "label": "The loop body is the block of statements that a while (or for) loop repeats on each pass."
+  }
+ ]
+}

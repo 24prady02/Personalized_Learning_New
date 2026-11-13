@@ -1,0 +1,146 @@
+{
+ "concept": "escape_sequences",
+ "label": "escape_sequences",
+ "graph_version": "3.9.8 (3.9.7 + one primary per misconception (S9c) and the four remaining sibling edges (S9b), 2026-11-04; listed in revision_3_9_8)",
+ "nodes": [
+  {
+   "id": "char",
+   "kind": "concept",
+   "label": "char"
+  },
+  {
+   "id": "char_arithmetic",
+   "kind": "concept",
+   "label": "char_arithmetic"
+  },
+  {
+   "id": "escape_sequences",
+   "kind": "concept",
+   "label": "escape_sequences"
+  },
+  {
+   "id": "string_concatenation",
+   "kind": "concept",
+   "label": "string_concatenation"
+  },
+  {
+   "id": "string_literal",
+   "kind": "concept",
+   "label": "string_literal"
+  },
+  {
+   "id": "string_type",
+   "kind": "concept",
+   "label": "string_type"
+  },
+  {
+   "id": "escape_sequences@L0",
+   "kind": "learning_level",
+   "label": "L0"
+  },
+  {
+   "id": "escape_sequences@L1",
+   "kind": "learning_level",
+   "label": "L1"
+  },
+  {
+   "id": "escape_sequences@L2",
+   "kind": "learning_level",
+   "label": "L2"
+  },
+  {
+   "id": "escape_sequences@L3",
+   "kind": "learning_level",
+   "label": "L3"
+  },
+  {
+   "id": "escape_sequences@L4",
+   "kind": "learning_level",
+   "label": "L4"
+  },
+  {
+   "id": "EscapeIsTwoCharacters",
+   "kind": "misconception",
+   "label": "EscapeIsTwoCharacters"
+  },
+  {
+   "id": "topic1.2.b",
+   "kind": "topic",
+   "label": "Characters and strings"
+  }
+ ],
+ "edges": [
+  {
+   "from": "topic1.2.b",
+   "to": "char",
+   "type": "contains",
+   "label": "The topic 'Characters and strings' introduces char."
+  },
+  {
+   "from": "topic1.2.b",
+   "to": "char_arithmetic",
+   "type": "contains",
+   "label": "The topic 'Characters and strings' introduces char_arithmetic."
+  },
+  {
+   "from": "topic1.2.b",
+   "to": "escape_sequences",
+   "type": "contains",
+   "label": "The topic 'Characters and strings' introduces escape_sequences."
+  },
+  {
+   "from": "topic1.2.b",
+   "to": "string_concatenation",
+   "type": "contains",
+   "label": "The topic 'Characters and strings' introduces string_concatenation."
+  },
+  {
+   "from": "topic1.2.b",
+   "to": "string_type",
+   "type": "contains",
+   "label": "The topic 'Characters and strings' introduces string_type."
+  },
+  {
+   "from": "escape_sequences",
+   "to": "escape_sequences@L0",
+   "type": "has_level",
+   "label": "[0] everyday_reading (E): In everyday text a backslash is just a character, and a new line is made by pressing Enter. Inside a Java literal a backslash starts an escape: \\n is one newline character and \\\\ is one backslash, and a literal cannot contain a raw line break.\n[1] misconception (M) -> EscapeIsTwoCharacters: wrong rule: \\t in a string prints a backslash and the letter t. Right rule: A backslash starts an escape sequence, so \\t is a single tab character.\n[2] inconsistent_trace (T) -> EscapeIsTwoCharacters: Points to LT (the compiler turns each escape into a single character). Applied unevenly, a student prints \"\\n\" as a line break but counts it as two characters in length() or charAt. (here mixing in: \"\\t in a string prints a backslash and the letter t\")"
+  },
+  {
+   "from": "escape_sequences",
+   "to": "escape_sequences@L1",
+   "type": "has_level",
+   "label": "[0] names_the_element (N): Escape sequence: a backslash code inside a char or String literal that stands for one special character (\\t, \\n, \\\\, \\', \\\").\n[1] states_the_rule (S): Java has eight escape sequences. The common ones are \\t (tab), \\n (newline), \\\\ (backslash), \\' (single quote) and \\\" (double quote), and each represents a single character."
+  },
+  {
+   "from": "escape_sequences",
+   "to": "escape_sequences@L2",
+   "type": "has_level",
+   "label": "[0] line_by_line_trace (LT): The compiler replaces each escape with its single character while reading the literal, so at run time the String already contains that one character.\n[1] output_prediction (OP): System.out.print(\"Hello!\\nHow are you doing?\\n\") prints two lines. \"a\\tb\" prints a, a tab, then b. \"Hi\\n\".length() is 3.\n[2] one_step_execution (OS): An escape changes no variable. Printing \\n moves the output position to the start of a new line."
+  },
+  {
+   "from": "escape_sequences",
+   "to": "escape_sequences@L3",
+   "type": "has_level",
+   "label": "[0] relation_to_neighbour (R): Escapes are written inside \"...\" or '...'. \\\" puts a double quote inside a String literal without ending it.\n[1] purpose_of_the_whole (P): Escapes format output (line breaks, tab-aligned columns) and put quote or backslash characters into text."
+  },
+  {
+   "from": "escape_sequences",
+   "to": "escape_sequences@L4",
+   "type": "has_level",
+   "label": "[0] predict_a_change (C) -> EscapeIsTwoCharacters: Removing the backslash turns \\n into the letter n. Doubling it (\\\\n) prints a backslash followed by n. Adding a space after \\n puts a space at the start of the next line.\n[1] transfer_to_a_new_program (X): Use escapes for special characters inside literals. For line ends in formatted output, use println or printf's %n, which gives the platform line separator.\n[2] diagnose_an_error (D): rule broken: A double quote inside a String literal must be escaped. Kind: compile-time. Trigger class: An unescaped \" inside a String, such as \"She said \"Hi\"\": the literal ends early, and the compiler reports an unclosed literal or ')' expected.\n[3] diagnose_an_error (D): rule broken: A backslash must be followed by a valid escape character. Kind: compile-time. Trigger class: Backslash plus an undefined letter, e.g. a Windows path \"C:\\data\": 'illegal escape character'.\n[4] diagnose_an_error (D): rule broken: A backslash followed by a valid escape letter is replaced by that character. Kind: silent logic error. Trigger class: Paths or text containing \\t or \\n by accident (\"C:\\temp\" contains a tab)."
+  },
+  {
+   "from": "escape_sequences",
+   "to": "EscapeIsTwoCharacters",
+   "type": "misconception",
+   "label": "wrong: \\t in a string prints a backslash and the letter t. | right: A backslash starts an escape sequence, so \\t is a single tab character."
+  },
+  {
+   "from": "string_literal",
+   "to": "escape_sequences",
+   "type": "prerequisite",
+   "label": "Escape sequences are written inside string or char literals."
+  }
+ ]
+}

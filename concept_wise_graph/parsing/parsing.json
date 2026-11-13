@@ -1,0 +1,197 @@
+{
+ "concept": "parsing",
+ "label": "parsing",
+ "graph_version": "3.9.8 (3.9.7 + one primary per misconception (S9c) and the four remaining sibling edges (S9b), 2026-11-04; listed in revision_3_9_8)",
+ "nodes": [
+  {
+   "id": "command_line_args",
+   "kind": "concept",
+   "label": "command_line_args"
+  },
+  {
+   "id": "explicit_cast",
+   "kind": "concept",
+   "label": "explicit_cast"
+  },
+  {
+   "id": "parsing",
+   "kind": "concept",
+   "label": "parsing"
+  },
+  {
+   "id": "run_time_error",
+   "kind": "concept",
+   "label": "run_time_error"
+  },
+  {
+   "id": "string_conversion",
+   "kind": "concept",
+   "label": "string_conversion"
+  },
+  {
+   "id": "type_conversion",
+   "kind": "concept",
+   "label": "type_conversion"
+  },
+  {
+   "id": "widening_conversion",
+   "kind": "concept",
+   "label": "widening_conversion"
+  },
+  {
+   "id": "parsing@L0",
+   "kind": "learning_level",
+   "label": "L0"
+  },
+  {
+   "id": "parsing@L1",
+   "kind": "learning_level",
+   "label": "L1"
+  },
+  {
+   "id": "parsing@L2",
+   "kind": "learning_level",
+   "label": "L2"
+  },
+  {
+   "id": "parsing@L3",
+   "kind": "learning_level",
+   "label": "L3"
+  },
+  {
+   "id": "parsing@L4",
+   "kind": "learning_level",
+   "label": "L4"
+  },
+  {
+   "id": "ArgsAreNumbers",
+   "kind": "misconception",
+   "label": "ArgsAreNumbers"
+  },
+  {
+   "id": "CastParsesString",
+   "kind": "misconception",
+   "label": "CastParsesString"
+  },
+  {
+   "id": "ParseAnyString",
+   "kind": "misconception",
+   "label": "ParseAnyString"
+  },
+  {
+   "id": "topic1.2.h",
+   "kind": "topic",
+   "label": "Type conversion (automatic, cast, parsing)"
+  }
+ ],
+ "edges": [
+  {
+   "from": "topic1.2.h",
+   "to": "explicit_cast",
+   "type": "contains",
+   "label": "The topic 'Type conversion (automatic, cast, parsing)' introduces explicit_cast."
+  },
+  {
+   "from": "topic1.2.h",
+   "to": "parsing",
+   "type": "contains",
+   "label": "The topic 'Type conversion (automatic, cast, parsing)' introduces parsing."
+  },
+  {
+   "from": "topic1.2.h",
+   "to": "string_conversion",
+   "type": "contains",
+   "label": "The topic 'Type conversion (automatic, cast, parsing)' introduces string_conversion."
+  },
+  {
+   "from": "topic1.2.h",
+   "to": "type_conversion",
+   "type": "contains",
+   "label": "The topic 'Type conversion (automatic, cast, parsing)' introduces type_conversion."
+  },
+  {
+   "from": "topic1.2.h",
+   "to": "widening_conversion",
+   "type": "contains",
+   "label": "The topic 'Type conversion (automatic, cast, parsing)' introduces widening_conversion."
+  },
+  {
+   "from": "parsing",
+   "to": "parsing@L0",
+   "type": "has_level",
+   "label": "[0] everyday_reading (E): Folk meaning: what the user typed, such as 34, already is a number, so a command-line argument can be used in arithmetic or simply cast. Java rule: command-line arguments are Strings; a String is converted to a number only by a parse method such as Integer.parseInt(args[0]) (parse = read and translate).\n[1] misconception (M) -> CastParsesString: wrong rule: (int) args[0] converts the text \"34\" into the number 34. Right rule: A String argument that represents a number must be converted with a method such as Integer.parseInt; a cast from String to int does not compile.\n[2] misconception (M) -> ParseAnyString: wrong rule: Integer.parseInt works on any text, e.g. \"five\" or \"12.2\". Right rule: Integer.parseInt throws a NumberFormatException at run time when the string is not an integer written in digits.\n[3] inconsistent_trace (T) -> CastParsesString: Points to LT (the method reads the whole string; it returns a number only if every character fits the format, otherwise it throws). Applied unevenly: the student parses \"12\" correctly but expects \"12.2\" to give 12 or \"five\" to give 5 on another call. (here mixing in: \"(int) args[0] converts the text \"34\" into the number 34\")\n[4] misconception (M) -> ArgsAreNumbers: wrong rule: Command-line args arrive already typed, so no parsing is needed. Right rule: args[0] is always a String, so Integer.parseInt(args[0]) is needed to get its number."
+  },
+  {
+   "from": "parsing",
+   "to": "parsing@L1",
+   "type": "has_level",
+   "label": "[0] names_the_element (N): Parsing is explicit type conversion from text: a library method such as Integer.parseInt or Double.parseDouble reads a String and translates it into a value of a primitive type.\n[1] states_the_rule (S): int Integer.parseInt(String s), double Double.parseDouble(String s) and long Long.parseLong(String s) convert s to an int, double or long; if s is not a valid representation they throw NumberFormatException."
+  },
+  {
+   "from": "parsing",
+   "to": "parsing@L2",
+   "type": "has_level",
+   "label": "[0] line_by_line_trace (LT): The argument expression (e.g. args[0]) is evaluated to a String, the method scans its characters and either returns the number or throws; then the value is used, typically assigned to a typed variable.\n[1] output_prediction (OP): Integer.parseInt(\"123\") is the int 123 (same as typing the literal 123); Double.parseDouble(\"-3.0\") is the double -3.0; Integer.parseInt(\"12.2\") or (\"five\") produces no value but a NumberFormatException.\n[2] one_step_execution (OS): The String is left unchanged; the only state change is the assignment of the result, e.g. int N = Integer.parseInt(args[0]); sets N."
+  },
+  {
+   "from": "parsing",
+   "to": "parsing@L3",
+   "type": "has_level",
+   "label": "[0] relation_to_neighbour (R): Because args[k] is always a String, a numeric argument must be passed through a parse method before it can be used in arithmetic or comparisons.\n[1] relation_to_neighbour (R): SW classifies parse methods as explicit type conversion: a method takes an argument of one type and produces a result of another.\n[2] purpose_of_the_whole (P): Input-conversion plan: at the top of main, parse each command-line argument once into a typed variable (Sajaniemi role: fixed value) and use that variable afterwards."
+  },
+  {
+   "from": "parsing",
+   "to": "parsing@L4",
+   "type": "has_level",
+   "label": "[0] predict_a_change (C) -> CastParsesString: Changing Integer.parseInt to Double.parseDouble widens the accepted inputs (\"2.5\") and changes the variable's type to double; changing the input text from \"34\" to \"34.0\" or \"thirty\" turns a working run into a NumberFormatException; converting a number back to a String always succeeds.\n[1] transfer_to_a_new_program (X): Use parse methods whenever numbers arrive as text (command-line arguments, tokens of a line); StdIn.readInt() already parses its token; use casts, not parse methods, between numeric types.\n[2] diagnose_an_error (D): rule broken: The string passed to a parse method must be a valid number of that type. Kind: run-time exception. Trigger class: Input that is not an integer in digits for parseInt: words (\"five\"), decimals (\"12.2\"), empty strings or embedded spaces (NumberFormatException).\n[3] diagnose_an_error (D): rule broken: args[k] exists only if at least k+1 arguments were typed. Kind: run-time exception. Trigger class: Running the program with too few command-line arguments, so Integer.parseInt(args[0]) fails with ArrayIndexOutOfBoundsException before parsing.\n[4] diagnose_an_error (D): rule broken: A String cannot be cast to a number. Kind: compile-time. Trigger class: (int) args[0]."
+  },
+  {
+   "from": "command_line_args",
+   "to": "ArgsAreNumbers",
+   "type": "misconception",
+   "label": "wrong: If a number is typed when the program is launched, args[0] is already an int and can be used in arithmetic. | right: args[0] is always a String, so Integer.parseInt(args[0]) is needed to get its number."
+  },
+  {
+   "from": "explicit_cast",
+   "to": "CastParsesString",
+   "type": "misconception",
+   "label": "wrong: (int) args[0] converts the text \"34\" into the number 34. | right: A String argument that represents a number must be converted with a method such as Integer.parseInt."
+  },
+  {
+   "from": "parsing",
+   "to": "ArgsAreNumbers",
+   "type": "misconception",
+   "label": "wrong: If a number is typed when the program is launched, args[0] is already an int and can be used in arithmetic. | right: args[0] is always a String, so Integer.parseInt(args[0]) is needed to get its number."
+  },
+  {
+   "from": "parsing",
+   "to": "CastParsesString",
+   "type": "misconception",
+   "label": "wrong: (int) args[0] converts the text \"34\" into the number 34. | right: A String argument that represents a number must be converted with a method such as Integer.parseInt."
+  },
+  {
+   "from": "parsing",
+   "to": "ParseAnyString",
+   "type": "misconception",
+   "label": "wrong: Integer.parseInt works on any text, e.g. \"five\" or \"12.2\". | right: Integer.parseInt throws a NumberFormatException at run time when the string is not an integer written in digits."
+  },
+  {
+   "from": "run_time_error",
+   "to": "ParseAnyString",
+   "type": "misconception",
+   "label": "wrong: Integer.parseInt works on any text, e.g. \"five\" or \"12.2\". | right: Integer.parseInt throws a NumberFormatException at run time when the string is not an integer written in digits."
+  },
+  {
+   "from": "command_line_args",
+   "to": "parsing",
+   "type": "prerequisite",
+   "label": "args[k] is always a String, so Integer.parseInt(args[k]) is needed before it can be used as a number."
+  },
+  {
+   "from": "parsing",
+   "to": "type_conversion",
+   "type": "prerequisite",
+   "label": "Integer.parseInt(s) converts the String s into an int; SW later classifies such methods as explicit type conversion."
+  }
+ ]
+}

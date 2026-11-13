@@ -1,0 +1,174 @@
+{
+ "concept": "data_structure",
+ "label": "Data structure",
+ "graph_version": "3.9.8 (3.9.7 + one primary per misconception (S9c) and the four remaining sibling edges (S9b), 2026-11-04; listed in revision_3_9_8)",
+ "nodes": [
+  {
+   "id": "args_length",
+   "kind": "concept",
+   "label": "args_length"
+  },
+  {
+   "id": "array_creation",
+   "kind": "concept",
+   "label": "array_creation"
+  },
+  {
+   "id": "array_declaration",
+   "kind": "concept",
+   "label": "array_declaration"
+  },
+  {
+   "id": "array_default_values",
+   "kind": "concept",
+   "label": "array_default_values"
+  },
+  {
+   "id": "data_structure",
+   "kind": "concept",
+   "label": "Data structure"
+  },
+  {
+   "id": "data_type",
+   "kind": "concept",
+   "label": "data_type"
+  },
+  {
+   "id": "indexing",
+   "kind": "concept",
+   "label": "indexing"
+  },
+  {
+   "id": "length_field",
+   "kind": "concept",
+   "label": "length_field"
+  },
+  {
+   "id": "off_by_one_error",
+   "kind": "concept",
+   "label": "off_by_one_error"
+  },
+  {
+   "id": "data_structure@L0",
+   "kind": "learning_level",
+   "label": "L0"
+  },
+  {
+   "id": "data_structure@L1",
+   "kind": "learning_level",
+   "label": "L1"
+  },
+  {
+   "id": "data_structure@L2",
+   "kind": "learning_level",
+   "label": "L2"
+  },
+  {
+   "id": "data_structure@L3",
+   "kind": "learning_level",
+   "label": "L3"
+  },
+  {
+   "id": "data_structure@L4",
+   "kind": "learning_level",
+   "label": "L4"
+  },
+  {
+   "id": "topic1.4.a",
+   "kind": "topic",
+   "label": "Arrays in Java (declare, create, initialize; indexing; length; default values)"
+  }
+ ],
+ "edges": [
+  {
+   "from": "topic1.4.a",
+   "to": "args_length",
+   "type": "contains",
+   "label": "The topic 'Arrays in Java (declare, create, initialize; indexing; length; default values)' introduces args_length."
+  },
+  {
+   "from": "topic1.4.a",
+   "to": "array_creation",
+   "type": "contains",
+   "label": "The topic 'Arrays in Java (declare, create, initialize; indexing; length; default values)' introduces array_creation."
+  },
+  {
+   "from": "topic1.4.a",
+   "to": "array_declaration",
+   "type": "contains",
+   "label": "The topic 'Arrays in Java (declare, create, initialize; indexing; length; default values)' introduces array_declaration."
+  },
+  {
+   "from": "topic1.4.a",
+   "to": "array_default_values",
+   "type": "contains",
+   "label": "The topic 'Arrays in Java (declare, create, initialize; indexing; length; default values)' introduces array_default_values."
+  },
+  {
+   "from": "topic1.4.a",
+   "to": "data_structure",
+   "type": "contains",
+   "label": "Data structure is taught under \"Arrays in Java (declare, create, initialize; indexing; length; default values)\"."
+  },
+  {
+   "from": "topic1.4.a",
+   "to": "indexing",
+   "type": "contains",
+   "label": "The topic 'Arrays in Java (declare, create, initialize; indexing; length; default values)' introduces indexing."
+  },
+  {
+   "from": "topic1.4.a",
+   "to": "length_field",
+   "type": "contains",
+   "label": "The topic 'Arrays in Java (declare, create, initialize; indexing; length; default values)' introduces length_field."
+  },
+  {
+   "from": "topic1.4.a",
+   "to": "off_by_one_error",
+   "type": "contains",
+   "label": "Topic 'Arrays in Java (declare, create, initialize; indexing; length; default values)' of section 1.4 holds the concept off by one error."
+  },
+  {
+   "from": "data_structure",
+   "to": "data_structure@L0",
+   "type": "has_level",
+   "label": "[0] everyday_reading (E): Folk meaning: one variable 'remembers' everything that was put into it, so storing many values needs no special structure. Rule: a variable holds one value at a time; keeping many values for later use needs a data structure such as an array."
+  },
+  {
+   "from": "data_structure",
+   "to": "data_structure@L1",
+   "type": "has_level",
+   "label": "[0] names_the_element (N): Identity: a data structure is a method for organizing data; the one-dimensional array is the book's first example, and the two-dimensional array the second.\n[1] states_the_rule (S): Declarative: an array is a data structure that stores a sequence of values of the same type and gives direct access to each by its index."
+  },
+  {
+   "from": "data_structure",
+   "to": "data_structure@L2",
+   "type": "has_level",
+   "label": "[0] line_by_line_trace (LT): Sequencing: a structure is first built (for an array: declare, create, initialize) and then accessed one element per operation.\n[1] output_prediction (OP): Result: what an array structure provides is fast access to any stored value: element i is found by adding i to the array's address.\n[2] one_step_execution (OS): State transition: one array operation changes at most one element (an assignment) or creates a new array; reads change nothing."
+  },
+  {
+   "from": "data_structure",
+   "to": "data_structure@L3",
+   "type": "has_level",
+   "label": "[0] relation_to_neighbour (R): A data structure organizes many values of a data type; the array holds a sequence of values of one type, and its operations (create, index, length) work on that collection.\n[1] purpose_of_the_whole (P): Plan/role: organize large amounts of data so it can be stored and then processed by indexing (vectors, matrices, tables, experimental results)."
+  },
+  {
+   "from": "data_structure",
+   "to": "data_structure@L4",
+   "type": "has_level",
+   "label": "[0] predict_a_change (C): Conservation: choosing a different organization keeps the data but changes which operations are cheap. Using arrays enlarges the program state, so tracing becomes harder and invariants matter more.\n[1] transfer_to_a_new_program (X): Applicability: use an array when the number of values is known when it is created and access is by integer position. Other structures (Chapter 4) fit growing collections or non-integer keys.\n[2] diagnose_an_error (D): rule broken: Values needed again later must be stored in a structure, not a single variable. Kind: silent logic error. Trigger class: a task that needs a second pass over the data (e.g. count how many equal the maximum) is solved with one variable that keeps only the latest value"
+  },
+  {
+   "from": "data_structure",
+   "to": "array_declaration",
+   "type": "prerequisite",
+   "label": "An array is a data structure: one name for a sequence of values of the same type, organised by index."
+  },
+  {
+   "from": "data_type",
+   "to": "data_structure",
+   "type": "prerequisite",
+   "label": "A data structure organizes many values of a data type; the array holds a sequence of values of one type."
+  }
+ ]
+}

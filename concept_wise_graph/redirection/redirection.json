@@ -1,0 +1,181 @@
+{
+ "concept": "redirection",
+ "label": "redirection",
+ "graph_version": "3.9.8 (3.9.7 + one primary per misconception (S9c) and the four remaining sibling edges (S9b), 2026-11-04; listed in revision_3_9_8)",
+ "nodes": [
+  {
+   "id": "data_driven_code",
+   "kind": "concept",
+   "label": "Data-driven code"
+  },
+  {
+   "id": "filter",
+   "kind": "concept",
+   "label": "filter"
+  },
+  {
+   "id": "piping",
+   "kind": "concept",
+   "label": "piping"
+  },
+  {
+   "id": "redirection",
+   "kind": "concept",
+   "label": "redirection"
+  },
+  {
+   "id": "run",
+   "kind": "concept",
+   "label": "run"
+  },
+  {
+   "id": "standard_input",
+   "kind": "concept",
+   "label": "standard_input"
+  },
+  {
+   "id": "standard_output",
+   "kind": "concept",
+   "label": "standard_output"
+  },
+  {
+   "id": "redirection@L0",
+   "kind": "learning_level",
+   "label": "L0"
+  },
+  {
+   "id": "redirection@L1",
+   "kind": "learning_level",
+   "label": "L1"
+  },
+  {
+   "id": "redirection@L2",
+   "kind": "learning_level",
+   "label": "L2"
+  },
+  {
+   "id": "redirection@L3",
+   "kind": "learning_level",
+   "label": "L3"
+  },
+  {
+   "id": "redirection@L4",
+   "kind": "learning_level",
+   "label": "L4"
+  },
+  {
+   "id": "RedirectionIsArgument",
+   "kind": "misconception",
+   "label": "RedirectionIsArgument"
+  },
+  {
+   "id": "topic1.5.d",
+   "kind": "topic",
+   "label": "Redirection and piping (filters)"
+  }
+ ],
+ "edges": [
+  {
+   "from": "topic1.5.d",
+   "to": "data_driven_code",
+   "type": "contains",
+   "label": "Data-driven code is taught under \"Redirection and piping (filters)\"."
+  },
+  {
+   "from": "topic1.5.d",
+   "to": "filter",
+   "type": "contains",
+   "label": "The topic 'Redirection and piping (filters)' introduces filter."
+  },
+  {
+   "from": "topic1.5.d",
+   "to": "piping",
+   "type": "contains",
+   "label": "The topic 'Redirection and piping (filters)' introduces piping."
+  },
+  {
+   "from": "topic1.5.d",
+   "to": "redirection",
+   "type": "contains",
+   "label": "The topic 'Redirection and piping (filters)' introduces redirection."
+  },
+  {
+   "from": "redirection",
+   "to": "redirection@L0",
+   "type": "has_level",
+   "label": "[0] everyday_reading (E): In maths `<` and `>` mean less-than and greater-than. In a command line they are directives to the operating system: `< file` makes the file the standard input and `> file` sends standard output to the file. They are not part of Java or of args[].\n[1] misconception (M) -> RedirectionIsArgument: wrong rule: A redirected file shows up in args[]. Right rule: With `< data.txt` the operating system supplies standard input from the file. args[] does not contain it, and the program just reads standard input whatever the source.\n[2] inconsistent_trace (T) -> RedirectionIsArgument: Points to LT (the OS connects the file before the program runs; reads come from the file and writes go only to the file). An uneven trace shows output on the screen as well as in the file, or treats the file name as a command-line argument. (here mixing in: \"a redirected file shows up in args[]\")"
+  },
+  {
+   "from": "redirection",
+   "to": "redirection@L1",
+   "type": "has_level",
+   "label": "[0] names_the_element (N): Redirection is an operating-system (shell) mechanism that connects a program's standard input or standard output to a file.\n[1] states_the_rule (S): `java P > data.txt` writes standard output to data.txt instead of the terminal. `java P < data.txt` makes StdIn read from data.txt. The program itself is not changed."
+  },
+  {
+   "from": "redirection",
+   "to": "redirection@L2",
+   "type": "has_level",
+   "label": "[0] line_by_line_trace (LT): The shell opens the file and connects it before main starts. Each StdIn read then takes the next value from the file, and each print appends text at the end of the output file.\n[1] output_prediction (OP): `java RandomSeq 1000 > data.txt` prints nothing in the terminal and leaves a file of 1,000 values. `java Average < data.txt` prints their average.\n[2] one_step_execution (OS): Each read or print still does exactly what it does at a terminal; only the source or destination is a file (one print appends to the file)."
+  },
+  {
+   "from": "redirection",
+   "to": "redirection@L3",
+   "type": "has_level",
+   "label": "[0] relation_to_neighbour (R): `> file` diverts all standard output (print, println, printf) into the file, so nothing appears in the terminal.\n[1] relation_to_neighbour (R): `< file` makes the file's contents the standard input stream: the same StdIn calls read the file's tokens in order.\n[2] relation_to_neighbour (R): `A > f` followed by `B < f` has the same effect as `A | B`, except that the pipe creates no file.\n[3] relation_to_neighbour (R): Redirecting different files into the same program changes the data it processes without changing the program.\n[4] purpose_of_the_whole (P): Redirection saves output for later and feeds large amounts of data from files, without typing."
+  },
+  {
+   "from": "redirection",
+   "to": "redirection@L4",
+   "type": "has_level",
+   "label": "[0] predict_a_change (C) -> RedirectionIsArgument: The program is unchanged whether its input or output is the terminal or a file: the I/O abstraction is conserved. Changing only the file changes only the data.\n[1] transfer_to_a_new_program (X): Use redirection when the data are in a file or the results should be saved. When a program needs several input or output files at once, use In/Out instead (one standard stream each way).\n[2] diagnose_an_error (D): rule broken: `> file` replaces the file's previous contents. Kind: silent logic error. Trigger class: Redirecting output onto an existing data file (or onto the input file itself) overwrites it.\n[3] diagnose_an_error (D): rule broken: The input file must exist and be readable. Kind: launch error. Trigger class: `java Average < missing.txt`: the shell reports that the file does not exist, and the program never starts.\n[4] diagnose_an_error (D): rule broken: A redirected file is finite. Kind: run-time exception. Trigger class: The program reads more values than the file contains."
+  },
+  {
+   "from": "filter",
+   "to": "RedirectionIsArgument",
+   "type": "misconception",
+   "label": "wrong: a redirected file shows up in args[] | right: With < data.txt the operating system implements the standard input stream by reading from the file; the program just reads standard input and has no dependence on the source of the input stream."
+  },
+  {
+   "from": "piping",
+   "to": "RedirectionIsArgument",
+   "type": "misconception",
+   "label": "wrong: a redirected file shows up in args[] | right: With < data.txt the operating system implements the standard input stream by reading from the file; the program just reads standard input and has no dependence on the source of the input stream."
+  },
+  {
+   "from": "redirection",
+   "to": "RedirectionIsArgument",
+   "type": "misconception",
+   "label": "wrong: java Prog < in.txt puts the name in.txt into args[0]. | right: With < data.txt the operating system implements the standard input stream by reading from the file; the program just reads standard input and has no dependence on the source of the input stream."
+  },
+  {
+   "from": "redirection",
+   "to": "data_driven_code",
+   "type": "prerequisite",
+   "label": "Redirecting a file to standard input lets the same program process different data files without being changed."
+  },
+  {
+   "from": "redirection",
+   "to": "piping",
+   "type": "prerequisite",
+   "label": "A pipe A | B connects A's standard output directly to B's standard input, with no file in between."
+  },
+  {
+   "from": "run",
+   "to": "redirection",
+   "type": "prerequisite",
+   "label": "Redirection is written on the command that runs a program, with < or >."
+  },
+  {
+   "from": "standard_input",
+   "to": "redirection",
+   "type": "prerequisite",
+   "label": "< file makes the contents of the file the standard input stream."
+  },
+  {
+   "from": "standard_output",
+   "to": "redirection",
+   "type": "prerequisite",
+   "label": "> file sends everything written to standard output into the file instead of the screen."
+  }
+ ]
+}

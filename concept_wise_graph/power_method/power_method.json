@@ -1,0 +1,221 @@
+{
+ "concept": "power_method",
+ "label": "power_method",
+ "graph_version": "3.9.8 (3.9.7 + one primary per misconception (S9c) and the four remaining sibling edges (S9b), 2026-11-04; listed in revision_3_9_8)",
+ "nodes": [
+  {
+   "id": "convergence_rate",
+   "kind": "concept",
+   "label": "convergence_rate"
+  },
+  {
+   "id": "markov_chain",
+   "kind": "concept",
+   "label": "markov_chain"
+  },
+  {
+   "id": "matrix_operations",
+   "kind": "concept",
+   "label": "matrix_operations"
+  },
+  {
+   "id": "power_method",
+   "kind": "concept",
+   "label": "power_method"
+  },
+  {
+   "id": "simulation_loop",
+   "kind": "concept",
+   "label": "simulation_loop"
+  },
+  {
+   "id": "two_dimensional_array",
+   "kind": "concept",
+   "label": "two_dimensional_array"
+  },
+  {
+   "id": "two_models",
+   "kind": "concept",
+   "label": "two_models"
+  },
+  {
+   "id": "power_method@L0",
+   "kind": "learning_level",
+   "label": "L0"
+  },
+  {
+   "id": "power_method@L1",
+   "kind": "learning_level",
+   "label": "L1"
+  },
+  {
+   "id": "power_method@L2",
+   "kind": "learning_level",
+   "label": "L2"
+  },
+  {
+   "id": "power_method@L3",
+   "kind": "learning_level",
+   "label": "L3"
+  },
+  {
+   "id": "power_method@L4",
+   "kind": "learning_level",
+   "label": "L4"
+  },
+  {
+   "id": "MatrixProductCommutes",
+   "kind": "misconception",
+   "label": "MatrixProductCommutes"
+  },
+  {
+   "id": "OneIterationSuffices",
+   "kind": "misconception",
+   "label": "OneIterationSuffices"
+  },
+  {
+   "id": "StartPageMatters",
+   "kind": "misconception",
+   "label": "StartPageMatters"
+  },
+  {
+   "id": "topic1.6.c",
+   "kind": "topic",
+   "label": "Mixing a Markov chain (squaring, power method)"
+  }
+ ],
+ "edges": [
+  {
+   "from": "topic1.6.c",
+   "to": "convergence_rate",
+   "type": "contains",
+   "label": "The topic 'Mixing a Markov chain (squaring, power method)' introduces convergence_rate."
+  },
+  {
+   "from": "topic1.6.c",
+   "to": "markov_chain",
+   "type": "contains",
+   "label": "The topic 'Mixing a Markov chain (squaring, power method)' introduces markov_chain."
+  },
+  {
+   "from": "topic1.6.c",
+   "to": "power_method",
+   "type": "contains",
+   "label": "The topic 'Mixing a Markov chain (squaring, power method)' introduces power_method."
+  },
+  {
+   "from": "topic1.6.c",
+   "to": "two_models",
+   "type": "contains",
+   "label": "The topic 'Mixing a Markov chain (squaring, power method)' introduces two_models."
+  },
+  {
+   "from": "power_method",
+   "to": "power_method@L0",
+   "type": "has_level",
+   "label": "[0] everyday_reading (E): \"Power\" suggests strength or Math.pow on a number; here it means raising the transition matrix to the t-th power by multiplying a probability vector by p[][] t times.\n[1] misconception (M) -> StartPageMatters: wrong rule: The page ranks depend on which page the surfer starts from. Right rule: The iteration converges to the same vector no matter where it starts; Markov starts from [1.0 0 0 0 0] only for convenience.\n[2] misconception (M) -> OneIterationSuffices: wrong rule: One vector-matrix multiplication gives the exact page ranks. Right rule: One multiplication gives the probabilities after one move ([.02 .92 .02 .02 .02] from page 0); about 20 multiplications give two decimal places and 20 more give three.\n[3] misconception (M) -> MatrixProductCommutes: wrong rule: A * B and B * A are the same matrix. Right rule: Matrix multiplication is not commutative: c[i][j] is row i of the left factor dotted with column j of the right; rank * p (row vector times matrix) is the page-rank update, p * rank is a different vector.\n[4] inconsistent_trace (T) -> StartPageMatters: Applies LT (compute all of newRank from the old rank, then copy) unevenly: e.g. on some passes writing rank[j] directly so later j use partly updated values, or forgetting to recreate newRank so sums accumulate. (here mixing in: \"The page ranks depend on which page the surfer starts from\")"
+  },
+  {
+   "from": "power_method",
+   "to": "power_method@L1",
+   "type": "has_level",
+   "label": "[0] names_the_element (N): An iterative algorithm: repeated vector-matrix multiplication of a probability vector by the transition matrix.\n[1] states_the_rule (S): The vector of probabilities after t steps is the vector after t-1 steps times the transition matrix; by the basic limit theorem this converges to the same vector from any start."
+  },
+  {
+   "from": "power_method",
+   "to": "power_method@L2",
+   "type": "has_level",
+   "label": "[0] line_by_line_trace (LT): rank = [1, 0, ..., 0]; for each t: create newRank (zeros); for each j, for each k, newRank[j] += rank[k]*p[k][j]; then copy newRank into rank. Finally print rank.\n[1] output_prediction (OP): Prints the page-rank vector after T multiplications: Markov 20 gives 0.27245 0.26515 0.14669 0.24764 0.06806 and Markov 40 gives 0.27303 0.26573 0.14618 0.24723 0.06783.\n[2] one_step_execution (OS): One iteration replaces every rank[j] with the dot product of the old rank and column j of p; the vector still sums to 1."
+  },
+  {
+   "from": "power_method",
+   "to": "power_method@L3",
+   "type": "has_level",
+   "label": "[0] relation_to_neighbour (R): Each iteration is a vector-matrix product: newRank[j] is the dot product of rank[] and column j of p[][], computed with nested for loops.\n[1] relation_to_neighbour (R): Each multiplication is one move of the chain; convergence is the chain's mixing.\n[2] relation_to_neighbour (R): Gives the move probabilities exactly (up to floating-point precision), whereas the simulation only estimates them.\n[3] relation_to_neighbour (R): The number of iterations T controls accuracy: about 20 for two decimals and 20 more for three on tiny.txt.\n[4] relation_to_neighbour (R): Computes the same ranks far more efficiently than simulating moves.\n[5] purpose_of_the_whole (P): Iterative-refinement plan: repeat the same update until the vector stops changing; newRank[j] is a gatherer (dot product), rank is the state vector replaced each pass."
+  },
+  {
+   "from": "power_method",
+   "to": "power_method@L4",
+   "type": "has_level",
+   "label": "[0] predict_a_change (C) -> StartPageMatters: Changing the start vector keeps the limit; more iterations keep the result and add digits; updating rank in place, or using p[j][k] instead of p[k][j], breaks the computation.\n[1] transfer_to_a_new_program (X): Use when the transition matrix fits in memory and accurate ranks are needed: far more efficient than simulation; still too slow for the whole web, and repeated squaring is an alternative.\n[2] diagnose_an_error (D): rule broken: The new vector must be computed from the old vector only. Kind: silent logic error. Trigger class: rank[j] updated in place (no newRank): later columns use already-updated ranks, so the result is not rank * p (though it may still converge).\n[3] diagnose_an_error (D): rule broken: newRank must start at zero each iteration. Kind: silent logic error. Trigger class: newRank created once outside the t loop: sums accumulate across iterations and the vector grows beyond 1.\n[4] diagnose_an_error (D): rule broken: The update is rank (row) times p: use column j of p, p[k][j]. Kind: silent logic error. Trigger class: Using p[j][k] (row j) computes p * rank instead, which does not give the page ranks.\n[5] diagnose_an_error (D): rule broken: Many iterations are needed for convergence. Kind: silent logic error. Trigger class: T too small (e.g. 1 or 2): prints the 1- or 2-move probabilities, not the ranks."
+  },
+  {
+   "from": "convergence_rate",
+   "to": "OneIterationSuffices",
+   "type": "misconception",
+   "label": "wrong: One vector-matrix multiplication gives the exact page ranks. | right: One multiplication gives only the probabilities after one move; the vector converges with repeated multiplication (for tiny.txt about 20 multiplications give two decimal places and about 40 give three)."
+  },
+  {
+   "from": "markov_chain",
+   "to": "StartPageMatters",
+   "type": "misconception",
+   "label": "wrong: The page ranks depend on which page the surfer starts from. | right: For the random-surfer chain the long-run probabilities do not depend on the starting page."
+  },
+  {
+   "from": "matrix_operations",
+   "to": "MatrixProductCommutes",
+   "type": "misconception",
+   "label": "wrong: A * B and B * A are the same matrix. | right: Matrix multiplication is not commutative; changing the order may change the product."
+  },
+  {
+   "from": "power_method",
+   "to": "MatrixProductCommutes",
+   "type": "misconception",
+   "label": "wrong: A * B and B * A are the same matrix. | right: Matrix multiplication is not commutative; changing the order may change the product."
+  },
+  {
+   "from": "power_method",
+   "to": "OneIterationSuffices",
+   "type": "misconception",
+   "label": "wrong: One vector-matrix multiplication gives the exact page ranks. | right: One multiplication gives only the probabilities after one move; the vector converges with repeated multiplication (for tiny.txt about 20 multiplications give two decimal places and about 40 give three)."
+  },
+  {
+   "from": "power_method",
+   "to": "StartPageMatters",
+   "type": "misconception",
+   "label": "wrong: The page ranks depend on which page the surfer starts from. | right: For the random-surfer chain the long-run probabilities do not depend on the starting page."
+  },
+  {
+   "from": "two_models",
+   "to": "StartPageMatters",
+   "type": "misconception",
+   "label": "wrong: The page ranks depend on which page the surfer starts from. | right: For the random-surfer chain the long-run probabilities do not depend on the starting page."
+  },
+  {
+   "from": "simulation_loop",
+   "to": "power_method",
+   "type": "parallel",
+   "label": "The power method used in Markov is far more efficient than simulating the behavior of a random surfer."
+  },
+  {
+   "from": "markov_chain",
+   "to": "power_method",
+   "type": "prerequisite",
+   "label": "Each multiplication advances the chain's probabilities by one move."
+  },
+  {
+   "from": "matrix_operations",
+   "to": "power_method",
+   "type": "prerequisite",
+   "label": "The power method is repeated vector-matrix multiplication."
+  },
+  {
+   "from": "power_method",
+   "to": "convergence_rate",
+   "type": "prerequisite",
+   "label": "The convergence rate counts how many power-method multiplications are needed for a given accuracy: about 20 for two decimal places and 20 more for three."
+  },
+  {
+   "from": "power_method",
+   "to": "two_models",
+   "type": "prerequisite",
+   "label": "The power method computes the move probabilities exactly (up to floating-point precision), in contrast to the simulation, which produces an estimate and needs more iterations to get a more accurate estimate."
+  },
+  {
+   "from": "two_dimensional_array",
+   "to": "power_method",
+   "type": "prerequisite",
+   "label": "The power method multiplies the rank vector by the transition matrix, stored as a two-dimensional array p[i][j]."
+  }
+ ]
+}

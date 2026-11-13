@@ -1,0 +1,241 @@
+{
+ "concept": "length_field",
+ "label": "length_field",
+ "graph_version": "3.9.8 (3.9.7 + one primary per misconception (S9c) and the four remaining sibling edges (S9b), 2026-11-04; listed in revision_3_9_8)",
+ "nodes": [
+  {
+   "id": "args_length",
+   "kind": "concept",
+   "label": "args_length"
+  },
+  {
+   "id": "array_creation",
+   "kind": "concept",
+   "label": "array_creation"
+  },
+  {
+   "id": "array_declaration",
+   "kind": "concept",
+   "label": "array_declaration"
+  },
+  {
+   "id": "array_default_values",
+   "kind": "concept",
+   "label": "array_default_values"
+  },
+  {
+   "id": "array_initializer",
+   "kind": "concept",
+   "label": "array_initializer"
+  },
+  {
+   "id": "array_reversal",
+   "kind": "concept",
+   "label": "array_reversal"
+  },
+  {
+   "id": "array_traversal",
+   "kind": "concept",
+   "label": "array_traversal"
+  },
+  {
+   "id": "data_structure",
+   "kind": "concept",
+   "label": "Data structure"
+  },
+  {
+   "id": "indexing",
+   "kind": "concept",
+   "label": "indexing"
+  },
+  {
+   "id": "length_field",
+   "kind": "concept",
+   "label": "length_field"
+  },
+  {
+   "id": "method_call",
+   "kind": "concept",
+   "label": "method_call"
+  },
+  {
+   "id": "off_by_one_error",
+   "kind": "concept",
+   "label": "off_by_one_error"
+  },
+  {
+   "id": "length_field@L0",
+   "kind": "learning_level",
+   "label": "L0"
+  },
+  {
+   "id": "length_field@L1",
+   "kind": "learning_level",
+   "label": "L1"
+  },
+  {
+   "id": "length_field@L2",
+   "kind": "learning_level",
+   "label": "L2"
+  },
+  {
+   "id": "length_field@L3",
+   "kind": "learning_level",
+   "label": "L3"
+  },
+  {
+   "id": "length_field@L4",
+   "kind": "learning_level",
+   "label": "L4"
+  },
+  {
+   "id": "ArrayHasLengthMethod",
+   "kind": "misconception",
+   "label": "ArrayHasLengthMethod"
+  },
+  {
+   "id": "ArrayLengthCannotBeZero",
+   "kind": "misconception",
+   "label": "ArrayLengthCannotBeZero"
+  },
+  {
+   "id": "topic1.4.a",
+   "kind": "topic",
+   "label": "Arrays in Java (declare, create, initialize; indexing; length; default values)"
+  }
+ ],
+ "edges": [
+  {
+   "from": "topic1.4.a",
+   "to": "args_length",
+   "type": "contains",
+   "label": "The topic 'Arrays in Java (declare, create, initialize; indexing; length; default values)' introduces args_length."
+  },
+  {
+   "from": "topic1.4.a",
+   "to": "array_creation",
+   "type": "contains",
+   "label": "The topic 'Arrays in Java (declare, create, initialize; indexing; length; default values)' introduces array_creation."
+  },
+  {
+   "from": "topic1.4.a",
+   "to": "array_declaration",
+   "type": "contains",
+   "label": "The topic 'Arrays in Java (declare, create, initialize; indexing; length; default values)' introduces array_declaration."
+  },
+  {
+   "from": "topic1.4.a",
+   "to": "array_default_values",
+   "type": "contains",
+   "label": "The topic 'Arrays in Java (declare, create, initialize; indexing; length; default values)' introduces array_default_values."
+  },
+  {
+   "from": "topic1.4.a",
+   "to": "data_structure",
+   "type": "contains",
+   "label": "Data structure is taught under \"Arrays in Java (declare, create, initialize; indexing; length; default values)\"."
+  },
+  {
+   "from": "topic1.4.a",
+   "to": "indexing",
+   "type": "contains",
+   "label": "The topic 'Arrays in Java (declare, create, initialize; indexing; length; default values)' introduces indexing."
+  },
+  {
+   "from": "topic1.4.a",
+   "to": "length_field",
+   "type": "contains",
+   "label": "The topic 'Arrays in Java (declare, create, initialize; indexing; length; default values)' introduces length_field."
+  },
+  {
+   "from": "topic1.4.a",
+   "to": "off_by_one_error",
+   "type": "contains",
+   "label": "Topic 'Arrays in Java (declare, create, initialize; indexing; length; default values)' of section 1.4 holds the concept off by one error."
+  },
+  {
+   "from": "length_field",
+   "to": "length_field@L0",
+   "type": "has_level",
+   "label": "[0] everyday_reading (E): Folk meaning: 'length' is something you ask for, like s.length() for a String, and in everyday counting 'length 10' suggests the last item is number 10. Java rule: a.length is a final field written without parentheses, equal to the number of elements, so the last index is a.length-1.\n[1] misconception (M) -> ArrayHasLengthMethod: wrong rule: You call length() instead of using the length field. Right rule: An array's size is the field a.length, written without parentheses; length() is a String method.\n[2] inconsistent_trace (T) -> ArrayHasLengthMethod: Points to LT: a.length is read every time the loop test i < a.length runs. Inconsistent application: the trace uses a.length as the last valid index on some passes (as if the test were <=). (here mixing in: \"you call length() instead of using the length field\")\n[3] misconception (M) -> ArrayLengthCannotBeZero: wrong rule: An array cannot have length 0. Right rule: new int[0] is a legal array with length 0; args is such an array when no arguments are typed."
+  },
+  {
+   "from": "length_field",
+   "to": "length_field@L1",
+   "type": "has_level",
+   "label": "[0] names_the_element (N): Identity: a.length is the public final instance field that every array has, holding its number of elements.\n[1] states_the_rule (S): Declarative: the length of array a is written a.length (no parentheses); it equals the size given at creation, may be zero, cannot be assigned, and the last element is a[a.length-1]."
+  },
+  {
+   "from": "length_field",
+   "to": "length_field@L2",
+   "type": "has_level",
+   "label": "[0] line_by_line_trace (LT): Sequencing: a is evaluated first (a null a throws NullPointerException), then the length field of the array a refers to now is read. In 'for (int i = 0; i < a.length; i++)' it is re-read at each test.\n[1] output_prediction (OP): Result: an int >= 0 equal to the number of elements: new double[8].length is 8, {1, 2, 3}.length is 3, and the last element is a[a.length-1].\n[2] one_step_execution (OS): State transition: reading a.length changes nothing. Assigning 'a.length = 5' is impossible (a final field), so only making a refer to a different array changes the value later read as a.length."
+  },
+  {
+   "from": "length_field",
+   "to": "length_field@L3",
+   "type": "has_level",
+   "label": "[0] relation_to_neighbour (R): The n given to new becomes a.length and stays fixed for that array object.\n[1] relation_to_neighbour (R): args is an ordinary String[], so args.length is its length field and counts the command-line arguments (0 when none are typed).\n[2] purpose_of_the_whole (P): Plan/role: a fixed value (Sajaniemi) that lets code adapt to any array size instead of a hard-coded magic number, e.g. loop bounds and the last element."
+  },
+  {
+   "from": "length_field",
+   "to": "length_field@L4",
+   "type": "has_level",
+   "label": "[0] predict_a_change (C) -> ArrayHasLengthMethod: Conservation: for a given array object a.length never changes, so loops bounded by a.length stay correct when the array is created with a different size. Reassigning a to another array changes a.length.\n[1] transfer_to_a_new_program (X): Applicability: use a.length wherever code must follow the array's real size (loop bounds, last element, copying); use a[i].length for each row of a possibly ragged 2-D array; use s.length() for Strings.\n[2] diagnose_an_error (D): rule broken: length is a field, not a method. Kind: compile-time. Trigger class: a.length() is written for an array (cannot find symbol: method length())\n[3] diagnose_an_error (D): rule broken: length is final and cannot be assigned. Kind: compile-time. Trigger class: 'a.length = n;' (cannot assign a value to final variable length)\n[4] diagnose_an_error (D): rule broken: The last valid index is a.length-1. Kind: run-time exception. Trigger class: a[a.length] or a loop with i <= a.length (ArrayIndexOutOfBoundsException)"
+  },
+  {
+   "from": "array_creation",
+   "to": "ArrayLengthCannotBeZero",
+   "type": "misconception",
+   "label": "wrong: An array cannot have length 0. | right: new int[0] is a legal array of length 0."
+  },
+  {
+   "from": "length_field",
+   "to": "ArrayHasLengthMethod",
+   "type": "misconception",
+   "label": "wrong: The size of an array is found by calling a.length(). | right: An array's size is the field a.length, written without parentheses."
+  },
+  {
+   "from": "length_field",
+   "to": "ArrayLengthCannotBeZero",
+   "type": "misconception",
+   "label": "wrong: An array cannot have length 0. | right: new int[0] is a legal array of length 0."
+  },
+  {
+   "from": "method_call",
+   "to": "ArrayHasLengthMethod",
+   "type": "misconception",
+   "label": "wrong: you call length() instead of using the length field | right: An array's size is the field a.length, written without parentheses."
+  },
+  {
+   "from": "array_creation",
+   "to": "length_field",
+   "type": "prerequisite",
+   "label": "The size n given to new becomes a.length and stays fixed for the array's lifetime."
+  },
+  {
+   "from": "array_initializer",
+   "to": "length_field",
+   "type": "prerequisite",
+   "label": "An array made from a literal has as many elements as values listed, and a.length gives that number."
+  },
+  {
+   "from": "length_field",
+   "to": "args_length",
+   "type": "prerequisite",
+   "label": "args is an ordinary String array, so args.length is its length field and counts the command-line arguments."
+  },
+  {
+   "from": "length_field",
+   "to": "array_reversal",
+   "type": "prerequisite",
+   "label": "Reversal pairs a[i] with a[a.length-1-i], counting back from the last index a.length-1."
+  },
+  {
+   "from": "length_field",
+   "to": "array_traversal",
+   "type": "prerequisite",
+   "label": "A traversal loop runs its index from 0 while it is below a.length, so it visits every element once."
+  }
+ ]
+}

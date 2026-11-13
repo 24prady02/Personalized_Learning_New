@@ -1,0 +1,324 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        
+            <script>function neighbourhoodHighlight(params) {
+  // console.log("in nieghbourhoodhighlight");
+  allNodes = nodes.get({ returnType: "Object" });
+  // originalNodes = JSON.parse(JSON.stringify(allNodes));
+  // if something is selected:
+  if (params.nodes.length > 0) {
+    highlightActive = true;
+    var i, j;
+    var selectedNode = params.nodes[0];
+    var degrees = 2;
+
+    // mark all nodes as hard to read.
+    for (let nodeId in allNodes) {
+      // nodeColors[nodeId] = allNodes[nodeId].color;
+      allNodes[nodeId].color = "rgba(200,200,200,0.5)";
+      if (allNodes[nodeId].hiddenLabel === undefined) {
+        allNodes[nodeId].hiddenLabel = allNodes[nodeId].label;
+        allNodes[nodeId].label = undefined;
+      }
+    }
+    var connectedNodes = network.getConnectedNodes(selectedNode);
+    var allConnectedNodes = [];
+
+    // get the second degree nodes
+    for (i = 1; i < degrees; i++) {
+      for (j = 0; j < connectedNodes.length; j++) {
+        allConnectedNodes = allConnectedNodes.concat(
+          network.getConnectedNodes(connectedNodes[j])
+        );
+      }
+    }
+
+    // all second degree nodes get a different color and their label back
+    for (i = 0; i < allConnectedNodes.length; i++) {
+      // allNodes[allConnectedNodes[i]].color = "pink";
+      allNodes[allConnectedNodes[i]].color = "rgba(150,150,150,0.75)";
+      if (allNodes[allConnectedNodes[i]].hiddenLabel !== undefined) {
+        allNodes[allConnectedNodes[i]].label =
+          allNodes[allConnectedNodes[i]].hiddenLabel;
+        allNodes[allConnectedNodes[i]].hiddenLabel = undefined;
+      }
+    }
+
+    // all first degree nodes get their own color and their label back
+    for (i = 0; i < connectedNodes.length; i++) {
+      // allNodes[connectedNodes[i]].color = undefined;
+      allNodes[connectedNodes[i]].color = nodeColors[connectedNodes[i]];
+      if (allNodes[connectedNodes[i]].hiddenLabel !== undefined) {
+        allNodes[connectedNodes[i]].label =
+          allNodes[connectedNodes[i]].hiddenLabel;
+        allNodes[connectedNodes[i]].hiddenLabel = undefined;
+      }
+    }
+
+    // the main node gets its own color and its label back.
+    // allNodes[selectedNode].color = undefined;
+    allNodes[selectedNode].color = nodeColors[selectedNode];
+    if (allNodes[selectedNode].hiddenLabel !== undefined) {
+      allNodes[selectedNode].label = allNodes[selectedNode].hiddenLabel;
+      allNodes[selectedNode].hiddenLabel = undefined;
+    }
+  } else if (highlightActive === true) {
+    // console.log("highlightActive was true");
+    // reset all nodes
+    for (let nodeId in allNodes) {
+      // allNodes[nodeId].color = "purple";
+      allNodes[nodeId].color = nodeColors[nodeId];
+      // delete allNodes[nodeId].color;
+      if (allNodes[nodeId].hiddenLabel !== undefined) {
+        allNodes[nodeId].label = allNodes[nodeId].hiddenLabel;
+        allNodes[nodeId].hiddenLabel = undefined;
+      }
+    }
+    highlightActive = false;
+  }
+
+  // transform the object into an array
+  var updateArray = [];
+  if (params.nodes.length > 0) {
+    for (let nodeId in allNodes) {
+      if (allNodes.hasOwnProperty(nodeId)) {
+        // console.log(allNodes[nodeId]);
+        updateArray.push(allNodes[nodeId]);
+      }
+    }
+    nodes.update(updateArray);
+  } else {
+    // console.log("Nothing was selected");
+    for (let nodeId in allNodes) {
+      if (allNodes.hasOwnProperty(nodeId)) {
+        // console.log(allNodes[nodeId]);
+        // allNodes[nodeId].color = {};
+        updateArray.push(allNodes[nodeId]);
+      }
+    }
+    nodes.update(updateArray);
+  }
+}
+
+function filterHighlight(params) {
+  allNodes = nodes.get({ returnType: "Object" });
+  // if something is selected:
+  if (params.nodes.length > 0) {
+    filterActive = true;
+    let selectedNodes = params.nodes;
+
+    // hiding all nodes and saving the label
+    for (let nodeId in allNodes) {
+      allNodes[nodeId].hidden = true;
+      if (allNodes[nodeId].savedLabel === undefined) {
+        allNodes[nodeId].savedLabel = allNodes[nodeId].label;
+        allNodes[nodeId].label = undefined;
+      }
+    }
+
+    for (let i=0; i < selectedNodes.length; i++) {
+      allNodes[selectedNodes[i]].hidden = false;
+      if (allNodes[selectedNodes[i]].savedLabel !== undefined) {
+        allNodes[selectedNodes[i]].label = allNodes[selectedNodes[i]].savedLabel;
+        allNodes[selectedNodes[i]].savedLabel = undefined;
+      }
+    }
+
+  } else if (filterActive === true) {
+    // reset all nodes
+    for (let nodeId in allNodes) {
+      allNodes[nodeId].hidden = false;
+      if (allNodes[nodeId].savedLabel !== undefined) {
+        allNodes[nodeId].label = allNodes[nodeId].savedLabel;
+        allNodes[nodeId].savedLabel = undefined;
+      }
+    }
+    filterActive = false;
+  }
+
+  // transform the object into an array
+  var updateArray = [];
+  if (params.nodes.length > 0) {
+    for (let nodeId in allNodes) {
+      if (allNodes.hasOwnProperty(nodeId)) {
+        updateArray.push(allNodes[nodeId]);
+      }
+    }
+    nodes.update(updateArray);
+  } else {
+    for (let nodeId in allNodes) {
+      if (allNodes.hasOwnProperty(nodeId)) {
+        updateArray.push(allNodes[nodeId]);
+      }
+    }
+    nodes.update(updateArray);
+  }
+}
+
+function selectNode(nodes) {
+  network.selectNodes(nodes);
+  neighbourhoodHighlight({ nodes: nodes });
+  return nodes;
+}
+
+function selectNodes(nodes) {
+  network.selectNodes(nodes);
+  filterHighlight({nodes: nodes});
+  return nodes;
+}
+
+function highlightFilter(filter) {
+  let selectedNodes = []
+  let selectedProp = filter['property']
+  if (filter['item'] === 'node') {
+    let allNodes = nodes.get({ returnType: "Object" });
+    for (let nodeId in allNodes) {
+      if (allNodes[nodeId][selectedProp] && filter['value'].includes((allNodes[nodeId][selectedProp]).toString())) {
+        selectedNodes.push(nodeId)
+      }
+    }
+  }
+  else if (filter['item'] === 'edge'){
+    let allEdges = edges.get({returnType: 'object'});
+    // check if the selected property exists for selected edge and select the nodes connected to the edge
+    for (let edge in allEdges) {
+      if (allEdges[edge][selectedProp] && filter['value'].includes((allEdges[edge][selectedProp]).toString())) {
+        selectedNodes.push(allEdges[edge]['from'])
+        selectedNodes.push(allEdges[edge]['to'])
+      }
+    }
+  }
+  selectNodes(selectedNodes)
+}</script>
+            <link rel="stylesheet" href="../vis-network.min.css">
+            <script src="../vis-network.min.js"></script>
+            
+        
+<center>
+<h1></h1>
+</center>
+
+<!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
+<script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+        <link
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6"
+          crossorigin="anonymous"
+        />
+        <script
+          src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"
+          integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf"
+          crossorigin="anonymous"
+        ></script>
+
+
+        <center>
+          <h1></h1>
+        </center>
+        <style type="text/css">
+
+             #mynetwork {
+                 width: 100%;
+                 height: 1000px;
+                 background-color: #ffffff;
+                 border: 1px solid lightgray;
+                 position: relative;
+                 float: left;
+             }
+
+             
+
+             
+
+             
+        </style>
+    </head>
+
+
+    <body>
+        <div class="card" style="width: 100%">
+            
+            
+            <div id="mynetwork" class="card-body"></div>
+        </div>
+
+        
+        
+
+        <script type="text/javascript">
+
+              // initialize global variables.
+              var edges;
+              var nodes;
+              var allNodes;
+              var allEdges;
+              var nodeColors;
+              var originalNodes;
+              var network;
+              var container;
+              var options, data;
+              var filter = {
+                  item : '',
+                  property : '',
+                  value : []
+              };
+
+              
+
+              
+
+              // This method is responsible for drawing the graph, returns the drawn network
+              function drawGraph() {
+                  var container = document.getElementById('mynetwork');
+
+                  
+
+                  // parsing and collecting nodes and edges from the python
+                  nodes = new vis.DataSet([{"borderWidth": 3, "color": "#111111", "font": {"color": "#111111"}, "id": "space_time_tradeoff", "label": "Space-time tradeoff", "physics": false, "shape": "dot", "size": 27.0, "title": "\u003cb\u003eSpace-time tradeoff\u003c/b\u003e \u003ci\u003e(space_time_tradeoff, \u00a71.4)\u003c/i\u003e\u003cbr\u003einvesting memory (an array of saved values) to save computation time\u003cbr\u003e\u003ci\u003ebook:\u003c/i\u003e \u201cPrecomputing values in this way is an example of a space-time tradeoff\u201d\u003cbr\u003e\u003cb\u003eE\u003c/b\u003e (folk-meaning rule): Folk meaning: saving results is always better, and storing data is free. Rule: precomputation spends memory proportional to the number of saved values to save time, which pays off only when values are reused and the table fits in memory.\u003cbr\u003e\u003cb\u003eT\u003c/b\u003e (uneven-application rule): Points to LT: precompute every value once, then answer each query by lookup. Inconsistent application: the trace recomputes some values despite the table, or reads entries before they are computed.\u003cbr\u003e\u003cb\u003eN\u003c/b\u003e (identity rule): Identity: a space-time tradeoff invests memory (an array of saved values) to save computation time.\u003cbr\u003e\u003cb\u003eS\u003c/b\u003e (declarative rule): Declarative: by investing in space (saving values) we save time (no recomputation). PrimeSieve trades a boolean array of size N for speed over the two-variable trial-division method.\u003cbr\u003e\u003cb\u003eLT\u003c/b\u003e (operational sequencing rule): Sequencing: a precompute phase (one pass storing N values) runs first, then a use phase in which each query is one array read.\u003cbr\u003e\u003cb\u003eOP\u003c/b\u003e (evaluation / result rule): Result: the same answers as recomputation, using about N extra memory cells and much less time per query.\u003cbr\u003e\u003cb\u003eOS\u003c/b\u003e (state-transition rule): State transition: during precomputation each step stores one value in the table; during use each lookup changes nothing.\u003cbr\u003e\u003cb\u003eR\u003c/b\u003e (composition rule (with a neighbour)): with lookup_table: The lookup table is the stored space: each value is computed once and then read by index.\u003cbr\u003e\u003cb\u003eP\u003c/b\u003e (plan / role rule): Plan/role: speed up programs that need the same values many times (harmonic numbers, primes up to N).\u003cbr\u003e\u003cb\u003eC\u003c/b\u003e (conservation rule): Conservation: results are unchanged by precomputing. Memory grows linearly with N, so for huge N or for values used only once the tradeoff stops paying.\u003cbr\u003e\u003cb\u003eD\u003c/b\u003e (error rule): rule broken: The table must fit in the memory Java allows. (run-time exception)\u003cbr\u003e\u003cb\u003eD\u003c/b\u003e (error rule): rule broken: Precomputation pays only when values are reused. (silent logic error)\u003cbr\u003e\u003cb\u003eX\u003c/b\u003e (applicability rule): Applicability: precompute when the values are needed for small N many times and memory is ample. Recompute when N is huge, memory is tight, or each value is used once.", "x": 0, "y": 0}, {"color": "#1B5E20", "font": {"color": "#111111"}, "id": "space_time_tradeoff@L4", "label": "L4\nExtended abstract\n(concrete-operational\nreversibility and\nconservation)", "physics": false, "shape": "box", "title": "\u003cb\u003espace_time_tradeoff @ L4 \u2014 Extended abstract (concrete-operational reversibility and conservation)\u003c/b\u003e\u003cbr\u003eL4 for Space-time tradeoff: the answer reasons beyond the given code by these rules.\u003cbr\u003e\u003ci\u003eDoes the answer link the code to a broader context: a changed program, a class of inputs, an unseen problem? Re-tracing changed code value by value is L2; fixing one given failing case is L3.\u003c/i\u003e", "x": -790, "y": 260.0}, {"color": "#EF6C00", "font": {"color": "#111111"}, "id": "space_time_tradeoff@L1", "label": "L1\nUnistructural / atom x\ntext surface", "physics": false, "shape": "box", "title": "\u003cb\u003espace_time_tradeoff @ L1 \u2014 Unistructural / atom x text surface\u003c/b\u003e\u003cbr\u003eL1 for Space-time tradeoff: the answer states one correct rule without applying it.\u003cbr\u003e\u003ci\u003eDoes the answer cover every part of the code, in order, with the values (L2)? If it covers one part or only states the rule, it is L1.\u003c/i\u003e", "x": -790, "y": -130.0}, {"color": "#C62828", "font": {"color": "#111111"}, "id": "space_time_tradeoff@L0", "label": "L0\nPrestructural /\nsensorimotor", "physics": false, "shape": "box", "title": "\u003cb\u003espace_time_tradeoff @ L0 \u2014 Prestructural / sensorimotor\u003c/b\u003e\u003cbr\u003eL0 for Space-time tradeoff: the answer holds a rule that contradicts Java.\u003cbr\u003e\u003ci\u003eDoes every rule the answer applies to Space-time tradeoff agree with the language rule? If it reads the code with everyday meanings, applies a wrong rule, or switches rules within one trace, it is L0. A slip in an otherwise rule-correct trace is L2 with an error, not L0.\u003c/i\u003e", "x": -790, "y": -260.0}, {"borderWidth": 1, "color": "#3B7DE0", "font": {"color": "#111111"}, "id": "indexing", "label": "indexing", "physics": false, "shape": "dot", "size": 18, "title": "\u003cb\u003eindexing\u003c/b\u003e \u003ci\u003e(indexing, \u00a71.4)\u003c/i\u003e\u003cbr\u003ea[i] -- 0-based access\u003cbr\u003e\u003ci\u003ebook:\u003c/i\u003e \u201cWe refer to each value by putting its index in brackets after the array name.\u201d\u003cbr\u003e\u003ci\u003ebook:\u003c/i\u003e \u201cIf we have N values, we think of them as being numbered from 0 to N\u201d\u003cbr\u003e\u003cb\u003eE\u003c/b\u003e (folk-meaning rule): Folk meaning: everyday counting starts at 1 (first = number 1), maths subscripts a_1..a_n run from 1, and f(i) with parentheses means \u0026#x27;apply to i\u0026#x27;. Java rule: a[i] uses square brackets and is 0-origin, so the first element is a[0] and the last is a[a.length-1].\u003cbr\u003e\u003cb\u003eM\u003c/b\u003e (wrong rule / right rule): ArrayAccessWithParentheses: wrong: a(i) accesses element i of an array. | right: Array elements are selected with square brackets, a[i]; a(i) would be a call of a method named a.\u003cbr\u003e\u003cb\u003eM\u003c/b\u003e (wrong rule / right rule): ArrayIndexStartsAtOne: wrong: The first element of a is a[1]. | right: Numbering begins with 0; the first element is a[0].\u003cbr\u003e\u003cb\u003eM\u003c/b\u003e (wrong rule / right rule): ArrayRangeInclusive: wrong: new int[n] has slots 0 to n, inclusive. | right: The slots are 0 to n - 1.\u003cbr\u003e\u003cb\u003eM\u003c/b\u003e (wrong rule / right rule): IndexIsValue: wrong: i and a[i] are the same thing, so the position is the stored value. | right: i is a position; a[i] is the value stored at that position.\u003cbr\u003e\u003cb\u003eM\u003c/b\u003e (wrong rule / right rule): ArrayElementNotVariable: wrong: An array element a[i] is not a variable, so it cannot be read into directly or used inside another index, as in a[a[i]]. | right: Each element a[i] is a variable of the element type and can be used anywhere a variable of that type can, including as an index.\u003cbr\u003e\u003cb\u003eM\u003c/b\u003e (wrong rule / right rule): ElementNameIsWholeArray: wrong: X[i] names the whole array, not one element. | right: The array is a (a[] in the book); a[i] is the single element at index i.\u003cbr\u003e\u003cb\u003eM\u003c/b\u003e (wrong rule / right rule): ElementBoundToOldIndex: wrong: After i changes, X[i] still refers to the element at the old value of i. | right: a[i] is evaluated with the current value of i each time it is executed.\u003cbr\u003e\u003cb\u003eM\u003c/b\u003e (wrong rule / right rule): ArrayUseScansAllCells: wrong: Using an array means every cell must be scanned. | right: Arrays allow random access: a[i] reaches one element directly, and a loop visits only the elements the task needs.\u003cbr\u003e\u003cb\u003eT\u003c/b\u003e (uneven-application rule): Points to LT: in a[i], a is evaluated, then i with its current value, then the bounds check, then the element is read or written. Inconsistent application: i is updated on one line, but a later a[i] is traced with the old i.\u003cbr\u003e\u003cb\u003eN\u003c/b\u003e (identity rule): Identity: an array access expression; a[i] names the single element variable at position i of the array a refers to.\u003cbr\u003e\u003cb\u003eS\u003c/b\u003e (declarative rule): Declarative: the index is any int-valued expression in square brackets; the valid indices of an array of length n are 0 to n-1, and an access outside that range throws ArrayIndexOutOfBoundsException.\u003cbr\u003e\u003cb\u003eLT\u003c/b\u003e (operational sequencing rule): Sequencing: the array reference is evaluated before the index; the index expression is fully evaluated with current variable values; the bounds are checked; then the element is fetched or, on the left of =, becomes the target. In a[i] = a[j], the target a[i] is located before a[j] is read.\u003cbr\u003e\u003cb\u003eOP\u003c/b\u003e (evaluation / result rule): Result: a[i] has the element type and the value currently stored at position i. For int[] a = {5, 7, 9}, a[1] is 7 and a[0] + a[2] is 14.\u003cbr\u003e\u003cb\u003eOS\u003c/b\u003e (state-transition rule): State transition: reading a[i] changes nothing. a[i] = v changes only element i (i, a and all other elements are unchanged), and a[i]++ adds 1 to that one element.\u003cbr\u003e\u003cb\u003eR\u003c/b\u003e (composition rule (with a neighbour)): with array_creation: An element can be indexed only after the array is created, and the n given to new sets the valid indices 0..n-1.\u003cbr\u003e\u003cb\u003eR\u003c/b\u003e (composition rule (with a neighbour)): with array_traversal: A traversal uses the loop variable as the index, so the same expression a[i] reaches a different element on each pass.\u003cbr\u003e\u003cb\u003eR\u003c/b\u003e (composition rule (with a neighbour)): with array_bounds: Every index value is checked against 0 and a.length at run time; any other value throws.\u003cbr\u003e\u003cb\u003eR\u003c/b\u003e (composition rule (with a neighbour)): with two_dimensional_array: a[i] on a 2-D array yields row i (itself a 1-D array), and a[i][j] then indexes into that row.\u003cbr\u003e\u003cb\u003eR\u003c/b\u003e (composition rule (with a neighbour)): with array_exchange: The exchange reads and writes elements only through their indices: t = a[i]; a[i] = a[j]; a[j] = t.\u003cbr\u003e\u003cb\u003eR\u003c/b\u003e (composition rule (with a neighbour)): with lookup_table: A lookup table uses a data value as the index (months[m]), so the data must lie in 0..length-1.\u003cbr\u003e\u003cb\u003eP\u003c/b\u003e (plan / role rule): Plan/role: random access, reaching any element directly by its position in constant time (address plus index), so code touches only the elements it needs.\u003cbr\u003e\u003cb\u003eC\u003c/b\u003e (conservation rule): Conservation: changing the index expression (i to i+1 or i-1) shifts which element is touched and can leave the bounds at the ends. Writing a[a[i]] instead of a[i] uses an element value as the index, a different access entirely. Changing what is stored never changes the positions.\u003cbr\u003e\u003cb\u003eD\u003c/b\u003e (error rule): rule broken: The index must be in 0..a.length-1. (run-time exception)\u003cbr\u003e\u003cb\u003eD\u003c/b\u003e (error rule): rule broken: The index must have type int (after promotion); long or double indices are rejected. (compile-time)\u003cbr\u003e\u003cb\u003eD\u003c/b\u003e (error rule): rule broken: Elements are selected with brackets, not parentheses. (compile-time)\u003cbr\u003e\u003cb\u003eD\u003c/b\u003e (error rule): rule broken: An index is a position, not the stored value. (silent logic error)\u003cbr\u003e\u003cb\u003eX\u003c/b\u003e (applicability rule): Applicability: index when you need a particular element by position, or when the position is computed from data (counts[score]++, months[m]). When every value is processed in order and the position is never needed, an enhanced for loop is simpler.", "x": -260.0000000000001, "y": -450.3332099679081}, {"borderWidth": 1, "color": "#F2C879", "font": {"color": "#111111"}, "id": "topic1.4.e", "label": "Precomputed values and simplifying repetitive code", "physics": false, "shape": "box", "size": 22, "title": "\u003cb\u003ePrecomputed values and simplifying repetitive code\u003c/b\u003e\u003cbr\u003eby investing in space (to save the values) we save time.", "x": 790, "y": 0.0}, {"color": "#2E7D32", "font": {"color": "#111111"}, "id": "space_time_tradeoff@L3", "label": "L3\nRelational / relations\nx function (concrete\noperational begins)", "physics": false, "shape": "box", "title": "\u003cb\u003espace_time_tradeoff @ L3 \u2014 Relational / relations x function (concrete operational begins)\u003c/b\u003e\u003cbr\u003eL3 for Space-time tradeoff: the answer relates the parts by these rules.\u003cbr\u003e\u003ci\u003eWas the purpose deduced from the code, or only guessed from traced input/output pairs (then L2)? Does the answer stay within the given code (L3), or reason about changed code, an error class or a new program (L4)?\u003c/i\u003e", "x": -790, "y": 130.0}, {"color": "#F9A825", "font": {"color": "#111111"}, "id": "space_time_tradeoff@L2", "label": "L2\nMultistructural /\nblock x execution /\npreoperational", "physics": false, "shape": "box", "title": "\u003cb\u003espace_time_tradeoff @ L2 \u2014 Multistructural / block x execution / preoperational\u003c/b\u003e\u003cbr\u003eL2 for Space-time tradeoff: the answer applies these rules to every part of the code, in order.\u003cbr\u003e\u003ci\u003eIs the answer many segments mapped onto lines (L2), or one segment stating the purpose of the whole (L3)? A correct output with no value-by-value justification is not levelled.\u003c/i\u003e", "x": -790, "y": 0.0}, {"borderWidth": 1, "color": "#3B7DE0", "font": {"color": "#111111"}, "id": "lookup_table", "label": "lookup_table", "physics": false, "shape": "dot", "size": 18, "title": "\u003cb\u003elookup_table\u003c/b\u003e \u003ci\u003e(lookup_table, \u00a71.4)\u003c/i\u003e\u003cbr\u003ean array of precomputed values or names indexed by position\u003cbr\u003e\u003ci\u003ebook:\u003c/i\u003e \u201cThis code uses the idiom introduced in SECTION 1.2 to generate random indices and then uses the indices\u201d\u003cbr\u003e\u003ci\u003ebook:\u003c/i\u003e \u201cby investing in space (to save the values) we save time.\u201d\u003cbr\u003e\u003cb\u003eE\u003c/b\u003e (folk-meaning rule): Folk meaning: everyday tables are numbered from 1 (month 1 is January) and are looked up by scanning. Java rule: array tables are 0-origin and are read directly by index, so either waste slot 0 (months[0] = \u0026quot;\u0026quot;) or subtract 1 from the key.\u003cbr\u003e\u003cb\u003eM\u003c/b\u003e (wrong rule / right rule): ArrayIndexStartsAtOne: wrong: The first element of a is a[1]. | right: Numbering begins with 0; a 1-based key needs a padding slot at index 0 or the index key-1.\u003cbr\u003e\u003cb\u003eT\u003c/b\u003e (uneven-application rule): Points to LT: compute the index from the data, then read the table entry. Inconsistent application: 1 is subtracted from the key on some lookups but not on others, or the padding slot is counted as January.\u003cbr\u003e\u003cb\u003eN\u003c/b\u003e (identity rule): Identity: a lookup table is an array whose element i holds a precomputed value or name for i, read by indexing.\u003cbr\u003e\u003cb\u003eS\u003c/b\u003e (declarative rule): Declarative: build the table once (initializer or loop), e.g. String[] months = {\u0026quot;\u0026quot;, \u0026quot;Jan\u0026quot;, ..., \u0026quot;Dec\u0026quot;}; or H[i] = H[i-1] + 1.0/i; then use months[m] or H[i] in place of recomputing.\u003cbr\u003e\u003cb\u003eLT\u003c/b\u003e (operational sequencing rule): Sequencing: the whole table is built before the first lookup. Each lookup evaluates the index expression, checks the bounds and reads one element.\u003cbr\u003e\u003cb\u003eOP\u003c/b\u003e (evaluation / result rule): Result: months[m] is the name of month m for m = 1..12 (months[0] is the empty string); H[i] is the i-th harmonic number.\u003cbr\u003e\u003cb\u003eOS\u003c/b\u003e (state-transition rule): State transition: a lookup changes nothing; only the building phase stores values (one element per step).\u003cbr\u003e\u003cb\u003eR\u003c/b\u003e (composition rule (with a neighbour)): with indexing: The key itself is the index (months[m], rank[i]), so keys must fall in 0..length-1.\u003cbr\u003e\u003cb\u003eR\u003c/b\u003e (composition rule (with a neighbour)): with space_time_tradeoff: Storing precomputed values trades memory for time: each value is computed once and then looked up.\u003cbr\u003e\u003cb\u003eP\u003c/b\u003e (plan / role rule): Plan/role: the table is a fixed value (Sajaniemi). It replaces long if-else chains or repeated computation with one indexed read.\u003cbr\u003e\u003cb\u003eC\u003c/b\u003e (conservation rule): Conservation: adding entries at the end keeps existing lookups valid. Removing the padding slot shifts every entry down one, so months[1] becomes Feb (off by one). Changing a stored value changes every lookup of it.\u003cbr\u003e\u003cb\u003eD\u003c/b\u003e (error rule): rule broken: Keys must map to legal indices. (run-time exception)\u003cbr\u003e\u003cb\u003eD\u003c/b\u003e (error rule): rule broken: The key-to-index mapping must match the table layout. (silent logic error)\u003cbr\u003e\u003cb\u003eX\u003c/b\u003e (applicability rule): Applicability: use a table when the same values are needed many times for small integer keys. It is not effective for huge key ranges, for values needed only once, or for keys that are not small integers.", "x": 344.99999999999994, "y": -597.5575286112627}]);
+                  edges = new vis.DataSet([{"arrows": "to", "color": "#1E88E5", "dashes": true, "font": {"align": "horizontal", "background": "rgba(255,255,255,0.92)", "color": "#111", "face": "arial", "size": 12, "strokeWidth": 0}, "from": "space_time_tradeoff", "label": "L0 WAYS", "title": "\u003cb style=\u0027font-size:14px\u0027\u003eL0 WAYS\u003c/b\u003e\u003cbr\u003e\u003cb\u003ehas_level\u003c/b\u003e: space_time_tradeoff \u2192 space_time_tradeoff@L0\u003cbr\u003eSpace-time tradeoff -\u0026gt; L0 (Prestructural): the answer holds a rule that contradicts Java (1 way).\u003cbr\u003e\u2022 \u003cb\u003e[0] everyday_reading\u003c/b\u003e (E): Folk meaning: saving results is always better, and storing data is free. Rule: precomputation spends memory proportional to the number of saved values to save time, which pays off only when values are reused and the table fits in memory.", "to": "space_time_tradeoff@L0", "width": 1.2}, {"arrows": "to", "color": "#1E88E5", "dashes": true, "font": {"align": "horizontal", "background": "rgba(255,255,255,0.92)", "color": "#111", "face": "arial", "size": 12, "strokeWidth": 0}, "from": "space_time_tradeoff", "label": "L1 WAYS", "title": "\u003cb style=\u0027font-size:14px\u0027\u003eL1 WAYS\u003c/b\u003e\u003cbr\u003e\u003cb\u003ehas_level\u003c/b\u003e: space_time_tradeoff \u2192 space_time_tradeoff@L1\u003cbr\u003eSpace-time tradeoff -\u0026gt; L1 (Unistructural): the answer states one correct rule without applying it (2 ways).\u003cbr\u003e\u2022 \u003cb\u003e[0] names_the_element\u003c/b\u003e (N): Identity: a space-time tradeoff invests memory (an array of saved values) to save computation time.\u003cbr\u003e\u2022 \u003cb\u003e[1] states_the_rule\u003c/b\u003e (S): Declarative: by investing in space (saving values) we save time (no recomputation). PrimeSieve trades a boolean array of size N for speed over the two-variable trial-division method.", "to": "space_time_tradeoff@L1", "width": 1.2}, {"arrows": "to", "color": "#1E88E5", "dashes": true, "font": {"align": "horizontal", "background": "rgba(255,255,255,0.92)", "color": "#111", "face": "arial", "size": 12, "strokeWidth": 0}, "from": "space_time_tradeoff", "label": "L2 WAYS", "title": "\u003cb style=\u0027font-size:14px\u0027\u003eL2 WAYS\u003c/b\u003e\u003cbr\u003e\u003cb\u003ehas_level\u003c/b\u003e: space_time_tradeoff \u2192 space_time_tradeoff@L2\u003cbr\u003eSpace-time tradeoff -\u0026gt; L2 (Multistructural): the answer applies the rules of Space-time tradeoff to every part of the code, in order (3 ways).\u003cbr\u003e\u2022 \u003cb\u003e[0] line_by_line_trace\u003c/b\u003e (LT): Sequencing: a precompute phase (one pass storing N values) runs first, then a use phase in which each query is one array read.\u003cbr\u003e\u2022 \u003cb\u003e[1] output_prediction\u003c/b\u003e (OP): Result: the same answers as recomputation, using about N extra memory cells and much less time per query.\u003cbr\u003e\u2022 \u003cb\u003e[2] one_step_execution\u003c/b\u003e (OS): State transition: during precomputation each step stores one value in the table; during use each lookup changes nothing.", "to": "space_time_tradeoff@L2", "width": 1.2}, {"arrows": "to", "color": "#1E88E5", "dashes": true, "font": {"align": "horizontal", "background": "rgba(255,255,255,0.92)", "color": "#111", "face": "arial", "size": 12, "strokeWidth": 0}, "from": "space_time_tradeoff", "label": "L3 WAYS", "title": "\u003cb style=\u0027font-size:14px\u0027\u003eL3 WAYS\u003c/b\u003e\u003cbr\u003e\u003cb\u003ehas_level\u003c/b\u003e: space_time_tradeoff \u2192 space_time_tradeoff@L3\u003cbr\u003eSpace-time tradeoff -\u0026gt; L3 (Relational): the answer relates the parts (2 ways).\u003cbr\u003e\u2022 \u003cb\u003e[0] relation_to_neighbour\u003c/b\u003e (R): The lookup table is the stored space: each value is computed once and then read by index.\u003cbr\u003e\u2022 \u003cb\u003e[1] purpose_of_the_whole\u003c/b\u003e (P): Plan/role: speed up programs that need the same values many times (harmonic numbers, primes up to N).", "to": "space_time_tradeoff@L3", "width": 1.2}, {"arrows": "to", "color": "#1E88E5", "dashes": true, "font": {"align": "horizontal", "background": "rgba(255,255,255,0.92)", "color": "#111", "face": "arial", "size": 12, "strokeWidth": 0}, "from": "space_time_tradeoff", "label": "L4 WAYS", "title": "\u003cb style=\u0027font-size:14px\u0027\u003eL4 WAYS\u003c/b\u003e\u003cbr\u003e\u003cb\u003ehas_level\u003c/b\u003e: space_time_tradeoff \u2192 space_time_tradeoff@L4\u003cbr\u003eSpace-time tradeoff -\u0026gt; L4 (Extended abstract): the answer reasons beyond the given code (4 ways).\u003cbr\u003e\u2022 \u003cb\u003e[0] predict_a_change\u003c/b\u003e (C): Conservation: results are unchanged by precomputing. Memory grows linearly with N, so for huge N or for values used only once the tradeoff stops paying.\u003cbr\u003e\u2022 \u003cb\u003e[1] transfer_to_a_new_program\u003c/b\u003e (X): Applicability: precompute when the values are needed for small N many times and memory is ample. Recompute when N is huge, memory is tight, or each value is used once.\u003cbr\u003e\u2022 \u003cb\u003e[2] diagnose_an_error\u003c/b\u003e (D): rule broken: The table must fit in the memory Java allows. Kind: run-time exception. Trigger class: N too large for the array (OutOfMemoryError, or NegativeArraySizeException if N+1 overflows)\u003cbr\u003e\u2022 \u003cb\u003e[3] diagnose_an_error\u003c/b\u003e (D): rule broken: Precomputation pays only when values are reused. Kind: silent logic error. Trigger class: a huge table is built for a single query, so the program is slower and larger with no benefit", "to": "space_time_tradeoff@L4", "width": 1.2}, {"arrows": "to", "color": "#2E7D32", "dashes": false, "font": {"align": "horizontal", "background": "rgba(255,255,255,0.92)", "color": "#111", "face": "arial", "size": 12, "strokeWidth": 0}, "from": "indexing", "label": "PREREQUISITE", "title": "\u003cb style=\u0027font-size:14px\u0027\u003ePREREQUISITE\u003c/b\u003e\u003cbr\u003e\u003cb\u003eprerequisite\u003c/b\u003e: indexing \u2192 space_time_tradeoff\u003cbr\u003eSaved values are read back by index, H[i], instead of being recomputed.\u003cbr\u003e\u003ci\u003egrounding: book_passage\u003c/i\u003e", "to": "space_time_tradeoff", "width": 2.5}, {"arrows": "to", "color": "#9E9E9E", "dashes": false, "font": {"align": "horizontal", "background": "rgba(255,255,255,0.92)", "color": "#111", "face": "arial", "size": 12, "strokeWidth": 0}, "from": "topic1.4.e", "label": "CONTAINS", "title": "\u003cb style=\u0027font-size:14px\u0027\u003eCONTAINS\u003c/b\u003e\u003cbr\u003e\u003cb\u003econtains\u003c/b\u003e: topic1.4.e \u2192 lookup_table\u003cbr\u003eThe topic \u0026#x27;Precomputed values and simplifying repetitive code\u0026#x27; introduces lookup_table.", "to": "lookup_table", "width": 1.5}, {"arrows": "to", "color": "#9E9E9E", "dashes": false, "font": {"align": "horizontal", "background": "rgba(255,255,255,0.92)", "color": "#111", "face": "arial", "size": 12, "strokeWidth": 0}, "from": "topic1.4.e", "label": "CONTAINS", "title": "\u003cb style=\u0027font-size:14px\u0027\u003eCONTAINS\u003c/b\u003e\u003cbr\u003e\u003cb\u003econtains\u003c/b\u003e: topic1.4.e \u2192 space_time_tradeoff\u003cbr\u003eSpace-time tradeoff is taught under \u0026quot;Precomputed values and simplifying repetitive code\u0026quot;.", "to": "space_time_tradeoff", "width": 1.5}, {"arrows": "to", "color": "#2E7D32", "dashes": false, "font": {"align": "horizontal", "background": "rgba(255,255,255,0.92)", "color": "#111", "face": "arial", "size": 12, "strokeWidth": 0}, "from": "lookup_table", "label": "PREREQUISITE", "title": "\u003cb style=\u0027font-size:14px\u0027\u003ePREREQUISITE\u003c/b\u003e\u003cbr\u003e\u003cb\u003eprerequisite\u003c/b\u003e: lookup_table \u2192 space_time_tradeoff\u003cbr\u003eSaving precomputed values in an array trades memory for time: each value is computed once and then looked up.\u003cbr\u003e\u003ci\u003egrounding: book_passage\u003c/i\u003e", "to": "space_time_tradeoff", "width": 2.5}]);
+
+                  nodeColors = {};
+                  allNodes = nodes.get({ returnType: "Object" });
+                  for (nodeId in allNodes) {
+                    nodeColors[nodeId] = allNodes[nodeId].color;
+                  }
+                  allEdges = edges.get({ returnType: "Object" });
+                  // adding nodes and edges to the graph
+                  data = {nodes: nodes, edges: edges};
+
+                  var options = {"physics": {"enabled": false}, "edges": {"smooth": false, "scaling": {"label": {"enabled": true, "drawThreshold": 2}}}, "nodes": {"scaling": {"label": {"enabled": true, "drawThreshold": 2}}}, "interaction": {"hover": true, "navigationButtons": true, "tooltipDelay": 100}};
+
+                  
+
+
+                  
+
+                  
+ function _tip(t) { var d = document.createElement("div"); d.innerHTML = t;
+   d.style.cssText = "max-width:620px;white-space:normal;font:12px arial;color:#111;line-height:1.35";
+   return d; }
+ nodes.update(nodes.get().filter(function (n) { return typeof n.title === "string"; })
+   .map(function (n) { return {id: n.id, title: _tip(n.title)}; }));
+ edges.update(edges.get().filter(function (e) { return typeof e.title === "string"; })
+   .map(function (e) { return {id: e.id, title: _tip(e.title)}; }));
+network = new vis.Network(container, data, options);
+ network.once("stabilizationIterationsDone", function () { network.setOptions({physics: false}); network.fit(); });
+
+                  
+
+                  
+
+                  
+
+
+                  
+
+                  return network;
+
+              }
+              drawGraph();
+        </script>
+    <div style='background:#fff;color:#111;padding:10px;border:1px solid #ddd;border-radius:6px;margin-bottom:6px;font-family:arial;font-size:13px'><h3 style='margin:0 0 4px 0'>Space-time tradeoff <span style='font-size:13px;color:#555'>(id <code>space_time_tradeoff</code>, section 1.4 1.4 Arrays, topic 1.4.e Precomputed values and simplifying repetitive code)</span></h3><b>Description:</b> investing memory (an array of saved values) to save computation time<br><b>Contained in topic:</b> topic1.4.e<br><b>Summary:</b> 2 prerequisites, 0 concepts it leads to, 0 parallel, 5 of 5 level nodes, 12 level ways, 0 misconceptions, 0 errors<h4 style='margin:12px 0 2px 0'><span style='color:#C62828'>To work on (2)</span></h4><ul style="margin:2px 0"><li>no misconception or error edge</li><li>no aliases: a student&#x27;s words cannot name this concept</li></ul><h4 style='margin:12px 0 2px 0'>Rules of the concept (13)</h4><div>Book (SW-1e, p. 95 (pdf 105)): <i>“Precomputing values in this way is an example of a space-time tradeoff”</i></div><table style='border-collapse:collapse;width:100%;margin:4px 0' border='1' cellpadding='4'><tr style='background:#f2f2f2'><th>Rule type</th><th>Rule</th></tr><tr><td><b>E</b> folk-meaning rule</td><td>Folk meaning: saving results is always better, and storing data is free. Rule: precomputation spends memory proportional to the number of saved values to save time, which pays off only when values are reused and the table fits in memory.</td></tr><tr><td><b>T</b> uneven-application rule</td><td>Points to LT: precompute every value once, then answer each query by lookup. Inconsistent application: the trace recomputes some values despite the table, or reads entries before they are computed.</td></tr><tr><td><b>N</b> identity rule</td><td>Identity: a space-time tradeoff invests memory (an array of saved values) to save computation time.</td></tr><tr><td><b>S</b> declarative rule</td><td>Declarative: by investing in space (saving values) we save time (no recomputation). PrimeSieve trades a boolean array of size N for speed over the two-variable trial-division method.</td></tr><tr><td><b>LT</b> operational sequencing rule</td><td>Sequencing: a precompute phase (one pass storing N values) runs first, then a use phase in which each query is one array read.</td></tr><tr><td><b>OP</b> evaluation / result rule</td><td>Result: the same answers as recomputation, using about N extra memory cells and much less time per query.</td></tr><tr><td><b>OS</b> state-transition rule</td><td>State transition: during precomputation each step stores one value in the table; during use each lookup changes nothing.</td></tr><tr><td><b>R</b> composition rule (with a neighbour)</td><td>with lookup_table: The lookup table is the stored space: each value is computed once and then read by index.</td></tr><tr><td><b>P</b> plan / role rule</td><td>Plan/role: speed up programs that need the same values many times (harmonic numbers, primes up to N).</td></tr><tr><td><b>C</b> conservation rule</td><td>Conservation: results are unchanged by precomputing. Memory grows linearly with N, so for huge N or for values used only once the tradeoff stops paying.</td></tr><tr><td><b>D</b> error rule</td><td>rule broken: The table must fit in the memory Java allows. (run-time exception)</td></tr><tr><td><b>D</b> error rule</td><td>rule broken: Precomputation pays only when values are reused. (silent logic error)</td></tr><tr><td><b>X</b> applicability rule</td><td>Applicability: precompute when the values are needed for small N many times and memory is ample. Recompute when N is huge, memory is tight, or each value is used once.</td></tr></table><h4 style='margin:12px 0 2px 0'>How it is found in code and answers (reader block)</h4><i>from chapter1_kg_updated.json</i><ul style='margin:2px 0'><li><b>aliases:</b> none</li><li><b>code patterns:</b> \w+\s*\[\s*\w+\s*\]\s*=\s*\w+\s*\[\s*\w+\s*-\s*1\s*\](?=\s*[+*])</li><li><b>operator symbols:</b> none</li><li><b>java types:</b> none</li></ul><h4 style='margin:12px 0 2px 0'>Needs (prerequisites) (2)</h4><table style='border-collapse:collapse;width:100%;margin:4px 0' border='1' cellpadding='4'><tr style='background:#f2f2f2'><th>Concept</th><th>Edge</th><th>Edge logic (from the KG)</th><th>Grounding</th></tr><tr><td><b>lookup_table</b><br><span style='color:#555'>an array of precomputed values or names indexed by position</span></td><td><code>pre:lookup_table-&gt;space_time_tradeoff</code></td><td>Saving precomputed values in an array trades memory for time: each value is computed once and then looked up.</td><td>book_passage</td></tr><tr><td><b>indexing</b><br><span style='color:#555'>a[i] -- 0-based access</span></td><td><code>pre:indexing-&gt;space_time_tradeoff</code></td><td>Saved values are read back by index, H[i], instead of being recomputed.</td><td>book_passage</td></tr></table><h4 style='margin:12px 0 2px 0'>Leads to (concepts that need it)</h4><i>none</i><h4 style='margin:12px 0 2px 0'>Parallel concepts</h4><i>none</i><h4 style='margin:12px 0 2px 0'>Full prerequisite chain</h4><b>everything it builds on (7):</b> array_creation, array_declaration, array_initializer, data_structure, data_type, indexing, lookup_table<br><b>everything that builds on it (0):</b> none<h4 style='margin:12px 0 2px 0'>Levels L0 to L4 and their ways</h4><table style='border-collapse:collapse;width:100%;margin:4px 0' border='1' cellpadding='4'><tr style='background:#f2f2f2'><th>Level</th><th>Name and criterion</th><th>Ways (way, rule type → linked misconception: exact rule)</th></tr><tr><td style='color:#fff;background:#C62828;text-align:center'><b>L0</b></td><td><b>Prestructural / sensorimotor</b><br>L0 for Space-time tradeoff: the answer holds a rule that contradicts Java.<br><i>Does every rule the answer applies to Space-time tradeoff agree with the language rule? If it reads the code with everyday meanings, applies a wrong rule, or switches rules within one trace, it is L0. A slip in an otherwise rule-correct trace is L2 with an error, not L0.</i></td><td><ul style="margin:2px 0;padding-left:18px"><li><b>[0] everyday_reading</b> (E): Folk meaning: saving results is always better, and storing data is free. Rule: precomputation spends memory proportional to the number of saved values to save time, which pays off only when values are reused and the table fits in memory.</li></ul></td></tr><tr><td style='color:#fff;background:#EF6C00;text-align:center'><b>L1</b></td><td><b>Unistructural / atom x text surface</b><br>L1 for Space-time tradeoff: the answer states one correct rule without applying it.<br><i>Does the answer cover every part of the code, in order, with the values (L2)? If it covers one part or only states the rule, it is L1.</i></td><td><ul style="margin:2px 0;padding-left:18px"><li><b>[0] names_the_element</b> (N): Identity: a space-time tradeoff invests memory (an array of saved values) to save computation time.</li><li><b>[1] states_the_rule</b> (S): Declarative: by investing in space (saving values) we save time (no recomputation). PrimeSieve trades a boolean array of size N for speed over the two-variable trial-division method.</li></ul></td></tr><tr><td style='color:#fff;background:#F9A825;text-align:center'><b>L2</b></td><td><b>Multistructural / block x execution / preoperational</b><br>L2 for Space-time tradeoff: the answer applies these rules to every part of the code, in order.<br><i>Is the answer many segments mapped onto lines (L2), or one segment stating the purpose of the whole (L3)? A correct output with no value-by-value justification is not levelled.</i></td><td><ul style="margin:2px 0;padding-left:18px"><li><b>[0] line_by_line_trace</b> (LT): Sequencing: a precompute phase (one pass storing N values) runs first, then a use phase in which each query is one array read.</li><li><b>[1] output_prediction</b> (OP): Result: the same answers as recomputation, using about N extra memory cells and much less time per query.</li><li><b>[2] one_step_execution</b> (OS): State transition: during precomputation each step stores one value in the table; during use each lookup changes nothing.</li></ul></td></tr><tr><td style='color:#fff;background:#2E7D32;text-align:center'><b>L3</b></td><td><b>Relational / relations x function (concrete operational begins)</b><br>L3 for Space-time tradeoff: the answer relates the parts by these rules.<br><i>Was the purpose deduced from the code, or only guessed from traced input/output pairs (then L2)? Does the answer stay within the given code (L3), or reason about changed code, an error class or a new program (L4)?</i></td><td><ul style="margin:2px 0;padding-left:18px"><li><b>[0] relation_to_neighbour</b> (R): The lookup table is the stored space: each value is computed once and then read by index.</li><li><b>[1] purpose_of_the_whole</b> (P): Plan/role: speed up programs that need the same values many times (harmonic numbers, primes up to N).</li></ul></td></tr><tr><td style='color:#fff;background:#1B5E20;text-align:center'><b>L4</b></td><td><b>Extended abstract (concrete-operational reversibility and conservation)</b><br>L4 for Space-time tradeoff: the answer reasons beyond the given code by these rules.<br><i>Does the answer link the code to a broader context: a changed program, a class of inputs, an unseen problem? Re-tracing changed code value by value is L2; fixing one given failing case is L3.</i></td><td><ul style="margin:2px 0;padding-left:18px"><li><b>[0] predict_a_change</b> (C): Conservation: results are unchanged by precomputing. Memory grows linearly with N, so for huge N or for values used only once the tradeoff stops paying.</li><li><b>[1] transfer_to_a_new_program</b> (X): Applicability: precompute when the values are needed for small N many times and memory is ample. Recompute when N is huge, memory is tight, or each value is used once.</li><li><b>[2] diagnose_an_error</b> (D): rule broken: The table must fit in the memory Java allows. Kind: run-time exception. Trigger class: N too large for the array (OutOfMemoryError, or NegativeArraySizeException if N+1 overflows)</li><li><b>[3] diagnose_an_error</b> (D): rule broken: Precomputation pays only when values are reused. Kind: silent logic error. Trigger class: a huge table is built for a single query, so the program is slower and larger with no benefit</li></ul></td></tr></table><h4 style='margin:12px 0 2px 0'>Misconceptions</h4><i>none</i><h4 style='margin:12px 0 2px 0'>Errors</h4><i>none</i></div><div style='background:#fff;color:#111;padding:10px;border:1px solid #ddd;border-radius:6px;margin-top:8px;font-family:arial;font-size:13px'><h3 style='margin:0 0 4px 0'>Other concepts in the view of space_time_tradeoff (2)</h3><table style='border-collapse:collapse;width:100%;margin:4px 0' border='1' cellpadding='4'><tr style='background:#f2f2f2'><th>Concept</th><th>Description</th><th>How the knowledge graph links it</th></tr><tr><td><b>indexing</b></td><td>a[i] -- 0-based access</td><td>prerequisite of it (it needs this)</td></tr><tr><td><b>lookup_table</b></td><td>an array of precomputed values or names indexed by position</td><td>prerequisite of it (it needs this)<br>composition rule (R) with it<br>same topic (topic1.4.e)</td></tr></table><h3 style='margin:12px 0 4px 0'>Every edge in this view and its full label (9)</h3><table style='border-collapse:collapse;width:100%;margin:4px 0' border='1' cellpadding='4'><tr style='background:#f2f2f2'><th>From</th><th>Edge</th><th>To</th><th>Full edge label</th></tr><tr><td><b>indexing</b></td><td>prerequisite</td><td><b>space_time_tradeoff</b></td><td>Saved values are read back by index, H[i], instead of being recomputed.<br><i>grounding: book_passage</i></td></tr><tr><td><b>lookup_table</b></td><td>prerequisite</td><td><b>space_time_tradeoff</b></td><td>Saving precomputed values in an array trades memory for time: each value is computed once and then looked up.<br><i>grounding: book_passage</i><br><b>composition rule (R) of lookup_table with space_time_tradeoff:</b> Storing precomputed values trades memory for time: each value is computed once and then looked up.<br><b>composition rule (R) of space_time_tradeoff with lookup_table:</b> The lookup table is the stored space: each value is computed once and then read by index.</td></tr><tr><td><b>space_time_tradeoff</b></td><td>has_level</td><td><b>space_time_tradeoff@L0</b></td><td>Space-time tradeoff -&gt; L0 (Prestructural): the answer holds a rule that contradicts Java (1 way).<ul style="margin:2px 0;padding-left:18px"><li><b>[0] everyday_reading</b> (E): Folk meaning: saving results is always better, and storing data is free. Rule: precomputation spends memory proportional to the number of saved values to save time, which pays off only when values are reused and the table fits in memory.</li></ul></td></tr><tr><td><b>space_time_tradeoff</b></td><td>has_level</td><td><b>space_time_tradeoff@L1</b></td><td>Space-time tradeoff -&gt; L1 (Unistructural): the answer states one correct rule without applying it (2 ways).<ul style="margin:2px 0;padding-left:18px"><li><b>[0] names_the_element</b> (N): Identity: a space-time tradeoff invests memory (an array of saved values) to save computation time.</li><li><b>[1] states_the_rule</b> (S): Declarative: by investing in space (saving values) we save time (no recomputation). PrimeSieve trades a boolean array of size N for speed over the two-variable trial-division method.</li></ul></td></tr><tr><td><b>space_time_tradeoff</b></td><td>has_level</td><td><b>space_time_tradeoff@L2</b></td><td>Space-time tradeoff -&gt; L2 (Multistructural): the answer applies the rules of Space-time tradeoff to every part of the code, in order (3 ways).<ul style="margin:2px 0;padding-left:18px"><li><b>[0] line_by_line_trace</b> (LT): Sequencing: a precompute phase (one pass storing N values) runs first, then a use phase in which each query is one array read.</li><li><b>[1] output_prediction</b> (OP): Result: the same answers as recomputation, using about N extra memory cells and much less time per query.</li><li><b>[2] one_step_execution</b> (OS): State transition: during precomputation each step stores one value in the table; during use each lookup changes nothing.</li></ul></td></tr><tr><td><b>space_time_tradeoff</b></td><td>has_level</td><td><b>space_time_tradeoff@L3</b></td><td>Space-time tradeoff -&gt; L3 (Relational): the answer relates the parts (2 ways).<ul style="margin:2px 0;padding-left:18px"><li><b>[0] relation_to_neighbour</b> (R): The lookup table is the stored space: each value is computed once and then read by index.</li><li><b>[1] purpose_of_the_whole</b> (P): Plan/role: speed up programs that need the same values many times (harmonic numbers, primes up to N).</li></ul></td></tr><tr><td><b>space_time_tradeoff</b></td><td>has_level</td><td><b>space_time_tradeoff@L4</b></td><td>Space-time tradeoff -&gt; L4 (Extended abstract): the answer reasons beyond the given code (4 ways).<ul style="margin:2px 0;padding-left:18px"><li><b>[0] predict_a_change</b> (C): Conservation: results are unchanged by precomputing. Memory grows linearly with N, so for huge N or for values used only once the tradeoff stops paying.</li><li><b>[1] transfer_to_a_new_program</b> (X): Applicability: precompute when the values are needed for small N many times and memory is ample. Recompute when N is huge, memory is tight, or each value is used once.</li><li><b>[2] diagnose_an_error</b> (D): rule broken: The table must fit in the memory Java allows. Kind: run-time exception. Trigger class: N too large for the array (OutOfMemoryError, or NegativeArraySizeException if N+1 overflows)</li><li><b>[3] diagnose_an_error</b> (D): rule broken: Precomputation pays only when values are reused. Kind: silent logic error. Trigger class: a huge table is built for a single query, so the program is slower and larger with no benefit</li></ul></td></tr><tr><td><b>topic1.4.e</b></td><td>contains</td><td><b>lookup_table</b></td><td>topic topic1.4.e contains lookup_table</td></tr><tr><td><b>topic1.4.e</b></td><td>contains</td><td><b>space_time_tradeoff</b></td><td>topic topic1.4.e contains space_time_tradeoff</td></tr></table></div></body>
+</html>

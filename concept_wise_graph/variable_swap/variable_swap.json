@@ -1,0 +1,285 @@
+{
+ "concept": "variable_swap",
+ "label": "variable_swap",
+ "graph_version": "3.9.8 (3.9.7 + one primary per misconception (S9c) and the four remaining sibling edges (S9b), 2026-11-04; listed in revision_3_9_8)",
+ "nodes": [
+  {
+   "id": "array_exchange",
+   "kind": "concept",
+   "label": "array_exchange"
+  },
+  {
+   "id": "assignment",
+   "kind": "concept",
+   "label": "assignment"
+  },
+  {
+   "id": "chained_assignment",
+   "kind": "concept",
+   "label": "chained_assignment"
+  },
+  {
+   "id": "data_type",
+   "kind": "concept",
+   "label": "data_type"
+  },
+  {
+   "id": "declaration",
+   "kind": "concept",
+   "label": "declaration"
+  },
+  {
+   "id": "definite_assignment",
+   "kind": "concept",
+   "label": "definite_assignment"
+  },
+  {
+   "id": "expression",
+   "kind": "concept",
+   "label": "expression"
+  },
+  {
+   "id": "identifier",
+   "kind": "concept",
+   "label": "identifier"
+  },
+  {
+   "id": "literal",
+   "kind": "concept",
+   "label": "literal"
+  },
+  {
+   "id": "named_constants",
+   "kind": "concept",
+   "label": "named_constants"
+  },
+  {
+   "id": "naming_convention",
+   "kind": "concept",
+   "label": "naming_convention"
+  },
+  {
+   "id": "operator_precedence",
+   "kind": "concept",
+   "label": "operator_precedence"
+  },
+  {
+   "id": "primitive_type",
+   "kind": "concept",
+   "label": "primitive_type"
+  },
+  {
+   "id": "program_trace",
+   "kind": "concept",
+   "label": "Trace (table of variable values)"
+  },
+  {
+   "id": "variable",
+   "kind": "concept",
+   "label": "variable"
+  },
+  {
+   "id": "variable_swap",
+   "kind": "concept",
+   "label": "variable_swap"
+  },
+  {
+   "id": "variable_swap@L0",
+   "kind": "learning_level",
+   "label": "L0"
+  },
+  {
+   "id": "variable_swap@L1",
+   "kind": "learning_level",
+   "label": "L1"
+  },
+  {
+   "id": "variable_swap@L2",
+   "kind": "learning_level",
+   "label": "L2"
+  },
+  {
+   "id": "variable_swap@L3",
+   "kind": "learning_level",
+   "label": "L3"
+  },
+  {
+   "id": "variable_swap@L4",
+   "kind": "learning_level",
+   "label": "L4"
+  },
+  {
+   "id": "AssignmentExchangesValues",
+   "kind": "misconception",
+   "label": "AssignmentExchangesValues"
+  },
+  {
+   "id": "SwapWithoutTemp",
+   "kind": "misconception",
+   "label": "SwapWithoutTemp"
+  },
+  {
+   "id": "topic1.2.a",
+   "kind": "topic",
+   "label": "Data types and terminology (literals, identifiers, variables, declarations, assignment, expressions)"
+  }
+ ],
+ "edges": [
+  {
+   "from": "topic1.2.a",
+   "to": "assignment",
+   "type": "contains",
+   "label": "The topic 'Data types and terminology (literals, identifiers, variables, declarations, assignment, expressions)' introduces assignment."
+  },
+  {
+   "from": "topic1.2.a",
+   "to": "chained_assignment",
+   "type": "contains",
+   "label": "The topic 'Data types and terminology (literals, identifiers, variables, declarations, assignment, expressions)' introduces chained_assignment."
+  },
+  {
+   "from": "topic1.2.a",
+   "to": "data_type",
+   "type": "contains",
+   "label": "The topic 'Data types and terminology (literals, identifiers, variables, declarations, assignment, expressions)' introduces data_type."
+  },
+  {
+   "from": "topic1.2.a",
+   "to": "declaration",
+   "type": "contains",
+   "label": "The topic 'Data types and terminology (literals, identifiers, variables, declarations, assignment, expressions)' introduces declaration."
+  },
+  {
+   "from": "topic1.2.a",
+   "to": "definite_assignment",
+   "type": "contains",
+   "label": "The topic 'Data types and terminology (literals, identifiers, variables, declarations, assignment, expressions)' introduces definite_assignment."
+  },
+  {
+   "from": "topic1.2.a",
+   "to": "expression",
+   "type": "contains",
+   "label": "The topic 'Data types and terminology (literals, identifiers, variables, declarations, assignment, expressions)' introduces expression."
+  },
+  {
+   "from": "topic1.2.a",
+   "to": "identifier",
+   "type": "contains",
+   "label": "The topic 'Data types and terminology (literals, identifiers, variables, declarations, assignment, expressions)' introduces identifier."
+  },
+  {
+   "from": "topic1.2.a",
+   "to": "literal",
+   "type": "contains",
+   "label": "The topic 'Data types and terminology (literals, identifiers, variables, declarations, assignment, expressions)' introduces literal."
+  },
+  {
+   "from": "topic1.2.a",
+   "to": "named_constants",
+   "type": "contains",
+   "label": "The topic 'Data types and terminology (literals, identifiers, variables, declarations, assignment, expressions)' introduces named_constants."
+  },
+  {
+   "from": "topic1.2.a",
+   "to": "naming_convention",
+   "type": "contains",
+   "label": "The topic 'Data types and terminology (literals, identifiers, variables, declarations, assignment, expressions)' introduces naming_convention."
+  },
+  {
+   "from": "topic1.2.a",
+   "to": "operator_precedence",
+   "type": "contains",
+   "label": "The topic 'Data types and terminology (literals, identifiers, variables, declarations, assignment, expressions)' introduces operator_precedence."
+  },
+  {
+   "from": "topic1.2.a",
+   "to": "primitive_type",
+   "type": "contains",
+   "label": "The topic 'Data types and terminology (literals, identifiers, variables, declarations, assignment, expressions)' introduces primitive_type."
+  },
+  {
+   "from": "topic1.2.a",
+   "to": "program_trace",
+   "type": "contains",
+   "label": "Trace (table of variable values) is taught under \"Data types and terminology (literals, identifiers, variables, declarations, assignment, expressions)\"."
+  },
+  {
+   "from": "topic1.2.a",
+   "to": "variable",
+   "type": "contains",
+   "label": "The topic 'Data types and terminology (literals, identifiers, variables, declarations, assignment, expressions)' introduces variable."
+  },
+  {
+   "from": "topic1.2.a",
+   "to": "variable_swap",
+   "type": "contains",
+   "label": "The topic 'Data types and terminology (literals, identifiers, variables, declarations, assignment, expressions)' introduces variable_swap."
+  },
+  {
+   "from": "variable_swap",
+   "to": "variable_swap@L0",
+   "type": "has_level",
+   "label": "[0] everyday_reading (E): In everyday life two people swap objects at the same moment, hand to hand, and 'b = a' sounds like 'a and b are now the same thing'. Java statements run one at a time, so the first assignment destroys a value unless it was first saved in a temporary.\n[1] misconception (M) -> SwapWithoutTemp: wrong rule: a[i] = a[j]; a[j] = a[i]; exchanges the two values. Right rule: A temporary variable must save a[i] before it is overwritten.\n[2] inconsistent_trace (T) -> SwapWithoutTemp: Points to LT (three assignments in order, each using current values). Applied unevenly, a student traces the first two steps correctly but uses a's original value in the third, or calls one segment a swap and the other a copy without tracing either. (here mixing in: \"a[i] = a[j]; a[j] = a[i]; exchanges the two values\")\n[3] misconception (M) -> AssignmentExchangesValues: wrong rule: b = a exchanges the values of a and b. Right rule: b = a copies a into b and leaves a unchanged; an exchange needs a temporary variable and three assignments."
+  },
+  {
+   "from": "variable_swap",
+   "to": "variable_swap@L1",
+   "type": "has_level",
+   "label": "[0] names_the_element (N): Variable swap: the three-assignment idiom that exchanges the values of two variables through a temporary variable.\n[1] states_the_rule (S): int t = a; a = b; b = t; exchanges a and b. The temporary t must have their type, and the three statements must run in exactly this order."
+  },
+  {
+   "from": "variable_swap",
+   "to": "variable_swap@L2",
+   "type": "has_level",
+   "label": "[0] line_by_line_trace (LT): Step 1 saves a in t. Step 2 overwrites a with b. Step 3 copies the saved value from t into b. Each step reads values left by the previous one.\n[1] output_prediction (OP): Starting from a = 1234 and b = 99, the swap ends with a = 99, b = 1234 and t = 1234.\n[2] one_step_execution (OS): Each of the three statements changes exactly one variable: first t, then a, then b."
+  },
+  {
+   "from": "variable_swap",
+   "to": "variable_swap@L3",
+   "type": "has_level",
+   "label": "[0] relation_to_neighbour (R): A swap is three assignments whose order matters, because each one overwrites the old value of its left variable.\n[1] purpose_of_the_whole (P): Plan: exchange. It is used to reorder two values (make a <= b), and inside sorting and shuffling of arrays. t plays Sajaniemi's temporary role."
+  },
+  {
+   "from": "variable_swap",
+   "to": "variable_swap@L4",
+   "type": "has_level",
+   "label": "[0] predict_a_change (C) -> SwapWithoutTemp: Reordering the steps (int t = a; b = t; a = b;) breaks the swap: both variables end up holding a's value. Dropping the temporary breaks it the same way. Running the correct swap twice restores the originals, so a swap is its own inverse.\n[1] transfer_to_a_new_program (X): Use the swap when two variables or array elements must exchange values (sorting, shuffling, ordering a pair). It is not needed when you only need a new variable holding the larger value, or when you can compute directly into new variables.\n[2] diagnose_an_error (D): rule broken: An assignment overwrites its target, so a value about to be overwritten must be saved first. Kind: silent logic error. Trigger class: Swapping without a temporary (a = b; b = a;) or in the wrong order: both variables end with the same value whenever a != b.\n[3] diagnose_an_error (D): rule broken: The temporary must have the type of the values being swapped. Kind: compile-time. Trigger class: Using int t to swap doubles: 'possible lossy conversion from double to int'."
+  },
+  {
+   "from": "array_exchange",
+   "to": "SwapWithoutTemp",
+   "type": "misconception",
+   "label": "wrong: a[i] = a[j]; a[j] = a[i]; exchanges the two values. | right: A temporary variable must save a[i] before it is overwritten."
+  },
+  {
+   "from": "assignment",
+   "to": "AssignmentExchangesValues",
+   "type": "misconception",
+   "label": "wrong: b = a exchanges the values of a and b. | right: b = a copies a into b and leaves a unchanged; an exchange needs a temporary variable and three assignments."
+  },
+  {
+   "from": "assignment",
+   "to": "SwapWithoutTemp",
+   "type": "misconception",
+   "label": "wrong: a[i] = a[j]; a[j] = a[i]; exchanges the two values. | right: A temporary variable must save a[i] before it is overwritten."
+  },
+  {
+   "from": "variable_swap",
+   "to": "AssignmentExchangesValues",
+   "type": "misconception",
+   "label": "wrong: b = a exchanges the values of a and b. | right: b = a copies a into b and leaves a unchanged; an exchange needs a temporary variable and three assignments."
+  },
+  {
+   "from": "variable_swap",
+   "to": "SwapWithoutTemp",
+   "type": "misconception",
+   "label": "wrong: a[i] = a[j]; a[j] = a[i]; exchanges the two values. | right: A temporary variable must save a[i] before it is overwritten."
+  },
+  {
+   "from": "assignment",
+   "to": "variable_swap",
+   "type": "prerequisite",
+   "label": "The three assignments int t = a; a = b; b = t; exchange the values of a and b, as a trace of the variable values after each statement shows."
+  }
+ ]
+}

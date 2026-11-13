@@ -1,0 +1,314 @@
+{
+ "concept": "string_type",
+ "label": "string_type",
+ "graph_version": "3.9.8 (3.9.7 + one primary per misconception (S9c) and the four remaining sibling edges (S9b), 2026-11-04; listed in revision_3_9_8)",
+ "nodes": [
+  {
+   "id": "arithmetic_operators",
+   "kind": "concept",
+   "label": "arithmetic_operators"
+  },
+  {
+   "id": "char",
+   "kind": "concept",
+   "label": "char"
+  },
+  {
+   "id": "char_arithmetic",
+   "kind": "concept",
+   "label": "char_arithmetic"
+  },
+  {
+   "id": "comparison_operators",
+   "kind": "concept",
+   "label": "comparison_operators"
+  },
+  {
+   "id": "escape_sequences",
+   "kind": "concept",
+   "label": "escape_sequences"
+  },
+  {
+   "id": "method_call",
+   "kind": "concept",
+   "label": "method_call"
+  },
+  {
+   "id": "primitive_type",
+   "kind": "concept",
+   "label": "primitive_type"
+  },
+  {
+   "id": "primitive_vs_reference",
+   "kind": "concept",
+   "label": "primitive_vs_reference"
+  },
+  {
+   "id": "string_concatenation",
+   "kind": "concept",
+   "label": "string_concatenation"
+  },
+  {
+   "id": "string_type",
+   "kind": "concept",
+   "label": "string_type"
+  },
+  {
+   "id": "string_type@L0",
+   "kind": "learning_level",
+   "label": "L0"
+  },
+  {
+   "id": "string_type@L1",
+   "kind": "learning_level",
+   "label": "L1"
+  },
+  {
+   "id": "string_type@L2",
+   "kind": "learning_level",
+   "label": "L2"
+  },
+  {
+   "id": "string_type@L3",
+   "kind": "learning_level",
+   "label": "L3"
+  },
+  {
+   "id": "string_type@L4",
+   "kind": "learning_level",
+   "label": "L4"
+  },
+  {
+   "id": "ArithmeticOnNumericStrings",
+   "kind": "misconception",
+   "label": "ArithmeticOnNumericStrings"
+  },
+  {
+   "id": "EqualityOperatorComparesObjectsValues",
+   "kind": "misconception",
+   "label": "EqualityOperatorComparesObjectsValues"
+  },
+  {
+   "id": "EqualsComparesReferences",
+   "kind": "misconception",
+   "label": "EqualsComparesReferences"
+  },
+  {
+   "id": "NullIsObject",
+   "kind": "misconception",
+   "label": "NullIsObject"
+  },
+  {
+   "id": "ObjectsMustBeNamed",
+   "kind": "misconception",
+   "label": "ObjectsMustBeNamed"
+  },
+  {
+   "id": "StringIsPrimitive",
+   "kind": "misconception",
+   "label": "StringIsPrimitive"
+  },
+  {
+   "id": "StringLiteralNoObject",
+   "kind": "misconception",
+   "label": "StringLiteralNoObject"
+  },
+  {
+   "id": "StringMethodChangesString",
+   "kind": "misconception",
+   "label": "StringMethodChangesString"
+  },
+  {
+   "id": "StringRelationalComparison",
+   "kind": "misconception",
+   "label": "StringRelationalComparison"
+  },
+  {
+   "id": "topic1.2.b",
+   "kind": "topic",
+   "label": "Characters and strings"
+  }
+ ],
+ "edges": [
+  {
+   "from": "topic1.2.b",
+   "to": "char",
+   "type": "contains",
+   "label": "The topic 'Characters and strings' introduces char."
+  },
+  {
+   "from": "topic1.2.b",
+   "to": "char_arithmetic",
+   "type": "contains",
+   "label": "The topic 'Characters and strings' introduces char_arithmetic."
+  },
+  {
+   "from": "topic1.2.b",
+   "to": "escape_sequences",
+   "type": "contains",
+   "label": "The topic 'Characters and strings' introduces escape_sequences."
+  },
+  {
+   "from": "topic1.2.b",
+   "to": "string_concatenation",
+   "type": "contains",
+   "label": "The topic 'Characters and strings' introduces string_concatenation."
+  },
+  {
+   "from": "topic1.2.b",
+   "to": "string_type",
+   "type": "contains",
+   "label": "The topic 'Characters and strings' introduces string_type."
+  },
+  {
+   "from": "string_type",
+   "to": "string_type@L0",
+   "type": "has_level",
+   "label": "[0] everyday_reading (E): In everyday writing, quotes only mark words, \"10\" is the number ten, and two texts are 'equal' when they read the same. In Java a String is an object reached through a reference: \"10\" is text, + concatenates, and == compares references rather than contents.\n[1] misconception (M) -> StringLiteralNoObject: wrong rule: a string literal isn't a String object until the constructor is called. Right rule: A string literal is already a String object, so \"text\".length() works directly.\n[2] misconception (M) -> EqualsComparesReferences: wrong rule: .equals() compares references, not contents. Right rule: s.equals(t) checks whether the two Strings contain the same characters.\n[3] misconception (M) -> ArithmeticOnNumericStrings: wrong rule: \"10\" - 1 or \"6\" * \"2\" works because the strings look like numbers. Right rule: Arithmetic operators other than + are not defined for Strings; a String of digits must first be converted to a number, e.g. with Integer.parseInt.\n[4] inconsistent_trace (T) -> StringLiteralNoObject: Points to LT (String expressions produce references to String objects, and operations build new strings). Applied unevenly, a student compares with equals in one test and == in another, or treats \"12\" as a number in one + and as text in the next. (here mixing in: \"a string literal isn't a String object until the constructor is called\")\n[5] misconception (M) -> StringIsPrimitive: wrong rule: String is a primitive type like int. Right rule: String is not a primitive type; it is a class whose values are objects, although Java gives it some built-in support (literals, +).\n[6] misconception (M) -> EqualityOperatorComparesObjectsValues: wrong rule: == compares contents (the String == bug). Right rule: s == t is true only when s and t refer to the same object; s.equals(t) compares the text.\n[7] misconception (M) -> StringRelationalComparison: wrong rule: s < t compares two Strings alphabetically. Right rule: < and > are defined only for primitive types; comparing Strings with them does not compile."
+  },
+  {
+   "from": "string_type",
+   "to": "string_type@L1",
+   "type": "has_level",
+   "label": "[0] names_the_element (N): String: Java's built-in non-primitive (reference) type for a sequence of characters.\n[1] states_the_rule (S): A String literal is characters in double quotes and denotes a String object. + concatenates. Contents are compared with equals, not ==. < and > are not defined for Strings, and Strings are immutable."
+  },
+  {
+   "from": "string_type",
+   "to": "string_type@L2",
+   "type": "has_level",
+   "label": "[0] line_by_line_trace (LT): A String expression is evaluated left to right. At each + with a String operand, the other operand is converted to a String and a new String object is made. Methods such as toUpperCase return a new String and leave the original unchanged.\n[1] output_prediction (OP): \"Hi, \" + \"Bob\" is \"Hi, Bob\" and \"1234\" + \"99\" is \"123499\". s.equals(t) is true exactly when the characters match, while \"abc\" == \"ab\" + x can be false for x = \"c\".\n[2] one_step_execution (OS): No operation changes an existing String. s = s + \"x\" makes s refer to a new String, and other variables still referring to the old one are unaffected."
+  },
+  {
+   "from": "string_type",
+   "to": "string_type@L3",
+   "type": "has_level",
+   "label": "[0] relation_to_neighbour (R): + produces a new String whenever at least one operand is a String; the other operand is converted to text first.\n[1] relation_to_neighbour (R): 'a' is a char (one 16-bit character code, a primitive); \"a\" is a String (a sequence of characters, an object). 'a' + 'b' is the int 195, while \"a\" + \"b\" is \"ab\".\n[2] purpose_of_the_whole (P): Strings handle all text: messages, labels, formatted output and command-line arguments (args[] are Strings and must be parsed before arithmetic)."
+  },
+  {
+   "from": "string_type",
+   "to": "string_type@L4",
+   "type": "has_level",
+   "label": "[0] predict_a_change (C) -> StringLiteralNoObject: Replacing equals with == may still pass for two identical literals but fails for computed or input strings. Changing \"5\" to 5 turns concatenation into addition.\n[1] transfer_to_a_new_program (X): Use String for any text: names, messages, tokens and output lines. Convert to int or double with Integer.parseInt or Double.parseDouble before arithmetic. Use char for a single character whose code matters.\n[2] diagnose_an_error (D): rule broken: String contents are compared with equals; == compares references. Kind: silent logic error. Trigger class: Comparing a String read from input or built by + against a literal with == or !=: false even though the text matches.\n[3] diagnose_an_error (D): rule broken: < and > (and - * /) are defined only for primitive types, not for Strings. Kind: compile-time. Trigger class: s < t, \"10\" - 1, \"6\" * \"2\": 'bad operand types for binary operator'.\n[4] diagnose_an_error (D): rule broken: A String variable can hold only a String (or null). Kind: compile-time. Trigger class: String message = 123;: 'incompatible types: int cannot be converted to String'.\n[5] diagnose_an_error (D): rule broken: A method cannot be called through a null reference. Kind: run-time exception. Trigger class: Calling length(), equals() or charAt() on a String variable whose value is null: NullPointerException."
+  },
+  {
+   "from": "arithmetic_operators",
+   "to": "ArithmeticOnNumericStrings",
+   "type": "misconception",
+   "label": "wrong: \"10\" - 1 or \"6\" * \"2\" works because the strings look like numbers. | right: Arithmetic operators other than + are not defined for Strings; a String of digits must first be converted to a number, e.g. with Integer.parseInt."
+  },
+  {
+   "from": "comparison_operators",
+   "to": "EqualityOperatorComparesObjectsValues",
+   "type": "misconception",
+   "label": "wrong: s == t is true whenever the two Strings contain the same text. | right: s == t is true only when s and t refer to the same object; s.equals(t) compares the text."
+  },
+  {
+   "from": "comparison_operators",
+   "to": "EqualsComparesReferences",
+   "type": "misconception",
+   "label": "wrong: .equals() compares references, not contents | right: s.equals(t) checks whether the two Strings contain the same characters."
+  },
+  {
+   "from": "comparison_operators",
+   "to": "StringRelationalComparison",
+   "type": "misconception",
+   "label": "wrong: s < t compares two Strings alphabetically. | right: < and > are defined only for primitive types; comparing Strings with them does not compile."
+  },
+  {
+   "from": "method_call",
+   "to": "EqualsComparesReferences",
+   "type": "misconception",
+   "label": "wrong: .equals() compares references, not contents | right: s.equals(t) checks whether the two Strings contain the same characters."
+  },
+  {
+   "from": "method_call",
+   "to": "StringMethodChangesString",
+   "type": "misconception",
+   "label": "wrong: name.toUpperCase(); changes name. | right: Strings are immutable: String methods return a new String, which must be assigned, e.g. name = name.toUpperCase();"
+  },
+  {
+   "from": "primitive_type",
+   "to": "StringIsPrimitive",
+   "type": "misconception",
+   "label": "wrong: String is a primitive type like int. | right: String is not a primitive type; it is a class whose values are objects, although Java gives it some built-in support (literals, +)."
+  },
+  {
+   "from": "primitive_vs_reference",
+   "to": "EqualityOperatorComparesObjectsValues",
+   "type": "misconception",
+   "label": "wrong: == compares contents (the String == bug) | right: s == t is true only when s and t refer to the same object; s.equals(t) compares the text."
+  },
+  {
+   "from": "primitive_vs_reference",
+   "to": "StringIsPrimitive",
+   "type": "misconception",
+   "label": "wrong: String is a primitive type like int. | right: String is not a primitive type; it is a class whose values are objects, although Java gives it some built-in support (literals, +)."
+  },
+  {
+   "from": "string_type",
+   "to": "ArithmeticOnNumericStrings",
+   "type": "misconception",
+   "label": "wrong: \"10\" - 1 or \"6\" * \"2\" works because the strings look like numbers. | right: Arithmetic operators other than + are not defined for Strings; a String of digits must first be converted to a number, e.g. with Integer.parseInt."
+  },
+  {
+   "from": "string_type",
+   "to": "EqualityOperatorComparesObjectsValues",
+   "type": "misconception",
+   "label": "wrong: s == t is true whenever the two Strings contain the same text. | right: s == t is true only when s and t refer to the same object; s.equals(t) compares the text."
+  },
+  {
+   "from": "string_type",
+   "to": "EqualsComparesReferences",
+   "type": "misconception",
+   "label": "wrong: s.equals(t) checks whether s and t are the same object. | right: s.equals(t) checks whether the two Strings contain the same characters."
+  },
+  {
+   "from": "string_type",
+   "to": "NullIsObject",
+   "type": "misconception",
+   "label": "wrong: null is an object, so a method can be called on a variable that is null. | right: null means the variable refers to no object, so calling a method on it throws an exception."
+  },
+  {
+   "from": "string_type",
+   "to": "ObjectsMustBeNamed",
+   "type": "misconception",
+   "label": "wrong: An object can only be created by first storing it in a variable. | right: An object can be created and used directly without a variable, as in \"s\".length() or passing new int[n] as an argument."
+  },
+  {
+   "from": "string_type",
+   "to": "StringIsPrimitive",
+   "type": "misconception",
+   "label": "wrong: String is a primitive type like int. | right: String is not a primitive type; it is a class whose values are objects, although Java gives it some built-in support (literals, +)."
+  },
+  {
+   "from": "string_type",
+   "to": "StringLiteralNoObject",
+   "type": "misconception",
+   "label": "wrong: \"text\" is not a String object until new String(...) is called. | right: A string literal is already a String object, so \"text\".length() works directly."
+  },
+  {
+   "from": "string_type",
+   "to": "StringMethodChangesString",
+   "type": "misconception",
+   "label": "wrong: name.toUpperCase(); changes name. | right: Strings are immutable: String methods return a new String, which must be assigned, e.g. name = name.toUpperCase();"
+  },
+  {
+   "from": "string_type",
+   "to": "StringRelationalComparison",
+   "type": "misconception",
+   "label": "wrong: s < t compares two Strings alphabetically. | right: < and > are defined only for primitive types; comparing Strings with them does not compile."
+  },
+  {
+   "from": "char",
+   "to": "string_type",
+   "type": "parallel",
+   "label": "'a' is a char (one 16-bit character code, a primitive); \"a\" is a String (a sequence of characters, an object). 'a' + 'b' is the int 195, while \"a\" + \"b\" is \"ab\"."
+  },
+  {
+   "from": "string_type",
+   "to": "string_concatenation",
+   "type": "prerequisite",
+   "label": "+ builds a new String whenever at least one of its operands is a String."
+  }
+ ]
+}

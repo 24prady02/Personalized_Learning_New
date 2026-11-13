@@ -1,0 +1,141 @@
+{
+ "concept": "teleportation",
+ "label": "teleportation",
+ "graph_version": "3.9.8 (3.9.7 + one primary per misconception (S9c) and the four remaining sibling edges (S9b), 2026-11-04; listed in revision_3_9_8)",
+ "nodes": [
+  {
+   "id": "dangling_pages",
+   "kind": "concept",
+   "label": "dangling_pages"
+  },
+  {
+   "id": "input_graph",
+   "kind": "concept",
+   "label": "input_graph"
+  },
+  {
+   "id": "normalization",
+   "kind": "concept",
+   "label": "normalization"
+  },
+  {
+   "id": "teleportation",
+   "kind": "concept",
+   "label": "teleportation"
+  },
+  {
+   "id": "transition_matrix",
+   "kind": "concept",
+   "label": "transition_matrix"
+  },
+  {
+   "id": "teleportation@L0",
+   "kind": "learning_level",
+   "label": "L0"
+  },
+  {
+   "id": "teleportation@L1",
+   "kind": "learning_level",
+   "label": "L1"
+  },
+  {
+   "id": "teleportation@L2",
+   "kind": "learning_level",
+   "label": "L2"
+  },
+  {
+   "id": "teleportation@L3",
+   "kind": "learning_level",
+   "label": "L3"
+  },
+  {
+   "id": "teleportation@L4",
+   "kind": "learning_level",
+   "label": "L4"
+  },
+  {
+   "id": "TeleportUnneeded",
+   "kind": "misconception",
+   "label": "TeleportUnneeded"
+  },
+  {
+   "id": "topic1.6.a",
+   "kind": "topic",
+   "label": "Input format and transition matrix"
+  }
+ ],
+ "edges": [
+  {
+   "from": "topic1.6.a",
+   "to": "dangling_pages",
+   "type": "contains",
+   "label": "The topic 'Input format and transition matrix' introduces dangling_pages."
+  },
+  {
+   "from": "topic1.6.a",
+   "to": "input_graph",
+   "type": "contains",
+   "label": "The topic 'Input format and transition matrix' introduces input_graph."
+  },
+  {
+   "from": "topic1.6.a",
+   "to": "normalization",
+   "type": "contains",
+   "label": "The topic 'Input format and transition matrix' introduces normalization."
+  },
+  {
+   "from": "topic1.6.a",
+   "to": "teleportation",
+   "type": "contains",
+   "label": "The topic 'Input format and transition matrix' introduces teleportation."
+  },
+  {
+   "from": "topic1.6.a",
+   "to": "transition_matrix",
+   "type": "contains",
+   "label": "The topic 'Input format and transition matrix' introduces transition_matrix."
+  },
+  {
+   "from": "teleportation",
+   "to": "teleportation@L0",
+   "type": "has_level",
+   "label": "[0] everyday_reading (E): Everyday \"90 percent of the time\" reads as a quota (exactly 9 of every 10 moves follow links); in the model it is a probability applied independently on every move, folded into each matrix entry as .90*(link share) + .10/N.\n[1] misconception (M) -> TeleportUnneeded: wrong rule: Without teleporting, the surfer still visits every page. Right rule: Without the random leap the surfer can get stuck (e.g. in a spider trap with no outgoing links); the 90-10 rule guarantees mixing.\n[2] inconsistent_trace (T) -> TeleportUnneeded: Applies LT (add .10/N to every entry of every row, after the link term) unevenly: e.g. adds it only to entries that have links, or only to the diagonal, so rows sum to less than 1. (here mixing in: \"Without teleporting, the surfer still visits every page\")"
+  },
+  {
+   "from": "teleportation",
+   "to": "teleportation@L1",
+   "type": "has_level",
+   "label": "[0] names_the_element (N): A model rule: the random leap of the 90-10 rule, a jump to a page chosen uniformly from all N pages with probability .10.\n[1] states_the_rule (S): 90 percent of the time the surfer clicks a random link on the current page (each link equally likely) and 10 percent of the time goes directly to a random page (all pages equally likely); in the matrix this adds .10/N to each entry."
+  },
+  {
+   "from": "teleportation",
+   "to": "teleportation@L2",
+   "type": "has_level",
+   "label": "[0] line_by_line_trace (LT): Per entry, the link term .90*counts[i][j]/outDegree[i] is computed first and the leap term .10/N is then added to every entry, including entries with no link and the diagonal.\n[1] output_prediction (OP): The leap contributes .10/N to each entry: .02 for tiny.txt (N = 5), so an entry with no link is .02 and the single link of page 0 gives .92.\n[2] one_step_execution (OS): Adding the leap term raises one entry p by .10/N; summed across a row it adds exactly .10."
+  },
+  {
+   "from": "teleportation",
+   "to": "teleportation@L3",
+   "type": "has_level",
+   "label": "[0] relation_to_neighbour (R): Every entry is built as link part plus leap part; the .90 and .10 weights must sum to 1 for each row to remain a distribution.\n[1] purpose_of_the_whole (P): Guarantee mixing: the leap makes every page reachable from every page, so the chain has a unique long-run distribution and spider traps cannot capture the surfer."
+  },
+  {
+   "from": "teleportation",
+   "to": "teleportation@L4",
+   "type": "has_level",
+   "label": "[0] predict_a_change (C) -> TeleportUnneeded: Changing the split to 80-20 or 95-5 keeps rows stochastic and mixing but changes the ranks; removing the leap (100-0) can break mixing.\n[1] transfer_to_a_new_program (X): Use whenever the link graph may not be strongly connected (any real web model) to make the chain mix; the particular 90-10 split is a guess, so it is a modelling parameter, not a fact.\n[2] diagnose_an_error (D): rule broken: The leap is needed for mixing. Kind: silent logic error. Trigger class: Leap term removed and graph has a spider trap or unreachable part: ranks pile up in the trap and depend on the starting page.\n[3] diagnose_an_error (D): rule broken: Leap and link weights must sum to 1. Kind: silent logic error. Trigger class: Leap changed (e.g. .20/N) without changing .90: rows sum to 1.1 and the random move misbehaves."
+  },
+  {
+   "from": "teleportation",
+   "to": "TeleportUnneeded",
+   "type": "misconception",
+   "label": "wrong: Without teleporting, the surfer still visits every page. | right: Without the random leap the surfer can get stuck (e.g. in a spider trap with no outgoing links); the 90-10 rule guarantees mixing."
+  },
+  {
+   "from": "teleportation",
+   "to": "transition_matrix",
+   "type": "prerequisite",
+   "label": "The 90-10 rule says the surfer follows a random link 90 percent of the time and jumps to a random page 10 percent of the time, and each transition-matrix entry is computed from it."
+  }
+ ]
+}

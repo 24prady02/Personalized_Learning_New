@@ -1,0 +1,280 @@
+{
+ "concept": "loop_scope",
+ "label": "loop_scope",
+ "graph_version": "3.9.8 (3.9.7 + one primary per misconception (S9c) and the four remaining sibling edges (S9b), 2026-11-04; listed in revision_3_9_8)",
+ "nodes": [
+  {
+   "id": "accumulator_pattern",
+   "kind": "concept",
+   "label": "accumulator_pattern"
+  },
+  {
+   "id": "block",
+   "kind": "concept",
+   "label": "block"
+  },
+  {
+   "id": "compound_assignment",
+   "kind": "concept",
+   "label": "compound_assignment"
+  },
+  {
+   "id": "counter_pattern",
+   "kind": "concept",
+   "label": "counter_pattern"
+  },
+  {
+   "id": "for_loop",
+   "kind": "concept",
+   "label": "for_loop"
+  },
+  {
+   "id": "increment_operators",
+   "kind": "concept",
+   "label": "increment_operators"
+  },
+  {
+   "id": "logical_error",
+   "kind": "concept",
+   "label": "logical_error"
+  },
+  {
+   "id": "loop_scope",
+   "kind": "concept",
+   "label": "loop_scope"
+  },
+  {
+   "id": "loop_variable",
+   "kind": "concept",
+   "label": "loop_variable"
+  },
+  {
+   "id": "side_effect_order",
+   "kind": "concept",
+   "label": "side_effect_order"
+  },
+  {
+   "id": "simulation_loop",
+   "kind": "concept",
+   "label": "simulation_loop"
+  },
+  {
+   "id": "variable",
+   "kind": "concept",
+   "label": "variable"
+  },
+  {
+   "id": "AccumulatorDeclaredInLoop",
+   "kind": "error",
+   "label": "AccumulatorDeclaredInLoop"
+  },
+  {
+   "id": "loop_scope@L0",
+   "kind": "learning_level",
+   "label": "L0"
+  },
+  {
+   "id": "loop_scope@L1",
+   "kind": "learning_level",
+   "label": "L1"
+  },
+  {
+   "id": "loop_scope@L2",
+   "kind": "learning_level",
+   "label": "L2"
+  },
+  {
+   "id": "loop_scope@L3",
+   "kind": "learning_level",
+   "label": "L3"
+  },
+  {
+   "id": "loop_scope@L4",
+   "kind": "learning_level",
+   "label": "L4"
+  },
+  {
+   "id": "ForVariableScopeBeyondLoop",
+   "kind": "misconception",
+   "label": "ForVariableScopeBeyondLoop"
+  },
+  {
+   "id": "LocalVarOutsideScope",
+   "kind": "misconception",
+   "label": "LocalVarOutsideScope"
+  },
+  {
+   "id": "LoopBodyScopeImpliesLoopLifetime",
+   "kind": "misconception",
+   "label": "LoopBodyScopeImpliesLoopLifetime"
+  },
+  {
+   "id": "LoopVariableLifetimeScope",
+   "kind": "misconception",
+   "label": "LoopVariableLifetimeScope"
+  },
+  {
+   "id": "topic1.3.d",
+   "kind": "topic",
+   "label": "For loops (including i++ and scope)"
+  }
+ ],
+ "edges": [
+  {
+   "from": "topic1.3.d",
+   "to": "compound_assignment",
+   "type": "contains",
+   "label": "The topic 'For loops (including i++ and scope)' introduces compound_assignment."
+  },
+  {
+   "from": "topic1.3.d",
+   "to": "for_loop",
+   "type": "contains",
+   "label": "The topic 'For loops (including i++ and scope)' introduces for_loop."
+  },
+  {
+   "from": "topic1.3.d",
+   "to": "increment_operators",
+   "type": "contains",
+   "label": "The topic 'For loops (including i++ and scope)' introduces increment_operators."
+  },
+  {
+   "from": "topic1.3.d",
+   "to": "loop_scope",
+   "type": "contains",
+   "label": "The topic 'For loops (including i++ and scope)' introduces loop_scope."
+  },
+  {
+   "from": "topic1.3.d",
+   "to": "loop_variable",
+   "type": "contains",
+   "label": "The topic 'For loops (including i++ and scope)' introduces loop_variable."
+  },
+  {
+   "from": "topic1.3.d",
+   "to": "side_effect_order",
+   "type": "contains",
+   "label": "The topic 'For loops (including i++ and scope)' introduces side_effect_order."
+  },
+  {
+   "from": "accumulator_pattern",
+   "to": "AccumulatorDeclaredInLoop",
+   "type": "error",
+   "label": "wrong: Declaring sum inside the loop body keeps a running total across passes. | right: The accumulator must be declared and initialised before the loop."
+  },
+  {
+   "from": "counter_pattern",
+   "to": "AccumulatorDeclaredInLoop",
+   "type": "error",
+   "label": "wrong: Declaring sum inside the loop body keeps a running total across passes. | right: The accumulator must be declared and initialised before the loop."
+  },
+  {
+   "from": "logical_error",
+   "to": "AccumulatorDeclaredInLoop",
+   "type": "error",
+   "label": "wrong: Declaring sum inside the loop body keeps a running total across passes. | right: The accumulator must be declared and initialised before the loop."
+  },
+  {
+   "from": "loop_scope",
+   "to": "AccumulatorDeclaredInLoop",
+   "type": "error",
+   "label": "wrong: Declaring sum inside the loop body keeps a running total across passes. | right: The accumulator must be declared and initialised before the loop."
+  },
+  {
+   "from": "loop_scope",
+   "to": "loop_scope@L0",
+   "type": "has_level",
+   "label": "[0] everyday_reading (E): Folk meaning: once a name is introduced ('let i be ...') it can be referred to for the rest of the text, and something introduced inside a repeated step keeps existing across repetitions. In Java a local variable exists only from its declaration to the end of its block, and a for header counts as part of the loop's block.\n[1] misconception (M) -> LoopBodyScopeImpliesLoopLifetime: wrong rule: a variable declared in the loop body lives across all iterations. Right rule: A variable declared inside the body is in scope only to the end of the body, so each pass declares and initializes it afresh and it does not keep the previous pass's value.\n[2] misconception (M) -> LoopVariableLifetimeScope: wrong rule: The for variable i is a new variable on every pass rather than one variable changed by the update. Right rule: The for variable i is created once by the init, the update changes that same variable on every pass, and i exists only until the end of the for statement.\n[3] misconception (M) -> ForVariableScopeBeyondLoop: wrong rule: i declared in the for header can still be used after the loop has ended. Right rule: i declared in the for header exists only inside the loop, so using it after the loop does not compile.\n[4] misconception (M) -> LocalVarOutsideScope: wrong rule: A variable declared inside a block can be used anywhere in the program, like a global. Right rule: A local variable exists only from its declaration to the end of its block.\n[5] inconsistent_trace (T) -> LoopBodyScopeImpliesLoopLifetime: Applies the scope rule (LT) unevenly: lets a body variable keep its value from the last pass on some passes but not others, or uses the for variable after the loop in one place but not another. (here mixing in: \"a variable declared in the loop body lives across all iterations\")"
+  },
+  {
+   "from": "loop_scope",
+   "to": "loop_scope@L1",
+   "type": "has_level",
+   "label": "[0] names_the_element (N): Scope is the part of the program where a variable is defined (can be used); for loops, the header is in the same block as the body.\n[1] states_the_rule (S): A local variable's scope is the rest of the block after its declaration; a variable declared in a for initializer is in scope in the header and the body only; redeclaring a local variable inside its scope is a compile-time error."
+  },
+  {
+   "from": "loop_scope",
+   "to": "loop_scope@L2",
+   "type": "has_level",
+   "label": "[0] line_by_line_trace (LT): Each time control enters a block, its declarations run in order, creating and (if initialized) setting those variables; when the block ends they cease to exist. For a loop body this happens on every pass; for the for-header variable once, at the init.\n[1] output_prediction (OP): A variable declared inside the body starts from its initializer on every pass (int s = 0; inside the body gives s = 0 at the start of each pass); a for-header variable cannot be printed after the loop (compile error).\n[2] one_step_execution (OS): Entering the body creates its local variables afresh; leaving it removes them; values left in variables declared before the loop persist into the next pass."
+  },
+  {
+   "from": "loop_scope",
+   "to": "loop_scope@L3",
+   "type": "has_level",
+   "label": "[0] relation_to_neighbour (R): A variable declared in the for header exists only from its declaration to the end of the for statement, so for and while versions differ: in the while version the counter is still available after the loop.\n[1] purpose_of_the_whole (P): Plan: keep each variable as local as possible - declare a loop index in the for header when it is not needed afterwards, and declare variables that must survive the loop (accumulators, counters, loop variables needed later) before it."
+  },
+  {
+   "from": "loop_scope",
+   "to": "loop_scope@L4",
+   "type": "has_level",
+   "label": "[0] predict_a_change (C) -> LoopBodyScopeImpliesLoopLifetime: Moving a declaration from before the loop into the body re-initializes the variable every pass and makes it unusable after the loop; moving a for-header declaration out (int i; for (i = 0; ...)) keeps the loop's behaviour and makes i usable after it.\n[1] diagnose_an_error (D): rule broken: A variable declared in the body is in scope only to the end of the body and is re-declared and re-initialized on every pass. Kind: silent logic error. Trigger class: for (...) { int sum = 0; sum += a[i]; }: sum restarts at 0 each pass, so only the last term survives; printing sum after the loop is a compile-time error (cannot find symbol) because sum is out of scope.\n[2] transfer_to_a_new_program (X): Declare the index in the for header when it is used only inside the loop; declare it before the loop when its final value is needed (as in the break-based primality test) and declare running results before the loop.\n[3] diagnose_an_error (D): rule broken: A for-header variable is out of scope after the loop. Kind: compile-time. Trigger class: Using i after for (int i = ...) {...}: 'cannot find symbol'.\n[4] diagnose_an_error (D): rule broken: A local variable cannot be redeclared in its own scope. Kind: compile-time. Trigger class: Declaring int i inside a for (int i ...) body, or an inner for (int i ...) inside an outer for (int i ...): 'variable i is already defined'."
+  },
+  {
+   "from": "accumulator_pattern",
+   "to": "LoopBodyScopeImpliesLoopLifetime",
+   "type": "misconception",
+   "label": "wrong: a variable declared in the loop body lives across all iterations | right: A variable declared inside the body is created anew on every pass and does not keep the previous pass's value."
+  },
+  {
+   "from": "block",
+   "to": "LocalVarOutsideScope",
+   "type": "misconception",
+   "label": "wrong: A variable declared inside a block can be used anywhere in the program, like a global. | right: A local variable exists only from its declaration to the end of its block."
+  },
+  {
+   "from": "loop_scope",
+   "to": "ForVariableScopeBeyondLoop",
+   "type": "misconception",
+   "label": "wrong: i declared in the for header can still be used after the loop has ended. | right: i declared in the for header exists only inside the loop, so using it after the loop does not compile."
+  },
+  {
+   "from": "loop_scope",
+   "to": "LocalVarOutsideScope",
+   "type": "misconception",
+   "label": "wrong: A variable declared inside a block can be used anywhere in the program, like a global. | right: A local variable exists only from its declaration to the end of its block."
+  },
+  {
+   "from": "loop_scope",
+   "to": "LoopBodyScopeImpliesLoopLifetime",
+   "type": "misconception",
+   "label": "wrong: A variable declared inside the loop body keeps its value from one pass to the next. | right: A variable declared inside the body is created anew on every pass and does not keep the previous pass's value."
+  },
+  {
+   "from": "loop_scope",
+   "to": "LoopVariableLifetimeScope",
+   "type": "misconception",
+   "label": "wrong: The for variable i is a new variable on every pass rather than one variable changed by the update. | right: The for variable i is created once by the init, and the update changes that same variable on every pass."
+  },
+  {
+   "from": "loop_variable",
+   "to": "LoopVariableLifetimeScope",
+   "type": "misconception",
+   "label": "wrong: The for variable i is a new variable on every pass rather than one variable changed by the update. | right: The for variable i is created once by the init, and the update changes that same variable on every pass."
+  },
+  {
+   "from": "simulation_loop",
+   "to": "LoopBodyScopeImpliesLoopLifetime",
+   "type": "misconception",
+   "label": "wrong: Declaring page inside the simulation loop still lets the surfer continue from the previous page. | right: If page is declared inside the loop body it is recreated each pass, so it must be declared before the loop to carry the walk forward."
+  },
+  {
+   "from": "variable",
+   "to": "LocalVarOutsideScope",
+   "type": "misconception",
+   "label": "wrong: A variable declared inside a block can be used anywhere in the program, like a global. | right: A local variable exists only from its declaration to the end of its block."
+  },
+  {
+   "from": "variable",
+   "to": "LoopBodyScopeImpliesLoopLifetime",
+   "type": "misconception",
+   "label": "wrong: a variable declared in the loop body lives across all iterations | right: A variable declared inside the body is created anew on every pass and does not keep the previous pass's value."
+  },
+  {
+   "from": "for_loop",
+   "to": "loop_scope",
+   "type": "prerequisite",
+   "label": "A variable declared in the for header exists only from its declaration to the end of the for statement's block."
+  }
+ ]
+}

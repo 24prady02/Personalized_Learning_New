@@ -1,0 +1,230 @@
+{
+ "concept": "main_method",
+ "label": "main_method",
+ "graph_version": "3.9.8 (3.9.7 + one primary per misconception (S9c) and the four remaining sibling edges (S9b), 2026-11-04; listed in revision_3_9_8)",
+ "nodes": [
+  {
+   "id": "block",
+   "kind": "concept",
+   "label": "block"
+  },
+  {
+   "id": "class_declaration",
+   "kind": "concept",
+   "label": "class_declaration"
+  },
+  {
+   "id": "command_line_args",
+   "kind": "concept",
+   "label": "command_line_args"
+  },
+  {
+   "id": "comment",
+   "kind": "concept",
+   "label": "comment"
+  },
+  {
+   "id": "main_method",
+   "kind": "concept",
+   "label": "main_method"
+  },
+  {
+   "id": "print",
+   "kind": "concept",
+   "label": "print"
+  },
+  {
+   "id": "println",
+   "kind": "concept",
+   "label": "println"
+  },
+  {
+   "id": "program_layout",
+   "kind": "concept",
+   "label": "program_layout"
+  },
+  {
+   "id": "run_time_error",
+   "kind": "concept",
+   "label": "run_time_error"
+  },
+  {
+   "id": "statement",
+   "kind": "concept",
+   "label": "statement"
+  },
+  {
+   "id": "string_literal",
+   "kind": "concept",
+   "label": "string_literal"
+  },
+  {
+   "id": "MainWithoutStringArgs",
+   "kind": "error",
+   "label": "MainWithoutStringArgs"
+  },
+  {
+   "id": "MissingKeyword",
+   "kind": "error",
+   "label": "MissingKeyword"
+  },
+  {
+   "id": "main_method@L0",
+   "kind": "learning_level",
+   "label": "L0"
+  },
+  {
+   "id": "main_method@L1",
+   "kind": "learning_level",
+   "label": "L1"
+  },
+  {
+   "id": "main_method@L2",
+   "kind": "learning_level",
+   "label": "L2"
+  },
+  {
+   "id": "main_method@L3",
+   "kind": "learning_level",
+   "label": "L3"
+  },
+  {
+   "id": "main_method@L4",
+   "kind": "learning_level",
+   "label": "L4"
+  },
+  {
+   "id": "topic1.1.b",
+   "kind": "topic",
+   "label": "Understanding a program (HelloWorld)"
+  }
+ ],
+ "edges": [
+  {
+   "from": "topic1.1.b",
+   "to": "block",
+   "type": "contains",
+   "label": "The topic 'Understanding a program (HelloWorld)' introduces block."
+  },
+  {
+   "from": "topic1.1.b",
+   "to": "class_declaration",
+   "type": "contains",
+   "label": "The topic 'Understanding a program (HelloWorld)' introduces class_declaration."
+  },
+  {
+   "from": "topic1.1.b",
+   "to": "comment",
+   "type": "contains",
+   "label": "The topic 'Understanding a program (HelloWorld)' introduces comment."
+  },
+  {
+   "from": "topic1.1.b",
+   "to": "main_method",
+   "type": "contains",
+   "label": "The topic 'Understanding a program (HelloWorld)' introduces main_method."
+  },
+  {
+   "from": "topic1.1.b",
+   "to": "print",
+   "type": "contains",
+   "label": "The topic 'Understanding a program (HelloWorld)' introduces print."
+  },
+  {
+   "from": "topic1.1.b",
+   "to": "println",
+   "type": "contains",
+   "label": "The topic 'Understanding a program (HelloWorld)' introduces println."
+  },
+  {
+   "from": "topic1.1.b",
+   "to": "program_layout",
+   "type": "contains",
+   "label": "The topic 'Understanding a program (HelloWorld)' introduces program_layout."
+  },
+  {
+   "from": "topic1.1.b",
+   "to": "statement",
+   "type": "contains",
+   "label": "The topic 'Understanding a program (HelloWorld)' introduces statement."
+  },
+  {
+   "from": "topic1.1.b",
+   "to": "string_literal",
+   "type": "contains",
+   "label": "The topic 'Understanding a program (HelloWorld)' introduces string_literal."
+  },
+  {
+   "from": "class_declaration",
+   "to": "MissingKeyword",
+   "type": "error",
+   "label": "wrong: Leaves out a required keyword such as static or class. | right: public class Name and public static void main(String[] args) need their keywords, which are required; omitting or misspelling one is an error, usually caught by the compiler as a syntax error."
+  },
+  {
+   "from": "main_method",
+   "to": "MainWithoutStringArgs",
+   "type": "error",
+   "label": "wrong: public static void main() is an acceptable entry point. | right: main is written public static void main(String[] args); these keywords and the args parameter are required."
+  },
+  {
+   "from": "main_method",
+   "to": "MissingKeyword",
+   "type": "error",
+   "label": "wrong: Leaves out a required keyword such as static or class. | right: public class Name and public static void main(String[] args) need their keywords, which are required; omitting or misspelling one is an error, usually caught by the compiler as a syntax error."
+  },
+  {
+   "from": "run_time_error",
+   "to": "MainWithoutStringArgs",
+   "type": "error",
+   "label": "wrong: public static void main() is an acceptable entry point. | right: main is written public static void main(String[] args); these keywords and the args parameter are required."
+  },
+  {
+   "from": "main_method",
+   "to": "main_method@L0",
+   "type": "has_level",
+   "label": "[0] everyday_reading (E): Everyday reading: 'main' sounds like the most important part, and 'void' like empty or invalid. Java rule: main is the entry point that java Name calls; public static void main(String[] args) must be written exactly, and void only means main returns no value."
+  },
+  {
+   "from": "main_method",
+   "to": "main_method@L1",
+   "type": "has_level",
+   "label": "[0] names_the_element (N): main is the method that is the entry point of a Java program: public static void main(String[] args) { statements }.\n[1] states_the_rule (S): The header must be public static void main(String[] args); the keywords are required; its body is a sequence of statements in braces, each followed by a semicolon."
+  },
+  {
+   "from": "main_method",
+   "to": "main_method@L2",
+   "type": "has_level",
+   "label": "[0] line_by_line_trace (LT): When the program runs, it starts at the first statement in main and ends when it finishes the last statement, executing the statements in order, one by one.\n[1] output_prediction (OP): main returns no value (void); the program's observable result is whatever main's statements print.\n[2] one_step_execution (OS): Calling main binds args to the array of command-line strings and then runs its body; when its last statement finishes, control goes back to the system."
+  },
+  {
+   "from": "main_method",
+   "to": "main_method@L3",
+   "type": "has_level",
+   "label": "[0] relation_to_neighbour (R): main is declared inside the class's braces; java Name looks in class Name for main.\n[1] relation_to_neighbour (R): main's body holds the statements; running the program executes them in order, one by one.\n[2] relation_to_neighbour (R): The command-line arguments arrive in main's parameter args, an array of Strings (args[0], args[1], ...).\n[3] purpose_of_the_whole (P): Purpose: the single place where a Chapter 1 program's work is written; programming at this stage means specifying a class name and the sequence of statements in its main()."
+  },
+  {
+   "from": "main_method",
+   "to": "main_method@L4",
+   "type": "has_level",
+   "label": "[0] predict_a_change (C): Changing the order of main's statements changes the order of output; changing public static void main(String[] args) (e.g. dropping static or args) keeps it compiling but leaves the class without a launchable entry point, or breaks compilation if misspelt.\n[1] diagnose_an_error (D): rule broken: main is written public static void main(String[] args). Kind: launch error. Trigger class: header written as public static void main() (or without static): it compiles, but java Name reports that no main method is found\n[2] transfer_to_a_new_program (X): Every runnable program needs exactly this main; put Chapter 1 code in it. It is not the place for code that should be reused or tested separately (that needs other methods, Section 2.1).\n[3] diagnose_an_error (D): rule broken: public, static, void and main must be present and correctly spelled. Kind: compile-time. Trigger class: misspelling a keyword (e.g. stati, viod) so the header cannot be parsed"
+  },
+  {
+   "from": "class_declaration",
+   "to": "main_method",
+   "type": "prerequisite",
+   "label": "main is written inside the class's braces, so java Name looks inside the class Name to find main."
+  },
+  {
+   "from": "main_method",
+   "to": "command_line_args",
+   "type": "prerequisite",
+   "label": "The command-line arguments arrive in main's parameter args, an array of Strings."
+  },
+  {
+   "from": "main_method",
+   "to": "statement",
+   "type": "prerequisite",
+   "label": "Statements are written in main's body, and running the program executes main's statements in order, one by one."
+  }
+ ]
+}

@@ -1,0 +1,180 @@
+{
+ "concept": "token_vs_line_input",
+ "label": "token_vs_line_input",
+ "graph_version": "3.9.8 (3.9.7 + one primary per misconception (S9c) and the four remaining sibling edges (S9b), 2026-11-04; listed in revision_3_9_8)",
+ "nodes": [
+  {
+   "id": "end_of_input",
+   "kind": "concept",
+   "label": "end_of_input"
+  },
+  {
+   "id": "input_format",
+   "kind": "concept",
+   "label": "input_format"
+  },
+  {
+   "id": "input_validation",
+   "kind": "concept",
+   "label": "input_validation"
+  },
+  {
+   "id": "interactive_input",
+   "kind": "concept",
+   "label": "interactive_input"
+  },
+  {
+   "id": "read_loop_idiom",
+   "kind": "concept",
+   "label": "read_loop_idiom"
+  },
+  {
+   "id": "sentinel_loop",
+   "kind": "concept",
+   "label": "sentinel_loop"
+  },
+  {
+   "id": "standard_input",
+   "kind": "concept",
+   "label": "standard_input"
+  },
+  {
+   "id": "token_vs_line_input",
+   "kind": "concept",
+   "label": "token_vs_line_input"
+  },
+  {
+   "id": "token_vs_line_input@L0",
+   "kind": "learning_level",
+   "label": "L0"
+  },
+  {
+   "id": "token_vs_line_input@L1",
+   "kind": "learning_level",
+   "label": "L1"
+  },
+  {
+   "id": "token_vs_line_input@L2",
+   "kind": "learning_level",
+   "label": "L2"
+  },
+  {
+   "id": "token_vs_line_input@L3",
+   "kind": "learning_level",
+   "label": "L3"
+  },
+  {
+   "id": "token_vs_line_input@L4",
+   "kind": "learning_level",
+   "label": "L4"
+  },
+  {
+   "id": "NextLineAfterNextInt",
+   "kind": "misconception",
+   "label": "NextLineAfterNextInt"
+  },
+  {
+   "id": "topic1.5.c",
+   "kind": "topic",
+   "label": "Standard input"
+  }
+ ],
+ "edges": [
+  {
+   "from": "topic1.5.c",
+   "to": "end_of_input",
+   "type": "contains",
+   "label": "The topic 'Standard input' introduces end_of_input."
+  },
+  {
+   "from": "topic1.5.c",
+   "to": "input_format",
+   "type": "contains",
+   "label": "The topic 'Standard input' introduces input_format."
+  },
+  {
+   "from": "topic1.5.c",
+   "to": "input_validation",
+   "type": "contains",
+   "label": "The topic 'Standard input' introduces input_validation."
+  },
+  {
+   "from": "topic1.5.c",
+   "to": "interactive_input",
+   "type": "contains",
+   "label": "The topic 'Standard input' introduces interactive_input."
+  },
+  {
+   "from": "topic1.5.c",
+   "to": "read_loop_idiom",
+   "type": "contains",
+   "label": "The topic 'Standard input' introduces read_loop_idiom."
+  },
+  {
+   "from": "topic1.5.c",
+   "to": "sentinel_loop",
+   "type": "contains",
+   "label": "The topic 'Standard input' introduces sentinel_loop."
+  },
+  {
+   "from": "topic1.5.c",
+   "to": "standard_input",
+   "type": "contains",
+   "label": "The topic 'Standard input' introduces standard_input."
+  },
+  {
+   "from": "topic1.5.c",
+   "to": "token_vs_line_input",
+   "type": "contains",
+   "label": "The topic 'Standard input' introduces token_vs_line_input."
+  },
+  {
+   "from": "token_vs_line_input",
+   "to": "token_vs_line_input@L0",
+   "type": "has_level",
+   "label": "[0] everyday_reading (E): Everyday 'read a line' means the next full line you see. readLine() returns the rest of the current line from the read position. A preceding readInt() stops right after the number, so the 'line' may be empty.\n[1] misconception (M) -> NextLineAfterNextInt: wrong rule: A line read after a number read returns the next line typed. Right rule: After readInt(), the position is just past the number. readLine() returns the rest of that line (\"\" if nothing follows) and consumes the line separator; a second readLine() is needed for the next line.\n[2] inconsistent_trace (T) -> NextLineAfterNextInt: Points to LT (token reads stop after the token; readLine reads to the end of the current line). An uneven trace skips the leftover line separator after a token read on some passes. (here mixing in: \"A line read after a number read returns the next line typed\")"
+  },
+  {
+   "from": "token_vs_line_input",
+   "to": "token_vs_line_input@L1",
+   "type": "has_level",
+   "label": "[0] names_the_element (N): StdIn's read methods come in two categories: token-based (readInt, readDouble, readString, ... separated by whitespace) and line- or text-based (readLine, readAll).\n[1] states_the_rule (S): A token is a maximal run of non-whitespace characters. readLine() reads and returns the rest of the line without its separator. It is best not to mix the two categories in one program."
+  },
+  {
+   "from": "token_vs_line_input",
+   "to": "token_vs_line_input@L2",
+   "type": "has_level",
+   "label": "[0] line_by_line_trace (LT): A token read skips whitespace, including line breaks, before the token and stops immediately after it. readLine() collects characters from the current position up to the line separator, consumes the separator, and returns them without it.\n[1] output_prediction (OP): For input `42\\nhello world\\n`: readInt() gives 42, then readLine() gives \"\", then readLine() gives \"hello world\". readString() on `hello world` gives \"hello\".\n[2] one_step_execution (OS): A token read advances past one token and leaves the line separator. A readLine() advances past exactly one line separator. Each returns what it consumed (minus the separator)."
+  },
+  {
+   "from": "token_vs_line_input",
+   "to": "token_vs_line_input@L3",
+   "type": "has_level",
+   "label": "[0] relation_to_neighbour (R): Both kinds of call share the single StdIn position, so a token read changes what the next readLine returns. Mixing them needs care.\n[1] purpose_of_the_whole (P): Token reads suit streams of numbers or words. Line reads suit line-structured records, e.g. a name with spaces followed by numbers on each line."
+  },
+  {
+   "from": "token_vs_line_input",
+   "to": "token_vs_line_input@L4",
+   "type": "has_level",
+   "label": "[0] predict_a_change (C) -> NextLineAfterNextInt: Replacing line breaks with spaces in the input leaves every token read unchanged but changes what readLine returns.\n[1] transfer_to_a_new_program (X): Use token reads when values are separated by arbitrary whitespace. Use readLine when line boundaries or spaces inside a value matter. Avoid mixing the two in one program.\n[2] diagnose_an_error (D): rule broken: A token read leaves the rest of its line unread. Kind: silent logic error. Trigger class: readInt() followed by readLine() on line-per-record input: the line read returns \"\" and the records are shifted.\n[3] diagnose_an_error (D): rule broken: Line reads must stop at end of input. Kind: run-time exception. Trigger class: Using the result of readLine() after the input is exhausted (no line left)."
+  },
+  {
+   "from": "standard_input",
+   "to": "NextLineAfterNextInt",
+   "type": "misconception",
+   "label": "wrong: A line read after a number read returns the next line typed. | right: The number read leaves the newline, so the line read returns \"\" unless the newline is consumed first."
+  },
+  {
+   "from": "token_vs_line_input",
+   "to": "NextLineAfterNextInt",
+   "type": "misconception",
+   "label": "wrong: A line read after a number read returns the next line typed. | right: The number read leaves the newline, so the line read returns \"\" unless the newline is consumed first."
+  },
+  {
+   "from": "standard_input",
+   "to": "token_vs_line_input",
+   "type": "prerequisite",
+   "label": "They are standard-input operations."
+  }
+ ]
+}

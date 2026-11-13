@@ -1,0 +1,270 @@
+{
+ "concept": "array_declaration",
+ "label": "array_declaration",
+ "graph_version": "3.9.8 (3.9.7 + one primary per misconception (S9c) and the four remaining sibling edges (S9b), 2026-11-04; listed in revision_3_9_8)",
+ "nodes": [
+  {
+   "id": "args_length",
+   "kind": "concept",
+   "label": "args_length"
+  },
+  {
+   "id": "array_creation",
+   "kind": "concept",
+   "label": "array_creation"
+  },
+  {
+   "id": "array_declaration",
+   "kind": "concept",
+   "label": "array_declaration"
+  },
+  {
+   "id": "array_default_values",
+   "kind": "concept",
+   "label": "array_default_values"
+  },
+  {
+   "id": "array_initializer",
+   "kind": "concept",
+   "label": "array_initializer"
+  },
+  {
+   "id": "array_reference",
+   "kind": "concept",
+   "label": "Array name holds a memory address"
+  },
+  {
+   "id": "data_structure",
+   "kind": "concept",
+   "label": "Data structure"
+  },
+  {
+   "id": "indexing",
+   "kind": "concept",
+   "label": "indexing"
+  },
+  {
+   "id": "length_field",
+   "kind": "concept",
+   "label": "length_field"
+  },
+  {
+   "id": "multidimensional_array",
+   "kind": "concept",
+   "label": "multidimensional_array"
+  },
+  {
+   "id": "off_by_one_error",
+   "kind": "concept",
+   "label": "off_by_one_error"
+  },
+  {
+   "id": "array_declaration@L0",
+   "kind": "learning_level",
+   "label": "L0"
+  },
+  {
+   "id": "array_declaration@L1",
+   "kind": "learning_level",
+   "label": "L1"
+  },
+  {
+   "id": "array_declaration@L2",
+   "kind": "learning_level",
+   "label": "L2"
+  },
+  {
+   "id": "array_declaration@L3",
+   "kind": "learning_level",
+   "label": "L3"
+  },
+  {
+   "id": "array_declaration@L4",
+   "kind": "learning_level",
+   "label": "L4"
+  },
+  {
+   "id": "ArrayBracketCountIsLength",
+   "kind": "misconception",
+   "label": "ArrayBracketCountIsLength"
+  },
+  {
+   "id": "ArrayElementsUntyped",
+   "kind": "misconception",
+   "label": "ArrayElementsUntyped"
+  },
+  {
+   "id": "DeclarationCreatesArray",
+   "kind": "misconception",
+   "label": "DeclarationCreatesArray"
+  },
+  {
+   "id": "ElementNameIsWholeArray",
+   "kind": "misconception",
+   "label": "ElementNameIsWholeArray"
+  },
+  {
+   "id": "topic1.4.a",
+   "kind": "topic",
+   "label": "Arrays in Java (declare, create, initialize; indexing; length; default values)"
+  }
+ ],
+ "edges": [
+  {
+   "from": "topic1.4.a",
+   "to": "args_length",
+   "type": "contains",
+   "label": "The topic 'Arrays in Java (declare, create, initialize; indexing; length; default values)' introduces args_length."
+  },
+  {
+   "from": "topic1.4.a",
+   "to": "array_creation",
+   "type": "contains",
+   "label": "The topic 'Arrays in Java (declare, create, initialize; indexing; length; default values)' introduces array_creation."
+  },
+  {
+   "from": "topic1.4.a",
+   "to": "array_declaration",
+   "type": "contains",
+   "label": "The topic 'Arrays in Java (declare, create, initialize; indexing; length; default values)' introduces array_declaration."
+  },
+  {
+   "from": "topic1.4.a",
+   "to": "array_default_values",
+   "type": "contains",
+   "label": "The topic 'Arrays in Java (declare, create, initialize; indexing; length; default values)' introduces array_default_values."
+  },
+  {
+   "from": "topic1.4.a",
+   "to": "data_structure",
+   "type": "contains",
+   "label": "Data structure is taught under \"Arrays in Java (declare, create, initialize; indexing; length; default values)\"."
+  },
+  {
+   "from": "topic1.4.a",
+   "to": "indexing",
+   "type": "contains",
+   "label": "The topic 'Arrays in Java (declare, create, initialize; indexing; length; default values)' introduces indexing."
+  },
+  {
+   "from": "topic1.4.a",
+   "to": "length_field",
+   "type": "contains",
+   "label": "The topic 'Arrays in Java (declare, create, initialize; indexing; length; default values)' introduces length_field."
+  },
+  {
+   "from": "topic1.4.a",
+   "to": "off_by_one_error",
+   "type": "contains",
+   "label": "Topic 'Arrays in Java (declare, create, initialize; indexing; length; default values)' of section 1.4 holds the concept off by one error."
+  },
+  {
+   "from": "array_declaration",
+   "to": "array_declaration@L0",
+   "type": "has_level",
+   "label": "[0] everyday_reading (E): Folk meaning: in maths and English, writing 'int[] a' reads as 'a is an array of ints', as if naming a list brings it into existence. Java rule: the declaration only creates a variable that can hold a reference to an int array; no array object or element space exists until new or an initializer creates one.\n[1] misconception (M) -> DeclarationCreatesArray: wrong rule: int[] a; already makes an array that can be indexed. Right rule: The declaration only names the array variable; until new (or an initializer) creates the array, a[i] gives the compile-time error 'variable a might not have been initialized'.\n[2] misconception (M) -> ArrayElementsUntyped: wrong rule: An array can hold elements of any type. Right rule: Every element of an array has the declared element type: an int[] holds only int values, a String[] only String references.\n[3] misconception (M) -> ArrayBracketCountIsLength: wrong rule: The number of brackets in an array type is the array's length. Right rule: Each bracket pair adds one dimension (int[] is 1-D, int[][] is 2-D); the length is not part of the type and is fixed only when the array is created.\n[4] inconsistent_trace (T) -> DeclarationCreatesArray: Points to LT: declare, then create, then initialize, in that order. Inconsistent application: the trace treats a as already created on some lines (reading a[i] straight after 'int[] a;') while requiring new on others. (here mixing in: \"int[] a; already makes an array that can be indexed\")\n[5] misconception (M) -> ElementNameIsWholeArray: wrong rule: X[i] names the whole array, not one element. Right rule: The name a (written a[] in the book) denotes the whole array; a[i] denotes the single element at index i."
+  },
+  {
+   "from": "array_declaration",
+   "to": "array_declaration@L1",
+   "type": "has_level",
+   "label": "[0] names_the_element (N): Identity: a local variable declaration whose type is T[]; it introduces a name for a reference to an array whose elements have type T.\n[1] states_the_rule (S): Declarative: 'T[] name;' declares an array variable of element type T (the C-style 'T name[]' is also legal); the length is not part of the type, so 'int[5] a;' is illegal."
+  },
+  {
+   "from": "array_declaration",
+   "to": "array_declaration@L2",
+   "type": "has_level",
+   "label": "[0] line_by_line_trace (LT): Sequencing: 'double[] a;' only adds the variable a. In 'double[] a = new double[N];' the right side runs first (N is evaluated, the array is allocated and filled with defaults), and then the reference is stored in a.\n[1] output_prediction (OP): Result: a declaration produces no value and no output. A declared but unassigned local array variable cannot be read at all, so any use of a or a[i] before an assignment is rejected at compile time.\n[2] one_step_execution (OS): State transition: after 'int[] a;' the state gains a variable a with no value (not definitely assigned). No array object and no element variables exist yet."
+  },
+  {
+   "from": "array_declaration",
+   "to": "array_declaration@L3",
+   "type": "has_level",
+   "label": "[0] relation_to_neighbour (R): Composition: the declaration fixes the name and element type, and the creation must match it. 'double[] a = new double[N];' is legal, but 'double[] a = new int[N];' is a compile-time type error, because int[] does not convert to double[].\n[1] purpose_of_the_whole (P): Plan/role: give one name to a whole sequence of same-type values, so a program reaches any of N values as a[i] instead of declaring N separate variables a0, a1, ..."
+  },
+  {
+   "from": "array_declaration",
+   "to": "array_declaration@L4",
+   "type": "has_level",
+   "label": "[0] predict_a_change (C) -> DeclarationCreatesArray: Conservation: rewriting 'int[] a' as 'int a[]' keeps the meaning. Changing the element type changes which values may be stored and the default values. Deleting the creation step breaks the program at compile time.\n[1] transfer_to_a_new_program (X): Applicability: declare an array when a program must hold many values of one type and reach them by position. Do not use one for a single value, for values of different types, or for a collection that must grow as values arrive (a resizing structure such as ArrayList fits that case).\n[2] diagnose_an_error (D): rule broken: An array variable must refer to a created array before it is used (definite assignment). Kind: compile-time. Trigger class: a[i] is read or written after 'int[] a;' with no 'a = new int[n]' or initializer on every path to that use\n[3] diagnose_an_error (D): rule broken: All elements have the declared element type. Kind: compile-time. Trigger class: a value or array of a different type is stored, e.g. 'int[] a = new double[5];' or 'a[0] = 2.5;' for an int[] a (incompatible types / possible lossy conversion)"
+  },
+  {
+   "from": "array_creation",
+   "to": "ArrayBracketCountIsLength",
+   "type": "misconception",
+   "label": "wrong: The number of brackets in an array type or initializer is the array's length. | right: Brackets give the number of dimensions; the length is set at creation."
+  },
+  {
+   "from": "array_creation",
+   "to": "DeclarationCreatesArray",
+   "type": "misconception",
+   "label": "wrong: int[] a; already makes an array that can be indexed. | right: The declaration only names the array; until new (or an initializer) creates it, using a[i] gives a 'variable might not have been initialized' compile-time error."
+  },
+  {
+   "from": "array_declaration",
+   "to": "ArrayBracketCountIsLength",
+   "type": "misconception",
+   "label": "wrong: The number of brackets in an array type or initializer is the array's length. | right: Brackets give the number of dimensions; the length is set at creation."
+  },
+  {
+   "from": "array_declaration",
+   "to": "ArrayElementsUntyped",
+   "type": "misconception",
+   "label": "wrong: An array can hold elements of any type. | right: All elements of an array have the declared element type."
+  },
+  {
+   "from": "array_declaration",
+   "to": "DeclarationCreatesArray",
+   "type": "misconception",
+   "label": "wrong: int[] a; already makes an array that can be indexed. | right: The declaration only names the array; until new (or an initializer) creates it, using a[i] gives a 'variable might not have been initialized' compile-time error."
+  },
+  {
+   "from": "array_declaration",
+   "to": "ElementNameIsWholeArray",
+   "type": "misconception",
+   "label": "wrong: X[i] names the whole array, not one element. | right: The array is a; a[i] is the single element at index i."
+  },
+  {
+   "from": "array_initializer",
+   "to": "ArrayBracketCountIsLength",
+   "type": "misconception",
+   "label": "wrong: The number of brackets in an array type or initializer is the array's length. | right: Brackets give the number of dimensions; the length is set at creation."
+  },
+  {
+   "from": "indexing",
+   "to": "ElementNameIsWholeArray",
+   "type": "misconception",
+   "label": "wrong: X[i] names the whole array, not one element. | right: The array is a; a[i] is the single element at index i."
+  },
+  {
+   "from": "multidimensional_array",
+   "to": "ArrayBracketCountIsLength",
+   "type": "misconception",
+   "label": "wrong: The number of brackets in an array type or initializer is the array's length. | right: Brackets give the number of dimensions; the length is set at creation."
+  },
+  {
+   "from": "array_declaration",
+   "to": "array_creation",
+   "type": "prerequisite",
+   "label": "double[] a; declares the array name and type; a = new double[N]; then creates the array."
+  },
+  {
+   "from": "array_declaration",
+   "to": "array_initializer",
+   "type": "prerequisite",
+   "label": "int[] a = {1, 2, 3}; declares the array variable and creates and fills the array in one statement."
+  },
+  {
+   "from": "array_declaration",
+   "to": "array_reference",
+   "type": "prerequisite",
+   "label": "Declaring an array variable creates only a variable that holds a reference to an array; the array itself is a separate object."
+  },
+  {
+   "from": "data_structure",
+   "to": "array_declaration",
+   "type": "prerequisite",
+   "label": "An array is a data structure: one name for a sequence of values of the same type, organised by index."
+  }
+ ]
+}

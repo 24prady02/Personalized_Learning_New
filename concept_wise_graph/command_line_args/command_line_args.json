@@ -1,0 +1,197 @@
+{
+ "concept": "command_line_args",
+ "label": "command_line_args",
+ "graph_version": "3.9.8 (3.9.7 + one primary per misconception (S9c) and the four remaining sibling edges (S9b), 2026-11-04; listed in revision_3_9_8)",
+ "nodes": [
+  {
+   "id": "args_length",
+   "kind": "concept",
+   "label": "args_length"
+  },
+  {
+   "id": "black_box_model",
+   "kind": "concept",
+   "label": "Program as a black box"
+  },
+  {
+   "id": "command_line_args",
+   "kind": "concept",
+   "label": "command_line_args"
+  },
+  {
+   "id": "main_method",
+   "kind": "concept",
+   "label": "main_method"
+  },
+  {
+   "id": "parsing",
+   "kind": "concept",
+   "label": "parsing"
+  },
+  {
+   "id": "run_time_error",
+   "kind": "concept",
+   "label": "run_time_error"
+  },
+  {
+   "id": "standard_input",
+   "kind": "concept",
+   "label": "standard_input"
+  },
+  {
+   "id": "ArgsAlwaysPresent",
+   "kind": "error",
+   "label": "ArgsAlwaysPresent"
+  },
+  {
+   "id": "FirstArgIsArgsOne",
+   "kind": "error",
+   "label": "FirstArgIsArgsOne"
+  },
+  {
+   "id": "command_line_args@L0",
+   "kind": "learning_level",
+   "label": "L0"
+  },
+  {
+   "id": "command_line_args@L1",
+   "kind": "learning_level",
+   "label": "L1"
+  },
+  {
+   "id": "command_line_args@L2",
+   "kind": "learning_level",
+   "label": "L2"
+  },
+  {
+   "id": "command_line_args@L3",
+   "kind": "learning_level",
+   "label": "L3"
+  },
+  {
+   "id": "command_line_args@L4",
+   "kind": "learning_level",
+   "label": "L4"
+  },
+  {
+   "id": "ArgsAreNumbers",
+   "kind": "misconception",
+   "label": "ArgsAreNumbers"
+  },
+  {
+   "id": "topic1.1.d",
+   "kind": "topic",
+   "label": "Input and output (command-line arguments)"
+  }
+ ],
+ "edges": [
+  {
+   "from": "topic1.1.d",
+   "to": "black_box_model",
+   "type": "contains",
+   "label": "Program as a black box is taught under \"Input and output (command-line arguments)\"."
+  },
+  {
+   "from": "topic1.1.d",
+   "to": "command_line_args",
+   "type": "contains",
+   "label": "The topic 'Input and output (command-line arguments)' introduces command_line_args."
+  },
+  {
+   "from": "args_length",
+   "to": "ArgsAlwaysPresent",
+   "type": "error",
+   "label": "wrong: args[0] can always be read. | right: If you run the program without typing the command-line argument it expects, reading args[0] fails with java.lang.ArrayIndexOutOfBoundsException: 0."
+  },
+  {
+   "from": "command_line_args",
+   "to": "ArgsAlwaysPresent",
+   "type": "error",
+   "label": "wrong: args[0] can always be read. | right: If you run the program without typing the command-line argument it expects, reading args[0] fails with java.lang.ArrayIndexOutOfBoundsException: 0."
+  },
+  {
+   "from": "command_line_args",
+   "to": "FirstArgIsArgsOne",
+   "type": "error",
+   "label": "wrong: The first command-line argument is args[1]. | right: Counting starts at 0: the first argument is args[0], the second args[1]."
+  },
+  {
+   "from": "run_time_error",
+   "to": "ArgsAlwaysPresent",
+   "type": "error",
+   "label": "wrong: args[0] can always be read. | right: If you run the program without typing the command-line argument it expects, reading args[0] fails with java.lang.ArrayIndexOutOfBoundsException: 0."
+  },
+  {
+   "from": "command_line_args",
+   "to": "command_line_args@L0",
+   "type": "has_level",
+   "label": "[0] everyday_reading (E): Everyday/maths reading: '1234' typed on the command line is a number, and the first item in a list is item 1. Java rule: every command-line argument arrives as a String in args, and the first is args[0].\n[1] misconception (M) -> ArgsAreNumbers: wrong rule: Command-line arguments arrive already typed as numbers, so no parsing is needed. Right rule: args[0] is always a String, so Integer.parseInt(args[0]) is needed to get its number.\n[2] inconsistent_trace (T) -> ArgsAreNumbers: Applies the args rule unevenly: maps the first typed word to args[0] on one run but to args[1] on another, or treats a numeric argument as a String in one place and as an int in another. (here mixing in: \"command-line args arrive already typed, no parsing needed\")"
+  },
+  {
+   "from": "command_line_args",
+   "to": "command_line_args@L1",
+   "type": "has_level",
+   "label": "[0] names_the_element (N): Command-line arguments are the strings typed after the class name in java Name a b c; they reach main as the String array args.\n[1] states_the_rule (S): args[0] represents the first string typed on the command line, args[1] the second, and so on (counting starts at 0); every element is a String."
+  },
+  {
+   "from": "command_line_args",
+   "to": "command_line_args@L2",
+   "type": "has_level",
+   "label": "[0] line_by_line_trace (LT): At launch the JVM splits the words after java Name at spaces, stores them in order in args, then calls main(args); the program reads args[k] whenever that expression is evaluated.\n[1] output_prediction (OP): args[k] evaluates to the k-th typed string, e.g. java UseArgument Alice gives args[0] = \"Alice\" and prints Hi, Alice. How are you?\n[2] one_step_execution (OS): Reading args[k] changes nothing; args is set once at launch and the same program gives different outputs only because different arguments were typed."
+  },
+  {
+   "from": "command_line_args",
+   "to": "command_line_args@L3",
+   "type": "has_level",
+   "label": "[0] relation_to_neighbour (R): args[k] is always a String, so Integer.parseInt(args[k]) or Double.parseDouble(args[k]) must convert it before arithmetic.\n[1] relation_to_neighbour (R): The arguments arrive in main's parameter args (String[] args).\n[2] relation_to_neighbour (R): args.length is the number of arguments typed (0 if none), so valid indices are 0 to args.length-1.\n[3] relation_to_neighbour (R): In the black-box view the command-line argument is the input string and what the program prints is the output string.\n[4] relation_to_neighbour (R): Command-line arguments are a fixed number of strings given once when the program starts (args[]); standard input is a stream of any length read while the program runs (StdIn.readInt()). Both arrive as text and must be parsed into numbers.\n[5] purpose_of_the_whole (P): Purpose: give the program its input at launch so the same compiled program can be tailored to different data without editing or recompiling."
+  },
+  {
+   "from": "command_line_args",
+   "to": "command_line_args@L4",
+   "type": "has_level",
+   "label": "[0] predict_a_change (C) -> ArgsAreNumbers: Changing the typed arguments changes the output but not the program; typing fewer arguments than the program reads causes ArrayIndexOutOfBoundsException; extra arguments are ignored unless read.\n[1] diagnose_an_error (D): rule broken: Counting starts at 0: the first argument is args[0]. Kind: silent logic error. Trigger class: using args[1] for the first argument: wrong argument used, or ArrayIndexOutOfBoundsException: 1 if only one was typed\n[2] transfer_to_a_new_program (X): Use command-line arguments for a few small inputs known at launch (sizes, names, seeds); use standard input for long or interactive input.\n[3] diagnose_an_error (D): rule broken: args[k] exists only if at least k+1 arguments were typed. Kind: run-time exception. Trigger class: running without the expected argument: java.lang.ArrayIndexOutOfBoundsException: 0\n[4] diagnose_an_error (D): rule broken: Arguments are Strings; numbers must be parsed. Kind: compile-time. Trigger class: int n = args[0]; incompatible types: String cannot be converted to int\n[5] diagnose_an_error (D): rule broken: Integer.parseInt needs digits. Kind: run-time exception. Trigger class: java Prog five or 12.2 where an int is parsed: NumberFormatException"
+  },
+  {
+   "from": "command_line_args",
+   "to": "ArgsAreNumbers",
+   "type": "misconception",
+   "label": "wrong: If a number is typed when the program is launched, args[0] is already an int and can be used in arithmetic. | right: args[0] is always a String, so Integer.parseInt(args[0]) is needed to get its number."
+  },
+  {
+   "from": "parsing",
+   "to": "ArgsAreNumbers",
+   "type": "misconception",
+   "label": "wrong: If a number is typed when the program is launched, args[0] is already an int and can be used in arithmetic. | right: args[0] is always a String, so Integer.parseInt(args[0]) is needed to get its number."
+  },
+  {
+   "from": "standard_input",
+   "to": "command_line_args",
+   "type": "parallel",
+   "label": "Command-line arguments are a fixed number of strings given once when the program starts (args[]); standard input is a stream of any length read while the program runs (StdIn.readInt()). Both arrive as text and must be parsed into numbers."
+  },
+  {
+   "from": "command_line_args",
+   "to": "args_length",
+   "type": "prerequisite",
+   "label": "args is the array of command-line arguments."
+  },
+  {
+   "from": "command_line_args",
+   "to": "black_box_model",
+   "type": "prerequisite",
+   "label": "The black-box view treats the command-line argument as the input string and what the program prints as the output string."
+  },
+  {
+   "from": "command_line_args",
+   "to": "parsing",
+   "type": "prerequisite",
+   "label": "args[k] is always a String, so Integer.parseInt(args[k]) is needed before it can be used as a number."
+  },
+  {
+   "from": "main_method",
+   "to": "command_line_args",
+   "type": "prerequisite",
+   "label": "The command-line arguments arrive in main's parameter args, an array of Strings."
+  }
+ ]
+}

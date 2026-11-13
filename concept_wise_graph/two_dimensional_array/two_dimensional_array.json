@@ -1,0 +1,305 @@
+{
+ "concept": "two_dimensional_array",
+ "label": "two_dimensional_array",
+ "graph_version": "3.9.8 (3.9.7 + one primary per misconception (S9c) and the four remaining sibling edges (S9b), 2026-11-04; listed in revision_3_9_8)",
+ "nodes": [
+  {
+   "id": "indexing",
+   "kind": "concept",
+   "label": "indexing"
+  },
+  {
+   "id": "input_graph",
+   "kind": "concept",
+   "label": "input_graph"
+  },
+  {
+   "id": "matrix_operations",
+   "kind": "concept",
+   "label": "matrix_operations"
+  },
+  {
+   "id": "multidimensional_array",
+   "kind": "concept",
+   "label": "multidimensional_array"
+  },
+  {
+   "id": "power_method",
+   "kind": "concept",
+   "label": "power_method"
+  },
+  {
+   "id": "ragged_array",
+   "kind": "concept",
+   "label": "ragged_array"
+  },
+  {
+   "id": "row_major_order",
+   "kind": "concept",
+   "label": "Row-major and column-major order"
+  },
+  {
+   "id": "transition_matrix",
+   "kind": "concept",
+   "label": "transition_matrix"
+  },
+  {
+   "id": "two_dimensional_array",
+   "kind": "concept",
+   "label": "two_dimensional_array"
+  },
+  {
+   "id": "two_dimensional_array@L0",
+   "kind": "learning_level",
+   "label": "L0"
+  },
+  {
+   "id": "two_dimensional_array@L1",
+   "kind": "learning_level",
+   "label": "L1"
+  },
+  {
+   "id": "two_dimensional_array@L2",
+   "kind": "learning_level",
+   "label": "L2"
+  },
+  {
+   "id": "two_dimensional_array@L3",
+   "kind": "learning_level",
+   "label": "L3"
+  },
+  {
+   "id": "two_dimensional_array@L4",
+   "kind": "learning_level",
+   "label": "L4"
+  },
+  {
+   "id": "ArrayElementTypeRepeats",
+   "kind": "misconception",
+   "label": "ArrayElementTypeRepeats"
+  },
+  {
+   "id": "ArrayRankIsLength",
+   "kind": "misconception",
+   "label": "ArrayRankIsLength"
+  },
+  {
+   "id": "ColumnLikeRow",
+   "kind": "misconception",
+   "label": "ColumnLikeRow"
+  },
+  {
+   "id": "MultidimensionalArray",
+   "kind": "misconception",
+   "label": "MultidimensionalArray"
+  },
+  {
+   "id": "NoJaggedArrays",
+   "kind": "misconception",
+   "label": "NoJaggedArrays"
+  },
+  {
+   "id": "OnlyInnermostArrayElements",
+   "kind": "misconception",
+   "label": "OnlyInnermostArrayElements"
+  },
+  {
+   "id": "RaggedRowsSameLength",
+   "kind": "misconception",
+   "label": "RaggedRowsSameLength"
+  },
+  {
+   "id": "topic1.4.g",
+   "kind": "topic",
+   "label": "Two-dimensional arrays (ragged, matrix operations)"
+  }
+ ],
+ "edges": [
+  {
+   "from": "topic1.4.g",
+   "to": "matrix_operations",
+   "type": "contains",
+   "label": "The topic 'Two-dimensional arrays (ragged, matrix operations)' introduces matrix_operations."
+  },
+  {
+   "from": "topic1.4.g",
+   "to": "multidimensional_array",
+   "type": "contains",
+   "label": "The topic 'Two-dimensional arrays (ragged, matrix operations)' introduces multidimensional_array."
+  },
+  {
+   "from": "topic1.4.g",
+   "to": "ragged_array",
+   "type": "contains",
+   "label": "The topic 'Two-dimensional arrays (ragged, matrix operations)' introduces ragged_array."
+  },
+  {
+   "from": "topic1.4.g",
+   "to": "row_major_order",
+   "type": "contains",
+   "label": "Row-major and column-major order is taught under \"Two-dimensional arrays (ragged, matrix operations)\"."
+  },
+  {
+   "from": "topic1.4.g",
+   "to": "two_dimensional_array",
+   "type": "contains",
+   "label": "The topic 'Two-dimensional arrays (ragged, matrix operations)' introduces two_dimensional_array."
+  },
+  {
+   "from": "two_dimensional_array",
+   "to": "two_dimensional_array@L0",
+   "type": "has_level",
+   "label": "[0] everyday_reading (E): Folk meaning: a table or matrix is one grid in which rows and columns are symmetric, so a column should be as easy to pick out as a row. Java rule: a 2-D array is an array of row arrays; a[i] is row i, a[i][j] an element, and there is no expression for a column.\n[1] misconception (M) -> OnlyInnermostArrayElements: wrong rule: Only the innermost elements are accessible. Right rule: a[i] gives the whole row i, which can be used like any 1-D array.\n[2] misconception (M) -> ArrayElementTypeRepeats: wrong rule: A 2-D int array type is written int[] int[]. Right rule: It is written int[][]: one element type followed by one bracket pair per dimension.\n[3] misconception (M) -> ColumnLikeRow: wrong rule: Column j of a 2-D array can be picked out as a 1-D array, just like row a[i]. Right rule: a[i] is row i (a 1-D array), but there is no expression for a column; loop over i and use a[i][j].\n[4] misconception (M) -> MultidimensionalArray: wrong rule: A 2-D array is one thing, not an array of arrays. Right rule: A 2-D array is an array of m row arrays, so a[i] is a 1-D array of length n.\n[5] inconsistent_trace (T) -> OnlyInnermostArrayElements: Points to LT: a[i][j] is evaluated as (a[i])[j], first the row and then the element in it. Inconsistent application: the first index is taken as the row on some steps and as the column on others. (here mixing in: \"only the innermost elements are accessible\")\n[6] misconception (M) -> ArrayRankIsLength: wrong rule: The number of dimensions of an array is its length. Right rule: Rank (number of bracket pairs) and length (number of elements, a.length) are different; a double[][] of size 10-by-3 has a.length == 10.\n[7] misconception (M) -> RaggedRowsSameLength: wrong rule: All rows of a 2-D array have the same length, so one N works for every row. Right rule: Rows may differ in length; use a[i].length for row i.\n[8] misconception (M) -> NoJaggedArrays: wrong rule: Multi-dimensional arrays must be rectangular. Right rule: Each row a[i] is its own array, so rows can have different lengths a[i].length."
+  },
+  {
+   "from": "two_dimensional_array",
+   "to": "two_dimensional_array@L1",
+   "type": "has_level",
+   "label": "[0] names_the_element (N): Identity: a two-dimensional array, an array of arrays used to represent a table or matrix with M rows and N columns.\n[1] states_the_rule (S): Declarative: declare double[][] a; create with new double[M][N] (rows first, then columns); refer to row i, column j as a[i][j]. Entries start at 0 (numbers) or false (boolean)."
+  },
+  {
+   "from": "two_dimensional_array",
+   "to": "two_dimensional_array@L2",
+   "type": "has_level",
+   "label": "[0] line_by_line_trace (LT): Sequencing: new double[M][N] creates an array of M references and then M row arrays of N defaults. a[i][j] evaluates a[i] (checked against a.length = M) and then [j] (checked against a[i].length).\n[1] output_prediction (OP): Result: a[i][j] has the element type; a.length is the number of rows M; a[i].length is the length of row i; a[i] is a double[] row.\n[2] one_step_execution (OS): State transition: a[i][j] = v changes one element of row i; a[i] = new double[K] replaces the whole row i with a new array; other rows are untouched."
+  },
+  {
+   "from": "two_dimensional_array",
+   "to": "two_dimensional_array@L3",
+   "type": "has_level",
+   "label": "[0] relation_to_neighbour (R): The transition matrix is a 2-D double array p[i][j] with one row per page; each row holds a probability distribution.\n[1] relation_to_neighbour (R): A 2-D array uses two indices, and the first chooses the row array: a[i][j] is (a[i])[j].\n[2] relation_to_neighbour (R): Since each row is a separate array, rows may have different lengths; such arrays are ragged.\n[3] relation_to_neighbour (R): Matrix operations index a[i][j] in nested loops (two for addition, three for multiplication).\n[4] relation_to_neighbour (R): The same notation extends to any number of dimensions: a[i][j][k] for double[][][].\n[5] relation_to_neighbour (R): Row-major order visits a[i][j] with the outer loop over rows i; column-major puts the loop over j outside.\n[6] purpose_of_the_whole (P): Plan/role: store tables, matrices, grids and images indexed by row and column (grades by student and test, lattice intersections, pixels)."
+  },
+  {
+   "from": "two_dimensional_array",
+   "to": "two_dimensional_array@L4",
+   "type": "has_level",
+   "label": "[0] predict_a_change (C) -> OnlyInnermostArrayElements: Conservation: swapping the loop order for an element-wise operation keeps the result but changes the processing order. Swapping the indices (a[j][i]) transposes and goes out of bounds when M != N.\n[1] transfer_to_a_new_program (X): Applicability: use a 2-D array for data naturally indexed by two integers (rows by columns). Use a ragged array when rows differ, a 1-D array when one index suffices, and higher dimensions for 3-D models.\n[2] diagnose_an_error (D): rule broken: Indices must be within each dimension (i < a.length, j < a[i].length). Kind: run-time exception. Trigger class: row and column bounds swapped in a non-square M-by-N array, or j bounded by N on a shorter ragged row (ArrayIndexOutOfBoundsException)\n[3] diagnose_an_error (D): rule broken: The type is written with one bracket pair per dimension. Kind: compile-time. Trigger class: int[] int[] a; or assigning an int[] where an int[][] is required (incompatible types)"
+  },
+  {
+   "from": "matrix_operations",
+   "to": "ColumnLikeRow",
+   "type": "misconception",
+   "label": "wrong: Column j of a 2-D array can be picked out as a 1-D array, just like row a[i]. | right: a[i] is row i (a 1-D array), but there is no expression for a column; loop over i and use a[i][j]."
+  },
+  {
+   "from": "multidimensional_array",
+   "to": "ArrayRankIsLength",
+   "type": "misconception",
+   "label": "wrong: The number of dimensions of an array is its length. | right: Rank (number of dimensions) and length are different."
+  },
+  {
+   "from": "ragged_array",
+   "to": "NoJaggedArrays",
+   "type": "misconception",
+   "label": "wrong: multi-dimensional arrays must be rectangular | right: Each row a[i] is its own array, so rows can have different lengths a[i].length."
+  },
+  {
+   "from": "ragged_array",
+   "to": "RaggedRowsSameLength",
+   "type": "misconception",
+   "label": "wrong: All rows of a 2-D array have the same length, so one N works for every row. | right: Rows may differ in length; use a[i].length for row i."
+  },
+  {
+   "from": "transition_matrix",
+   "to": "MultidimensionalArray",
+   "type": "misconception",
+   "label": "wrong: The transition matrix is one block of n * n numbers, so p[i] on its own means nothing. | right: p[i] is the row array of page i, holding the probabilities of moving from page i to every page."
+  },
+  {
+   "from": "transition_matrix",
+   "to": "NoJaggedArrays",
+   "type": "misconception",
+   "label": "wrong: Every row of the transition matrix must be stored with the same length because 2-D arrays are always rectangular. | right: Each p[i] is its own row array; the surfer's matrix is square only because every page has a row of n probabilities."
+  },
+  {
+   "from": "two_dimensional_array",
+   "to": "ArrayElementTypeRepeats",
+   "type": "misconception",
+   "label": "wrong: A 2-D int array type is written int[] int[]. | right: It is written int[][]."
+  },
+  {
+   "from": "two_dimensional_array",
+   "to": "ArrayRankIsLength",
+   "type": "misconception",
+   "label": "wrong: The number of dimensions of an array is its length. | right: Rank (number of dimensions) and length are different."
+  },
+  {
+   "from": "two_dimensional_array",
+   "to": "ColumnLikeRow",
+   "type": "misconception",
+   "label": "wrong: Column j of a 2-D array can be picked out as a 1-D array, just like row a[i]. | right: a[i] is row i (a 1-D array), but there is no expression for a column; loop over i and use a[i][j]."
+  },
+  {
+   "from": "two_dimensional_array",
+   "to": "MultidimensionalArray",
+   "type": "misconception",
+   "label": "wrong: int[m][n] is one block of m * n values, so a[i] on its own means nothing. | right: A 2-D array is an array of m row arrays, so a[i] is a 1-D array of length n."
+  },
+  {
+   "from": "two_dimensional_array",
+   "to": "NoJaggedArrays",
+   "type": "misconception",
+   "label": "wrong: Every row of a 2-D array must have the same length. | right: Each row a[i] is its own array, so rows can have different lengths a[i].length."
+  },
+  {
+   "from": "two_dimensional_array",
+   "to": "OnlyInnermostArrayElements",
+   "type": "misconception",
+   "label": "wrong: Only single elements a[i][j] can be used, not whole rows a[i]. | right: a[i] gives the whole row i, which can be used like any 1-D array."
+  },
+  {
+   "from": "two_dimensional_array",
+   "to": "RaggedRowsSameLength",
+   "type": "misconception",
+   "label": "wrong: All rows of a 2-D array have the same length, so one N works for every row. | right: Rows may differ in length; use a[i].length for row i."
+  },
+  {
+   "from": "indexing",
+   "to": "two_dimensional_array",
+   "type": "prerequisite",
+   "label": "A 1-D array uses one index a[i]; a 2-D array uses two, a[i][j], where the first index chooses the row array."
+  },
+  {
+   "from": "two_dimensional_array",
+   "to": "input_graph",
+   "type": "prerequisite",
+   "label": "The links read from input are counted in a two-dimensional array, counts[i][j]."
+  },
+  {
+   "from": "two_dimensional_array",
+   "to": "matrix_operations",
+   "type": "prerequisite",
+   "label": "Matrix operations index a[i][j] in nested loops."
+  },
+  {
+   "from": "two_dimensional_array",
+   "to": "multidimensional_array",
+   "type": "prerequisite",
+   "label": "Higher dimensions generalise 2-D arrays."
+  },
+  {
+   "from": "two_dimensional_array",
+   "to": "power_method",
+   "type": "prerequisite",
+   "label": "The power method multiplies the rank vector by the transition matrix, stored as a two-dimensional array p[i][j]."
+  },
+  {
+   "from": "two_dimensional_array",
+   "to": "ragged_array",
+   "type": "prerequisite",
+   "label": "There is no requirement that all rows in a two-dimensional array have the same length; an array with rows of nonuniform length is known as a ragged array."
+  },
+  {
+   "from": "two_dimensional_array",
+   "to": "row_major_order",
+   "type": "prerequisite",
+   "label": "Row-major order visits a[i][j] row by row (outer loop over i); column-major order puts the column loop outside."
+  },
+  {
+   "from": "two_dimensional_array",
+   "to": "transition_matrix",
+   "type": "prerequisite",
+   "label": "The transition matrix is a 2-D double array p[i][j], with one row array per page."
+  }
+ ]
+}

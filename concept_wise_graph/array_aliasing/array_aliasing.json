@@ -1,0 +1,248 @@
+{
+ "concept": "array_aliasing",
+ "label": "array_aliasing",
+ "graph_version": "3.9.8 (3.9.7 + one primary per misconception (S9c) and the four remaining sibling edges (S9b), 2026-11-04; listed in revision_3_9_8)",
+ "nodes": [
+  {
+   "id": "array_aliasing",
+   "kind": "concept",
+   "label": "array_aliasing"
+  },
+  {
+   "id": "array_bounds",
+   "kind": "concept",
+   "label": "array_bounds"
+  },
+  {
+   "id": "array_copy",
+   "kind": "concept",
+   "label": "array_copy"
+  },
+  {
+   "id": "array_creation",
+   "kind": "concept",
+   "label": "array_creation"
+  },
+  {
+   "id": "array_reference",
+   "kind": "concept",
+   "label": "Array name holds a memory address"
+  },
+  {
+   "id": "assignment",
+   "kind": "concept",
+   "label": "assignment"
+  },
+  {
+   "id": "loop_guard",
+   "kind": "concept",
+   "label": "Loop test as a guard"
+  },
+  {
+   "id": "primitive_vs_reference",
+   "kind": "concept",
+   "label": "primitive_vs_reference"
+  },
+  {
+   "id": "printing_array_reference",
+   "kind": "concept",
+   "label": "printing_array_reference"
+  },
+  {
+   "id": "program_state",
+   "kind": "concept",
+   "label": "Program state"
+  },
+  {
+   "id": "array_aliasing@L0",
+   "kind": "learning_level",
+   "label": "L0"
+  },
+  {
+   "id": "array_aliasing@L1",
+   "kind": "learning_level",
+   "label": "L1"
+  },
+  {
+   "id": "array_aliasing@L2",
+   "kind": "learning_level",
+   "label": "L2"
+  },
+  {
+   "id": "array_aliasing@L3",
+   "kind": "learning_level",
+   "label": "L3"
+  },
+  {
+   "id": "array_aliasing@L4",
+   "kind": "learning_level",
+   "label": "L4"
+  },
+  {
+   "id": "ArrayEqualityComparesValues",
+   "kind": "misconception",
+   "label": "ArrayEqualityComparesValues"
+  },
+  {
+   "id": "ArrayListIsArray",
+   "kind": "misconception",
+   "label": "ArrayListIsArray"
+  },
+  {
+   "id": "AssignmentCopiesObject",
+   "kind": "misconception",
+   "label": "AssignmentCopiesObject"
+  },
+  {
+   "id": "topic1.4.b",
+   "kind": "topic",
+   "label": "Memory representation and bounds checking"
+  }
+ ],
+ "edges": [
+  {
+   "from": "topic1.4.b",
+   "to": "array_aliasing",
+   "type": "contains",
+   "label": "The topic 'Memory representation and bounds checking' introduces array_aliasing."
+  },
+  {
+   "from": "topic1.4.b",
+   "to": "array_bounds",
+   "type": "contains",
+   "label": "The topic 'Memory representation and bounds checking' introduces array_bounds."
+  },
+  {
+   "from": "topic1.4.b",
+   "to": "array_copy",
+   "type": "contains",
+   "label": "Topic 'Memory representation and bounds checking' of section 1.4 holds the concept array copy."
+  },
+  {
+   "from": "topic1.4.b",
+   "to": "array_reference",
+   "type": "contains",
+   "label": "Array name holds a memory address is taught under \"Memory representation and bounds checking\"."
+  },
+  {
+   "from": "topic1.4.b",
+   "to": "loop_guard",
+   "type": "contains",
+   "label": "Loop test as a guard is taught under \"Memory representation and bounds checking\"."
+  },
+  {
+   "from": "topic1.4.b",
+   "to": "primitive_vs_reference",
+   "type": "contains",
+   "label": "Topic 'Memory representation and bounds checking' of section 1.4 holds the concept primitive vs reference."
+  },
+  {
+   "from": "topic1.4.b",
+   "to": "printing_array_reference",
+   "type": "contains",
+   "label": "The topic 'Memory representation and bounds checking' introduces printing_array_reference."
+  },
+  {
+   "from": "topic1.4.b",
+   "to": "program_state",
+   "type": "contains",
+   "label": "Program state is taught under \"Memory representation and bounds checking\"."
+  },
+  {
+   "from": "array_aliasing",
+   "to": "array_aliasing@L0",
+   "type": "has_level",
+   "label": "[0] everyday_reading (E): Folk meaning: in maths and English, 'b = a' means b becomes an equal but independent copy, and 'a == b' means 'have the same values'. Java rule: for arrays, b = a copies only the reference, so both names denote one array, and == tests whether two names refer to the same array.\n[1] misconception (M) -> ArrayEqualityComparesValues: wrong rule: a == b is true when a and b hold the same values. Right rule: == compares whether a and b are the same array (same reference), not whether their elements are equal.\n[2] misconception (M) -> AssignmentCopiesObject: wrong rule: Assigning an array reference copies the array. Right rule: b = a; copies only the reference, so a and b refer to the same array and b[i] = v also changes a[i].\n[3] inconsistent_trace (T) -> ArrayEqualityComparesValues: Points to LT: b = a copies the reference, so every later write through b is a write to the shared array. Inconsistent application: after b = a the trace changes b[0] but leaves a[0] unchanged in its table, keeping two copies on some steps and one array on others. (here mixing in: \"a == b is true when a and b hold the same values\")"
+  },
+  {
+   "from": "array_aliasing",
+   "to": "array_aliasing@L1",
+   "type": "has_level",
+   "label": "[0] names_the_element (N): Identity: aliasing is the situation in which two or more array variables refer to the same array object.\n[1] states_the_rule (S): Declarative: an assignment makes the names a and b refer to the same array; an equality test a == b checks whether the two names refer to the same array."
+  },
+  {
+   "from": "array_aliasing",
+   "to": "array_aliasing@L2",
+   "type": "has_level",
+   "label": "[0] line_by_line_trace (LT): Sequencing: in b = a, a is evaluated to its reference value, which is then stored in b; no element is read or copied. In a == b both reference values are evaluated and compared.\n[1] output_prediction (OP): Result: for int[] a = {1, 2, 3}; int[] b = {1, 2, 3};, the test a == b is false; after b = a it is true. A read through either name gives the same element.\n[2] one_step_execution (OS): State transition: b = a changes only the variable b (it now holds a's reference). A later b[0] = 17 changes the one shared array, so a[0] then reads 17 too."
+  },
+  {
+   "from": "array_aliasing",
+   "to": "array_aliasing@L3",
+   "type": "has_level",
+   "label": "[0] relation_to_neighbour (R): Only new creates a distinct array; to copy, create a new array and copy each element (or use Arrays.copyOf).\n[1] relation_to_neighbour (R): Assignment, == and println(a) all act on the reference value: two aliases print the same address, while two equal-content arrays print different ones.\n[2] relation_to_neighbour (R): b = a makes a second name for the same array (an alias); copying makes a second array: after a copy, changing b[i] leaves a[i] unchanged.\n[3] purpose_of_the_whole (P): Plan/role: aliasing lets two names work on one array without copying (as when an array is passed to a method), but in Chapter 1 code it is mostly a source of subtle bugs."
+  },
+  {
+   "from": "array_aliasing",
+   "to": "array_aliasing@L4",
+   "type": "has_level",
+   "label": "[0] predict_a_change (C) -> ArrayEqualityComparesValues: Conservation: replacing b = a with an element-copy loop keeps b's initial contents but breaks the link, so later changes to a no longer show in b. Reassigning a = new int[n] after b = a leaves b on the old array.\n[1] transfer_to_a_new_program (X): Applicability: assign an array variable when you want a second name for the same data. Use a copy loop or Arrays.copyOf for an independent copy, and an element loop or Arrays.equals to compare contents.\n[2] diagnose_an_error (D): rule broken: Assignment copies the reference, not the elements. Kind: silent logic error. Trigger class: b = a is used as a 'copy', and then b is modified while a is expected to stay unchanged (or the reverse)\n[3] diagnose_an_error (D): rule broken: == on arrays compares references, not contents. Kind: silent logic error. Trigger class: two separately created arrays with equal elements are compared with == (always false)"
+  },
+  {
+   "from": "array_aliasing",
+   "to": "ArrayEqualityComparesValues",
+   "type": "misconception",
+   "label": "wrong: a == b is true when a and b hold the same values. | right: == compares whether the two arrays are the same array, not whether their values are equal."
+  },
+  {
+   "from": "array_aliasing",
+   "to": "ArrayListIsArray",
+   "type": "misconception",
+   "label": "wrong: An ArrayList is just an array, so it has a fixed length and is indexed with []. | right: An array has a fixed length and uses [] and .length; an ArrayList can grow and uses get, set and size()."
+  },
+  {
+   "from": "array_aliasing",
+   "to": "AssignmentCopiesObject",
+   "type": "misconception",
+   "label": "wrong: assigning a reference copies the object | right: b = a; copies only the reference, so a and b refer to the same array and b[i] = v also changes a[i]."
+  },
+  {
+   "from": "array_copy",
+   "to": "ArrayEqualityComparesValues",
+   "type": "misconception",
+   "label": "wrong: a == b is true when a and b hold the same values. | right: == compares whether the two arrays are the same array, not whether their values are equal."
+  },
+  {
+   "from": "array_copy",
+   "to": "AssignmentCopiesObject",
+   "type": "misconception",
+   "label": "wrong: assigning a reference copies the object | right: b = a; copies only the reference, so a and b refer to the same array and b[i] = v also changes a[i]."
+  },
+  {
+   "from": "array_creation",
+   "to": "ArrayListIsArray",
+   "type": "misconception",
+   "label": "wrong: an ArrayList is an array (borderline; beyond Chapter 1 CS1) | right: An array has a fixed length and uses [] and .length; an ArrayList can grow and uses get, set and size()."
+  },
+  {
+   "from": "assignment",
+   "to": "AssignmentCopiesObject",
+   "type": "misconception",
+   "label": "wrong: b = a; for an array makes b a separate copy, so changing b[i] leaves a[i] unchanged. | right: b = a; copies only the reference, so a and b refer to the same array and b[i] = v also changes a[i]."
+  },
+  {
+   "from": "array_aliasing",
+   "to": "printing_array_reference",
+   "type": "parallel",
+   "label": "Both follow from the array variable holding a reference (memory address): assignment and == act on that reference, and println(a) prints it."
+  },
+  {
+   "from": "array_copy",
+   "to": "array_aliasing",
+   "type": "parallel",
+   "label": "b = a makes a second name for the same array (an alias); copying makes a second array: after a copy, changing b[i] leaves a[i] unchanged."
+  },
+  {
+   "from": "array_creation",
+   "to": "array_aliasing",
+   "type": "prerequisite",
+   "label": "Because new creates one array and the variable stores only a reference to it, assigning that variable to another makes both names refer to the same array."
+  },
+  {
+   "from": "array_reference",
+   "to": "array_aliasing",
+   "type": "prerequisite",
+   "label": "Because an array variable holds a reference, b = a copies the reference, so a and b name the same array."
+  }
+ ]
+}

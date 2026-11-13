@@ -1,0 +1,170 @@
+{
+ "concept": "widening_conversion",
+ "label": "widening_conversion",
+ "graph_version": "3.9.8 (3.9.7 + one primary per misconception (S9c) and the four remaining sibling edges (S9b), 2026-11-04; listed in revision_3_9_8)",
+ "nodes": [
+  {
+   "id": "explicit_cast",
+   "kind": "concept",
+   "label": "explicit_cast"
+  },
+  {
+   "id": "parsing",
+   "kind": "concept",
+   "label": "parsing"
+  },
+  {
+   "id": "string_conversion",
+   "kind": "concept",
+   "label": "string_conversion"
+  },
+  {
+   "id": "type_conversion",
+   "kind": "concept",
+   "label": "type_conversion"
+  },
+  {
+   "id": "widening_conversion",
+   "kind": "concept",
+   "label": "widening_conversion"
+  },
+  {
+   "id": "widening_conversion@L0",
+   "kind": "learning_level",
+   "label": "L0"
+  },
+  {
+   "id": "widening_conversion@L1",
+   "kind": "learning_level",
+   "label": "L1"
+  },
+  {
+   "id": "widening_conversion@L2",
+   "kind": "learning_level",
+   "label": "L2"
+  },
+  {
+   "id": "widening_conversion@L3",
+   "kind": "learning_level",
+   "label": "L3"
+  },
+  {
+   "id": "widening_conversion@L4",
+   "kind": "learning_level",
+   "label": "L4"
+  },
+  {
+   "id": "NarrowingAssignmentAllowed",
+   "kind": "misconception",
+   "label": "NarrowingAssignmentAllowed"
+  },
+  {
+   "id": "NoCastIfSameSize",
+   "kind": "misconception",
+   "label": "NoCastIfSameSize"
+  },
+  {
+   "id": "topic1.2.h",
+   "kind": "topic",
+   "label": "Type conversion (automatic, cast, parsing)"
+  }
+ ],
+ "edges": [
+  {
+   "from": "topic1.2.h",
+   "to": "explicit_cast",
+   "type": "contains",
+   "label": "The topic 'Type conversion (automatic, cast, parsing)' introduces explicit_cast."
+  },
+  {
+   "from": "topic1.2.h",
+   "to": "parsing",
+   "type": "contains",
+   "label": "The topic 'Type conversion (automatic, cast, parsing)' introduces parsing."
+  },
+  {
+   "from": "topic1.2.h",
+   "to": "string_conversion",
+   "type": "contains",
+   "label": "The topic 'Type conversion (automatic, cast, parsing)' introduces string_conversion."
+  },
+  {
+   "from": "topic1.2.h",
+   "to": "type_conversion",
+   "type": "contains",
+   "label": "The topic 'Type conversion (automatic, cast, parsing)' introduces type_conversion."
+  },
+  {
+   "from": "topic1.2.h",
+   "to": "widening_conversion",
+   "type": "contains",
+   "label": "The topic 'Type conversion (automatic, cast, parsing)' introduces widening_conversion."
+  },
+  {
+   "from": "widening_conversion",
+   "to": "widening_conversion@L0",
+   "type": "has_level",
+   "label": "[0] everyday_reading (E): Folk meaning: like containers, a bigger box holds a smaller thing, and a smaller box holds a big thing if it happens to fit (3.0 fits in an int). Java rule: the compiler decides by types, not values: int to long or double is automatic, but double to int is never automatic, even for 3.0.\n[1] misconception (M) -> NoCastIfSameSize: wrong rule: If a variable is at least as big as a value, no cast is needed to assign the value. Right rule: The compiler decides by types, not values: assigning a double to an int needs a cast even when the value (e.g. 3.0) would fit, because a conversion that might involve loss of information leads to a compile-time error.\n[2] misconception (M) -> NarrowingAssignmentAllowed: wrong rule: A double value can be stored in an int variable like an int in a double. Right rule: int to double is automatic (widening); double to int needs a cast, otherwise the assignment is a compile-time error.\n[3] inconsistent_trace (T) -> NoCastIfSameSize: Points to LT (promotion happens at each operator, at the moment an int operand meets a double). Applied unevenly: the student promotes the whole expression up front on one line (so b*b - 4*c is done in double) but per operator on another. (here mixing in: \"If a variable is at least as big as a value, no cast is needed to assign the value\")"
+  },
+  {
+   "from": "widening_conversion",
+   "to": "widening_conversion@L1",
+   "type": "has_level",
+   "label": "[0] names_the_element (N): Widening conversion (promotion) is the automatic conversion of a value to a type with a larger range, e.g. int to long or double, char to int.\n[1] states_the_rule (S): A value of a numeric type can be used wherever a type with a larger range is expected and is converted automatically; the magnitude is preserved (int to double is exact), though long to double may lose low-order precision."
+  },
+  {
+   "from": "widening_conversion",
+   "to": "widening_conversion@L2",
+   "type": "has_level",
+   "label": "[0] line_by_line_trace (LT): At a binary operator, if one operand is double the other is widened to double just before that operation; in an assignment or method argument, the value is widened to the target type after it has been computed.\n[1] output_prediction (OP): The widened value has the larger type and the same magnitude: double d = 5; gives 5.0; 11 * 0.3 is double 3.3; 'a' + 1 is int 98; (x < 3.1) with int x = 3 is true.\n[2] one_step_execution (OS): Widening creates the converted value for the target; the source variable keeps its type and value (after double d = n; n is still an int)."
+  },
+  {
+   "from": "widening_conversion",
+   "to": "widening_conversion@L3",
+   "type": "has_level",
+   "label": "[0] relation_to_neighbour (R): Widening is the automatic branch of type conversion; every other direction needs an explicit cast or method.\n[1] relation_to_neighbour (R): Widening (promotion) happens automatically when a value goes to a type with a larger range (int to double) and loses nothing; a narrowing conversion (double to int) is never automatic and needs an explicit cast, which truncates toward zero.\n[2] purpose_of_the_whole (P): Lets int data feed double formulas and library methods without explicit casts, e.g. Math.sqrt(25) or an int count in a double expression."
+  },
+  {
+   "from": "widening_conversion",
+   "to": "widening_conversion@L4",
+   "type": "has_level",
+   "label": "[0] predict_a_change (C) -> NoCastIfSameSize: Widening an int to double and casting back restores the original int (reversible); widening a large long to double may not be reversible; widening an int quotient after the division cannot restore the lost fraction.\n[1] transfer_to_a_new_program (X): Rely on widening when mixing int and double in formulas or passing ints to double methods; do not expect it to fix an int division already performed; when a narrowing is intended, write the cast explicitly.\n[2] diagnose_an_error (D): rule broken: Only widening is automatic; narrowing needs a cast. Kind: compile-time. Trigger class: A double (or long) value assigned or passed where an int is expected.\n[3] diagnose_an_error (D): rule broken: Widening applies to the value after the operation that produced it. Kind: silent logic error. Trigger class: Expecting double d = a / b; with int a, b to keep the fraction (gives the truncated quotient as a double)."
+  },
+  {
+   "from": "type_conversion",
+   "to": "NarrowingAssignmentAllowed",
+   "type": "misconception",
+   "label": "wrong: A double value can be stored in an int variable like an int in a double. | right: int to double is automatic; double to int needs a cast."
+  },
+  {
+   "from": "type_conversion",
+   "to": "NoCastIfSameSize",
+   "type": "misconception",
+   "label": "wrong: If a variable is at least as big as a value, no cast is needed to assign the value. | right: Assigning a double to an int needs a cast even when the value would fit, because a conversion that might involve loss of information leads to a compile-time error."
+  },
+  {
+   "from": "widening_conversion",
+   "to": "NarrowingAssignmentAllowed",
+   "type": "misconception",
+   "label": "wrong: A double value can be stored in an int variable like an int in a double. | right: int to double is automatic; double to int needs a cast."
+  },
+  {
+   "from": "widening_conversion",
+   "to": "NoCastIfSameSize",
+   "type": "misconception",
+   "label": "wrong: If a variable is at least as big as a value, no cast is needed to assign the value. | right: Assigning a double to an int needs a cast even when the value would fit, because a conversion that might involve loss of information leads to a compile-time error."
+  },
+  {
+   "from": "widening_conversion",
+   "to": "explicit_cast",
+   "type": "parallel",
+   "label": "Widening (promotion) happens automatically when a value goes to a type with a larger range (int to double) and loses nothing; a narrowing conversion (double to int) is never automatic and needs an explicit cast, which truncates toward zero."
+  },
+  {
+   "from": "type_conversion",
+   "to": "widening_conversion",
+   "type": "prerequisite",
+   "label": "Widening is the automatic kind of type conversion."
+  }
+ ]
+}

@@ -1,0 +1,291 @@
+{
+ "concept": "named_constants",
+ "label": "named_constants",
+ "graph_version": "3.9.8 (3.9.7 + one primary per misconception (S9c) and the four remaining sibling edges (S9b), 2026-11-04; listed in revision_3_9_8)",
+ "nodes": [
+  {
+   "id": "assignment",
+   "kind": "concept",
+   "label": "assignment"
+  },
+  {
+   "id": "chained_assignment",
+   "kind": "concept",
+   "label": "chained_assignment"
+  },
+  {
+   "id": "compile_time_error",
+   "kind": "concept",
+   "label": "compile_time_error"
+  },
+  {
+   "id": "data_type",
+   "kind": "concept",
+   "label": "data_type"
+  },
+  {
+   "id": "declaration",
+   "kind": "concept",
+   "label": "declaration"
+  },
+  {
+   "id": "definite_assignment",
+   "kind": "concept",
+   "label": "definite_assignment"
+  },
+  {
+   "id": "expression",
+   "kind": "concept",
+   "label": "expression"
+  },
+  {
+   "id": "identifier",
+   "kind": "concept",
+   "label": "identifier"
+  },
+  {
+   "id": "literal",
+   "kind": "concept",
+   "label": "literal"
+  },
+  {
+   "id": "named_constants",
+   "kind": "concept",
+   "label": "named_constants"
+  },
+  {
+   "id": "naming_convention",
+   "kind": "concept",
+   "label": "naming_convention"
+  },
+  {
+   "id": "operator_precedence",
+   "kind": "concept",
+   "label": "operator_precedence"
+  },
+  {
+   "id": "primitive_type",
+   "kind": "concept",
+   "label": "primitive_type"
+  },
+  {
+   "id": "program_trace",
+   "kind": "concept",
+   "label": "Trace (table of variable values)"
+  },
+  {
+   "id": "variable",
+   "kind": "concept",
+   "label": "variable"
+  },
+  {
+   "id": "variable_swap",
+   "kind": "concept",
+   "label": "variable_swap"
+  },
+  {
+   "id": "AssignToFinal",
+   "kind": "error",
+   "label": "AssignToFinal"
+  },
+  {
+   "id": "named_constants@L0",
+   "kind": "learning_level",
+   "label": "L0"
+  },
+  {
+   "id": "named_constants@L1",
+   "kind": "learning_level",
+   "label": "L1"
+  },
+  {
+   "id": "named_constants@L2",
+   "kind": "learning_level",
+   "label": "L2"
+  },
+  {
+   "id": "named_constants@L3",
+   "kind": "learning_level",
+   "label": "L3"
+  },
+  {
+   "id": "named_constants@L4",
+   "kind": "learning_level",
+   "label": "L4"
+  },
+  {
+   "id": "MagicNumbers",
+   "kind": "misconception",
+   "label": "MagicNumbers"
+  },
+  {
+   "id": "topic1.2.a",
+   "kind": "topic",
+   "label": "Data types and terminology (literals, identifiers, variables, declarations, assignment, expressions)"
+  }
+ ],
+ "edges": [
+  {
+   "from": "topic1.2.a",
+   "to": "assignment",
+   "type": "contains",
+   "label": "The topic 'Data types and terminology (literals, identifiers, variables, declarations, assignment, expressions)' introduces assignment."
+  },
+  {
+   "from": "topic1.2.a",
+   "to": "chained_assignment",
+   "type": "contains",
+   "label": "The topic 'Data types and terminology (literals, identifiers, variables, declarations, assignment, expressions)' introduces chained_assignment."
+  },
+  {
+   "from": "topic1.2.a",
+   "to": "data_type",
+   "type": "contains",
+   "label": "The topic 'Data types and terminology (literals, identifiers, variables, declarations, assignment, expressions)' introduces data_type."
+  },
+  {
+   "from": "topic1.2.a",
+   "to": "declaration",
+   "type": "contains",
+   "label": "The topic 'Data types and terminology (literals, identifiers, variables, declarations, assignment, expressions)' introduces declaration."
+  },
+  {
+   "from": "topic1.2.a",
+   "to": "definite_assignment",
+   "type": "contains",
+   "label": "The topic 'Data types and terminology (literals, identifiers, variables, declarations, assignment, expressions)' introduces definite_assignment."
+  },
+  {
+   "from": "topic1.2.a",
+   "to": "expression",
+   "type": "contains",
+   "label": "The topic 'Data types and terminology (literals, identifiers, variables, declarations, assignment, expressions)' introduces expression."
+  },
+  {
+   "from": "topic1.2.a",
+   "to": "identifier",
+   "type": "contains",
+   "label": "The topic 'Data types and terminology (literals, identifiers, variables, declarations, assignment, expressions)' introduces identifier."
+  },
+  {
+   "from": "topic1.2.a",
+   "to": "literal",
+   "type": "contains",
+   "label": "The topic 'Data types and terminology (literals, identifiers, variables, declarations, assignment, expressions)' introduces literal."
+  },
+  {
+   "from": "topic1.2.a",
+   "to": "named_constants",
+   "type": "contains",
+   "label": "The topic 'Data types and terminology (literals, identifiers, variables, declarations, assignment, expressions)' introduces named_constants."
+  },
+  {
+   "from": "topic1.2.a",
+   "to": "naming_convention",
+   "type": "contains",
+   "label": "The topic 'Data types and terminology (literals, identifiers, variables, declarations, assignment, expressions)' introduces naming_convention."
+  },
+  {
+   "from": "topic1.2.a",
+   "to": "operator_precedence",
+   "type": "contains",
+   "label": "The topic 'Data types and terminology (literals, identifiers, variables, declarations, assignment, expressions)' introduces operator_precedence."
+  },
+  {
+   "from": "topic1.2.a",
+   "to": "primitive_type",
+   "type": "contains",
+   "label": "The topic 'Data types and terminology (literals, identifiers, variables, declarations, assignment, expressions)' introduces primitive_type."
+  },
+  {
+   "from": "topic1.2.a",
+   "to": "program_trace",
+   "type": "contains",
+   "label": "Trace (table of variable values) is taught under \"Data types and terminology (literals, identifiers, variables, declarations, assignment, expressions)\"."
+  },
+  {
+   "from": "topic1.2.a",
+   "to": "variable",
+   "type": "contains",
+   "label": "The topic 'Data types and terminology (literals, identifiers, variables, declarations, assignment, expressions)' introduces variable."
+  },
+  {
+   "from": "topic1.2.a",
+   "to": "variable_swap",
+   "type": "contains",
+   "label": "The topic 'Data types and terminology (literals, identifiers, variables, declarations, assignment, expressions)' introduces variable_swap."
+  },
+  {
+   "from": "assignment",
+   "to": "AssignToFinal",
+   "type": "error",
+   "label": "wrong: Assigns a new value to a variable declared final. | right: A final variable cannot be reassigned after it is initialized; the compiler reports an error."
+  },
+  {
+   "from": "compile_time_error",
+   "to": "AssignToFinal",
+   "type": "error",
+   "label": "wrong: Assigns a new value to a variable declared final. | right: A final variable cannot be reassigned after it is initialized; the compiler reports an error."
+  },
+  {
+   "from": "named_constants",
+   "to": "AssignToFinal",
+   "type": "error",
+   "label": "wrong: Assigns a new value to a variable declared final. | right: A final variable cannot be reassigned after it is initialized; the compiler reports an error."
+  },
+  {
+   "from": "named_constants",
+   "to": "named_constants@L0",
+   "type": "has_level",
+   "label": "[0] everyday_reading (E): In everyday speech a 'constant' is just a number that stays the same in the problem, and a capitalized name looks official. In Java a value is constant only if its variable is declared final, which the compiler enforces; naming it in UPPER_CASE alone protects nothing."
+  },
+  {
+   "from": "named_constants",
+   "to": "named_constants@L1",
+   "type": "has_level",
+   "label": "[0] names_the_element (N): Named constant: a variable declared final (by convention named in UPPER_CASE) that names a fixed value.\n[1] states_the_rule (S): final type NAME = value; cannot be reassigned after initialization (the compiler reports an error). Constant names are all uppercase with _ between words."
+  },
+  {
+   "from": "named_constants",
+   "to": "named_constants@L2",
+   "type": "has_level",
+   "label": "[0] line_by_line_trace (LT): A constant is initialized once, when its declaration executes. Every later use reads that same value.\n[1] output_prediction (OP): A use of CM_PER_INCH evaluates to 2.54 with type double, exactly as the literal would.\n[2] one_step_execution (OS): Only the initialization changes state; no later statement can change the constant."
+  },
+  {
+   "from": "named_constants",
+   "to": "named_constants@L3",
+   "type": "has_level",
+   "label": "[0] relation_to_neighbour (R): A constant is an ordinary declaration with the final modifier, with the same type and scope rules.\n[1] relation_to_neighbour (R): Constants follow their own convention, ALL_CAPS_WITH_UNDERSCORES, which sets them apart from lowerCamelCase variables.\n[2] purpose_of_the_whole (P): Plan: replace magic numbers with a meaningful name (Sajaniemi role: fixed value), so the code is readable, the value is changed in one place, and accidental reassignment is prevented."
+  },
+  {
+   "from": "named_constants",
+   "to": "named_constants@L4",
+   "type": "has_level",
+   "label": "[0] predict_a_change (C): Changing the constant's value in its declaration changes every use consistently. Removing final keeps behavior but loses the protection. Adding any later assignment to it breaks compilation.\n[1] diagnose_an_error (D): rule broken: A final variable is assigned exactly once; it cannot be reassigned after initialization. Kind: compile-time. Trigger class: Any assignment, ++ or op= to a final variable after its initialization: 'cannot assign a value to final variable'.\n[2] transfer_to_a_new_program (X): Use a named constant for a value fixed for the whole run that appears in formulas (conversion factors, physical constants, sizes, rates). Use a variable for values that are read or computed, and plain literals for self-evident values such as 0 or 1.\n[3] diagnose_an_error (D): rule broken: A final variable must be assigned before it is read. Kind: compile-time. Trigger class: Declaring final double RATE; and reading it on a path that never assigns it: 'variable RATE might not have been initialized'."
+  },
+  {
+   "from": "named_constants",
+   "to": "MagicNumbers",
+   "type": "misconception",
+   "label": "wrong: Writing 7 or 0.0825 directly in formulas is as clear as using a named constant. | right: Give fixed values a final, UPPER_CASE name and use the name."
+  },
+  {
+   "from": "naming_convention",
+   "to": "MagicNumbers",
+   "type": "misconception",
+   "label": "wrong: Writing 7 or 0.0825 directly in formulas is as clear as using a named constant. | right: Give fixed values a final, UPPER_CASE name and use the name."
+  },
+  {
+   "from": "declaration",
+   "to": "named_constants",
+   "type": "prerequisite",
+   "label": "A constant is a declaration marked final."
+  },
+  {
+   "from": "naming_convention",
+   "to": "named_constants",
+   "type": "prerequisite",
+   "label": "Constants have their own naming convention."
+  }
+ ]
+}
