@@ -8,137 +8,101 @@
   "backend": "claude-cli"
  },
  "clauses": [
-  "Tue, then Wed",
-  "Case 2 has no break",
-  "so it carries on into case 3 and stops at the break there",
-  "Mon and",
-  "are never reached"
+  "Zero times",
+  "10 < 5 is false",
+  "so the loop never starts"
  ],
  "start_concepts": [
-  "break_statement",
-  "control_flow",
-  "println"
+  "do_while_loop",
+  "loop_body",
+  "loop_control"
  ],
- "held_misconceptions": [],
+ "held_misconceptions": [
+  {
+   "concept": "do_while_loop",
+   "misconception": "DoWhileTestsFirst",
+   "kind": "misconception",
+   "quote": "Zero times; 10 < 5 is false; so the loop never starts",
+   "score": 0.97
+  }
+ ],
  "error_evidence": [],
  "shadowed": [],
- "broken_edges": [],
- "root_cause": null,
+ "broken_edges": [
+  {
+   "edge": "pre:do_while_loop->loop_control",
+   "quote": "Zero times; 10 < 5 is false; so the loop never starts",
+   "score": 0.495,
+   "consequence_of": "mis:do_while_loop->DoWhileTestsFirst"
+  },
+  {
+   "edge": "pre:do_while_loop->loop_body",
+   "quote": "Zero times; so the loop never starts",
+   "score": 0.4185,
+   "consequence_of": "mis:do_while_loop->DoWhileTestsFirst"
+  }
+ ],
+ "root_cause": {
+  "concept": "do_while_loop",
+  "misconception": "DoWhileTestsFirst"
+ },
  "levels": {
-  "break_statement": {
+  "do_while_loop": {
+   "level": "L0",
+   "way": "misconception",
+   "misconception": "DoWhileTestsFirst",
+   "quote": "Zero times; 10 < 5 is false; so the loop never starts",
+   "edge": "mis:do_while_loop->DoWhileTestsFirst",
+   "rule": "wrong rule: A do-while whose condition starts false runs its body zero times. Right rule: The first test is omitted: the body always runs at least once, and the condition is checked only after each pass.",
+   "source": "level_mis_links"
+  },
+  "loop_control": {
+   "level": "L2",
+   "way": "line_by_line_trace",
+   "quote": "10 < 5 is false; so the loop never starts",
+   "edge": "lvl:loop_control@L2#0",
+   "source": "level_way",
+   "also_shown": []
+  },
+  "loop_variable": {
    "level": "L3",
    "way": "relation_to_neighbour",
-   "quote": "Case 2 has no break; so it carries on into case 3 and stops at the break there",
-   "edge": "lvl:break_statement@L3#3",
+   "quote": "10 < 5 is false",
+   "edge": "lvl:loop_variable@L3#0",
    "source": "level_way",
    "also_shown": [
-    "L2 line_by_line_trace",
+    "L2 one_step_execution",
     "L1 states_the_rule"
-   ]
-  },
-  "control_flow": {
-   "level": "L4",
-   "way": "transfer_to_a_new_program",
-   "quote": "Tue, then Wed; Case 2 has no break; so it carries on into case 3 and stops at the break there; Mon and; are never reached",
-   "edge": "lvl:control_flow@L4#1",
-   "source": "level_way",
-   "also_shown": [
-    "L2 output_prediction",
-    "L2 line_by_line_trace"
-   ]
-  },
-  "println": {
-   "level": "L3",
-   "way": "relation_to_neighbour",
-   "quote": "Tue, then Wed",
-   "edge": "lvl:println@L3#0",
-   "source": "level_way",
-   "also_shown": [
-    "L3 relation_to_neighbour",
-    "L2 output_prediction"
-   ]
-  },
-  "switch_statement": {
-   "level": "L3",
-   "way": "relation_to_neighbour",
-   "quote": "Case 2 has no break; so it carries on into case 3 and stops at the break there",
-   "edge": "lvl:switch_statement@L3#1",
-   "source": "level_way",
-   "also_shown": [
-    "L2 line_by_line_trace",
-    "L2 output_prediction"
    ]
   }
  },
- "overall_level": "L3",
+ "overall_level": "L0",
  "paths": [
   {
    "depth": 1,
-   "source": "break_statement",
-   "edge": "lvl:break_statement@L3#3",
-   "target": "break_statement@L3",
-   "kind": "level",
-   "label": "shown",
+   "source": "do_while_loop",
+   "edge": "mis:do_while_loop->DoWhileTestsFirst",
+   "target": "DoWhileTestsFirst",
+   "kind": "misconception",
+   "label": "held",
    "clauses": [
+    1,
     2,
     3
    ],
-   "quote": "Case 2 has no break; so it carries on into case 3 and stops at the break there",
-   "confidence": 0.93,
-   "prune_score": 0.6,
-   "score": 0.558,
-   "logic": "In a switch, break ends the switch body; without it, execution falls through into the next case. A break inside a switch that is inside a loop exits only the switch, not the loop.",
-   "twin_logic": null,
-   "level": "L3",
-   "way": "relation_to_neighbour"
-  },
-  {
-   "depth": 1,
-   "source": "break_statement",
-   "edge": "mis:break_statement->BreakIgnored",
-   "target": "BreakIgnored",
-   "kind": "misconception",
-   "label": "correct",
-   "clauses": [
-    1,
-    3,
-    5
-   ],
-   "quote": "Tue, then Wed; so it carries on into case 3 and stops at the break there; are never reached",
-   "confidence": 0.9,
-   "prune_score": 0.4,
-   "score": 0.36,
-   "logic": "break has no effect; the loop body just carries on.",
-   "twin_logic": "break leaves the innermost loop at once; the rest of the body and later passes do not run.",
+   "quote": "Zero times; 10 < 5 is false; so the loop never starts",
+   "confidence": 0.97,
+   "prune_score": 1.0,
+   "score": 0.97,
+   "logic": "A do-while whose condition starts false runs its body zero times.",
+   "twin_logic": "The statements within the do block are always executed at least once.",
    "role": "primary"
   },
   {
    "depth": 1,
-   "source": "control_flow",
-   "edge": "lvl:control_flow@L2#1",
-   "target": "control_flow@L2",
-   "kind": "level",
-   "label": "shown",
-   "clauses": [
-    1,
-    3,
-    4,
-    5
-   ],
-   "quote": "Tue, then Wed; so it carries on into case 3 and stops at the break there; Mon and; are never reached",
-   "confidence": 0.9,
-   "prune_score": 0.4,
-   "score": 0.36,
-   "logic": "The output is the sequence of print statements that control actually reaches, in the order reached: e.g. TenHellos prints 1st, 2nd, 3rd Hello once each, then 4th to 10th Hello from the loop.",
-   "twin_logic": null,
-   "level": "L2",
-   "way": "output_prediction"
-  },
-  {
-   "depth": 2,
-   "source": "switch_statement",
-   "edge": "mis:switch_statement->SwitchNoFallThrough",
-   "target": "SwitchNoFallThrough",
+   "source": "loop_body",
+   "edge": "mis:loop_body->LoopBodyAlwaysOnce",
+   "target": "LoopBodyAlwaysOnce",
    "kind": "misconception",
    "label": "correct",
    "clauses": [
@@ -146,198 +110,197 @@
     2,
     3
    ],
-   "quote": "Tue, then Wed; Case 2 has no break; so it carries on into case 3 and stops at the break there",
-   "confidence": 0.95,
-   "prune_score": 1.0,
-   "score": 0.95,
-   "logic": "After the matching case runs, the switch ends even without break.",
-   "twin_logic": "Without break, statements in switch blocks fall through into the following cases.",
-   "role": "primary"
-  },
-  {
-   "depth": 2,
-   "source": "break_statement",
-   "edge": "pre:break_statement->switch_statement",
-   "target": "switch_statement",
-   "kind": "prerequisite",
-   "label": "confirmed",
-   "clauses": [
-    2,
-    3
-   ],
-   "quote": "Case 2 has no break; so it carries on into case 3 and stops at the break there",
-   "confidence": 0.9,
-   "prune_score": 1.0,
-   "score": 0.9,
-   "logic": "Each case of a switch normally ends with break, which exits the switch body.",
-   "twin_logic": null
-  },
-  {
-   "depth": 2,
-   "source": "control_flow",
-   "edge": "pre:control_flow->switch_statement",
-   "target": "switch_statement",
-   "kind": "prerequisite",
-   "label": "confirmed",
-   "clauses": [
-    1,
-    4,
-    5
-   ],
-   "quote": "Tue, then Wed; Mon and; are never reached",
-   "confidence": 0.85,
-   "prune_score": 0.7,
-   "score": 0.595,
-   "logic": "switch directs the flow of control to one of several case labels, depending on the value of one expression.",
-   "twin_logic": null
-  }
- ],
- "evidence": [
-  {
-   "depth": 1,
-   "source": "break_statement",
-   "edge": "mis:break_statement->BreakExitsIf",
-   "target": "BreakExitsIf",
-   "kind": "misconception",
-   "label": "correct",
-   "clauses": [
-    3,
-    5
-   ],
-   "quote": "so it carries on into case 3 and stops at the break there; are never reached",
+   "quote": "Zero times; 10 < 5 is false; so the loop never starts",
    "confidence": 0.6,
-   "prune_score": 0.4,
-   "score": 0.24,
-   "logic": "break leaves the if statement it is written in.",
-   "twin_logic": "break immediately exits a loop without letting it run to completion, and in a switch it exits the switch body.",
-   "role": "primary"
+   "prune_score": 0.7,
+   "score": 0.42,
+   "logic": "The loop body always runs at least once, even if the condition is false at the start.",
+   "twin_logic": "A while or for body runs zero times when the condition is false at the start.",
+   "role": "context"
   },
   {
    "depth": 1,
-   "source": "break_statement",
-   "edge": "mis:break_statement->BreakIgnored",
-   "target": "BreakIgnored",
-   "kind": "misconception",
-   "label": "correct",
+   "source": "do_while_loop",
+   "edge": "lvl:do_while_loop@L0#2",
+   "target": "do_while_loop@L0",
+   "kind": "level",
+   "label": "shown",
    "clauses": [
     1,
-    3,
-    5
+    2,
+    3
    ],
-   "quote": "Tue, then Wed; so it carries on into case 3 and stops at the break there; are never reached",
-   "confidence": 0.9,
-   "prune_score": 0.4,
-   "score": 0.36,
-   "logic": "break has no effect; the loop body just carries on.",
-   "twin_logic": "break leaves the innermost loop at once; the rest of the body and later passes do not run.",
-   "role": "primary"
+   "quote": "Zero times; 10 < 5 is false; so the loop never starts",
+   "confidence": 0.75,
+   "prune_score": 0.5,
+   "score": 0.375,
+   "logic": "Applies the LT rule unevenly: on a trace, the condition is tested before the first pass on some runs (as for while) and after it on others, or one more pass is run after the condition becomes false. The traced number of passes is off by one. (here mixing in: \"A do-while whose condition starts false runs its body zero times\")",
+   "twin_logic": null,
+   "level": "L0",
+   "way": "inconsistent_trace"
   },
   {
-   "depth": 1,
-   "source": "break_statement",
-   "edge": "lvl:break_statement@L3#3",
-   "target": "break_statement@L3",
+   "depth": 2,
+   "source": "do_while_loop",
+   "edge": "pre:do_while_loop->loop_control",
+   "target": "loop_control",
+   "kind": "prerequisite",
+   "label": "broken",
+   "clauses": [
+    1,
+    2,
+    3
+   ],
+   "quote": "Zero times; 10 < 5 is false; so the loop never starts",
+   "confidence": 0.9,
+   "prune_score": 0.55,
+   "score": 0.495,
+   "logic": "A do-while loop has the same control parts as a while loop (the variable set before, the condition, the update in the body); only the test is moved after the body.",
+   "twin_logic": null,
+   "consequence_of": "mis:do_while_loop->DoWhileTestsFirst"
+  },
+  {
+   "depth": 2,
+   "source": "do_while_loop",
+   "edge": "pre:do_while_loop->loop_body",
+   "target": "loop_body",
+   "kind": "prerequisite",
+   "label": "broken",
+   "clauses": [
+    1,
+    3
+   ],
+   "quote": "Zero times; so the loop never starts",
+   "confidence": 0.93,
+   "prune_score": 0.45,
+   "score": 0.4185,
+   "logic": "The block between do and while is the loop body; it runs first and is repeated while the condition holds.",
+   "twin_logic": null,
+   "consequence_of": "mis:do_while_loop->DoWhileTestsFirst"
+  },
+  {
+   "depth": 2,
+   "source": "loop_control",
+   "edge": "pre:loop_variable->loop_control",
+   "target": "loop_variable",
+   "kind": "prerequisite",
+   "label": "confirmed",
+   "clauses": [
+    2
+   ],
+   "quote": "10 < 5 is false",
+   "confidence": 0.6,
+   "prune_score": 0.85,
+   "score": 0.51,
+   "logic": "The init, condition and update all act on the loop variable: the init sets it, the condition tests it, the update changes it.",
+   "twin_logic": null
+  },
+  {
+   "depth": 3,
+   "source": "loop_variable",
+   "edge": "lvl:loop_variable@L1#1",
+   "target": "loop_variable@L1",
    "kind": "level",
    "label": "shown",
    "clauses": [
     2,
     3
    ],
-   "quote": "Case 2 has no break; so it carries on into case 3 and stops at the break there",
-   "confidence": 0.93,
-   "prune_score": 0.6,
-   "score": 0.558,
-   "logic": "In a switch, break ends the switch body; without it, execution falls through into the next case. A break inside a switch that is inside a loop exits only the switch, not the loop.",
-   "twin_logic": null,
-   "level": "L3",
-   "way": "relation_to_neighbour"
-  },
-  {
-   "depth": 1,
-   "source": "break_statement",
-   "edge": "lvl:break_statement@L2#0",
-   "target": "break_statement@L2",
-   "kind": "level",
-   "label": "shown",
-   "clauses": [
-    3,
-    5
-   ],
-   "quote": "so it carries on into case 3 and stops at the break there; are never reached",
-   "confidence": 0.7,
-   "prune_score": 0.2,
-   "score": 0.14,
-   "logic": "When `break` executes: the remaining statements of the body are skipped, the for-loop increment and the condition are not evaluated again, and control continues at the first statement after the loop. In `for (i = 2; i <= N/i; i++) if (N % i == 0) break;` it runs right after the test that found a divisor.",
-   "twin_logic": null,
-   "level": "L2",
-   "way": "line_by_line_trace"
-  },
-  {
-   "depth": 1,
-   "source": "break_statement",
-   "edge": "lvl:break_statement@L1#1",
-   "target": "break_statement@L1",
-   "kind": "level",
-   "label": "shown",
-   "clauses": [
-    3,
-    5
-   ],
-   "quote": "so it carries on into case 3 and stops at the break there; are never reached",
-   "confidence": 0.8,
-   "prune_score": 0.2,
-   "score": 0.16,
-   "logic": "`break;` may appear only inside a loop or switch. When executed, it completes that innermost loop or switch at once, and control passes to the statement after it. (Spec: JLS §14.15.)",
+   "quote": "10 < 5 is false; so the loop never starts",
+   "confidence": 0.6,
+   "prune_score": 0.5,
+   "score": 0.3,
+   "logic": "The loop variable is set once by the initialization, tested by the continuation condition before each pass and updated (usually incremented) at the end of each pass; declared in a for header, it is not available after the loop.",
    "twin_logic": null,
    "level": "L1",
    "way": "states_the_rule"
   },
   {
+   "depth": 3,
+   "source": "loop_variable",
+   "edge": "lvl:loop_variable@L2#2",
+   "target": "loop_variable@L2",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    2
+   ],
+   "quote": "10 < 5 is false",
+   "confidence": 0.7,
+   "prune_score": 0.3,
+   "score": 0.21,
+   "logic": "One update changes only the loop variable (i = i + 1 turns 4 into 5); one test reads it and yields true or false; an assignment to it in the body changes what the next test sees.",
+   "twin_logic": null,
+   "level": "L2",
+   "way": "one_step_execution"
+  },
+  {
+   "depth": 3,
+   "source": "loop_variable",
+   "edge": "lvl:loop_variable@L3#0",
+   "target": "loop_variable@L3",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    2
+   ],
+   "quote": "10 < 5 is false",
+   "confidence": 0.6,
+   "prune_score": 0.2,
+   "score": 0.12,
+   "logic": "The init, condition and update all act on the loop variable: the init sets it, the condition tests it, the update changes it.",
+   "twin_logic": null,
+   "level": "L3",
+   "way": "relation_to_neighbour"
+  }
+ ],
+ "evidence": [
+  {
    "depth": 1,
-   "source": "control_flow",
-   "edge": "mis:control_flow->StatementsRunInAnyOrder",
-   "target": "StatementsRunInAnyOrder",
+   "source": "do_while_loop",
+   "edge": "mis:do_while_loop->DoWhileTestsFirst",
+   "target": "DoWhileTestsFirst",
    "kind": "misconception",
-   "label": "correct",
+   "label": "held",
    "clauses": [
     1,
+    2,
     3
    ],
-   "quote": "Tue, then Wed; so it carries on into case 3 and stops at the break there",
+   "quote": "Zero times; 10 < 5 is false; so the loop never starts",
+   "confidence": 0.97,
+   "prune_score": 1.0,
+   "score": 0.97,
+   "logic": "A do-while whose condition starts false runs its body zero times.",
+   "twin_logic": "The statements within the do block are always executed at least once.",
+   "role": "primary"
+  },
+  {
+   "depth": 1,
+   "source": "do_while_loop",
+   "edge": "lvl:do_while_loop@L0#2",
+   "target": "do_while_loop@L0",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    1,
+    2,
+    3
+   ],
+   "quote": "Zero times; 10 < 5 is false; so the loop never starts",
    "confidence": 0.75,
-   "prune_score": 0.45,
-   "score": 0.3375,
-   "logic": "Statements in a program can run in any order.",
-   "twin_logic": "Without control statements, statements run once each, top to bottom.",
-   "role": "primary"
-  },
-  {
-   "depth": 1,
-   "source": "control_flow",
-   "edge": "lvl:control_flow@L2#1",
-   "target": "control_flow@L2",
-   "kind": "level",
-   "label": "shown",
-   "clauses": [
-    1,
-    3,
-    4,
-    5
-   ],
-   "quote": "Tue, then Wed; so it carries on into case 3 and stops at the break there; Mon and; are never reached",
-   "confidence": 0.9,
-   "prune_score": 0.4,
-   "score": 0.36,
-   "logic": "The output is the sequence of print statements that control actually reaches, in the order reached: e.g. TenHellos prints 1st, 2nd, 3rd Hello once each, then 4th to 10th Hello from the loop.",
+   "prune_score": 0.5,
+   "score": 0.375,
+   "logic": "Applies the LT rule unevenly: on a trace, the condition is tested before the first pass on some runs (as for while) and after it on others, or one more pass is run after the condition becomes false. The traced number of passes is off by one. (here mixing in: \"A do-while whose condition starts false runs its body zero times\")",
    "twin_logic": null,
-   "level": "L2",
-   "way": "output_prediction"
+   "level": "L0",
+   "way": "inconsistent_trace"
   },
   {
    "depth": 1,
-   "source": "control_flow",
-   "edge": "lvl:control_flow@L2#0",
-   "target": "control_flow@L2",
+   "source": "do_while_loop",
+   "edge": "lvl:do_while_loop@L0#0",
+   "target": "do_while_loop@L0",
    "kind": "level",
    "label": "shown",
    "clauses": [
@@ -345,192 +308,20 @@
     2,
     3
    ],
-   "quote": "Tue, then Wed; Case 2 has no break; so it carries on into case 3 and stops at the break there",
-   "confidence": 0.8,
-   "prune_score": 0.35,
-   "score": 0.28,
-   "logic": "Execute the statement at the current point; when it completes normally, control passes to the next statement in the block. An if evaluates its condition once and then runs at most one branch; a loop evaluates its condition before each pass; after an if or a loop finishes, control continues with the statement after it.",
-   "twin_logic": null,
-   "level": "L2",
-   "way": "line_by_line_trace"
-  },
-  {
-   "depth": 1,
-   "source": "control_flow",
-   "edge": "lvl:control_flow@L4#1",
-   "target": "control_flow@L4",
-   "kind": "level",
-   "label": "shown",
-   "clauses": [
-    1,
-    2,
-    3,
-    4,
-    5
-   ],
-   "quote": "Tue, then Wed; Case 2 has no break; so it carries on into case 3 and stops at the break there; Mon and; are never reached",
+   "quote": "Zero times; 10 < 5 is false; so the loop never starts",
    "confidence": 0.85,
-   "prune_score": 0.25,
-   "score": 0.2125,
-   "logic": "Reason in terms of control flow whenever you must predict output or find why a statement did or did not run: trace which statement is reached next. Straight-line sequence suffices only when every input needs the same steps exactly once; otherwise add a conditional or a loop.",
-   "twin_logic": null,
-   "level": "L4",
-   "way": "transfer_to_a_new_program"
-  },
-  {
-   "depth": 1,
-   "source": "println",
-   "edge": "lvl:println@L2#1",
-   "target": "println@L2",
-   "kind": "level",
-   "label": "shown",
-   "clauses": [
-    1
-   ],
-   "quote": "Tue, then Wed",
-   "confidence": 0.6,
-   "prune_score": 0.4,
-   "score": 0.24,
-   "logic": "Output is the value's characters followed by a line break: println(\"Hello, \"); println(\"World!\"); prints two lines.",
-   "twin_logic": null,
-   "level": "L2",
-   "way": "output_prediction"
-  },
-  {
-   "depth": 1,
-   "source": "println",
-   "edge": "lvl:println@L3#0",
-   "target": "println@L3",
-   "kind": "level",
-   "label": "shown",
-   "clauses": [
-    1
-   ],
-   "quote": "Tue, then Wed",
-   "confidence": 0.7,
-   "prune_score": 0.35,
-   "score": 0.245,
-   "logic": "System.out.println(s); is a statement, so its line of output appears at its own place in the sequence.",
-   "twin_logic": null,
-   "level": "L3",
-   "way": "relation_to_neighbour"
-  },
-  {
-   "depth": 1,
-   "source": "println",
-   "edge": "lvl:println@L3#1",
-   "target": "println@L3",
-   "kind": "level",
-   "label": "shown",
-   "clauses": [
-    1
-   ],
-   "quote": "Tue, then Wed",
-   "confidence": 0.55,
-   "prune_score": 0.25,
-   "score": 0.1375,
-   "logic": "println(\"s\") outputs exactly the characters between the quotes and then ends the line.",
-   "twin_logic": null,
-   "level": "L3",
-   "way": "relation_to_neighbour"
-  },
-  {
-   "depth": 2,
-   "source": "break_statement",
-   "edge": "pre:break_statement->switch_statement",
-   "target": "switch_statement",
-   "kind": "prerequisite",
-   "label": "confirmed",
-   "clauses": [
-    2,
-    3
-   ],
-   "quote": "Case 2 has no break; so it carries on into case 3 and stops at the break there",
-   "confidence": 0.9,
-   "prune_score": 1.0,
-   "score": 0.9,
-   "logic": "Each case of a switch normally ends with break, which exits the switch body.",
-   "twin_logic": null
-  },
-  {
-   "depth": 2,
-   "source": "control_flow",
-   "edge": "pre:control_flow->switch_statement",
-   "target": "switch_statement",
-   "kind": "prerequisite",
-   "label": "confirmed",
-   "clauses": [
-    1,
-    4,
-    5
-   ],
-   "quote": "Tue, then Wed; Mon and; are never reached",
-   "confidence": 0.85,
-   "prune_score": 0.7,
-   "score": 0.595,
-   "logic": "switch directs the flow of control to one of several case labels, depending on the value of one expression.",
-   "twin_logic": null
-  },
-  {
-   "depth": 2,
-   "source": "control_flow",
-   "edge": "pre:statement->control_flow",
-   "target": "statement",
-   "kind": "prerequisite",
-   "label": "confirmed",
-   "clauses": [
-    1,
-    3,
-    4,
-    5
-   ],
-   "quote": "Tue, then Wed; so it carries on into case 3 and stops at the break there; Mon and; are never reached",
-   "confidence": 0.8,
    "prune_score": 0.3,
-   "score": 0.24,
-   "logic": "Control flow is the order in which statements run.",
-   "twin_logic": null
+   "score": 0.255,
+   "logic": "Folk meaning: in English 'do X while Y' means do X during the time that Y holds, with Y watched continuously, as in the 'while demon'. In Java the condition is tested only at the bottom, after each complete pass of the body, and the first pass always runs.",
+   "twin_logic": null,
+   "level": "L0",
+   "way": "everyday_reading"
   },
   {
-   "depth": 2,
-   "source": "println",
-   "edge": "pre:statement->println",
-   "target": "statement",
-   "kind": "prerequisite",
-   "label": "confirmed",
-   "clauses": [
-    1,
-    3
-   ],
-   "quote": "Tue, then Wed; so it carries on into case 3 and stops at the break there",
-   "confidence": 0.7,
-   "prune_score": 0.6,
-   "score": 0.42,
-   "logic": "System.out.println(s); is itself a statement, so its line of output appears at its own place in the sequence.",
-   "twin_logic": null
-  },
-  {
-   "depth": 2,
-   "source": "println",
-   "edge": "pre:string_literal->println",
-   "target": "string_literal",
-   "kind": "prerequisite",
-   "label": "confirmed",
-   "clauses": [
-    1
-   ],
-   "quote": "Tue, then Wed",
-   "confidence": 0.6,
-   "prune_score": 0.4,
-   "score": 0.24,
-   "logic": "println(\"s\") outputs exactly the characters between the quotes and then ends the line.",
-   "twin_logic": null
-  },
-  {
-   "depth": 2,
-   "source": "switch_statement",
-   "edge": "mis:switch_statement->SwitchNoFallThrough",
-   "target": "SwitchNoFallThrough",
+   "depth": 1,
+   "source": "loop_body",
+   "edge": "mis:loop_body->LoopBodyAlwaysOnce",
+   "target": "LoopBodyAlwaysOnce",
    "kind": "misconception",
    "label": "correct",
    "clauses": [
@@ -538,88 +329,157 @@
     2,
     3
    ],
-   "quote": "Tue, then Wed; Case 2 has no break; so it carries on into case 3 and stops at the break there",
-   "confidence": 0.95,
-   "prune_score": 1.0,
-   "score": 0.95,
-   "logic": "After the matching case runs, the switch ends even without break.",
-   "twin_logic": "Without break, statements in switch blocks fall through into the following cases.",
-   "role": "primary"
+   "quote": "Zero times; 10 < 5 is false; so the loop never starts",
+   "confidence": 0.6,
+   "prune_score": 0.7,
+   "score": 0.42,
+   "logic": "The loop body always runs at least once, even if the condition is false at the start.",
+   "twin_logic": "A while or for body runs zero times when the condition is false at the start.",
+   "role": "context"
   },
   {
-   "depth": 2,
-   "source": "switch_statement",
-   "edge": "lvl:switch_statement@L2#0",
-   "target": "switch_statement@L2",
+   "depth": 1,
+   "source": "loop_control",
+   "edge": "lvl:loop_control@L2#0",
+   "target": "loop_control@L2",
    "kind": "level",
    "label": "shown",
    "clauses": [
-    1,
     2,
-    3,
-    4,
-    5
+    3
    ],
-   "quote": "Tue, then Wed; Case 2 has no break; so it carries on into case 3 and stops at the break there; Mon and; are never reached",
-   "confidence": 0.85,
-   "prune_score": 0.45,
-   "score": 0.3825,
-   "logic": "Order: evaluate the selector once; compare it with the case constants; jump to the matching label (else default, else skip the switch). Then execute the statements from there in order, through later labels, until a break or the closing brace.",
+   "quote": "10 < 5 is false; so the loop never starts",
+   "confidence": 0.75,
+   "prune_score": 0.2,
+   "score": 0.15,
+   "logic": "init (once) -> test -> body -> update -> test -> body -> update ... -> test false -> exit.",
    "twin_logic": null,
    "level": "L2",
    "way": "line_by_line_trace"
   },
   {
    "depth": 2,
-   "source": "switch_statement",
-   "edge": "lvl:switch_statement@L3#1",
-   "target": "switch_statement@L3",
+   "source": "do_while_loop",
+   "edge": "pre:do_while_loop->loop_control",
+   "target": "loop_control",
+   "kind": "prerequisite",
+   "label": "broken",
+   "clauses": [
+    1,
+    2,
+    3
+   ],
+   "quote": "Zero times; 10 < 5 is false; so the loop never starts",
+   "confidence": 0.9,
+   "prune_score": 0.55,
+   "score": 0.495,
+   "logic": "A do-while loop has the same control parts as a while loop (the variable set before, the condition, the update in the body); only the test is moved after the body.",
+   "twin_logic": null,
+   "consequence_of": "mis:do_while_loop->DoWhileTestsFirst"
+  },
+  {
+   "depth": 2,
+   "source": "do_while_loop",
+   "edge": "pre:do_while_loop->loop_body",
+   "target": "loop_body",
+   "kind": "prerequisite",
+   "label": "broken",
+   "clauses": [
+    1,
+    3
+   ],
+   "quote": "Zero times; so the loop never starts",
+   "confidence": 0.93,
+   "prune_score": 0.45,
+   "score": 0.4185,
+   "logic": "The block between do and while is the loop body; it runs first and is repeated while the condition holds.",
+   "twin_logic": null,
+   "consequence_of": "mis:do_while_loop->DoWhileTestsFirst"
+  },
+  {
+   "depth": 2,
+   "source": "loop_control",
+   "edge": "pre:loop_variable->loop_control",
+   "target": "loop_variable",
+   "kind": "prerequisite",
+   "label": "confirmed",
+   "clauses": [
+    2
+   ],
+   "quote": "10 < 5 is false",
+   "confidence": 0.6,
+   "prune_score": 0.85,
+   "score": 0.51,
+   "logic": "The init, condition and update all act on the loop variable: the init sets it, the condition tests it, the update changes it.",
+   "twin_logic": null
+  },
+  {
+   "depth": 3,
+   "source": "loop_variable",
+   "edge": "lvl:loop_variable@L1#1",
+   "target": "loop_variable@L1",
    "kind": "level",
    "label": "shown",
    "clauses": [
     2,
     3
    ],
-   "quote": "Case 2 has no break; so it carries on into case 3 and stops at the break there",
-   "confidence": 0.92,
-   "prune_score": 0.3,
-   "score": 0.276,
-   "logic": "Each case is normally ended by break, which exits the switch body. Leaving it out makes that case fall into the next. Inside a loop, that break exits the switch, not the loop.",
+   "quote": "10 < 5 is false; so the loop never starts",
+   "confidence": 0.6,
+   "prune_score": 0.5,
+   "score": 0.3,
+   "logic": "The loop variable is set once by the initialization, tested by the continuation condition before each pass and updated (usually incremented) at the end of each pass; declared in a for header, it is not available after the loop.",
    "twin_logic": null,
-   "level": "L3",
-   "way": "relation_to_neighbour"
+   "level": "L1",
+   "way": "states_the_rule"
   },
   {
-   "depth": 2,
-   "source": "switch_statement",
-   "edge": "lvl:switch_statement@L2#1",
-   "target": "switch_statement@L2",
+   "depth": 3,
+   "source": "loop_variable",
+   "edge": "lvl:loop_variable@L2#2",
+   "target": "loop_variable@L2",
    "kind": "level",
    "label": "shown",
    "clauses": [
-    1,
-    3
+    2
    ],
-   "quote": "Tue, then Wed; so it carries on into case 3 and stops at the break there",
-   "confidence": 0.9,
-   "prune_score": 0.25,
-   "score": 0.225,
-   "logic": "A switch statement has no value. Its result is the effect of the case(s) run: with `day = 3`, the S&W day switch prints Wed. Without breaks, day = 5 would print Fri, then Sat.",
+   "quote": "10 < 5 is false",
+   "confidence": 0.7,
+   "prune_score": 0.3,
+   "score": 0.21,
+   "logic": "One update changes only the loop variable (i = i + 1 turns 4 into 5); one test reads it and yields true or false; an assignment to it in the body changes what the next test sees.",
    "twin_logic": null,
    "level": "L2",
-   "way": "output_prediction"
+   "way": "one_step_execution"
+  },
+  {
+   "depth": 3,
+   "source": "loop_variable",
+   "edge": "lvl:loop_variable@L3#0",
+   "target": "loop_variable@L3",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    2
+   ],
+   "quote": "10 < 5 is false",
+   "confidence": 0.6,
+   "prune_score": 0.2,
+   "score": 0.12,
+   "logic": "The init, condition and update all act on the loop variable: the init sets it, the condition tests it, the update changes it.",
+   "twin_logic": null,
+   "level": "L3",
+   "way": "relation_to_neighbour"
   }
  ],
  "clause_coverage": {
-  "Tue, then Wed": "mis:break_statement->BreakIgnored",
-  "Case 2 has no break": "lvl:break_statement@L3#3",
-  "so it carries on into case 3 and stops at the break there": "mis:break_statement->BreakExitsIf",
-  "Mon and": "lvl:control_flow@L2#1",
-  "are never reached": "mis:break_statement->BreakExitsIf"
+  "Zero times": "mis:do_while_loop->DoWhileTestsFirst",
+  "10 < 5 is false": "mis:do_while_loop->DoWhileTestsFirst",
+  "so the loop never starts": "mis:do_while_loop->DoWhileTestsFirst"
  },
  "unexplained_clauses": [],
  "stop_reason": "sufficient",
- "depth_reached": 2,
+ "depth_reached": 3,
  "llm_calls": 0,
  "llm_cache_hits": 32,
  "llm_calls_by_step": {

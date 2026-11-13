@@ -8,97 +8,91 @@
   "backend": "claude-cli"
  },
  "clauses": [
-  "21",
-  "t[0].length is 3, and every row of a 2D array has the same length",
-  "so it visits three columns in every row and adds all six numbers"
+  "5",
+  "Page 1 has probability 0.5",
+  "so in 10 steps the surfer goes there exactly 5 times",
+  "Actual: it varies from run to run",
+  "five runs gave 6, 4, 8, 5 and 6"
  ],
  "start_concepts": [
-  "two_dimensional_array",
-  "ragged_array",
-  "indexing"
+  "arithmetic_operators",
+  "compound_assignment",
+  "println"
  ],
  "held_misconceptions": [
   {
-   "concept": "ragged_array",
-   "misconception": "RaggedRowsSameLength",
+   "concept": "math_random",
+   "misconception": "ProbabilityIsPrediction",
    "kind": "misconception",
-   "quote": "t[0].length is 3, and every row of a 2D array has the same length; so it visits three columns in every row and adds all six numbers",
-   "score": 0.57
-  },
-  {
-   "concept": "ragged_array",
-   "misconception": "NoJaggedArrays",
-   "kind": "misconception",
-   "quote": "t[0].length is 3, and every row of a 2D array has the same length",
-   "score": 0.22,
-   "shares_evidence_with": "mis:ragged_array->RaggedRowsSameLength"
+   "quote": "5; Page 1 has probability 0.5; so in 10 steps the surfer goes there exactly 5 times",
+   "score": 0.8075
   }
  ],
  "error_evidence": [],
- "shadowed": [
-  {
-   "concept": "two_dimensional_array",
-   "misconception": "RaggedRowsSameLength",
-   "shadow_of": "mis:ragged_array->RaggedRowsSameLength",
-   "quote": "t[0].length is 3, and every row of a 2D array has the same length; so it visits three columns in every row and adds all six numbers",
-   "score": 0.465
-  },
-  {
-   "concept": "two_dimensional_array",
-   "misconception": "NoJaggedArrays",
-   "shadow_of": "mis:ragged_array->NoJaggedArrays",
-   "quote": "t[0].length is 3, and every row of a 2D array has the same length",
-   "score": 0.28
-  }
- ],
+ "shadowed": [],
  "broken_edges": [
   {
-   "edge": "pre:two_dimensional_array->ragged_array",
-   "quote": "t[0].length is 3, and every row of a 2D array has the same length; so it visits three columns in every row and adds all six numbers",
-   "score": 0.95,
-   "consequence_of": "mis:ragged_array->RaggedRowsSameLength"
-  },
-  {
-   "edge": "pre:indexing->two_dimensional_array",
-   "quote": "t[0].length is 3, and every row of a 2D array has the same length; so it visits three columns in every row and adds all six numbers",
-   "score": 0.49,
-   "consequence_of": "mis:ragged_array->RaggedRowsSameLength"
-  },
-  {
-   "edge": "pre:indexing->array_bounds",
-   "quote": "21; so it visits three columns in every row and adds all six numbers",
-   "score": 0.425,
-   "consequence_of": "mis:ragged_array->RaggedRowsSameLength"
-  },
-  {
-   "edge": "pre:array_initializer->indexing",
-   "quote": "t[0].length is 3, and every row of a 2D array has the same length; so it visits three columns in every row and adds all six numbers",
-   "score": 0.18,
-   "consequence_of": "mis:ragged_array->RaggedRowsSameLength"
+   "edge": "pre:math_library->math_random",
+   "quote": "5; so in 10 steps the surfer goes there exactly 5 times",
+   "score": 0.8,
+   "consequence_of": "mis:math_random->ProbabilityIsPrediction"
   }
  ],
  "root_cause": {
-  "concept": "ragged_array",
-  "misconception": "RaggedRowsSameLength"
+  "concept": "math_random",
+  "misconception": "ProbabilityIsPrediction"
  },
  "levels": {
-  "ragged_array": {
-   "level": "L0",
-   "way": "misconception",
-   "misconception": "RaggedRowsSameLength",
-   "quote": "t[0].length is 3, and every row of a 2D array has the same length; so it visits three columns in every row and adds all six numbers",
-   "edge": "mis:ragged_array->RaggedRowsSameLength",
-   "rule": "wrong rule: All rows of a 2-D array have the same length, so one N works for every row. Right rule: Rows may differ in length; use a[i].length for row i.",
-   "source": "level_mis_links",
-   "also_held": [
-    "NoJaggedArrays"
+  "for_loop": {
+   "level": "L3",
+   "way": "relation_to_neighbour",
+   "quote": "so in 10 steps the surfer goes there exactly 5 times",
+   "edge": "lvl:for_loop@L3#3",
+   "source": "level_way",
+   "also_shown": [
+    "L3 purpose_of_the_whole"
    ]
   },
-  "two_dimensional_array": {
+  "loop_control": {
+   "level": "L3",
+   "way": "purpose_of_the_whole",
+   "quote": "so in 10 steps the surfer goes there exactly 5 times",
+   "edge": "lvl:loop_control@L3#6",
+   "source": "level_way",
+   "also_shown": [
+    "L1 names_the_element"
+   ]
+  },
+  "math_library": {
+   "level": "L2",
+   "way": "one_step_execution",
+   "quote": "Actual: it varies from run to run; five runs gave 6, 4, 8, 5 and 6",
+   "edge": "lvl:math_library@L2#2",
+   "source": "level_way",
+   "also_shown": []
+  },
+  "math_random": {
+   "level": "L0",
+   "way": "misconception",
+   "misconception": "ProbabilityIsPrediction",
+   "quote": "5; Page 1 has probability 0.5; so in 10 steps the surfer goes there exactly 5 times",
+   "edge": "mis:math_random->ProbabilityIsPrediction",
+   "rule": "wrong rule: A probability (e.g. 70%) predicts what the next single trial will do. Right rule: A probability describes the long-run frequency over many trials, not one outcome; Math.random() < 0.7 is true on about 70% of many calls, and any single call can go either way.",
+   "source": "level_mis_links"
+  },
+  "println": {
+   "level": "L2",
+   "way": "output_prediction",
+   "quote": "5; five runs gave 6, 4, 8, 5 and 6",
+   "edge": "lvl:println@L2#1",
+   "source": "level_way",
+   "also_shown": []
+  },
+  "statement": {
    "level": "L0",
    "way": "everyday_reading",
-   "quote": "t[0].length is 3, and every row of a 2D array has the same length; so it visits three columns in every row and adds all six numbers",
-   "edge": "lvl:two_dimensional_array@L0#0",
+   "quote": "5; Page 1 has probability 0.5; so in 10 steps the surfer goes there exactly 5 times",
+   "edge": "lvl:statement@L0#0",
    "source": "level_way",
    "also_shown": []
   }
@@ -107,471 +101,593 @@
  "paths": [
   {
    "depth": 1,
-   "source": "ragged_array",
-   "edge": "mis:ragged_array->RaggedRowsSameLength",
-   "target": "RaggedRowsSameLength",
-   "kind": "misconception",
-   "label": "held",
+   "source": "println",
+   "edge": "lvl:println@L2#1",
+   "target": "println@L2",
+   "kind": "level",
+   "label": "shown",
    "clauses": [
-    2,
-    3
+    1,
+    5
    ],
-   "quote": "t[0].length is 3, and every row of a 2D array has the same length; so it visits three columns in every row and adds all six numbers",
-   "confidence": 0.95,
-   "prune_score": 0.6,
-   "score": 0.57,
-   "logic": "All rows of a 2-D array have the same length, so one N works for every row.",
-   "twin_logic": "Rows may differ in length; use a[i].length for row i.",
-   "role": "primary"
+   "quote": "5; five runs gave 6, 4, 8, 5 and 6",
+   "confidence": 0.55,
+   "prune_score": 0.5,
+   "score": 0.275,
+   "logic": "Output is the value's characters followed by a line break: println(\"Hello, \"); println(\"World!\"); prints two lines.",
+   "twin_logic": null,
+   "level": "L2",
+   "way": "output_prediction"
   },
   {
-   "depth": 1,
-   "source": "two_dimensional_array",
-   "edge": "mis:two_dimensional_array->RaggedRowsSameLength",
-   "target": "RaggedRowsSameLength",
+   "depth": 2,
+   "source": "math_random",
+   "edge": "mis:math_random->ProbabilityIsPrediction",
+   "target": "ProbabilityIsPrediction",
    "kind": "misconception",
    "label": "held",
    "clauses": [
+    1,
     2,
     3
    ],
-   "quote": "t[0].length is 3, and every row of a 2D array has the same length; so it visits three columns in every row and adds all six numbers",
-   "confidence": 0.93,
-   "prune_score": 0.5,
-   "score": 0.465,
-   "logic": "All rows of a 2-D array have the same length, so one N works for every row.",
-   "twin_logic": "Rows may differ in length; use a[i].length for row i.",
+   "quote": "5; Page 1 has probability 0.5; so in 10 steps the surfer goes there exactly 5 times",
+   "confidence": 0.85,
+   "prune_score": 0.95,
+   "score": 0.8075,
+   "logic": "A probability (e.g. 70%) predicts what the next single trial will do.",
+   "twin_logic": "A probability describes the long-run frequency over many trials, not one outcome.",
    "role": "context"
   },
   {
-   "depth": 1,
-   "source": "two_dimensional_array",
-   "edge": "mis:two_dimensional_array->NoJaggedArrays",
-   "target": "NoJaggedArrays",
-   "kind": "misconception",
-   "label": "held",
-   "clauses": [
-    2
-   ],
-   "quote": "t[0].length is 3, and every row of a 2D array has the same length",
-   "confidence": 0.7,
-   "prune_score": 0.4,
-   "score": 0.28,
-   "logic": "Every row of a 2-D array must have the same length.",
-   "twin_logic": "Each row a[i] is its own array, so rows can have different lengths a[i].length.",
-   "role": "context",
-   "shares_evidence_with": "mis:two_dimensional_array->RaggedRowsSameLength"
-  },
-  {
-   "depth": 1,
-   "source": "ragged_array",
-   "edge": "mis:ragged_array->NoJaggedArrays",
-   "target": "NoJaggedArrays",
-   "kind": "misconception",
-   "label": "held",
-   "clauses": [
-    2
-   ],
-   "quote": "t[0].length is 3, and every row of a 2D array has the same length",
-   "confidence": 0.55,
-   "prune_score": 0.4,
-   "score": 0.22,
-   "logic": "multi-dimensional arrays must be rectangular",
-   "twin_logic": "Each row a[i] is its own array, so rows can have different lengths a[i].length.",
-   "role": "primary",
-   "shares_evidence_with": "mis:ragged_array->RaggedRowsSameLength"
-  },
-  {
    "depth": 2,
-   "source": "ragged_array",
-   "edge": "pre:two_dimensional_array->ragged_array",
-   "target": "two_dimensional_array",
-   "kind": "prerequisite",
-   "label": "broken",
+   "source": "math_random",
+   "edge": "lvl:math_random@L0#0",
+   "target": "math_random@L0",
+   "kind": "level",
+   "label": "shown",
    "clauses": [
-    2,
+    1,
     3
    ],
-   "quote": "t[0].length is 3, and every row of a 2D array has the same length; so it visits three columns in every row and adds all six numbers",
-   "confidence": 0.95,
-   "prune_score": 1.0,
-   "score": 0.95,
-   "logic": "There is no requirement that all rows in a two-dimensional array have the same length; an array with rows of nonuniform length is known as a ragged array.",
+   "quote": "5; so in 10 steps the surfer goes there exactly 5 times",
+   "confidence": 0.85,
+   "prune_score": 0.6,
+   "score": 0.51,
+   "logic": "Folk meaning: 'a random number between 0 and 1' includes both ends, and a 70% chance means the event will happen next time. Java rule: Math.random() returns a double in the half-open interval [0, 1) (0 possible, 1 never), and a probability only describes long-run frequencies over many calls.",
    "twin_logic": null,
-   "consequence_of": "mis:ragged_array->RaggedRowsSameLength"
+   "level": "L0",
+   "way": "everyday_reading"
   },
   {
    "depth": 2,
-   "source": "two_dimensional_array",
-   "edge": "pre:indexing->two_dimensional_array",
-   "target": "indexing",
-   "kind": "prerequisite",
-   "label": "broken",
+   "source": "for_loop",
+   "edge": "err:for_loop->WrongIterationCount",
+   "target": "WrongIterationCount",
+   "kind": "error",
+   "label": "correct",
    "clauses": [
-    2,
     3
    ],
-   "quote": "t[0].length is 3, and every row of a 2D array has the same length; so it visits three columns in every row and adds all six numbers",
-   "confidence": 0.7,
-   "prune_score": 0.7,
-   "score": 0.49,
-   "logic": "A 1-D array uses one index a[i]; a 2-D array uses two, a[i][j], where the first index chooses the row array.",
-   "twin_logic": null,
-   "consequence_of": "mis:ragged_array->RaggedRowsSameLength"
+   "quote": "so in 10 steps the surfer goes there exactly 5 times",
+   "confidence": 0.6,
+   "prune_score": 0.5,
+   "score": 0.3,
+   "logic": "Updates the loop counter so that the loop runs the wrong number of times.",
+   "twin_logic": "The init, test and update together decide the number of passes; trace them to check the count.",
+   "role": "primary"
   },
   {
-   "depth": 2,
-   "source": "indexing",
-   "edge": "pre:indexing->array_bounds",
-   "target": "array_bounds",
+   "depth": 3,
+   "source": "math_random",
+   "edge": "pre:math_library->math_random",
+   "target": "math_library",
    "kind": "prerequisite",
    "label": "broken",
    "clauses": [
     1,
     3
    ],
-   "quote": "21; so it visits three columns in every row and adds all six numbers",
-   "confidence": 0.85,
-   "prune_score": 0.5,
-   "score": 0.425,
-   "logic": "Valid indexes run from 0 to a.length - 1; any other index throws an exception when it is used.",
+   "quote": "5; so in 10 steps the surfer goes there exactly 5 times",
+   "confidence": 0.8,
+   "prune_score": 1.0,
+   "score": 0.8,
+   "logic": "Math.random() is a Math library method; unlike the others it takes no argument and returns a random double in [0, 1).",
    "twin_logic": null,
-   "consequence_of": "mis:ragged_array->RaggedRowsSameLength"
-  },
-  {
-   "depth": 2,
-   "source": "indexing",
-   "edge": "pre:array_initializer->indexing",
-   "target": "array_initializer",
-   "kind": "prerequisite",
-   "label": "broken",
-   "clauses": [
-    2,
-    3
-   ],
-   "quote": "t[0].length is 3, and every row of a 2D array has the same length; so it visits three columns in every row and adds all six numbers",
-   "confidence": 0.6,
-   "prune_score": 0.3,
-   "score": 0.18,
-   "logic": "The values listed in braces are stored at indices 0, 1, 2, ... in order, and a[i] reads the value at index i.",
-   "twin_logic": null,
-   "consequence_of": "mis:ragged_array->RaggedRowsSameLength"
+   "consequence_of": "mis:math_random->ProbabilityIsPrediction"
   },
   {
    "depth": 3,
-   "source": "two_dimensional_array",
-   "edge": "pre:two_dimensional_array->row_major_order",
-   "target": "row_major_order",
+   "source": "for_loop",
+   "edge": "pre:for_loop->loop_body",
+   "target": "loop_body",
    "kind": "prerequisite",
    "label": "confirmed",
    "clauses": [
+    3,
+    5
+   ],
+   "quote": "so in 10 steps the surfer goes there exactly 5 times; five runs gave 6, 4, 8, 5 and 6",
+   "confidence": 0.7,
+   "prune_score": 0.7000000000000001,
+   "score": 0.49,
+   "logic": "The statements in braces after the for header are the loop body; they run once on every pass, between the test and the increment, exactly as in a while loop.",
+   "twin_logic": null
+  },
+  {
+   "depth": 3,
+   "source": "statement",
+   "edge": "lvl:statement@L0#0",
+   "target": "statement@L0",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    1,
+    2,
     3
    ],
-   "quote": "so it visits three columns in every row and adds all six numbers",
-   "confidence": 0.55,
-   "prune_score": 1.0,
-   "score": 0.55,
-   "logic": "Row-major order visits a[i][j] row by row (outer loop over i); column-major order puts the column loop outside.",
-   "twin_logic": null
+   "quote": "5; Page 1 has probability 0.5; so in 10 steps the surfer goes there exactly 5 times",
+   "confidence": 0.6,
+   "prune_score": 0.6000000000000001,
+   "score": 0.36,
+   "logic": "Everyday reading: a program is read like a text or a list of wishes that the computer takes in all at once, so line order, goals of later lines or what the writer meant can matter. Java rule: each statement is one step, ended by ;, executed once, in written order, using only the current state.",
+   "twin_logic": null,
+   "level": "L0",
+   "way": "everyday_reading"
+  },
+  {
+   "depth": 4,
+   "source": "math_library",
+   "edge": "lvl:math_library@L2#2",
+   "target": "math_library@L2",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    4,
+    5
+   ],
+   "quote": "Actual: it varies from run to run; five runs gave 6, 4, 8, 5 and 6",
+   "confidence": 0.6,
+   "prune_score": 0.4,
+   "score": 0.24,
+   "logic": "All the listed Math methods except random() are mathematical functions: they change no variable and return the same result for the same argument; random() takes no argument and returns a different value on each call.",
+   "twin_logic": null,
+   "level": "L2",
+   "way": "one_step_execution"
+  },
+  {
+   "depth": 4,
+   "source": "control_flow",
+   "edge": "mis:control_flow->ProgramEndsAfterLoop",
+   "target": "ProgramEndsAfterLoop",
+   "kind": "misconception",
+   "label": "correct",
+   "clauses": [
+    4,
+    5
+   ],
+   "quote": "Actual: it varies from run to run; five runs gave 6, 4, 8, 5 and 6",
+   "confidence": 0.6,
+   "prune_score": 0.25,
+   "score": 0.15,
+   "logic": "When a loop finishes the program ends, so code after the loop never runs.",
+   "twin_logic": "When the loop condition becomes false, control continues with the first statement after the loop.",
+   "role": "context"
   }
  ],
  "evidence": [
   {
    "depth": 1,
-   "source": "two_dimensional_array",
-   "edge": "mis:two_dimensional_array->RaggedRowsSameLength",
-   "target": "RaggedRowsSameLength",
-   "kind": "misconception",
-   "label": "held",
+   "source": "println",
+   "edge": "lvl:println@L2#1",
+   "target": "println@L2",
+   "kind": "level",
+   "label": "shown",
    "clauses": [
-    2,
+    1,
+    5
+   ],
+   "quote": "5; five runs gave 6, 4, 8, 5 and 6",
+   "confidence": 0.55,
+   "prune_score": 0.5,
+   "score": 0.275,
+   "logic": "Output is the value's characters followed by a line break: println(\"Hello, \"); println(\"World!\"); prints two lines.",
+   "twin_logic": null,
+   "level": "L2",
+   "way": "output_prediction"
+  },
+  {
+   "depth": 2,
+   "source": "loop_control",
+   "edge": "err:loop_control->WrongIterationCount",
+   "target": "WrongIterationCount",
+   "kind": "error",
+   "label": "correct",
+   "clauses": [
     3
    ],
-   "quote": "t[0].length is 3, and every row of a 2D array has the same length; so it visits three columns in every row and adds all six numbers",
-   "confidence": 0.93,
-   "prune_score": 0.5,
-   "score": 0.465,
-   "logic": "All rows of a 2-D array have the same length, so one N works for every row.",
-   "twin_logic": "Rows may differ in length; use a[i].length for row i.",
+   "quote": "so in 10 steps the surfer goes there exactly 5 times",
+   "confidence": 0.6,
+   "prune_score": 0.45,
+   "score": 0.27,
+   "logic": "Updates the loop counter so that the loop runs the wrong number of times.",
+   "twin_logic": "The init, test and update together decide the number of passes; trace them to check the count.",
    "role": "context"
   },
   {
-   "depth": 1,
-   "source": "two_dimensional_array",
-   "edge": "mis:two_dimensional_array->NoJaggedArrays",
-   "target": "NoJaggedArrays",
-   "kind": "misconception",
-   "label": "held",
-   "clauses": [
-    2
-   ],
-   "quote": "t[0].length is 3, and every row of a 2D array has the same length",
-   "confidence": 0.7,
-   "prune_score": 0.4,
-   "score": 0.28,
-   "logic": "Every row of a 2-D array must have the same length.",
-   "twin_logic": "Each row a[i] is its own array, so rows can have different lengths a[i].length.",
-   "role": "context",
-   "shares_evidence_with": "mis:two_dimensional_array->RaggedRowsSameLength"
-  },
-  {
-   "depth": 1,
-   "source": "two_dimensional_array",
-   "edge": "mis:two_dimensional_array->MultidimensionalArray",
-   "target": "MultidimensionalArray",
+   "depth": 2,
+   "source": "loop_control",
+   "edge": "mis:loop_control->OffByOneBound",
+   "target": "OffByOneBound",
    "kind": "misconception",
    "label": "correct",
    "clauses": [
-    2
-   ],
-   "quote": "t[0].length is 3, and every row of a 2D array has the same length",
-   "confidence": 0.6,
-   "prune_score": 0.1,
-   "score": 0.06,
-   "logic": "int[m][n] is one block of m * n values, so a[i] on its own means nothing.",
-   "twin_logic": "A 2-D array is an array of m row arrays, so a[i] is a 1-D array of length n.",
-   "role": "primary"
-  },
-  {
-   "depth": 1,
-   "source": "two_dimensional_array",
-   "edge": "lvl:two_dimensional_array@L0#0",
-   "target": "two_dimensional_array@L0",
-   "kind": "level",
-   "label": "shown",
-   "clauses": [
-    2,
     3
    ],
-   "quote": "t[0].length is 3, and every row of a 2D array has the same length; so it visits three columns in every row and adds all six numbers",
-   "confidence": 0.7,
-   "prune_score": 0.3,
-   "score": 0.21,
-   "logic": "Folk meaning: a table or matrix is one grid in which rows and columns are symmetric, so a column should be as easy to pick out as a row. Java rule: a 2-D array is an array of row arrays; a[i] is row i, a[i][j] an element, and there is no expression for a column.",
-   "twin_logic": null,
-   "level": "L0",
-   "way": "everyday_reading"
-  },
-  {
-   "depth": 1,
-   "source": "ragged_array",
-   "edge": "mis:ragged_array->RaggedRowsSameLength",
-   "target": "RaggedRowsSameLength",
-   "kind": "misconception",
-   "label": "held",
-   "clauses": [
-    2,
-    3
-   ],
-   "quote": "t[0].length is 3, and every row of a 2D array has the same length; so it visits three columns in every row and adds all six numbers",
-   "confidence": 0.95,
-   "prune_score": 0.6,
-   "score": 0.57,
-   "logic": "All rows of a 2-D array have the same length, so one N works for every row.",
-   "twin_logic": "Rows may differ in length; use a[i].length for row i.",
-   "role": "primary"
-  },
-  {
-   "depth": 1,
-   "source": "ragged_array",
-   "edge": "mis:ragged_array->NoJaggedArrays",
-   "target": "NoJaggedArrays",
-   "kind": "misconception",
-   "label": "held",
-   "clauses": [
-    2
-   ],
-   "quote": "t[0].length is 3, and every row of a 2D array has the same length",
-   "confidence": 0.55,
-   "prune_score": 0.4,
-   "score": 0.22,
-   "logic": "multi-dimensional arrays must be rectangular",
-   "twin_logic": "Each row a[i] is its own array, so rows can have different lengths a[i].length.",
-   "role": "primary",
-   "shares_evidence_with": "mis:ragged_array->RaggedRowsSameLength"
-  },
-  {
-   "depth": 1,
-   "source": "ragged_array",
-   "edge": "lvl:ragged_array@L0#0",
-   "target": "ragged_array@L0",
-   "kind": "level",
-   "label": "shown",
-   "clauses": [
-    2,
-    3
-   ],
-   "quote": "t[0].length is 3, and every row of a 2D array has the same length; so it visits three columns in every row and adds all six numbers",
-   "confidence": 0.8,
-   "prune_score": 0.5,
-   "score": 0.4,
-   "logic": "Folk meaning: a 'table' has the same number of columns in every row, so one width N serves all rows. Java rule: each row is a separate array, so rows may have different lengths, and code must use a[i].length for row i.",
-   "twin_logic": null,
-   "level": "L0",
-   "way": "everyday_reading"
-  },
-  {
-   "depth": 1,
-   "source": "ragged_array",
-   "edge": "lvl:ragged_array@L0#3",
-   "target": "ragged_array@L0",
-   "kind": "level",
-   "label": "shown",
-   "clauses": [
-    2,
-    3
-   ],
-   "quote": "t[0].length is 3, and every row of a 2D array has the same length; so it visits three columns in every row and adds all six numbers",
-   "confidence": 0.8,
+   "quote": "so in 10 steps the surfer goes there exactly 5 times",
+   "confidence": 0.5,
    "prune_score": 0.35,
-   "score": 0.28,
-   "logic": "Points to LT: the inner bound a[i].length is re-evaluated for each row. Inconsistent application: the trace uses row 0's length (or N) for every row, sometimes over-running a short row and sometimes stopping early in a long one. (here mixing in: \"All rows of a 2-D array have the same length, so one N works for every row\")",
-   "twin_logic": null,
-   "level": "L0",
-   "way": "inconsistent_trace"
-  },
-  {
-   "depth": 1,
-   "source": "indexing",
-   "edge": "mis:indexing->ArrayRangeInclusive",
-   "target": "ArrayRangeInclusive",
-   "kind": "misconception",
-   "label": "correct",
-   "clauses": [
-    2,
-    3
-   ],
-   "quote": "t[0].length is 3, and every row of a 2D array has the same length; so it visits three columns in every row and adds all six numbers",
-   "confidence": 0.55,
-   "prune_score": 0.3,
-   "score": 0.165,
-   "logic": "new int[n] has slots 0 to n, inclusive.",
-   "twin_logic": "The slots are 0 to n - 1.",
+   "score": 0.175,
+   "logic": "i < n and i <= n mean the same, so the loop runs until i equals n and the last pass can use a[n].",
+   "twin_logic": "for (i = 0; i < n; i++) runs n times with i going up to n - 1; with <= it runs n + 1 times and reaches i = n.",
    "role": "primary"
   },
   {
    "depth": 2,
-   "source": "ragged_array",
-   "edge": "pre:two_dimensional_array->ragged_array",
-   "target": "two_dimensional_array",
-   "kind": "prerequisite",
-   "label": "broken",
-   "clauses": [
-    2,
-    3
-   ],
-   "quote": "t[0].length is 3, and every row of a 2D array has the same length; so it visits three columns in every row and adds all six numbers",
-   "confidence": 0.95,
-   "prune_score": 1.0,
-   "score": 0.95,
-   "logic": "There is no requirement that all rows in a two-dimensional array have the same length; an array with rows of nonuniform length is known as a ragged array.",
-   "twin_logic": null,
-   "consequence_of": "mis:ragged_array->RaggedRowsSameLength"
-  },
-  {
-   "depth": 2,
-   "source": "two_dimensional_array",
-   "edge": "pre:indexing->two_dimensional_array",
-   "target": "indexing",
-   "kind": "prerequisite",
-   "label": "broken",
-   "clauses": [
-    2,
-    3
-   ],
-   "quote": "t[0].length is 3, and every row of a 2D array has the same length; so it visits three columns in every row and adds all six numbers",
-   "confidence": 0.7,
-   "prune_score": 0.7,
-   "score": 0.49,
-   "logic": "A 1-D array uses one index a[i]; a 2-D array uses two, a[i][j], where the first index chooses the row array.",
-   "twin_logic": null,
-   "consequence_of": "mis:ragged_array->RaggedRowsSameLength"
-  },
-  {
-   "depth": 2,
-   "source": "two_dimensional_array",
-   "edge": "pre:two_dimensional_array->row_major_order",
-   "target": "row_major_order",
-   "kind": "prerequisite",
-   "label": "confirmed",
+   "source": "loop_control",
+   "edge": "lvl:loop_control@L3#6",
+   "target": "loop_control@L3",
+   "kind": "level",
+   "label": "shown",
    "clauses": [
     3
    ],
-   "quote": "so it visits three columns in every row and adds all six numbers",
+   "quote": "so in 10 steps the surfer goes there exactly 5 times",
    "confidence": 0.55,
    "prune_score": 0.3,
    "score": 0.165,
-   "logic": "Row-major order visits a[i][j] row by row (outer loop over i); column-major order puts the column loop outside.",
-   "twin_logic": null
+   "logic": "Plan: counter-controlled loop - the loop variable is a stepper that walks a predictable sequence of values (0..N-1, 1..N, every 2nd value) and fixes the number of passes in advance.",
+   "twin_logic": null,
+   "level": "L3",
+   "way": "purpose_of_the_whole"
   },
   {
    "depth": 2,
-   "source": "indexing",
-   "edge": "pre:indexing->array_bounds",
-   "target": "array_bounds",
+   "source": "loop_control",
+   "edge": "lvl:loop_control@L1#0",
+   "target": "loop_control@L1",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    3
+   ],
+   "quote": "so in 10 steps the surfer goes there exactly 5 times",
+   "confidence": 0.55,
+   "prune_score": 0.2,
+   "score": 0.11,
+   "logic": "Loop control is the init / continuation condition / increment scheme on an index variable that decides how many passes a loop makes and with which values.",
+   "twin_logic": null,
+   "level": "L1",
+   "way": "names_the_element"
+  },
+  {
+   "depth": 2,
+   "source": "for_loop",
+   "edge": "err:for_loop->WrongIterationCount",
+   "target": "WrongIterationCount",
+   "kind": "error",
+   "label": "correct",
+   "clauses": [
+    3
+   ],
+   "quote": "so in 10 steps the surfer goes there exactly 5 times",
+   "confidence": 0.6,
+   "prune_score": 0.5,
+   "score": 0.3,
+   "logic": "Updates the loop counter so that the loop runs the wrong number of times.",
+   "twin_logic": "The init, test and update together decide the number of passes; trace them to check the count.",
+   "role": "primary"
+  },
+  {
+   "depth": 2,
+   "source": "for_loop",
+   "edge": "mis:for_loop->ForIsConditional",
+   "target": "ForIsConditional",
+   "kind": "misconception",
+   "label": "correct",
+   "clauses": [
+    3
+   ],
+   "quote": "so in 10 steps the surfer goes there exactly 5 times",
+   "confidence": 0.6,
+   "prune_score": 0.3,
+   "score": 0.18,
+   "logic": "The body of a for statement executes at most once.",
+   "twin_logic": "The body of a for statement runs once for every pass on which the condition is true, which can be many times.",
+   "role": "primary"
+  },
+  {
+   "depth": 2,
+   "source": "for_loop",
+   "edge": "lvl:for_loop@L3#3",
+   "target": "for_loop@L3",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    3
+   ],
+   "quote": "so in 10 steps the surfer goes there exactly 5 times",
+   "confidence": 0.6,
+   "prune_score": 0.5,
+   "score": 0.3,
+   "logic": "A simulation runs a fixed number of trials with an outer for loop (for (int t = 0; t < T; t++)), each trial simulated inside the body.",
+   "twin_logic": null,
+   "level": "L3",
+   "way": "relation_to_neighbour"
+  },
+  {
+   "depth": 2,
+   "source": "for_loop",
+   "edge": "lvl:for_loop@L3#8",
+   "target": "for_loop@L3",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    3
+   ],
+   "quote": "so in 10 steps the surfer goes there exactly 5 times",
+   "confidence": 0.6,
+   "prune_score": 0.3,
+   "score": 0.18,
+   "logic": "Plan: counted loop / counter-controlled repetition - do the body a known number of times, with the loop variable as a stepper (index, term number, trial number).",
+   "twin_logic": null,
+   "level": "L3",
+   "way": "purpose_of_the_whole"
+  },
+  {
+   "depth": 2,
+   "source": "math_random",
+   "edge": "mis:math_random->ProbabilityIsPrediction",
+   "target": "ProbabilityIsPrediction",
+   "kind": "misconception",
+   "label": "held",
+   "clauses": [
+    1,
+    2,
+    3
+   ],
+   "quote": "5; Page 1 has probability 0.5; so in 10 steps the surfer goes there exactly 5 times",
+   "confidence": 0.85,
+   "prune_score": 0.95,
+   "score": 0.8075,
+   "logic": "A probability (e.g. 70%) predicts what the next single trial will do.",
+   "twin_logic": "A probability describes the long-run frequency over many trials, not one outcome.",
+   "role": "context"
+  },
+  {
+   "depth": 2,
+   "source": "math_random",
+   "edge": "lvl:math_random@L0#0",
+   "target": "math_random@L0",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    1,
+    3
+   ],
+   "quote": "5; so in 10 steps the surfer goes there exactly 5 times",
+   "confidence": 0.85,
+   "prune_score": 0.6,
+   "score": 0.51,
+   "logic": "Folk meaning: 'a random number between 0 and 1' includes both ends, and a 70% chance means the event will happen next time. Java rule: Math.random() returns a double in the half-open interval [0, 1) (0 possible, 1 never), and a probability only describes long-run frequencies over many calls.",
+   "twin_logic": null,
+   "level": "L0",
+   "way": "everyday_reading"
+  },
+  {
+   "depth": 2,
+   "source": "math_random",
+   "edge": "lvl:math_random@L3#2",
+   "target": "math_random@L3",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    4,
+    5
+   ],
+   "quote": "Actual: it varies from run to run; five runs gave 6, 4, 8, 5 and 6",
+   "confidence": 0.6,
+   "prune_score": 0.2,
+   "score": 0.12,
+   "logic": "Each trial of a Monte Carlo simulation draws fresh values with Math.random(); estimates become reliable only over many trials.",
+   "twin_logic": null,
+   "level": "L3",
+   "way": "relation_to_neighbour"
+  },
+  {
+   "depth": 2,
+   "source": "math_random",
+   "edge": "lvl:math_random@L4#0",
+   "target": "math_random@L4",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    4,
+    5
+   ],
+   "quote": "Actual: it varies from run to run; five runs gave 6, 4, 8, 5 and 6",
+   "confidence": 0.6,
+   "prune_score": 0.2,
+   "score": 0.12,
+   "logic": "Changing N in (int) (Math.random() * N) changes the range to 0..N-1, and adding a constant shifts it; the output changes from run to run, so a program using Math.random() cannot be checked by comparing exact outputs, only by statistics over many runs.",
+   "twin_logic": null,
+   "level": "L4",
+   "way": "predict_a_change"
+  },
+  {
+   "depth": 3,
+   "source": "math_random",
+   "edge": "pre:math_library->math_random",
+   "target": "math_library",
    "kind": "prerequisite",
    "label": "broken",
    "clauses": [
     1,
     3
    ],
-   "quote": "21; so it visits three columns in every row and adds all six numbers",
-   "confidence": 0.85,
-   "prune_score": 0.5,
-   "score": 0.425,
-   "logic": "Valid indexes run from 0 to a.length - 1; any other index throws an exception when it is used.",
+   "quote": "5; so in 10 steps the surfer goes there exactly 5 times",
+   "confidence": 0.8,
+   "prune_score": 1.0,
+   "score": 0.8,
+   "logic": "Math.random() is a Math library method; unlike the others it takes no argument and returns a random double in [0, 1).",
    "twin_logic": null,
-   "consequence_of": "mis:ragged_array->RaggedRowsSameLength"
-  },
-  {
-   "depth": 2,
-   "source": "indexing",
-   "edge": "pre:array_initializer->indexing",
-   "target": "array_initializer",
-   "kind": "prerequisite",
-   "label": "broken",
-   "clauses": [
-    2,
-    3
-   ],
-   "quote": "t[0].length is 3, and every row of a 2D array has the same length; so it visits three columns in every row and adds all six numbers",
-   "confidence": 0.6,
-   "prune_score": 0.3,
-   "score": 0.18,
-   "logic": "The values listed in braces are stored at indices 0, 1, 2, ... in order, and a[i] reads the value at index i.",
-   "twin_logic": null,
-   "consequence_of": "mis:ragged_array->RaggedRowsSameLength"
+   "consequence_of": "mis:math_random->ProbabilityIsPrediction"
   },
   {
    "depth": 3,
-   "source": "two_dimensional_array",
-   "edge": "pre:two_dimensional_array->row_major_order",
-   "target": "row_major_order",
+   "source": "loop_control",
+   "edge": "pre:loop_control->for_loop",
+   "target": "for_loop",
    "kind": "prerequisite",
    "label": "confirmed",
    "clauses": [
     3
    ],
-   "quote": "so it visits three columns in every row and adds all six numbers",
+   "quote": "so in 10 steps the surfer goes there exactly 5 times",
    "confidence": 0.55,
-   "prune_score": 1.0,
-   "score": 0.55,
-   "logic": "Row-major order visits a[i][j] row by row (outer loop over i); column-major order puts the column loop outside.",
+   "prune_score": 0.5,
+   "score": 0.275,
+   "logic": "The for header is exactly the three control slots, and the body runs after the test and before the update on each pass.",
    "twin_logic": null
+  },
+  {
+   "depth": 3,
+   "source": "loop_control",
+   "edge": "pre:loop_variable->loop_control",
+   "target": "loop_variable",
+   "kind": "prerequisite",
+   "label": "confirmed",
+   "clauses": [
+    3
+   ],
+   "quote": "so in 10 steps the surfer goes there exactly 5 times",
+   "confidence": 0.55,
+   "prune_score": 0.3,
+   "score": 0.165,
+   "logic": "The init, condition and update all act on the loop variable: the init sets it, the condition tests it, the update changes it.",
+   "twin_logic": null
+  },
+  {
+   "depth": 3,
+   "source": "for_loop",
+   "edge": "pre:for_loop->loop_body",
+   "target": "loop_body",
+   "kind": "prerequisite",
+   "label": "confirmed",
+   "clauses": [
+    3,
+    5
+   ],
+   "quote": "so in 10 steps the surfer goes there exactly 5 times; five runs gave 6, 4, 8, 5 and 6",
+   "confidence": 0.7,
+   "prune_score": 0.7000000000000001,
+   "score": 0.49,
+   "logic": "The statements in braces after the for header are the loop body; they run once on every pass, between the test and the increment, exactly as in a while loop.",
+   "twin_logic": null
+  },
+  {
+   "depth": 3,
+   "source": "statement",
+   "edge": "lvl:statement@L0#0",
+   "target": "statement@L0",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    1,
+    2,
+    3
+   ],
+   "quote": "5; Page 1 has probability 0.5; so in 10 steps the surfer goes there exactly 5 times",
+   "confidence": 0.6,
+   "prune_score": 0.6000000000000001,
+   "score": 0.36,
+   "logic": "Everyday reading: a program is read like a text or a list of wishes that the computer takes in all at once, so line order, goals of later lines or what the writer meant can matter. Java rule: each statement is one step, ended by ;, executed once, in written order, using only the current state.",
+   "twin_logic": null,
+   "level": "L0",
+   "way": "everyday_reading"
+  },
+  {
+   "depth": 3,
+   "source": "nested_loops",
+   "edge": "mis:nested_loops->OuterLoopIgnored",
+   "target": "OuterLoopIgnored",
+   "kind": "misconception",
+   "label": "correct",
+   "clauses": [
+    3
+   ],
+   "quote": "so in 10 steps the surfer goes there exactly 5 times",
+   "confidence": 0.6,
+   "prune_score": 0.5,
+   "score": 0.3,
+   "logic": "In nested loops only the inner loop repeats; the outer loop runs once.",
+   "twin_logic": "The outer loop repeats as its own condition says, and the inner loop runs fully on each outer pass.",
+   "role": "primary"
+  },
+  {
+   "depth": 4,
+   "source": "math_library",
+   "edge": "lvl:math_library@L2#2",
+   "target": "math_library@L2",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    4,
+    5
+   ],
+   "quote": "Actual: it varies from run to run; five runs gave 6, 4, 8, 5 and 6",
+   "confidence": 0.6,
+   "prune_score": 0.4,
+   "score": 0.24,
+   "logic": "All the listed Math methods except random() are mathematical functions: they change no variable and return the same result for the same argument; random() takes no argument and returns a different value on each call.",
+   "twin_logic": null,
+   "level": "L2",
+   "way": "one_step_execution"
+  },
+  {
+   "depth": 4,
+   "source": "control_flow",
+   "edge": "mis:control_flow->ProgramEndsAfterLoop",
+   "target": "ProgramEndsAfterLoop",
+   "kind": "misconception",
+   "label": "correct",
+   "clauses": [
+    4,
+    5
+   ],
+   "quote": "Actual: it varies from run to run; five runs gave 6, 4, 8, 5 and 6",
+   "confidence": 0.6,
+   "prune_score": 0.25,
+   "score": 0.15,
+   "logic": "When a loop finishes the program ends, so code after the loop never runs.",
+   "twin_logic": "When the loop condition becomes false, control continues with the first statement after the loop.",
+   "role": "context"
   }
  ],
  "clause_coverage": {
-  "21": "pre:indexing->array_bounds",
-  "t[0].length is 3, and every row of a 2D array has the same length": "mis:two_dimensional_array->RaggedRowsSameLength",
-  "so it visits three columns in every row and adds all six numbers": "mis:two_dimensional_array->RaggedRowsSameLength"
+  "5": "lvl:println@L2#1",
+  "Page 1 has probability 0.5": "mis:math_random->ProbabilityIsPrediction",
+  "so in 10 steps the surfer goes there exactly 5 times": "err:loop_control->WrongIterationCount",
+  "Actual: it varies from run to run": "lvl:math_random@L3#2",
+  "five runs gave 6, 4, 8, 5 and 6": "lvl:println@L2#1"
  },
  "unexplained_clauses": [],
  "stop_reason": "max depth",
  "depth_reached": 4,
  "llm_calls": 0,
- "llm_cache_hits": 47,
+ "llm_cache_hits": 96,
  "llm_calls_by_step": {
-  "prune": 16,
-  "label": 31
+  "prune": 32,
+  "label": 64
  }
 }

@@ -8,1052 +8,733 @@
   "backend": "claude-cli"
  },
  "clauses": [
-  "Nothing",
-  "The else lines up with if",
-  "x > 0",
-  "and thats true",
-  "so the else is skipped",
-  "x > 10 is false",
-  "so big isnt printed either"
+  "0",
+  "Nothing was added",
+  "so sum and count are both 0, and 0 divided by 0 is just 0"
  ],
  "start_concepts": [
-  "comparison_operators",
-  "println",
-  "if_statement"
+  "sentinel_loop",
+  "division_by_zero",
+  "compound_assignment"
  ],
  "held_misconceptions": [
   {
-   "concept": "dangling_else",
-   "misconception": "ElseMatchesIndentation",
-   "kind": "misconception",
-   "quote": "Nothing; The else lines up with if; x > 0; and thats true; so the else is skipped",
-   "score": 0.93
+   "concept": "sentinel_loop",
+   "misconception": "AverageWithoutZeroGuard",
+   "kind": "error",
+   "quote": "0; so sum and count are both 0, and 0 divided by 0 is just 0",
+   "score": 0.744
+  },
+  {
+   "concept": "division_by_zero",
+   "misconception": "AverageWithoutZeroGuard",
+   "kind": "error",
+   "quote": "0; so sum and count are both 0, and 0 divided by 0 is just 0",
+   "score": 0.51
   }
  ],
  "error_evidence": [],
- "shadowed": [
-  {
-   "concept": "nested_conditionals",
-   "misconception": "ElseMatchesIndentation",
-   "shadow_of": "mis:dangling_else->ElseMatchesIndentation",
-   "quote": "The else lines up with if; x > 0; and thats true; so the else is skipped",
-   "score": 0.651
-  }
- ],
+ "shadowed": [],
  "broken_edges": [
   {
-   "edge": "pre:nested_conditionals->dangling_else",
-   "quote": "The else lines up with if; so the else is skipped; so big isnt printed either",
-   "score": 0.8,
-   "consequence_of": "mis:dangling_else->ElseMatchesIndentation"
+   "edge": "pre:arithmetic_operators->division_by_zero",
+   "quote": "0; so sum and count are both 0, and 0 divided by 0 is just 0",
+   "score": 0.57
   },
   {
-   "edge": "pre:if_else_statement->nested_conditionals",
-   "quote": "Nothing; The else lines up with if; so the else is skipped",
-   "score": 0.51,
-   "consequence_of": "mis:dangling_else->ElseMatchesIndentation"
+   "edge": "pre:division_by_zero->run_time_error",
+   "quote": "0; so sum and count are both 0, and 0 divided by 0 is just 0",
+   "score": 0.38
   }
  ],
  "root_cause": {
-  "concept": "dangling_else",
-  "misconception": "ElseMatchesIndentation"
+  "concept": "division_by_zero",
+  "misconception": "AverageWithoutZeroGuard"
  },
  "levels": {
-  "comparison_operators": {
+  "accumulator_pattern": {
    "level": "L3",
    "way": "relation_to_neighbour",
-   "quote": "x > 0; and thats true; so the else is skipped; x > 10 is false; so big isnt printed either",
-   "edge": "lvl:comparison_operators@L3#1",
+   "quote": "Nothing was added; so sum and count are both 0, and 0 divided by 0 is just 0",
+   "edge": "lvl:accumulator_pattern@L3#2",
    "source": "level_way",
    "also_shown": [
-    "L2 output_prediction",
-    "L2 line_by_line_trace"
-   ]
-  },
-  "control_flow": {
-   "level": "L2",
-   "way": "line_by_line_trace",
-   "quote": "x > 0; and thats true; so the else is skipped; x > 10 is false; so big isnt printed either",
-   "edge": "lvl:control_flow@L2#0",
-   "source": "level_way",
-   "also_shown": [
+    "L2 line_by_line_trace",
     "L2 output_prediction"
    ]
   },
-  "dangling_else": {
-   "level": "L0",
-   "way": "misconception",
-   "misconception": "ElseMatchesIndentation",
-   "quote": "Nothing; The else lines up with if; x > 0; and thats true; so the else is skipped",
-   "edge": "mis:dangling_else->ElseMatchesIndentation",
-   "rule": "wrong rule: The else belongs to the if it is lined up with. Right rule: The else belongs to the most recent unmatched if, whatever the indentation.",
-   "source": "level_mis_links"
-  },
-  "if_else_statement": {
-   "level": "L2",
-   "way": "line_by_line_trace",
-   "quote": "x > 0; and thats true; so the else is skipped; x > 10 is false; so big isnt printed either",
-   "edge": "lvl:if_else_statement@L2#0",
+  "compound_assignment": {
+   "level": "L3",
+   "way": "purpose_of_the_whole",
+   "quote": "Nothing was added",
+   "edge": "lvl:compound_assignment@L3#3",
    "source": "level_way",
-   "also_shown": [
-    "L2 output_prediction"
-   ]
+   "also_shown": []
   },
-  "if_statement": {
+  "sentinel_loop": {
    "level": "L3",
    "way": "relation_to_neighbour",
-   "quote": "x > 0; and thats true; so the else is skipped; x > 10 is false; so big isnt printed either",
-   "edge": "lvl:if_statement@L3#1",
+   "quote": "Nothing was added; so sum and count are both 0, and 0 divided by 0 is just 0",
+   "edge": "lvl:sentinel_loop@L3#1",
    "source": "level_way",
    "also_shown": [
-    "L2 line_by_line_trace"
+    "L2 one_step_execution"
    ]
   },
-  "nested_conditionals": {
-   "level": "L0",
-   "way": "inconsistent_trace",
-   "quote": "The else lines up with if; so the else is skipped",
-   "edge": "lvl:nested_conditionals@L0#3",
+  "while_loop": {
+   "level": "L4",
+   "way": "predict_a_change",
+   "quote": "Nothing was added; so sum and count are both 0, and 0 divided by 0 is just 0",
+   "edge": "lvl:while_loop@L4#0",
    "source": "level_way",
    "also_shown": [
-    "L0 everyday_reading"
+    "L2 one_step_execution",
+    "L2 line_by_line_trace"
    ]
   }
  },
- "overall_level": "L0",
+ "overall_level": null,
  "paths": [
   {
    "depth": 1,
-   "source": "comparison_operators",
-   "edge": "mis:comparison_operators->LessGreaterSwapped",
-   "target": "LessGreaterSwapped",
-   "kind": "misconception",
-   "label": "correct",
+   "source": "sentinel_loop",
+   "edge": "err:sentinel_loop->AverageWithoutZeroGuard",
+   "target": "AverageWithoutZeroGuard",
+   "kind": "error",
+   "label": "held",
    "clauses": [
-    3,
-    4,
-    6
+    1,
+    3
    ],
-   "quote": "x > 0; and thats true; x > 10 is false",
-   "confidence": 0.85,
+   "quote": "0; so sum and count are both 0, and 0 divided by 0 is just 0",
+   "confidence": 0.93,
    "prune_score": 0.8,
-   "score": 0.68,
-   "logic": "< and > mean the same thing (or a < b means a is greater than b).",
-   "twin_logic": "a < b is true when a is smaller than b; a > b when a is larger.",
+   "score": 0.744,
+   "logic": "Computes sum / count without checking that count is above 0.",
+   "twin_logic": "If no value was read (count is 0), do not compute the average: with int operands sum / count is a division by zero, a run-time exception that stops the program; with a double sum the division does not stop the program and gives a meaningless value instead of an average.",
    "role": "primary"
   },
   {
    "depth": 1,
-   "source": "comparison_operators",
-   "edge": "lvl:comparison_operators@L2#1",
-   "target": "comparison_operators@L2",
-   "kind": "level",
-   "label": "shown",
+   "source": "division_by_zero",
+   "edge": "err:division_by_zero->AverageWithoutZeroGuard",
+   "target": "AverageWithoutZeroGuard",
+   "kind": "error",
+   "label": "held",
    "clauses": [
-    3,
-    4,
-    6
+    1,
+    3
    ],
-   "quote": "x > 0; and thats true; x > 10 is false",
-   "confidence": 0.8,
-   "prune_score": 0.4,
-   "score": 0.32,
-   "logic": "The result is a boolean: (2 <= 2) is true, 2 < 2 is false, (x < 3.1) is true for int x = 3; any comparison involving NaN, even NaN == NaN, is false.",
-   "twin_logic": null,
-   "level": "L2",
-   "way": "output_prediction"
+   "quote": "0; so sum and count are both 0, and 0 divided by 0 is just 0",
+   "confidence": 0.85,
+   "prune_score": 0.6000000000000001,
+   "score": 0.51,
+   "logic": "Computes sum / count without checking that count is above 0.",
+   "twin_logic": "If no value was read (count is 0), do not compute the average: with int operands sum / count is a division by zero, a run-time exception that stops the program; with a double sum the division does not stop the program and gives a meaningless value instead of an average.",
+   "role": "context"
   },
   {
    "depth": 1,
-   "source": "comparison_operators",
-   "edge": "lvl:comparison_operators@L3#1",
-   "target": "comparison_operators@L3",
+   "source": "compound_assignment",
+   "edge": "lvl:compound_assignment@L3#3",
+   "target": "compound_assignment@L3",
    "kind": "level",
    "label": "shown",
    "clauses": [
-    3,
-    4,
-    5,
-    6,
-    7
+    2
    ],
-   "quote": "x > 0; and thats true; so the else is skipped; x > 10 is false; so big isnt printed either",
-   "confidence": 0.7,
-   "prune_score": 0.35,
-   "score": 0.245,
-   "logic": "Comparisons are the building blocks of conditions: together with boolean logic they provide the basis for decision-making.",
+   "quote": "Nothing was added",
+   "confidence": 0.55,
+   "prune_score": 0.5,
+   "score": 0.275,
+   "logic": "Plan/role: the update step of a gatherer (sum += a[i], product *= i) or of a stepper with a step other than 1 (i += 2).",
+   "twin_logic": null,
+   "level": "L3",
+   "way": "purpose_of_the_whole"
+  },
+  {
+   "depth": 2,
+   "source": "division_by_zero",
+   "edge": "pre:arithmetic_operators->division_by_zero",
+   "target": "arithmetic_operators",
+   "kind": "prerequisite",
+   "label": "broken",
+   "clauses": [
+    1,
+    3
+   ],
+   "quote": "0; so sum and count are both 0, and 0 divided by 0 is just 0",
+   "confidence": 0.95,
+   "prune_score": 0.6,
+   "score": 0.57,
+   "logic": "Integer division by zero (1/0) generates a run-time exception, while floating-point 1.0/0.0 is legal and has the value Infinity.",
+   "twin_logic": null
+  },
+  {
+   "depth": 2,
+   "source": "division_by_zero",
+   "edge": "pre:division_by_zero->run_time_error",
+   "target": "run_time_error",
+   "kind": "prerequisite",
+   "label": "broken",
+   "clauses": [
+    1,
+    3
+   ],
+   "quote": "0; so sum and count are both 0, and 0 divided by 0 is just 0",
+   "confidence": 0.95,
+   "prune_score": 0.4,
+   "score": 0.38,
+   "logic": "Dividing an int by zero compiles but throws ArithmeticException when the program runs: a run-time error.",
+   "twin_logic": null
+  },
+  {
+   "depth": 2,
+   "source": "sentinel_loop",
+   "edge": "pre:accumulator_pattern->sentinel_loop",
+   "target": "accumulator_pattern",
+   "kind": "prerequisite",
+   "label": "confirmed",
+   "clauses": [
+    2,
+    3
+   ],
+   "quote": "Nothing was added; so sum and count are both 0, and 0 divided by 0 is just 0",
+   "confidence": 0.8,
+   "prune_score": 0.6,
+   "score": 0.48,
+   "logic": "Sum and count are accumulators.",
+   "twin_logic": null
+  },
+  {
+   "depth": 3,
+   "source": "sentinel_loop",
+   "edge": "pre:while_loop->sentinel_loop",
+   "target": "while_loop",
+   "kind": "prerequisite",
+   "label": "confirmed",
+   "clauses": [
+    2
+   ],
+   "quote": "Nothing was added",
+   "confidence": 0.75,
+   "prune_score": 1.0,
+   "score": 0.75,
+   "logic": "A sentinel loop is a while loop whose condition tests each value read against the stop value.",
+   "twin_logic": null
+  },
+  {
+   "depth": 3,
+   "source": "accumulator_pattern",
+   "edge": "lvl:accumulator_pattern@L3#2",
+   "target": "accumulator_pattern@L3",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    2,
+    3
+   ],
+   "quote": "Nothing was added; so sum and count are both 0, and 0 divided by 0 is just 0",
+   "confidence": 0.8,
+   "prune_score": 0.5,
+   "score": 0.4,
+   "logic": "In a sentinel loop the sum and the count of the values read are both accumulators, updated only for values that are not the sentinel.",
    "twin_logic": null,
    "level": "L3",
    "way": "relation_to_neighbour"
   },
   {
-   "depth": 2,
-   "source": "dangling_else",
-   "edge": "mis:dangling_else->ElseMatchesIndentation",
-   "target": "ElseMatchesIndentation",
-   "kind": "misconception",
-   "label": "held",
-   "clauses": [
-    1,
-    2,
-    3,
-    4,
-    5
-   ],
-   "quote": "Nothing; The else lines up with if; x > 0; and thats true; so the else is skipped",
-   "confidence": 0.93,
-   "prune_score": 1.0,
-   "score": 0.93,
-   "logic": "The else belongs to the if it is lined up with.",
-   "twin_logic": "The else belongs to the most recent unmatched if, whatever the indentation.",
-   "role": "primary"
-  },
-  {
-   "depth": 2,
-   "source": "nested_conditionals",
-   "edge": "mis:nested_conditionals->ElseMatchesIndentation",
-   "target": "ElseMatchesIndentation",
-   "kind": "misconception",
-   "label": "held",
-   "clauses": [
-    2,
-    3,
-    4,
-    5
-   ],
-   "quote": "The else lines up with if; x > 0; and thats true; so the else is skipped",
-   "confidence": 0.93,
-   "prune_score": 0.7,
-   "score": 0.651,
-   "logic": "The else belongs to the if it is lined up with.",
-   "twin_logic": "The else belongs to the most recent unmatched if, whatever the indentation.",
-   "role": "context"
-  },
-  {
-   "depth": 2,
-   "source": "dangling_else",
-   "edge": "lvl:dangling_else@L0#0",
-   "target": "dangling_else@L0",
+   "depth": 3,
+   "source": "accumulator_pattern",
+   "edge": "lvl:accumulator_pattern@L2#0",
+   "target": "accumulator_pattern@L2",
    "kind": "level",
    "label": "shown",
    "clauses": [
     2,
-    3,
-    4,
-    5
+    3
    ],
-   "quote": "The else lines up with if; x > 0; and thats true; so the else is skipped",
-   "confidence": 0.85,
-   "prune_score": 0.7,
-   "score": 0.595,
-   "logic": "Folk meaning: on paper the layout shows which 'if' an 'otherwise' answers, so an else lined up with the outer if is read as belonging to it. Java ignores indentation and attaches each else to the innermost if to which it might possibly belong.",
-   "twin_logic": null,
-   "level": "L0",
-   "way": "everyday_reading"
-  },
-  {
-   "depth": 3,
-   "source": "dangling_else",
-   "edge": "pre:nested_conditionals->dangling_else",
-   "target": "nested_conditionals",
-   "kind": "prerequisite",
-   "label": "broken",
-   "clauses": [
-    2,
-    5,
-    7
-   ],
-   "quote": "The else lines up with if; so the else is skipped; so big isnt printed either",
-   "confidence": 0.8,
-   "prune_score": 1.0,
-   "score": 0.8,
-   "logic": "The dangling else arises when ifs are nested without braces.",
-   "twin_logic": null,
-   "consequence_of": "mis:dangling_else->ElseMatchesIndentation"
-  },
-  {
-   "depth": 3,
-   "source": "nested_conditionals",
-   "edge": "pre:if_else_statement->nested_conditionals",
-   "target": "if_else_statement",
-   "kind": "prerequisite",
-   "label": "broken",
-   "clauses": [
-    1,
-    2,
-    5
-   ],
-   "quote": "Nothing; The else lines up with if; so the else is skipped",
-   "confidence": 0.85,
-   "prune_score": 0.6,
-   "score": 0.51,
-   "logic": "Nesting puts an if or if-else inside a branch of another if-else; an else-if chain is the common case where the else branch is itself an if.",
-   "twin_logic": null,
-   "consequence_of": "mis:dangling_else->ElseMatchesIndentation"
-  },
-  {
-   "depth": 3,
-   "source": "control_flow",
-   "edge": "pre:control_flow->if_statement",
-   "target": "if_statement",
-   "kind": "prerequisite",
-   "label": "confirmed",
-   "clauses": [
-    3,
-    4,
-    6,
-    7
-   ],
-   "quote": "x > 0; and thats true; x > 10 is false; so big isnt printed either",
-   "confidence": 0.8,
-   "prune_score": 0.8,
-   "score": 0.64,
-   "logic": "An if changes the default top-to-bottom flow by running a block only when its condition is true.",
-   "twin_logic": null
-  },
-  {
-   "depth": 4,
-   "source": "if_else_statement",
-   "edge": "mis:if_else_statement->ElseAlwaysExecutes",
-   "target": "ElseAlwaysExecutes",
-   "kind": "misconception",
-   "label": "correct",
-   "clauses": [
-    3,
-    4,
-    5
-   ],
-   "quote": "x > 0; and thats true; so the else is skipped",
-   "confidence": 0.85,
-   "prune_score": 0.4,
-   "score": 0.34,
-   "logic": "The else branch of an if-else statement always executes.",
-   "twin_logic": "The else branch runs only when the if condition is false.",
-   "role": "primary"
-  },
-  {
-   "depth": 4,
-   "source": "if_else_statement",
-   "edge": "mis:if_else_statement->BranchChosenByIntent",
-   "target": "BranchChosenByIntent",
-   "kind": "misconception",
-   "label": "correct",
-   "clauses": [
-    3,
-    4,
-    5
-   ],
-   "quote": "x > 0; and thats true; so the else is skipped",
+   "quote": "Nothing was added; so sum and count are both 0, and 0 divided by 0 is just 0",
    "confidence": 0.7,
-   "prune_score": 0.4,
-   "score": 0.28,
-   "logic": "Which branch runs is decided by what the programmer meant or by code outside the if, not by whether the condition is true.",
-   "twin_logic": "The then branch runs exactly when the condition evaluates to true at the moment it is tested; otherwise the else branch (if any) runs.",
-   "role": "context"
-  },
-  {
-   "depth": 4,
-   "source": "if_else_statement",
-   "edge": "lvl:if_else_statement@L2#0",
-   "target": "if_else_statement@L2",
-   "kind": "level",
-   "label": "shown",
-   "clauses": [
-    3,
-    4,
-    5,
-    6,
-    7
-   ],
-   "quote": "x > 0; and thats true; so the else is skipped; x > 10 is false; so big isnt printed either",
-   "confidence": 0.8,
-   "prune_score": 0.25,
-   "score": 0.2,
-   "logic": "Evaluate the condition once; if true execute the then branch, otherwise execute the else branch; then continue with the statement after the whole if-else (the condition is not re-tested).",
+   "prune_score": 0.3,
+   "score": 0.21,
+   "logic": "Before the loop: total = initial value. Each pass: read total, combine with the current item, store back. After the loop: total holds the combination of all items.",
    "twin_logic": null,
    "level": "L2",
    "way": "line_by_line_trace"
+  },
+  {
+   "depth": 4,
+   "source": "while_loop",
+   "edge": "mis:while_loop->LoopBodyAlwaysOnce",
+   "target": "LoopBodyAlwaysOnce",
+   "kind": "misconception",
+   "label": "correct",
+   "clauses": [
+    2,
+    3
+   ],
+   "quote": "Nothing was added; so sum and count are both 0, and 0 divided by 0 is just 0",
+   "confidence": 0.9,
+   "prune_score": 0.45,
+   "score": 0.405,
+   "logic": "The loop body always runs at least once, even if the condition is false at the start.",
+   "twin_logic": "A while or for body runs zero times when the condition is false at the start.",
+   "role": "primary"
+  },
+  {
+   "depth": 4,
+   "source": "while_loop",
+   "edge": "lvl:while_loop@L2#2",
+   "target": "while_loop@L2",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    2,
+    3
+   ],
+   "quote": "Nothing was added; so sum and count are both 0, and 0 divided by 0 is just 0",
+   "confidence": 0.75,
+   "prune_score": 0.4,
+   "score": 0.3,
+   "logic": "One pass: test the condition with the current values, then (if true) apply every body statement once in order; the variables assigned in the body change and nothing else; a false test ends the loop with the state unchanged.",
+   "twin_logic": null,
+   "level": "L2",
+   "way": "one_step_execution"
+  },
+  {
+   "depth": 4,
+   "source": "while_loop",
+   "edge": "lvl:while_loop@L4#0",
+   "target": "while_loop@L4",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    2,
+    3
+   ],
+   "quote": "Nothing was added; so sum and count are both 0, and 0 divided by 0 is just 0",
+   "confidence": 0.7,
+   "prune_score": 0.35,
+   "score": 0.245,
+   "logic": "Changing < to <= adds exactly one pass at the boundary; removing the update from the body makes a loop that was entered never end; a condition that is false initially gives zero passes whatever the body does. Rewriting as for (init; cond; update) preserves behaviour if no continue is involved.",
+   "twin_logic": null,
+   "level": "L4",
+   "way": "predict_a_change"
   }
  ],
  "evidence": [
   {
    "depth": 1,
-   "source": "comparison_operators",
-   "edge": "mis:comparison_operators->LessGreaterSwapped",
-   "target": "LessGreaterSwapped",
-   "kind": "misconception",
-   "label": "correct",
+   "source": "sentinel_loop",
+   "edge": "err:sentinel_loop->AverageWithoutZeroGuard",
+   "target": "AverageWithoutZeroGuard",
+   "kind": "error",
+   "label": "held",
    "clauses": [
-    3,
-    4,
-    6
+    1,
+    3
    ],
-   "quote": "x > 0; and thats true; x > 10 is false",
-   "confidence": 0.85,
+   "quote": "0; so sum and count are both 0, and 0 divided by 0 is just 0",
+   "confidence": 0.93,
    "prune_score": 0.8,
-   "score": 0.68,
-   "logic": "< and > mean the same thing (or a < b means a is greater than b).",
-   "twin_logic": "a < b is true when a is smaller than b; a > b when a is larger.",
+   "score": 0.744,
+   "logic": "Computes sum / count without checking that count is above 0.",
+   "twin_logic": "If no value was read (count is 0), do not compute the average: with int operands sum / count is a division by zero, a run-time exception that stops the program; with a double sum the division does not stop the program and gives a meaningless value instead of an average.",
    "role": "primary"
   },
   {
    "depth": 1,
-   "source": "comparison_operators",
-   "edge": "lvl:comparison_operators@L2#1",
-   "target": "comparison_operators@L2",
-   "kind": "level",
-   "label": "shown",
-   "clauses": [
-    3,
-    4,
-    6
-   ],
-   "quote": "x > 0; and thats true; x > 10 is false",
-   "confidence": 0.8,
-   "prune_score": 0.4,
-   "score": 0.32,
-   "logic": "The result is a boolean: (2 <= 2) is true, 2 < 2 is false, (x < 3.1) is true for int x = 3; any comparison involving NaN, even NaN == NaN, is false.",
-   "twin_logic": null,
-   "level": "L2",
-   "way": "output_prediction"
-  },
-  {
-   "depth": 1,
-   "source": "comparison_operators",
-   "edge": "lvl:comparison_operators@L3#1",
-   "target": "comparison_operators@L3",
-   "kind": "level",
-   "label": "shown",
-   "clauses": [
-    3,
-    4,
-    5,
-    6,
-    7
-   ],
-   "quote": "x > 0; and thats true; so the else is skipped; x > 10 is false; so big isnt printed either",
-   "confidence": 0.7,
-   "prune_score": 0.35,
-   "score": 0.245,
-   "logic": "Comparisons are the building blocks of conditions: together with boolean logic they provide the basis for decision-making.",
-   "twin_logic": null,
-   "level": "L3",
-   "way": "relation_to_neighbour"
-  },
-  {
-   "depth": 1,
-   "source": "comparison_operators",
-   "edge": "lvl:comparison_operators@L2#0",
-   "target": "comparison_operators@L2",
-   "kind": "level",
-   "label": "shown",
-   "clauses": [
-    3,
-    4,
-    6
-   ],
-   "quote": "x > 0; and thats true; x > 10 is false",
-   "confidence": 0.7,
-   "prune_score": 0.25,
-   "score": 0.175,
-   "logic": "Evaluate the left operand (including its arithmetic), then the right operand; if their types differ, promote the narrower one (int to double); then compare and produce true or false.",
-   "twin_logic": null,
-   "level": "L2",
-   "way": "line_by_line_trace"
-  },
-  {
-   "depth": 1,
-   "source": "if_statement",
-   "edge": "mis:if_statement->BranchChosenByIntent",
-   "target": "BranchChosenByIntent",
+   "source": "sentinel_loop",
+   "edge": "mis:sentinel_loop->SentinelProcessed",
+   "target": "SentinelProcessed",
    "kind": "misconception",
    "label": "correct",
    "clauses": [
-    3,
-    4,
-    6,
-    7
+    2
    ],
-   "quote": "x > 0; and thats true; x > 10 is false; so big isnt printed either",
-   "confidence": 0.55,
-   "prune_score": 0.3,
-   "score": 0.165,
-   "logic": "Which branch runs is decided by what the programmer meant or by code outside the if, not by whether the condition is true.",
-   "twin_logic": "The then branch runs exactly when the condition evaluates to true at the moment it is tested; otherwise the else branch (if any) runs.",
-   "role": "primary"
-  },
-  {
-   "depth": 1,
-   "source": "if_statement",
-   "edge": "mis:if_statement->ThenAlwaysExecutes",
-   "target": "ThenAlwaysExecutes",
-   "kind": "misconception",
-   "label": "correct",
-   "clauses": [
-    6,
-    7
-   ],
-   "quote": "x > 10 is false; so big isnt printed either",
+   "quote": "Nothing was added",
    "confidence": 0.85,
-   "prune_score": 0.2,
-   "score": 0.17,
-   "logic": "The then branch always runs.",
-   "twin_logic": "The then branch runs only when the condition is true.",
+   "prune_score": 0.15,
+   "score": 0.1275,
+   "logic": "The sentinel value (e.g. 999999) is added to the total like the other values.",
+   "twin_logic": "The loop stops at the sentinel without processing it.",
    "role": "primary"
   },
   {
    "depth": 1,
-   "source": "if_statement",
-   "edge": "lvl:if_statement@L3#1",
-   "target": "if_statement@L3",
+   "source": "sentinel_loop",
+   "edge": "lvl:sentinel_loop@L2#2",
+   "target": "sentinel_loop@L2",
    "kind": "level",
    "label": "shown",
    "clauses": [
-    3,
-    4,
-    5,
-    6,
-    7
+    2,
+    3
    ],
-   "quote": "x > 0; and thats true; so the else is skipped; x > 10 is false; so big isnt printed either",
-   "confidence": 0.7,
+   "quote": "Nothing was added; so sum and count are both 0, and 0 divided by 0 is just 0",
+   "confidence": 0.8,
    "prune_score": 0.3,
-   "score": 0.21,
-   "logic": "if-else extends if with a second branch that runs exactly when the condition is false; a lone if has an implicit empty else-case.",
+   "score": 0.24,
+   "logic": "One pass reads one value. If it is the sentinel, the loop ends with sum and count unchanged; otherwise the (valid) value updates sum and count.",
    "twin_logic": null,
-   "level": "L3",
-   "way": "relation_to_neighbour"
+   "level": "L2",
+   "way": "one_step_execution"
   },
   {
    "depth": 1,
-   "source": "if_statement",
-   "edge": "lvl:if_statement@L2#0",
-   "target": "if_statement@L2",
+   "source": "sentinel_loop",
+   "edge": "lvl:sentinel_loop@L3#1",
+   "target": "sentinel_loop@L3",
    "kind": "level",
    "label": "shown",
    "clauses": [
-    3,
-    4,
-    5,
-    6,
-    7
+    2,
+    3
    ],
-   "quote": "x > 0; and thats true; so the else is skipped; x > 10 is false; so big isnt printed either",
+   "quote": "Nothing was added; so sum and count are both 0, and 0 divided by 0 is just 0",
    "confidence": 0.8,
    "prune_score": 0.2,
    "score": 0.16,
-   "logic": "Evaluate the condition once; if true, execute the body; then, in either case, continue with the statement after the if.",
+   "logic": "sum (a gatherer) and count must change only for values that are not the sentinel and pass the filter. The average is computed once, after the loop.",
    "twin_logic": null,
-   "level": "L2",
-   "way": "line_by_line_trace"
+   "level": "L3",
+   "way": "relation_to_neighbour"
   },
   {
-   "depth": 2,
-   "source": "comparison_operators",
-   "edge": "pre:comparison_operators->boolean_expression",
-   "target": "boolean_expression",
-   "kind": "prerequisite",
-   "label": "confirmed",
+   "depth": 1,
+   "source": "division_by_zero",
+   "edge": "err:division_by_zero->AverageWithoutZeroGuard",
+   "target": "AverageWithoutZeroGuard",
+   "kind": "error",
+   "label": "held",
    "clauses": [
-    3,
-    4,
-    6,
-    7
+    1,
+    3
    ],
-   "quote": "x > 0; and thats true; x > 10 is false; so big isnt printed either",
-   "confidence": 0.8,
+   "quote": "0; so sum and count are both 0, and 0 divided by 0 is just 0",
+   "confidence": 0.85,
    "prune_score": 0.6000000000000001,
-   "score": 0.48,
-   "logic": "A comparison such as x < y produces a boolean result; comparisons together with boolean logic provide the basis for decision-making.",
-   "twin_logic": null
-  },
-  {
-   "depth": 2,
-   "source": "comparison_operators",
-   "edge": "pre:expression->comparison_operators",
-   "target": "expression",
-   "kind": "prerequisite",
-   "label": "confirmed",
-   "clauses": [
-    3,
-    4,
-    6
-   ],
-   "quote": "x > 0; and thats true; x > 10 is false",
-   "confidence": 0.8,
-   "prune_score": 0.30000000000000004,
-   "score": 0.24,
-   "logic": "Comparison operators build expressions whose value is a boolean, so one must already know what an expression is to understand a < b.",
-   "twin_logic": null
-  },
-  {
-   "depth": 2,
-   "source": "println",
-   "edge": "pre:statement->println",
-   "target": "statement",
-   "kind": "prerequisite",
-   "label": "confirmed",
-   "clauses": [
-    7
-   ],
-   "quote": "so big isnt printed either",
-   "confidence": 0.55,
-   "prune_score": 0.7,
-   "score": 0.385,
-   "logic": "System.out.println(s); is itself a statement, so its line of output appears at its own place in the sequence.",
-   "twin_logic": null
-  },
-  {
-   "depth": 2,
-   "source": "if_statement",
-   "edge": "pre:if_statement->nested_conditionals",
-   "target": "nested_conditionals",
-   "kind": "prerequisite",
-   "label": "confirmed",
-   "clauses": [
-    3,
-    4,
-    6,
-    7
-   ],
-   "quote": "x > 0; and thats true; x > 10 is false; so big isnt printed either",
-   "confidence": 0.8,
-   "prune_score": 0.4,
-   "score": 0.32,
-   "logic": "An if statement can sit inside the body of another if; the inner one is tested only when the outer condition is true.",
-   "twin_logic": null
-  },
-  {
-   "depth": 2,
-   "source": "if_statement",
-   "edge": "pre:if_statement->if_else_statement",
-   "target": "if_else_statement",
-   "kind": "prerequisite",
-   "label": "confirmed",
-   "clauses": [
-    3,
-    4,
-    5
-   ],
-   "quote": "x > 0; and thats true; so the else is skipped",
-   "confidence": 0.6,
-   "prune_score": 0.35,
-   "score": 0.21,
-   "logic": "if-else extends if with a second block that runs exactly when the condition is false.",
-   "twin_logic": null
-  },
-  {
-   "depth": 2,
-   "source": "if_statement",
-   "edge": "pre:boolean_expression->if_statement",
-   "target": "boolean_expression",
-   "kind": "prerequisite",
-   "label": "confirmed",
-   "clauses": [
-    3,
-    4,
-    6,
-    7
-   ],
-   "quote": "x > 0; and thats true; x > 10 is false; so big isnt printed either",
-   "confidence": 0.8,
-   "prune_score": 0.25,
-   "score": 0.2,
-   "logic": "An if runs its block only when its boolean expression evaluates to true.",
-   "twin_logic": null
-  },
-  {
-   "depth": 2,
-   "source": "control_flow",
-   "edge": "mis:control_flow->FalseConditionRestartsProgram",
-   "target": "FalseConditionRestartsProgram",
-   "kind": "misconception",
-   "label": "correct",
-   "clauses": [
-    6,
-    7
-   ],
-   "quote": "x > 10 is false; so big isnt printed either",
-   "confidence": 0.6,
-   "prune_score": 0.4,
-   "score": 0.24,
-   "logic": "When an if condition is false (and there is no else), control jumps back to the start of the program.",
-   "twin_logic": "A false condition skips the then branch and execution continues with the statement after the if statement.",
-   "role": "context"
-  },
-  {
-   "depth": 2,
-   "source": "control_flow",
-   "edge": "lvl:control_flow@L2#0",
-   "target": "control_flow@L2",
-   "kind": "level",
-   "label": "shown",
-   "clauses": [
-    3,
-    4,
-    5,
-    6,
-    7
-   ],
-   "quote": "x > 0; and thats true; so the else is skipped; x > 10 is false; so big isnt printed either",
-   "confidence": 0.8,
-   "prune_score": 0.45,
-   "score": 0.36,
-   "logic": "Execute the statement at the current point; when it completes normally, control passes to the next statement in the block. An if evaluates its condition once and then runs at most one branch; a loop evaluates its condition before each pass; after an if or a loop finishes, control continues with the statement after it.",
-   "twin_logic": null,
-   "level": "L2",
-   "way": "line_by_line_trace"
-  },
-  {
-   "depth": 2,
-   "source": "control_flow",
-   "edge": "lvl:control_flow@L2#1",
-   "target": "control_flow@L2",
-   "kind": "level",
-   "label": "shown",
-   "clauses": [
-    1,
-    3,
-    4,
-    5,
-    6,
-    7
-   ],
-   "quote": "Nothing; x > 0; and thats true; so the else is skipped; x > 10 is false; so big isnt printed either",
-   "confidence": 0.75,
-   "prune_score": 0.25,
-   "score": 0.1875,
-   "logic": "The output is the sequence of print statements that control actually reaches, in the order reached: e.g. TenHellos prints 1st, 2nd, 3rd Hello once each, then 4th to 10th Hello from the loop.",
-   "twin_logic": null,
-   "level": "L2",
-   "way": "output_prediction"
-  },
-  {
-   "depth": 2,
-   "source": "dangling_else",
-   "edge": "mis:dangling_else->ElseMatchesIndentation",
-   "target": "ElseMatchesIndentation",
-   "kind": "misconception",
-   "label": "held",
-   "clauses": [
-    1,
-    2,
-    3,
-    4,
-    5
-   ],
-   "quote": "Nothing; The else lines up with if; x > 0; and thats true; so the else is skipped",
-   "confidence": 0.93,
-   "prune_score": 1.0,
-   "score": 0.93,
-   "logic": "The else belongs to the if it is lined up with.",
-   "twin_logic": "The else belongs to the most recent unmatched if, whatever the indentation.",
-   "role": "primary"
-  },
-  {
-   "depth": 2,
-   "source": "dangling_else",
-   "edge": "lvl:dangling_else@L0#0",
-   "target": "dangling_else@L0",
-   "kind": "level",
-   "label": "shown",
-   "clauses": [
-    2,
-    3,
-    4,
-    5
-   ],
-   "quote": "The else lines up with if; x > 0; and thats true; so the else is skipped",
-   "confidence": 0.85,
-   "prune_score": 0.7,
-   "score": 0.595,
-   "logic": "Folk meaning: on paper the layout shows which 'if' an 'otherwise' answers, so an else lined up with the outer if is read as belonging to it. Java ignores indentation and attaches each else to the innermost if to which it might possibly belong.",
-   "twin_logic": null,
-   "level": "L0",
-   "way": "everyday_reading"
-  },
-  {
-   "depth": 2,
-   "source": "nested_conditionals",
-   "edge": "mis:nested_conditionals->ElseMatchesIndentation",
-   "target": "ElseMatchesIndentation",
-   "kind": "misconception",
-   "label": "held",
-   "clauses": [
-    2,
-    3,
-    4,
-    5
-   ],
-   "quote": "The else lines up with if; x > 0; and thats true; so the else is skipped",
-   "confidence": 0.93,
-   "prune_score": 0.7,
-   "score": 0.651,
-   "logic": "The else belongs to the if it is lined up with.",
-   "twin_logic": "The else belongs to the most recent unmatched if, whatever the indentation.",
-   "role": "context"
-  },
-  {
-   "depth": 2,
-   "source": "nested_conditionals",
-   "edge": "lvl:nested_conditionals@L0#3",
-   "target": "nested_conditionals@L0",
-   "kind": "level",
-   "label": "shown",
-   "clauses": [
-    2,
-    5
-   ],
-   "quote": "The else lines up with if; so the else is skipped",
-   "confidence": 0.85,
-   "prune_score": 0.45,
-   "score": 0.3825,
-   "logic": "Applies the nesting rule (LT) unevenly: on some inputs tests the inner condition even though the outer one was false, or matches an else to the if it is lined up with. (here mixing in: \"An inner if runs its body whenever its own condition is true, even if the outer if condition is false\")",
-   "twin_logic": null,
-   "level": "L0",
-   "way": "inconsistent_trace"
-  },
-  {
-   "depth": 2,
-   "source": "nested_conditionals",
-   "edge": "lvl:nested_conditionals@L0#0",
-   "target": "nested_conditionals@L0",
-   "kind": "level",
-   "label": "shown",
-   "clauses": [
-    1,
-    2,
-    5
-   ],
-   "quote": "Nothing; The else lines up with if; so the else is skipped",
-   "confidence": 0.85,
-   "prune_score": 0.35,
-   "score": 0.2975,
-   "logic": "Folk meaning: in prose, indentation and line layout show what belongs to what, and two consecutive 'if' sentences can be heard as one combined condition. The Java compiler ignores indentation: an inner if belongs to the branch that syntactically contains it, and an else pairs with the innermost unmatched if.",
-   "twin_logic": null,
-   "level": "L0",
-   "way": "everyday_reading"
-  },
-  {
-   "depth": 3,
-   "source": "dangling_else",
-   "edge": "pre:nested_conditionals->dangling_else",
-   "target": "nested_conditionals",
-   "kind": "prerequisite",
-   "label": "broken",
-   "clauses": [
-    2,
-    5,
-    7
-   ],
-   "quote": "The else lines up with if; so the else is skipped; so big isnt printed either",
-   "confidence": 0.8,
-   "prune_score": 1.0,
-   "score": 0.8,
-   "logic": "The dangling else arises when ifs are nested without braces.",
-   "twin_logic": null,
-   "consequence_of": "mis:dangling_else->ElseMatchesIndentation"
-  },
-  {
-   "depth": 3,
-   "source": "nested_conditionals",
-   "edge": "pre:if_else_statement->nested_conditionals",
-   "target": "if_else_statement",
-   "kind": "prerequisite",
-   "label": "broken",
-   "clauses": [
-    1,
-    2,
-    5
-   ],
-   "quote": "Nothing; The else lines up with if; so the else is skipped",
-   "confidence": 0.85,
-   "prune_score": 0.6,
    "score": 0.51,
-   "logic": "Nesting puts an if or if-else inside a branch of another if-else; an else-if chain is the common case where the else branch is itself an if.",
-   "twin_logic": null,
-   "consequence_of": "mis:dangling_else->ElseMatchesIndentation"
-  },
-  {
-   "depth": 3,
-   "source": "nested_conditionals",
-   "edge": "pre:if_statement->nested_conditionals",
-   "target": "if_statement",
-   "kind": "prerequisite",
-   "label": "confirmed",
-   "clauses": [
-    3,
-    4,
-    6,
-    7
-   ],
-   "quote": "x > 0; and thats true; x > 10 is false; so big isnt printed either",
-   "confidence": 0.8,
-   "prune_score": 0.4,
-   "score": 0.32,
-   "logic": "An if statement can sit inside the body of another if; the inner one is tested only when the outer condition is true.",
-   "twin_logic": null
-  },
-  {
-   "depth": 3,
-   "source": "control_flow",
-   "edge": "pre:control_flow->if_statement",
-   "target": "if_statement",
-   "kind": "prerequisite",
-   "label": "confirmed",
-   "clauses": [
-    3,
-    4,
-    6,
-    7
-   ],
-   "quote": "x > 0; and thats true; x > 10 is false; so big isnt printed either",
-   "confidence": 0.8,
-   "prune_score": 0.8,
-   "score": 0.64,
-   "logic": "An if changes the default top-to-bottom flow by running a block only when its condition is true.",
-   "twin_logic": null
-  },
-  {
-   "depth": 3,
-   "source": "control_flow",
-   "edge": "pre:statement->control_flow",
-   "target": "statement",
-   "kind": "prerequisite",
-   "label": "confirmed",
-   "clauses": [
-    3,
-    4,
-    6,
-    7
-   ],
-   "quote": "x > 0; and thats true; x > 10 is false; so big isnt printed either",
-   "confidence": 0.6,
-   "prune_score": 0.2,
-   "score": 0.12,
-   "logic": "Control flow is the order in which statements run.",
-   "twin_logic": null
-  },
-  {
-   "depth": 4,
-   "source": "if_else_statement",
-   "edge": "mis:if_else_statement->BranchChosenByIntent",
-   "target": "BranchChosenByIntent",
-   "kind": "misconception",
-   "label": "correct",
-   "clauses": [
-    3,
-    4,
-    5
-   ],
-   "quote": "x > 0; and thats true; so the else is skipped",
-   "confidence": 0.7,
-   "prune_score": 0.4,
-   "score": 0.28,
-   "logic": "Which branch runs is decided by what the programmer meant or by code outside the if, not by whether the condition is true.",
-   "twin_logic": "The then branch runs exactly when the condition evaluates to true at the moment it is tested; otherwise the else branch (if any) runs.",
+   "logic": "Computes sum / count without checking that count is above 0.",
+   "twin_logic": "If no value was read (count is 0), do not compute the average: with int operands sum / count is a division by zero, a run-time exception that stops the program; with a double sum the division does not stop the program and gives a meaningless value instead of an average.",
    "role": "context"
   },
   {
-   "depth": 4,
-   "source": "if_else_statement",
-   "edge": "mis:if_else_statement->ElseAlwaysExecutes",
-   "target": "ElseAlwaysExecutes",
-   "kind": "misconception",
-   "label": "correct",
-   "clauses": [
-    3,
-    4,
-    5
-   ],
-   "quote": "x > 0; and thats true; so the else is skipped",
-   "confidence": 0.85,
-   "prune_score": 0.4,
-   "score": 0.34,
-   "logic": "The else branch of an if-else statement always executes.",
-   "twin_logic": "The else branch runs only when the if condition is false.",
-   "role": "primary"
-  },
-  {
-   "depth": 4,
-   "source": "if_else_statement",
-   "edge": "mis:if_else_statement->BothBranchesExecute",
-   "target": "BothBranchesExecute",
-   "kind": "misconception",
-   "label": "correct",
-   "clauses": [
-    4,
-    5
-   ],
-   "quote": "and thats true; so the else is skipped",
-   "confidence": 0.75,
-   "prune_score": 0.2,
-   "score": 0.15,
-   "logic": "Both the then branch and the else branch run.",
-   "twin_logic": "Exactly one of the two branches runs.",
-   "role": "primary"
-  },
-  {
-   "depth": 4,
-   "source": "if_else_statement",
-   "edge": "lvl:if_else_statement@L2#0",
-   "target": "if_else_statement@L2",
+   "depth": 1,
+   "source": "compound_assignment",
+   "edge": "lvl:compound_assignment@L3#3",
+   "target": "compound_assignment@L3",
    "kind": "level",
    "label": "shown",
    "clauses": [
-    3,
-    4,
-    5,
-    6,
-    7
+    2
    ],
-   "quote": "x > 0; and thats true; so the else is skipped; x > 10 is false; so big isnt printed either",
+   "quote": "Nothing was added",
+   "confidence": 0.55,
+   "prune_score": 0.5,
+   "score": 0.275,
+   "logic": "Plan/role: the update step of a gatherer (sum += a[i], product *= i) or of a stepper with a step other than 1 (i += 2).",
+   "twin_logic": null,
+   "level": "L3",
+   "way": "purpose_of_the_whole"
+  },
+  {
+   "depth": 2,
+   "source": "sentinel_loop",
+   "edge": "pre:accumulator_pattern->sentinel_loop",
+   "target": "accumulator_pattern",
+   "kind": "prerequisite",
+   "label": "confirmed",
+   "clauses": [
+    2,
+    3
+   ],
+   "quote": "Nothing was added; so sum and count are both 0, and 0 divided by 0 is just 0",
    "confidence": 0.8,
-   "prune_score": 0.25,
-   "score": 0.2,
-   "logic": "Evaluate the condition once; if true execute the then branch, otherwise execute the else branch; then continue with the statement after the whole if-else (the condition is not re-tested).",
+   "prune_score": 0.6,
+   "score": 0.48,
+   "logic": "Sum and count are accumulators.",
+   "twin_logic": null
+  },
+  {
+   "depth": 2,
+   "source": "sentinel_loop",
+   "edge": "pre:while_loop->sentinel_loop",
+   "target": "while_loop",
+   "kind": "prerequisite",
+   "label": "confirmed",
+   "clauses": [
+    2
+   ],
+   "quote": "Nothing was added",
+   "confidence": 0.75,
+   "prune_score": 0.4,
+   "score": 0.3,
+   "logic": "A sentinel loop is a while loop whose condition tests each value read against the stop value.",
+   "twin_logic": null
+  },
+  {
+   "depth": 2,
+   "source": "division_by_zero",
+   "edge": "pre:arithmetic_operators->division_by_zero",
+   "target": "arithmetic_operators",
+   "kind": "prerequisite",
+   "label": "broken",
+   "clauses": [
+    1,
+    3
+   ],
+   "quote": "0; so sum and count are both 0, and 0 divided by 0 is just 0",
+   "confidence": 0.95,
+   "prune_score": 0.6,
+   "score": 0.57,
+   "logic": "Integer division by zero (1/0) generates a run-time exception, while floating-point 1.0/0.0 is legal and has the value Infinity.",
+   "twin_logic": null
+  },
+  {
+   "depth": 2,
+   "source": "division_by_zero",
+   "edge": "pre:division_by_zero->run_time_error",
+   "target": "run_time_error",
+   "kind": "prerequisite",
+   "label": "broken",
+   "clauses": [
+    1,
+    3
+   ],
+   "quote": "0; so sum and count are both 0, and 0 divided by 0 is just 0",
+   "confidence": 0.95,
+   "prune_score": 0.4,
+   "score": 0.38,
+   "logic": "Dividing an int by zero compiles but throws ArithmeticException when the program runs: a run-time error.",
+   "twin_logic": null
+  },
+  {
+   "depth": 2,
+   "source": "compound_assignment",
+   "edge": "pre:compound_assignment->accumulator_pattern",
+   "target": "accumulator_pattern",
+   "kind": "prerequisite",
+   "label": "confirmed",
+   "clauses": [
+    2,
+    3
+   ],
+   "quote": "Nothing was added; so sum and count are both 0, and 0 divided by 0 is just 0",
+   "confidence": 0.75,
+   "prune_score": 0.5,
+   "score": 0.375,
+   "logic": "sum += x is the usual way a running total is updated on each pass.",
+   "twin_logic": null
+  },
+  {
+   "depth": 3,
+   "source": "accumulator_pattern",
+   "edge": "lvl:accumulator_pattern@L3#2",
+   "target": "accumulator_pattern@L3",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    2,
+    3
+   ],
+   "quote": "Nothing was added; so sum and count are both 0, and 0 divided by 0 is just 0",
+   "confidence": 0.8,
+   "prune_score": 0.5,
+   "score": 0.4,
+   "logic": "In a sentinel loop the sum and the count of the values read are both accumulators, updated only for values that are not the sentinel.",
+   "twin_logic": null,
+   "level": "L3",
+   "way": "relation_to_neighbour"
+  },
+  {
+   "depth": 3,
+   "source": "accumulator_pattern",
+   "edge": "lvl:accumulator_pattern@L2#0",
+   "target": "accumulator_pattern@L2",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    2,
+    3
+   ],
+   "quote": "Nothing was added; so sum and count are both 0, and 0 divided by 0 is just 0",
+   "confidence": 0.7,
+   "prune_score": 0.3,
+   "score": 0.21,
+   "logic": "Before the loop: total = initial value. Each pass: read total, combine with the current item, store back. After the loop: total holds the combination of all items.",
    "twin_logic": null,
    "level": "L2",
    "way": "line_by_line_trace"
   },
   {
-   "depth": 4,
-   "source": "if_else_statement",
-   "edge": "lvl:if_else_statement@L2#1",
-   "target": "if_else_statement@L2",
+   "depth": 3,
+   "source": "accumulator_pattern",
+   "edge": "lvl:accumulator_pattern@L2#1",
+   "target": "accumulator_pattern@L2",
    "kind": "level",
    "label": "shown",
    "clauses": [
-    3,
-    4,
-    5
+    2,
+    3
    ],
-   "quote": "x > 0; and thats true; so the else is skipped",
-   "confidence": 0.6,
-   "prune_score": 0.15,
-   "score": 0.09,
-   "logic": "Exactly one branch's effects occur; e.g. if (x > y) max = x; else max = y; leaves max equal to the larger value, and the coin flip prints either Heads or Tails, never both.",
+   "quote": "Nothing was added; so sum and count are both 0, and 0 divided by 0 is just 0",
+   "confidence": 0.7,
+   "prune_score": 0.2,
+   "score": 0.14,
+   "logic": "After the loop the accumulator holds the reduce result: sum of 1..N is N(N+1)/2; Harmonic(2) = 1.5; the product loop gives N!.",
    "twin_logic": null,
    "level": "L2",
    "way": "output_prediction"
+  },
+  {
+   "depth": 3,
+   "source": "sentinel_loop",
+   "edge": "pre:while_loop->sentinel_loop",
+   "target": "while_loop",
+   "kind": "prerequisite",
+   "label": "confirmed",
+   "clauses": [
+    2
+   ],
+   "quote": "Nothing was added",
+   "confidence": 0.75,
+   "prune_score": 1.0,
+   "score": 0.75,
+   "logic": "A sentinel loop is a while loop whose condition tests each value read against the stop value.",
+   "twin_logic": null
+  },
+  {
+   "depth": 4,
+   "source": "while_loop",
+   "edge": "mis:while_loop->LoopBodyAlwaysOnce",
+   "target": "LoopBodyAlwaysOnce",
+   "kind": "misconception",
+   "label": "correct",
+   "clauses": [
+    2,
+    3
+   ],
+   "quote": "Nothing was added; so sum and count are both 0, and 0 divided by 0 is just 0",
+   "confidence": 0.9,
+   "prune_score": 0.45,
+   "score": 0.405,
+   "logic": "The loop body always runs at least once, even if the condition is false at the start.",
+   "twin_logic": "A while or for body runs zero times when the condition is false at the start.",
+   "role": "primary"
+  },
+  {
+   "depth": 4,
+   "source": "while_loop",
+   "edge": "err:while_loop->LoopIgnoresCodeBefore",
+   "target": "LoopIgnoresCodeBefore",
+   "kind": "error",
+   "label": "correct",
+   "clauses": [
+    2,
+    3
+   ],
+   "quote": "Nothing was added; so sum and count are both 0, and 0 divided by 0 is just 0",
+   "confidence": 0.7,
+   "prune_score": 0.3,
+   "score": 0.21,
+   "logic": "Initializes the flag before the loop so that the loop condition is already false, and the loop body never runs.",
+   "twin_logic": "A while loop tests its condition before the first pass: if the values set before the loop make the condition false, the body never runs.",
+   "role": "primary"
+  },
+  {
+   "depth": 4,
+   "source": "while_loop",
+   "edge": "mis:while_loop->ProgramEndsAfterLoop",
+   "target": "ProgramEndsAfterLoop",
+   "kind": "misconception",
+   "label": "correct",
+   "clauses": [
+    1,
+    3
+   ],
+   "quote": "0; so sum and count are both 0, and 0 divided by 0 is just 0",
+   "confidence": 0.8,
+   "prune_score": 0.25,
+   "score": 0.2,
+   "logic": "When a loop finishes the program ends, so code after the loop never runs.",
+   "twin_logic": "When the loop condition becomes false, control continues with the first statement after the loop.",
+   "role": "primary"
+  },
+  {
+   "depth": 4,
+   "source": "while_loop",
+   "edge": "lvl:while_loop@L2#2",
+   "target": "while_loop@L2",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    2,
+    3
+   ],
+   "quote": "Nothing was added; so sum and count are both 0, and 0 divided by 0 is just 0",
+   "confidence": 0.75,
+   "prune_score": 0.4,
+   "score": 0.3,
+   "logic": "One pass: test the condition with the current values, then (if true) apply every body statement once in order; the variables assigned in the body change and nothing else; a false test ends the loop with the state unchanged.",
+   "twin_logic": null,
+   "level": "L2",
+   "way": "one_step_execution"
+  },
+  {
+   "depth": 4,
+   "source": "while_loop",
+   "edge": "lvl:while_loop@L4#0",
+   "target": "while_loop@L4",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    2,
+    3
+   ],
+   "quote": "Nothing was added; so sum and count are both 0, and 0 divided by 0 is just 0",
+   "confidence": 0.7,
+   "prune_score": 0.35,
+   "score": 0.245,
+   "logic": "Changing < to <= adds exactly one pass at the boundary; removing the update from the body makes a loop that was entered never end; a condition that is false initially gives zero passes whatever the body does. Rewriting as for (init; cond; update) preserves behaviour if no continue is involved.",
+   "twin_logic": null,
+   "level": "L4",
+   "way": "predict_a_change"
+  },
+  {
+   "depth": 4,
+   "source": "while_loop",
+   "edge": "lvl:while_loop@L2#0",
+   "target": "while_loop@L2",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    2,
+    3
+   ],
+   "quote": "Nothing was added; so sum and count are both 0, and 0 divided by 0 is just 0",
+   "confidence": 0.7,
+   "prune_score": 0.25,
+   "score": 0.175,
+   "logic": "1. Evaluate the condition. 2. If false, skip the body and continue after the loop. 3. If true, execute the whole body, then go back to step 1.",
+   "twin_logic": null,
+   "level": "L2",
+   "way": "line_by_line_trace"
   }
  ],
  "clause_coverage": {
-  "Nothing": "lvl:control_flow@L2#1",
-  "The else lines up with if": "mis:dangling_else->ElseMatchesIndentation",
-  "x > 0": "mis:comparison_operators->LessGreaterSwapped",
-  "and thats true": "mis:comparison_operators->LessGreaterSwapped",
-  "so the else is skipped": "lvl:comparison_operators@L3#1",
-  "x > 10 is false": "mis:comparison_operators->LessGreaterSwapped",
-  "so big isnt printed either": "lvl:comparison_operators@L3#1"
+  "0": "err:sentinel_loop->AverageWithoutZeroGuard",
+  "Nothing was added": "mis:sentinel_loop->SentinelProcessed",
+  "so sum and count are both 0, and 0 divided by 0 is just 0": "err:sentinel_loop->AverageWithoutZeroGuard"
  },
  "unexplained_clauses": [],
- "stop_reason": "sufficient",
+ "stop_reason": "max depth",
  "depth_reached": 4,
  "llm_calls": 0,
- "llm_cache_hits": 61,
+ "llm_cache_hits": 54,
  "llm_calls_by_step": {
-  "prune": 20,
-  "label": 41
+  "prune": 18,
+  "label": 36
  }
 }

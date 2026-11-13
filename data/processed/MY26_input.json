@@ -1,0 +1,5 @@
+{
+ "code": "int total = 50;\nint count = 0;\nSystem.out.println(total / count);",
+ "question": "Will this compile? What happens when you run it? Explain your reasoning",
+ "answer": "It won’t compile. Dividing by zero isn’t allowed, so the compiler stops you before it runs.”\nActual: it compiles, then crashes at run time with ArithmeticException: / by zero."
+}

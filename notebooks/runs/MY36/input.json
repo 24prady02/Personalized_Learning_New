@@ -1,5 +1,5 @@
 {
- "code": "final int STOP = -1;\nint sum = 0, count = 0;\nint x = StdIn.readInt();\nwhile (x != STOP) {\n    sum += x;\n    count++;\n    x = StdIn.readInt();\n}\nSystem.out.println(sum / count);",
- "question": "Suppose the very first number typed is -1. What does the program print, and why?",
- "answer": "0. Nothing was added, so sum and count are both 0, and 0 divided by 0 is just 0."
+ "code": "int[] a = {1, 2, 3};\nint[] b = a;\nb[0] = 9;\nSystem.out.println(a[0]);",
+ "question": "What is printed? Explain what int[] b = a; does.",
+ "answer": "1. b is a copy of a, so changing b[0] doesn’t touch a"
 }

@@ -1,5 +1,5 @@
 {
- "code": "int[][] t = {{1, 2, 3}, {4, 5}, {6}};\nint sum = 0;\nfor (int i = 0; i < t.length; i++) {\n    for (int j = 0; j < t[0].length; j++) {\n        sum += t[i][j];\n    }\n}\nSystem.out.println(sum);",
- "question": "What is printed? Explain how the inner loop decides how many columns to visit.",
- "answer": "21. t[0].length is 3, and every row of a 2D array has the same length, so it visits three columns in every row and adds all six numbers"
+ "code": "double[] p = {0.2, 0.5, 0.3};\nint[] freq = new int[3];\nfor (int t = 0; t < 10; t++) {\n    double r = Math.random();\n    double sum = 0.0;\n    int j = 0;\n    while (r >= sum + p[j]) {\n        sum += p[j];\n        j++;\n    }\n    freq[j]++;\n}\nSystem.out.println(freq[1]);",
+ "question": "What does the program print, and why?",
+ "answer": "5. Page 1 has probability 0.5, so in 10 steps the surfer goes there exactly 5 times.”\nActual: it varies from run to run; five runs gave 6, 4, 8, 5 and 6."
 }

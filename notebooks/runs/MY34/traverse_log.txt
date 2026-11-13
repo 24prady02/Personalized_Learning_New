@@ -1,43 +1,104 @@
-clauses: Im not sure what number, but break is the statement that ends the loop early
-start: BM25 of the answer against each tagged concept: for_loop 10.44 (hits 1), break_statement 9.21 (hits 1), loop_variable 7.56 (hits 1), loop_control 6.78 (hits 1), if_statement 6.48 (hits 1), loop_body 6.03 (hits 1), control_flow 5.83 (hits 2), increment_operators 5.60 (hits 1), println 3.97 (hits 1), naming_convention 3.71 (hits 1), loop_performance 3.45 (hits 1), comparison_operators 3.05 (hits 1), arithmetic_operators 2.55 (hits 1), boolean_expression 2.25 (hits 2), remainder_operator 2.08 (hits 1), integer_division 1.99 (hits 1)
-start: chosen for_loop, break_statement, loop_variable
-start concepts (3): for_loop, break_statement, loop_variable
---- depth 1: current concepts ['for_loop', 'break_statement', 'loop_variable']
-  for_loop (misconceptions): 21 candidates -> kept mis:for_loop->ReturnDoesNotExitLoop (0.50), err:for_loop->WrongIterationCount (0.30), mis:for_loop->ProgramEndsAfterLoop (0.20)
-    mis:for_loop->ReturnDoesNotExitLoop -> not applied (0.00) ""
-    err:for_loop->WrongIterationCount -> not applied (0.00) ""
-    mis:for_loop->ProgramEndsAfterLoop -> not applied (0.00) ""
-  for_loop (level ways): 24 candidates -> kept lvl:for_loop@L1#0 (0.50), lvl:for_loop@L2#1 (0.30), lvl:for_loop@L2#0 (0.20)
-    lvl:for_loop@L1#0 -> not applied (0.00) ""
-    lvl:for_loop@L2#1 -> not applied (0.00) ""
-    lvl:for_loop@L2#0 -> not applied (0.00) ""
-  break_statement (misconceptions): 4 candidates -> kept mis:break_statement->BreakIgnored (0.40), mis:break_statement->BreakEndsProgram (0.30), mis:break_statement->BreakIsContinue (0.30)
-    mis:break_statement->BreakIgnored -> correct (0.36) "Im not sure what number, but break is the statement that ends the loop early"
-    mis:break_statement->BreakEndsProgram -> correct (0.21) "Im not sure what number, but break is the statement that ends the loop early"
-    mis:break_statement->BreakIsContinue -> correct (0.26) "Im not sure what number, but break is the statement that ends the loop early"
-  break_statement (level ways): 19 candidates -> kept lvl:break_statement@L1#0 (0.60), lvl:break_statement@L1#1 (0.25), lvl:break_statement@L2#1 (0.15)
-    lvl:break_statement@L1#0 -> shown (0.51) "Im not sure what number, but break is the statement that ends the loop early"
-    lvl:break_statement@L1#1 -> shown (0.19) "Im not sure what number, but break is the statement that ends the loop early"
-    lvl:break_statement@L2#1 -> not applied (0.00) ""
-  loop_variable (misconceptions): 7 candidates -> kept mis:loop_variable->BodyChangeIgnoredByCondition (0.50), mis:loop_variable->LoopVariableLifetimeScope (0.30), mis:loop_variable->ForInitRepeats (0.20)
-    mis:loop_variable->BodyChangeIgnoredByCondition -> not applied (0.00) ""
-    mis:loop_variable->LoopVariableLifetimeScope -> not applied (0.00) ""
-    mis:loop_variable->ForInitRepeats -> not applied (0.00) ""
-  loop_variable (level ways): 13 candidates -> kept lvl:loop_variable@L2#1 (0.50), lvl:loop_variable@L1#0 (0.30), lvl:loop_variable@L3#1 (0.20)
-    lvl:loop_variable@L2#1 -> not applied (0.00) ""
-    lvl:loop_variable@L1#0 -> not applied (0.00) ""
-    lvl:loop_variable@L3#1 -> not applied (0.00) ""
-  kept: lvl:break_statement@L1#0 [shown, tier 2, 0.51], mis:break_statement->BreakIgnored [correct, tier 2, 0.36], mis:break_statement->BreakIsContinue [correct, tier 2, 0.26]
-  clause coverage: c1 <- mis:break_statement->BreakIgnored
-  not yet read: pre:for_loop->break_statement, pre:for_loop->loop_body, pre:loop_control->for_loop, pre:loop_variable->loop_control
---- depth 2: current concepts ['for_loop', 'break_statement', 'loop_variable']
-  for_loop (concept edges): 3 candidates -> kept pre:for_loop->break_statement (0.80), pre:for_loop->loop_body (0.10), pre:loop_control->for_loop (0.10)
-    pre:for_loop->break_statement -> confirmed (0.56) "Im not sure what number, but break is the statement that ends the loop early"
-    pre:for_loop->loop_body -> not applied (0.00) ""
-    pre:loop_control->for_loop -> not applied (0.00) ""
-  loop_variable (concept edges): 1 candidates -> kept pre:loop_variable->loop_control (1.00)
-    pre:loop_variable->loop_control -> not applied (0.00) ""
-  kept: pre:for_loop->break_statement [confirmed, tier 2, 0.56]
-  clause coverage: c1 <- mis:break_statement->BreakIgnored
-  root-cause walk: held on [], broken at [], prerequisites {'expression': ['arithmetic_operators', 'variable'], 'integer_division': ['arithmetic_operators'], 'remainder_operator': ['arithmetic_operators', 'integer_division'], 'increment_operators': ['assignment', 'loop_control'], 'if_statement': ['boolean_expression', 'control_flow'], 'boolean_expression': ['comparison_operators'], 'comparison_operators': ['expression'], 'break_statement': ['for_loop'], 'loop_body': ['for_loop'], 'for_loop': ['loop_control'], 'loop_performance': ['loop_control'], 'loop_control': ['loop_variable'], 'control_flow': ['statement'], 'println': ['statement'], 'assignment': ['variable'], 'naming_convention': ['variable']}
-  level break_statement: L1 via names_the_element "Im not sure what number, but break is the statement that ends the loop early"
+clauses: Nothing | The else lines up with if | x > 0 | and thats true | so the else is skipped | x > 10 is false | so big isnt printed either
+start: generic concepts whose tagging text occurs in the answer: expression
+start: BM25 of the answer against each tagged concept: comparison_operators 15.12 (hits 1), println 14.44 (hits 1), if_statement 13.10 (hits 1), boolean_expression 12.75 (hits 1), control_flow 11.94 (hits 1), nested_conditionals 11.56 (hits 1), if_else_statement 11.37 (hits 1), expression 8.80 (hits 2), dangling_else 6.81 (hits 1), fencepost_loop 1.89 (hits 1)
+start: chosen comparison_operators, println, if_statement
+start concepts (3): comparison_operators, println, if_statement
+--- depth 1: current concepts ['comparison_operators', 'println', 'if_statement']
+  comparison_operators (misconceptions): 8 candidates -> kept mis:comparison_operators->LessGreaterSwapped (0.80), mis:comparison_operators->ChainedComparison (0.10), mis:comparison_operators->ComparisonWithBooleanLiteral (0.10)
+    mis:comparison_operators->LessGreaterSwapped -> correct (0.68) "x > 0; and thats true; x > 10 is false"
+    mis:comparison_operators->ChainedComparison -> not applied (0.00) ""
+    mis:comparison_operators->ComparisonWithBooleanLiteral -> not applied (0.00) ""
+  comparison_operators (level ways): 20 candidates -> kept lvl:comparison_operators@L2#1 (0.40), lvl:comparison_operators@L3#1 (0.35), lvl:comparison_operators@L2#0 (0.25)
+    lvl:comparison_operators@L2#1 -> shown (0.32) "x > 0; and thats true; x > 10 is false"
+    lvl:comparison_operators@L3#1 -> shown (0.24) "x > 0; and thats true; so the else is skipped; x > 10 is false; so big isnt printed either"
+    lvl:comparison_operators@L2#0 -> shown (0.17) "x > 0; and thats true; x > 10 is false"
+  println (misconceptions): 6 candidates -> kept mis:println->PrintedTextIsExecuted (0.60), mis:println->PrintEqualsPrintln (0.20), mis:println->PrintNewLineFirst (0.20)
+    mis:println->PrintedTextIsExecuted -> not applied (0.00) ""
+    mis:println->PrintEqualsPrintln -> not applied (0.00) ""
+    mis:println->PrintNewLineFirst -> not applied (0.00) ""
+  println (level ways): 17 candidates -> kept lvl:println@L3#0 (0.45), lvl:println@L2#1 (0.35), lvl:println@L2#0 (0.20)
+    lvl:println@L3#0 -> not applied (0.00) ""
+    lvl:println@L2#1 -> not applied (0.00) ""
+    lvl:println@L2#0 -> not applied (0.00) ""
+  if_statement (misconceptions): 22 candidates -> kept err:if_statement->BracelessMultiStatementBody (0.50), mis:if_statement->BranchChosenByIntent (0.30), mis:if_statement->ThenAlwaysExecutes (0.20)
+    err:if_statement->BracelessMultiStatementBody -> not applied (0.00) ""
+    mis:if_statement->BranchChosenByIntent -> correct (0.17) "x > 0; and thats true; x > 10 is false; so big isnt printed either"
+    mis:if_statement->ThenAlwaysExecutes -> correct (0.17) "x > 10 is false; so big isnt printed either"
+  if_statement (level ways): 19 candidates -> kept lvl:if_statement@L4#4 (0.50), lvl:if_statement@L3#1 (0.30), lvl:if_statement@L2#0 (0.20)
+    lvl:if_statement@L4#4 -> not applied (0.00) ""
+    lvl:if_statement@L3#1 -> shown (0.21) "x > 0; and thats true; so the else is skipped; x > 10 is false; so big isnt printed either"
+    lvl:if_statement@L2#0 -> shown (0.16) "x > 0; and thats true; so the else is skipped; x > 10 is false; so big isnt printed either"
+  kept: mis:comparison_operators->LessGreaterSwapped [correct, tier 2, 0.68], lvl:comparison_operators@L2#1 [shown, tier 2, 0.32], lvl:comparison_operators@L3#1 [shown, tier 2, 0.24]
+  clause coverage: c1 uncovered; c2 uncovered; c3 <- mis:comparison_operators->LessGreaterSwapped; c4 <- mis:comparison_operators->LessGreaterSwapped; c5 uncovered; c6 <- mis:comparison_operators->LessGreaterSwapped; c7 <- mis:if_statement->BranchChosenByIntent
+  uncovered clauses bring in: control_flow (5.84), dangling_else (4.86), nested_conditionals (4.69)
+  not yet read: own edges of control_flow, own edges of dangling_else, own edges of nested_conditionals, par:assignment~comparison_operators, pre:boolean_expression->if_statement, pre:comparison_operators->boolean_expression, pre:control_flow->if_statement, pre:expression->comparison_operators, pre:if_statement->if_else_statement, pre:if_statement->nested_conditionals, pre:statement->println, pre:string_literal->println
+--- depth 2: current concepts ['comparison_operators', 'println', 'if_statement', 'control_flow', 'dangling_else', 'nested_conditionals']
+  comparison_operators (concept edges): 3 candidates -> kept pre:comparison_operators->boolean_expression (0.60), pre:expression->comparison_operators (0.30), par:assignment~comparison_operators (0.10)
+    pre:comparison_operators->boolean_expression -> confirmed (0.48) "x > 0; and thats true; x > 10 is false; so big isnt printed either"
+    pre:expression->comparison_operators -> confirmed (0.24) "x > 0; and thats true; x > 10 is false"
+    par:assignment~comparison_operators -> not applied (0.00) ""
+  println (concept edges): 2 candidates -> kept pre:statement->println (0.70), pre:string_literal->println (0.30)
+    pre:statement->println -> confirmed (0.39) "so big isnt printed either"
+    pre:string_literal->println -> not applied (0.00) ""
+  if_statement (concept edges): 4 candidates -> kept pre:if_statement->nested_conditionals (0.40), pre:if_statement->if_else_statement (0.35), pre:boolean_expression->if_statement (0.25)
+    pre:if_statement->nested_conditionals -> confirmed (0.32) "x > 0; and thats true; x > 10 is false; so big isnt printed either"
+    pre:if_statement->if_else_statement -> confirmed (0.21) "x > 0; and thats true; so the else is skipped"
+    pre:boolean_expression->if_statement -> confirmed (0.20) "x > 0; and thats true; x > 10 is false; so big isnt printed either"
+  control_flow (misconceptions): 11 candidates -> kept mis:control_flow->FalseConditionRestartsProgram (0.40), mis:control_flow->IfConditionWatched (0.30), mis:control_flow->StatementsRunInAnyOrder (0.30)
+    mis:control_flow->FalseConditionRestartsProgram -> correct (0.24) "x > 10 is false; so big isnt printed either"
+    mis:control_flow->IfConditionWatched -> not applied (0.00) ""
+    mis:control_flow->StatementsRunInAnyOrder -> not applied (0.00) ""
+  control_flow (level ways): 15 candidates -> kept lvl:control_flow@L2#0 (0.45), lvl:control_flow@L0#0 (0.30), lvl:control_flow@L2#1 (0.25)
+    lvl:control_flow@L2#0 -> shown (0.36) "x > 0; and thats true; so the else is skipped; x > 10 is false; so big isnt printed either"
+    lvl:control_flow@L0#0 -> not applied (0.00) ""
+    lvl:control_flow@L2#1 -> shown (0.19) "Nothing; x > 0; and thats true; so the else is skipped; x > 10 is false; so big isnt printed either"
+  dangling_else (misconceptions): 1 candidates -> kept mis:dangling_else->ElseMatchesIndentation (1.00)
+    mis:dangling_else->ElseMatchesIndentation -> held (0.93) "Nothing; The else lines up with if; x > 0; and thats true; so the else is skipped"
+  dangling_else (level ways): 12 candidates -> kept lvl:dangling_else@L0#0 (0.70), lvl:dangling_else@L2#1 (0.15), lvl:dangling_else@L4#2 (0.15)
+    lvl:dangling_else@L0#0 -> shown (0.59) "The else lines up with if; x > 0; and thats true; so the else is skipped"
+    lvl:dangling_else@L2#1 -> not applied (0.00) ""
+    lvl:dangling_else@L4#2 -> not applied (0.00) ""
+  nested_conditionals (misconceptions): 6 candidates -> kept mis:nested_conditionals->ElseMatchesIndentation (0.70), mis:nested_conditionals->InconsistentIndentation (0.15), mis:nested_conditionals->InnerIfIgnoresOuter (0.15)
+    mis:nested_conditionals->ElseMatchesIndentation -> held (0.65) "The else lines up with if; x > 0; and thats true; so the else is skipped"
+    mis:nested_conditionals->InconsistentIndentation -> not applied (0.00) ""
+    mis:nested_conditionals->InnerIfIgnoresOuter -> not applied (0.00) ""
+  nested_conditionals (level ways): 14 candidates -> kept lvl:nested_conditionals@L0#3 (0.45), lvl:nested_conditionals@L0#0 (0.35), lvl:nested_conditionals@L4#2 (0.20)
+    lvl:nested_conditionals@L0#3 -> shown (0.38) "The else lines up with if; so the else is skipped"
+    lvl:nested_conditionals@L0#0 -> shown (0.30) "Nothing; The else lines up with if; so the else is skipped"
+    lvl:nested_conditionals@L4#2 -> not applied (0.00) ""
+  kept: mis:dangling_else->ElseMatchesIndentation [held, tier 0, 0.93], mis:nested_conditionals->ElseMatchesIndentation [held, tier 0, 0.65], lvl:dangling_else@L0#0 [shown, tier 2, 0.59]
+  clause coverage: c1 <- mis:dangling_else->ElseMatchesIndentation; c2 <- mis:dangling_else->ElseMatchesIndentation; c3 <- mis:comparison_operators->LessGreaterSwapped; c4 <- mis:comparison_operators->LessGreaterSwapped; c5 <- pre:if_statement->if_else_statement; c6 <- mis:comparison_operators->LessGreaterSwapped; c7 <- mis:if_statement->BranchChosenByIntent
+  not yet read: pre:if_else_statement->nested_conditionals, pre:nested_conditionals->dangling_else, pre:statement->control_flow
+--- depth 3: current concepts ['dangling_else', 'nested_conditionals', 'control_flow']
+  dangling_else (concept edges): 1 candidates -> kept pre:nested_conditionals->dangling_else (1.00)
+    pre:nested_conditionals->dangling_else -> broken (0.80) "The else lines up with if; so the else is skipped; so big isnt printed either"
+  nested_conditionals (concept edges): 2 candidates -> kept pre:if_else_statement->nested_conditionals (0.60), pre:if_statement->nested_conditionals (0.40)
+    pre:if_else_statement->nested_conditionals -> broken (0.51) "Nothing; The else lines up with if; so the else is skipped"
+    pre:if_statement->nested_conditionals -> confirmed (0.32) "x > 0; and thats true; x > 10 is false; so big isnt printed either"
+  control_flow (concept edges): 2 candidates -> kept pre:control_flow->if_statement (0.80), pre:statement->control_flow (0.20)
+    pre:control_flow->if_statement -> confirmed (0.64) "x > 0; and thats true; x > 10 is false; so big isnt printed either"
+    pre:statement->control_flow -> confirmed (0.12) "x > 0; and thats true; x > 10 is false; so big isnt printed either"
+  kept: pre:nested_conditionals->dangling_else [broken, tier 0, 0.80], pre:if_else_statement->nested_conditionals [broken, tier 0, 0.51], pre:control_flow->if_statement [confirmed, tier 2, 0.64]
+  reached across pre:if_else_statement->nested_conditionals, entered next: if_else_statement
+  clause coverage: c1 <- mis:dangling_else->ElseMatchesIndentation; c2 <- mis:dangling_else->ElseMatchesIndentation; c3 <- mis:comparison_operators->LessGreaterSwapped; c4 <- mis:comparison_operators->LessGreaterSwapped; c5 <- pre:if_statement->if_else_statement; c6 <- mis:comparison_operators->LessGreaterSwapped; c7 <- mis:if_statement->BranchChosenByIntent
+  not yet read: own edges of if_else_statement
+--- depth 4: current concepts ['if_else_statement'] (closing round: own edges only)
+  if_else_statement (misconceptions): 6 candidates -> kept mis:if_else_statement->BranchChosenByIntent (0.40), mis:if_else_statement->ElseAlwaysExecutes (0.40), mis:if_else_statement->BothBranchesExecute (0.20)
+    mis:if_else_statement->BranchChosenByIntent -> correct (0.28) "x > 0; and thats true; so the else is skipped"
+    mis:if_else_statement->ElseAlwaysExecutes -> correct (0.34) "x > 0; and thats true; so the else is skipped"
+    mis:if_else_statement->BothBranchesExecute -> correct (0.15) "and thats true; so the else is skipped"
+  if_else_statement (level ways): 17 candidates -> kept lvl:if_else_statement@L3#1 (0.60), lvl:if_else_statement@L2#0 (0.25), lvl:if_else_statement@L2#1 (0.15)
+    lvl:if_else_statement@L3#1 -> not applied (0.00) ""
+    lvl:if_else_statement@L2#0 -> shown (0.20) "x > 0; and thats true; so the else is skipped; x > 10 is false; so big isnt printed either"
+    lvl:if_else_statement@L2#1 -> shown (0.09) "x > 0; and thats true; so the else is skipped"
+  kept: mis:if_else_statement->ElseAlwaysExecutes [correct, tier 2, 0.34], mis:if_else_statement->BranchChosenByIntent [correct, tier 2, 0.28], lvl:if_else_statement@L2#0 [shown, tier 2, 0.20]
+  clause coverage: c1 <- mis:dangling_else->ElseMatchesIndentation; c2 <- mis:dangling_else->ElseMatchesIndentation; c3 <- mis:comparison_operators->LessGreaterSwapped; c4 <- mis:comparison_operators->LessGreaterSwapped; c5 <- pre:if_statement->if_else_statement; c6 <- mis:comparison_operators->LessGreaterSwapped; c7 <- mis:if_statement->BranchChosenByIntent
+  held: mis:dangling_else->ElseMatchesIndentation; filed at the dependent concept: mis:nested_conditionals->ElseMatchesIndentation
+  shadows: mis:nested_conditionals->ElseMatchesIndentation (shadow of mis:dangling_else->ElseMatchesIndentation)
+  root-cause walk: held on ['dangling_else'], broken at [] (consequences: pre:nested_conditionals->dangling_else, pre:if_else_statement->nested_conditionals), prerequisites {'if_statement': ['boolean_expression', 'control_flow'], 'boolean_expression': ['comparison_operators'], 'comparison_operators': ['expression'], 'nested_conditionals': ['if_else_statement', 'if_statement'], 'if_else_statement': ['if_statement'], 'dangling_else': ['nested_conditionals'], 'control_flow': ['statement'], 'println': ['statement', 'string_literal']}
+  level comparison_operators: L3 via relation_to_neighbour "x > 0; and thats true; so the else is skipped; x > 10 is false; so big isnt printed either"
+  level control_flow: L2 via line_by_line_trace "x > 0; and thats true; so the else is skipped; x > 10 is false; so big isnt printed either"
+  level dangling_else: L0 via misconception "Nothing; The else lines up with if; x > 0; and thats true; so the else is skipped"
+  level if_else_statement: L2 via line_by_line_trace "x > 0; and thats true; so the else is skipped; x > 10 is false; so big isnt printed either"
+  level if_statement: L3 via relation_to_neighbour "x > 0; and thats true; so the else is skipped; x > 10 is false; so big isnt printed either"
+  level nested_conditionals: L0 via inconsistent_trace "The else lines up with if; so the else is skipped"

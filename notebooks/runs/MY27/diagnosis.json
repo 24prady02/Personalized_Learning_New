@@ -8,87 +8,88 @@
   "backend": "claude-cli"
  },
  "clauses": [
-  "It wont compile",
-  "Dividing by zero isnt allowed",
-  "so the compiler stops you before it runs",
-  "Actual: it compiles, then crashes at run time with ArithmeticException: / by zero"
+  "339",
+  "Java adds the numbers first",
+  "so 1 + 2 is 3 and 4 + 5 is 9, then it joins them with the 3"
  ],
  "start_concepts": [
-  "division_by_zero",
-  "run_time_error",
-  "println"
+  "arithmetic_operators",
+  "string_concatenation",
+  "string_conversion"
  ],
  "held_misconceptions": [
   {
-   "concept": "division_by_zero",
-   "misconception": "DivisionByZeroIsCompileError",
+   "concept": "string_conversion",
+   "misconception": "StringPlusLeftToRight",
    "kind": "misconception",
-   "quote": "It wont compile; Dividing by zero isnt allowed; so the compiler stops you before it runs",
-   "score": 0.76
+   "quote": "339; Java adds the numbers first; so 1 + 2 is 3 and 4 + 5 is 9, then it joins them with the 3",
+   "score": 0.9
+  },
+  {
+   "concept": "string_concatenation",
+   "misconception": "ArithmeticPlusPrecedes",
+   "kind": "misconception",
+   "quote": "339; Java adds the numbers first; so 1 + 2 is 3 and 4 + 5 is 9, then it joins them with the 3",
+   "score": 0.651
   }
  ],
  "error_evidence": [],
- "shadowed": [
-  {
-   "concept": "run_time_error",
-   "misconception": "DivisionByZeroIsCompileError",
-   "shadow_of": "mis:division_by_zero->DivisionByZeroIsCompileError",
-   "quote": "It wont compile; Dividing by zero isnt allowed; so the compiler stops you before it runs",
-   "score": 0.76
-  }
- ],
+ "shadowed": [],
  "broken_edges": [
   {
-   "edge": "pre:division_by_zero->run_time_error",
-   "quote": "It wont compile; so the compiler stops you before it runs",
-   "score": 0.6175,
-   "consequence_of": "mis:division_by_zero->DivisionByZeroIsCompileError"
+   "edge": "par:string_concatenation~arithmetic_operators",
+   "quote": "339; Java adds the numbers first; so 1 + 2 is 3 and 4 + 5 is 9, then it joins them with the 3",
+   "score": 0.95,
+   "consequence_of": "mis:string_conversion->StringPlusLeftToRight"
   },
   {
-   "edge": "pre:arithmetic_operators->division_by_zero",
-   "quote": "It wont compile; so the compiler stops you before it runs",
-   "score": 0.315,
-   "consequence_of": "mis:division_by_zero->DivisionByZeroIsCompileError"
+   "edge": "pre:string_concatenation->string_conversion",
+   "quote": "339; so 1 + 2 is 3 and 4 + 5 is 9, then it joins them with the 3",
+   "score": 0.85,
+   "consequence_of": "mis:string_conversion->StringPlusLeftToRight"
   }
  ],
  "root_cause": {
-  "concept": "division_by_zero",
-  "misconception": "DivisionByZeroIsCompileError"
+  "concept": "string_concatenation",
+  "misconception": "ArithmeticPlusPrecedes"
  },
  "levels": {
-  "division_by_zero": {
+  "expression": {
+   "level": "L3",
+   "way": "relation_to_neighbour",
+   "quote": "Java adds the numbers first; so 1 + 2 is 3 and 4 + 5 is 9, then it joins them with the 3",
+   "edge": "lvl:expression@L3#1",
+   "source": "level_way",
+   "also_shown": [
+    "L0 inconsistent_trace"
+   ]
+  },
+  "string_concatenation": {
    "level": "L0",
    "way": "misconception",
-   "misconception": "DivisionByZeroIsCompileError",
-   "quote": "It wont compile; Dividing by zero isnt allowed; so the compiler stops you before it runs",
-   "edge": "mis:division_by_zero->DivisionByZeroIsCompileError",
-   "rule": "wrong rule: System.out.println(5 / 0); is rejected by the compiler. Right rule: It compiles; the ArithmeticException (/ by zero) is thrown when the program runs and reaches the division.",
+   "misconception": "ArithmeticPlusPrecedes",
+   "quote": "339; Java adds the numbers first; so 1 + 2 is 3 and 4 + 5 is 9, then it joins them with the 3",
+   "edge": "mis:string_concatenation->ArithmeticPlusPrecedes",
+   "rule": "wrong rule: arithmetic + binds tighter than string-concatenation +. Right rule: Both uses of + have the same precedence and are evaluated left to right, so \"s\" + a + b joins a and then b as text; only \"s\" + (a + b) adds them first.",
    "source": "level_mis_links"
   },
-  "integer_division": {
-   "level": "L4",
-   "way": "diagnose_an_error",
-   "quote": "Dividing by zero isnt allowed",
-   "edge": "lvl:integer_division@L4#3",
-   "source": "level_way",
-   "also_shown": []
-  },
-  "run_time_error": {
+  "string_conversion": {
    "level": "L0",
-   "way": "everyday_reading",
-   "quote": "It wont compile; so the compiler stops you before it runs",
-   "edge": "lvl:run_time_error@L0#0",
-   "source": "level_way",
-   "also_shown": []
+   "way": "misconception",
+   "misconception": "StringPlusLeftToRight",
+   "quote": "339; Java adds the numbers first; so 1 + 2 is 3 and 4 + 5 is 9, then it joins them with the 3",
+   "edge": "mis:string_conversion->StringPlusLeftToRight",
+   "rule": "wrong rule: 2 + 3 + \"bc\" and \"bc\" + 2 + 3 give the same text. Right rule: + is evaluated left to right: 2 + 3 + \"bc\" is \"5bc\" but \"bc\" + 2 + 3 is \"bc23\".",
+   "source": "level_mis_links"
   }
  },
  "overall_level": "L0",
  "paths": [
   {
    "depth": 1,
-   "source": "division_by_zero",
-   "edge": "mis:division_by_zero->DivisionByZeroIsCompileError",
-   "target": "DivisionByZeroIsCompileError",
+   "source": "string_conversion",
+   "edge": "mis:string_conversion->StringPlusLeftToRight",
+   "target": "StringPlusLeftToRight",
    "kind": "misconception",
    "label": "held",
    "clauses": [
@@ -96,19 +97,19 @@
     2,
     3
    ],
-   "quote": "It wont compile; Dividing by zero isnt allowed; so the compiler stops you before it runs",
-   "confidence": 0.95,
-   "prune_score": 0.8,
-   "score": 0.76,
-   "logic": "System.out.println(5 / 0); is rejected by the compiler.",
-   "twin_logic": "It compiles; the ArithmeticException happens when the program runs.",
+   "quote": "339; Java adds the numbers first; so 1 + 2 is 3 and 4 + 5 is 9, then it joins them with the 3",
+   "confidence": 0.9,
+   "prune_score": 1.0,
+   "score": 0.9,
+   "logic": "2 + 3 + \"bc\" and \"bc\" + 2 + 3 give the same text.",
+   "twin_logic": "+ is evaluated left to right: 2 + 3 + \"bc\" is \"5bc\" but \"bc\" + 2 + 3 is \"bc23\".",
    "role": "primary"
   },
   {
    "depth": 1,
-   "source": "run_time_error",
-   "edge": "mis:run_time_error->DivisionByZeroIsCompileError",
-   "target": "DivisionByZeroIsCompileError",
+   "source": "string_concatenation",
+   "edge": "mis:string_concatenation->ArithmeticPlusPrecedes",
+   "target": "ArithmeticPlusPrecedes",
    "kind": "misconception",
    "label": "held",
    "clauses": [
@@ -116,19 +117,19 @@
     2,
     3
    ],
-   "quote": "It wont compile; Dividing by zero isnt allowed; so the compiler stops you before it runs",
-   "confidence": 0.95,
-   "prune_score": 0.8,
-   "score": 0.76,
-   "logic": "System.out.println(5 / 0); is rejected by the compiler.",
-   "twin_logic": "It compiles; the ArithmeticException happens when the program runs.",
-   "role": "context"
+   "quote": "339; Java adds the numbers first; so 1 + 2 is 3 and 4 + 5 is 9, then it joins them with the 3",
+   "confidence": 0.93,
+   "prune_score": 0.7,
+   "score": 0.651,
+   "logic": "In \"s\" + a + b, the numbers a and b are added first and their sum is joined to s.",
+   "twin_logic": "Both uses of + have the same precedence and are evaluated left to right, so \"s\" + a + b joins a and then b as text; only \"s\" + (a + b) adds them first.",
+   "role": "primary"
   },
   {
    "depth": 1,
-   "source": "division_by_zero",
-   "edge": "lvl:division_by_zero@L0#0",
-   "target": "division_by_zero@L0",
+   "source": "string_concatenation",
+   "edge": "lvl:string_concatenation@L0#3",
+   "target": "string_concatenation@L0",
    "kind": "level",
    "label": "shown",
    "clauses": [
@@ -136,79 +137,118 @@
     2,
     3
    ],
-   "quote": "It wont compile; Dividing by zero isnt allowed; so the compiler stops you before it runs",
-   "confidence": 0.93,
-   "prune_score": 0.7,
-   "score": 0.651,
-   "logic": "Folk meaning: in maths division by zero is 'impossible', so every x / 0 must be rejected, ideally by the compiler. Java rule: the compiler accepts it; int or long / and % by zero throw ArithmeticException at run time, while double division by zero is legal and gives Infinity or NaN.",
+   "quote": "339; Java adds the numbers first; so 1 + 2 is 3 and 4 + 5 is 9, then it joins them with the 3",
+   "confidence": 0.85,
+   "prune_score": 0.6,
+   "score": 0.51,
+   "logic": "Points to LT (left to right, and each + adds or concatenates according to its operands at that moment). Applied unevenly, a student keeps adding numbers after a String has appeared, or concatenates before any String appears (1 + 2 + \"x\" as \"12x\"). (here mixing in: \"+ with a String turns the whole other side into a string first\")",
    "twin_logic": null,
    "level": "L0",
-   "way": "everyday_reading"
+   "way": "inconsistent_trace"
   },
   {
    "depth": 2,
-   "source": "division_by_zero",
-   "edge": "pre:division_by_zero->run_time_error",
-   "target": "run_time_error",
-   "kind": "prerequisite",
-   "label": "broken",
-   "clauses": [
-    1,
-    3
-   ],
-   "quote": "It wont compile; so the compiler stops you before it runs",
-   "confidence": 0.95,
-   "prune_score": 0.65,
-   "score": 0.6175,
-   "logic": "Dividing an int by zero compiles but throws ArithmeticException when the program runs: a run-time error.",
-   "twin_logic": null,
-   "consequence_of": "mis:division_by_zero->DivisionByZeroIsCompileError"
-  },
-  {
-   "depth": 2,
-   "source": "division_by_zero",
-   "edge": "pre:arithmetic_operators->division_by_zero",
+   "source": "string_concatenation",
+   "edge": "par:string_concatenation~arithmetic_operators",
    "target": "arithmetic_operators",
+   "kind": "parallel",
+   "label": "broken",
+   "clauses": [
+    1,
+    2,
+    3
+   ],
+   "quote": "339; Java adds the numbers first; so 1 + 2 is 3 and 4 + 5 is 9, then it joins them with the 3",
+   "confidence": 0.95,
+   "prune_score": 1.0,
+   "score": 0.95,
+   "logic": "+ adds when both operands are numbers and concatenates when either operand is a String, converting the other operand to a String. It is left-associative, so 1 + 2 + \"3\" is \"33\" but \"1\" + 2 + 3 is \"123\".",
+   "twin_logic": null,
+   "consequence_of": "mis:string_conversion->StringPlusLeftToRight"
+  },
+  {
+   "depth": 2,
+   "source": "string_conversion",
+   "edge": "pre:string_concatenation->string_conversion",
+   "target": "string_concatenation",
    "kind": "prerequisite",
    "label": "broken",
    "clauses": [
     1,
     3
    ],
-   "quote": "It wont compile; so the compiler stops you before it runs",
-   "confidence": 0.9,
-   "prune_score": 0.35,
-   "score": 0.315,
-   "logic": "Integer division by zero (1/0) generates a run-time exception, while floating-point 1.0/0.0 is legal and has the value Infinity.",
+   "quote": "339; so 1 + 2 is 3 and 4 + 5 is 9, then it joins them with the 3",
+   "confidence": 0.85,
+   "prune_score": 1.0,
+   "score": 0.85,
+   "logic": "When one operand of + is a String, Java converts the other operand to a String before concatenating.",
    "twin_logic": null,
-   "consequence_of": "mis:division_by_zero->DivisionByZeroIsCompileError"
+   "consequence_of": "mis:string_conversion->StringPlusLeftToRight"
   },
   {
    "depth": 2,
-   "source": "integer_division",
-   "edge": "lvl:integer_division@L4#3",
-   "target": "integer_division@L4",
+   "source": "arithmetic_operators",
+   "edge": "pre:arithmetic_operators->expression",
+   "target": "expression",
+   "kind": "prerequisite",
+   "label": "confirmed",
+   "clauses": [
+    3
+   ],
+   "quote": "so 1 + 2 is 3 and 4 + 5 is 9, then it joins them with the 3",
+   "confidence": 0.6,
+   "prune_score": 1.0,
+   "score": 0.6,
+   "logic": "An operator combines operand values a and b into a new value, so operators build larger expressions from smaller ones.",
+   "twin_logic": null
+  },
+  {
+   "depth": 3,
+   "source": "expression",
+   "edge": "lvl:expression@L0#2",
+   "target": "expression@L0",
    "kind": "level",
    "label": "shown",
    "clauses": [
-    2
+    1,
+    3
    ],
-   "quote": "Dividing by zero isnt allowed",
+   "quote": "339; so 1 + 2 is 3 and 4 + 5 is 9, then it joins them with the 3",
    "confidence": 0.6,
-   "prune_score": 0.6,
-   "score": 0.36,
-   "logic": "rule broken: int division by zero is undefined. Kind: run-time exception. Trigger class: A divisor that evaluates to 0: ArithmeticException: / by zero.",
+   "prune_score": 0.3,
+   "score": 0.18,
+   "logic": "Points to LT (replace each variable with its current value, then apply operators in precedence order). Applied unevenly, a student substitutes current values for some variables and old or future values for others, or respects precedence in one subexpression only. (here mixing in: \"a single literal or variable \"isn't an expression\"\")",
    "twin_logic": null,
-   "level": "L4",
-   "way": "diagnose_an_error"
+   "level": "L0",
+   "way": "inconsistent_trace"
+  },
+  {
+   "depth": 3,
+   "source": "expression",
+   "edge": "lvl:expression@L3#1",
+   "target": "expression@L3",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    2,
+    3
+   ],
+   "quote": "Java adds the numbers first; so 1 + 2 is 3 and 4 + 5 is 9, then it joins them with the 3",
+   "confidence": 0.6,
+   "prune_score": 0.2,
+   "score": 0.12,
+   "logic": "Operators combine operand values into a new value, and the operand types choose the operation (int / truncates, double / does not).",
+   "twin_logic": null,
+   "level": "L3",
+   "way": "relation_to_neighbour"
   }
  ],
  "evidence": [
   {
    "depth": 1,
-   "source": "division_by_zero",
-   "edge": "mis:division_by_zero->DivisionByZeroIsCompileError",
-   "target": "DivisionByZeroIsCompileError",
+   "source": "string_concatenation",
+   "edge": "mis:string_concatenation->ArithmeticPlusPrecedes",
+   "target": "ArithmeticPlusPrecedes",
    "kind": "misconception",
    "label": "held",
    "clauses": [
@@ -216,19 +256,19 @@
     2,
     3
    ],
-   "quote": "It wont compile; Dividing by zero isnt allowed; so the compiler stops you before it runs",
-   "confidence": 0.95,
-   "prune_score": 0.8,
-   "score": 0.76,
-   "logic": "System.out.println(5 / 0); is rejected by the compiler.",
-   "twin_logic": "It compiles; the ArithmeticException happens when the program runs.",
+   "quote": "339; Java adds the numbers first; so 1 + 2 is 3 and 4 + 5 is 9, then it joins them with the 3",
+   "confidence": 0.93,
+   "prune_score": 0.7,
+   "score": 0.651,
+   "logic": "In \"s\" + a + b, the numbers a and b are added first and their sum is joined to s.",
+   "twin_logic": "Both uses of + have the same precedence and are evaluated left to right, so \"s\" + a + b joins a and then b as text; only \"s\" + (a + b) adds them first.",
    "role": "primary"
   },
   {
    "depth": 1,
-   "source": "division_by_zero",
-   "edge": "lvl:division_by_zero@L0#0",
-   "target": "division_by_zero@L0",
+   "source": "string_concatenation",
+   "edge": "lvl:string_concatenation@L0#3",
+   "target": "string_concatenation@L0",
    "kind": "level",
    "label": "shown",
    "clauses": [
@@ -236,20 +276,20 @@
     2,
     3
    ],
-   "quote": "It wont compile; Dividing by zero isnt allowed; so the compiler stops you before it runs",
-   "confidence": 0.93,
-   "prune_score": 0.7,
-   "score": 0.651,
-   "logic": "Folk meaning: in maths division by zero is 'impossible', so every x / 0 must be rejected, ideally by the compiler. Java rule: the compiler accepts it; int or long / and % by zero throw ArithmeticException at run time, while double division by zero is legal and gives Infinity or NaN.",
+   "quote": "339; Java adds the numbers first; so 1 + 2 is 3 and 4 + 5 is 9, then it joins them with the 3",
+   "confidence": 0.85,
+   "prune_score": 0.6,
+   "score": 0.51,
+   "logic": "Points to LT (left to right, and each + adds or concatenates according to its operands at that moment). Applied unevenly, a student keeps adding numbers after a String has appeared, or concatenates before any String appears (1 + 2 + \"x\" as \"12x\"). (here mixing in: \"+ with a String turns the whole other side into a string first\")",
    "twin_logic": null,
    "level": "L0",
-   "way": "everyday_reading"
+   "way": "inconsistent_trace"
   },
   {
    "depth": 1,
-   "source": "run_time_error",
-   "edge": "mis:run_time_error->DivisionByZeroIsCompileError",
-   "target": "DivisionByZeroIsCompileError",
+   "source": "string_conversion",
+   "edge": "mis:string_conversion->StringPlusLeftToRight",
+   "target": "StringPlusLeftToRight",
    "kind": "misconception",
    "label": "held",
    "clauses": [
@@ -257,106 +297,164 @@
     2,
     3
    ],
-   "quote": "It wont compile; Dividing by zero isnt allowed; so the compiler stops you before it runs",
-   "confidence": 0.95,
-   "prune_score": 0.8,
-   "score": 0.76,
-   "logic": "System.out.println(5 / 0); is rejected by the compiler.",
-   "twin_logic": "It compiles; the ArithmeticException happens when the program runs.",
-   "role": "context"
+   "quote": "339; Java adds the numbers first; so 1 + 2 is 3 and 4 + 5 is 9, then it joins them with the 3",
+   "confidence": 0.9,
+   "prune_score": 1.0,
+   "score": 0.9,
+   "logic": "2 + 3 + \"bc\" and \"bc\" + 2 + 3 give the same text.",
+   "twin_logic": "+ is evaluated left to right: 2 + 3 + \"bc\" is \"5bc\" but \"bc\" + 2 + 3 is \"bc23\".",
+   "role": "primary"
   },
   {
    "depth": 1,
-   "source": "run_time_error",
-   "edge": "lvl:run_time_error@L0#0",
-   "target": "run_time_error@L0",
+   "source": "string_conversion",
+   "edge": "lvl:string_conversion@L0#2",
+   "target": "string_conversion@L0",
    "kind": "level",
    "label": "shown",
    "clauses": [
     1,
     3
    ],
-   "quote": "It wont compile; so the compiler stops you before it runs",
+   "quote": "339; so 1 + 2 is 3 and 4 + 5 is 9, then it joins them with the 3",
+   "confidence": 0.8,
+   "prune_score": 0.55,
+   "score": 0.44,
+   "logic": "Points to LT (+ is applied left to right, each + deciding between addition and concatenation from its two operands at that moment). Applied unevenly: once a String has appeared the student goes back to numeric addition for later terms, or concatenates two numbers that come before any String. (here mixing in: \"2 + 3 + \"bc\" and \"bc\" + 2 + 3 give the same text\")",
+   "twin_logic": null,
+   "level": "L0",
+   "way": "inconsistent_trace"
+  },
+  {
+   "depth": 1,
+   "source": "string_conversion",
+   "edge": "lvl:string_conversion@L0#0",
+   "target": "string_conversion@L0",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    1,
+    2,
+    3
+   ],
+   "quote": "339; Java adds the numbers first; so 1 + 2 is 3 and 4 + 5 is 9, then it joins them with the 3",
    "confidence": 0.85,
    "prune_score": 0.3,
    "score": 0.255,
-   "logic": "Everyday reading: if the program compiled, the computer has accepted it, so any problem would have been reported then. Java rule: run-time errors are detected only while the program executes, on particular data (e.g. no argument, a divisor of 0), and stop it with an exception.",
+   "logic": "Folk meaning: + is addition, which is commutative and associative, so 2 + 3 + \"bc\" and \"bc\" + 2 + 3 must give the same thing. Java rule: when one operand of + is a String the other is converted to a String and concatenated, and + is evaluated left to right, so 2 + 3 + \"bc\" is \"5bc\" but \"bc\" + 2 + 3 is \"bc23\".",
    "twin_logic": null,
    "level": "L0",
    "way": "everyday_reading"
   },
   {
    "depth": 2,
-   "source": "division_by_zero",
-   "edge": "pre:division_by_zero->run_time_error",
-   "target": "run_time_error",
+   "source": "string_conversion",
+   "edge": "pre:string_concatenation->string_conversion",
+   "target": "string_concatenation",
    "kind": "prerequisite",
    "label": "broken",
    "clauses": [
     1,
     3
    ],
-   "quote": "It wont compile; so the compiler stops you before it runs",
-   "confidence": 0.95,
-   "prune_score": 0.65,
-   "score": 0.6175,
-   "logic": "Dividing an int by zero compiles but throws ArithmeticException when the program runs: a run-time error.",
+   "quote": "339; so 1 + 2 is 3 and 4 + 5 is 9, then it joins them with the 3",
+   "confidence": 0.85,
+   "prune_score": 1.0,
+   "score": 0.85,
+   "logic": "When one operand of + is a String, Java converts the other operand to a String before concatenating.",
    "twin_logic": null,
-   "consequence_of": "mis:division_by_zero->DivisionByZeroIsCompileError"
+   "consequence_of": "mis:string_conversion->StringPlusLeftToRight"
   },
   {
    "depth": 2,
-   "source": "division_by_zero",
-   "edge": "pre:arithmetic_operators->division_by_zero",
+   "source": "string_concatenation",
+   "edge": "par:string_concatenation~arithmetic_operators",
    "target": "arithmetic_operators",
-   "kind": "prerequisite",
+   "kind": "parallel",
    "label": "broken",
    "clauses": [
     1,
+    2,
     3
    ],
-   "quote": "It wont compile; so the compiler stops you before it runs",
-   "confidence": 0.9,
-   "prune_score": 0.35,
-   "score": 0.315,
-   "logic": "Integer division by zero (1/0) generates a run-time exception, while floating-point 1.0/0.0 is legal and has the value Infinity.",
+   "quote": "339; Java adds the numbers first; so 1 + 2 is 3 and 4 + 5 is 9, then it joins them with the 3",
+   "confidence": 0.95,
+   "prune_score": 1.0,
+   "score": 0.95,
+   "logic": "+ adds when both operands are numbers and concatenates when either operand is a String, converting the other operand to a String. It is left-associative, so 1 + 2 + \"3\" is \"33\" but \"1\" + 2 + 3 is \"123\".",
    "twin_logic": null,
-   "consequence_of": "mis:division_by_zero->DivisionByZeroIsCompileError"
+   "consequence_of": "mis:string_conversion->StringPlusLeftToRight"
   },
   {
    "depth": 2,
-   "source": "integer_division",
-   "edge": "lvl:integer_division@L4#3",
-   "target": "integer_division@L4",
+   "source": "arithmetic_operators",
+   "edge": "pre:arithmetic_operators->expression",
+   "target": "expression",
+   "kind": "prerequisite",
+   "label": "confirmed",
+   "clauses": [
+    3
+   ],
+   "quote": "so 1 + 2 is 3 and 4 + 5 is 9, then it joins them with the 3",
+   "confidence": 0.6,
+   "prune_score": 1.0,
+   "score": 0.6,
+   "logic": "An operator combines operand values a and b into a new value, so operators build larger expressions from smaller ones.",
+   "twin_logic": null
+  },
+  {
+   "depth": 3,
+   "source": "expression",
+   "edge": "lvl:expression@L0#2",
+   "target": "expression@L0",
    "kind": "level",
    "label": "shown",
    "clauses": [
-    2
+    1,
+    3
    ],
-   "quote": "Dividing by zero isnt allowed",
+   "quote": "339; so 1 + 2 is 3 and 4 + 5 is 9, then it joins them with the 3",
    "confidence": 0.6,
-   "prune_score": 0.6,
-   "score": 0.36,
-   "logic": "rule broken: int division by zero is undefined. Kind: run-time exception. Trigger class: A divisor that evaluates to 0: ArithmeticException: / by zero.",
+   "prune_score": 0.3,
+   "score": 0.18,
+   "logic": "Points to LT (replace each variable with its current value, then apply operators in precedence order). Applied unevenly, a student substitutes current values for some variables and old or future values for others, or respects precedence in one subexpression only. (here mixing in: \"a single literal or variable \"isn't an expression\"\")",
    "twin_logic": null,
-   "level": "L4",
-   "way": "diagnose_an_error"
+   "level": "L0",
+   "way": "inconsistent_trace"
+  },
+  {
+   "depth": 3,
+   "source": "expression",
+   "edge": "lvl:expression@L3#1",
+   "target": "expression@L3",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    2,
+    3
+   ],
+   "quote": "Java adds the numbers first; so 1 + 2 is 3 and 4 + 5 is 9, then it joins them with the 3",
+   "confidence": 0.6,
+   "prune_score": 0.2,
+   "score": 0.12,
+   "logic": "Operators combine operand values into a new value, and the operand types choose the operation (int / truncates, double / does not).",
+   "twin_logic": null,
+   "level": "L3",
+   "way": "relation_to_neighbour"
   }
  ],
  "clause_coverage": {
-  "It wont compile": "mis:division_by_zero->DivisionByZeroIsCompileError",
-  "Dividing by zero isnt allowed": "mis:division_by_zero->DivisionByZeroIsCompileError",
-  "so the compiler stops you before it runs": "mis:division_by_zero->DivisionByZeroIsCompileError"
+  "339": "mis:string_concatenation->ArithmeticPlusPrecedes",
+  "Java adds the numbers first": "mis:string_concatenation->ArithmeticPlusPrecedes",
+  "so 1 + 2 is 3 and 4 + 5 is 9, then it joins them with the 3": "mis:string_concatenation->ArithmeticPlusPrecedes"
  },
- "unexplained_clauses": [
-  "Actual: it compiles, then crashes at run time with ArithmeticException: / by zero"
- ],
- "stop_reason": "half_stop",
+ "unexplained_clauses": [],
+ "stop_reason": "sufficient",
  "depth_reached": 3,
  "llm_calls": 0,
- "llm_cache_hits": 36,
+ "llm_cache_hits": 30,
  "llm_calls_by_step": {
-  "prune": 13,
-  "label": 23
+  "prune": 11,
+  "label": 19
  }
 }

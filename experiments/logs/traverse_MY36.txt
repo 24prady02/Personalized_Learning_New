@@ -1,94 +1,55 @@
-clauses: 0 | Nothing was added | so sum and count are both 0, and 0 divided by 0 is just 0
-start: BM25 of the answer against each tagged concept: sentinel_loop 18.56 (hits 1), division_by_zero 17.29 (hits 1), compound_assignment 10.91 (hits 1), loop_control 10.71 (hits 1), increment_operators 10.12 (hits 1), while_loop 10.09 (hits 1), integer_division 9.85 (hits 1), arithmetic_operators 9.73 (hits 1), run_time_error 8.85 (hits 1), boolean_expression 8.85 (hits 1), accumulator_pattern 7.23 (hits 1), named_constants 6.20 (hits 1), counter_pattern 5.94 (hits 1), loop_body 5.10 (hits 1), filter 5.02 (hits 1), println 3.63 (hits 1), control_flow 3.55 (hits 1), comparison_operators 3.23 (hits 1), method_call 3.12 (hits 1), standard_input 1.80 (hits 1), stream_model 1.22 (hits 1), api 0.57 (hits 1), input_format 0.53 (hits 1)
-start: chosen sentinel_loop, division_by_zero, compound_assignment
-start concepts (3): sentinel_loop, division_by_zero, compound_assignment
---- depth 1: current concepts ['sentinel_loop', 'division_by_zero', 'compound_assignment']
-  sentinel_loop (misconceptions): 3 candidates -> kept err:sentinel_loop->AverageWithoutZeroGuard (0.80), mis:sentinel_loop->SentinelProcessed (0.15), err:sentinel_loop->NegativeNotFiltered (0.05)
-    err:sentinel_loop->AverageWithoutZeroGuard -> held (0.74) "0; so sum and count are both 0, and 0 divided by 0 is just 0"
-    mis:sentinel_loop->SentinelProcessed -> correct (0.13) "Nothing was added"
-    err:sentinel_loop->NegativeNotFiltered -> not applied (0.00) ""
-  sentinel_loop (level ways): 16 candidates -> kept lvl:sentinel_loop@L4#1 (0.50), lvl:sentinel_loop@L2#2 (0.30), lvl:sentinel_loop@L3#1 (0.20)
-    lvl:sentinel_loop@L4#1 -> not applied (0.00) ""
-    lvl:sentinel_loop@L2#2 -> shown (0.24) "Nothing was added; so sum and count are both 0, and 0 divided by 0 is just 0"
-    lvl:sentinel_loop@L3#1 -> shown (0.16) "Nothing was added; so sum and count are both 0, and 0 divided by 0 is just 0"
-  division_by_zero (misconceptions): 3 candidates -> kept err:division_by_zero->AverageWithoutZeroGuard (0.60), mis:division_by_zero->ZeroDivisionAlwaysCrashes (0.30), mis:division_by_zero->DivisionByZeroIsCompileError (0.10)
-    err:division_by_zero->AverageWithoutZeroGuard -> held (0.51) "0; so sum and count are both 0, and 0 divided by 0 is just 0"
-    mis:division_by_zero->ZeroDivisionAlwaysCrashes -> not applied (0.00) ""
-    mis:division_by_zero->DivisionByZeroIsCompileError -> not applied (0.00) ""
-  division_by_zero (level ways): 15 candidates -> kept lvl:division_by_zero@L4#1 (0.50), lvl:division_by_zero@L2#1 (0.30), lvl:division_by_zero@L4#3 (0.20)
-    lvl:division_by_zero@L4#1 -> not applied (0.00) ""
-    lvl:division_by_zero@L2#1 -> not applied (0.00) ""
-    lvl:division_by_zero@L4#3 -> not applied (0.00) ""
-  compound_assignment (misconceptions): 2 candidates -> kept mis:compound_assignment->CompoundAssignmentNoCast (0.60), mis:compound_assignment->CompoundSubtractIsAssignNegative (0.40)
-    mis:compound_assignment->CompoundAssignmentNoCast -> not applied (0.00) ""
-    mis:compound_assignment->CompoundSubtractIsAssignNegative -> not applied (0.00) ""
-  compound_assignment (level ways): 15 candidates -> kept lvl:compound_assignment@L3#3 (0.50), lvl:compound_assignment@L2#2 (0.30), lvl:compound_assignment@L3#0 (0.20)
-    lvl:compound_assignment@L3#3 -> shown (0.28) "Nothing was added"
-    lvl:compound_assignment@L2#2 -> not applied (0.00) ""
-    lvl:compound_assignment@L3#0 -> not applied (0.00) ""
-  kept: err:sentinel_loop->AverageWithoutZeroGuard [held, tier 1, 0.74], err:division_by_zero->AverageWithoutZeroGuard [held, tier 1, 0.51], lvl:compound_assignment@L3#3 [shown, tier 2, 0.28]
-  clause coverage: c1 <- err:sentinel_loop->AverageWithoutZeroGuard; c2 <- mis:sentinel_loop->SentinelProcessed; c3 <- err:sentinel_loop->AverageWithoutZeroGuard
-  not yet read: par:increment_operators~compound_assignment, pre:accumulator_pattern->sentinel_loop, pre:arithmetic_operators->division_by_zero, pre:assignment->compound_assignment, pre:compound_assignment->accumulator_pattern, pre:division_by_zero->run_time_error, pre:while_loop->sentinel_loop
---- depth 2: current concepts ['sentinel_loop', 'division_by_zero', 'compound_assignment']
-  sentinel_loop (concept edges): 2 candidates -> kept pre:accumulator_pattern->sentinel_loop (0.60), pre:while_loop->sentinel_loop (0.40)
-    pre:accumulator_pattern->sentinel_loop -> confirmed (0.48) "Nothing was added; so sum and count are both 0, and 0 divided by 0 is just 0"
-    pre:while_loop->sentinel_loop -> confirmed (0.30) "Nothing was added"
-  division_by_zero (concept edges): 2 candidates -> kept pre:arithmetic_operators->division_by_zero (0.60), pre:division_by_zero->run_time_error (0.40)
-    pre:arithmetic_operators->division_by_zero -> broken (0.57) "0; so sum and count are both 0, and 0 divided by 0 is just 0"
-    pre:division_by_zero->run_time_error -> broken (0.38) "0; so sum and count are both 0, and 0 divided by 0 is just 0"
-  compound_assignment (concept edges): 3 candidates -> kept pre:compound_assignment->accumulator_pattern (0.50), par:increment_operators~compound_assignment (0.30), pre:assignment->compound_assignment (0.20)
-    pre:compound_assignment->accumulator_pattern -> confirmed (0.38) "Nothing was added; so sum and count are both 0, and 0 divided by 0 is just 0"
-    par:increment_operators~compound_assignment -> not applied (0.00) ""
-    pre:assignment->compound_assignment -> not applied (0.00) ""
-  kept: pre:arithmetic_operators->division_by_zero [broken, tier 0, 0.57], pre:division_by_zero->run_time_error [broken, tier 0, 0.38], pre:accumulator_pattern->sentinel_loop [confirmed, tier 2, 0.48]
-  reached across pre:arithmetic_operators->division_by_zero, entered next: arithmetic_operators
-  reached across pre:division_by_zero->run_time_error, entered next: run_time_error
-  reached across pre:accumulator_pattern->sentinel_loop, entered next: accumulator_pattern
-  clause coverage: c1 <- err:sentinel_loop->AverageWithoutZeroGuard; c2 <- mis:sentinel_loop->SentinelProcessed; c3 <- err:sentinel_loop->AverageWithoutZeroGuard
-  not yet read: own edges of accumulator_pattern, own edges of arithmetic_operators, own edges of run_time_error
---- depth 3: current concepts ['arithmetic_operators', 'division_by_zero', 'run_time_error', 'accumulator_pattern', 'sentinel_loop']
-  arithmetic_operators (misconceptions): 3 candidates -> kept mis:arithmetic_operators->RemainderIsSubtraction (1.00)
-    mis:arithmetic_operators->RemainderIsSubtraction -> not applied (0.00) ""
-  arithmetic_operators (level ways): 18 candidates -> kept lvl:arithmetic_operators@L4#2 (0.50), lvl:arithmetic_operators@L3#2 (0.30), lvl:arithmetic_operators@L1#1 (0.20)
-    lvl:arithmetic_operators@L4#2 -> not applied (0.00) ""
-    lvl:arithmetic_operators@L3#2 -> not applied (0.00) ""
-    lvl:arithmetic_operators@L1#1 -> not applied (0.00) ""
-  run_time_error (misconceptions): 7 candidates -> kept mis:run_time_error->DivisionByZeroIsCompileError (0.60), mis:run_time_error->CompilesMeansWorks (0.30), err:run_time_error->InputTypeMismatch (0.10)
-    mis:run_time_error->DivisionByZeroIsCompileError -> not applied (0.00) ""
-    mis:run_time_error->CompilesMeansWorks -> not applied (0.00) ""
-    err:run_time_error->InputTypeMismatch -> not applied (0.00) ""
-  run_time_error (level ways): 19 candidates -> kept lvl:run_time_error@L4#6 (0.60), lvl:run_time_error@L0#0 (0.25), lvl:run_time_error@L2#1 (0.15)
-    lvl:run_time_error@L4#6 -> not applied (0.00) ""
-    lvl:run_time_error@L0#0 -> not applied (0.00) ""
-    lvl:run_time_error@L2#1 -> not applied (0.00) ""
-  accumulator_pattern (misconceptions): 4 candidates -> kept err:accumulator_pattern->AccumulatorDeclaredInLoop (0.45), mis:accumulator_pattern->VariableRolesInferred (0.30), mis:accumulator_pattern->StateChangeIgnoredAcrossPasses (0.25)
-    err:accumulator_pattern->AccumulatorDeclaredInLoop -> not applied (0.00) ""
-    mis:accumulator_pattern->VariableRolesInferred -> not applied (0.00) ""
-    mis:accumulator_pattern->StateChangeIgnoredAcrossPasses -> not applied (0.00) ""
-  accumulator_pattern (level ways): 17 candidates -> kept lvl:accumulator_pattern@L3#2 (0.50), lvl:accumulator_pattern@L2#0 (0.30), lvl:accumulator_pattern@L2#1 (0.20)
-    lvl:accumulator_pattern@L3#2 -> shown (0.40) "Nothing was added; so sum and count are both 0, and 0 divided by 0 is just 0"
-    lvl:accumulator_pattern@L2#0 -> shown (0.21) "Nothing was added; so sum and count are both 0, and 0 divided by 0 is just 0"
-    lvl:accumulator_pattern@L2#1 -> shown (0.14) "Nothing was added; so sum and count are both 0, and 0 divided by 0 is just 0"
-  sentinel_loop (concept edges): 1 candidates -> kept pre:while_loop->sentinel_loop (1.00)
-    pre:while_loop->sentinel_loop -> confirmed (0.75) "Nothing was added"
-  kept: pre:while_loop->sentinel_loop [confirmed, tier 2, 0.75], lvl:accumulator_pattern@L3#2 [shown, tier 2, 0.40], lvl:accumulator_pattern@L2#0 [shown, tier 2, 0.21]
-  reached across pre:while_loop->sentinel_loop, entered next: while_loop
-  clause coverage: c1 <- err:sentinel_loop->AverageWithoutZeroGuard; c2 <- mis:sentinel_loop->SentinelProcessed; c3 <- err:sentinel_loop->AverageWithoutZeroGuard
-  not yet read: own edges of while_loop, par:accumulator_pattern~counter_pattern, pre:arithmetic_operators->expression, pre:arithmetic_operators->integer_division, pre:loop_body->accumulator_pattern
---- depth 4: current concepts ['while_loop'] (closing round: own edges only)
-  while_loop (misconceptions): 19 candidates -> kept mis:while_loop->LoopBodyAlwaysOnce (0.45), err:while_loop->LoopIgnoresCodeBefore (0.30), mis:while_loop->ProgramEndsAfterLoop (0.25)
-    mis:while_loop->LoopBodyAlwaysOnce -> correct (0.41) "Nothing was added; so sum and count are both 0, and 0 divided by 0 is just 0"
-    err:while_loop->LoopIgnoresCodeBefore -> correct (0.21) "Nothing was added; so sum and count are both 0, and 0 divided by 0 is just 0"
-    mis:while_loop->ProgramEndsAfterLoop -> correct (0.20) "0; so sum and count are both 0, and 0 divided by 0 is just 0"
-  while_loop (level ways): 24 candidates -> kept lvl:while_loop@L2#2 (0.40), lvl:while_loop@L4#0 (0.35), lvl:while_loop@L2#0 (0.25)
-    lvl:while_loop@L2#2 -> shown (0.30) "Nothing was added; so sum and count are both 0, and 0 divided by 0 is just 0"
-    lvl:while_loop@L4#0 -> shown (0.24) "Nothing was added; so sum and count are both 0, and 0 divided by 0 is just 0"
-    lvl:while_loop@L2#0 -> shown (0.17) "Nothing was added; so sum and count are both 0, and 0 divided by 0 is just 0"
-  kept: mis:while_loop->LoopBodyAlwaysOnce [correct, tier 2, 0.41], lvl:while_loop@L2#2 [shown, tier 2, 0.30], lvl:while_loop@L4#0 [shown, tier 2, 0.24]
-  clause coverage: c1 <- err:sentinel_loop->AverageWithoutZeroGuard; c2 <- mis:sentinel_loop->SentinelProcessed; c3 <- err:sentinel_loop->AverageWithoutZeroGuard
-  not yet read: par:accumulator_pattern~counter_pattern, pre:arithmetic_operators->expression, pre:arithmetic_operators->integer_division, pre:boolean_expression->while_loop, pre:loop_body->accumulator_pattern, pre:while_loop->loop_body, pre:while_loop->loop_control
-  root-cause walk: held on ['division_by_zero', 'sentinel_loop'], broken at ['division_by_zero', 'run_time_error'], prerequisites {'sentinel_loop': ['accumulator_pattern', 'while_loop'], 'division_by_zero': ['arithmetic_operators'], 'expression': ['arithmetic_operators'], 'integer_division': ['arithmetic_operators'], 'compound_assignment': ['assignment'], 'increment_operators': ['assignment', 'loop_control'], 'while_loop': ['boolean_expression'], 'boolean_expression': ['comparison_operators'], 'accumulator_pattern': ['compound_assignment', 'loop_body'], 'assignment': ['declaration'], 'named_constants': ['declaration'], 'run_time_error': ['division_by_zero'], 'comparison_operators': ['expression'], 'method_call': ['expression'], 'counter_pattern': ['increment_operators', 'loop_body'], 'api': ['method_call'], 'filter': ['standard_input'], 'input_format': ['standard_input'], 'control_flow': ['statement'], 'println': ['statement'], 'standard_input': ['stream_model'], 'standard_output': ['stream_model'], 'loop_body': ['while_loop'], 'loop_control': ['while_loop']}
-  level accumulator_pattern: L3 via relation_to_neighbour "Nothing was added; so sum and count are both 0, and 0 divided by 0 is just 0"
-  level compound_assignment: L3 via purpose_of_the_whole "Nothing was added"
-  level sentinel_loop: L3 via relation_to_neighbour "Nothing was added; so sum and count are both 0, and 0 divided by 0 is just 0"
-  level while_loop: L4 via predict_a_change "Nothing was added; so sum and count are both 0, and 0 divided by 0 is just 0"
+clauses: 1 | b is a copy of a | so changing b[0] doesnt touch a
+start: BM25 of the answer against each tagged concept: array_aliasing 9.87 (hits 1), indexing 8.26 (hits 1), array_initializer 6.59 (hits 1), array_reference 6.40 (hits 1), array_declaration 4.44 (hits 1), primitive_vs_reference 4.08 (hits 1), println 2.01 (hits 1), data_structure 1.05 (hits 1)
+start: chosen array_aliasing, indexing, array_initializer
+start concepts (3): array_aliasing, indexing, array_initializer
+--- depth 1: current concepts ['array_aliasing', 'indexing', 'array_initializer']
+  array_aliasing (misconceptions): 3 candidates -> kept mis:array_aliasing->AssignmentCopiesObject (1.00)
+    mis:array_aliasing->AssignmentCopiesObject -> held (0.97) "1; b is a copy of a; so changing b[0] doesnt touch a"
+  array_aliasing (level ways): 15 candidates -> kept lvl:array_aliasing@L0#0 (0.60), lvl:array_aliasing@L4#2 (0.25), lvl:array_aliasing@L3#2 (0.15)
+    lvl:array_aliasing@L0#0 -> shown (0.56) "1; b is a copy of a; so changing b[0] doesnt touch a"
+    lvl:array_aliasing@L4#2 -> not applied (0.00) ""
+    lvl:array_aliasing@L3#2 -> not applied (0.00) ""
+  indexing (misconceptions): 8 candidates -> kept mis:indexing->ArrayIndexStartsAtOne (0.40), mis:indexing->ElementNameIsWholeArray (0.30), mis:indexing->ArrayElementNotVariable (0.30)
+    mis:indexing->ArrayIndexStartsAtOne -> correct (0.24) "1"
+    mis:indexing->ElementNameIsWholeArray -> not applied (0.00) ""
+    mis:indexing->ArrayElementNotVariable -> not applied (0.00) ""
+  indexing (level ways): 21 candidates -> kept lvl:indexing@L2#2 (0.50), lvl:indexing@L2#1 (0.30), lvl:indexing@L1#0 (0.20)
+    lvl:indexing@L2#2 -> not applied (0.00) ""
+    lvl:indexing@L2#1 -> shown (0.18) "1"
+    lvl:indexing@L1#0 -> shown (0.12) "so changing b[0] doesnt touch a"
+  array_initializer (misconceptions): 2 candidates -> kept mis:array_initializer->ArrayInitializerContentsInBrackets (0.60), mis:array_initializer->ArrayBracketCountIsLength (0.40)
+    mis:array_initializer->ArrayInitializerContentsInBrackets -> not applied (0.00) ""
+    mis:array_initializer->ArrayBracketCountIsLength -> not applied (0.00) ""
+  array_initializer (level ways): 14 candidates -> kept lvl:array_initializer@L2#1 (0.50), lvl:array_initializer@L2#2 (0.30), lvl:array_initializer@L2#0 (0.20)
+    lvl:array_initializer@L2#1 -> shown (0.30) "1"
+    lvl:array_initializer@L2#2 -> not applied (0.00) ""
+    lvl:array_initializer@L2#0 -> not applied (0.00) ""
+  kept: mis:array_aliasing->AssignmentCopiesObject [held, tier 0, 0.97], lvl:array_aliasing@L0#0 [shown, tier 2, 0.56], lvl:array_initializer@L2#1 [shown, tier 2, 0.30]
+  clause coverage: c1 <- mis:array_aliasing->AssignmentCopiesObject; c2 <- mis:array_aliasing->AssignmentCopiesObject; c3 <- mis:array_aliasing->AssignmentCopiesObject
+  not yet read: pre:array_declaration->array_initializer, pre:array_initializer->indexing, pre:array_reference->array_aliasing
+--- depth 2: current concepts ['array_aliasing', 'indexing', 'array_initializer']
+  array_aliasing (concept edges): 1 candidates -> kept pre:array_reference->array_aliasing (1.00)
+    pre:array_reference->array_aliasing -> broken (0.97) "1; b is a copy of a; so changing b[0] doesnt touch a"
+  indexing (concept edges): 1 candidates -> kept pre:array_initializer->indexing (1.00)
+    pre:array_initializer->indexing -> confirmed (0.70) "1"
+  array_initializer (concept edges): 1 candidates -> kept pre:array_declaration->array_initializer (1.00)
+    pre:array_declaration->array_initializer -> not applied (0.00) ""
+  kept: pre:array_reference->array_aliasing [broken, tier 0, 0.97], pre:array_initializer->indexing [confirmed, tier 2, 0.70]
+  reached across pre:array_reference->array_aliasing, entered next: array_reference
+  clause coverage: c1 <- mis:array_aliasing->AssignmentCopiesObject; c2 <- mis:array_aliasing->AssignmentCopiesObject; c3 <- mis:array_aliasing->AssignmentCopiesObject
+  not yet read: own edges of array_reference
+--- depth 3: current concepts ['array_reference', 'array_aliasing', 'array_initializer', 'indexing']
+  array_reference (level ways): 12 candidates -> kept lvl:array_reference@L4#0 (0.50), lvl:array_reference@L0#0 (0.30), lvl:array_reference@L2#2 (0.20)
+    lvl:array_reference@L4#0 -> not applied (0.00) ""
+    lvl:array_reference@L0#0 -> shown (0.27) "1; b is a copy of a; so changing b[0] doesnt touch a"
+    lvl:array_reference@L2#2 -> not applied (0.00) ""
+  array_initializer (concept edges): 1 candidates -> kept pre:array_declaration->array_initializer (1.00)
+    pre:array_declaration->array_initializer -> not applied (0.00) ""
+  kept: lvl:array_reference@L0#0 [shown, tier 2, 0.27]
+  clause coverage: c1 <- mis:array_aliasing->AssignmentCopiesObject; c2 <- mis:array_aliasing->AssignmentCopiesObject; c3 <- mis:array_aliasing->AssignmentCopiesObject
+  not yet read: pre:array_declaration->array_reference, pre:array_reference->primitive_vs_reference
+  root-cause walk: held on ['array_aliasing'], broken at [] (consequences: pre:array_reference->array_aliasing), prerequisites {'array_initializer': ['array_declaration'], 'array_reference': ['array_declaration'], 'indexing': ['array_initializer'], 'array_aliasing': ['array_reference'], 'primitive_vs_reference': ['array_reference', 'primitive_type'], 'array_declaration': ['data_structure'], 'data_structure': ['data_type'], 'primitive_type': ['data_type'], 'println': ['statement']}
+  level array_aliasing: L0 via misconception "1; b is a copy of a; so changing b[0] doesnt touch a"
+  level array_initializer: L2 via output_prediction "1"
+  level array_reference: L0 via everyday_reading "1; b is a copy of a; so changing b[0] doesnt touch a"
+  level indexing: L2 via output_prediction "1"

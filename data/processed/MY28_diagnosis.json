@@ -8,88 +8,121 @@
   "backend": "claude-cli"
  },
  "clauses": [
-  "339",
-  "Java adds the numbers first",
-  "so 1 + 2 is 3 and 4 + 5 is 9, then it joins them with the 3"
+  "3.5",
+  "The cast makes it a double division",
+  "so you get the decimal part"
  ],
  "start_concepts": [
-  "arithmetic_operators",
-  "string_concatenation",
-  "string_conversion"
+  "explicit_cast",
+  "integer_division",
+  "type_conversion"
  ],
  "held_misconceptions": [
   {
-   "concept": "string_conversion",
-   "misconception": "StringPlusLeftToRight",
+   "concept": "explicit_cast",
+   "misconception": "CastAfterIntDivision",
    "kind": "misconception",
-   "quote": "339; Java adds the numbers first; so 1 + 2 is 3 and 4 + 5 is 9, then it joins them with the 3",
-   "score": 0.9
-  },
-  {
-   "concept": "string_concatenation",
-   "misconception": "ArithmeticPlusPrecedes",
-   "kind": "misconception",
-   "quote": "339; Java adds the numbers first; so 1 + 2 is 3 and 4 + 5 is 9, then it joins them with the 3",
-   "score": 0.651
+   "quote": "3.5; The cast makes it a double division; so you get the decimal part",
+   "score": 0.665
   }
  ],
  "error_evidence": [],
- "shadowed": [],
- "broken_edges": [
+ "shadowed": [
   {
-   "edge": "par:string_concatenation~arithmetic_operators",
-   "quote": "339; Java adds the numbers first; so 1 + 2 is 3 and 4 + 5 is 9, then it joins them with the 3",
-   "score": 0.95,
-   "consequence_of": "mis:string_conversion->StringPlusLeftToRight"
+   "concept": "integer_division",
+   "misconception": "CastAfterIntDivision",
+   "shadow_of": "mis:explicit_cast->CastAfterIntDivision",
+   "quote": "3.5; The cast makes it a double division; so you get the decimal part",
+   "score": 0.57
   },
   {
-   "edge": "pre:string_concatenation->string_conversion",
-   "quote": "339; so 1 + 2 is 3 and 4 + 5 is 9, then it joins them with the 3",
-   "score": 0.85,
-   "consequence_of": "mis:string_conversion->StringPlusLeftToRight"
+   "concept": "type_conversion",
+   "misconception": "TargetTyping",
+   "shadow_of": "mis:explicit_cast->CastAfterIntDivision",
+   "quote": "3.5; The cast makes it a double division; so you get the decimal part",
+   "score": 0.64
+  }
+ ],
+ "broken_edges": [
+  {
+   "edge": "pre:arithmetic_operators->integer_division",
+   "quote": "3.5; The cast makes it a double division; so you get the decimal part",
+   "score": 0.9,
+   "consequence_of": "mis:explicit_cast->CastAfterIntDivision"
+  },
+  {
+   "edge": "pre:integer_division->explicit_cast",
+   "quote": "3.5; The cast makes it a double division; so you get the decimal part",
+   "score": 0.76,
+   "consequence_of": "mis:explicit_cast->CastAfterIntDivision"
+  },
+  {
+   "edge": "pre:primitive_type->type_conversion",
+   "quote": "3.5; The cast makes it a double division; so you get the decimal part",
+   "score": 0.7,
+   "consequence_of": "mis:explicit_cast->CastAfterIntDivision"
+  },
+  {
+   "edge": "pre:type_conversion->explicit_cast",
+   "quote": "3.5; The cast makes it a double division; so you get the decimal part",
+   "score": 0.15,
+   "consequence_of": "mis:explicit_cast->CastAfterIntDivision"
   }
  ],
  "root_cause": {
-  "concept": "string_concatenation",
-  "misconception": "ArithmeticPlusPrecedes"
+  "concept": "explicit_cast",
+  "misconception": "CastAfterIntDivision"
  },
  "levels": {
-  "expression": {
+  "arithmetic_operators": {
+   "level": "L4",
+   "way": "predict_a_change",
+   "quote": "The cast makes it a double division; so you get the decimal part",
+   "edge": "lvl:arithmetic_operators@L4#0",
+   "source": "level_way",
+   "also_shown": []
+  },
+  "explicit_cast": {
+   "level": "L0",
+   "way": "misconception",
+   "misconception": "CastAfterIntDivision",
+   "quote": "3.5; The cast makes it a double division; so you get the decimal part",
+   "edge": "mis:explicit_cast->CastAfterIntDivision",
+   "rule": "wrong rule: (double) (3 / 5) is 0.6. Right rule: The integer division 3 / 5 = 0 happens inside the parentheses before the cast, so the result is 0.0; write (double) 3 / 5 to get 0.6.",
+   "source": "level_mis_links"
+  },
+  "integer_division": {
+   "level": "L0",
+   "way": "inconsistent_trace",
+   "quote": "3.5; The cast makes it a double division; so you get the decimal part",
+   "edge": "lvl:integer_division@L0#4",
+   "source": "level_way",
+   "also_shown": []
+  },
+  "primitive_type": {
    "level": "L3",
    "way": "relation_to_neighbour",
-   "quote": "Java adds the numbers first; so 1 + 2 is 3 and 4 + 5 is 9, then it joins them with the 3",
-   "edge": "lvl:expression@L3#1",
+   "quote": "The cast makes it a double division; so you get the decimal part",
+   "edge": "lvl:primitive_type@L3#4",
    "source": "level_way",
-   "also_shown": [
-    "L0 inconsistent_trace"
-   ]
+   "also_shown": []
   },
-  "string_concatenation": {
+  "type_conversion": {
    "level": "L0",
-   "way": "misconception",
-   "misconception": "ArithmeticPlusPrecedes",
-   "quote": "339; Java adds the numbers first; so 1 + 2 is 3 and 4 + 5 is 9, then it joins them with the 3",
-   "edge": "mis:string_concatenation->ArithmeticPlusPrecedes",
-   "rule": "wrong rule: arithmetic + binds tighter than string-concatenation +. Right rule: Both uses of + have the same precedence and are evaluated left to right, so \"s\" + a + b joins a and then b as text; only \"s\" + (a + b) adds them first.",
-   "source": "level_mis_links"
-  },
-  "string_conversion": {
-   "level": "L0",
-   "way": "misconception",
-   "misconception": "StringPlusLeftToRight",
-   "quote": "339; Java adds the numbers first; so 1 + 2 is 3 and 4 + 5 is 9, then it joins them with the 3",
-   "edge": "mis:string_conversion->StringPlusLeftToRight",
-   "rule": "wrong rule: 2 + 3 + \"bc\" and \"bc\" + 2 + 3 give the same text. Right rule: + is evaluated left to right: 2 + 3 + \"bc\" is \"5bc\" but \"bc\" + 2 + 3 is \"bc23\".",
-   "source": "level_mis_links"
+   "way": "everyday_reading",
+   "quote": "3.5; The cast makes it a double division; so you get the decimal part",
+   "edge": "lvl:type_conversion@L0#0",
+   "source": "level_way",
+   "also_shown": []
   }
  },
  "overall_level": "L0",
  "paths": [
   {
    "depth": 1,
-   "source": "string_conversion",
-   "edge": "mis:string_conversion->StringPlusLeftToRight",
-   "target": "StringPlusLeftToRight",
+   "source": "explicit_cast",
+   "edge": "mis:explicit_cast->CastAfterIntDivision",
+   "target": "CastAfterIntDivision",
    "kind": "misconception",
    "label": "held",
    "clauses": [
@@ -97,147 +130,170 @@
     2,
     3
    ],
-   "quote": "339; Java adds the numbers first; so 1 + 2 is 3 and 4 + 5 is 9, then it joins them with the 3",
+   "quote": "3.5; The cast makes it a double division; so you get the decimal part",
+   "confidence": 0.95,
+   "prune_score": 0.7000000000000001,
+   "score": 0.665,
+   "logic": "(double) (3 / 5) is 0.6.",
+   "twin_logic": "The integer division 3 / 5 = 0 happens before the cast, so the result is 0.0.",
+   "role": "primary"
+  },
+  {
+   "depth": 1,
+   "source": "type_conversion",
+   "edge": "mis:type_conversion->TargetTyping",
+   "target": "TargetTyping",
+   "kind": "misconception",
+   "label": "held",
+   "clauses": [
+    1,
+    2,
+    3
+   ],
+   "quote": "3.5; The cast makes it a double division; so you get the decimal part",
+   "confidence": 0.8,
+   "prune_score": 0.8,
+   "score": 0.64,
+   "logic": "The type of a numerical expression depends on the type expected by the surrounding context, so double d = a / b; keeps the fraction.",
+   "twin_logic": "The type of a numerical expression is determined by the expression, so double d = a / b; with int a and b still divides as ints.",
+   "role": "context"
+  },
+  {
+   "depth": 1,
+   "source": "integer_division",
+   "edge": "mis:integer_division->CastAfterIntDivision",
+   "target": "CastAfterIntDivision",
+   "kind": "misconception",
+   "label": "held",
+   "clauses": [
+    1,
+    2,
+    3
+   ],
+   "quote": "3.5; The cast makes it a double division; so you get the decimal part",
+   "confidence": 0.95,
+   "prune_score": 0.6,
+   "score": 0.57,
+   "logic": "(double) (3 / 5) is 0.6.",
+   "twin_logic": "The integer division 3 / 5 = 0 happens before the cast, so the result is 0.0.",
+   "role": "context"
+  },
+  {
+   "depth": 2,
+   "source": "integer_division",
+   "edge": "pre:arithmetic_operators->integer_division",
+   "target": "arithmetic_operators",
+   "kind": "prerequisite",
+   "label": "broken",
+   "clauses": [
+    1,
+    2,
+    3
+   ],
+   "quote": "3.5; The cast makes it a double division; so you get the decimal part",
    "confidence": 0.9,
    "prune_score": 1.0,
    "score": 0.9,
-   "logic": "2 + 3 + \"bc\" and \"bc\" + 2 + 3 give the same text.",
-   "twin_logic": "+ is evaluated left to right: 2 + 3 + \"bc\" is \"5bc\" but \"bc\" + 2 + 3 is \"bc23\".",
-   "role": "primary"
-  },
-  {
-   "depth": 1,
-   "source": "string_concatenation",
-   "edge": "mis:string_concatenation->ArithmeticPlusPrecedes",
-   "target": "ArithmeticPlusPrecedes",
-   "kind": "misconception",
-   "label": "held",
-   "clauses": [
-    1,
-    2,
-    3
-   ],
-   "quote": "339; Java adds the numbers first; so 1 + 2 is 3 and 4 + 5 is 9, then it joins them with the 3",
-   "confidence": 0.93,
-   "prune_score": 0.7,
-   "score": 0.651,
-   "logic": "In \"s\" + a + b, the numbers a and b are added first and their sum is joined to s.",
-   "twin_logic": "Both uses of + have the same precedence and are evaluated left to right, so \"s\" + a + b joins a and then b as text; only \"s\" + (a + b) adds them first.",
-   "role": "primary"
-  },
-  {
-   "depth": 1,
-   "source": "string_concatenation",
-   "edge": "lvl:string_concatenation@L0#3",
-   "target": "string_concatenation@L0",
-   "kind": "level",
-   "label": "shown",
-   "clauses": [
-    1,
-    2,
-    3
-   ],
-   "quote": "339; Java adds the numbers first; so 1 + 2 is 3 and 4 + 5 is 9, then it joins them with the 3",
-   "confidence": 0.85,
-   "prune_score": 0.6,
-   "score": 0.51,
-   "logic": "Points to LT (left to right, and each + adds or concatenates according to its operands at that moment). Applied unevenly, a student keeps adding numbers after a String has appeared, or concatenates before any String appears (1 + 2 + \"x\" as \"12x\"). (here mixing in: \"+ with a String turns the whole other side into a string first\")",
+   "logic": "For ints a and b, / gives the whole quotient q and % gives the remainder r, so that a = b * q + r.",
    "twin_logic": null,
-   "level": "L0",
-   "way": "inconsistent_trace"
+   "consequence_of": "mis:explicit_cast->CastAfterIntDivision"
   },
   {
    "depth": 2,
-   "source": "string_concatenation",
-   "edge": "par:string_concatenation~arithmetic_operators",
-   "target": "arithmetic_operators",
-   "kind": "parallel",
+   "source": "explicit_cast",
+   "edge": "pre:integer_division->explicit_cast",
+   "target": "integer_division",
+   "kind": "prerequisite",
    "label": "broken",
    "clauses": [
     1,
     2,
     3
    ],
-   "quote": "339; Java adds the numbers first; so 1 + 2 is 3 and 4 + 5 is 9, then it joins them with the 3",
+   "quote": "3.5; The cast makes it a double division; so you get the decimal part",
    "confidence": 0.95,
-   "prune_score": 1.0,
-   "score": 0.95,
-   "logic": "+ adds when both operands are numbers and concatenates when either operand is a String, converting the other operand to a String. It is left-associative, so 1 + 2 + \"3\" is \"33\" but \"1\" + 2 + 3 is \"123\".",
+   "prune_score": 0.8,
+   "score": 0.76,
+   "logic": "To divide two ints and keep the fraction, one operand is cast to double before the division, as in (double) freq[i] / T; casting the finished quotient comes too late.",
    "twin_logic": null,
-   "consequence_of": "mis:string_conversion->StringPlusLeftToRight"
+   "consequence_of": "mis:explicit_cast->CastAfterIntDivision"
   },
   {
    "depth": 2,
-   "source": "string_conversion",
-   "edge": "pre:string_concatenation->string_conversion",
-   "target": "string_concatenation",
+   "source": "type_conversion",
+   "edge": "pre:primitive_type->type_conversion",
+   "target": "primitive_type",
    "kind": "prerequisite",
    "label": "broken",
    "clauses": [
     1,
+    2,
     3
    ],
-   "quote": "339; so 1 + 2 is 3 and 4 + 5 is 9, then it joins them with the 3",
-   "confidence": 0.85,
+   "quote": "3.5; The cast makes it a double division; so you get the decimal part",
+   "confidence": 0.7,
    "prune_score": 1.0,
-   "score": 0.85,
-   "logic": "When one operand of + is a String, Java converts the other operand to a String before concatenating.",
+   "score": 0.7,
+   "logic": "Conversion moves a value between primitive types: int to double happens automatically, while double to int needs a cast that drops the fraction.",
    "twin_logic": null,
-   "consequence_of": "mis:string_conversion->StringPlusLeftToRight"
+   "consequence_of": "mis:explicit_cast->CastAfterIntDivision"
   },
   {
    "depth": 2,
-   "source": "arithmetic_operators",
-   "edge": "pre:arithmetic_operators->expression",
-   "target": "expression",
+   "source": "explicit_cast",
+   "edge": "pre:type_conversion->explicit_cast",
+   "target": "type_conversion",
    "kind": "prerequisite",
-   "label": "confirmed",
+   "label": "broken",
    "clauses": [
+    1,
+    2,
     3
    ],
-   "quote": "so 1 + 2 is 3 and 4 + 5 is 9, then it joins them with the 3",
-   "confidence": 0.6,
-   "prune_score": 1.0,
-   "score": 0.6,
-   "logic": "An operator combines operand values a and b into a new value, so operators build larger expressions from smaller ones.",
-   "twin_logic": null
+   "quote": "3.5; The cast makes it a double division; so you get the decimal part",
+   "confidence": 0.75,
+   "prune_score": 0.2,
+   "score": 0.15,
+   "logic": "A cast is the explicit form of type conversion between primitive types, required when the conversion may lose information (e.g. (int) 2.71828 is 2).",
+   "twin_logic": null,
+   "consequence_of": "mis:explicit_cast->CastAfterIntDivision"
   },
   {
    "depth": 3,
-   "source": "expression",
-   "edge": "lvl:expression@L0#2",
-   "target": "expression@L0",
+   "source": "arithmetic_operators",
+   "edge": "lvl:arithmetic_operators@L4#0",
+   "target": "arithmetic_operators@L4",
    "kind": "level",
    "label": "shown",
    "clauses": [
-    1,
+    2,
     3
    ],
-   "quote": "339; so 1 + 2 is 3 and 4 + 5 is 9, then it joins them with the 3",
+   "quote": "The cast makes it a double division; so you get the decimal part",
+   "confidence": 0.6,
+   "prune_score": 0.35,
+   "score": 0.21,
+   "logic": "Changing an operand's type changes the operator's meaning (int / versus double /). Reordering * and / changes integer results (59 * 100 / 60 is 98, 59 / 60 * 100 is 0). Replacing ^ with Math.pow gives a real power.",
+   "twin_logic": null,
+   "level": "L4",
+   "way": "predict_a_change"
+  },
+  {
+   "depth": 3,
+   "source": "primitive_type",
+   "edge": "lvl:primitive_type@L3#4",
+   "target": "primitive_type@L3",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    2,
+    3
+   ],
+   "quote": "The cast makes it a double division; so you get the decimal part",
    "confidence": 0.6,
    "prune_score": 0.3,
    "score": 0.18,
-   "logic": "Points to LT (replace each variable with its current value, then apply operators in precedence order). Applied unevenly, a student substitutes current values for some variables and old or future values for others, or respects precedence in one subexpression only. (here mixing in: \"a single literal or variable \"isn't an expression\"\")",
-   "twin_logic": null,
-   "level": "L0",
-   "way": "inconsistent_trace"
-  },
-  {
-   "depth": 3,
-   "source": "expression",
-   "edge": "lvl:expression@L3#1",
-   "target": "expression@L3",
-   "kind": "level",
-   "label": "shown",
-   "clauses": [
-    2,
-    3
-   ],
-   "quote": "Java adds the numbers first; so 1 + 2 is 3 and 4 + 5 is 9, then it joins them with the 3",
-   "confidence": 0.6,
-   "prune_score": 0.2,
-   "score": 0.12,
-   "logic": "Operators combine operand values into a new value, and the operand types choose the operation (int / truncates, double / does not).",
+   "logic": "double is the 64-bit IEEE 754 primitive. Once a double meets an integral operand in a binary operator, the whole operation becomes floating point.",
    "twin_logic": null,
    "level": "L3",
    "way": "relation_to_neighbour"
@@ -246,9 +302,9 @@
  "evidence": [
   {
    "depth": 1,
-   "source": "string_concatenation",
-   "edge": "mis:string_concatenation->ArithmeticPlusPrecedes",
-   "target": "ArithmeticPlusPrecedes",
+   "source": "explicit_cast",
+   "edge": "mis:explicit_cast->CastAfterIntDivision",
+   "target": "CastAfterIntDivision",
    "kind": "misconception",
    "label": "held",
    "clauses": [
@@ -256,19 +312,59 @@
     2,
     3
    ],
-   "quote": "339; Java adds the numbers first; so 1 + 2 is 3 and 4 + 5 is 9, then it joins them with the 3",
-   "confidence": 0.93,
-   "prune_score": 0.7,
-   "score": 0.651,
-   "logic": "In \"s\" + a + b, the numbers a and b are added first and their sum is joined to s.",
-   "twin_logic": "Both uses of + have the same precedence and are evaluated left to right, so \"s\" + a + b joins a and then b as text; only \"s\" + (a + b) adds them first.",
+   "quote": "3.5; The cast makes it a double division; so you get the decimal part",
+   "confidence": 0.95,
+   "prune_score": 0.7000000000000001,
+   "score": 0.665,
+   "logic": "(double) (3 / 5) is 0.6.",
+   "twin_logic": "The integer division 3 / 5 = 0 happens before the cast, so the result is 0.0.",
    "role": "primary"
   },
   {
    "depth": 1,
-   "source": "string_concatenation",
-   "edge": "lvl:string_concatenation@L0#3",
-   "target": "string_concatenation@L0",
+   "source": "explicit_cast",
+   "edge": "lvl:explicit_cast@L0#0",
+   "target": "explicit_cast@L0",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    1,
+    2
+   ],
+   "quote": "3.5; The cast makes it a double division",
+   "confidence": 0.6,
+   "prune_score": 0.35,
+   "score": 0.21,
+   "logic": "Folk meaning: 'convert 2.7 to a whole number' means round it to 3, and (int) looks like a function label that applies to everything written after it. Java rule: a cast to int truncates toward zero ((int) 2.7 is 2) and, having higher precedence than arithmetic, applies only to the value immediately following it.",
+   "twin_logic": null,
+   "level": "L0",
+   "way": "everyday_reading"
+  },
+  {
+   "depth": 1,
+   "source": "integer_division",
+   "edge": "mis:integer_division->CastAfterIntDivision",
+   "target": "CastAfterIntDivision",
+   "kind": "misconception",
+   "label": "held",
+   "clauses": [
+    1,
+    2,
+    3
+   ],
+   "quote": "3.5; The cast makes it a double division; so you get the decimal part",
+   "confidence": 0.95,
+   "prune_score": 0.6,
+   "score": 0.57,
+   "logic": "(double) (3 / 5) is 0.6.",
+   "twin_logic": "The integer division 3 / 5 = 0 happens before the cast, so the result is 0.0.",
+   "role": "context"
+  },
+  {
+   "depth": 1,
+   "source": "integer_division",
+   "edge": "lvl:integer_division@L0#4",
+   "target": "integer_division@L0",
    "kind": "level",
    "label": "shown",
    "clauses": [
@@ -276,20 +372,20 @@
     2,
     3
    ],
-   "quote": "339; Java adds the numbers first; so 1 + 2 is 3 and 4 + 5 is 9, then it joins them with the 3",
+   "quote": "3.5; The cast makes it a double division; so you get the decimal part",
    "confidence": 0.85,
    "prune_score": 0.6,
    "score": 0.51,
-   "logic": "Points to LT (left to right, and each + adds or concatenates according to its operands at that moment). Applied unevenly, a student keeps adding numbers after a String has appeared, or concatenates before any String appears (1 + 2 + \"x\" as \"12x\"). (here mixing in: \"+ with a String turns the whole other side into a string first\")",
+   "logic": "Points to LT (each / looks at its own two operand types when it is evaluated). Applied unevenly, a student evaluates 9/5 as 1.8 in f = (9/5)*c + 32 but as 1 elsewhere, or assumes a later double operand rescues an earlier int division. (here mixing in: \"The type of a numerical expression depends on the type expected by the surrounding context, so double d = a / b; keeps the fraction\")",
    "twin_logic": null,
    "level": "L0",
    "way": "inconsistent_trace"
   },
   {
    "depth": 1,
-   "source": "string_conversion",
-   "edge": "mis:string_conversion->StringPlusLeftToRight",
-   "target": "StringPlusLeftToRight",
+   "source": "type_conversion",
+   "edge": "mis:type_conversion->TargetTyping",
+   "target": "TargetTyping",
    "kind": "misconception",
    "label": "held",
    "clauses": [
@@ -297,39 +393,19 @@
     2,
     3
    ],
-   "quote": "339; Java adds the numbers first; so 1 + 2 is 3 and 4 + 5 is 9, then it joins them with the 3",
-   "confidence": 0.9,
-   "prune_score": 1.0,
-   "score": 0.9,
-   "logic": "2 + 3 + \"bc\" and \"bc\" + 2 + 3 give the same text.",
-   "twin_logic": "+ is evaluated left to right: 2 + 3 + \"bc\" is \"5bc\" but \"bc\" + 2 + 3 is \"bc23\".",
-   "role": "primary"
-  },
-  {
-   "depth": 1,
-   "source": "string_conversion",
-   "edge": "lvl:string_conversion@L0#2",
-   "target": "string_conversion@L0",
-   "kind": "level",
-   "label": "shown",
-   "clauses": [
-    1,
-    3
-   ],
-   "quote": "339; so 1 + 2 is 3 and 4 + 5 is 9, then it joins them with the 3",
+   "quote": "3.5; The cast makes it a double division; so you get the decimal part",
    "confidence": 0.8,
-   "prune_score": 0.55,
-   "score": 0.44,
-   "logic": "Points to LT (+ is applied left to right, each + deciding between addition and concatenation from its two operands at that moment). Applied unevenly: once a String has appeared the student goes back to numeric addition for later terms, or concatenates two numbers that come before any String. (here mixing in: \"2 + 3 + \"bc\" and \"bc\" + 2 + 3 give the same text\")",
-   "twin_logic": null,
-   "level": "L0",
-   "way": "inconsistent_trace"
+   "prune_score": 0.8,
+   "score": 0.64,
+   "logic": "The type of a numerical expression depends on the type expected by the surrounding context, so double d = a / b; keeps the fraction.",
+   "twin_logic": "The type of a numerical expression is determined by the expression, so double d = a / b; with int a and b still divides as ints.",
+   "role": "context"
   },
   {
    "depth": 1,
-   "source": "string_conversion",
-   "edge": "lvl:string_conversion@L0#0",
-   "target": "string_conversion@L0",
+   "source": "type_conversion",
+   "edge": "lvl:type_conversion@L0#0",
+   "target": "type_conversion@L0",
    "kind": "level",
    "label": "shown",
    "clauses": [
@@ -337,124 +413,148 @@
     2,
     3
    ],
-   "quote": "339; Java adds the numbers first; so 1 + 2 is 3 and 4 + 5 is 9, then it joins them with the 3",
-   "confidence": 0.85,
-   "prune_score": 0.3,
-   "score": 0.255,
-   "logic": "Folk meaning: + is addition, which is commutative and associative, so 2 + 3 + \"bc\" and \"bc\" + 2 + 3 must give the same thing. Java rule: when one operand of + is a String the other is converted to a String and concatenated, and + is evaluated left to right, so 2 + 3 + \"bc\" is \"5bc\" but \"bc\" + 2 + 3 is \"bc23\".",
+   "quote": "3.5; The cast makes it a double division; so you get the decimal part",
+   "confidence": 0.72,
+   "prune_score": 0.25,
+   "score": 0.18,
+   "logic": "Folk meaning: a number is a number, so 3, 3.0 and \"3\" are the same value, and a variable will take whatever form the context needs (the result 'becomes' double when stored in a double). Java rule: every value has a fixed type; conversions happen only by automatic promotion to a wider type, by an explicit cast, by conversion methods (Integer.parseInt, Math.round), or by String conversion with +.",
    "twin_logic": null,
    "level": "L0",
    "way": "everyday_reading"
   },
   {
    "depth": 2,
-   "source": "string_conversion",
-   "edge": "pre:string_concatenation->string_conversion",
-   "target": "string_concatenation",
+   "source": "explicit_cast",
+   "edge": "pre:integer_division->explicit_cast",
+   "target": "integer_division",
    "kind": "prerequisite",
-   "label": "broken",
-   "clauses": [
-    1,
-    3
-   ],
-   "quote": "339; so 1 + 2 is 3 and 4 + 5 is 9, then it joins them with the 3",
-   "confidence": 0.85,
-   "prune_score": 1.0,
-   "score": 0.85,
-   "logic": "When one operand of + is a String, Java converts the other operand to a String before concatenating.",
-   "twin_logic": null,
-   "consequence_of": "mis:string_conversion->StringPlusLeftToRight"
-  },
-  {
-   "depth": 2,
-   "source": "string_concatenation",
-   "edge": "par:string_concatenation~arithmetic_operators",
-   "target": "arithmetic_operators",
-   "kind": "parallel",
    "label": "broken",
    "clauses": [
     1,
     2,
     3
    ],
-   "quote": "339; Java adds the numbers first; so 1 + 2 is 3 and 4 + 5 is 9, then it joins them with the 3",
+   "quote": "3.5; The cast makes it a double division; so you get the decimal part",
    "confidence": 0.95,
-   "prune_score": 1.0,
-   "score": 0.95,
-   "logic": "+ adds when both operands are numbers and concatenates when either operand is a String, converting the other operand to a String. It is left-associative, so 1 + 2 + \"3\" is \"33\" but \"1\" + 2 + 3 is \"123\".",
+   "prune_score": 0.8,
+   "score": 0.76,
+   "logic": "To divide two ints and keep the fraction, one operand is cast to double before the division, as in (double) freq[i] / T; casting the finished quotient comes too late.",
    "twin_logic": null,
-   "consequence_of": "mis:string_conversion->StringPlusLeftToRight"
+   "consequence_of": "mis:explicit_cast->CastAfterIntDivision"
   },
   {
    "depth": 2,
-   "source": "arithmetic_operators",
-   "edge": "pre:arithmetic_operators->expression",
-   "target": "expression",
+   "source": "explicit_cast",
+   "edge": "pre:type_conversion->explicit_cast",
+   "target": "type_conversion",
    "kind": "prerequisite",
-   "label": "confirmed",
+   "label": "broken",
    "clauses": [
+    1,
+    2,
     3
    ],
-   "quote": "so 1 + 2 is 3 and 4 + 5 is 9, then it joins them with the 3",
-   "confidence": 0.6,
+   "quote": "3.5; The cast makes it a double division; so you get the decimal part",
+   "confidence": 0.75,
+   "prune_score": 0.2,
+   "score": 0.15,
+   "logic": "A cast is the explicit form of type conversion between primitive types, required when the conversion may lose information (e.g. (int) 2.71828 is 2).",
+   "twin_logic": null,
+   "consequence_of": "mis:explicit_cast->CastAfterIntDivision"
+  },
+  {
+   "depth": 2,
+   "source": "type_conversion",
+   "edge": "pre:primitive_type->type_conversion",
+   "target": "primitive_type",
+   "kind": "prerequisite",
+   "label": "broken",
+   "clauses": [
+    1,
+    2,
+    3
+   ],
+   "quote": "3.5; The cast makes it a double division; so you get the decimal part",
+   "confidence": 0.7,
    "prune_score": 1.0,
-   "score": 0.6,
-   "logic": "An operator combines operand values a and b into a new value, so operators build larger expressions from smaller ones.",
-   "twin_logic": null
+   "score": 0.7,
+   "logic": "Conversion moves a value between primitive types: int to double happens automatically, while double to int needs a cast that drops the fraction.",
+   "twin_logic": null,
+   "consequence_of": "mis:explicit_cast->CastAfterIntDivision"
+  },
+  {
+   "depth": 2,
+   "source": "integer_division",
+   "edge": "pre:arithmetic_operators->integer_division",
+   "target": "arithmetic_operators",
+   "kind": "prerequisite",
+   "label": "broken",
+   "clauses": [
+    1,
+    2,
+    3
+   ],
+   "quote": "3.5; The cast makes it a double division; so you get the decimal part",
+   "confidence": 0.9,
+   "prune_score": 1.0,
+   "score": 0.9,
+   "logic": "For ints a and b, / gives the whole quotient q and % gives the remainder r, so that a = b * q + r.",
+   "twin_logic": null,
+   "consequence_of": "mis:explicit_cast->CastAfterIntDivision"
   },
   {
    "depth": 3,
-   "source": "expression",
-   "edge": "lvl:expression@L0#2",
-   "target": "expression@L0",
+   "source": "arithmetic_operators",
+   "edge": "lvl:arithmetic_operators@L4#0",
+   "target": "arithmetic_operators@L4",
    "kind": "level",
    "label": "shown",
    "clauses": [
-    1,
+    2,
     3
    ],
-   "quote": "339; so 1 + 2 is 3 and 4 + 5 is 9, then it joins them with the 3",
+   "quote": "The cast makes it a double division; so you get the decimal part",
+   "confidence": 0.6,
+   "prune_score": 0.35,
+   "score": 0.21,
+   "logic": "Changing an operand's type changes the operator's meaning (int / versus double /). Reordering * and / changes integer results (59 * 100 / 60 is 98, 59 / 60 * 100 is 0). Replacing ^ with Math.pow gives a real power.",
+   "twin_logic": null,
+   "level": "L4",
+   "way": "predict_a_change"
+  },
+  {
+   "depth": 3,
+   "source": "primitive_type",
+   "edge": "lvl:primitive_type@L3#4",
+   "target": "primitive_type@L3",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    2,
+    3
+   ],
+   "quote": "The cast makes it a double division; so you get the decimal part",
    "confidence": 0.6,
    "prune_score": 0.3,
    "score": 0.18,
-   "logic": "Points to LT (replace each variable with its current value, then apply operators in precedence order). Applied unevenly, a student substitutes current values for some variables and old or future values for others, or respects precedence in one subexpression only. (here mixing in: \"a single literal or variable \"isn't an expression\"\")",
-   "twin_logic": null,
-   "level": "L0",
-   "way": "inconsistent_trace"
-  },
-  {
-   "depth": 3,
-   "source": "expression",
-   "edge": "lvl:expression@L3#1",
-   "target": "expression@L3",
-   "kind": "level",
-   "label": "shown",
-   "clauses": [
-    2,
-    3
-   ],
-   "quote": "Java adds the numbers first; so 1 + 2 is 3 and 4 + 5 is 9, then it joins them with the 3",
-   "confidence": 0.6,
-   "prune_score": 0.2,
-   "score": 0.12,
-   "logic": "Operators combine operand values into a new value, and the operand types choose the operation (int / truncates, double / does not).",
+   "logic": "double is the 64-bit IEEE 754 primitive. Once a double meets an integral operand in a binary operator, the whole operation becomes floating point.",
    "twin_logic": null,
    "level": "L3",
    "way": "relation_to_neighbour"
   }
  ],
  "clause_coverage": {
-  "339": "mis:string_concatenation->ArithmeticPlusPrecedes",
-  "Java adds the numbers first": "mis:string_concatenation->ArithmeticPlusPrecedes",
-  "so 1 + 2 is 3 and 4 + 5 is 9, then it joins them with the 3": "mis:string_concatenation->ArithmeticPlusPrecedes"
+  "3.5": "mis:explicit_cast->CastAfterIntDivision",
+  "The cast makes it a double division": "mis:explicit_cast->CastAfterIntDivision",
+  "so you get the decimal part": "mis:explicit_cast->CastAfterIntDivision"
  },
  "unexplained_clauses": [],
- "stop_reason": "sufficient",
+ "stop_reason": "max depth",
  "depth_reached": 3,
  "llm_calls": 0,
- "llm_cache_hits": 30,
+ "llm_cache_hits": 36,
  "llm_calls_by_step": {
-  "prune": 11,
-  "label": 19
+  "prune": 13,
+  "label": 23
  }
 }

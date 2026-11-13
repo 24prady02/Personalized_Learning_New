@@ -1,6 +1,6 @@
 {
  "source": "The 40 scenarios run in notebooks/think_on_the_graph.ipynb (data/processed/MYnn_input.json), collected into one file",
- "note": "40 scenarios, MY01 to MY41 without MY26: MY26 was the same code, question and answer as MY18 and was removed. No gold labels yet; the earlier gold-labelled set is in tests/data/scenarios_gold.json.",
+ "note": "40 scenarios, MY01 to MY40. An exact repeat of MY18 (first numbered MY26) was removed and the scenarios after it were renumbered, so MY26 to MY40 here were MY27 to MY41 before. No gold labels yet; the earlier gold-labelled set is in tests/data/scenarios_gold.json.",
  "scenarios": [
   {
    "id": "MY01",
@@ -153,91 +153,91 @@
    "answer": "The program runs every line from top to bottom, so the println inside the if runs too, and then done is printed"
   },
   {
-   "id": "MY27",
+   "id": "MY26",
    "code": "int total = 50;\nint count = 0;\nSystem.out.println(total / count);",
    "question": "Will this compile? What happens when you run it? Explain your reasoning",
    "answer": "It won’t compile. Dividing by zero isn’t allowed, so the compiler stops you before it runs.”\nActual: it compiles, then crashes at run time with ArithmeticException: / by zero."
   },
   {
-   "id": "MY28",
+   "id": "MY27",
    "code": "System.out.println(1 + 2 + \"3\" + 4 + 5);",
    "question": "What is printed? Explain how Java works out each +",
    "answer": "339. Java adds the numbers first, so 1 + 2 is 3 and 4 + 5 is 9, then it joins them with the “3”."
   },
   {
-   "id": "MY29",
+   "id": "MY28",
    "code": "int sum = 7;\nint n = 2;\ndouble avg = (double) (sum / n);\nSystem.out.println(avg);",
    "question": "What is printed? Explain what the (double) does here.",
    "answer": "3.5. The cast makes it a double division, so you get the decimal part"
   },
   {
-   "id": "MY30",
+   "id": "MY29",
    "code": "double a = 0.1 + 0.2;\nif (a == 0.3) {\n    System.out.println(\"equal\");\n} else {\n    System.out.println(\"not equal\");\n}",
    "question": "What is printed? Explain what the (double) does here.",
    "answer": "3.5. The cast makes it a double division, so you get the decimal part."
   },
   {
-   "id": "MY31",
+   "id": "MY30",
    "code": "char c = 'a';\nc++;\nint k = c + 1;\nSystem.out.println(c);\nSystem.out.println(k);",
    "question": "What are the two lines of output? Explain each one.",
    "answer": "b, because c++ moves to the next letter. Then k = c + 1 is the letter after b, so it prints c"
   },
   {
-   "id": "MY32",
+   "id": "MY31",
    "code": "int day = 2;\nswitch (day) {\n    case 1: System.out.println(\"Mon\");\n    case 2: System.out.println(\"Tue\");\n    case 3: System.out.println(\"Wed\");\n            break;\n    default: System.out.println(\"?\");\n}",
    "question": "What is printed? Explain step by step what happens after case 2 matches.",
    "answer": "Tue, then Wed. Case 2 has no break, so it carries on into case 3 and stops at the break there. Mon and ? are never reached."
   },
   {
-   "id": "MY33",
+   "id": "MY32",
    "code": "int n = 10;\ndo {\n    System.out.println(n);\n    n++;\n} while (n < 5);",
    "question": "How many times does the body run? Explain your reasoning.",
    "answer": "Zero times. 10 < 5 is false, so the loop never starts."
   },
   {
-   "id": "MY34",
+   "id": "MY33",
    "code": "int N = 91;\nint i;\nfor (i = 2; i <= N / i; i++) {\n    if (N % i == 0) break;\n}\nSystem.out.println(i);",
    "question": "What is printed? Explain what the break does.",
    "answer": "I’m not sure what number, but break is the statement that ends the loop early."
   },
   {
-   "id": "MY35",
+   "id": "MY34",
    "code": "int x = 5;\nif (x > 0)\n    if (x > 10)\n        System.out.println(\"big\");\nelse\n    System.out.println(\"small\");",
    "question": "What is printed? Explain which if the else belongs to.",
    "answer": "Nothing. The else lines up with if (x > 0), and that’s true, so the else is skipped. x > 10 is false, so big isn’t printed either"
   },
   {
-   "id": "MY36",
+   "id": "MY35",
    "code": "final int STOP = -1;\nint sum = 0, count = 0;\nint x = StdIn.readInt();\nwhile (x != STOP) {\n    sum += x;\n    count++;\n    x = StdIn.readInt();\n}\nSystem.out.println(sum / count);",
    "question": "Suppose the very first number typed is -1. What does the program print, and why?",
    "answer": "0. Nothing was added, so sum and count are both 0, and 0 divided by 0 is just 0."
   },
   {
-   "id": "MY37",
+   "id": "MY36",
    "code": "int[] a = {1, 2, 3};\nint[] b = a;\nb[0] = 9;\nSystem.out.println(a[0]);",
    "question": "What is printed? Explain what int[] b = a; does.",
    "answer": "1. b is a copy of a, so changing b[0] doesn’t touch a"
   },
   {
-   "id": "MY38",
+   "id": "MY37",
    "code": "int[] a = {1, 2, 3, 4};\nfor (int i = 0; i < a.length; i++) {\n    int t = a[i];\n    a[i] = a[a.length - 1 - i];\n    a[a.length - 1 - i] = t;\n}\nfor (int i = 0; i < a.length; i++) {\n    System.out.print(a[i] + \" \");\n}",
    "question": "The programmer wanted to reverse the array. What does this print, and what is wrong?",
    "answer": "1 2 3 4, unchanged. Every pair gets swapped twice: i = 0 swaps a[0] and a[3], then i = 3 swaps them back. The loop should only run while i < a.length / 2"
   },
   {
-   "id": "MY39",
+   "id": "MY38",
    "code": "int[] data = {4, 7, 2, 9, 5, 3};\nint[] counts = new int[3];\nfor (int i = 0; i < data.length; i++) {\n    counts[data[i] % 3]++;\n}\nfor (int r = 0; r < 3; r++) {\n    System.out.println(r + \": \" + counts[r]);\n}",
    "question": "Without tracing line by line, explain what counts holds at the end and why the code uses % 3",
    "answer": "counts[r] is how many numbers leave remainder r when divided by 3. The % 3 turns each number into an index 0, 1 or 2, so it fits the array.”"
   },
   {
-   "id": "MY40",
+   "id": "MY39",
    "code": "int[][] t = {{1, 2, 3}, {4, 5}, {6}};\nint sum = 0;\nfor (int i = 0; i < t.length; i++) {\n    for (int j = 0; j < t[0].length; j++) {\n        sum += t[i][j];\n    }\n}\nSystem.out.println(sum);",
    "question": "What is printed? Explain how the inner loop decides how many columns to visit.",
    "answer": "21. t[0].length is 3, and every row of a 2D array has the same length, so it visits three columns in every row and adds all six numbers"
   },
   {
-   "id": "MY41",
+   "id": "MY40",
    "code": "double[] p = {0.2, 0.5, 0.3};\nint[] freq = new int[3];\nfor (int t = 0; t < 10; t++) {\n    double r = Math.random();\n    double sum = 0.0;\n    int j = 0;\n    while (r >= sum + p[j]) {\n        sum += p[j];\n        j++;\n    }\n    freq[j]++;\n}\nSystem.out.println(freq[1]);",
    "question": "What does the program print, and why?",
    "answer": "5. Page 1 has probability 0.5, so in 10 steps the surfer goes there exactly 5 times.”\nActual: it varies from run to run; five runs gave 6, 4, 8, 5 and 6."

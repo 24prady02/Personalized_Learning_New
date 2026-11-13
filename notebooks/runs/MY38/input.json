@@ -1,5 +1,5 @@
 {
- "code": "int[] a = {1, 2, 3, 4};\nfor (int i = 0; i < a.length; i++) {\n    int t = a[i];\n    a[i] = a[a.length - 1 - i];\n    a[a.length - 1 - i] = t;\n}\nfor (int i = 0; i < a.length; i++) {\n    System.out.print(a[i] + \" \");\n}",
- "question": "The programmer wanted to reverse the array. What does this print, and what is wrong?",
- "answer": "1 2 3 4, unchanged. Every pair gets swapped twice: i = 0 swaps a[0] and a[3], then i = 3 swaps them back. The loop should only run while i < a.length / 2"
+ "code": "int[] data = {4, 7, 2, 9, 5, 3};\nint[] counts = new int[3];\nfor (int i = 0; i < data.length; i++) {\n    counts[data[i] % 3]++;\n}\nfor (int r = 0; r < 3; r++) {\n    System.out.println(r + \": \" + counts[r]);\n}",
+ "question": "Without tracing line by line, explain what counts holds at the end and why the code uses % 3",
+ "answer": "counts[r] is how many numbers leave remainder r when divided by 3. The % 3 turns each number into an index 0, 1 or 2, so it fits the array.”"
 }

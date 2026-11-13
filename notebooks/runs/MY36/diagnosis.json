@@ -8,733 +8,384 @@
   "backend": "claude-cli"
  },
  "clauses": [
-  "0",
-  "Nothing was added",
-  "so sum and count are both 0, and 0 divided by 0 is just 0"
+  "1",
+  "b is a copy of a",
+  "so changing b[0] doesnt touch a"
  ],
  "start_concepts": [
-  "sentinel_loop",
-  "division_by_zero",
-  "compound_assignment"
+  "array_aliasing",
+  "indexing",
+  "array_initializer"
  ],
  "held_misconceptions": [
   {
-   "concept": "sentinel_loop",
-   "misconception": "AverageWithoutZeroGuard",
-   "kind": "error",
-   "quote": "0; so sum and count are both 0, and 0 divided by 0 is just 0",
-   "score": 0.744
-  },
-  {
-   "concept": "division_by_zero",
-   "misconception": "AverageWithoutZeroGuard",
-   "kind": "error",
-   "quote": "0; so sum and count are both 0, and 0 divided by 0 is just 0",
-   "score": 0.51
+   "concept": "array_aliasing",
+   "misconception": "AssignmentCopiesObject",
+   "kind": "misconception",
+   "quote": "1; b is a copy of a; so changing b[0] doesnt touch a",
+   "score": 0.97
   }
  ],
  "error_evidence": [],
  "shadowed": [],
  "broken_edges": [
   {
-   "edge": "pre:arithmetic_operators->division_by_zero",
-   "quote": "0; so sum and count are both 0, and 0 divided by 0 is just 0",
-   "score": 0.57
-  },
-  {
-   "edge": "pre:division_by_zero->run_time_error",
-   "quote": "0; so sum and count are both 0, and 0 divided by 0 is just 0",
-   "score": 0.38
+   "edge": "pre:array_reference->array_aliasing",
+   "quote": "1; b is a copy of a; so changing b[0] doesnt touch a",
+   "score": 0.97,
+   "consequence_of": "mis:array_aliasing->AssignmentCopiesObject"
   }
  ],
  "root_cause": {
-  "concept": "division_by_zero",
-  "misconception": "AverageWithoutZeroGuard"
+  "concept": "array_aliasing",
+  "misconception": "AssignmentCopiesObject"
  },
  "levels": {
-  "accumulator_pattern": {
-   "level": "L3",
-   "way": "relation_to_neighbour",
-   "quote": "Nothing was added; so sum and count are both 0, and 0 divided by 0 is just 0",
-   "edge": "lvl:accumulator_pattern@L3#2",
-   "source": "level_way",
-   "also_shown": [
-    "L2 line_by_line_trace",
-    "L2 output_prediction"
-   ]
+  "array_aliasing": {
+   "level": "L0",
+   "way": "misconception",
+   "misconception": "AssignmentCopiesObject",
+   "quote": "1; b is a copy of a; so changing b[0] doesnt touch a",
+   "edge": "mis:array_aliasing->AssignmentCopiesObject",
+   "rule": "wrong rule: Assigning an array reference copies the array. Right rule: b = a; copies only the reference, so a and b refer to the same array and b[i] = v also changes a[i].",
+   "source": "level_mis_links"
   },
-  "compound_assignment": {
-   "level": "L3",
-   "way": "purpose_of_the_whole",
-   "quote": "Nothing was added",
-   "edge": "lvl:compound_assignment@L3#3",
+  "array_initializer": {
+   "level": "L2",
+   "way": "output_prediction",
+   "quote": "1",
+   "edge": "lvl:array_initializer@L2#1",
    "source": "level_way",
    "also_shown": []
   },
-  "sentinel_loop": {
-   "level": "L3",
-   "way": "relation_to_neighbour",
-   "quote": "Nothing was added; so sum and count are both 0, and 0 divided by 0 is just 0",
-   "edge": "lvl:sentinel_loop@L3#1",
+  "array_reference": {
+   "level": "L0",
+   "way": "everyday_reading",
+   "quote": "1; b is a copy of a; so changing b[0] doesnt touch a",
+   "edge": "lvl:array_reference@L0#0",
    "source": "level_way",
-   "also_shown": [
-    "L2 one_step_execution"
-   ]
+   "also_shown": []
   },
-  "while_loop": {
-   "level": "L4",
-   "way": "predict_a_change",
-   "quote": "Nothing was added; so sum and count are both 0, and 0 divided by 0 is just 0",
-   "edge": "lvl:while_loop@L4#0",
+  "indexing": {
+   "level": "L2",
+   "way": "output_prediction",
+   "quote": "1",
+   "edge": "lvl:indexing@L2#1",
    "source": "level_way",
    "also_shown": [
-    "L2 one_step_execution",
-    "L2 line_by_line_trace"
+    "L1 names_the_element"
    ]
   }
  },
- "overall_level": null,
+ "overall_level": "L0",
  "paths": [
   {
    "depth": 1,
-   "source": "sentinel_loop",
-   "edge": "err:sentinel_loop->AverageWithoutZeroGuard",
-   "target": "AverageWithoutZeroGuard",
-   "kind": "error",
+   "source": "array_aliasing",
+   "edge": "mis:array_aliasing->AssignmentCopiesObject",
+   "target": "AssignmentCopiesObject",
+   "kind": "misconception",
    "label": "held",
    "clauses": [
     1,
-    3
-   ],
-   "quote": "0; so sum and count are both 0, and 0 divided by 0 is just 0",
-   "confidence": 0.93,
-   "prune_score": 0.8,
-   "score": 0.744,
-   "logic": "Computes sum / count without checking that count is above 0.",
-   "twin_logic": "If no value was read (count is 0), do not compute the average: with int operands sum / count is a division by zero, a run-time exception that stops the program; with a double sum the division does not stop the program and gives a meaningless value instead of an average.",
-   "role": "primary"
-  },
-  {
-   "depth": 1,
-   "source": "division_by_zero",
-   "edge": "err:division_by_zero->AverageWithoutZeroGuard",
-   "target": "AverageWithoutZeroGuard",
-   "kind": "error",
-   "label": "held",
-   "clauses": [
-    1,
-    3
-   ],
-   "quote": "0; so sum and count are both 0, and 0 divided by 0 is just 0",
-   "confidence": 0.85,
-   "prune_score": 0.6000000000000001,
-   "score": 0.51,
-   "logic": "Computes sum / count without checking that count is above 0.",
-   "twin_logic": "If no value was read (count is 0), do not compute the average: with int operands sum / count is a division by zero, a run-time exception that stops the program; with a double sum the division does not stop the program and gives a meaningless value instead of an average.",
-   "role": "context"
-  },
-  {
-   "depth": 1,
-   "source": "compound_assignment",
-   "edge": "lvl:compound_assignment@L3#3",
-   "target": "compound_assignment@L3",
-   "kind": "level",
-   "label": "shown",
-   "clauses": [
-    2
-   ],
-   "quote": "Nothing was added",
-   "confidence": 0.55,
-   "prune_score": 0.5,
-   "score": 0.275,
-   "logic": "Plan/role: the update step of a gatherer (sum += a[i], product *= i) or of a stepper with a step other than 1 (i += 2).",
-   "twin_logic": null,
-   "level": "L3",
-   "way": "purpose_of_the_whole"
-  },
-  {
-   "depth": 2,
-   "source": "division_by_zero",
-   "edge": "pre:arithmetic_operators->division_by_zero",
-   "target": "arithmetic_operators",
-   "kind": "prerequisite",
-   "label": "broken",
-   "clauses": [
-    1,
-    3
-   ],
-   "quote": "0; so sum and count are both 0, and 0 divided by 0 is just 0",
-   "confidence": 0.95,
-   "prune_score": 0.6,
-   "score": 0.57,
-   "logic": "Integer division by zero (1/0) generates a run-time exception, while floating-point 1.0/0.0 is legal and has the value Infinity.",
-   "twin_logic": null
-  },
-  {
-   "depth": 2,
-   "source": "division_by_zero",
-   "edge": "pre:division_by_zero->run_time_error",
-   "target": "run_time_error",
-   "kind": "prerequisite",
-   "label": "broken",
-   "clauses": [
-    1,
-    3
-   ],
-   "quote": "0; so sum and count are both 0, and 0 divided by 0 is just 0",
-   "confidence": 0.95,
-   "prune_score": 0.4,
-   "score": 0.38,
-   "logic": "Dividing an int by zero compiles but throws ArithmeticException when the program runs: a run-time error.",
-   "twin_logic": null
-  },
-  {
-   "depth": 2,
-   "source": "sentinel_loop",
-   "edge": "pre:accumulator_pattern->sentinel_loop",
-   "target": "accumulator_pattern",
-   "kind": "prerequisite",
-   "label": "confirmed",
-   "clauses": [
     2,
     3
    ],
-   "quote": "Nothing was added; so sum and count are both 0, and 0 divided by 0 is just 0",
-   "confidence": 0.8,
-   "prune_score": 0.6,
-   "score": 0.48,
-   "logic": "Sum and count are accumulators.",
-   "twin_logic": null
-  },
-  {
-   "depth": 3,
-   "source": "sentinel_loop",
-   "edge": "pre:while_loop->sentinel_loop",
-   "target": "while_loop",
-   "kind": "prerequisite",
-   "label": "confirmed",
-   "clauses": [
-    2
-   ],
-   "quote": "Nothing was added",
-   "confidence": 0.75,
+   "quote": "1; b is a copy of a; so changing b[0] doesnt touch a",
+   "confidence": 0.97,
    "prune_score": 1.0,
-   "score": 0.75,
-   "logic": "A sentinel loop is a while loop whose condition tests each value read against the stop value.",
-   "twin_logic": null
-  },
-  {
-   "depth": 3,
-   "source": "accumulator_pattern",
-   "edge": "lvl:accumulator_pattern@L3#2",
-   "target": "accumulator_pattern@L3",
-   "kind": "level",
-   "label": "shown",
-   "clauses": [
-    2,
-    3
-   ],
-   "quote": "Nothing was added; so sum and count are both 0, and 0 divided by 0 is just 0",
-   "confidence": 0.8,
-   "prune_score": 0.5,
-   "score": 0.4,
-   "logic": "In a sentinel loop the sum and the count of the values read are both accumulators, updated only for values that are not the sentinel.",
-   "twin_logic": null,
-   "level": "L3",
-   "way": "relation_to_neighbour"
-  },
-  {
-   "depth": 3,
-   "source": "accumulator_pattern",
-   "edge": "lvl:accumulator_pattern@L2#0",
-   "target": "accumulator_pattern@L2",
-   "kind": "level",
-   "label": "shown",
-   "clauses": [
-    2,
-    3
-   ],
-   "quote": "Nothing was added; so sum and count are both 0, and 0 divided by 0 is just 0",
-   "confidence": 0.7,
-   "prune_score": 0.3,
-   "score": 0.21,
-   "logic": "Before the loop: total = initial value. Each pass: read total, combine with the current item, store back. After the loop: total holds the combination of all items.",
-   "twin_logic": null,
-   "level": "L2",
-   "way": "line_by_line_trace"
-  },
-  {
-   "depth": 4,
-   "source": "while_loop",
-   "edge": "mis:while_loop->LoopBodyAlwaysOnce",
-   "target": "LoopBodyAlwaysOnce",
-   "kind": "misconception",
-   "label": "correct",
-   "clauses": [
-    2,
-    3
-   ],
-   "quote": "Nothing was added; so sum and count are both 0, and 0 divided by 0 is just 0",
-   "confidence": 0.9,
-   "prune_score": 0.45,
-   "score": 0.405,
-   "logic": "The loop body always runs at least once, even if the condition is false at the start.",
-   "twin_logic": "A while or for body runs zero times when the condition is false at the start.",
+   "score": 0.97,
+   "logic": "assigning a reference copies the object",
+   "twin_logic": "b = a; copies only the reference, so a and b refer to the same array and b[i] = v also changes a[i].",
    "role": "primary"
   },
   {
-   "depth": 4,
-   "source": "while_loop",
-   "edge": "lvl:while_loop@L2#2",
-   "target": "while_loop@L2",
-   "kind": "level",
-   "label": "shown",
-   "clauses": [
-    2,
-    3
-   ],
-   "quote": "Nothing was added; so sum and count are both 0, and 0 divided by 0 is just 0",
-   "confidence": 0.75,
-   "prune_score": 0.4,
-   "score": 0.3,
-   "logic": "One pass: test the condition with the current values, then (if true) apply every body statement once in order; the variables assigned in the body change and nothing else; a false test ends the loop with the state unchanged.",
-   "twin_logic": null,
-   "level": "L2",
-   "way": "one_step_execution"
-  },
-  {
-   "depth": 4,
-   "source": "while_loop",
-   "edge": "lvl:while_loop@L4#0",
-   "target": "while_loop@L4",
-   "kind": "level",
-   "label": "shown",
-   "clauses": [
-    2,
-    3
-   ],
-   "quote": "Nothing was added; so sum and count are both 0, and 0 divided by 0 is just 0",
-   "confidence": 0.7,
-   "prune_score": 0.35,
-   "score": 0.245,
-   "logic": "Changing < to <= adds exactly one pass at the boundary; removing the update from the body makes a loop that was entered never end; a condition that is false initially gives zero passes whatever the body does. Rewriting as for (init; cond; update) preserves behaviour if no continue is involved.",
-   "twin_logic": null,
-   "level": "L4",
-   "way": "predict_a_change"
-  }
- ],
- "evidence": [
-  {
    "depth": 1,
-   "source": "sentinel_loop",
-   "edge": "err:sentinel_loop->AverageWithoutZeroGuard",
-   "target": "AverageWithoutZeroGuard",
-   "kind": "error",
-   "label": "held",
+   "source": "array_aliasing",
+   "edge": "lvl:array_aliasing@L0#0",
+   "target": "array_aliasing@L0",
+   "kind": "level",
+   "label": "shown",
    "clauses": [
     1,
+    2,
     3
    ],
-   "quote": "0; so sum and count are both 0, and 0 divided by 0 is just 0",
+   "quote": "1; b is a copy of a; so changing b[0] doesnt touch a",
    "confidence": 0.93,
-   "prune_score": 0.8,
-   "score": 0.744,
-   "logic": "Computes sum / count without checking that count is above 0.",
-   "twin_logic": "If no value was read (count is 0), do not compute the average: with int operands sum / count is a division by zero, a run-time exception that stops the program; with a double sum the division does not stop the program and gives a meaningless value instead of an average.",
-   "role": "primary"
-  },
-  {
-   "depth": 1,
-   "source": "sentinel_loop",
-   "edge": "mis:sentinel_loop->SentinelProcessed",
-   "target": "SentinelProcessed",
-   "kind": "misconception",
-   "label": "correct",
-   "clauses": [
-    2
-   ],
-   "quote": "Nothing was added",
-   "confidence": 0.85,
-   "prune_score": 0.15,
-   "score": 0.1275,
-   "logic": "The sentinel value (e.g. 999999) is added to the total like the other values.",
-   "twin_logic": "The loop stops at the sentinel without processing it.",
-   "role": "primary"
-  },
-  {
-   "depth": 1,
-   "source": "sentinel_loop",
-   "edge": "lvl:sentinel_loop@L2#2",
-   "target": "sentinel_loop@L2",
-   "kind": "level",
-   "label": "shown",
-   "clauses": [
-    2,
-    3
-   ],
-   "quote": "Nothing was added; so sum and count are both 0, and 0 divided by 0 is just 0",
-   "confidence": 0.8,
-   "prune_score": 0.3,
-   "score": 0.24,
-   "logic": "One pass reads one value. If it is the sentinel, the loop ends with sum and count unchanged; otherwise the (valid) value updates sum and count.",
-   "twin_logic": null,
-   "level": "L2",
-   "way": "one_step_execution"
-  },
-  {
-   "depth": 1,
-   "source": "sentinel_loop",
-   "edge": "lvl:sentinel_loop@L3#1",
-   "target": "sentinel_loop@L3",
-   "kind": "level",
-   "label": "shown",
-   "clauses": [
-    2,
-    3
-   ],
-   "quote": "Nothing was added; so sum and count are both 0, and 0 divided by 0 is just 0",
-   "confidence": 0.8,
-   "prune_score": 0.2,
-   "score": 0.16,
-   "logic": "sum (a gatherer) and count must change only for values that are not the sentinel and pass the filter. The average is computed once, after the loop.",
-   "twin_logic": null,
-   "level": "L3",
-   "way": "relation_to_neighbour"
-  },
-  {
-   "depth": 1,
-   "source": "division_by_zero",
-   "edge": "err:division_by_zero->AverageWithoutZeroGuard",
-   "target": "AverageWithoutZeroGuard",
-   "kind": "error",
-   "label": "held",
-   "clauses": [
-    1,
-    3
-   ],
-   "quote": "0; so sum and count are both 0, and 0 divided by 0 is just 0",
-   "confidence": 0.85,
-   "prune_score": 0.6000000000000001,
-   "score": 0.51,
-   "logic": "Computes sum / count without checking that count is above 0.",
-   "twin_logic": "If no value was read (count is 0), do not compute the average: with int operands sum / count is a division by zero, a run-time exception that stops the program; with a double sum the division does not stop the program and gives a meaningless value instead of an average.",
-   "role": "context"
-  },
-  {
-   "depth": 1,
-   "source": "compound_assignment",
-   "edge": "lvl:compound_assignment@L3#3",
-   "target": "compound_assignment@L3",
-   "kind": "level",
-   "label": "shown",
-   "clauses": [
-    2
-   ],
-   "quote": "Nothing was added",
-   "confidence": 0.55,
-   "prune_score": 0.5,
-   "score": 0.275,
-   "logic": "Plan/role: the update step of a gatherer (sum += a[i], product *= i) or of a stepper with a step other than 1 (i += 2).",
-   "twin_logic": null,
-   "level": "L3",
-   "way": "purpose_of_the_whole"
-  },
-  {
-   "depth": 2,
-   "source": "sentinel_loop",
-   "edge": "pre:accumulator_pattern->sentinel_loop",
-   "target": "accumulator_pattern",
-   "kind": "prerequisite",
-   "label": "confirmed",
-   "clauses": [
-    2,
-    3
-   ],
-   "quote": "Nothing was added; so sum and count are both 0, and 0 divided by 0 is just 0",
-   "confidence": 0.8,
    "prune_score": 0.6,
-   "score": 0.48,
-   "logic": "Sum and count are accumulators.",
-   "twin_logic": null
+   "score": 0.558,
+   "logic": "Folk meaning: in maths and English, 'b = a' means b becomes an equal but independent copy, and 'a == b' means 'have the same values'. Java rule: for arrays, b = a copies only the reference, so both names denote one array, and == tests whether two names refer to the same array.",
+   "twin_logic": null,
+   "level": "L0",
+   "way": "everyday_reading"
   },
   {
-   "depth": 2,
-   "source": "sentinel_loop",
-   "edge": "pre:while_loop->sentinel_loop",
-   "target": "while_loop",
-   "kind": "prerequisite",
-   "label": "confirmed",
+   "depth": 1,
+   "source": "array_initializer",
+   "edge": "lvl:array_initializer@L2#1",
+   "target": "array_initializer@L2",
+   "kind": "level",
+   "label": "shown",
    "clauses": [
-    2
+    1
    ],
-   "quote": "Nothing was added",
-   "confidence": 0.75,
-   "prune_score": 0.4,
+   "quote": "1",
+   "confidence": 0.6,
+   "prune_score": 0.5,
    "score": 0.3,
-   "logic": "A sentinel loop is a while loop whose condition tests each value read against the stop value.",
-   "twin_logic": null
-  },
-  {
-   "depth": 2,
-   "source": "division_by_zero",
-   "edge": "pre:arithmetic_operators->division_by_zero",
-   "target": "arithmetic_operators",
-   "kind": "prerequisite",
-   "label": "broken",
-   "clauses": [
-    1,
-    3
-   ],
-   "quote": "0; so sum and count are both 0, and 0 divided by 0 is just 0",
-   "confidence": 0.95,
-   "prune_score": 0.6,
-   "score": 0.57,
-   "logic": "Integer division by zero (1/0) generates a run-time exception, while floating-point 1.0/0.0 is legal and has the value Infinity.",
-   "twin_logic": null
-  },
-  {
-   "depth": 2,
-   "source": "division_by_zero",
-   "edge": "pre:division_by_zero->run_time_error",
-   "target": "run_time_error",
-   "kind": "prerequisite",
-   "label": "broken",
-   "clauses": [
-    1,
-    3
-   ],
-   "quote": "0; so sum and count are both 0, and 0 divided by 0 is just 0",
-   "confidence": 0.95,
-   "prune_score": 0.4,
-   "score": 0.38,
-   "logic": "Dividing an int by zero compiles but throws ArithmeticException when the program runs: a run-time error.",
-   "twin_logic": null
-  },
-  {
-   "depth": 2,
-   "source": "compound_assignment",
-   "edge": "pre:compound_assignment->accumulator_pattern",
-   "target": "accumulator_pattern",
-   "kind": "prerequisite",
-   "label": "confirmed",
-   "clauses": [
-    2,
-    3
-   ],
-   "quote": "Nothing was added; so sum and count are both 0, and 0 divided by 0 is just 0",
-   "confidence": 0.75,
-   "prune_score": 0.5,
-   "score": 0.375,
-   "logic": "sum += x is the usual way a running total is updated on each pass.",
-   "twin_logic": null
-  },
-  {
-   "depth": 3,
-   "source": "accumulator_pattern",
-   "edge": "lvl:accumulator_pattern@L3#2",
-   "target": "accumulator_pattern@L3",
-   "kind": "level",
-   "label": "shown",
-   "clauses": [
-    2,
-    3
-   ],
-   "quote": "Nothing was added; so sum and count are both 0, and 0 divided by 0 is just 0",
-   "confidence": 0.8,
-   "prune_score": 0.5,
-   "score": 0.4,
-   "logic": "In a sentinel loop the sum and the count of the values read are both accumulators, updated only for values that are not the sentinel.",
-   "twin_logic": null,
-   "level": "L3",
-   "way": "relation_to_neighbour"
-  },
-  {
-   "depth": 3,
-   "source": "accumulator_pattern",
-   "edge": "lvl:accumulator_pattern@L2#0",
-   "target": "accumulator_pattern@L2",
-   "kind": "level",
-   "label": "shown",
-   "clauses": [
-    2,
-    3
-   ],
-   "quote": "Nothing was added; so sum and count are both 0, and 0 divided by 0 is just 0",
-   "confidence": 0.7,
-   "prune_score": 0.3,
-   "score": 0.21,
-   "logic": "Before the loop: total = initial value. Each pass: read total, combine with the current item, store back. After the loop: total holds the combination of all items.",
-   "twin_logic": null,
-   "level": "L2",
-   "way": "line_by_line_trace"
-  },
-  {
-   "depth": 3,
-   "source": "accumulator_pattern",
-   "edge": "lvl:accumulator_pattern@L2#1",
-   "target": "accumulator_pattern@L2",
-   "kind": "level",
-   "label": "shown",
-   "clauses": [
-    2,
-    3
-   ],
-   "quote": "Nothing was added; so sum and count are both 0, and 0 divided by 0 is just 0",
-   "confidence": 0.7,
-   "prune_score": 0.2,
-   "score": 0.14,
-   "logic": "After the loop the accumulator holds the reduce result: sum of 1..N is N(N+1)/2; Harmonic(2) = 1.5; the product loop gives N!.",
+   "logic": "Result: int[] a = {1, 2, 3}; gives a.length == 3, a[0] == 1, a[2] == 3. String[] suit = {\"Clubs\", \"Diamonds\", \"Hearts\", \"Spades\"}; gives suit.length == 4.",
    "twin_logic": null,
    "level": "L2",
    "way": "output_prediction"
   },
   {
-   "depth": 3,
-   "source": "sentinel_loop",
-   "edge": "pre:while_loop->sentinel_loop",
-   "target": "while_loop",
+   "depth": 2,
+   "source": "array_aliasing",
+   "edge": "pre:array_reference->array_aliasing",
+   "target": "array_reference",
+   "kind": "prerequisite",
+   "label": "broken",
+   "clauses": [
+    1,
+    2,
+    3
+   ],
+   "quote": "1; b is a copy of a; so changing b[0] doesnt touch a",
+   "confidence": 0.97,
+   "prune_score": 1.0,
+   "score": 0.97,
+   "logic": "Because an array variable holds a reference, b = a copies the reference, so a and b name the same array.",
+   "twin_logic": null,
+   "consequence_of": "mis:array_aliasing->AssignmentCopiesObject"
+  },
+  {
+   "depth": 2,
+   "source": "indexing",
+   "edge": "pre:array_initializer->indexing",
+   "target": "array_initializer",
    "kind": "prerequisite",
    "label": "confirmed",
    "clauses": [
-    2
+    1
    ],
-   "quote": "Nothing was added",
-   "confidence": 0.75,
+   "quote": "1",
+   "confidence": 0.7,
    "prune_score": 1.0,
-   "score": 0.75,
-   "logic": "A sentinel loop is a while loop whose condition tests each value read against the stop value.",
+   "score": 0.7,
+   "logic": "The values listed in braces are stored at indices 0, 1, 2, ... in order, and a[i] reads the value at index i.",
    "twin_logic": null
   },
   {
-   "depth": 4,
-   "source": "while_loop",
-   "edge": "mis:while_loop->LoopBodyAlwaysOnce",
-   "target": "LoopBodyAlwaysOnce",
-   "kind": "misconception",
-   "label": "correct",
-   "clauses": [
-    2,
-    3
-   ],
-   "quote": "Nothing was added; so sum and count are both 0, and 0 divided by 0 is just 0",
-   "confidence": 0.9,
-   "prune_score": 0.45,
-   "score": 0.405,
-   "logic": "The loop body always runs at least once, even if the condition is false at the start.",
-   "twin_logic": "A while or for body runs zero times when the condition is false at the start.",
-   "role": "primary"
-  },
-  {
-   "depth": 4,
-   "source": "while_loop",
-   "edge": "err:while_loop->LoopIgnoresCodeBefore",
-   "target": "LoopIgnoresCodeBefore",
-   "kind": "error",
-   "label": "correct",
-   "clauses": [
-    2,
-    3
-   ],
-   "quote": "Nothing was added; so sum and count are both 0, and 0 divided by 0 is just 0",
-   "confidence": 0.7,
-   "prune_score": 0.3,
-   "score": 0.21,
-   "logic": "Initializes the flag before the loop so that the loop condition is already false, and the loop body never runs.",
-   "twin_logic": "A while loop tests its condition before the first pass: if the values set before the loop make the condition false, the body never runs.",
-   "role": "primary"
-  },
-  {
-   "depth": 4,
-   "source": "while_loop",
-   "edge": "mis:while_loop->ProgramEndsAfterLoop",
-   "target": "ProgramEndsAfterLoop",
-   "kind": "misconception",
-   "label": "correct",
+   "depth": 3,
+   "source": "array_reference",
+   "edge": "lvl:array_reference@L0#0",
+   "target": "array_reference@L0",
+   "kind": "level",
+   "label": "shown",
    "clauses": [
     1,
+    2,
     3
    ],
-   "quote": "0; so sum and count are both 0, and 0 divided by 0 is just 0",
-   "confidence": 0.8,
-   "prune_score": 0.25,
-   "score": 0.2,
-   "logic": "When a loop finishes the program ends, so code after the loop never runs.",
-   "twin_logic": "When the loop condition becomes false, control continues with the first statement after the loop.",
+   "quote": "1; b is a copy of a; so changing b[0] doesnt touch a",
+   "confidence": 0.9,
+   "prune_score": 0.3,
+   "score": 0.27,
+   "logic": "Folk meaning: a variable is a box, so the array's values are 'inside' a. Java rule: the variable a holds only a reference (memory address, pointer) to the array object, which lives elsewhere.",
+   "twin_logic": null,
+   "level": "L0",
+   "way": "everyday_reading"
+  }
+ ],
+ "evidence": [
+  {
+   "depth": 1,
+   "source": "array_aliasing",
+   "edge": "mis:array_aliasing->AssignmentCopiesObject",
+   "target": "AssignmentCopiesObject",
+   "kind": "misconception",
+   "label": "held",
+   "clauses": [
+    1,
+    2,
+    3
+   ],
+   "quote": "1; b is a copy of a; so changing b[0] doesnt touch a",
+   "confidence": 0.97,
+   "prune_score": 1.0,
+   "score": 0.97,
+   "logic": "assigning a reference copies the object",
+   "twin_logic": "b = a; copies only the reference, so a and b refer to the same array and b[i] = v also changes a[i].",
    "role": "primary"
   },
   {
-   "depth": 4,
-   "source": "while_loop",
-   "edge": "lvl:while_loop@L2#2",
-   "target": "while_loop@L2",
+   "depth": 1,
+   "source": "array_aliasing",
+   "edge": "lvl:array_aliasing@L0#0",
+   "target": "array_aliasing@L0",
    "kind": "level",
    "label": "shown",
    "clauses": [
+    1,
     2,
     3
    ],
-   "quote": "Nothing was added; so sum and count are both 0, and 0 divided by 0 is just 0",
-   "confidence": 0.75,
+   "quote": "1; b is a copy of a; so changing b[0] doesnt touch a",
+   "confidence": 0.93,
+   "prune_score": 0.6,
+   "score": 0.558,
+   "logic": "Folk meaning: in maths and English, 'b = a' means b becomes an equal but independent copy, and 'a == b' means 'have the same values'. Java rule: for arrays, b = a copies only the reference, so both names denote one array, and == tests whether two names refer to the same array.",
+   "twin_logic": null,
+   "level": "L0",
+   "way": "everyday_reading"
+  },
+  {
+   "depth": 1,
+   "source": "indexing",
+   "edge": "mis:indexing->ArrayIndexStartsAtOne",
+   "target": "ArrayIndexStartsAtOne",
+   "kind": "misconception",
+   "label": "correct",
+   "clauses": [
+    1
+   ],
+   "quote": "1",
+   "confidence": 0.6,
    "prune_score": 0.4,
+   "score": 0.24,
+   "logic": "The first element of a is a[1].",
+   "twin_logic": "Numbering begins with 0; the first element is a[0].",
+   "role": "primary"
+  },
+  {
+   "depth": 1,
+   "source": "indexing",
+   "edge": "lvl:indexing@L2#1",
+   "target": "indexing@L2",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    1
+   ],
+   "quote": "1",
+   "confidence": 0.6,
+   "prune_score": 0.3,
+   "score": 0.18,
+   "logic": "Result: a[i] has the element type and the value currently stored at position i. For int[] a = {5, 7, 9}, a[1] is 7 and a[0] + a[2] is 14.",
+   "twin_logic": null,
+   "level": "L2",
+   "way": "output_prediction"
+  },
+  {
+   "depth": 1,
+   "source": "indexing",
+   "edge": "lvl:indexing@L1#0",
+   "target": "indexing@L1",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    3
+   ],
+   "quote": "so changing b[0] doesnt touch a",
+   "confidence": 0.6,
+   "prune_score": 0.2,
+   "score": 0.12,
+   "logic": "Identity: an array access expression; a[i] names the single element variable at position i of the array a refers to.",
+   "twin_logic": null,
+   "level": "L1",
+   "way": "names_the_element"
+  },
+  {
+   "depth": 1,
+   "source": "array_initializer",
+   "edge": "lvl:array_initializer@L2#1",
+   "target": "array_initializer@L2",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    1
+   ],
+   "quote": "1",
+   "confidence": 0.6,
+   "prune_score": 0.5,
    "score": 0.3,
-   "logic": "One pass: test the condition with the current values, then (if true) apply every body statement once in order; the variables assigned in the body change and nothing else; a false test ends the loop with the state unchanged.",
+   "logic": "Result: int[] a = {1, 2, 3}; gives a.length == 3, a[0] == 1, a[2] == 3. String[] suit = {\"Clubs\", \"Diamonds\", \"Hearts\", \"Spades\"}; gives suit.length == 4.",
    "twin_logic": null,
    "level": "L2",
-   "way": "one_step_execution"
+   "way": "output_prediction"
   },
   {
-   "depth": 4,
-   "source": "while_loop",
-   "edge": "lvl:while_loop@L4#0",
-   "target": "while_loop@L4",
-   "kind": "level",
-   "label": "shown",
+   "depth": 2,
+   "source": "array_aliasing",
+   "edge": "pre:array_reference->array_aliasing",
+   "target": "array_reference",
+   "kind": "prerequisite",
+   "label": "broken",
    "clauses": [
+    1,
     2,
     3
    ],
-   "quote": "Nothing was added; so sum and count are both 0, and 0 divided by 0 is just 0",
-   "confidence": 0.7,
-   "prune_score": 0.35,
-   "score": 0.245,
-   "logic": "Changing < to <= adds exactly one pass at the boundary; removing the update from the body makes a loop that was entered never end; a condition that is false initially gives zero passes whatever the body does. Rewriting as for (init; cond; update) preserves behaviour if no continue is involved.",
+   "quote": "1; b is a copy of a; so changing b[0] doesnt touch a",
+   "confidence": 0.97,
+   "prune_score": 1.0,
+   "score": 0.97,
+   "logic": "Because an array variable holds a reference, b = a copies the reference, so a and b name the same array.",
    "twin_logic": null,
-   "level": "L4",
-   "way": "predict_a_change"
+   "consequence_of": "mis:array_aliasing->AssignmentCopiesObject"
   },
   {
-   "depth": 4,
-   "source": "while_loop",
-   "edge": "lvl:while_loop@L2#0",
-   "target": "while_loop@L2",
+   "depth": 2,
+   "source": "indexing",
+   "edge": "pre:array_initializer->indexing",
+   "target": "array_initializer",
+   "kind": "prerequisite",
+   "label": "confirmed",
+   "clauses": [
+    1
+   ],
+   "quote": "1",
+   "confidence": 0.7,
+   "prune_score": 1.0,
+   "score": 0.7,
+   "logic": "The values listed in braces are stored at indices 0, 1, 2, ... in order, and a[i] reads the value at index i.",
+   "twin_logic": null
+  },
+  {
+   "depth": 3,
+   "source": "array_reference",
+   "edge": "lvl:array_reference@L0#0",
+   "target": "array_reference@L0",
    "kind": "level",
    "label": "shown",
    "clauses": [
+    1,
     2,
     3
    ],
-   "quote": "Nothing was added; so sum and count are both 0, and 0 divided by 0 is just 0",
-   "confidence": 0.7,
-   "prune_score": 0.25,
-   "score": 0.175,
-   "logic": "1. Evaluate the condition. 2. If false, skip the body and continue after the loop. 3. If true, execute the whole body, then go back to step 1.",
+   "quote": "1; b is a copy of a; so changing b[0] doesnt touch a",
+   "confidence": 0.9,
+   "prune_score": 0.3,
+   "score": 0.27,
+   "logic": "Folk meaning: a variable is a box, so the array's values are 'inside' a. Java rule: the variable a holds only a reference (memory address, pointer) to the array object, which lives elsewhere.",
    "twin_logic": null,
-   "level": "L2",
-   "way": "line_by_line_trace"
+   "level": "L0",
+   "way": "everyday_reading"
   }
  ],
  "clause_coverage": {
-  "0": "err:sentinel_loop->AverageWithoutZeroGuard",
-  "Nothing was added": "mis:sentinel_loop->SentinelProcessed",
-  "so sum and count are both 0, and 0 divided by 0 is just 0": "err:sentinel_loop->AverageWithoutZeroGuard"
+  "1": "mis:array_aliasing->AssignmentCopiesObject",
+  "b is a copy of a": "mis:array_aliasing->AssignmentCopiesObject",
+  "so changing b[0] doesnt touch a": "mis:array_aliasing->AssignmentCopiesObject"
  },
  "unexplained_clauses": [],
  "stop_reason": "max depth",
- "depth_reached": 4,
+ "depth_reached": 3,
  "llm_calls": 0,
- "llm_cache_hits": 54,
+ "llm_cache_hits": 30,
  "llm_calls_by_step": {
-  "prune": 18,
-  "label": 36
+  "prune": 11,
+  "label": 19
  }
 }

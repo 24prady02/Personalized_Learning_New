@@ -37,7 +37,7 @@ requirements.txt                             pytest; matplotlib, networkx (figur
 pytest.ini                                   testpaths = tests, pythonpath = src
 data/
   raw/chapter1_kg_updated.json                   knowledge graph v3.9.8 (173 concepts, 1943 edges, 296 misconception/error records, 865 level nodes)
-  raw/scenarios_40.json                      the main set: the 40 scenarios MY01-MY41 without MY26 (code, question, answer; MY26 repeated MY18 and was removed; no gold labels yet)
+  raw/scenarios_40.json                      the main set: the 40 scenarios MY01-MY40 (code, question, answer; no gold labels yet)
   raw/scenarios_not_from_code.json           the other 10 scenarios (prose code, or a gold concept only the answer brings in)
   processed/<sid>_subgraph.json              one extracted subgraph per scenario (output of src/evaluate.py)
   processed/<sid>_diagnosis.json             Stage 2 output: held misconceptions, root cause, levels, paths, evidence, clause coverage, stop reason, prompts per step

@@ -1,104 +1,94 @@
-clauses: Nothing | The else lines up with if | x > 0 | and thats true | so the else is skipped | x > 10 is false | so big isnt printed either
-start: generic concepts whose tagging text occurs in the answer: expression
-start: BM25 of the answer against each tagged concept: comparison_operators 15.12 (hits 1), println 14.44 (hits 1), if_statement 13.10 (hits 1), boolean_expression 12.75 (hits 1), control_flow 11.94 (hits 1), nested_conditionals 11.56 (hits 1), if_else_statement 11.37 (hits 1), expression 8.80 (hits 2), dangling_else 6.81 (hits 1), fencepost_loop 1.89 (hits 1)
-start: chosen comparison_operators, println, if_statement
-start concepts (3): comparison_operators, println, if_statement
---- depth 1: current concepts ['comparison_operators', 'println', 'if_statement']
-  comparison_operators (misconceptions): 8 candidates -> kept mis:comparison_operators->LessGreaterSwapped (0.80), mis:comparison_operators->ChainedComparison (0.10), mis:comparison_operators->ComparisonWithBooleanLiteral (0.10)
-    mis:comparison_operators->LessGreaterSwapped -> correct (0.68) "x > 0; and thats true; x > 10 is false"
-    mis:comparison_operators->ChainedComparison -> not applied (0.00) ""
-    mis:comparison_operators->ComparisonWithBooleanLiteral -> not applied (0.00) ""
-  comparison_operators (level ways): 20 candidates -> kept lvl:comparison_operators@L2#1 (0.40), lvl:comparison_operators@L3#1 (0.35), lvl:comparison_operators@L2#0 (0.25)
-    lvl:comparison_operators@L2#1 -> shown (0.32) "x > 0; and thats true; x > 10 is false"
-    lvl:comparison_operators@L3#1 -> shown (0.24) "x > 0; and thats true; so the else is skipped; x > 10 is false; so big isnt printed either"
-    lvl:comparison_operators@L2#0 -> shown (0.17) "x > 0; and thats true; x > 10 is false"
-  println (misconceptions): 6 candidates -> kept mis:println->PrintedTextIsExecuted (0.60), mis:println->PrintEqualsPrintln (0.20), mis:println->PrintNewLineFirst (0.20)
-    mis:println->PrintedTextIsExecuted -> not applied (0.00) ""
-    mis:println->PrintEqualsPrintln -> not applied (0.00) ""
-    mis:println->PrintNewLineFirst -> not applied (0.00) ""
-  println (level ways): 17 candidates -> kept lvl:println@L3#0 (0.45), lvl:println@L2#1 (0.35), lvl:println@L2#0 (0.20)
-    lvl:println@L3#0 -> not applied (0.00) ""
-    lvl:println@L2#1 -> not applied (0.00) ""
-    lvl:println@L2#0 -> not applied (0.00) ""
-  if_statement (misconceptions): 22 candidates -> kept err:if_statement->BracelessMultiStatementBody (0.50), mis:if_statement->BranchChosenByIntent (0.30), mis:if_statement->ThenAlwaysExecutes (0.20)
-    err:if_statement->BracelessMultiStatementBody -> not applied (0.00) ""
-    mis:if_statement->BranchChosenByIntent -> correct (0.17) "x > 0; and thats true; x > 10 is false; so big isnt printed either"
-    mis:if_statement->ThenAlwaysExecutes -> correct (0.17) "x > 10 is false; so big isnt printed either"
-  if_statement (level ways): 19 candidates -> kept lvl:if_statement@L4#4 (0.50), lvl:if_statement@L3#1 (0.30), lvl:if_statement@L2#0 (0.20)
-    lvl:if_statement@L4#4 -> not applied (0.00) ""
-    lvl:if_statement@L3#1 -> shown (0.21) "x > 0; and thats true; so the else is skipped; x > 10 is false; so big isnt printed either"
-    lvl:if_statement@L2#0 -> shown (0.16) "x > 0; and thats true; so the else is skipped; x > 10 is false; so big isnt printed either"
-  kept: mis:comparison_operators->LessGreaterSwapped [correct, tier 2, 0.68], lvl:comparison_operators@L2#1 [shown, tier 2, 0.32], lvl:comparison_operators@L3#1 [shown, tier 2, 0.24]
-  clause coverage: c1 uncovered; c2 uncovered; c3 <- mis:comparison_operators->LessGreaterSwapped; c4 <- mis:comparison_operators->LessGreaterSwapped; c5 uncovered; c6 <- mis:comparison_operators->LessGreaterSwapped; c7 <- mis:if_statement->BranchChosenByIntent
-  uncovered clauses bring in: control_flow (5.84), dangling_else (4.86), nested_conditionals (4.69)
-  not yet read: own edges of control_flow, own edges of dangling_else, own edges of nested_conditionals, par:assignment~comparison_operators, pre:boolean_expression->if_statement, pre:comparison_operators->boolean_expression, pre:control_flow->if_statement, pre:expression->comparison_operators, pre:if_statement->if_else_statement, pre:if_statement->nested_conditionals, pre:statement->println, pre:string_literal->println
---- depth 2: current concepts ['comparison_operators', 'println', 'if_statement', 'control_flow', 'dangling_else', 'nested_conditionals']
-  comparison_operators (concept edges): 3 candidates -> kept pre:comparison_operators->boolean_expression (0.60), pre:expression->comparison_operators (0.30), par:assignment~comparison_operators (0.10)
-    pre:comparison_operators->boolean_expression -> confirmed (0.48) "x > 0; and thats true; x > 10 is false; so big isnt printed either"
-    pre:expression->comparison_operators -> confirmed (0.24) "x > 0; and thats true; x > 10 is false"
-    par:assignment~comparison_operators -> not applied (0.00) ""
-  println (concept edges): 2 candidates -> kept pre:statement->println (0.70), pre:string_literal->println (0.30)
-    pre:statement->println -> confirmed (0.39) "so big isnt printed either"
-    pre:string_literal->println -> not applied (0.00) ""
-  if_statement (concept edges): 4 candidates -> kept pre:if_statement->nested_conditionals (0.40), pre:if_statement->if_else_statement (0.35), pre:boolean_expression->if_statement (0.25)
-    pre:if_statement->nested_conditionals -> confirmed (0.32) "x > 0; and thats true; x > 10 is false; so big isnt printed either"
-    pre:if_statement->if_else_statement -> confirmed (0.21) "x > 0; and thats true; so the else is skipped"
-    pre:boolean_expression->if_statement -> confirmed (0.20) "x > 0; and thats true; x > 10 is false; so big isnt printed either"
-  control_flow (misconceptions): 11 candidates -> kept mis:control_flow->FalseConditionRestartsProgram (0.40), mis:control_flow->IfConditionWatched (0.30), mis:control_flow->StatementsRunInAnyOrder (0.30)
-    mis:control_flow->FalseConditionRestartsProgram -> correct (0.24) "x > 10 is false; so big isnt printed either"
-    mis:control_flow->IfConditionWatched -> not applied (0.00) ""
-    mis:control_flow->StatementsRunInAnyOrder -> not applied (0.00) ""
-  control_flow (level ways): 15 candidates -> kept lvl:control_flow@L2#0 (0.45), lvl:control_flow@L0#0 (0.30), lvl:control_flow@L2#1 (0.25)
-    lvl:control_flow@L2#0 -> shown (0.36) "x > 0; and thats true; so the else is skipped; x > 10 is false; so big isnt printed either"
-    lvl:control_flow@L0#0 -> not applied (0.00) ""
-    lvl:control_flow@L2#1 -> shown (0.19) "Nothing; x > 0; and thats true; so the else is skipped; x > 10 is false; so big isnt printed either"
-  dangling_else (misconceptions): 1 candidates -> kept mis:dangling_else->ElseMatchesIndentation (1.00)
-    mis:dangling_else->ElseMatchesIndentation -> held (0.93) "Nothing; The else lines up with if; x > 0; and thats true; so the else is skipped"
-  dangling_else (level ways): 12 candidates -> kept lvl:dangling_else@L0#0 (0.70), lvl:dangling_else@L2#1 (0.15), lvl:dangling_else@L4#2 (0.15)
-    lvl:dangling_else@L0#0 -> shown (0.59) "The else lines up with if; x > 0; and thats true; so the else is skipped"
-    lvl:dangling_else@L2#1 -> not applied (0.00) ""
-    lvl:dangling_else@L4#2 -> not applied (0.00) ""
-  nested_conditionals (misconceptions): 6 candidates -> kept mis:nested_conditionals->ElseMatchesIndentation (0.70), mis:nested_conditionals->InconsistentIndentation (0.15), mis:nested_conditionals->InnerIfIgnoresOuter (0.15)
-    mis:nested_conditionals->ElseMatchesIndentation -> held (0.65) "The else lines up with if; x > 0; and thats true; so the else is skipped"
-    mis:nested_conditionals->InconsistentIndentation -> not applied (0.00) ""
-    mis:nested_conditionals->InnerIfIgnoresOuter -> not applied (0.00) ""
-  nested_conditionals (level ways): 14 candidates -> kept lvl:nested_conditionals@L0#3 (0.45), lvl:nested_conditionals@L0#0 (0.35), lvl:nested_conditionals@L4#2 (0.20)
-    lvl:nested_conditionals@L0#3 -> shown (0.38) "The else lines up with if; so the else is skipped"
-    lvl:nested_conditionals@L0#0 -> shown (0.30) "Nothing; The else lines up with if; so the else is skipped"
-    lvl:nested_conditionals@L4#2 -> not applied (0.00) ""
-  kept: mis:dangling_else->ElseMatchesIndentation [held, tier 0, 0.93], mis:nested_conditionals->ElseMatchesIndentation [held, tier 0, 0.65], lvl:dangling_else@L0#0 [shown, tier 2, 0.59]
-  clause coverage: c1 <- mis:dangling_else->ElseMatchesIndentation; c2 <- mis:dangling_else->ElseMatchesIndentation; c3 <- mis:comparison_operators->LessGreaterSwapped; c4 <- mis:comparison_operators->LessGreaterSwapped; c5 <- pre:if_statement->if_else_statement; c6 <- mis:comparison_operators->LessGreaterSwapped; c7 <- mis:if_statement->BranchChosenByIntent
-  not yet read: pre:if_else_statement->nested_conditionals, pre:nested_conditionals->dangling_else, pre:statement->control_flow
---- depth 3: current concepts ['dangling_else', 'nested_conditionals', 'control_flow']
-  dangling_else (concept edges): 1 candidates -> kept pre:nested_conditionals->dangling_else (1.00)
-    pre:nested_conditionals->dangling_else -> broken (0.80) "The else lines up with if; so the else is skipped; so big isnt printed either"
-  nested_conditionals (concept edges): 2 candidates -> kept pre:if_else_statement->nested_conditionals (0.60), pre:if_statement->nested_conditionals (0.40)
-    pre:if_else_statement->nested_conditionals -> broken (0.51) "Nothing; The else lines up with if; so the else is skipped"
-    pre:if_statement->nested_conditionals -> confirmed (0.32) "x > 0; and thats true; x > 10 is false; so big isnt printed either"
-  control_flow (concept edges): 2 candidates -> kept pre:control_flow->if_statement (0.80), pre:statement->control_flow (0.20)
-    pre:control_flow->if_statement -> confirmed (0.64) "x > 0; and thats true; x > 10 is false; so big isnt printed either"
-    pre:statement->control_flow -> confirmed (0.12) "x > 0; and thats true; x > 10 is false; so big isnt printed either"
-  kept: pre:nested_conditionals->dangling_else [broken, tier 0, 0.80], pre:if_else_statement->nested_conditionals [broken, tier 0, 0.51], pre:control_flow->if_statement [confirmed, tier 2, 0.64]
-  reached across pre:if_else_statement->nested_conditionals, entered next: if_else_statement
-  clause coverage: c1 <- mis:dangling_else->ElseMatchesIndentation; c2 <- mis:dangling_else->ElseMatchesIndentation; c3 <- mis:comparison_operators->LessGreaterSwapped; c4 <- mis:comparison_operators->LessGreaterSwapped; c5 <- pre:if_statement->if_else_statement; c6 <- mis:comparison_operators->LessGreaterSwapped; c7 <- mis:if_statement->BranchChosenByIntent
-  not yet read: own edges of if_else_statement
---- depth 4: current concepts ['if_else_statement'] (closing round: own edges only)
-  if_else_statement (misconceptions): 6 candidates -> kept mis:if_else_statement->BranchChosenByIntent (0.40), mis:if_else_statement->ElseAlwaysExecutes (0.40), mis:if_else_statement->BothBranchesExecute (0.20)
-    mis:if_else_statement->BranchChosenByIntent -> correct (0.28) "x > 0; and thats true; so the else is skipped"
-    mis:if_else_statement->ElseAlwaysExecutes -> correct (0.34) "x > 0; and thats true; so the else is skipped"
-    mis:if_else_statement->BothBranchesExecute -> correct (0.15) "and thats true; so the else is skipped"
-  if_else_statement (level ways): 17 candidates -> kept lvl:if_else_statement@L3#1 (0.60), lvl:if_else_statement@L2#0 (0.25), lvl:if_else_statement@L2#1 (0.15)
-    lvl:if_else_statement@L3#1 -> not applied (0.00) ""
-    lvl:if_else_statement@L2#0 -> shown (0.20) "x > 0; and thats true; so the else is skipped; x > 10 is false; so big isnt printed either"
-    lvl:if_else_statement@L2#1 -> shown (0.09) "x > 0; and thats true; so the else is skipped"
-  kept: mis:if_else_statement->ElseAlwaysExecutes [correct, tier 2, 0.34], mis:if_else_statement->BranchChosenByIntent [correct, tier 2, 0.28], lvl:if_else_statement@L2#0 [shown, tier 2, 0.20]
-  clause coverage: c1 <- mis:dangling_else->ElseMatchesIndentation; c2 <- mis:dangling_else->ElseMatchesIndentation; c3 <- mis:comparison_operators->LessGreaterSwapped; c4 <- mis:comparison_operators->LessGreaterSwapped; c5 <- pre:if_statement->if_else_statement; c6 <- mis:comparison_operators->LessGreaterSwapped; c7 <- mis:if_statement->BranchChosenByIntent
-  held: mis:dangling_else->ElseMatchesIndentation; filed at the dependent concept: mis:nested_conditionals->ElseMatchesIndentation
-  shadows: mis:nested_conditionals->ElseMatchesIndentation (shadow of mis:dangling_else->ElseMatchesIndentation)
-  root-cause walk: held on ['dangling_else'], broken at [] (consequences: pre:nested_conditionals->dangling_else, pre:if_else_statement->nested_conditionals), prerequisites {'if_statement': ['boolean_expression', 'control_flow'], 'boolean_expression': ['comparison_operators'], 'comparison_operators': ['expression'], 'nested_conditionals': ['if_else_statement', 'if_statement'], 'if_else_statement': ['if_statement'], 'dangling_else': ['nested_conditionals'], 'control_flow': ['statement'], 'println': ['statement', 'string_literal']}
-  level comparison_operators: L3 via relation_to_neighbour "x > 0; and thats true; so the else is skipped; x > 10 is false; so big isnt printed either"
-  level control_flow: L2 via line_by_line_trace "x > 0; and thats true; so the else is skipped; x > 10 is false; so big isnt printed either"
-  level dangling_else: L0 via misconception "Nothing; The else lines up with if; x > 0; and thats true; so the else is skipped"
-  level if_else_statement: L2 via line_by_line_trace "x > 0; and thats true; so the else is skipped; x > 10 is false; so big isnt printed either"
-  level if_statement: L3 via relation_to_neighbour "x > 0; and thats true; so the else is skipped; x > 10 is false; so big isnt printed either"
-  level nested_conditionals: L0 via inconsistent_trace "The else lines up with if; so the else is skipped"
+clauses: 0 | Nothing was added | so sum and count are both 0, and 0 divided by 0 is just 0
+start: BM25 of the answer against each tagged concept: sentinel_loop 18.56 (hits 1), division_by_zero 17.29 (hits 1), compound_assignment 10.91 (hits 1), loop_control 10.71 (hits 1), increment_operators 10.12 (hits 1), while_loop 10.09 (hits 1), integer_division 9.85 (hits 1), arithmetic_operators 9.73 (hits 1), run_time_error 8.85 (hits 1), boolean_expression 8.85 (hits 1), accumulator_pattern 7.23 (hits 1), named_constants 6.20 (hits 1), counter_pattern 5.94 (hits 1), loop_body 5.10 (hits 1), filter 5.02 (hits 1), println 3.63 (hits 1), control_flow 3.55 (hits 1), comparison_operators 3.23 (hits 1), method_call 3.12 (hits 1), standard_input 1.80 (hits 1), stream_model 1.22 (hits 1), api 0.57 (hits 1), input_format 0.53 (hits 1)
+start: chosen sentinel_loop, division_by_zero, compound_assignment
+start concepts (3): sentinel_loop, division_by_zero, compound_assignment
+--- depth 1: current concepts ['sentinel_loop', 'division_by_zero', 'compound_assignment']
+  sentinel_loop (misconceptions): 3 candidates -> kept err:sentinel_loop->AverageWithoutZeroGuard (0.80), mis:sentinel_loop->SentinelProcessed (0.15), err:sentinel_loop->NegativeNotFiltered (0.05)
+    err:sentinel_loop->AverageWithoutZeroGuard -> held (0.74) "0; so sum and count are both 0, and 0 divided by 0 is just 0"
+    mis:sentinel_loop->SentinelProcessed -> correct (0.13) "Nothing was added"
+    err:sentinel_loop->NegativeNotFiltered -> not applied (0.00) ""
+  sentinel_loop (level ways): 16 candidates -> kept lvl:sentinel_loop@L4#1 (0.50), lvl:sentinel_loop@L2#2 (0.30), lvl:sentinel_loop@L3#1 (0.20)
+    lvl:sentinel_loop@L4#1 -> not applied (0.00) ""
+    lvl:sentinel_loop@L2#2 -> shown (0.24) "Nothing was added; so sum and count are both 0, and 0 divided by 0 is just 0"
+    lvl:sentinel_loop@L3#1 -> shown (0.16) "Nothing was added; so sum and count are both 0, and 0 divided by 0 is just 0"
+  division_by_zero (misconceptions): 3 candidates -> kept err:division_by_zero->AverageWithoutZeroGuard (0.60), mis:division_by_zero->ZeroDivisionAlwaysCrashes (0.30), mis:division_by_zero->DivisionByZeroIsCompileError (0.10)
+    err:division_by_zero->AverageWithoutZeroGuard -> held (0.51) "0; so sum and count are both 0, and 0 divided by 0 is just 0"
+    mis:division_by_zero->ZeroDivisionAlwaysCrashes -> not applied (0.00) ""
+    mis:division_by_zero->DivisionByZeroIsCompileError -> not applied (0.00) ""
+  division_by_zero (level ways): 15 candidates -> kept lvl:division_by_zero@L4#1 (0.50), lvl:division_by_zero@L2#1 (0.30), lvl:division_by_zero@L4#3 (0.20)
+    lvl:division_by_zero@L4#1 -> not applied (0.00) ""
+    lvl:division_by_zero@L2#1 -> not applied (0.00) ""
+    lvl:division_by_zero@L4#3 -> not applied (0.00) ""
+  compound_assignment (misconceptions): 2 candidates -> kept mis:compound_assignment->CompoundAssignmentNoCast (0.60), mis:compound_assignment->CompoundSubtractIsAssignNegative (0.40)
+    mis:compound_assignment->CompoundAssignmentNoCast -> not applied (0.00) ""
+    mis:compound_assignment->CompoundSubtractIsAssignNegative -> not applied (0.00) ""
+  compound_assignment (level ways): 15 candidates -> kept lvl:compound_assignment@L3#3 (0.50), lvl:compound_assignment@L2#2 (0.30), lvl:compound_assignment@L3#0 (0.20)
+    lvl:compound_assignment@L3#3 -> shown (0.28) "Nothing was added"
+    lvl:compound_assignment@L2#2 -> not applied (0.00) ""
+    lvl:compound_assignment@L3#0 -> not applied (0.00) ""
+  kept: err:sentinel_loop->AverageWithoutZeroGuard [held, tier 1, 0.74], err:division_by_zero->AverageWithoutZeroGuard [held, tier 1, 0.51], lvl:compound_assignment@L3#3 [shown, tier 2, 0.28]
+  clause coverage: c1 <- err:sentinel_loop->AverageWithoutZeroGuard; c2 <- mis:sentinel_loop->SentinelProcessed; c3 <- err:sentinel_loop->AverageWithoutZeroGuard
+  not yet read: par:increment_operators~compound_assignment, pre:accumulator_pattern->sentinel_loop, pre:arithmetic_operators->division_by_zero, pre:assignment->compound_assignment, pre:compound_assignment->accumulator_pattern, pre:division_by_zero->run_time_error, pre:while_loop->sentinel_loop
+--- depth 2: current concepts ['sentinel_loop', 'division_by_zero', 'compound_assignment']
+  sentinel_loop (concept edges): 2 candidates -> kept pre:accumulator_pattern->sentinel_loop (0.60), pre:while_loop->sentinel_loop (0.40)
+    pre:accumulator_pattern->sentinel_loop -> confirmed (0.48) "Nothing was added; so sum and count are both 0, and 0 divided by 0 is just 0"
+    pre:while_loop->sentinel_loop -> confirmed (0.30) "Nothing was added"
+  division_by_zero (concept edges): 2 candidates -> kept pre:arithmetic_operators->division_by_zero (0.60), pre:division_by_zero->run_time_error (0.40)
+    pre:arithmetic_operators->division_by_zero -> broken (0.57) "0; so sum and count are both 0, and 0 divided by 0 is just 0"
+    pre:division_by_zero->run_time_error -> broken (0.38) "0; so sum and count are both 0, and 0 divided by 0 is just 0"
+  compound_assignment (concept edges): 3 candidates -> kept pre:compound_assignment->accumulator_pattern (0.50), par:increment_operators~compound_assignment (0.30), pre:assignment->compound_assignment (0.20)
+    pre:compound_assignment->accumulator_pattern -> confirmed (0.38) "Nothing was added; so sum and count are both 0, and 0 divided by 0 is just 0"
+    par:increment_operators~compound_assignment -> not applied (0.00) ""
+    pre:assignment->compound_assignment -> not applied (0.00) ""
+  kept: pre:arithmetic_operators->division_by_zero [broken, tier 0, 0.57], pre:division_by_zero->run_time_error [broken, tier 0, 0.38], pre:accumulator_pattern->sentinel_loop [confirmed, tier 2, 0.48]
+  reached across pre:arithmetic_operators->division_by_zero, entered next: arithmetic_operators
+  reached across pre:division_by_zero->run_time_error, entered next: run_time_error
+  reached across pre:accumulator_pattern->sentinel_loop, entered next: accumulator_pattern
+  clause coverage: c1 <- err:sentinel_loop->AverageWithoutZeroGuard; c2 <- mis:sentinel_loop->SentinelProcessed; c3 <- err:sentinel_loop->AverageWithoutZeroGuard
+  not yet read: own edges of accumulator_pattern, own edges of arithmetic_operators, own edges of run_time_error
+--- depth 3: current concepts ['arithmetic_operators', 'division_by_zero', 'run_time_error', 'accumulator_pattern', 'sentinel_loop']
+  arithmetic_operators (misconceptions): 3 candidates -> kept mis:arithmetic_operators->RemainderIsSubtraction (1.00)
+    mis:arithmetic_operators->RemainderIsSubtraction -> not applied (0.00) ""
+  arithmetic_operators (level ways): 18 candidates -> kept lvl:arithmetic_operators@L4#2 (0.50), lvl:arithmetic_operators@L3#2 (0.30), lvl:arithmetic_operators@L1#1 (0.20)
+    lvl:arithmetic_operators@L4#2 -> not applied (0.00) ""
+    lvl:arithmetic_operators@L3#2 -> not applied (0.00) ""
+    lvl:arithmetic_operators@L1#1 -> not applied (0.00) ""
+  run_time_error (misconceptions): 7 candidates -> kept mis:run_time_error->DivisionByZeroIsCompileError (0.60), mis:run_time_error->CompilesMeansWorks (0.30), err:run_time_error->InputTypeMismatch (0.10)
+    mis:run_time_error->DivisionByZeroIsCompileError -> not applied (0.00) ""
+    mis:run_time_error->CompilesMeansWorks -> not applied (0.00) ""
+    err:run_time_error->InputTypeMismatch -> not applied (0.00) ""
+  run_time_error (level ways): 19 candidates -> kept lvl:run_time_error@L4#6 (0.60), lvl:run_time_error@L0#0 (0.25), lvl:run_time_error@L2#1 (0.15)
+    lvl:run_time_error@L4#6 -> not applied (0.00) ""
+    lvl:run_time_error@L0#0 -> not applied (0.00) ""
+    lvl:run_time_error@L2#1 -> not applied (0.00) ""
+  accumulator_pattern (misconceptions): 4 candidates -> kept err:accumulator_pattern->AccumulatorDeclaredInLoop (0.45), mis:accumulator_pattern->VariableRolesInferred (0.30), mis:accumulator_pattern->StateChangeIgnoredAcrossPasses (0.25)
+    err:accumulator_pattern->AccumulatorDeclaredInLoop -> not applied (0.00) ""
+    mis:accumulator_pattern->VariableRolesInferred -> not applied (0.00) ""
+    mis:accumulator_pattern->StateChangeIgnoredAcrossPasses -> not applied (0.00) ""
+  accumulator_pattern (level ways): 17 candidates -> kept lvl:accumulator_pattern@L3#2 (0.50), lvl:accumulator_pattern@L2#0 (0.30), lvl:accumulator_pattern@L2#1 (0.20)
+    lvl:accumulator_pattern@L3#2 -> shown (0.40) "Nothing was added; so sum and count are both 0, and 0 divided by 0 is just 0"
+    lvl:accumulator_pattern@L2#0 -> shown (0.21) "Nothing was added; so sum and count are both 0, and 0 divided by 0 is just 0"
+    lvl:accumulator_pattern@L2#1 -> shown (0.14) "Nothing was added; so sum and count are both 0, and 0 divided by 0 is just 0"
+  sentinel_loop (concept edges): 1 candidates -> kept pre:while_loop->sentinel_loop (1.00)
+    pre:while_loop->sentinel_loop -> confirmed (0.75) "Nothing was added"
+  kept: pre:while_loop->sentinel_loop [confirmed, tier 2, 0.75], lvl:accumulator_pattern@L3#2 [shown, tier 2, 0.40], lvl:accumulator_pattern@L2#0 [shown, tier 2, 0.21]
+  reached across pre:while_loop->sentinel_loop, entered next: while_loop
+  clause coverage: c1 <- err:sentinel_loop->AverageWithoutZeroGuard; c2 <- mis:sentinel_loop->SentinelProcessed; c3 <- err:sentinel_loop->AverageWithoutZeroGuard
+  not yet read: own edges of while_loop, par:accumulator_pattern~counter_pattern, pre:arithmetic_operators->expression, pre:arithmetic_operators->integer_division, pre:loop_body->accumulator_pattern
+--- depth 4: current concepts ['while_loop'] (closing round: own edges only)
+  while_loop (misconceptions): 19 candidates -> kept mis:while_loop->LoopBodyAlwaysOnce (0.45), err:while_loop->LoopIgnoresCodeBefore (0.30), mis:while_loop->ProgramEndsAfterLoop (0.25)
+    mis:while_loop->LoopBodyAlwaysOnce -> correct (0.41) "Nothing was added; so sum and count are both 0, and 0 divided by 0 is just 0"
+    err:while_loop->LoopIgnoresCodeBefore -> correct (0.21) "Nothing was added; so sum and count are both 0, and 0 divided by 0 is just 0"
+    mis:while_loop->ProgramEndsAfterLoop -> correct (0.20) "0; so sum and count are both 0, and 0 divided by 0 is just 0"
+  while_loop (level ways): 24 candidates -> kept lvl:while_loop@L2#2 (0.40), lvl:while_loop@L4#0 (0.35), lvl:while_loop@L2#0 (0.25)
+    lvl:while_loop@L2#2 -> shown (0.30) "Nothing was added; so sum and count are both 0, and 0 divided by 0 is just 0"
+    lvl:while_loop@L4#0 -> shown (0.24) "Nothing was added; so sum and count are both 0, and 0 divided by 0 is just 0"
+    lvl:while_loop@L2#0 -> shown (0.17) "Nothing was added; so sum and count are both 0, and 0 divided by 0 is just 0"
+  kept: mis:while_loop->LoopBodyAlwaysOnce [correct, tier 2, 0.41], lvl:while_loop@L2#2 [shown, tier 2, 0.30], lvl:while_loop@L4#0 [shown, tier 2, 0.24]
+  clause coverage: c1 <- err:sentinel_loop->AverageWithoutZeroGuard; c2 <- mis:sentinel_loop->SentinelProcessed; c3 <- err:sentinel_loop->AverageWithoutZeroGuard
+  not yet read: par:accumulator_pattern~counter_pattern, pre:arithmetic_operators->expression, pre:arithmetic_operators->integer_division, pre:boolean_expression->while_loop, pre:loop_body->accumulator_pattern, pre:while_loop->loop_body, pre:while_loop->loop_control
+  root-cause walk: held on ['division_by_zero', 'sentinel_loop'], broken at ['division_by_zero', 'run_time_error'], prerequisites {'sentinel_loop': ['accumulator_pattern', 'while_loop'], 'division_by_zero': ['arithmetic_operators'], 'expression': ['arithmetic_operators'], 'integer_division': ['arithmetic_operators'], 'compound_assignment': ['assignment'], 'increment_operators': ['assignment', 'loop_control'], 'while_loop': ['boolean_expression'], 'boolean_expression': ['comparison_operators'], 'accumulator_pattern': ['compound_assignment', 'loop_body'], 'assignment': ['declaration'], 'named_constants': ['declaration'], 'run_time_error': ['division_by_zero'], 'comparison_operators': ['expression'], 'method_call': ['expression'], 'counter_pattern': ['increment_operators', 'loop_body'], 'api': ['method_call'], 'filter': ['standard_input'], 'input_format': ['standard_input'], 'control_flow': ['statement'], 'println': ['statement'], 'standard_input': ['stream_model'], 'standard_output': ['stream_model'], 'loop_body': ['while_loop'], 'loop_control': ['while_loop']}
+  level accumulator_pattern: L3 via relation_to_neighbour "Nothing was added; so sum and count are both 0, and 0 divided by 0 is just 0"
+  level compound_assignment: L3 via purpose_of_the_whole "Nothing was added"
+  level sentinel_loop: L3 via relation_to_neighbour "Nothing was added; so sum and count are both 0, and 0 divided by 0 is just 0"
+  level while_loop: L4 via predict_a_change "Nothing was added; so sum and count are both 0, and 0 divided by 0 is just 0"

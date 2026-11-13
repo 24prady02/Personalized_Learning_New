@@ -1,5 +1,5 @@
 {
- "code": "double a = 0.1 + 0.2;\nif (a == 0.3) {\n    System.out.println(\"equal\");\n} else {\n    System.out.println(\"not equal\");\n}",
- "question": "What is printed? Explain what the (double) does here.",
- "answer": "3.5. The cast makes it a double division, so you get the decimal part."
+ "code": "char c = 'a';\nc++;\nint k = c + 1;\nSystem.out.println(c);\nSystem.out.println(k);",
+ "question": "What are the two lines of output? Explain each one.",
+ "answer": "b, because c++ moves to the next letter. Then k = c + 1 is the letter after b, so it prints c"
 }

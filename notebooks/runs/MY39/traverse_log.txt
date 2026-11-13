@@ -1,114 +1,82 @@
-clauses: counts[r] is how many numbers leave remainder r when divided by 3 | The % 3 turns each number into an index 0, 1 or 2 | so it fits the array
-start: BM25 of the answer against each tagged concept: arithmetic_operators 25.38 (hits 1), remainder_operator 21.09 (hits 1), array_initializer 17.98 (hits 1), string_concatenation 15.94 (hits 1), array_declaration 15.93 (hits 1), indexing 15.45 (hits 1), for_loop 15.43 (hits 1), loop_control 13.59 (hits 1), loop_body 13.53 (hits 1), array_traversal 12.55 (hits 2), length_field 12.35 (hits 1), array_creation 12.19 (hits 1), loop_variable 11.32 (hits 1), array_bounds 9.99 (hits 1), increment_operators 9.70 (hits 1), string_conversion 9.27 (hits 2), array_default_values 7.80 (hits 1), control_flow 7.48 (hits 1), data_structure 6.97 (hits 1), boolean_expression 4.52 (hits 1), comparison_operators 4.08 (hits 1), counter_pattern 3.56 (hits 1), loop_scope 2.52 (hits 1), println 1.77 (hits 1)
-start: chosen arithmetic_operators, remainder_operator, array_initializer
-start concepts (3): arithmetic_operators, remainder_operator, array_initializer
---- depth 1: current concepts ['arithmetic_operators', 'remainder_operator', 'array_initializer']
-  arithmetic_operators (misconceptions): 3 candidates -> kept mis:arithmetic_operators->RemainderIsSubtraction (0.90), mis:arithmetic_operators->CaretIsPower (0.05), mis:arithmetic_operators->ArithmeticOnNumericStrings (0.05)
-    mis:arithmetic_operators->RemainderIsSubtraction -> correct (0.81) "counts[r] is how many numbers leave remainder r when divided by 3; The % 3 turns each number into an index 0, 1 or 2"
-    mis:arithmetic_operators->CaretIsPower -> not applied (0.00) ""
-    mis:arithmetic_operators->ArithmeticOnNumericStrings -> not applied (0.00) ""
-  arithmetic_operators (level ways): 18 candidates -> kept lvl:arithmetic_operators@L3#4 (0.50), lvl:arithmetic_operators@L3#1 (0.30), lvl:arithmetic_operators@L2#1 (0.20)
-    lvl:arithmetic_operators@L3#4 -> shown (0.38) "counts[r] is how many numbers leave remainder r when divided by 3; The % 3 turns each number into an index 0, 1 or 2; so it fits the array"
-    lvl:arithmetic_operators@L3#1 -> not applied (0.00) ""
-    lvl:arithmetic_operators@L2#1 -> shown (0.12) "counts[r] is how many numbers leave remainder r when divided by 3; The % 3 turns each number into an index 0, 1 or 2"
-  remainder_operator (misconceptions): 3 candidates -> kept mis:remainder_operator->RemainderIsQuotient (0.45), mis:remainder_operator->RemainderIsSubtraction (0.40), mis:remainder_operator->NegativeRemainderSign (0.15)
-    mis:remainder_operator->RemainderIsQuotient -> correct (0.36) "counts[r] is how many numbers leave remainder r when divided by 3; The % 3 turns each number into an index 0, 1 or 2"
-    mis:remainder_operator->RemainderIsSubtraction -> correct (0.30) "counts[r] is how many numbers leave remainder r when divided by 3; The % 3 turns each number into an index 0, 1 or 2"
-    mis:remainder_operator->NegativeRemainderSign -> not applied (0.00) ""
-  remainder_operator (level ways): 14 candidates -> kept lvl:remainder_operator@L3#1 (0.50), lvl:remainder_operator@L1#0 (0.30), lvl:remainder_operator@L2#2 (0.20)
-    lvl:remainder_operator@L3#1 -> shown (0.42) "counts[r] is how many numbers leave remainder r when divided by 3; The % 3 turns each number into an index 0, 1 or 2; so it fits the array"
-    lvl:remainder_operator@L1#0 -> shown (0.24) "counts[r] is how many numbers leave remainder r when divided by 3; The % 3 turns each number into an index 0, 1 or 2"
-    lvl:remainder_operator@L2#2 -> shown (0.14) "The % 3 turns each number into an index 0, 1 or 2; so it fits the array"
-  array_initializer (misconceptions): 2 candidates -> kept mis:array_initializer->ArrayBracketCountIsLength (0.60), mis:array_initializer->ArrayInitializerContentsInBrackets (0.40)
+clauses: 21 | t[0].length is 3, and every row of a 2D array has the same length | so it visits three columns in every row and adds all six numbers
+start: BM25 of the answer against each tagged concept: two_dimensional_array 28.24 (hits 2), ragged_array 24.31 (hits 2), indexing 20.88 (hits 1), array_traversal 19.88 (hits 1), length_field 16.10 (hits 1), loop_control 14.92 (hits 1), array_initializer 14.01 (hits 1), for_loop 13.06 (hits 1), row_major_order 11.27 (hits 1), increment_operators 10.97 (hits 1), comparison_operators 10.50 (hits 1), compound_assignment 9.75 (hits 1), nested_loops 9.49 (hits 1), array_bounds 9.25 (hits 1), loop_variable 8.67 (hits 1), loop_body 8.59 (hits 1), loop_scope 7.53 (hits 1), accumulator_pattern 6.26 (hits 1), boolean_expression 6.17 (hits 1), println 4.52 (hits 1), control_flow 3.58 (hits 1), data_structure 1.77 (hits 1)
+start: chosen two_dimensional_array, ragged_array, indexing
+start concepts (3): two_dimensional_array, ragged_array, indexing
+--- depth 1: current concepts ['two_dimensional_array', 'ragged_array', 'indexing']
+  two_dimensional_array (misconceptions): 7 candidates -> kept mis:two_dimensional_array->RaggedRowsSameLength (0.50), mis:two_dimensional_array->NoJaggedArrays (0.40), mis:two_dimensional_array->MultidimensionalArray (0.10)
+    mis:two_dimensional_array->RaggedRowsSameLength -> held (0.47) "t[0].length is 3, and every row of a 2D array has the same length; so it visits three columns in every row and adds all six numbers"
+    mis:two_dimensional_array->NoJaggedArrays -> held (0.28) "t[0].length is 3, and every row of a 2D array has the same length"
+    mis:two_dimensional_array->MultidimensionalArray -> correct (0.06) "t[0].length is 3, and every row of a 2D array has the same length"
+  two_dimensional_array (level ways): 18 candidates -> kept lvl:two_dimensional_array@L3#2 (0.45), lvl:two_dimensional_array@L0#0 (0.30), lvl:two_dimensional_array@L4#2 (0.25)
+    lvl:two_dimensional_array@L3#2 -> not applied (0.00) ""
+    lvl:two_dimensional_array@L0#0 -> shown (0.21) "t[0].length is 3, and every row of a 2D array has the same length; so it visits three columns in every row and adds all six numbers"
+    lvl:two_dimensional_array@L4#2 -> not applied (0.00) ""
+  ragged_array (misconceptions): 2 candidates -> kept mis:ragged_array->RaggedRowsSameLength (0.60), mis:ragged_array->NoJaggedArrays (0.40)
+    mis:ragged_array->RaggedRowsSameLength -> held (0.57) "t[0].length is 3, and every row of a 2D array has the same length; so it visits three columns in every row and adds all six numbers"
+    mis:ragged_array->NoJaggedArrays -> held (0.22) "t[0].length is 3, and every row of a 2D array has the same length"
+  ragged_array (level ways): 13 candidates -> kept lvl:ragged_array@L0#0 (0.50), lvl:ragged_array@L0#3 (0.35), lvl:ragged_array@L4#2 (0.15)
+    lvl:ragged_array@L0#0 -> shown (0.40) "t[0].length is 3, and every row of a 2D array has the same length; so it visits three columns in every row and adds all six numbers"
+    lvl:ragged_array@L0#3 -> shown (0.28) "t[0].length is 3, and every row of a 2D array has the same length; so it visits three columns in every row and adds all six numbers"
+    lvl:ragged_array@L4#2 -> not applied (0.00) ""
+  indexing (misconceptions): 8 candidates -> kept mis:indexing->ArrayUseScansAllCells (0.50), mis:indexing->ArrayRangeInclusive (0.30), mis:indexing->IndexIsValue (0.20)
+    mis:indexing->ArrayUseScansAllCells -> not applied (0.00) ""
+    mis:indexing->ArrayRangeInclusive -> correct (0.17) "t[0].length is 3, and every row of a 2D array has the same length; so it visits three columns in every row and adds all six numbers"
+    mis:indexing->IndexIsValue -> not applied (0.00) ""
+  indexing (level ways): 21 candidates -> kept lvl:indexing@L3#3 (0.45), lvl:indexing@L4#2 (0.35), lvl:indexing@L3#2 (0.20)
+    lvl:indexing@L3#3 -> not applied (0.00) ""
+    lvl:indexing@L4#2 -> not applied (0.00) ""
+    lvl:indexing@L3#2 -> not applied (0.00) ""
+  kept: mis:ragged_array->RaggedRowsSameLength [held, tier 0, 0.57], mis:two_dimensional_array->RaggedRowsSameLength [held, tier 0, 0.47], mis:two_dimensional_array->NoJaggedArrays [held, tier 0, 0.28], mis:ragged_array->NoJaggedArrays [held, tier 0, 0.22]
+  clause coverage: c1 uncovered; c2 <- mis:two_dimensional_array->RaggedRowsSameLength; c3 <- mis:two_dimensional_array->RaggedRowsSameLength
+  not yet read: pre:array_initializer->indexing, pre:indexing->array_bounds, pre:indexing->array_traversal, pre:indexing->two_dimensional_array, pre:two_dimensional_array->ragged_array, pre:two_dimensional_array->row_major_order
+--- depth 2: current concepts ['ragged_array', 'two_dimensional_array', 'indexing']
+  ragged_array (concept edges): 1 candidates -> kept pre:two_dimensional_array->ragged_array (1.00)
+    pre:two_dimensional_array->ragged_array -> broken (0.95) "t[0].length is 3, and every row of a 2D array has the same length; so it visits three columns in every row and adds all six numbers"
+  two_dimensional_array (concept edges): 2 candidates -> kept pre:indexing->two_dimensional_array (0.70), pre:two_dimensional_array->row_major_order (0.30)
+    pre:indexing->two_dimensional_array -> broken (0.49) "t[0].length is 3, and every row of a 2D array has the same length; so it visits three columns in every row and adds all six numbers"
+    pre:two_dimensional_array->row_major_order -> confirmed (0.17) "so it visits three columns in every row and adds all six numbers"
+  indexing (concept edges): 3 candidates -> kept pre:indexing->array_bounds (0.50), pre:array_initializer->indexing (0.30), pre:indexing->array_traversal (0.20)
+    pre:indexing->array_bounds -> broken (0.42) "21; so it visits three columns in every row and adds all six numbers"
+    pre:array_initializer->indexing -> broken (0.18) "t[0].length is 3, and every row of a 2D array has the same length; so it visits three columns in every row and adds all six numbers"
+    pre:indexing->array_traversal -> not applied (0.00) ""
+  kept: pre:two_dimensional_array->ragged_array [broken, tier 0, 0.95], pre:indexing->two_dimensional_array [broken, tier 0, 0.49], pre:indexing->array_bounds [broken, tier 0, 0.42], pre:array_initializer->indexing [broken, tier 0, 0.18]
+  reached across pre:indexing->array_bounds, entered next: array_bounds
+  reached across pre:array_initializer->indexing, entered next: array_initializer
+  clause coverage: c1 <- pre:indexing->array_bounds; c2 <- mis:two_dimensional_array->RaggedRowsSameLength; c3 <- mis:two_dimensional_array->RaggedRowsSameLength
+  not yet read: own edges of array_bounds, own edges of array_initializer
+--- depth 3: current concepts ['two_dimensional_array', 'ragged_array', 'indexing', 'array_bounds', 'array_initializer']
+  two_dimensional_array (concept edges): 1 candidates -> kept pre:two_dimensional_array->row_major_order (1.00)
+    pre:two_dimensional_array->row_major_order -> confirmed (0.55) "so it visits three columns in every row and adds all six numbers"
+  indexing (concept edges): 1 candidates -> kept pre:indexing->array_traversal (1.00)
+    pre:indexing->array_traversal -> not applied (0.00) ""
+  array_bounds (misconceptions): 2 candidates -> kept mis:array_bounds->OutOfBoundsElementsAreNull (0.75), mis:array_bounds->OffByOneBound (0.25)
+    mis:array_bounds->OutOfBoundsElementsAreNull -> not applied (0.00) ""
+    mis:array_bounds->OffByOneBound -> not applied (0.00) ""
+  array_bounds (level ways): 14 candidates -> kept lvl:array_bounds@L0#2 (0.50), lvl:array_bounds@L0#0 (0.30), lvl:array_bounds@L3#0 (0.20)
+    lvl:array_bounds@L0#2 -> not applied (0.00) ""
+    lvl:array_bounds@L0#0 -> not applied (0.00) ""
+    lvl:array_bounds@L3#0 -> not applied (0.00) ""
+  array_initializer (misconceptions): 2 candidates -> kept mis:array_initializer->ArrayBracketCountIsLength (0.85), mis:array_initializer->ArrayInitializerContentsInBrackets (0.15)
     mis:array_initializer->ArrayBracketCountIsLength -> not applied (0.00) ""
     mis:array_initializer->ArrayInitializerContentsInBrackets -> not applied (0.00) ""
-  array_initializer (level ways): 14 candidates -> kept lvl:array_initializer@L2#2 (0.40), lvl:array_initializer@L1#0 (0.30), lvl:array_initializer@L3#1 (0.30)
-    lvl:array_initializer@L2#2 -> not applied (0.00) ""
-    lvl:array_initializer@L1#0 -> not applied (0.00) ""
-    lvl:array_initializer@L3#1 -> not applied (0.00) ""
-  kept: mis:arithmetic_operators->RemainderIsSubtraction [correct, tier 2, 0.81], lvl:remainder_operator@L3#1 [shown, tier 2, 0.42], lvl:arithmetic_operators@L3#4 [shown, tier 2, 0.38]
-  clause coverage: c1 <- mis:arithmetic_operators->RemainderIsSubtraction; c2 <- mis:arithmetic_operators->RemainderIsSubtraction; c3 uncovered
-  uncovered clauses bring in: length_field (2.50), array_creation (2.48), indexing (2.38)
-  not yet read: own edges of array_creation, own edges of indexing, own edges of length_field, par:string_concatenation~arithmetic_operators, pre:arithmetic_operators->expression, pre:arithmetic_operators->remainder_operator, pre:array_creation->array_initializer, pre:array_declaration->array_initializer, pre:array_initializer->indexing, pre:array_initializer->length_field
---- depth 2: current concepts ['arithmetic_operators', 'remainder_operator', 'array_initializer', 'length_field', 'array_creation', 'indexing']
-  arithmetic_operators (concept edges): 3 candidates -> kept pre:arithmetic_operators->remainder_operator (0.75), pre:arithmetic_operators->expression (0.20), par:string_concatenation~arithmetic_operators (0.05)
-    pre:arithmetic_operators->remainder_operator -> confirmed (0.64) "counts[r] is how many numbers leave remainder r when divided by 3; The % 3 turns each number into an index 0, 1 or 2"
-    pre:arithmetic_operators->expression -> confirmed (0.16) "The % 3 turns each number into an index 0, 1 or 2; so it fits the array"
-    par:string_concatenation~arithmetic_operators -> not applied (0.00) ""
-  array_initializer (concept edges): 4 candidates -> kept pre:array_initializer->indexing (0.50), pre:array_initializer->length_field (0.35), pre:array_creation->array_initializer (0.15)
-    pre:array_initializer->indexing -> confirmed (0.28) "counts[r] is how many numbers leave remainder r when divided by 3; The % 3 turns each number into an index 0, 1 or 2"
-    pre:array_initializer->length_field -> not applied (0.00) ""
-    pre:array_creation->array_initializer -> not applied (0.00) ""
-  length_field (misconceptions): 2 candidates -> kept mis:length_field->ArrayHasLengthMethod (0.60), mis:length_field->ArrayLengthCannotBeZero (0.40)
-    mis:length_field->ArrayHasLengthMethod -> not applied (0.00) ""
-    mis:length_field->ArrayLengthCannotBeZero -> not applied (0.00) ""
-  length_field (level ways): 15 candidates -> kept lvl:length_field@L3#0 (0.40), lvl:length_field@L1#1 (0.35), lvl:length_field@L3#2 (0.25)
-    lvl:length_field@L3#0 -> not applied (0.00) ""
-    lvl:length_field@L1#1 -> not applied (0.00) ""
-    lvl:length_field@L3#2 -> not applied (0.00) ""
-  array_creation (misconceptions): 9 candidates -> kept mis:array_creation->ArrayRangeInclusive (0.60), mis:array_creation->ArraysGrow (0.25), mis:array_creation->ArrayAllocationWithoutNew (0.15)
-    mis:array_creation->ArrayRangeInclusive -> correct (0.48) "The % 3 turns each number into an index 0, 1 or 2; so it fits the array"
-    mis:array_creation->ArraysGrow -> not applied (0.00) ""
-    mis:array_creation->ArrayAllocationWithoutNew -> not applied (0.00) ""
-  array_creation (level ways): 21 candidates -> kept lvl:array_creation@L3#1 (0.60), lvl:array_creation@L3#7 (0.25), lvl:array_creation@L3#3 (0.15)
-    lvl:array_creation@L3#1 -> shown (0.48) "The % 3 turns each number into an index 0, 1 or 2; so it fits the array"
-    lvl:array_creation@L3#7 -> not applied (0.00) ""
-    lvl:array_creation@L3#3 -> shown (0.08) "The % 3 turns each number into an index 0, 1 or 2; so it fits the array"
-  indexing (misconceptions): 8 candidates -> kept mis:indexing->IndexIsValue (0.40), mis:indexing->ArrayRangeInclusive (0.35), mis:indexing->ArrayElementNotVariable (0.25)
-    mis:indexing->IndexIsValue -> correct (0.32) "counts[r] is how many numbers leave remainder r when divided by 3"
-    mis:indexing->ArrayRangeInclusive -> correct (0.28) "The % 3 turns each number into an index 0, 1 or 2; so it fits the array"
-    mis:indexing->ArrayElementNotVariable -> correct (0.15) "The % 3 turns each number into an index 0, 1 or 2"
-  indexing (level ways): 21 candidates -> kept lvl:indexing@L3#5 (0.50), lvl:indexing@L4#1 (0.30), lvl:indexing@L3#7 (0.20)
-    lvl:indexing@L3#5 -> shown (0.42) "counts[r] is how many numbers leave remainder r when divided by 3; The % 3 turns each number into an index 0, 1 or 2; so it fits the array"
-    lvl:indexing@L4#1 -> shown (0.22) "counts[r] is how many numbers leave remainder r when divided by 3; The % 3 turns each number into an index 0, 1 or 2; so it fits the array"
-    lvl:indexing@L3#7 -> shown (0.12) "counts[r] is how many numbers leave remainder r when divided by 3; The % 3 turns each number into an index 0, 1 or 2"
-  kept: pre:arithmetic_operators->remainder_operator [confirmed, tier 2, 0.64], mis:array_creation->ArrayRangeInclusive [correct, tier 2, 0.48], lvl:array_creation@L3#1 [shown, tier 2, 0.48]
-  clause coverage: c1 <- mis:arithmetic_operators->RemainderIsSubtraction; c2 <- mis:arithmetic_operators->RemainderIsSubtraction; c3 <- pre:arithmetic_operators->expression
-  not yet read: pre:array_creation->array_default_values, pre:array_creation->indexing, pre:array_creation->length_field, pre:array_declaration->array_creation, pre:indexing->array_bounds, pre:indexing->array_traversal, pre:length_field->array_traversal
---- depth 3: current concepts ['remainder_operator', 'arithmetic_operators', 'length_field', 'array_creation', 'indexing']
-  arithmetic_operators (concept edges): 2 candidates -> kept pre:arithmetic_operators->expression (0.85), par:string_concatenation~arithmetic_operators (0.15)
-    pre:arithmetic_operators->expression -> confirmed (0.68) "The % 3 turns each number into an index 0, 1 or 2; so it fits the array"
-    par:string_concatenation~arithmetic_operators -> not applied (0.00) ""
-  length_field (concept edges): 3 candidates -> kept pre:array_creation->length_field (0.60), pre:length_field->array_traversal (0.25), pre:array_initializer->length_field (0.15)
-    pre:array_creation->length_field -> confirmed (0.42) "The % 3 turns each number into an index 0, 1 or 2; so it fits the array"
-    pre:length_field->array_traversal -> not applied (0.00) ""
-    pre:array_initializer->length_field -> not applied (0.00) ""
-  array_creation (concept edges): 4 candidates -> kept pre:array_creation->indexing (0.50), pre:array_creation->array_default_values (0.35), pre:array_declaration->array_creation (0.15)
-    pre:array_creation->indexing -> not applied (0.00) ""
-    pre:array_creation->array_default_values -> not applied (0.00) ""
-    pre:array_declaration->array_creation -> not applied (0.00) ""
-  indexing (concept edges): 3 candidates -> kept pre:indexing->array_bounds (0.60), pre:indexing->array_traversal (0.20), pre:array_initializer->indexing (0.20)
-    pre:indexing->array_bounds -> confirmed (0.51) "The % 3 turns each number into an index 0, 1 or 2; so it fits the array"
-    pre:indexing->array_traversal -> confirmed (0.12) "counts[r] is how many numbers leave remainder r when divided by 3; The % 3 turns each number into an index 0, 1 or 2"
-    pre:array_initializer->indexing -> confirmed (0.11) "counts[r] is how many numbers leave remainder r when divided by 3; The % 3 turns each number into an index 0, 1 or 2"
-  kept: pre:arithmetic_operators->expression [confirmed, tier 2, 0.68], pre:indexing->array_bounds [confirmed, tier 2, 0.51], pre:array_creation->length_field [confirmed, tier 2, 0.42]
-  reached across pre:arithmetic_operators->expression, entered next: expression
-  reached across pre:indexing->array_bounds, entered next: array_bounds
-  clause coverage: c1 <- mis:arithmetic_operators->RemainderIsSubtraction; c2 <- mis:arithmetic_operators->RemainderIsSubtraction; c3 <- pre:arithmetic_operators->expression
-  not yet read: own edges of array_bounds, own edges of expression
---- depth 4: current concepts ['expression', 'array_bounds'] (closing round: own edges only)
-  expression (misconceptions): 8 candidates -> kept mis:expression->OutsideInMethodNesting (0.50), mis:expression->AssignmentIsEquation (0.25), mis:expression->VariablesHoldExpressions (0.25)
-    mis:expression->OutsideInMethodNesting -> not applied (0.00) ""
-    mis:expression->AssignmentIsEquation -> not applied (0.00) ""
-    mis:expression->VariablesHoldExpressions -> not applied (0.00) ""
-  expression (level ways): 19 candidates -> kept lvl:expression@L3#5 (0.40), lvl:expression@L3#1 (0.35), lvl:expression@L4#1 (0.25)
-    lvl:expression@L3#5 -> shown (0.32) "The % 3 turns each number into an index 0, 1 or 2; so it fits the array"
-    lvl:expression@L3#1 -> shown (0.24) "The % 3 turns each number into an index 0, 1 or 2; so it fits the array"
-    lvl:expression@L4#1 -> shown (0.15) "The % 3 turns each number into an index 0, 1 or 2; so it fits the array"
-  array_bounds (misconceptions): 2 candidates -> kept mis:array_bounds->OutOfBoundsElementsAreNull (0.60), mis:array_bounds->OffByOneBound (0.40)
-    mis:array_bounds->OutOfBoundsElementsAreNull -> not applied (0.00) ""
-    mis:array_bounds->OffByOneBound -> correct (0.24) "The % 3 turns each number into an index 0, 1 or 2; so it fits the array"
-  array_bounds (level ways): 14 candidates -> kept lvl:array_bounds@L3#0 (0.45), lvl:array_bounds@L4#1 (0.35), lvl:array_bounds@L1#0 (0.20)
-    lvl:array_bounds@L3#0 -> shown (0.32) "The % 3 turns each number into an index 0, 1 or 2; so it fits the array"
-    lvl:array_bounds@L4#1 -> shown (0.24) "The % 3 turns each number into an index 0, 1 or 2; so it fits the array"
-    lvl:array_bounds@L1#0 -> shown (0.16) "The % 3 turns each number into an index 0, 1 or 2; so it fits the array"
-  kept: lvl:array_bounds@L3#0 [shown, tier 2, 0.32], lvl:expression@L3#5 [shown, tier 2, 0.32], lvl:expression@L3#1 [shown, tier 2, 0.24]
-  clause coverage: c1 <- mis:arithmetic_operators->RemainderIsSubtraction; c2 <- mis:arithmetic_operators->RemainderIsSubtraction; c3 <- pre:arithmetic_operators->expression
-  not yet read: pre:expression->comparison_operators
-  root-cause walk: held on [], broken at [], prerequisites {'expression': ['arithmetic_operators'], 'remainder_operator': ['arithmetic_operators'], 'array_default_values': ['array_creation'], 'array_initializer': ['array_creation', 'array_declaration'], 'indexing': ['array_creation', 'array_initializer'], 'length_field': ['array_creation', 'array_initializer'], 'array_creation': ['array_declaration'], 'increment_operators': ['assignment', 'loop_control'], 'boolean_expression': ['comparison_operators'], 'array_declaration': ['data_structure'], 'data_structure': ['data_type'], 'comparison_operators': ['expression'], 'array_traversal': ['for_loop', 'indexing', 'length_field'], 'loop_body': ['for_loop'], 'loop_scope': ['for_loop'], 'counter_pattern': ['increment_operators', 'loop_body'], 'array_bounds': ['indexing'], 'for_loop': ['loop_control'], 'loop_control': ['loop_variable'], 'control_flow': ['statement'], 'println': ['statement', 'string_literal'], 'string_conversion': ['string_concatenation']}
-  level arithmetic_operators: L3 via purpose_of_the_whole "counts[r] is how many numbers leave remainder r when divided by 3; The % 3 turns each number into an index 0, 1 or 2; so it fits the array"
-  level array_bounds: L4 via transfer_to_a_new_program "The % 3 turns each number into an index 0, 1 or 2; so it fits the array"
-  level array_creation: L3 via relation_to_neighbour "The % 3 turns each number into an index 0, 1 or 2; so it fits the array"
-  level expression: L4 via transfer_to_a_new_program "The % 3 turns each number into an index 0, 1 or 2; so it fits the array"
-  level indexing: L4 via transfer_to_a_new_program "counts[r] is how many numbers leave remainder r when divided by 3; The % 3 turns each number into an index 0, 1 or 2; so it fits the array"
-  level remainder_operator: L3 via purpose_of_the_whole "counts[r] is how many numbers leave remainder r when divided by 3; The % 3 turns each number into an index 0, 1 or 2; so it fits the array"
+  array_initializer (level ways): 14 candidates -> kept lvl:array_initializer@L1#1 (0.50), lvl:array_initializer@L0#2 (0.30), lvl:array_initializer@L2#1 (0.20)
+    lvl:array_initializer@L1#1 -> not applied (0.00) ""
+    lvl:array_initializer@L0#2 -> not applied (0.00) ""
+    lvl:array_initializer@L2#1 -> not applied (0.00) ""
+  kept: pre:two_dimensional_array->row_major_order [confirmed, tier 2, 0.55]
+  reached across pre:two_dimensional_array->row_major_order, entered next: row_major_order
+  clause coverage: c1 <- pre:indexing->array_bounds; c2 <- mis:two_dimensional_array->RaggedRowsSameLength; c3 <- mis:two_dimensional_array->RaggedRowsSameLength
+  not yet read: own edges of row_major_order, pre:array_initializer->length_field
+--- depth 4: current concepts ['row_major_order'] (closing round: own edges only)
+  row_major_order (level ways): 13 candidates -> kept lvl:row_major_order@L4#2 (0.45), lvl:row_major_order@L4#1 (0.35), lvl:row_major_order@L3#0 (0.20)
+    lvl:row_major_order@L4#2 -> not applied (0.00) ""
+    lvl:row_major_order@L4#1 -> not applied (0.00) ""
+    lvl:row_major_order@L3#0 -> not applied (0.00) ""
+  nothing kept at this depth
+  clause coverage: c1 <- pre:indexing->array_bounds; c2 <- mis:two_dimensional_array->RaggedRowsSameLength; c3 <- mis:two_dimensional_array->RaggedRowsSameLength
+  not yet read: pre:array_initializer->length_field, pre:nested_loops->row_major_order
+  held: mis:ragged_array->RaggedRowsSameLength, mis:ragged_array->NoJaggedArrays (same words as mis:ragged_array->RaggedRowsSameLength); filed at the dependent concept: mis:two_dimensional_array->RaggedRowsSameLength, mis:two_dimensional_array->NoJaggedArrays
+  shadows: mis:two_dimensional_array->RaggedRowsSameLength (shadow of mis:ragged_array->RaggedRowsSameLength), mis:two_dimensional_array->NoJaggedArrays (shadow of mis:ragged_array->NoJaggedArrays)
+  root-cause walk: held on ['ragged_array'], broken at [] (consequences: pre:two_dimensional_array->ragged_array, pre:indexing->two_dimensional_array, pre:indexing->array_bounds, pre:array_initializer->indexing), prerequisites {'indexing': ['array_initializer'], 'length_field': ['array_initializer'], 'compound_assignment': ['assignment'], 'increment_operators': ['assignment', 'loop_control'], 'boolean_expression': ['comparison_operators'], 'accumulator_pattern': ['compound_assignment', 'loop_body'], 'data_structure': ['data_type'], 'comparison_operators': ['expression'], 'array_traversal': ['for_loop', 'indexing', 'length_field'], 'loop_body': ['for_loop'], 'loop_scope': ['for_loop'], 'nested_loops': ['for_loop'], 'array_bounds': ['indexing'], 'two_dimensional_array': ['indexing'], 'for_loop': ['loop_control'], 'loop_control': ['loop_variable'], 'row_major_order': ['nested_loops', 'two_dimensional_array'], 'control_flow': ['statement'], 'println': ['statement'], 'ragged_array': ['two_dimensional_array']}
+  level ragged_array: L0 via misconception "t[0].length is 3, and every row of a 2D array has the same length; so it visits three columns in every row and adds all six numbers"
+  level two_dimensional_array: L0 via everyday_reading "t[0].length is 3, and every row of a 2D array has the same length; so it visits three columns in every row and adds all six numbers"

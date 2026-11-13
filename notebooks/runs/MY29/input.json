@@ -1,5 +1,5 @@
 {
- "code": "int sum = 7;\nint n = 2;\ndouble avg = (double) (sum / n);\nSystem.out.println(avg);",
+ "code": "double a = 0.1 + 0.2;\nif (a == 0.3) {\n    System.out.println(\"equal\");\n} else {\n    System.out.println(\"not equal\");\n}",
  "question": "What is printed? Explain what the (double) does here.",
- "answer": "3.5. The cast makes it a double division, so you get the decimal part"
+ "answer": "3.5. The cast makes it a double division, so you get the decimal part."
 }

@@ -1,5 +1,5 @@
 {
- "code": "int n = 10;\ndo {\n    System.out.println(n);\n    n++;\n} while (n < 5);",
- "question": "How many times does the body run? Explain your reasoning.",
- "answer": "Zero times. 10 < 5 is false, so the loop never starts."
+ "code": "int N = 91;\nint i;\nfor (i = 2; i <= N / i; i++) {\n    if (N % i == 0) break;\n}\nSystem.out.println(i);",
+ "question": "What is printed? Explain what the break does.",
+ "answer": "I’m not sure what number, but break is the statement that ends the loop early."
 }

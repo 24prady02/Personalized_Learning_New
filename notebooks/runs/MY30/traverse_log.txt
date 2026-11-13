@@ -1,115 +1,99 @@
-clauses: 3.5 | The cast makes it a double division | so you get the decimal part
-start: generic concepts whose tagging text occurs in the answer: double
-start: BM25 of the answer against each tagged concept: double 11.19 (hits 3), arithmetic_operators 6.38 (hits 1), if_statement 6.16 (hits 1), println 5.40 (hits 1), boolean_expression 4.54 (hits 1), floating_point_precision 3.23 (hits 3), control_flow 2.61 (hits 1), comparison_operators 1.98 (hits 1), if_else_statement 1.71 (hits 1)
-start: chosen double, arithmetic_operators, if_statement
-start concepts (3): double, arithmetic_operators, if_statement
---- depth 1: current concepts ['double', 'arithmetic_operators', 'if_statement']
-  double (misconceptions): 2 candidates -> kept mis:double->WholeNumberLiteralIsInt (0.60), mis:double->FloatingPointIsExact (0.40)
-    mis:double->WholeNumberLiteralIsInt -> not applied (0.00) ""
-    mis:double->FloatingPointIsExact -> not applied (0.00) ""
-  double (level ways): 19 candidates -> kept lvl:double@L3#0 (0.50), lvl:double@L1#1 (0.30), lvl:double@L4#3 (0.20)
-    lvl:double@L3#0 -> shown (0.35) "The cast makes it a double division; so you get the decimal part"
-    lvl:double@L1#1 -> shown (0.21) "The cast makes it a double division; so you get the decimal part"
-    lvl:double@L4#3 -> shown (0.12) "The cast makes it a double division; so you get the decimal part"
-  arithmetic_operators (misconceptions): 3 candidates -> kept 
-  arithmetic_operators (level ways): 18 candidates -> kept lvl:arithmetic_operators@L4#0 (0.45), lvl:arithmetic_operators@L2#1 (0.35), lvl:arithmetic_operators@L1#1 (0.20)
-    lvl:arithmetic_operators@L4#0 -> shown (0.34) "The cast makes it a double division; so you get the decimal part"
-    lvl:arithmetic_operators@L2#1 -> shown (0.21) "3.5; The cast makes it a double division; so you get the decimal part"
-    lvl:arithmetic_operators@L1#1 -> shown (0.11) "The cast makes it a double division; so you get the decimal part"
-  if_statement (misconceptions): 22 candidates -> kept mis:if_statement->BranchChosenByIntent (0.50), mis:if_statement->ThenAlwaysExecutes (0.30), mis:if_statement->ProgramLooksAhead (0.20)
-    mis:if_statement->BranchChosenByIntent -> not applied (0.00) ""
-    mis:if_statement->ThenAlwaysExecutes -> not applied (0.00) ""
-    mis:if_statement->ProgramLooksAhead -> not applied (0.00) ""
-  if_statement (level ways): 19 candidates -> kept lvl:if_statement@L2#1 (0.40), lvl:if_statement@L3#1 (0.35), lvl:if_statement@L0#14 (0.25)
-    lvl:if_statement@L2#1 -> not applied (0.00) ""
-    lvl:if_statement@L3#1 -> not applied (0.00) ""
-    lvl:if_statement@L0#14 -> not applied (0.00) ""
-  kept: lvl:double@L3#0 [shown, tier 2, 0.35], lvl:arithmetic_operators@L4#0 [shown, tier 2, 0.34], lvl:double@L1#1 [shown, tier 2, 0.21]
-  clause coverage: c1 uncovered; c2 uncovered; c3 uncovered
-  uncovered clauses bring in: println (5.41), boolean_expression (4.02), floating_point_precision (3.16)
-  not yet read: own edges of boolean_expression, own edges of floating_point_precision, own edges of println, pre:arithmetic_operators->expression, pre:boolean_expression->if_statement, pre:control_flow->if_statement, pre:double->floating_point_precision, pre:if_statement->if_else_statement
---- depth 2: current concepts ['double', 'arithmetic_operators', 'if_statement', 'println', 'boolean_expression', 'floating_point_precision']
-  double (concept edges): 1 candidates -> kept pre:double->floating_point_precision (1.00)
-    pre:double->floating_point_precision -> not applied (0.00) ""
-  arithmetic_operators (concept edges): 1 candidates -> kept pre:arithmetic_operators->expression (1.00)
-    pre:arithmetic_operators->expression -> not applied (0.00) ""
-  if_statement (concept edges): 3 candidates -> kept pre:if_statement->if_else_statement (0.50), pre:boolean_expression->if_statement (0.30), pre:control_flow->if_statement (0.20)
-    pre:if_statement->if_else_statement -> not applied (0.00) ""
-    pre:boolean_expression->if_statement -> not applied (0.00) ""
-    pre:control_flow->if_statement -> not applied (0.00) ""
-  println (misconceptions): 6 candidates -> kept mis:println->PrintedTextIsExecuted (0.60), mis:println->PrintNewLineFirst (0.20), mis:println->PrintEqualsPrintln (0.20)
-    mis:println->PrintedTextIsExecuted -> not applied (0.00) ""
-    mis:println->PrintNewLineFirst -> not applied (0.00) ""
+clauses: b | because c++ moves to the next letter | Then k = c + 1 is the letter after b | so it prints c
+start: generic concepts whose tagging text occurs in the answer: assignment, expression
+start: BM25 of the answer against each tagged concept: assignment 10.66 (hits 1), expression 8.88 (hits 2), arithmetic_operators 8.73 (hits 1), char_arithmetic 6.95 (hits 2), println 6.45 (hits 1), increment_operators 5.66 (hits 1)
+start: chosen assignment, expression, arithmetic_operators
+start concepts (3): assignment, expression, arithmetic_operators
+--- depth 1: current concepts ['assignment', 'expression', 'arithmetic_operators']
+  assignment (misconceptions): 15 candidates -> kept mis:assignment->VariableKeepsOldValue (0.45), mis:assignment->AssignmentIsEquation (0.30), mis:assignment->AssignmentOppositeDirection (0.25)
+    mis:assignment->VariableKeepsOldValue -> correct (0.38) "b; because c++ moves to the next letter; Then k = c + 1 is the letter after b"
+    mis:assignment->AssignmentIsEquation -> not applied (0.00) ""
+    mis:assignment->AssignmentOppositeDirection -> correct (0.15) "Then k = c + 1 is the letter after b"
+  assignment (level ways): 24 candidates -> kept lvl:assignment@L2#0 (0.40), lvl:assignment@L3#6 (0.35), lvl:assignment@L4#6 (0.25)
+    lvl:assignment@L2#0 -> shown (0.24) "because c++ moves to the next letter; Then k = c + 1 is the letter after b"
+    lvl:assignment@L3#6 -> not applied (0.00) ""
+    lvl:assignment@L4#6 -> not applied (0.00) ""
+  expression (misconceptions): 8 candidates -> kept mis:expression->TargetTyping (0.50), mis:expression->VariablesHoldExpressions (0.25), mis:expression->AssignmentIsEquation (0.25)
+    mis:expression->TargetTyping -> not applied (0.00) ""
+    mis:expression->VariablesHoldExpressions -> not applied (0.00) ""
+    mis:expression->AssignmentIsEquation -> not applied (0.00) ""
+  expression (level ways): 19 candidates -> kept lvl:expression@L2#1 (0.45), lvl:expression@L1#1 (0.30), lvl:expression@L3#0 (0.25)
+    lvl:expression@L2#1 -> not applied (0.00) ""
+    lvl:expression@L1#1 -> not applied (0.00) ""
+    lvl:expression@L3#0 -> shown (0.17) "Then k = c + 1 is the letter after b"
+  arithmetic_operators (misconceptions): 3 candidates -> kept mis:arithmetic_operators->ArithmeticOnNumericStrings (0.80), mis:arithmetic_operators->RemainderIsSubtraction (0.10), mis:arithmetic_operators->CaretIsPower (0.10)
+    mis:arithmetic_operators->ArithmeticOnNumericStrings -> not applied (0.00) ""
+    mis:arithmetic_operators->RemainderIsSubtraction -> not applied (0.00) ""
+    mis:arithmetic_operators->CaretIsPower -> not applied (0.00) ""
+  arithmetic_operators (level ways): 18 candidates -> kept lvl:arithmetic_operators@L1#1 (0.45), lvl:arithmetic_operators@L2#0 (0.35), lvl:arithmetic_operators@L0#0 (0.20)
+    lvl:arithmetic_operators@L1#1 -> not applied (0.00) ""
+    lvl:arithmetic_operators@L2#0 -> not applied (0.00) ""
+    lvl:arithmetic_operators@L0#0 -> not applied (0.00) ""
+  kept: mis:assignment->VariableKeepsOldValue [correct, tier 2, 0.38], lvl:assignment@L2#0 [shown, tier 2, 0.24], lvl:expression@L3#0 [shown, tier 2, 0.17]
+  clause coverage: c1 <- mis:assignment->VariableKeepsOldValue; c2 <- mis:assignment->VariableKeepsOldValue; c3 <- mis:assignment->VariableKeepsOldValue; c4 uncovered
+  uncovered clauses bring in: println (2.22), char_arithmetic (1.62), increment_operators (0.18)
+  not yet read: own edges of char_arithmetic, own edges of increment_operators, own edges of println, pre:arithmetic_operators->expression, pre:assignment->increment_operators
+--- depth 2: current concepts ['assignment', 'expression', 'arithmetic_operators', 'println', 'char_arithmetic', 'increment_operators']
+  assignment (concept edges): 1 candidates -> kept pre:assignment->increment_operators (1.00)
+    pre:assignment->increment_operators -> confirmed (0.70) "b; because c++ moves to the next letter"
+  expression (concept edges): 1 candidates -> kept pre:arithmetic_operators->expression (1.00)
+    pre:arithmetic_operators->expression -> confirmed (0.60) "Then k = c + 1 is the letter after b; so it prints c"
+  println (misconceptions): 6 candidates -> kept mis:println->PrintEqualsPrintln (0.50), mis:println->PrintNewLineFirst (0.30), mis:println->PrintedTextIsExecuted (0.20)
     mis:println->PrintEqualsPrintln -> not applied (0.00) ""
-  println (level ways): 17 candidates -> kept lvl:println@L2#1 (0.40), lvl:println@L3#1 (0.35), lvl:println@L3#3 (0.25)
-    lvl:println@L2#1 -> not applied (0.00) ""
-    lvl:println@L3#1 -> not applied (0.00) ""
-    lvl:println@L3#3 -> not applied (0.00) ""
-  boolean_expression (misconceptions): 8 candidates -> kept mis:boolean_expression->ArithmeticInsteadOfBoolean (0.80), mis:boolean_expression->MapToBooleanWithIf (0.10), mis:boolean_expression->ComparisonWithBooleanLiteral (0.10)
-    mis:boolean_expression->ArithmeticInsteadOfBoolean -> not applied (0.00) ""
-    mis:boolean_expression->MapToBooleanWithIf -> not applied (0.00) ""
-    mis:boolean_expression->ComparisonWithBooleanLiteral -> not applied (0.00) ""
-  boolean_expression (level ways): 19 candidates -> kept lvl:boolean_expression@L2#1 (0.50), lvl:boolean_expression@L3#2 (0.30), lvl:boolean_expression@L0#5 (0.20)
-    lvl:boolean_expression@L2#1 -> not applied (0.00) ""
-    lvl:boolean_expression@L3#2 -> not applied (0.00) ""
-    lvl:boolean_expression@L0#5 -> not applied (0.00) ""
-  floating_point_precision (misconceptions): 1 candidates -> kept mis:floating_point_precision->FloatingPointIsExact (1.00)
-    mis:floating_point_precision->FloatingPointIsExact -> not applied (0.00) ""
-  floating_point_precision (level ways): 14 candidates -> kept lvl:floating_point_precision@L0#0 (0.50), lvl:floating_point_precision@L2#1 (0.30), lvl:floating_point_precision@L0#2 (0.20)
-    lvl:floating_point_precision@L0#0 -> not applied (0.00) ""
-    lvl:floating_point_precision@L2#1 -> not applied (0.00) ""
-    lvl:floating_point_precision@L0#2 -> not applied (0.00) ""
-  nothing kept at this depth
-  clause coverage: c1 uncovered; c2 uncovered; c3 uncovered
-  uncovered clauses bring in: comparison_operators (2.85), control_flow (2.80), if_else_statement (1.78)
-  not yet read: own edges of comparison_operators, own edges of control_flow, own edges of if_else_statement, pre:comparison_operators->boolean_expression, pre:statement->println, pre:string_literal->println
---- depth 3: current concepts ['println', 'boolean_expression', 'comparison_operators', 'control_flow', 'if_else_statement']
-  println (concept edges): 2 candidates -> kept pre:string_literal->println (0.70), pre:statement->println (0.30)
-    pre:string_literal->println -> broken (0.39) "3.5"
-    pre:statement->println -> not applied (0.00) ""
-  boolean_expression (concept edges): 2 candidates -> kept pre:boolean_expression->if_statement (0.60), pre:comparison_operators->boolean_expression (0.40)
-    pre:boolean_expression->if_statement -> not applied (0.00) ""
-    pre:comparison_operators->boolean_expression -> not applied (0.00) ""
-  comparison_operators (misconceptions): 8 candidates -> kept mis:comparison_operators->EqualityOperatorComparesObjectsValues (0.40), mis:comparison_operators->AssignCompares (0.30), mis:comparison_operators->EqualsComparesReferences (0.30)
-    mis:comparison_operators->EqualityOperatorComparesObjectsValues -> not applied (0.00) ""
-    mis:comparison_operators->AssignCompares -> not applied (0.00) ""
-    mis:comparison_operators->EqualsComparesReferences -> not applied (0.00) ""
-  comparison_operators (level ways): 20 candidates -> kept lvl:comparison_operators@L4#6 (0.40), lvl:comparison_operators@L2#0 (0.35), lvl:comparison_operators@L2#1 (0.25)
-    lvl:comparison_operators@L4#6 -> not applied (0.00) ""
-    lvl:comparison_operators@L2#0 -> not applied (0.00) ""
-    lvl:comparison_operators@L2#1 -> not applied (0.00) ""
-  control_flow (misconceptions): 11 candidates -> kept mis:control_flow->StatementsRunInAnyOrder (0.40), mis:control_flow->CodeAfterIfSkipped (0.30), mis:control_flow->FalseConditionRestartsProgram (0.30)
-    mis:control_flow->StatementsRunInAnyOrder -> not applied (0.00) ""
-    mis:control_flow->CodeAfterIfSkipped -> not applied (0.00) ""
-    mis:control_flow->FalseConditionRestartsProgram -> not applied (0.00) ""
-  control_flow (level ways): 15 candidates -> kept lvl:control_flow@L0#0 (0.45), lvl:control_flow@L2#1 (0.30), lvl:control_flow@L0#3 (0.25)
-    lvl:control_flow@L0#0 -> not applied (0.00) ""
-    lvl:control_flow@L2#1 -> not applied (0.00) ""
-    lvl:control_flow@L0#3 -> not applied (0.00) ""
-  if_else_statement (misconceptions): 6 candidates -> kept mis:if_else_statement->BranchChosenByIntent (0.50), mis:if_else_statement->ElseAlwaysExecutes (0.30), mis:if_else_statement->BothBranchesExecute (0.20)
-    mis:if_else_statement->BranchChosenByIntent -> not applied (0.00) ""
-    mis:if_else_statement->ElseAlwaysExecutes -> not applied (0.00) ""
-    mis:if_else_statement->BothBranchesExecute -> not applied (0.00) ""
-  if_else_statement (level ways): 17 candidates -> kept lvl:if_else_statement@L2#1 (0.50), lvl:if_else_statement@L2#0 (0.30), lvl:if_else_statement@L0#5 (0.20)
-    lvl:if_else_statement@L2#1 -> not applied (0.00) ""
-    lvl:if_else_statement@L2#0 -> not applied (0.00) ""
-    lvl:if_else_statement@L0#5 -> not applied (0.00) ""
-  kept: pre:string_literal->println [broken, tier 0, 0.39]
-  reached across pre:string_literal->println, entered next: string_literal
-  clause coverage: c1 <- pre:string_literal->println; c2 uncovered; c3 uncovered
-  not yet read: own edges of string_literal, par:assignment~comparison_operators, pre:expression->comparison_operators, pre:statement->control_flow
---- depth 4: current concepts ['string_literal'] (closing round: own edges only)
-  string_literal (misconceptions): 4 candidates -> kept mis:string_literal->PrintedTextIsExecuted (0.80), err:string_literal->UnclosedStringLiteral (0.10), err:string_literal->SingleQuotedString (0.10)
-    mis:string_literal->PrintedTextIsExecuted -> not applied (0.00) ""
-    err:string_literal->UnclosedStringLiteral -> not applied (0.00) ""
-    err:string_literal->SingleQuotedString -> not applied (0.00) ""
-  string_literal (level ways): 16 candidates -> kept lvl:string_literal@L2#1 (0.45), lvl:string_literal@L3#1 (0.35), lvl:string_literal@L3#3 (0.20)
-    lvl:string_literal@L2#1 -> not applied (0.00) ""
-    lvl:string_literal@L3#1 -> not applied (0.00) ""
-    lvl:string_literal@L3#3 -> not applied (0.00) ""
-  nothing kept at this depth
-  clause coverage: c1 <- pre:string_literal->println; c2 uncovered; c3 uncovered
-  not yet read: par:assignment~comparison_operators, pre:expression->comparison_operators, pre:statement->control_flow
-  root-cause walk: held on [], broken at ['println'], prerequisites {'expression': ['arithmetic_operators'], 'if_statement': ['boolean_expression', 'control_flow'], 'boolean_expression': ['comparison_operators'], 'floating_point_precision': ['double'], 'comparison_operators': ['expression'], 'if_else_statement': ['if_statement'], 'control_flow': ['statement'], 'println': ['statement', 'string_literal']}
-  level arithmetic_operators: L4 via predict_a_change "The cast makes it a double division; so you get the decimal part"
-  level double: L4 via diagnose_an_error "The cast makes it a double division; so you get the decimal part"
+    mis:println->PrintNewLineFirst -> not applied (0.00) ""
+    mis:println->PrintedTextIsExecuted -> not applied (0.00) ""
+  println (level ways): 17 candidates -> kept lvl:println@L2#1 (0.45), lvl:println@L3#0 (0.30), lvl:println@L2#0 (0.25)
+    lvl:println@L2#1 -> shown (0.32) "b; so it prints c"
+    lvl:println@L3#0 -> shown (0.18) "b; so it prints c"
+    lvl:println@L2#0 -> shown (0.16) "b; so it prints c"
+  char_arithmetic (misconceptions): 1 candidates -> kept mis:char_arithmetic->CharNotNumeric (1.00)
+    mis:char_arithmetic->CharNotNumeric -> held (0.60) "Then k = c + 1 is the letter after b; so it prints c"
+  char_arithmetic (level ways): 14 candidates -> kept lvl:char_arithmetic@L0#2 (0.50), lvl:char_arithmetic@L2#2 (0.30), lvl:char_arithmetic@L3#0 (0.20)
+    lvl:char_arithmetic@L0#2 -> not applied (0.00) ""
+    lvl:char_arithmetic@L2#2 -> shown (0.24) "b; because c++ moves to the next letter"
+    lvl:char_arithmetic@L3#0 -> not applied (0.00) ""
+  increment_operators (misconceptions): 5 candidates -> kept mis:increment_operators->IncrementByTwo (0.80), mis:increment_operators->PrePostIncrementSameValue (0.12), mis:increment_operators->PostIncrementAssignsLater (0.08)
+    mis:increment_operators->IncrementByTwo -> correct (0.72) "b; because c++ moves to the next letter"
+    mis:increment_operators->PrePostIncrementSameValue -> not applied (0.00) ""
+    mis:increment_operators->PostIncrementAssignsLater -> not applied (0.00) ""
+  increment_operators (level ways): 16 candidates -> kept lvl:increment_operators@L2#2 (0.50), lvl:increment_operators@L2#1 (0.30), lvl:increment_operators@L3#2 (0.20)
+    lvl:increment_operators@L2#2 -> shown (0.35) "b; because c++ moves to the next letter"
+    lvl:increment_operators@L2#1 -> shown (0.21) "b; because c++ moves to the next letter"
+    lvl:increment_operators@L3#2 -> shown (0.12) "b; because c++ moves to the next letter"
+  kept: mis:char_arithmetic->CharNotNumeric [held, tier 0, 0.60], mis:increment_operators->IncrementByTwo [correct, tier 2, 0.72], pre:assignment->increment_operators [confirmed, tier 2, 0.70]
+  clause coverage: c1 <- mis:assignment->VariableKeepsOldValue; c2 <- mis:assignment->VariableKeepsOldValue; c3 <- mis:assignment->VariableKeepsOldValue; c4 <- pre:arithmetic_operators->expression
+  not yet read: pre:char->char_arithmetic, pre:statement->println
+--- depth 3: current concepts ['char_arithmetic', 'increment_operators', 'assignment', 'println']
+  char_arithmetic (concept edges): 1 candidates -> kept pre:char->char_arithmetic (1.00)
+    pre:char->char_arithmetic -> broken (0.90) "Then k = c + 1 is the letter after b; so it prints c"
+  println (concept edges): 1 candidates -> kept pre:statement->println (1.00)
+    pre:statement->println -> confirmed (0.70) "b; so it prints c"
+  kept: pre:char->char_arithmetic [broken, tier 0, 0.90], pre:statement->println [confirmed, tier 2, 0.70]
+  reached across pre:char->char_arithmetic, entered next: char
+  reached across pre:statement->println, entered next: statement
+  clause coverage: c1 <- mis:assignment->VariableKeepsOldValue; c2 <- mis:assignment->VariableKeepsOldValue; c3 <- mis:assignment->VariableKeepsOldValue; c4 <- pre:arithmetic_operators->expression
+  not yet read: own edges of char, own edges of statement
+--- depth 4: current concepts ['char', 'statement'] (closing round: own edges only)
+  char (misconceptions): 1 candidates -> kept mis:char->CharNotNumeric (1.00)
+    mis:char->CharNotNumeric -> not applied (0.00) ""
+  char (level ways): 19 candidates -> kept lvl:char@L0#0 (0.50), lvl:char@L2#2 (0.30), lvl:char@L3#3 (0.20)
+    lvl:char@L0#0 -> shown (0.42) "Then k = c + 1 is the letter after b; so it prints c"
+    lvl:char@L2#2 -> shown (0.22) "b; because c++ moves to the next letter"
+    lvl:char@L3#3 -> not applied (0.00) ""
+  statement (misconceptions): 5 candidates -> kept mis:statement->StatementsRunInAnyOrder (0.45), mis:statement->ProgramLooksAhead (0.35), mis:statement->ComputerFillsInIntent (0.20)
+    mis:statement->StatementsRunInAnyOrder -> correct (0.32) "because c++ moves to the next letter; Then k = c + 1 is the letter after b"
+    mis:statement->ProgramLooksAhead -> not applied (0.00) ""
+    mis:statement->ComputerFillsInIntent -> not applied (0.00) ""
+  statement (level ways): 19 candidates -> kept lvl:statement@L2#0 (0.45), lvl:statement@L2#2 (0.35), lvl:statement@L2#1 (0.20)
+    lvl:statement@L2#0 -> shown (0.36) "because c++ moves to the next letter; Then k = c + 1 is the letter after b"
+    lvl:statement@L2#2 -> shown (0.24) "b; because c++ moves to the next letter; Then k = c + 1 is the letter after b"
+    lvl:statement@L2#1 -> shown (0.14) "b; because c++ moves to the next letter"
+  kept: lvl:char@L0#0 [shown, tier 2, 0.42], lvl:statement@L2#0 [shown, tier 2, 0.36], mis:statement->StatementsRunInAnyOrder [correct, tier 2, 0.32]
+  clause coverage: c1 <- mis:assignment->VariableKeepsOldValue; c2 <- mis:assignment->VariableKeepsOldValue; c3 <- mis:assignment->VariableKeepsOldValue; c4 <- pre:arithmetic_operators->expression
+  root-cause walk: held on ['char_arithmetic'], broken at [] (consequences: pre:char->char_arithmetic), prerequisites {'expression': ['arithmetic_operators'], 'increment_operators': ['assignment'], 'char_arithmetic': ['char'], 'println': ['statement']}
+  level assignment: L2 via line_by_line_trace "because c++ moves to the next letter; Then k = c + 1 is the letter after b"
+  level char: L2 via one_step_execution "b; because c++ moves to the next letter"
+  level char_arithmetic: L0 via misconception "Then k = c + 1 is the letter after b; so it prints c"
+  level expression: L3 via relation_to_neighbour "Then k = c + 1 is the letter after b"
+  level increment_operators: L3 via relation_to_neighbour "b; because c++ moves to the next letter"
+  level println: L3 via relation_to_neighbour "b; so it prints c"
+  level statement: L2 via line_by_line_trace "because c++ moves to the next letter; Then k = c + 1 is the letter after b"

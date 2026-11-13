@@ -1,5 +1,5 @@
 {
- "code": "int total = 50;\nint count = 0;\nSystem.out.println(total / count);",
- "question": "Will this compile? What happens when you run it? Explain your reasoning",
- "answer": "It won’t compile. Dividing by zero isn’t allowed, so the compiler stops you before it runs.”\nActual: it compiles, then crashes at run time with ArithmeticException: / by zero."
+ "code": "System.out.println(1 + 2 + \"3\" + 4 + 5);",
+ "question": "What is printed? Explain how Java works out each +",
+ "answer": "339. Java adds the numbers first, so 1 + 2 is 3 and 4 + 5 is 9, then it joins them with the “3”."
 }

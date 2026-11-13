@@ -1,55 +1,58 @@
-clauses: Tue, then Wed | Case 2 has no break | so it carries on into case 3 and stops at the break there | Mon and | are never reached
-start: BM25 of the answer against each tagged concept: break_statement 10.60 (hits 1), control_flow 9.15 (hits 2), println 8.19 (hits 1), switch_statement 6.52 (hits 4)
-start: chosen break_statement, control_flow, println
-start concepts (3): break_statement, control_flow, println
---- depth 1: current concepts ['break_statement', 'control_flow', 'println']
-  break_statement (misconceptions): 4 candidates -> kept mis:break_statement->BreakExitsIf (0.40), mis:break_statement->BreakIgnored (0.40), mis:break_statement->BreakEndsProgram (0.20)
-    mis:break_statement->BreakExitsIf -> correct (0.24) "so it carries on into case 3 and stops at the break there; are never reached"
-    mis:break_statement->BreakIgnored -> correct (0.36) "Tue, then Wed; so it carries on into case 3 and stops at the break there; are never reached"
-    mis:break_statement->BreakEndsProgram -> not applied (0.00) ""
-  break_statement (level ways): 19 candidates -> kept lvl:break_statement@L3#3 (0.60), lvl:break_statement@L2#0 (0.20), lvl:break_statement@L1#1 (0.20)
-    lvl:break_statement@L3#3 -> shown (0.56) "Case 2 has no break; so it carries on into case 3 and stops at the break there"
-    lvl:break_statement@L2#0 -> shown (0.14) "so it carries on into case 3 and stops at the break there; are never reached"
-    lvl:break_statement@L1#1 -> shown (0.16) "so it carries on into case 3 and stops at the break there; are never reached"
-  control_flow (misconceptions): 11 candidates -> kept mis:control_flow->StatementsRunInAnyOrder (0.45), mis:control_flow->ProgramLooksAhead (0.35), mis:control_flow->CodeAfterIfSkipped (0.20)
-    mis:control_flow->StatementsRunInAnyOrder -> correct (0.34) "Tue, then Wed; so it carries on into case 3 and stops at the break there"
-    mis:control_flow->ProgramLooksAhead -> not applied (0.00) ""
-    mis:control_flow->CodeAfterIfSkipped -> not applied (0.00) ""
-  control_flow (level ways): 15 candidates -> kept lvl:control_flow@L2#1 (0.40), lvl:control_flow@L2#0 (0.35), lvl:control_flow@L4#1 (0.25)
-    lvl:control_flow@L2#1 -> shown (0.36) "Tue, then Wed; so it carries on into case 3 and stops at the break there; Mon and; are never reached"
-    lvl:control_flow@L2#0 -> shown (0.28) "Tue, then Wed; Case 2 has no break; so it carries on into case 3 and stops at the break there"
-    lvl:control_flow@L4#1 -> shown (0.21) "Tue, then Wed; Case 2 has no break; so it carries on into case 3 and stops at the break there; Mon and; are never reached"
-  println (misconceptions): 6 candidates -> kept mis:println->PrintEqualsPrintln (0.50), mis:println->PrintedTextIsExecuted (0.30), mis:println->PrintNewLineFirst (0.20)
-    mis:println->PrintEqualsPrintln -> not applied (0.00) ""
-    mis:println->PrintedTextIsExecuted -> not applied (0.00) ""
-    mis:println->PrintNewLineFirst -> not applied (0.00) ""
-  println (level ways): 17 candidates -> kept lvl:println@L2#1 (0.40), lvl:println@L3#0 (0.35), lvl:println@L3#1 (0.25)
-    lvl:println@L2#1 -> shown (0.24) "Tue, then Wed"
-    lvl:println@L3#0 -> shown (0.24) "Tue, then Wed"
-    lvl:println@L3#1 -> shown (0.14) "Tue, then Wed"
-  kept: lvl:break_statement@L3#3 [shown, tier 2, 0.56], mis:break_statement->BreakIgnored [correct, tier 2, 0.36], lvl:control_flow@L2#1 [shown, tier 2, 0.36]
-  clause coverage: c1 <- mis:break_statement->BreakIgnored; c2 uncovered; c3 <- mis:break_statement->BreakExitsIf; c4 uncovered; c5 <- mis:break_statement->BreakExitsIf
-  uncovered clauses bring in: switch_statement (0.96)
-  not yet read: own edges of switch_statement, pre:break_statement->switch_statement, pre:control_flow->switch_statement, pre:statement->control_flow, pre:statement->println, pre:string_literal->println
---- depth 2: current concepts ['break_statement', 'control_flow', 'println', 'switch_statement']
-  break_statement (concept edges): 1 candidates -> kept pre:break_statement->switch_statement (1.00)
-    pre:break_statement->switch_statement -> confirmed (0.90) "Case 2 has no break; so it carries on into case 3 and stops at the break there"
-  control_flow (concept edges): 2 candidates -> kept pre:control_flow->switch_statement (0.70), pre:statement->control_flow (0.30)
-    pre:control_flow->switch_statement -> confirmed (0.59) "Tue, then Wed; Mon and; are never reached"
-    pre:statement->control_flow -> confirmed (0.24) "Tue, then Wed; so it carries on into case 3 and stops at the break there; Mon and; are never reached"
-  println (concept edges): 2 candidates -> kept pre:statement->println (0.60), pre:string_literal->println (0.40)
-    pre:statement->println -> confirmed (0.42) "Tue, then Wed; so it carries on into case 3 and stops at the break there"
-    pre:string_literal->println -> confirmed (0.24) "Tue, then Wed"
-  switch_statement (misconceptions): 1 candidates -> kept mis:switch_statement->SwitchNoFallThrough (1.00)
-    mis:switch_statement->SwitchNoFallThrough -> correct (0.95) "Tue, then Wed; Case 2 has no break; so it carries on into case 3 and stops at the break there"
-  switch_statement (level ways): 16 candidates -> kept lvl:switch_statement@L2#0 (0.45), lvl:switch_statement@L3#1 (0.30), lvl:switch_statement@L2#1 (0.25)
-    lvl:switch_statement@L2#0 -> shown (0.38) "Tue, then Wed; Case 2 has no break; so it carries on into case 3 and stops at the break there; Mon and; are never reached"
-    lvl:switch_statement@L3#1 -> shown (0.28) "Case 2 has no break; so it carries on into case 3 and stops at the break there"
-    lvl:switch_statement@L2#1 -> shown (0.23) "Tue, then Wed; so it carries on into case 3 and stops at the break there"
-  kept: mis:switch_statement->SwitchNoFallThrough [correct, tier 2, 0.95], pre:break_statement->switch_statement [confirmed, tier 2, 0.90], pre:control_flow->switch_statement [confirmed, tier 2, 0.59]
-  clause coverage: c1 <- mis:break_statement->BreakIgnored; c2 <- pre:break_statement->switch_statement; c3 <- mis:break_statement->BreakExitsIf; c4 <- pre:control_flow->switch_statement; c5 <- mis:break_statement->BreakExitsIf
-  root-cause walk: held on [], broken at [], prerequisites {'switch_statement': ['break_statement', 'control_flow'], 'control_flow': ['statement'], 'println': ['statement', 'string_literal']}
-  level break_statement: L3 via relation_to_neighbour "Case 2 has no break; so it carries on into case 3 and stops at the break there"
-  level control_flow: L4 via transfer_to_a_new_program "Tue, then Wed; Case 2 has no break; so it carries on into case 3 and stops at the break there; Mon and; are never reached"
-  level println: L3 via relation_to_neighbour "Tue, then Wed"
-  level switch_statement: L3 via relation_to_neighbour "Case 2 has no break; so it carries on into case 3 and stops at the break there"
+clauses: Zero times | 10 < 5 is false | so the loop never starts
+start: BM25 of the answer against each tagged concept: do_while_loop 7.21 (hits 3), loop_body 5.84 (hits 2), loop_control 5.71 (hits 1), println 4.25 (hits 1), boolean_expression 3.70 (hits 1), control_flow 3.49 (hits 2), loop_variable 3.42 (hits 1), comparison_operators 3.04 (hits 1), increment_operators 1.31 (hits 1)
+start: chosen do_while_loop, loop_body, loop_control
+start concepts (3): do_while_loop, loop_body, loop_control
+--- depth 1: current concepts ['do_while_loop', 'loop_body', 'loop_control']
+  do_while_loop (misconceptions): 1 candidates -> kept mis:do_while_loop->DoWhileTestsFirst (1.00)
+    mis:do_while_loop->DoWhileTestsFirst -> held (0.97) "Zero times; 10 < 5 is false; so the loop never starts"
+  do_while_loop (level ways): 14 candidates -> kept lvl:do_while_loop@L0#2 (0.50), lvl:do_while_loop@L0#0 (0.30), lvl:do_while_loop@L3#0 (0.20)
+    lvl:do_while_loop@L0#2 -> shown (0.38) "Zero times; 10 < 5 is false; so the loop never starts"
+    lvl:do_while_loop@L0#0 -> shown (0.26) "Zero times; 10 < 5 is false; so the loop never starts"
+    lvl:do_while_loop@L3#0 -> not applied (0.00) ""
+  loop_body (misconceptions): 12 candidates -> kept mis:loop_body->LoopBodyAlwaysOnce (0.70), mis:loop_body->ForLoopPartSkipped (0.15), mis:loop_body->WhileStopsMidBody (0.15)
+    mis:loop_body->LoopBodyAlwaysOnce -> correct (0.42) "Zero times; 10 < 5 is false; so the loop never starts"
+    mis:loop_body->ForLoopPartSkipped -> not applied (0.00) ""
+    mis:loop_body->WhileStopsMidBody -> not applied (0.00) ""
+  loop_body (level ways): 14 candidates -> kept lvl:loop_body@L3#2 (0.50), lvl:loop_body@L0#6 (0.30), lvl:loop_body@L2#0 (0.20)
+    lvl:loop_body@L3#2 -> not applied (0.00) ""
+    lvl:loop_body@L0#6 -> not applied (0.00) ""
+    lvl:loop_body@L2#0 -> not applied (0.00) ""
+  loop_control (misconceptions): 11 candidates -> kept err:loop_control->WrongIterationCount (0.45), mis:loop_control->ForLoopPartSkipped (0.30), mis:loop_control->IdiomOverridesCode (0.25)
+    err:loop_control->WrongIterationCount -> not applied (0.00) ""
+    mis:loop_control->ForLoopPartSkipped -> not applied (0.00) ""
+    mis:loop_control->IdiomOverridesCode -> not applied (0.00) ""
+  loop_control (level ways): 19 candidates -> kept lvl:loop_control@L1#1 (0.50), lvl:loop_control@L0#3 (0.30), lvl:loop_control@L2#0 (0.20)
+    lvl:loop_control@L1#1 -> not applied (0.00) ""
+    lvl:loop_control@L0#3 -> not applied (0.00) ""
+    lvl:loop_control@L2#0 -> shown (0.15) "10 < 5 is false; so the loop never starts"
+  kept: mis:do_while_loop->DoWhileTestsFirst [held, tier 0, 0.97], mis:loop_body->LoopBodyAlwaysOnce [correct, tier 2, 0.42], lvl:do_while_loop@L0#2 [shown, tier 2, 0.38]
+  clause coverage: c1 <- mis:do_while_loop->DoWhileTestsFirst; c2 <- mis:do_while_loop->DoWhileTestsFirst; c3 <- mis:do_while_loop->DoWhileTestsFirst
+  not yet read: pre:do_while_loop->loop_body, pre:do_while_loop->loop_control, pre:loop_control->increment_operators, pre:loop_variable->loop_control
+--- depth 2: current concepts ['do_while_loop', 'loop_body', 'loop_control']
+  do_while_loop (concept edges): 2 candidates -> kept pre:do_while_loop->loop_control (0.55), pre:do_while_loop->loop_body (0.45)
+    pre:do_while_loop->loop_control -> broken (0.50) "Zero times; 10 < 5 is false; so the loop never starts"
+    pre:do_while_loop->loop_body -> broken (0.42) "Zero times; so the loop never starts"
+  loop_control (concept edges): 2 candidates -> kept pre:loop_variable->loop_control (0.85), pre:loop_control->increment_operators (0.15)
+    pre:loop_variable->loop_control -> confirmed (0.51) "10 < 5 is false"
+    pre:loop_control->increment_operators -> not applied (0.00) ""
+  kept: pre:do_while_loop->loop_control [broken, tier 0, 0.49], pre:do_while_loop->loop_body [broken, tier 0, 0.42], pre:loop_variable->loop_control [confirmed, tier 2, 0.51]
+  reached across pre:loop_variable->loop_control, entered next: loop_variable
+  clause coverage: c1 <- mis:do_while_loop->DoWhileTestsFirst; c2 <- mis:do_while_loop->DoWhileTestsFirst; c3 <- mis:do_while_loop->DoWhileTestsFirst
+  not yet read: own edges of loop_variable
+--- depth 3: current concepts ['loop_control', 'do_while_loop', 'loop_body', 'loop_variable']
+  loop_control (concept edges): 1 candidates -> kept pre:loop_control->increment_operators (1.00)
+    pre:loop_control->increment_operators -> not applied (0.00) ""
+  loop_variable (misconceptions): 7 candidates -> kept mis:loop_variable->BodyChangeIgnoredByCondition (0.50), mis:loop_variable->ForInitRepeats (0.30), mis:loop_variable->LoopVariableLimitsValues (0.20)
+    mis:loop_variable->BodyChangeIgnoredByCondition -> not applied (0.00) ""
+    mis:loop_variable->ForInitRepeats -> not applied (0.00) ""
+    mis:loop_variable->LoopVariableLimitsValues -> not applied (0.00) ""
+  loop_variable (level ways): 13 candidates -> kept lvl:loop_variable@L1#1 (0.50), lvl:loop_variable@L2#2 (0.30), lvl:loop_variable@L3#0 (0.20)
+    lvl:loop_variable@L1#1 -> shown (0.30) "10 < 5 is false; so the loop never starts"
+    lvl:loop_variable@L2#2 -> shown (0.21) "10 < 5 is false"
+    lvl:loop_variable@L3#0 -> shown (0.12) "10 < 5 is false"
+  kept: lvl:loop_variable@L1#1 [shown, tier 2, 0.30], lvl:loop_variable@L2#2 [shown, tier 2, 0.21], lvl:loop_variable@L3#0 [shown, tier 2, 0.12]
+  clause coverage: c1 <- mis:do_while_loop->DoWhileTestsFirst; c2 <- mis:do_while_loop->DoWhileTestsFirst; c3 <- mis:do_while_loop->DoWhileTestsFirst
+  root-cause walk: held on ['do_while_loop'], broken at [] (consequences: pre:do_while_loop->loop_control, pre:do_while_loop->loop_body), prerequisites {'increment_operators': ['assignment', 'loop_control'], 'boolean_expression': ['comparison_operators'], 'loop_body': ['do_while_loop'], 'loop_control': ['do_while_loop', 'loop_variable'], 'comparison_operators': ['expression'], 'control_flow': ['statement'], 'println': ['statement']}
+  level do_while_loop: L0 via misconception "Zero times; 10 < 5 is false; so the loop never starts"
+  level loop_control: L2 via line_by_line_trace "10 < 5 is false; so the loop never starts"
+  level loop_variable: L3 via relation_to_neighbour "10 < 5 is false"

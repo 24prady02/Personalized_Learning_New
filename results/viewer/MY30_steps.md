@@ -2,83 +2,63 @@
 ## 0. Input
 Program:
 ```java
-double a = 0.1 + 0.2;
-if (a == 0.3) {
-    System.out.println("equal");
-} else {
-    System.out.println("not equal");
-}
+char c = 'a';
+c++;
+int k = c + 1;
+System.out.println(c);
+System.out.println(k);
 ```
-Question: What is printed? Explain what the (double) does here.
+Question: What are the two lines of output? Explain each one.
 
-Student's answer: 3.5. The cast makes it a double division, so you get the decimal part.
+Student's answer: b, because c++ moves to the next letter. Then k = c + 1 is the letter after b, so it prints c
 Settings: width 3, depth 3, prune llm, backend claude-cli, model claude-opus-5-5
 ## 1. Stage 1: the subgraph G from the code (no model)
 Masked code (string and char literals and comments blanked; this is what the patterns see):
 ```
-double a = 0.1 + 0.2;
-if (a == 0.3) {
-    System.out.println("     ");
-} else {
-    System.out.println("         ");
-}
+char c = 'a';
+c++;
+int k = c + 1;
+System.out.println(c);
+System.out.println(k);
 ```
 Which code text tagged which concept (a generic concept fires on almost any Java line; it starts the walk only if the answer repeats its tag):
 | concept | generic | channel | matched text | line |
 |---|---|---|---|---|
-| arithmetic_operators | False | pattern | '1 + 0' | 1 |
+| arithmetic_operators | False | pattern | 'c + 1' | 3 |
 | assignment | True | pattern | '=' | 1 |
-| boolean_expression | False | pattern | 'if (' | 2 |
-| comparison_operators | False | pattern | 'if (a ==' | 2 |
-| control_flow | False | pattern | 'if (' | 2 |
-| double | True | pattern | 'double' | 1 |
-| double | True | pattern | '0.1' | 1 |
-| double | True | type | 'double' | 1 |
-| expression | True | pattern | '1 +' | 1 |
-| expression | True | pattern | '= 0.1 + 0.2;' | 1 |
-| floating_point_precision | False | pattern | '0.1 + 0.2' | 1 |
-| floating_point_precision | False | pattern | '== 0.3' | 2 |
-| floating_point_precision | False | signal | 'double a = 0.1 + 0.2;\nif (a ==' | 1 |
-| if_else_statement | False | pattern | 'else' | 4 |
-| if_statement | False | pattern | 'if (' | 2 |
-| println | False | pattern | 'System.out.println(' | 3 |
+| char | True | pattern | 'char' | 1 |
+| char | True | pattern | "'a'" | 1 |
+| char | True | type | 'char' | 1 |
+| char_arithmetic | False | signal | "char c = 'a';\nc++" | 1 |
+| char_arithmetic | False | signal | "char c = 'a';\nc++;\nint k = c + 1" | 1 |
+| expression | True | pattern | 'c +' | 3 |
+| expression | True | pattern | "= 'a';" | 1 |
+| increment_operators | False | pattern | '++' | 2 |
+| println | False | pattern | 'System.out.println(' | 4 |
 | statement | True | pattern | ';' | 1 |
-| string_literal | True | pattern | '"equal"' | 3 |
 
-G: 13 concept nodes (5 generic), 11 concept edges, 99 misconception / error edges, 76 misconception / error nodes, 65 level nodes, 102 level-misconception links, 2 connected piece(s).
-Note: concept nodes form 2 pieces (the KG has no edge between them): arithmetic_operators,assignment,boolean_expression,comparison_operators,control_flow,expression,if_else_statement,if_statement,println,statement,string_literal | double,floating_point_precision
+G: 8 concept nodes (4 generic), 4 concept edges, 44 misconception / error edges, 37 misconception / error nodes, 40 level nodes, 51 level-misconception links, 4 connected piece(s).
+Note: concept nodes form 4 pieces (the KG has no edge between them): arithmetic_operators,expression | assignment,increment_operators | char,char_arithmetic | println,statement
 
 Concept edges of G (the links the walk can read; `pre:` = prerequisite A -> B, `par:` = parallel):
 | edge | type | rule (logic) |
 |---|---|---|
-| par:assignment~comparison_operators | parallel | x = y stores the value of y in x (a statement with a side effect); x == y only tests whether the two values are equal and gives a boolean. Writing = where == is meant is a compile error with int operands and a silent bug with boolean operands. |
 | pre:arithmetic_operators->expression | prerequisite | An operator combines operand values a and b into a new value, so operators build larger expressions from smaller ones. |
-| pre:boolean_expression->if_statement | prerequisite | An if runs its block only when its boolean expression evaluates to true. |
-| pre:comparison_operators->boolean_expression | prerequisite | A comparison such as x < y produces a boolean result; comparisons together with boolean logic provide the basis for decision-making. |
-| pre:control_flow->if_statement | prerequisite | An if changes the default top-to-bottom flow by running a block only when its condition is true. |
-| pre:double->floating_point_precision | prerequisite | A double approximates real numbers, so its arithmetic is not exact. |
-| pre:expression->comparison_operators | prerequisite | Comparison operators build expressions whose value is a boolean, so one must already know what an expression is to understand a < b. |
-| pre:if_statement->if_else_statement | prerequisite | if-else extends if with a second block that runs exactly when the condition is false. |
-| pre:statement->control_flow | prerequisite | Control flow is the order in which statements run. |
+| pre:assignment->increment_operators | prerequisite | i++ is shorthand for the assignment i = i + 1. |
+| pre:char->char_arithmetic | prerequisite | Char arithmetic uses the numeric code stored for each char. |
 | pre:statement->println | prerequisite | System.out.println(s); is itself a statement, so its line of output appears at its own place in the sequence. |
-| pre:string_literal->println | prerequisite | println("s") outputs exactly the characters between the quotes and then ends the line. |
 
 Misconception / error edges per concept (count), and level ways per concept (count):
 | concept | misconception / error edges | level ways (L1-L4 + L0 non-misconception) |
 |---|---|---|
 | arithmetic_operators | 3 | 18 |
 | assignment | 15 | 24 |
-| boolean_expression | 8 | 19 |
-| comparison_operators | 8 | 20 |
-| control_flow | 11 | 15 |
-| double | 2 | 19 |
+| char | 1 | 19 |
+| char_arithmetic | 1 | 14 |
 | expression | 8 | 19 |
-| floating_point_precision | 1 | 14 |
-| if_else_statement | 6 | 17 |
-| if_statement | 22 | 19 |
+| increment_operators | 5 | 16 |
 | println | 6 | 17 |
 | statement | 5 | 19 |
-| string_literal | 4 | 16 |
 
 Figure 1: C:\Users\magnu\OneDrive\Desktop\ES_VIterbi_Personalized_Learning\results\viewer\MY30_figure01.png
 
@@ -88,112 +68,113 @@ Figure 2: C:\Users\magnu\OneDrive\Desktop\ES_VIterbi_Personalized_Learning\resul
 The answer split into clauses (at sentence ends, ';', and before 'because' / 'so'; quotes removed):
 | clause | text |
 |---|---|
-| c1 | 3.5 |
-| c2 | The cast makes it a double division |
-| c3 | so you get the decimal part |
+| c1 | b |
+| c2 | because c++ moves to the next letter |
+| c3 | Then k = c + 1 is the letter after b |
+| c4 | so it prints c |
 
-start: generic concepts whose tagging text occurs in the answer: double
+start: generic concepts whose tagging text occurs in the answer: assignment, expression
 
-start: BM25 of the answer against each tagged concept: double 11.19 (hits 3), arithmetic_operators 6.38 (hits 1), if_statement 6.16 (hits 1), println 5.40 (hits 1), boolean_expression 4.54 (hits 1), floating_point_precision 3.23 (hits 3), control_flow 2.61 (hits 1), comparison_operators 1.98 (hits 1), if_else_statement 1.71 (hits 1)
+start: BM25 of the answer against each tagged concept: assignment 10.66 (hits 1), expression 8.88 (hits 2), arithmetic_operators 8.73 (hits 1), char_arithmetic 6.95 (hits 2), println 6.45 (hits 1), increment_operators 5.66 (hits 1)
 
-start: chosen double, arithmetic_operators, if_statement
+start: chosen assignment, expression, arithmetic_operators
 
-start concepts (3): double, arithmetic_operators, if_statement
+start concepts (3): assignment, expression, arithmetic_operators
 
-Start concepts: double, arithmetic_operators, if_statement
+Start concepts: assignment, expression, arithmetic_operators
 
 Figure 3: C:\Users\magnu\OneDrive\Desktop\ES_VIterbi_Personalized_Learning\results\viewer\MY30_figure03.png
 
 ## 3. The walk, depth by depth
 At each depth, for each current concept: the edges offered (a concept entering as a start concept offers its misconception / error edges and its level ways, as two families; otherwise it offers its concept edges), the prune prompt and the model's reply, then the label prompt(s) and the model's reply, parsed into label / clauses / confidence. Score = prune score x confidence.
 
-### Depth 1: current concepts 'double', 'arithmetic_operators', 'if_statement'
+### Depth 1: current concepts 'assignment', 'expression', 'arithmetic_operators'
 
-#### double, misconceptions: 2 edges offered
+#### assignment, misconceptions: 15 edges offered
 Edges offered:
 | edge |
 |---|
-| mis:double->FloatingPointIsExact \| wrong rule: Math.sqrt(2) * Math.sqrt(2) == 2 is true. \| right rule: A double is an approximation, so the product is close to 2 but not equal to 2. |
-| mis:double->WholeNumberLiteralIsInt \| wrong rule: 207. and 2.3e4 are int values because they are whole numbers. \| right rule: A decimal point or scientific notation makes the literal a double. |
+| err:assignment->AssignToFinal \| wrong rule: Assigns a new value to a variable declared final. \| right rule: A final variable cannot be reassigned after it is initialized; the compiler reports an error. |
+| err:assignment->ExpressionOnLeftOfAssignment \| wrong rule: Writes a + b = c; or 7 = a; as if = were a math equation. \| right rule: The left side of an assignment must be a single variable; only the right side can be an expression. |
+| err:assignment->RedeclareToReassign \| wrong rule: Writes int x = 5; ... int x = 10; to change x. \| right rule: A declaration gives a variable its name and type; a later change of value is an assignment statement such as x = 10;, not a second declaration. |
+| mis:assignment->AssignCompares \| wrong rule: x = y checks whether x and y are equal. \| right rule: x = y copies the value of y into x; x == y is what compares them. |
+| mis:assignment->AssignmentAddsToTarget \| wrong rule: a = b adds the value of b to the value already in a (the accumulator model). \| right rule: a = b replaces the old value of a with the value of b; the old value is lost. |
+| mis:assignment->AssignmentCopiesObject \| wrong rule: b = a; for an array makes b a separate copy, so changing b[i] leaves a[i] unchanged. \| right rule: b = a; copies only the reference, so a and b refer to the same array and b[i] = v also changes a[i]. |
+| mis:assignment->AssignmentEmptiesSource \| wrong rule: After b = a, a no longer holds a value, as if the value had been moved. \| right rule: Assignment copies; the variable on the right keeps its value. |
+| mis:assignment->AssignmentExchangesValues \| wrong rule: b = a exchanges the values of a and b. \| right rule: b = a copies a into b and leaves a unchanged; an exchange needs a temporary variable and three assignments. |
+| mis:assignment->AssignmentIsEquation \| wrong rule: An assignment states a lasting equality between its two sides, so y = x - y can be solved like the equation x = 2y and x = x + 5 relates two equal quantities. \| right rule: An assignment is a one-time action: evaluate the right side with current values, then store the result in the left variable. |
+| mis:assignment->AssignmentNotExpression \| wrong rule: An assignment cannot be used inside a larger expression, so a condition like (x = read()) != v is not allowed. \| right rule: An assignment is an expression whose value is the value assigned, so (x = v) both stores v in x and gives v. |
+| mis:assignment->AssignmentOppositeDirection \| wrong rule: a = b copies the value of a into b. \| right rule: Assignment stores the value of the right side into the variable on the left. |
+| mis:assignment->PrintedTextIsExecuted \| wrong rule: System.out.println("x is 5"); sets x to 5 (text inside the quotes is run as code). \| right rule: Characters inside double quotes are printed literally; println only displays them and changes no variable. Only an assignment such as x = 5; sets x. |
+| mis:assignment->SwapWithoutTemp \| wrong rule: a[i] = a[j]; a[j] = a[i]; exchanges the two values. \| right rule: A temporary variable must save a[i] before it is overwritten. |
+| mis:assignment->VariableKeepsOldValue \| wrong rule: A variable keeps its first value after a new assignment (the static model). \| right rule: Each assignment or read replaces the variable's current value. |
+| mis:assignment->VariablesHoldExpressions \| wrong rule: y = x + k; makes y always equal to x + k, so when x changes later, y changes too. \| right rule: y = x + k; stores the value that x + k has at that moment, so later changes to x do not change y. |
 
 Prune: the model's reply (edge id and score; the kept edges sum to 1):
 ```
-{mis:double->WholeNumberLiteralIsInt (Score: 0.6)}
-{mis:double->FloatingPointIsExact (Score: 0.4)}
+mis:assignment->VariableKeepsOldValue (0.45), mis:assignment->AssignmentIsEquation (0.30), mis:assignment->AssignmentOppositeDirection (0.25)
 ```
-Kept by pruning: mis:double->WholeNumberLiteralIsInt (0.60), mis:double->FloatingPointIsExact (0.40)
+Kept by pruning: mis:assignment->VariableKeepsOldValue (0.45), mis:assignment->AssignmentIsEquation (0.30), mis:assignment->AssignmentOppositeDirection (0.25)
 
 Label prompt for the misconception / error edges (judged together). The model saw the program, the question, the numbered clauses, and these edges with their wrong rule and right rule:
 | edge |
 |---|
-| mis:double->WholeNumberLiteralIsInt \| wrong rule: 207. and 2.3e4 are int values because they are whole numbers. \| right rule: A decimal point or scientific notation makes the literal a double. |
-| mis:double->FloatingPointIsExact \| wrong rule: Math.sqrt(2) * Math.sqrt(2) == 2 is true. \| right rule: A double is an approximation, so the product is close to 2 but not equal to 2. |
+| mis:assignment->VariableKeepsOldValue \| wrong rule: A variable keeps its first value after a new assignment (the static model). \| right rule: Each assignment or read replaces the variable's current value. |
+| mis:assignment->AssignmentIsEquation \| wrong rule: An assignment states a lasting equality between its two sides, so y = x - y can be solved like the equation x = 2y and x = x + 5 relates two equal quantities. \| right rule: An assignment is a one-time action: evaluate the right side with current values, then store the result in the left variable. |
+| mis:assignment->AssignmentOppositeDirection \| wrong rule: a = b copies the value of a into b. \| right rule: Assignment stores the value of the right side into the variable on the left. |
 Model's reply:
 ```
-mis:double->WholeNumberLiteralIsInt | not applied | clauses: none | confidence: 0.9
-mis:double->FloatingPointIsExact | not applied | clauses: none | confidence: 0.8
+mis:assignment->VariableKeepsOldValue | correct | clauses: 1, 2, 3 | confidence: 0.85
+mis:assignment->AssignmentIsEquation | not applied | clauses: none | confidence: 0.85
+mis:assignment->AssignmentOppositeDirection | correct | clauses: 3 | confidence: 0.6
 ```
 
 Parsed labels:
 | edge | label | prune score | confidence | score | clauses | words |
 |---|---|---|---|---|---|---|
-| mis:double->WholeNumberLiteralIsInt | not applied |  |  | 0.0 |  |  |
-| mis:double->FloatingPointIsExact | not applied |  |  | 0.0 |  |  |
+| mis:assignment->VariableKeepsOldValue | correct | 0.45 | 0.85 | 0.38 | c1, c2, c3 | b; because c++ moves to the next letter; Then k = c + 1 is the letter after b |
+| mis:assignment->AssignmentIsEquation | not applied |  |  | 0.0 |  |  |
+| mis:assignment->AssignmentOppositeDirection | correct | 0.25 | 0.6 | 0.15 | c3 | Then k = c + 1 is the letter after b |
 
-#### double, level ways: 19 edges offered
+#### assignment, level ways: 24 edges offered
 Edges offered:
 | edge |
 |---|
-| lvl:double@L0#0 \| level L0 way everyday_reading: Folk meaning: a number with a decimal point is the exact real number of school maths, and a whole-looking number such as 207. or 2.3e4 is an integer. Java rule: a double is a 64-bit binary approximation from a finite set of values, and any literal with a decimal point or exponent is a double (207. is 207.0, 2.3e4 is 23000.0). |
-| lvl:double@L0#3 \| level L0 way inconsistent_trace: Points to LT (at each operator the narrower operand is promoted, then the operation is done in double and rounded). Applied unevenly: the student promotes to double on one line but keeps integer division on another, e.g. treats 1/2 * x as 0.5 * x on one pass and as 0 on the next. (here mixing in: "Math.sqrt(2) * Math.sqrt(2) == 2 is true") |
-| lvl:double@L1#0 \| level L1 way names_the_element: double is a primitive data type: Java's 64-bit IEEE 754 floating-point type for representing real numbers. |
-| lvl:double@L1#1 \| level L1 way states_the_rule: Values are 64-bit IEEE 754 numbers (about 15 significant digits) plus the special values Infinity and NaN; +, -, *, / (and %) are defined; if at least one operand of a binary arithmetic operator is double, the operation is a floating-point operation. |
-| lvl:double@L2#0 \| level L2 way line_by_line_trace: Operators are applied in precedence order, left operand first; at each operator, if one operand is double the other is widened to double before the operation, and the result is rounded to the nearest double before the next operator uses it. |
-| lvl:double@L2#1 \| level L2 way output_prediction: The result has type double: 5.0/3.0 is 1.6666666666666667, 10/3.0 is 3.3333333333333335, 1.0/0.0 is Infinity, Math.sqrt(-1.0) is NaN; println always shows a decimal part (3.0, not 3). |
-| lvl:double@L2#2 \| level L2 way one_step_execution: An assignment to a double variable stores the nearest representable value (x = x + 0.1 replaces x with the rounded sum); no double operation throws an exception, so the variable may end up holding Infinity or NaN. |
-| lvl:double@L3#0 \| level L3 way relation_to_neighbour: Type flow decides the division: with two int operands a / b discards the fraction (10/3 is 3, and double d = 10/3; stores 3.0); if either operand is double the other is promoted and the fraction is kept (10/3.0 is 3.3333333333333335). |
-| lvl:double@L3#1 \| level L3 way relation_to_neighbour: double and boolean never convert into each other (no cast is allowed either way); they meet only through comparisons, which take doubles and produce a boolean, e.g. (x < 3.1). |
-| lvl:double@L3#2 \| level L3 way relation_to_neighbour: char is an integral numeric type, so a char widens automatically to double in arithmetic ('a' + 0.5 is 97.5), but a double needs an explicit cast to become a char. |
-| lvl:double@L3#3 \| level L3 way relation_to_neighbour: Every double operation rounds its result to the nearest representable value, so double results carry rounding error that can accumulate; this is why == on computed doubles is unreliable. |
-| lvl:double@L3#4 \| level L3 way relation_to_neighbour: For double operands a zero divisor is not an error: 1.0/0.0 is Infinity, -1.0/0.0 is -Infinity and 0.0/0.0 is NaN, whereas int division by zero throws an exception. |
-| lvl:double@L3#5 \| level L3 way relation_to_neighbour: double is one of the eight primitive types and the default type of decimal literals (float would need an f suffix and is not used in the book). |
-| lvl:double@L3#6 \| level L3 way purpose_of_the_whole: Used for measured or computed real quantities (physics formulas, roots, averages, probabilities); a double variable often plays the gatherer role, as in Harmonic's sum += 1.0/i. |
-| lvl:double@L4#0 \| level L4 way predict_a_change: Changing a variable from int to double changes / from truncating to real division and changes the printed form (3 becomes 3.0); changing back needs a cast and loses the fraction. Invariant: values are approximations, so reordering a sum ((a+b)+c vs a+(b+c)) may change the last digits. |
-| lvl:double@L4#1 \| level L4 way transfer_to_a_new_program: Use double for real-valued quantities where approximate results are acceptable (science, geometry, probabilities, averages); do not use it for counts, array indices, loop counters or money that must be exact (use int or long, e.g. cents). |
-| lvl:double@L4#2 \| level L4 way diagnose_an_error: rule broken: A double cannot be assigned to an int (narrowing) without a cast. Kind: compile-time. Trigger class: A double expression assigned or passed where an int is required, e.g. int n = Math.sqrt(x); or int n = 2.0 * k; (possible lossy conversion). |
-| lvl:double@L4#3 \| level L4 way diagnose_an_error: rule broken: Floating-point division needs at least one double operand. Kind: silent logic error. Trigger class: A formula assigned to a double whose division has only int operands, e.g. double y = 1 / 3; (gives 0.0) or (9/5)*c + 32. |
-| lvl:double@L4#4 \| level L4 way diagnose_an_error: rule broken: Computed doubles are approximations and must not be compared with ==. Kind: silent logic error. Trigger class: == or != between doubles produced by arithmetic on non-dyadic fractions (0.1, 1/3, square roots). |
+| lvl:assignment@L0#0 \| level L0 way everyday_reading: In maths, = states a symmetric, lasting equality (a = b means b = a, and x = x + 5 is false). In Java, = is a one-time, directed action: evaluate the right side, then store the result in the variable on the left. |
+| lvl:assignment@L0#9 \| level L0 way inconsistent_trace: Points to LT (evaluate the right side with current values, then overwrite the left variable). Applied unevenly, a student traces one segment correctly but reads the next as simultaneous equations or as a swap, giving 15 and 15 for one segment and 5 and 10 for the other. (here mixing in: "= stores the expression itself, not its computed value") |
+| lvl:assignment@L1#0 \| level L1 way names_the_element: Assignment statement: the statement variable = expression; which stores a data-type value in a variable. |
+| lvl:assignment@L1#1 \| level L1 way states_the_rule: The left-hand side must be a single variable. The right-hand side can be any expression whose type is compatible with the variable's type. = is not mathematical equality (a + b = b + a and 1 = a are illegal). |
+| lvl:assignment@L2#0 \| level L2 way line_by_line_trace: First the right-hand side is fully evaluated using the variables' current values (left to right). Then that value is stored in the left-hand variable, replacing its old value, and execution moves to the next statement. |
+| lvl:assignment@L2#1 \| level L2 way output_prediction: As a statement it prints nothing; its result is the new value of the left variable (after c = a + b; with a = 1234 and b = 99, c is 1333). Used as an expression, its value is the value assigned. |
+| lvl:assignment@L2#2 \| level L2 way one_step_execution: Exactly one variable, the left one, changes, and its old value is lost. Variables on the right keep their values: x = x + 5; with x = 5 makes x 10. |
+| lvl:assignment@L3#0 \| level L3 way relation_to_neighbour: The left side must be a declared variable whose type accepts the value. Assignment is how that variable's value changes. |
+| lvl:assignment@L3#1 \| level L3 way relation_to_neighbour: A declaration can include the first assignment (int x = 5;). Assigning to a variable that was never declared does not compile. |
+| lvl:assignment@L3#2 \| level L3 way relation_to_neighbour: Exchanging a[i] and a[j] takes three assignments in a fixed order through a temporary, because each assignment overwrites its target. |
+| lvl:assignment@L3#3 \| level L3 way relation_to_neighbour: int t = a; a = b; b = t; works only in this order, because every assignment destroys its left variable's old value. |
+| lvl:assignment@L3#4 \| level L3 way relation_to_neighbour: x op= e is shorthand for x = x op e. The left variable's current value is fetched first and then combined with e. |
+| lvl:assignment@L3#5 \| level L3 way relation_to_neighbour: Because an assignment is an expression whose value is the value stored, and = groups right to left, a = b = 0 first stores 0 in b and then stores that 0 in a. |
+| lvl:assignment@L3#6 \| level L3 way relation_to_neighbour: As a statement, i++ has the same effect as the assignment i = i + 1. |
+| lvl:assignment@L3#7 \| level L3 way relation_to_neighbour: A trace records the value of each variable after each assignment runs, one row per statement. |
+| lvl:assignment@L3#8 \| level L3 way relation_to_neighbour: x = y stores the value of y in x (a statement with a side effect); x == y only tests whether the two values are equal and gives a boolean. Writing = where == is meant is a compile error with int operands and a silent bug with boolean operands. |
+| lvl:assignment@L3#9 \| level L3 way purpose_of_the_whole: Assignment gives a variable its value in each role: initialization, counter update (n = n + 1), gatherer update (sum = sum + x), most-wanted holder update (max = x), or temporary (t = a). |
+| lvl:assignment@L4#0 \| level L4 way predict_a_change: Swapping the two sides (a = b versus b = a) changes which variable changes. Reordering assignments changes the final values. An assignment cannot be undone, because the old value is lost unless it was first saved in a temporary. |
+| lvl:assignment@L4#1 \| level L4 way diagnose_an_error: rule broken: The left-hand side of = must be a single variable; only the right-hand side may be an arbitrary expression. Kind: compile-time. Trigger class: Any assignment whose left side is a literal or compound expression (7 = a; a + b = c;): 'unexpected type, required: variable'. |
+| lvl:assignment@L4#2 \| level L4 way transfer_to_a_new_program: Use assignment whenever a variable's value must be set or updated. Use == to compare, final to forbid updates, and op= or ++ for x = x op e. |
+| lvl:assignment@L4#3 \| level L4 way diagnose_an_error: rule broken: A local variable may be declared only once in its scope; later changes use an assignment without the type. Kind: compile-time. Trigger class: A second 'int x = ...' for a name already declared in the same or an enclosing block: 'variable x is already defined'. |
+| lvl:assignment@L4#4 \| level L4 way diagnose_an_error: rule broken: A final variable is assigned exactly once; it cannot be reassigned after initialization. Kind: compile-time. Trigger class: Any assignment, ++ or op= to a final variable after its initialization: 'cannot assign a value to final variable'. |
+| lvl:assignment@L4#5 \| level L4 way diagnose_an_error: rule broken: = assigns and == compares; a condition needs a boolean. Kind: compile-time. Trigger class: Writing if (a = b) with int a, b gives 'incompatible types: int cannot be converted to boolean'. With boolean variables it compiles and silently assigns. |
+| lvl:assignment@L4#6 \| level L4 way diagnose_an_error: rule broken: The assigned value's type must fit the variable's type. Kind: compile-time. Trigger class: Assigning a double to an int, an int to a String, and so on: 'incompatible types'. |
 
 Prune: the model's reply (edge id and score; the kept edges sum to 1):
 ```
-{lvl:double@L3#0 (Score: 0.5)}
-{lvl:double@L1#1 (Score: 0.3)}
-{lvl:double@L4#3 (Score: 0.2)}
+{lvl:assignment@L2#0 (Score: 0.4)}
+{lvl:assignment@L3#6 (Score: 0.35)}
+{lvl:assignment@L4#6 (Score: 0.25)}
 ```
-Kept by pruning: lvl:double@L3#0 (0.50), lvl:double@L1#1 (0.30), lvl:double@L4#3 (0.20)
+Kept by pruning: lvl:assignment@L2#0 (0.40), lvl:assignment@L3#6 (0.35), lvl:assignment@L4#6 (0.25)
 
-Label prompt for level way lvl:double@L3#0 (the model saw only the concept, the way's name 'relation to neighbour' and its text; no level):
-> Type flow decides the division: with two int operands a / b discards the fraction (10/3 is 3, and double d = 10/3; stores 3.0); if either operand is double the other is promoted and the fraction is kept (10/3.0 is 3.3333333333333335).
-
-Model's reply:
-```
-Label: shown
-Clauses: 2, 3
-Confidence: 0.7
-```
-
-Label prompt for level way lvl:double@L1#1 (the model saw only the concept, the way's name 'states the rule' and its text; no level):
-> Values are 64-bit IEEE 754 numbers (about 15 significant digits) plus the special values Infinity and NaN; +, -, *, / (and %) are defined; if at least one operand of a binary arithmetic operator is double, the operation is a floating-point operation.
-
-Model's reply:
-```
-Label: shown
-Clauses: 2, 3
-Confidence: 0.7
-```
-
-Label prompt for level way lvl:double@L4#3 (the model saw only the concept, the way's name 'diagnose an error' and its text; no level):
-> rule broken: Floating-point division needs at least one double operand. Kind: silent logic error. Trigger class: A formula assigned to a double whose division has only int operands, e.g. double y = 1 / 3; (gives 0.0) or (9/5)*c + 32.
+Label prompt for level way lvl:assignment@L2#0 (the model saw only the concept, the way's name 'line by line trace' and its text; no level):
+> First the right-hand side is fully evaluated using the variables' current values (left to right). Then that value is stored in the left-hand variable, replacing its old value, and execution moves to the next statement.
 
 Model's reply:
 ```
@@ -202,12 +183,140 @@ Clauses: 2, 3
 Confidence: 0.6
 ```
 
+Label prompt for level way lvl:assignment@L3#6 (the model saw only the concept, the way's name 'relation to neighbour' and its text; no level):
+> As a statement, i++ has the same effect as the assignment i = i + 1.
+
+Model's reply:
+```
+Label: not shown
+Clauses: none
+Confidence: 0.75
+```
+
+Label prompt for level way lvl:assignment@L4#6 (the model saw only the concept, the way's name 'diagnose an error' and its text; no level):
+> rule broken: The assigned value's type must fit the variable's type. Kind: compile-time. Trigger class: Assigning a double to an int, an int to a String, and so on: 'incompatible types'.
+
+Model's reply:
+```
+Label: not shown
+Clauses: none
+Confidence: 0.92
+```
+
 Parsed labels:
 | edge | label | prune score | confidence | score | clauses | words |
 |---|---|---|---|---|---|---|
-| lvl:double@L3#0 | shown | 0.5 | 0.7 | 0.35 | c2, c3 | The cast makes it a double division; so you get the decimal part |
-| lvl:double@L1#1 | shown | 0.3 | 0.7 | 0.21 | c2, c3 | The cast makes it a double division; so you get the decimal part |
-| lvl:double@L4#3 | shown | 0.2 | 0.6 | 0.12 | c2, c3 | The cast makes it a double division; so you get the decimal part |
+| lvl:assignment@L2#0 | shown | 0.4 | 0.6 | 0.24 | c2, c3 | because c++ moves to the next letter; Then k = c + 1 is the letter after b |
+| lvl:assignment@L3#6 | not applied |  |  | 0.0 |  |  |
+| lvl:assignment@L4#6 | not applied |  |  | 0.0 |  |  |
+
+#### expression, misconceptions: 8 edges offered
+Edges offered:
+| edge |
+|---|
+| err:expression->ExpressionOnLeftOfAssignment \| wrong rule: Writes a + b = c; or 7 = a; as if = were a math equation. \| right rule: The left side of an assignment must be a single variable; only the right side can be an expression. |
+| mis:expression->AssignmentIsEquation \| wrong rule: An assignment states a lasting equality between its two sides, so y = x - y can be solved like the equation x = 2y and x = x + 5 relates two equal quantities. \| right rule: An assignment is a one-time action: evaluate the right side with current values, then store the result in the left variable. |
+| mis:expression->AssignmentNotExpression \| wrong rule: An assignment cannot be used inside a larger expression, so a condition like (x = read()) != v is not allowed. \| right rule: An assignment is an expression whose value is the value assigned, so (x = v) both stores v in x and gives v. |
+| mis:expression->NoAtomicExpression \| wrong rule: A single variable x or a literal on its own is not an expression. \| right rule: A single variable or literal is an expression whose value is just that value. |
+| mis:expression->OutsideInMethodNesting \| wrong rule: In f(g(x)), f runs first and then g runs. \| right rule: In f(g(x)), g(x) is evaluated first and its result is passed to f. |
+| mis:expression->ParenthesesOnlyIfArgument \| wrong rule: () are optional on a no-argument call like println \| right rule: A method call always needs parentheses, so an empty line is printed with System.out.println();. |
+| mis:expression->TargetTyping \| wrong rule: The type of a numerical expression depends on the type expected by the surrounding context, so double d = a / b; keeps the fraction. \| right rule: The type of a numerical expression is determined by the expression, so double d = a / b; with int a and b still divides as ints. |
+| mis:expression->VariablesHoldExpressions \| wrong rule: = stores the expression itself, not its computed value \| right rule: y = x + k; stores the value that x + k has at that moment, so later changes to x do not change y. |
+
+Prune: the model's reply (edge id and score; the kept edges sum to 1):
+```
+mis:expression->TargetTyping (0.50), mis:expression->VariablesHoldExpressions (0.25), mis:expression->AssignmentIsEquation (0.25)
+```
+Kept by pruning: mis:expression->TargetTyping (0.50), mis:expression->VariablesHoldExpressions (0.25), mis:expression->AssignmentIsEquation (0.25)
+
+Label prompt for the misconception / error edges (judged together). The model saw the program, the question, the numbered clauses, and these edges with their wrong rule and right rule:
+| edge |
+|---|
+| mis:expression->TargetTyping \| wrong rule: The type of a numerical expression depends on the type expected by the surrounding context, so double d = a / b; keeps the fraction. \| right rule: The type of a numerical expression is determined by the expression, so double d = a / b; with int a and b still divides as ints. |
+| mis:expression->VariablesHoldExpressions \| wrong rule: = stores the expression itself, not its computed value \| right rule: y = x + k; stores the value that x + k has at that moment, so later changes to x do not change y. |
+| mis:expression->AssignmentIsEquation \| wrong rule: An assignment states a lasting equality between its two sides, so y = x - y can be solved like the equation x = 2y and x = x + 5 relates two equal quantities. \| right rule: An assignment is a one-time action: evaluate the right side with current values, then store the result in the left variable. |
+Model's reply:
+```
+mis:expression->TargetTyping | not applied | clauses: none | confidence: 0.75
+mis:expression->VariablesHoldExpressions | not applied | clauses: none | confidence: 0.85
+mis:expression->AssignmentIsEquation | not applied | clauses: none | confidence: 0.85
+```
+
+Parsed labels:
+| edge | label | prune score | confidence | score | clauses | words |
+|---|---|---|---|---|---|---|
+| mis:expression->TargetTyping | not applied |  |  | 0.0 |  |  |
+| mis:expression->VariablesHoldExpressions | not applied |  |  | 0.0 |  |  |
+| mis:expression->AssignmentIsEquation | not applied |  |  | 0.0 |  |  |
+
+#### expression, level ways: 19 edges offered
+Edges offered:
+| edge |
+|---|
+| lvl:expression@L0#0 \| level L0 way everyday_reading: In maths an expression such as 7/2 or x + y names an exact number, and 'expression' means a formula with operators. In Java, any code that evaluates to a typed value is an expression, including a lone literal or variable, and with ints 7/2 evaluates to 3. |
+| lvl:expression@L0#2 \| level L0 way inconsistent_trace: Points to LT (replace each variable with its current value, then apply operators in precedence order). Applied unevenly, a student substitutes current values for some variables and old or future values for others, or respects precedence in one subexpression only. (here mixing in: "a single literal or variable "isn't an expression"") |
+| lvl:expression@L1#0 \| level L1 way names_the_element: Expression: a literal, a variable, or a sequence of operations (operators, method calls) on them that produces one value. |
+| lvl:expression@L1#1 \| level L1 way states_the_rule: Each operand of an operator can itself be any expression, and a parenthesized expression has the same value as the expression inside. Every expression has a type, determined by its operators and operands. |
+| lvl:expression@L2#0 \| level L2 way line_by_line_trace: Operands are evaluated left to right, each fully before its operator is applied. Precedence and parentheses decide the grouping, and a method's arguments are all evaluated before the method is called. |
+| lvl:expression@L2#1 \| level L2 way output_prediction: An expression produces one value of a type fixed by its operands: hour * 60 + minute with hour = 11 and minute = 59 is the int 719. |
+| lvl:expression@L2#2 \| level L2 way one_step_execution: Evaluating an expression changes no variable unless it contains an assignment, ++/-- or a method with side effects. The value goes to the enclosing statement, and an expression statement discards it. |
+| lvl:expression@L3#0 \| level L3 way relation_to_neighbour: A variable name inside an expression contributes the variable's value at the moment of evaluation. |
+| lvl:expression@L3#1 \| level L3 way relation_to_neighbour: Operators combine operand values into a new value, and the operand types choose the operation (int / truncates, double / does not). |
+| lvl:expression@L3#2 \| level L3 way relation_to_neighbour: With several operators, precedence and left associativity decide the grouping, and parentheses override both. |
+| lvl:expression@L3#3 \| level L3 way relation_to_neighbour: A comparison takes numeric expressions and yields a boolean expression, and it has lower precedence than arithmetic, so a + b < c compares the sum. |
+| lvl:expression@L3#4 \| level L3 way relation_to_neighbour: A method call is an expression usable wherever a value of its return type is, and its arguments are expressions evaluated before the call. |
+| lvl:expression@L3#5 \| level L3 way purpose_of_the_whole: Expressions compute new values from existing ones. They form the right side of every assignment, every condition, every method argument and every printed value. |
+| lvl:expression@L4#0 \| level L4 way predict_a_change: Adding parentheses that match the default grouping keeps the value, and rewriting with an equivalent formula (4 * (x - 3) as 4*x - 12) keeps it for ints. Changing one operand's type (3 to 3.0) can change both the result's type and its value. |
+| lvl:expression@L4#1 \| level L4 way transfer_to_a_new_program: Use an expression wherever a value is needed. Split a long or unclear expression into named intermediate variables, and add parentheses wherever the grouping is not obvious. |
+| lvl:expression@L4#2 \| level L4 way diagnose_an_error: rule broken: The left-hand side of = must be a single variable; only the right-hand side may be an arbitrary expression. Kind: compile-time. Trigger class: Any assignment whose left side is a literal or compound expression (7 = a; a + b = c;): 'unexpected type, required: variable'. |
+| lvl:expression@L4#3 \| level L4 way diagnose_an_error: rule broken: Only assignments, increments, method calls and object creation can stand alone as statements. Kind: compile-time. Trigger class: A bare expression line such as x + 1; or a == b;: 'not a statement'. |
+| lvl:expression@L4#4 \| level L4 way diagnose_an_error: rule broken: Operators accept only operands of suitable types. Kind: compile-time. Trigger class: Applying arithmetic to Strings ("Hello" - 1) or comparing booleans with <: 'bad operand types'. |
+| lvl:expression@L4#5 \| level L4 way diagnose_an_error: rule broken: An int division or remainder by zero cannot be evaluated. Kind: run-time exception. Trigger class: Any int / or % whose right operand evaluates to 0: ArithmeticException. |
+
+Prune: the model's reply (edge id and score; the kept edges sum to 1):
+```
+{lvl:expression@L2#1 (Score: 0.45)}
+{lvl:expression@L1#1 (Score: 0.3)}
+{lvl:expression@L3#0 (Score: 0.25)}
+```
+Kept by pruning: lvl:expression@L2#1 (0.45), lvl:expression@L1#1 (0.30), lvl:expression@L3#0 (0.25)
+
+Label prompt for level way lvl:expression@L2#1 (the model saw only the concept, the way's name 'output prediction' and its text; no level):
+> An expression produces one value of a type fixed by its operands: hour * 60 + minute with hour = 11 and minute = 59 is the int 719.
+
+Model's reply:
+```
+Label: not shown
+Clauses: none
+Confidence: 0.85
+```
+
+Label prompt for level way lvl:expression@L1#1 (the model saw only the concept, the way's name 'states the rule' and its text; no level):
+> Each operand of an operator can itself be any expression, and a parenthesized expression has the same value as the expression inside. Every expression has a type, determined by its operators and operands.
+
+Model's reply:
+```
+Label: not shown
+Clauses: none
+Confidence: 0.85
+```
+
+Label prompt for level way lvl:expression@L3#0 (the model saw only the concept, the way's name 'relation to neighbour' and its text; no level):
+> A variable name inside an expression contributes the variable's value at the moment of evaluation.
+
+Model's reply:
+```
+Label: shown
+Clauses: 3
+Confidence: 0.7
+```
+
+Parsed labels:
+| edge | label | prune score | confidence | score | clauses | words |
+|---|---|---|---|---|---|---|
+| lvl:expression@L2#1 | not applied |  |  | 0.0 |  |  |
+| lvl:expression@L1#1 | not applied |  |  | 0.0 |  |  |
+| lvl:expression@L3#0 | shown | 0.25 | 0.7 | 0.17 | c3 | Then k = c + 1 is the letter after b |
 
 #### arithmetic_operators, misconceptions: 3 edges offered
 Edges offered:
@@ -219,12 +328,29 @@ Edges offered:
 
 Prune: the model's reply (edge id and score; the kept edges sum to 1):
 ```
-
+mis:arithmetic_operators->ArithmeticOnNumericStrings (0.80), mis:arithmetic_operators->RemainderIsSubtraction (0.10), mis:arithmetic_operators->CaretIsPower (0.10)
 ```
-Kept by pruning: 
+Kept by pruning: mis:arithmetic_operators->ArithmeticOnNumericStrings (0.80), mis:arithmetic_operators->RemainderIsSubtraction (0.10), mis:arithmetic_operators->CaretIsPower (0.10)
+
+Label prompt for the misconception / error edges (judged together). The model saw the program, the question, the numbered clauses, and these edges with their wrong rule and right rule:
+| edge |
+|---|
+| mis:arithmetic_operators->ArithmeticOnNumericStrings \| wrong rule: "10" - 1 or "6" * "2" works because the strings look like numbers. \| right rule: Arithmetic operators other than + are not defined for Strings; a String of digits must first be converted to a number, e.g. with Integer.parseInt. |
+| mis:arithmetic_operators->RemainderIsSubtraction \| wrong rule: 9 % 5 means 9 minus 5 (a % b subtracts b from a). \| right rule: % gives the remainder after integer division: 9 % 5 is 4 because 9 = 1 * 5 + 4, and 17 % 5 is 2, not 12. |
+| mis:arithmetic_operators->CaretIsPower \| wrong rule: a^2 computes a squared. \| right rule: Java has no exponent operator; ^ is exclusive or, and a * a or Math.pow(a, 2) computes a squared. |
+Model's reply:
+```
+mis:arithmetic_operators->ArithmeticOnNumericStrings | not applied | clauses: none | confidence: 0.9
+mis:arithmetic_operators->RemainderIsSubtraction | not applied | clauses: none | confidence: 0.95
+mis:arithmetic_operators->CaretIsPower | not applied | clauses: none | confidence: 0.95
+```
 
 Parsed labels:
-(none)
+| edge | label | prune score | confidence | score | clauses | words |
+|---|---|---|---|---|---|---|
+| mis:arithmetic_operators->ArithmeticOnNumericStrings | not applied |  |  | 0.0 |  |  |
+| mis:arithmetic_operators->RemainderIsSubtraction | not applied |  |  | 0.0 |  |  |
+| mis:arithmetic_operators->CaretIsPower | not applied |  |  | 0.0 |  |  |
 
 #### arithmetic_operators, level ways: 18 edges offered
 Edges offered:
@@ -251,218 +377,97 @@ Edges offered:
 
 Prune: the model's reply (edge id and score; the kept edges sum to 1):
 ```
-{lvl:arithmetic_operators@L4#0 (Score: 0.45)}
-{lvl:arithmetic_operators@L2#1 (Score: 0.35)}
-{lvl:arithmetic_operators@L1#1 (Score: 0.2)}
+{lvl:arithmetic_operators@L1#1 (Score: 0.45)}
+{lvl:arithmetic_operators@L2#0 (Score: 0.35)}
+{lvl:arithmetic_operators@L0#0 (Score: 0.2)}
 ```
-Kept by pruning: lvl:arithmetic_operators@L4#0 (0.45), lvl:arithmetic_operators@L2#1 (0.35), lvl:arithmetic_operators@L1#1 (0.20)
-
-Label prompt for level way lvl:arithmetic_operators@L4#0 (the model saw only the concept, the way's name 'predict a change' and its text; no level):
-> Changing an operand's type changes the operator's meaning (int / versus double /). Reordering * and / changes integer results (59 * 100 / 60 is 98, 59 / 60 * 100 is 0). Replacing ^ with Math.pow gives a real power.
-
-Model's reply:
-```
-Label: shown
-Clauses: 2, 3
-Confidence: 0.75
-```
-
-Label prompt for level way lvl:arithmetic_operators@L2#1 (the model saw only the concept, the way's name 'output prediction' and its text; no level):
-> With ints, 17 / 3 is 5 and 17 % 3 is 2. With doubles, 5.0 / 3.0 is 1.6666666666666667. With mixed operands, the int is promoted first (10 / 3.0 is 3.333...).
-
-Model's reply:
-```
-Label: shown
-Clauses: 1, 2, 3
-Confidence: 0.6
-```
+Kept by pruning: lvl:arithmetic_operators@L1#1 (0.45), lvl:arithmetic_operators@L2#0 (0.35), lvl:arithmetic_operators@L0#0 (0.20)
 
 Label prompt for level way lvl:arithmetic_operators@L1#1 (the model saw only the concept, the way's name 'states the rule' and its text; no level):
 > Both operands must be numeric, and the result has the promoted type (int, long or double). * / % bind tighter than + -, all group left to right, and int / or % by zero throws ArithmeticException. Unary minus negates its operand (-x) and unary plus leaves it unchanged; they bind more tightly than * and /, so -a * b is (-a) * b.
 
 Model's reply:
 ```
-Label: shown
-Clauses: 2, 3
-Confidence: 0.55
+Label: not shown
+Clauses: none
+Confidence: 0.9
 ```
 
-Parsed labels:
-| edge | label | prune score | confidence | score | clauses | words |
-|---|---|---|---|---|---|---|
-| lvl:arithmetic_operators@L4#0 | shown | 0.45 | 0.75 | 0.34 | c2, c3 | The cast makes it a double division; so you get the decimal part |
-| lvl:arithmetic_operators@L2#1 | shown | 0.35 | 0.6 | 0.21 | c1, c2, c3 | 3.5; The cast makes it a double division; so you get the decimal part |
-| lvl:arithmetic_operators@L1#1 | shown | 0.2 | 0.55 | 0.11 | c2, c3 | The cast makes it a double division; so you get the decimal part |
-
-#### if_statement, misconceptions: 22 edges offered
-Edges offered:
-| edge |
-|---|
-| err:if_statement->BracelessMultiStatementBody \| wrong rule: Indenting several statements under an if or for makes them all part of its body, even without braces. \| right rule: Without braces only the first statement belongs to the if/for; the rest run once, after it. |
-| err:if_statement->CurlyIfCondition \| wrong rule: Writes the if condition inside { } instead of ( ). \| right rule: The condition of an if is written in parentheses. |
-| err:if_statement->SemicolonAfterIfHeader \| wrong rule: if (x > 0); System.out.println("positive"); prints only for positive x. \| right rule: The ; ends the if with an empty statement, so the next line always runs. |
-| mis:if_statement->AssignCompares \| wrong rule: = compares two values instead of assigning \| right rule: x = y copies the value of y into x; x == y is what compares them. |
-| mis:if_statement->BranchChosenByIntent \| wrong rule: Which branch runs is decided by what the programmer meant or by code outside the if, not by whether the condition is true. \| right rule: The then branch runs exactly when the condition evaluates to true at the moment it is tested; otherwise the else branch (if any) runs. |
-| mis:if_statement->CodeAfterIfSkipped \| wrong rule: When the then branch runs, the code after the if is skipped. \| right rule: After the if finishes, execution continues with the next statement either way. |
-| mis:if_statement->FalseConditionEndsProgram \| wrong rule: A false condition with no else ends the program. \| right rule: When an if condition is false and there is no else, execution continues with the statement after the if. |
-| mis:if_statement->FalseConditionRestartsProgram \| wrong rule: When an if condition is false (and there is no else), control jumps back to the start of the program. \| right rule: A false condition skips the then branch and execution continues with the statement after the if statement. |
-| mis:if_statement->IfConditionCheckedInHindsight \| wrong rule: Whether the branch runs is decided by the condition after the branch, or from the point inside the body where the condition becomes true. \| right rule: The condition is tested once, before the branch; the whole branch runs if it was true at that moment and none of it runs otherwise. |
-| mis:if_statement->IfConditionWatched \| wrong rule: An if statement watches its condition while the program runs and fires as soon as the condition becomes true (if = whenever). \| right rule: An if condition is tested once, when control reaches the if statement; later changes to the variables do not trigger the branch. |
-| mis:if_statement->IfInLoopUnchecked \| wrong rule: An if inside a loop body runs its branch on every pass without testing its condition. \| right rule: The if condition is tested again on every pass, with the current values, so the branch runs only on passes where it is true. |
-| mis:if_statement->IfIsLoop \| wrong rule: The if body keeps repeating as long as its condition stays true. \| right rule: An if body runs at most once; only a loop repeats its body. |
-| mis:if_statement->IfRequiresElse \| wrong rule: Every if statement requires an else. \| right rule: An if statement may stand alone; the else part is optional. |
-| mis:if_statement->IfWaitsForCondition \| wrong rule: An IF statement earlier in the program stays active and fires later, e.g. inside a later loop, when its condition becomes true. \| right rule: An if is evaluated once when control reaches it; afterwards it is inactive unless control returns to it. |
-| mis:if_statement->LoopForOneTimeTest \| wrong rule: Uses a loop where a condition needs to be tested only once. \| right rule: A test made once is an if; a loop repeats. |
-| mis:if_statement->MapToBooleanWithIf \| wrong rule: you need an if to turn a boolean expression into a boolean \| right rule: ok = (x > y); stores the result of the comparison directly. |
-| mis:if_statement->MissingBraces \| wrong rule: Omits braces around a single-statement body of if, for or while. \| right rule: Braces are optional for a single-statement body, but using them anyway avoids bugs when statements are added later. |
-| mis:if_statement->NextStatementIsElse \| wrong rule: In if (c) A; B; the statement B runs only when c is false. \| right rule: B is not part of the if; it runs every time. |
-| mis:if_statement->ProgramLooksAhead \| wrong rule: The program knows or sees what later lines will do and acts on those goals at the current line, e.g. it stops 'at ten' because it wants to draw a box. \| right rule: Each statement executes using only the current state; later lines have no effect until control reaches them. |
-| mis:if_statement->SequentialIfsAreNested \| wrong rule: Of two if statements one after the other, the second runs its body only if both conditions are true. \| right rule: Two ifs in sequence are independent: each tests only its own condition. |
-| mis:if_statement->StatementAfterIfInBranch \| wrong rule: A statement placed after the if statement belongs to its branch, so it runs only when the condition is true. \| right rule: The branch ends at its closing brace (or after its single statement); the next statement runs whatever the condition was. |
-| mis:if_statement->ThenAlwaysExecutes \| wrong rule: The then branch always runs. \| right rule: The then branch runs only when the condition is true. |
-
-Prune: the model's reply (edge id and score; the kept edges sum to 1):
-```
-mis:if_statement->BranchChosenByIntent (0.50), mis:if_statement->ThenAlwaysExecutes (0.30), mis:if_statement->ProgramLooksAhead (0.20)
-```
-Kept by pruning: mis:if_statement->BranchChosenByIntent (0.50), mis:if_statement->ThenAlwaysExecutes (0.30), mis:if_statement->ProgramLooksAhead (0.20)
-
-Label prompt for the misconception / error edges (judged together). The model saw the program, the question, the numbered clauses, and these edges with their wrong rule and right rule:
-| edge |
-|---|
-| mis:if_statement->BranchChosenByIntent \| wrong rule: Which branch runs is decided by what the programmer meant or by code outside the if, not by whether the condition is true. \| right rule: The then branch runs exactly when the condition evaluates to true at the moment it is tested; otherwise the else branch (if any) runs. |
-| mis:if_statement->ThenAlwaysExecutes \| wrong rule: The then branch always runs. \| right rule: The then branch runs only when the condition is true. |
-| mis:if_statement->ProgramLooksAhead \| wrong rule: The program knows or sees what later lines will do and acts on those goals at the current line, e.g. it stops 'at ten' because it wants to draw a box. \| right rule: Each statement executes using only the current state; later lines have no effect until control reaches them. |
-Model's reply:
-```
-mis:if_statement->BranchChosenByIntent | not applied | clauses: none | confidence: 0.85
-mis:if_statement->ThenAlwaysExecutes | not applied | clauses: none | confidence: 0.85
-mis:if_statement->ProgramLooksAhead | not applied | clauses: none | confidence: 0.9
-```
-
-Parsed labels:
-| edge | label | prune score | confidence | score | clauses | words |
-|---|---|---|---|---|---|---|
-| mis:if_statement->BranchChosenByIntent | not applied |  |  | 0.0 |  |  |
-| mis:if_statement->ThenAlwaysExecutes | not applied |  |  | 0.0 |  |  |
-| mis:if_statement->ProgramLooksAhead | not applied |  |  | 0.0 |  |  |
-
-#### if_statement, level ways: 19 edges offered
-Edges offered:
-| edge |
-|---|
-| lvl:if_statement@L0#0 \| level L0 way everyday_reading: Folk meaning: English 'if' (and 'whenever') states a standing rule that stays in force and fires whenever its condition becomes true. A Java if is evaluated once, when control reaches it, and then is 'taken off the books'; changing the variables later does not re-trigger it. |
-| lvl:if_statement@L0#14 \| level L0 way inconsistent_trace: Applies the if rule (LT) unevenly: tests the condition on some visits but not others (e.g. runs the branch on every loop pass without testing), runs the branch after a false test, or re-checks the condition after the branch has run. (here mixing in: "an if body repeats while its condition holds") |
-| lvl:if_statement@L1#0 \| level L1 way names_the_element: The if statement is a conditional (selection) statement: it runs a statement or block only when a boolean condition is true. |
-| lvl:if_statement@L1#1 \| level L1 way states_the_rule: Syntax: if (<boolean expression>) <statement or { block }>; the braces are optional when the body is a single statement. The expression must have type boolean (or Boolean), and the body is executed if and only if the expression is true. |
-| lvl:if_statement@L2#0 \| level L2 way line_by_line_trace: Evaluate the condition once; if true, execute the body; then, in either case, continue with the statement after the if. |
-| lvl:if_statement@L2#1 \| level L2 way output_prediction: An if produces no value; its observable result is that the body's effects (assignments, output) happen exactly once when the condition is true and not at all when it is false; e.g. if (x < 0) x = -x; leaves x = 5 for 5 and gives 5 for -5. |
-| lvl:if_statement@L2#2 \| level L2 way one_step_execution: One execution reads the variables in the condition, changes nothing by the test itself (unless the condition has a side effect), and, when true, applies the body's changes once; control then moves to the next statement. |
-| lvl:if_statement@L3#0 \| level L3 way relation_to_neighbour: The condition must be a boolean expression; a non-boolean condition such as if (t = goal) with int t is a compile-time error, while if (b = false) with boolean b compiles and assigns. |
-| lvl:if_statement@L3#1 \| level L3 way relation_to_neighbour: if-else extends if with a second branch that runs exactly when the condition is false; a lone if has an implicit empty else-case. |
-| lvl:if_statement@L3#2 \| level L3 way relation_to_neighbour: An if is a fork in the control flow: one path through the body, one around it, both rejoining at the next statement. |
-| lvl:if_statement@L3#3 \| level L3 way relation_to_neighbour: if and while have the same form, but if tests its condition once and runs the block at most once, while while tests again after every pass and repeats the block as long as the condition is true. |
-| lvl:if_statement@L3#4 \| level L3 way purpose_of_the_whole: Plan: guard / conditional action - do something only for the inputs that need it (absolute value, put two values in order, error check before dividing). |
-| lvl:if_statement@L4#0 \| level L4 way predict_a_change: Negating the condition swaps which inputs run the body; changing < to <= changes only the boundary value. Adding a statement under a braceless if does not put it in the body. Whatever the condition, code after the if still runs exactly once. |
-| lvl:if_statement@L4#1 \| level L4 way diagnose_an_error: rule broken: A ; right after if (...) is an empty statement that forms the whole then branch; the following statement or block is no longer part of the if. Kind: silent logic error. Trigger class: Any if (cond); followed by a statement or block: that statement runs for every input, whatever cond is (it compiles without error). |
-| lvl:if_statement@L4#2 \| level L4 way diagnose_an_error: rule broken: The if template is if (<boolean expression>) <statement>: the condition must be enclosed in parentheses. Kind: compile-time. Trigger class: Any if whose condition is written in { } or without ( ), e.g. if {x > 0} ... or if a > b { c = 0; }. |
-| lvl:if_statement@L4#3 \| level L4 way transfer_to_a_new_program: Use an if when an action is needed for some inputs only and the test happens once at that point; use a loop if the action must repeat while the condition holds, and assign a boolean directly (ok = x > y;) when you only need the truth value. |
-| lvl:if_statement@L4#4 \| level L4 way diagnose_an_error: rule broken: Without braces, the body of an if, while or for is exactly one statement; indentation does not add statements to it. Kind: silent logic error. Trigger class: A braceless header followed by two or more indented statements: only the first is controlled, the others run once, after the if/loop, on every input. |
-| lvl:if_statement@L4#5 \| level L4 way diagnose_an_error: rule broken: The condition of an if must have type boolean. Kind: compile-time. Trigger class: Using = instead of == with int operands, e.g. if (t = goal): 'incompatible types: int cannot be converted to boolean'. |
-| lvl:if_statement@L4#6 \| level L4 way diagnose_an_error: rule broken: With boolean operands, = is assignment, not comparison. Kind: silent logic error. Trigger class: if (isPrime = false) with boolean isPrime: compiles, sets isPrime to false and the branch never runs. |
-
-Prune: the model's reply (edge id and score; the kept edges sum to 1):
-```
-{lvl:if_statement@L2#1 (Score: 0.4)}
-{lvl:if_statement@L3#1 (Score: 0.35)}
-{lvl:if_statement@L0#14 (Score: 0.25)}
-```
-Kept by pruning: lvl:if_statement@L2#1 (0.40), lvl:if_statement@L3#1 (0.35), lvl:if_statement@L0#14 (0.25)
-
-Label prompt for level way lvl:if_statement@L2#1 (the model saw only the concept, the way's name 'output prediction' and its text; no level):
-> An if produces no value; its observable result is that the body's effects (assignments, output) happen exactly once when the condition is true and not at all when it is false; e.g. if (x < 0) x = -x; leaves x = 5 for 5 and gives 5 for -5.
+Label prompt for level way lvl:arithmetic_operators@L2#0 (the model saw only the concept, the way's name 'line by line trace' and its text; no level):
+> The left operand is evaluated fully, then the right operand, and then the operator is applied in the promoted type.
 
 Model's reply:
 ```
 Label: not shown
-Clauses: none
-Confidence: 0.95
-```
-
-Label prompt for level way lvl:if_statement@L3#1 (the model saw only the concept, the way's name 'relation to neighbour' and its text; no level):
-> if-else extends if with a second branch that runs exactly when the condition is false; a lone if has an implicit empty else-case.
-
-Model's reply:
-```
-Label: not shown
-Clauses: none
-Confidence: 0.95
-```
-
-Label prompt for level way lvl:if_statement@L0#14 (the model saw only the concept, the way's name 'inconsistent trace' and its text; no level):
-> Applies the if rule (LT) unevenly: tests the condition on some visits but not others (e.g. runs the branch on every loop pass without testing), runs the branch after a false test, or re-checks the condition after the branch has run. (here mixing in: "an if body repeats while its condition holds")
-
-Model's reply:
-```
-Label: not shown
-Clauses: none
-Confidence: 0.95
-```
-
-Parsed labels:
-| edge | label | prune score | confidence | score | clauses | words |
-|---|---|---|---|---|---|---|
-| lvl:if_statement@L2#1 | not applied |  |  | 0.0 |  |  |
-| lvl:if_statement@L3#1 | not applied |  |  | 0.0 |  |  |
-| lvl:if_statement@L0#14 | not applied |  |  | 0.0 |  |  |
-
-**Kept on a path at this depth** (best N in tiers: held misconception / broken edge, then held error, then correct / confirmed / shown):
-
-lvl:double@L3#0 [shown, tier 2, 0.35], lvl:arithmetic_operators@L4#0 [shown, tier 2, 0.34], lvl:double@L1#1 [shown, tier 2, 0.21]
-
-**Clause coverage after this depth:**
-| clause | text | covered by |
-|---|---|---|
-| c1 | 3.5 | not covered yet |
-| c2 | The cast makes it a double division | not covered yet |
-| c3 | so you get the decimal part | not covered yet |
-
-**Uncovered clauses bring in (BM25 of the uncovered clauses against unvisited concepts):** println (5.41), boolean_expression (4.02), floating_point_precision (3.16)
-
-**Graph check, not yet read (the walk may not stop while these remain):** own edges of boolean_expression, own edges of floating_point_precision, own edges of println, pre:arithmetic_operators->expression, pre:boolean_expression->if_statement, pre:control_flow->if_statement, pre:double->floating_point_precision, pre:if_statement->if_else_statement
-
-Figure 4 (the graph after depth 1): C:\Users\magnu\OneDrive\Desktop\ES_VIterbi_Personalized_Learning\results\viewer\MY30_figure04.png
-
-### Depth 2: current concepts 'double', 'arithmetic_operators', 'if_statement', 'println', 'boolean_expression', 'floating_point_precision'
-
-#### double, concept edges: 1 edges offered
-Edges offered:
-| edge |
-|---|
-| pre:double->floating_point_precision \| rule: A double approximates real numbers, so its arithmetic is not exact. |
-
-Prune: the model's reply (edge id and score; the kept edges sum to 1):
-```
-{pre:double->floating_point_precision (Score: 1.0)}
-```
-Kept by pruning: pre:double->floating_point_precision (1.00)
-
-Label prompt for concept edge pre:double->floating_point_precision (double -> floating_point_precision, prerequisite):
-> A double approximates real numbers, so its arithmetic is not exact.
-
-Model's reply:
-```
-Label: not applied
 Clauses: none
 Confidence: 0.75
 ```
 
+Label prompt for level way lvl:arithmetic_operators@L0#0 (the model saw only the concept, the way's name 'everyday reading' and its text; no level):
+> In maths notation, multiplication can be implicit (2x), ^ or a superscript means a power, ÷ is exact division, and % means percent. In Java * must be written, / depends on the operand types, % is the remainder, and there is no power operator (^ is exclusive or).
+
+Model's reply:
+```
+Label: not shown
+Clauses: none
+Confidence: 0.9
+```
+
 Parsed labels:
 | edge | label | prune score | confidence | score | clauses | words |
 |---|---|---|---|---|---|---|
-| pre:double->floating_point_precision | not applied |  |  | 0.0 |  |  |
+| lvl:arithmetic_operators@L1#1 | not applied |  |  | 0.0 |  |  |
+| lvl:arithmetic_operators@L2#0 | not applied |  |  | 0.0 |  |  |
+| lvl:arithmetic_operators@L0#0 | not applied |  |  | 0.0 |  |  |
 
-#### arithmetic_operators, concept edges: 1 edges offered
+**Kept on a path at this depth** (best N in tiers: held misconception / broken edge, then held error, then correct / confirmed / shown):
+
+mis:assignment->VariableKeepsOldValue [correct, tier 2, 0.38], lvl:assignment@L2#0 [shown, tier 2, 0.24], lvl:expression@L3#0 [shown, tier 2, 0.17]
+
+**Clause coverage after this depth:**
+| clause | text | covered by |
+|---|---|---|
+| c1 | b | mis:assignment->VariableKeepsOldValue |
+| c2 | because c++ moves to the next letter | mis:assignment->VariableKeepsOldValue |
+| c3 | Then k = c + 1 is the letter after b | mis:assignment->VariableKeepsOldValue |
+| c4 | so it prints c | not covered yet |
+
+**Uncovered clauses bring in (BM25 of the uncovered clauses against unvisited concepts):** println (2.22), char_arithmetic (1.62), increment_operators (0.18)
+
+**Graph check, not yet read (the walk may not stop while these remain):** own edges of char_arithmetic, own edges of increment_operators, own edges of println, pre:arithmetic_operators->expression, pre:assignment->increment_operators
+
+Figure 4 (the graph after depth 1): C:\Users\magnu\OneDrive\Desktop\ES_VIterbi_Personalized_Learning\results\viewer\MY30_figure04.png
+
+### Depth 2: current concepts 'assignment', 'expression', 'arithmetic_operators', 'println', 'char_arithmetic', 'increment_operators'
+
+#### assignment, concept edges: 1 edges offered
+Edges offered:
+| edge |
+|---|
+| pre:assignment->increment_operators \| rule: i++ is shorthand for the assignment i = i + 1. |
+
+Prune: the model's reply (edge id and score; the kept edges sum to 1):
+```
+{pre:assignment->increment_operators (Score: 1.0)}
+```
+Kept by pruning: pre:assignment->increment_operators (1.00)
+
+Label prompt for concept edge pre:assignment->increment_operators (assignment -> increment_operators, prerequisite):
+> i++ is shorthand for the assignment i = i + 1.
+
+Model's reply:
+```
+Label: confirmed
+Clauses: 1, 2
+Confidence: 0.7
+```
+
+Parsed labels:
+| edge | label | prune score | confidence | score | clauses | words |
+|---|---|---|---|---|---|---|
+| pre:assignment->increment_operators | confirmed | 1.0 | 0.7 | 0.7 | c1, c2 | b; because c++ moves to the next letter |
+
+#### expression, concept edges: 1 edges offered
 Edges offered:
 | edge |
 |---|
@@ -479,68 +484,15 @@ Label prompt for concept edge pre:arithmetic_operators->expression (arithmetic_o
 
 Model's reply:
 ```
-Label: not applied
-Clauses: none
-Confidence: 0.55
+Label: confirmed
+Clauses: 3, 4
+Confidence: 0.6
 ```
 
 Parsed labels:
 | edge | label | prune score | confidence | score | clauses | words |
 |---|---|---|---|---|---|---|
-| pre:arithmetic_operators->expression | not applied |  |  | 0.0 |  |  |
-
-#### if_statement, concept edges: 3 edges offered
-Edges offered:
-| edge |
-|---|
-| pre:boolean_expression->if_statement \| rule: An if runs its block only when its boolean expression evaluates to true. |
-| pre:control_flow->if_statement \| rule: An if changes the default top-to-bottom flow by running a block only when its condition is true. |
-| pre:if_statement->if_else_statement \| rule: if-else extends if with a second block that runs exactly when the condition is false. |
-
-Prune: the model's reply (edge id and score; the kept edges sum to 1):
-```
-{pre:if_statement->if_else_statement (Score: 0.5)}
-{pre:boolean_expression->if_statement (Score: 0.3)}
-{pre:control_flow->if_statement (Score: 0.2)}
-```
-Kept by pruning: pre:if_statement->if_else_statement (0.50), pre:boolean_expression->if_statement (0.30), pre:control_flow->if_statement (0.20)
-
-Label prompt for concept edge pre:if_statement->if_else_statement (if_statement -> if_else_statement, prerequisite):
-> if-else extends if with a second block that runs exactly when the condition is false.
-
-Model's reply:
-```
-Label: not applied
-Clauses: none
-Confidence: 0.8
-```
-
-Label prompt for concept edge pre:boolean_expression->if_statement (boolean_expression -> if_statement, prerequisite):
-> An if runs its block only when its boolean expression evaluates to true.
-
-Model's reply:
-```
-Label: not applied
-Clauses: none
-Confidence: 0.8
-```
-
-Label prompt for concept edge pre:control_flow->if_statement (control_flow -> if_statement, prerequisite):
-> An if changes the default top-to-bottom flow by running a block only when its condition is true.
-
-Model's reply:
-```
-Label: not applied
-Clauses: none
-Confidence: 0.9
-```
-
-Parsed labels:
-| edge | label | prune score | confidence | score | clauses | words |
-|---|---|---|---|---|---|---|
-| pre:if_statement->if_else_statement | not applied |  |  | 0.0 |  |  |
-| pre:boolean_expression->if_statement | not applied |  |  | 0.0 |  |  |
-| pre:control_flow->if_statement | not applied |  |  | 0.0 |  |  |
+| pre:arithmetic_operators->expression | confirmed | 1.0 | 0.6 | 0.6 | c3, c4 | Then k = c + 1 is the letter after b; so it prints c |
 
 #### println, misconceptions: 6 edges offered
 Edges offered:
@@ -555,29 +507,29 @@ Edges offered:
 
 Prune: the model's reply (edge id and score; the kept edges sum to 1):
 ```
-mis:println->PrintedTextIsExecuted (0.60), mis:println->PrintNewLineFirst (0.20), mis:println->PrintEqualsPrintln (0.20)
+mis:println->PrintEqualsPrintln (0.50), mis:println->PrintNewLineFirst (0.30), mis:println->PrintedTextIsExecuted (0.20)
 ```
-Kept by pruning: mis:println->PrintedTextIsExecuted (0.60), mis:println->PrintNewLineFirst (0.20), mis:println->PrintEqualsPrintln (0.20)
+Kept by pruning: mis:println->PrintEqualsPrintln (0.50), mis:println->PrintNewLineFirst (0.30), mis:println->PrintedTextIsExecuted (0.20)
 
 Label prompt for the misconception / error edges (judged together). The model saw the program, the question, the numbered clauses, and these edges with their wrong rule and right rule:
 | edge |
 |---|
-| mis:println->PrintedTextIsExecuted \| wrong rule: System.out.println("x is 5"); sets x to 5 (text inside the quotes is run as code). \| right rule: Characters inside double quotes are printed literally; println only displays them and changes no variable. Only an assignment such as x = 5; sets x. |
-| mis:println->PrintNewLineFirst \| wrong rule: println(s) prints a newline and then s. \| right rule: println(s) prints s and then the newline. |
 | mis:println->PrintEqualsPrintln \| wrong rule: print and println do the same thing, so print(s1); print(s2); puts s1 and s2 on separate lines. \| right rule: println ends the line after printing and print does not, so print(s1); print(s2); puts s1 and s2 on the same line. |
+| mis:println->PrintNewLineFirst \| wrong rule: println(s) prints a newline and then s. \| right rule: println(s) prints s and then the newline. |
+| mis:println->PrintedTextIsExecuted \| wrong rule: System.out.println("x is 5"); sets x to 5 (text inside the quotes is run as code). \| right rule: Characters inside double quotes are printed literally; println only displays them and changes no variable. Only an assignment such as x = 5; sets x. |
 Model's reply:
 ```
-mis:println->PrintedTextIsExecuted | not applied | clauses: none | confidence: 0.9
+mis:println->PrintEqualsPrintln | not applied | clauses: none | confidence: 0.85
 mis:println->PrintNewLineFirst | not applied | clauses: none | confidence: 0.9
-mis:println->PrintEqualsPrintln | not applied | clauses: none | confidence: 0.9
+mis:println->PrintedTextIsExecuted | not applied | clauses: none | confidence: 0.9
 ```
 
 Parsed labels:
 | edge | label | prune score | confidence | score | clauses | words |
 |---|---|---|---|---|---|---|
-| mis:println->PrintedTextIsExecuted | not applied |  |  | 0.0 |  |  |
-| mis:println->PrintNewLineFirst | not applied |  |  | 0.0 |  |  |
 | mis:println->PrintEqualsPrintln | not applied |  |  | 0.0 |  |  |
+| mis:println->PrintNewLineFirst | not applied |  |  | 0.0 |  |  |
+| mis:println->PrintedTextIsExecuted | not applied |  |  | 0.0 |  |  |
 
 #### println, level ways: 17 edges offered
 Edges offered:
@@ -603,14 +555,104 @@ Edges offered:
 
 Prune: the model's reply (edge id and score; the kept edges sum to 1):
 ```
-{lvl:println@L2#1 (Score: 0.4)}
-{lvl:println@L3#1 (Score: 0.35)}
-{lvl:println@L3#3 (Score: 0.25)}
+{lvl:println@L2#1 (Score: 0.45)}
+{lvl:println@L3#0 (Score: 0.3)}
+{lvl:println@L2#0 (Score: 0.25)}
 ```
-Kept by pruning: lvl:println@L2#1 (0.40), lvl:println@L3#1 (0.35), lvl:println@L3#3 (0.25)
+Kept by pruning: lvl:println@L2#1 (0.45), lvl:println@L3#0 (0.30), lvl:println@L2#0 (0.25)
 
 Label prompt for level way lvl:println@L2#1 (the model saw only the concept, the way's name 'output prediction' and its text; no level):
 > Output is the value's characters followed by a line break: println("Hello, "); println("World!"); prints two lines.
+
+Model's reply:
+```
+Label: shown
+Clauses: 1, 4
+Confidence: 0.7
+```
+
+Label prompt for level way lvl:println@L3#0 (the model saw only the concept, the way's name 'relation to neighbour' and its text; no level):
+> System.out.println(s); is a statement, so its line of output appears at its own place in the sequence.
+
+Model's reply:
+```
+Label: shown
+Clauses: 1, 4
+Confidence: 0.6
+```
+
+Label prompt for level way lvl:println@L2#0 (the model saw only the concept, the way's name 'line by line trace' and its text; no level):
+> Evaluate the argument, print its characters at the current position, then write the line separator so the cursor moves to the beginning of the next line.
+
+Model's reply:
+```
+Label: shown
+Clauses: 1, 4
+Confidence: 0.65
+```
+
+Parsed labels:
+| edge | label | prune score | confidence | score | clauses | words |
+|---|---|---|---|---|---|---|
+| lvl:println@L2#1 | shown | 0.45 | 0.7 | 0.32 | c1, c4 | b; so it prints c |
+| lvl:println@L3#0 | shown | 0.3 | 0.6 | 0.18 | c1, c4 | b; so it prints c |
+| lvl:println@L2#0 | shown | 0.25 | 0.65 | 0.16 | c1, c4 | b; so it prints c |
+
+#### char_arithmetic, misconceptions: 1 edges offered
+Edges offered:
+| edge |
+|---|
+| mis:char_arithmetic->CharNotNumeric \| wrong rule: char is not a numeric type \| right rule: A char is encoded as a 16-bit integer, so arithmetic such as 'b' + 'c' or 'a' + 4 works on the character codes. |
+
+Prune: the model's reply (edge id and score; the kept edges sum to 1):
+```
+{mis:char_arithmetic->CharNotNumeric (Score: 1.0)}
+```
+Kept by pruning: mis:char_arithmetic->CharNotNumeric (1.00)
+
+Label prompt for the misconception / error edges (judged together). The model saw the program, the question, the numbered clauses, and these edges with their wrong rule and right rule:
+| edge |
+|---|
+| mis:char_arithmetic->CharNotNumeric \| wrong rule: char is not a numeric type \| right rule: A char is encoded as a 16-bit integer, so arithmetic such as 'b' + 'c' or 'a' + 4 works on the character codes. |
+Model's reply:
+```
+mis:char_arithmetic->CharNotNumeric | held | clauses: 3, 4 | confidence: 0.6
+```
+
+Parsed labels:
+| edge | label | prune score | confidence | score | clauses | words |
+|---|---|---|---|---|---|---|
+| mis:char_arithmetic->CharNotNumeric | held | 1.0 | 0.6 | 0.6 | c3, c4 | Then k = c + 1 is the letter after b; so it prints c |
+
+#### char_arithmetic, level ways: 14 edges offered
+Edges offered:
+| edge |
+|---|
+| lvl:char_arithmetic@L0#0 \| level L0 way everyday_reading: In everyday use letters are not numbers, so 'a' + 1 seems meaningless or should give "a1". Java promotes each char to its int code, so 'a' + 1 is 98. |
+| lvl:char_arithmetic@L0#2 \| level L0 way inconsistent_trace: Points to LT (chars become int codes before the operator is applied). Applied unevenly, a student converts to codes in one step but keeps letters in another, e.g. printing 'b' + 'c' as "bc". (here mixing in: "char is not a numeric type") |
+| lvl:char_arithmetic@L1#0 \| level L1 way names_the_element: Char arithmetic: applying arithmetic or comparison operators to char values, which act on their Unicode codes. |
+| lvl:char_arithmetic@L1#1 \| level L1 way states_the_rule: char operands of arithmetic are promoted to int, so the result is an int. Casting an int to char gives the character with that code. ++, -- and comparisons work directly on chars. |
+| lvl:char_arithmetic@L2#0 \| level L2 way line_by_line_trace: Each char operand is replaced by its code (promoted to int) and the operation runs in int. A cast written outside the parentheses, as in (char) ('a' + 4), is applied last. |
+| lvl:char_arithmetic@L2#1 \| level L2 way output_prediction: 'b' + 'c' is the int 197. 'a' + 4 is 101. (char) ('a' + 4) is 'e'. 'A' < 'a' is true. |
+| lvl:char_arithmetic@L2#2 \| level L2 way one_step_execution: For char c = 'A', c++ sets c to 'B'. c = c + 1; is rejected, because the right side is an int. |
+| lvl:char_arithmetic@L3#0 \| level L3 way relation_to_neighbour: Char arithmetic uses each char's numeric code, so the result is an int, not a char, unless it is cast back. |
+| lvl:char_arithmetic@L3#1 \| level L3 way purpose_of_the_whole: Plans: shifting letters (Caesar cipher), turning a digit char into its value (c - '0'), looping over 'A'..'Z', and testing whether a char is in a range. |
+| lvl:char_arithmetic@L4#0 \| level L4 way predict_a_change: Adding or removing the (char) cast changes the output from a number to a letter. Changing 'a' + 4 to "a" + 4 makes it concatenation ("a4"). |
+| lvl:char_arithmetic@L4#1 \| level L4 way transfer_to_a_new_program: Use char arithmetic when the computation depends on character order or codes (alphabet loops, ciphers, digit values). To join characters into text, use String + or a String instead. |
+| lvl:char_arithmetic@L4#2 \| level L4 way diagnose_an_error: rule broken: Arithmetic on chars yields an int, which needs a cast to go back into a char. Kind: compile-time. Trigger class: char next = c + 1; or char d = 'a' + k;: 'possible lossy conversion from int to char'. |
+| lvl:char_arithmetic@L4#3 \| level L4 way diagnose_an_error: rule broken: Without a cast the int code is printed, not the letter. Kind: silent logic error. Trigger class: Printing c + 1 or 'a' + i when a letter was expected. |
+| lvl:char_arithmetic@L4#4 \| level L4 way diagnose_an_error: rule broken: A char compares by its code, not by the digit it shows. Kind: silent logic error. Trigger class: Comparing a char with an int as if it were a digit (seat <= 3 for seat = 'A'). |
+
+Prune: the model's reply (edge id and score; the kept edges sum to 1):
+```
+{lvl:char_arithmetic@L0#2 (Score: 0.5)}
+{lvl:char_arithmetic@L2#2 (Score: 0.3)}
+{lvl:char_arithmetic@L3#0 (Score: 0.2)}
+```
+Kept by pruning: lvl:char_arithmetic@L0#2 (0.50), lvl:char_arithmetic@L2#2 (0.30), lvl:char_arithmetic@L3#0 (0.20)
+
+Label prompt for level way lvl:char_arithmetic@L0#2 (the model saw only the concept, the way's name 'inconsistent trace' and its text; no level):
+> Points to LT (chars become int codes before the operator is applied). Applied unevenly, a student converts to codes in one step but keeps letters in another, e.g. printing 'b' + 'c' as "bc". (here mixing in: "char is not a numeric type")
 
 Model's reply:
 ```
@@ -619,519 +661,309 @@ Clauses: none
 Confidence: 0.6
 ```
 
-Label prompt for level way lvl:println@L3#1 (the model saw only the concept, the way's name 'relation to neighbour' and its text; no level):
-> println("s") outputs exactly the characters between the quotes and then ends the line.
+Label prompt for level way lvl:char_arithmetic@L2#2 (the model saw only the concept, the way's name 'one step execution' and its text; no level):
+> For char c = 'A', c++ sets c to 'B'. c = c + 1; is rejected, because the right side is an int.
+
+Model's reply:
+```
+Label: shown
+Clauses: 1, 2
+Confidence: 0.8
+```
+
+Label prompt for level way lvl:char_arithmetic@L3#0 (the model saw only the concept, the way's name 'relation to neighbour' and its text; no level):
+> Char arithmetic uses each char's numeric code, so the result is an int, not a char, unless it is cast back.
 
 Model's reply:
 ```
 Label: not shown
 Clauses: none
-Confidence: 0.95
-```
-
-Label prompt for level way lvl:println@L3#3 (the model saw only the concept, the way's name 'relation to neighbour' and its text; no level):
-> println prints numbers with all their digits and always ends the line; printf formats each value by its conversion code and ends the line only where the format has %n or \n.
-
-Model's reply:
-```
-Label: not shown
-Clauses: none
-Confidence: 0.95
+Confidence: 0.9
 ```
 
 Parsed labels:
 | edge | label | prune score | confidence | score | clauses | words |
 |---|---|---|---|---|---|---|
-| lvl:println@L2#1 | not applied |  |  | 0.0 |  |  |
-| lvl:println@L3#1 | not applied |  |  | 0.0 |  |  |
-| lvl:println@L3#3 | not applied |  |  | 0.0 |  |  |
+| lvl:char_arithmetic@L0#2 | not applied |  |  | 0.0 |  |  |
+| lvl:char_arithmetic@L2#2 | shown | 0.3 | 0.8 | 0.24 | c1, c2 | b; because c++ moves to the next letter |
+| lvl:char_arithmetic@L3#0 | not applied |  |  | 0.0 |  |  |
 
-#### boolean_expression, misconceptions: 8 edges offered
+#### increment_operators, misconceptions: 5 edges offered
 Edges offered:
 | edge |
 |---|
-| err:boolean_expression->ElseWithCondition \| wrong rule: Writes else (x > 0) with a condition but no if. \| right rule: else takes no condition; use else if (x > 0). |
-| mis:boolean_expression->ArithmeticInsteadOfBoolean \| wrong rule: A true/false question is answered with arithmetic (e.g. 1 for true). \| right rule: A logic question is written as a boolean expression whose value is true or false. |
-| mis:boolean_expression->ChainedComparison \| wrong rule: 90 <= grade <= 100 tests whether grade is between 90 and 100. \| right rule: a < b < c does not compile (a < b is a boolean); a range test is written 90 <= grade && grade <= 100. |
-| mis:boolean_expression->ComparisonWithBooleanLiteral \| wrong rule: To test a boolean b you must write if (b == true). \| right rule: if (b) already tests b, so writing == true adds nothing. |
-| mis:boolean_expression->LoopForOneTimeTest \| wrong rule: Uses a loop where a condition needs to be tested only once. \| right rule: A test made once is an if; a loop repeats. |
-| mis:boolean_expression->MapToBooleanWithConditionalOperator \| wrong rule: To get a boolean from x > y you need ok = (x > y) ? true : false;. \| right rule: ok = (x > y); already gives the boolean, so the ? : is unnecessary. |
-| mis:boolean_expression->MapToBooleanWithIf \| wrong rule: To store whether x > y in a boolean you need if (x > y) ok = true; else ok = false;. \| right rule: ok = (x > y); stores the result of the comparison directly. |
-| mis:boolean_expression->NestedIfsInsteadOfLogicalOperators \| wrong rule: A condition on several values has to be written as nested if statements, one value per if. \| right rule: Several conditions combine into one boolean expression with && and \|\|, e.g. if (x == 0 && y == 0). |
+| mis:increment_operators->IdiomOverridesCode \| wrong rule: An array loop processes the whole array from index 0 to length-1 and increments its index at the end of the body, whatever the code says. \| right rule: The loop visits exactly the indices that its initialisation, guard and update produce, in the order in which its statements are written. |
+| mis:increment_operators->IncrementByTwo \| wrong rule: i++ increases i by 2. \| right rule: i++ (and ++i) increases i by exactly 1. |
+| mis:increment_operators->PostIncrementAssignsLater \| wrong rule: i = i++ increases i by 1. \| right rule: i++ evaluates to the old value, so i = i++ stores the old value back. |
+| mis:increment_operators->PreIncrementBeforeLoop \| wrong rule: ++i in the for-update runs before the body each pass \| right rule: The update runs after each pass of the body, so with either ++i or i++ the first pass uses i = s. |
+| mis:increment_operators->PrePostIncrementSameValue \| wrong rule: x = i++ and x = ++i store the same value in x. \| right rule: Both increment i, but ++i has the value after the increment and i++ the value before. |
 
 Prune: the model's reply (edge id and score; the kept edges sum to 1):
 ```
-mis:boolean_expression->ArithmeticInsteadOfBoolean (0.80), mis:boolean_expression->MapToBooleanWithIf (0.10), mis:boolean_expression->ComparisonWithBooleanLiteral (0.10)
+mis:increment_operators->IncrementByTwo (0.80), mis:increment_operators->PrePostIncrementSameValue (0.12), mis:increment_operators->PostIncrementAssignsLater (0.08)
 ```
-Kept by pruning: mis:boolean_expression->ArithmeticInsteadOfBoolean (0.80), mis:boolean_expression->MapToBooleanWithIf (0.10), mis:boolean_expression->ComparisonWithBooleanLiteral (0.10)
+Kept by pruning: mis:increment_operators->IncrementByTwo (0.80), mis:increment_operators->PrePostIncrementSameValue (0.12), mis:increment_operators->PostIncrementAssignsLater (0.08)
 
 Label prompt for the misconception / error edges (judged together). The model saw the program, the question, the numbered clauses, and these edges with their wrong rule and right rule:
 | edge |
 |---|
-| mis:boolean_expression->ArithmeticInsteadOfBoolean \| wrong rule: A true/false question is answered with arithmetic (e.g. 1 for true). \| right rule: A logic question is written as a boolean expression whose value is true or false. |
-| mis:boolean_expression->MapToBooleanWithIf \| wrong rule: To store whether x > y in a boolean you need if (x > y) ok = true; else ok = false;. \| right rule: ok = (x > y); stores the result of the comparison directly. |
-| mis:boolean_expression->ComparisonWithBooleanLiteral \| wrong rule: To test a boolean b you must write if (b == true). \| right rule: if (b) already tests b, so writing == true adds nothing. |
+| mis:increment_operators->IncrementByTwo \| wrong rule: i++ increases i by 2. \| right rule: i++ (and ++i) increases i by exactly 1. |
+| mis:increment_operators->PrePostIncrementSameValue \| wrong rule: x = i++ and x = ++i store the same value in x. \| right rule: Both increment i, but ++i has the value after the increment and i++ the value before. |
+| mis:increment_operators->PostIncrementAssignsLater \| wrong rule: i = i++ increases i by 1. \| right rule: i++ evaluates to the old value, so i = i++ stores the old value back. |
 Model's reply:
 ```
-mis:boolean_expression->ArithmeticInsteadOfBoolean | not applied | clauses: none | confidence: 0.85
-mis:boolean_expression->MapToBooleanWithIf | not applied | clauses: none | confidence: 0.95
-mis:boolean_expression->ComparisonWithBooleanLiteral | not applied | clauses: none | confidence: 0.95
+mis:increment_operators->IncrementByTwo | correct | clauses: 1, 2 | confidence: 0.9
+mis:increment_operators->PrePostIncrementSameValue | not applied | clauses: none | confidence: 0.9
+mis:increment_operators->PostIncrementAssignsLater | not applied | clauses: none | confidence: 0.9
 ```
 
 Parsed labels:
 | edge | label | prune score | confidence | score | clauses | words |
 |---|---|---|---|---|---|---|
-| mis:boolean_expression->ArithmeticInsteadOfBoolean | not applied |  |  | 0.0 |  |  |
-| mis:boolean_expression->MapToBooleanWithIf | not applied |  |  | 0.0 |  |  |
-| mis:boolean_expression->ComparisonWithBooleanLiteral | not applied |  |  | 0.0 |  |  |
+| mis:increment_operators->IncrementByTwo | correct | 0.8 | 0.9 | 0.72 | c1, c2 | b; because c++ moves to the next letter |
+| mis:increment_operators->PrePostIncrementSameValue | not applied |  |  | 0.0 |  |  |
+| mis:increment_operators->PostIncrementAssignsLater | not applied |  |  | 0.0 |  |  |
 
-#### boolean_expression, level ways: 19 edges offered
+#### increment_operators, level ways: 16 edges offered
 Edges offered:
 | edge |
 |---|
-| lvl:boolean_expression@L0#0 \| level L0 way everyday_reading: Folk meaning: maths writes a range as 90 <= grade <= 100 and English says 'if x is 1 or 2'. Java rule: each comparison is a separate boolean expression and they must be joined explicitly: 90 <= grade && grade <= 100, x == 1 \|\| x == 2; 90 <= grade <= 100 does not compile because 90 <= grade is already a boolean. |
-| lvl:boolean_expression@L0#5 \| level L0 way inconsistent_trace: Points to LT (arithmetic first, then comparisons, then !, &&, \|\|, left to right, with short-circuit). Applied unevenly: the student evaluates && before a comparison in one sub-expression, or evaluates the right operand of && on a pass where the left was already false. (here mixing in: "you must write == true / == false to test a boolean") |
-| lvl:boolean_expression@L1#0 \| level L1 way names_the_element: A boolean expression is any expression whose type is boolean: a boolean literal or variable, a comparison, or such parts combined with &&, \|\| and !. |
-| lvl:boolean_expression@L1#1 \| level L1 way states_the_rule: A boolean expression has value true or false; it is built from comparisons (lower precedence than arithmetic, higher than boolean operators) and boolean operators; the condition of if, while and for must be one. |
-| lvl:boolean_expression@L2#0 \| level L2 way line_by_line_trace: Operands are evaluated left to right; arithmetic sub-expressions first, then comparisons, then !, then &&, then \|\|; && and \|\| evaluate their right operand only when the left has not decided the result. |
-| lvl:boolean_expression@L2#1 \| level L2 way output_prediction: The value is true or false: with year = 1900, (year % 4 == 0) && (year % 100 != 0) \|\| (year % 400 == 0) is false, so LeapYear prints false. |
-| lvl:boolean_expression@L2#2 \| level L2 way one_step_execution: Evaluating a boolean expression changes no variable (unless it contains an assignment, ++ or a method with side effects); state changes only when its value is stored, as in isLeapYear = isLeapYear && (year % 100 != 0);. |
-| lvl:boolean_expression@L3#0 \| level L3 way relation_to_neighbour: Comparisons are the atoms of boolean expressions; because they bind tighter than && and \|\|, month >= 1 && month <= 12 groups as (month >= 1) && (month <= 12) without parentheses. |
-| lvl:boolean_expression@L3#1 \| level L3 way relation_to_neighbour: &&, \|\| and ! combine boolean sub-expressions into a larger one; ! binds tighter than comparisons, so negating a comparison needs parentheses: !(x > 0). |
-| lvl:boolean_expression@L3#2 \| level L3 way relation_to_neighbour: The if statement evaluates its boolean expression once and runs its block only when the value is true; the expression must have type boolean, so if (x = 5) with int x does not compile. |
-| lvl:boolean_expression@L3#3 \| level L3 way relation_to_neighbour: The while loop re-evaluates its boolean expression before every pass and stops the first time it is false, so some variable in the expression must change in the body or the loop never ends. |
-| lvl:boolean_expression@L3#4 \| level L3 way relation_to_neighbour: In RandomSurfer the boolean expression r < sum is evaluated for each candidate page j in turn, as sum grows; the first j for which it is true is the chosen page. |
-| lvl:boolean_expression@L3#5 \| level L3 way relation_to_neighbour: In the template if (<boolean expression>) { <statements> } the placeholder may be filled by any boolean-typed expression: a literal, a boolean variable, a comparison or a combination with logical operators. |
-| lvl:boolean_expression@L3#6 \| level L3 way purpose_of_the_whole: Expresses a decision condition or guard (which branch runs, whether a loop continues) or computes a flag; common plans: range test lo <= x && x <= hi, divisibility test n % k == 0, combined rule as in LeapYear. |
-| lvl:boolean_expression@L4#0 \| level L4 way predict_a_change: Rewriting with De Morgan (!(a && b) as !a \|\| !b) keeps the value for every input; swapping the operands of && keeps the truth value but can change whether the right operand is evaluated (and whether a guard still protects it); changing < to <= changes the result only at the boundary value. |
-| lvl:boolean_expression@L4#1 \| level L4 way diagnose_an_error: rule broken: else takes no condition; a second condition needs else if (...). Kind: compile-time. Trigger class: Writing else (x > 0) { ... } after an if block (the compiler reports e.g. 'not a statement' or '; expected'). |
-| lvl:boolean_expression@L4#2 \| level L4 way transfer_to_a_new_program: Use a boolean expression wherever code must decide or record a yes/no condition, and store it directly (ok = x > y) rather than via if or ? :; when different outcomes are needed for several cases use an if-else chain of such expressions. |
-| lvl:boolean_expression@L4#3 \| level L4 way diagnose_an_error: rule broken: The condition must be a boolean expression; = assigns, == compares. Kind: compile-time. Trigger class: if (a = b) with int a and b (with boolean variables it compiles and silently assigns). |
-| lvl:boolean_expression@L4#4 \| level L4 way diagnose_an_error: rule broken: Comparisons cannot be chained; each must be joined with && or \|\|. Kind: compile-time. Trigger class: Range written as a < b < c or 90 <= grade <= 100. |
+| lvl:increment_operators@L0#0 \| level L0 way everyday_reading: Folk meaning: '++' reads as 'plus plus' (add twice) or as a maths symbol with no effect, and i++ inside an expression is read as 'add 1 at some later time'. In Java i++ and ++i each add exactly 1 to i immediately when evaluated; they differ only in the value the expression yields. |
+| lvl:increment_operators@L0#3 \| level L0 way inconsistent_trace: Applies the increment rule (LT) unevenly: uses the old value in one expression and the new value in another for the same i++, or performs the increment at the end of the loop body instead of where it is written. (here mixing in: "x = i++ and x = ++i store the same value in x") |
+| lvl:increment_operators@L1#0 \| level L1 way names_the_element: ++ and -- are the increment and decrement operators: shorthand that adds 1 to (or subtracts 1 from) a numeric variable. |
+| lvl:increment_operators@L1#1 \| level L1 way states_the_rule: ++ has the same effect as i = i + 1 and -- the same as i = i - 1; as statements i++ and ++i are the same, but in expressions ++i has the value after the increment and i++ the value before. |
+| lvl:increment_operators@L2#0 \| level L2 way line_by_line_trace: i++: fetch the value of i (that is the expression's value), then store i + 1 into i. ++i: store i + 1 into i, and the new value is the expression's value. Both happen before the rest of the enclosing expression continues. |
+| lvl:increment_operators@L2#1 \| level L2 way output_prediction: With i = 5: x = i++ gives x = 5, i = 6; x = ++i gives x = 6, i = 6; i = i++ leaves i = 5. |
+| lvl:increment_operators@L2#2 \| level L2 way one_step_execution: One execution changes exactly one variable (i) by exactly 1 and returns its old (i++) or new (++i) value. |
+| lvl:increment_operators@L3#0 \| level L3 way relation_to_neighbour: The usual for-loop update is i++ (shorthand for i = i + 1); as a stand-alone update statement ++i and i++ give the same loop. |
+| lvl:increment_operators@L3#1 \| level L3 way relation_to_neighbour: Inside a larger expression the result depends on which value (old or new) the increment yields and on left-to-right evaluation, e.g. j += j++ in Exercise 1.3.6. |
+| lvl:increment_operators@L3#2 \| level L3 way relation_to_neighbour: i++ is shorthand for the assignment i = i + 1 (and i += k for i = i + k), so it changes the variable's stored value. |
+| lvl:increment_operators@L3#3 \| level L3 way relation_to_neighbour: i++, ++i and i += 1 all add 1 to i; ++ and -- change a variable only by one and are normally used for integers, while i += k works for any amount and with any arithmetic operator (-=, *=, /=, %=). |
+| lvl:increment_operators@L3#4 \| level L3 way purpose_of_the_whole: Plan/role: the update of a stepper or counter (count++ in a counter, i++ in a counted loop). |
+| lvl:increment_operators@L4#0 \| level L4 way predict_a_change: As a stand-alone statement, replacing i++ by ++i, i += 1 or i = i + 1 preserves behaviour; inside an expression (x = i++ vs x = ++i) the swap changes the value used by 1. |
+| lvl:increment_operators@L4#1 \| level L4 way transfer_to_a_new_program: Use i++ / i-- as stand-alone statements and in for-loop updates; avoid them inside larger expressions (x = ++i), as the book does, and use += for steps other than 1. |
+| lvl:increment_operators@L4#2 \| level L4 way diagnose_an_error: rule broken: i = i++ stores the old value back. Kind: silent logic error. Trigger class: Writing i = i++ to increment: i never changes, so a loop driven by it is infinite. |
+| lvl:increment_operators@L4#3 \| level L4 way diagnose_an_error: rule broken: ++ and -- apply only to a variable. Kind: compile-time. Trigger class: Applying ++ to a value that is not a variable, e.g. 5++ or (i + 1)++: compile-time error. |
 
 Prune: the model's reply (edge id and score; the kept edges sum to 1):
 ```
-{lvl:boolean_expression@L2#1 (Score: 0.5)}
-{lvl:boolean_expression@L3#2 (Score: 0.3)}
-{lvl:boolean_expression@L0#5 (Score: 0.2)}
+{lvl:increment_operators@L2#2 (Score: 0.5)}
+{lvl:increment_operators@L2#1 (Score: 0.3)}
+{lvl:increment_operators@L3#2 (Score: 0.2)}
 ```
-Kept by pruning: lvl:boolean_expression@L2#1 (0.50), lvl:boolean_expression@L3#2 (0.30), lvl:boolean_expression@L0#5 (0.20)
+Kept by pruning: lvl:increment_operators@L2#2 (0.50), lvl:increment_operators@L2#1 (0.30), lvl:increment_operators@L3#2 (0.20)
 
-Label prompt for level way lvl:boolean_expression@L2#1 (the model saw only the concept, the way's name 'output prediction' and its text; no level):
-> The value is true or false: with year = 1900, (year % 4 == 0) && (year % 100 != 0) || (year % 400 == 0) is false, so LeapYear prints false.
-
-Model's reply:
-```
-Label: not shown
-Clauses: none
-Confidence: 0.95
-```
-
-Label prompt for level way lvl:boolean_expression@L3#2 (the model saw only the concept, the way's name 'relation to neighbour' and its text; no level):
-> The if statement evaluates its boolean expression once and runs its block only when the value is true; the expression must have type boolean, so if (x = 5) with int x does not compile.
+Label prompt for level way lvl:increment_operators@L2#2 (the model saw only the concept, the way's name 'one step execution' and its text; no level):
+> One execution changes exactly one variable (i) by exactly 1 and returns its old (i++) or new (++i) value.
 
 Model's reply:
 ```
-Label: not shown
-Clauses: none
-Confidence: 0.95
+Label: shown
+Clauses: 1, 2
+Confidence: 0.7
 ```
 
-Label prompt for level way lvl:boolean_expression@L0#5 (the model saw only the concept, the way's name 'inconsistent trace' and its text; no level):
-> Points to LT (arithmetic first, then comparisons, then !, &&, ||, left to right, with short-circuit). Applied unevenly: the student evaluates && before a comparison in one sub-expression, or evaluates the right operand of && on a pass where the left was already false. (here mixing in: "you must write == true / == false to test a boolean")
+Label prompt for level way lvl:increment_operators@L2#1 (the model saw only the concept, the way's name 'output prediction' and its text; no level):
+> With i = 5: x = i++ gives x = 5, i = 6; x = ++i gives x = 6, i = 6; i = i++ leaves i = 5.
 
 Model's reply:
 ```
-Label: not shown
-Clauses: none
-Confidence: 0.95
+Label: shown
+Clauses: 1, 2
+Confidence: 0.7
+```
+
+Label prompt for level way lvl:increment_operators@L3#2 (the model saw only the concept, the way's name 'relation to neighbour' and its text; no level):
+> i++ is shorthand for the assignment i = i + 1 (and i += k for i = i + k), so it changes the variable's stored value.
+
+Model's reply:
+```
+Label: shown
+Clauses: 1, 2
+Confidence: 0.6
 ```
 
 Parsed labels:
 | edge | label | prune score | confidence | score | clauses | words |
 |---|---|---|---|---|---|---|
-| lvl:boolean_expression@L2#1 | not applied |  |  | 0.0 |  |  |
-| lvl:boolean_expression@L3#2 | not applied |  |  | 0.0 |  |  |
-| lvl:boolean_expression@L0#5 | not applied |  |  | 0.0 |  |  |
+| lvl:increment_operators@L2#2 | shown | 0.5 | 0.7 | 0.35 | c1, c2 | b; because c++ moves to the next letter |
+| lvl:increment_operators@L2#1 | shown | 0.3 | 0.7 | 0.21 | c1, c2 | b; because c++ moves to the next letter |
+| lvl:increment_operators@L3#2 | shown | 0.2 | 0.6 | 0.12 | c1, c2 | b; because c++ moves to the next letter |
 
-#### floating_point_precision, misconceptions: 1 edges offered
-Edges offered:
-| edge |
-|---|
-| mis:floating_point_precision->FloatingPointIsExact \| wrong rule: Math.sqrt(2) * Math.sqrt(2) == 2 is true. \| right rule: A double is an approximation, so the product is close to 2 but not equal to 2. |
+**Kept on a path at this depth** (best N in tiers: held misconception / broken edge, then held error, then correct / confirmed / shown):
 
-Prune: the model's reply (edge id and score; the kept edges sum to 1):
-```
-{mis:floating_point_precision->FloatingPointIsExact (Score: 1.0)}
-```
-Kept by pruning: mis:floating_point_precision->FloatingPointIsExact (1.00)
-
-Label prompt for the misconception / error edges (judged together). The model saw the program, the question, the numbered clauses, and these edges with their wrong rule and right rule:
-| edge |
-|---|
-| mis:floating_point_precision->FloatingPointIsExact \| wrong rule: Math.sqrt(2) * Math.sqrt(2) == 2 is true. \| right rule: A double is an approximation, so the product is close to 2 but not equal to 2. |
-Model's reply:
-```
-mis:floating_point_precision->FloatingPointIsExact | not applied | clauses: none | confidence: 0.85
-```
-
-Parsed labels:
-| edge | label | prune score | confidence | score | clauses | words |
-|---|---|---|---|---|---|---|
-| mis:floating_point_precision->FloatingPointIsExact | not applied |  |  | 0.0 |  |  |
-
-#### floating_point_precision, level ways: 14 edges offered
-Edges offered:
-| edge |
-|---|
-| lvl:floating_point_precision@L0#0 \| level L0 way everyday_reading: Folk meaning: decimal arithmetic is exact, as on paper or on a calculator display, so 0.1 + 0.1 + 0.1 equals 0.3. Java rule: most decimal fractions (0.1) have no exact binary representation, every double operation rounds, and (0.1 + 0.1 + 0.1 == 0.3) is false. |
-| lvl:floating_point_precision@L0#2 \| level L0 way inconsistent_trace: Points to LT (rounding happens after every single operation, and the error is carried into the next one). Applied unevenly: the student rounds only the final printed value, treating intermediate values as exact on some lines, or expects ten additions of 0.1 to equal 0.1 * 10. (here mixing in: "Math.sqrt(2) * Math.sqrt(2) == 2 is true") |
-| lvl:floating_point_precision@L1#0 \| level L1 way names_the_element: Floating-point precision is a property of the double type: a double keeps only about 15 significant decimal digits, and the difference between the intended real number and the stored double is rounding error. |
-| lvl:floating_point_precision@L1#1 \| level L1 way states_the_rule: Each double result is the nearest representable binary64 value, so results are generally approximate; S&W: novice programmers should avoid comparing two floating-point numbers for equality. Do not test doubles for equality with ==: compare with a tolerance, e.g. Math.abs(x - y) < 1e-9; and == is false whenever an operand is NaN. |
-| lvl:floating_point_precision@L2#0 \| level L2 way line_by_line_trace: Evaluation proceeds operator by operator; after each one the exact result is rounded to a double, and the next operator works on that rounded value, so errors compound along the evaluation order; only at output is the stored value converted to a decimal string. |
-| lvl:floating_point_precision@L2#1 \| level L2 way output_prediction: Printed results show the approximation: 0.1 * 10 prints 1.0 but adding 0.1 ten times prints 0.9999999999999999; 5.0/3.0 prints 1.6666666666666667; (0.1 + 0.1 + 0.1 == 0.3) is false. |
-| lvl:floating_point_precision@L2#2 \| level L2 way one_step_execution: Each assignment such as x = x + 0.1 stores the rounded sum; the error stays in x and is carried into every later step that uses x. |
-| lvl:floating_point_precision@L3#0 \| level L3 way relation_to_neighbour: Imprecision is inherent in the double type, not in a particular program: any arithmetic on doubles may carry rounding error, so code that uses double must be written to tolerate it. |
-| lvl:floating_point_precision@L3#1 \| level L3 way relation_to_neighbour: Because doubles are approximate, a loop that waits for exact equality may never stop; Sqrt therefore loops while Math.abs(t - c/t) > epsilon * t, a relative-tolerance test. |
-| lvl:floating_point_precision@L3#2 \| level L3 way relation_to_neighbour: Both come from finite representations: an int result too large for 32 bits wraps around silently (overflow), while a double keeps about 15 significant digits so most results are approximations (5.0/3.0 is 1.6666666666666667). Neither raises an error. |
-| lvl:floating_point_precision@L3#3 \| level L3 way purpose_of_the_whole: Awareness of precision is used to write tolerance comparisons (Math.abs(a - b) < epsilon) and to choose integer representations for exact quantities, e.g. money as an int number of cents. |
-| lvl:floating_point_precision@L4#0 \| level L4 way predict_a_change: Reordering additions, or changing a loop step such as x += 0.1, changes the last digits and can change how many times a loop tested with <= runs; replacing an == test by a tolerance test makes the outcome stable under such changes. |
-| lvl:floating_point_precision@L4#1 \| level L4 way transfer_to_a_new_program: Accept double precision for measurements and simulations and compare with a tolerance; when exactness is required (counts, money, loop control) use int or long instead. |
-| lvl:floating_point_precision@L4#2 \| level L4 way diagnose_an_error: rule broken: Computed doubles must not be compared for exact equality. Kind: silent logic error. Trigger class: == or != between doubles from arithmetic on non-dyadic fractions (0.1, 1/3, square roots), or a double loop counter with a == / <= bound; can also cause an infinite loop. |
-
-Prune: the model's reply (edge id and score; the kept edges sum to 1):
-```
-{lvl:floating_point_precision@L0#0 (Score: 0.5)}
-{lvl:floating_point_precision@L2#1 (Score: 0.3)}
-{lvl:floating_point_precision@L0#2 (Score: 0.2)}
-```
-Kept by pruning: lvl:floating_point_precision@L0#0 (0.50), lvl:floating_point_precision@L2#1 (0.30), lvl:floating_point_precision@L0#2 (0.20)
-
-Label prompt for level way lvl:floating_point_precision@L0#0 (the model saw only the concept, the way's name 'everyday reading' and its text; no level):
-> Folk meaning: decimal arithmetic is exact, as on paper or on a calculator display, so 0.1 + 0.1 + 0.1 equals 0.3. Java rule: most decimal fractions (0.1) have no exact binary representation, every double operation rounds, and (0.1 + 0.1 + 0.1 == 0.3) is false.
-
-Model's reply:
-```
-Label: not shown
-Clauses: none
-Confidence: 0.95
-```
-
-Label prompt for level way lvl:floating_point_precision@L2#1 (the model saw only the concept, the way's name 'output prediction' and its text; no level):
-> Printed results show the approximation: 0.1 * 10 prints 1.0 but adding 0.1 ten times prints 0.9999999999999999; 5.0/3.0 prints 1.6666666666666667; (0.1 + 0.1 + 0.1 == 0.3) is false.
-
-Model's reply:
-```
-Label: not shown
-Clauses: none
-Confidence: 0.95
-```
-
-Label prompt for level way lvl:floating_point_precision@L0#2 (the model saw only the concept, the way's name 'inconsistent trace' and its text; no level):
-> Points to LT (rounding happens after every single operation, and the error is carried into the next one). Applied unevenly: the student rounds only the final printed value, treating intermediate values as exact on some lines, or expects ten additions of 0.1 to equal 0.1 * 10. (here mixing in: "Math.sqrt(2) * Math.sqrt(2) == 2 is true")
-
-Model's reply:
-```
-Label: not shown
-Clauses: none
-Confidence: 0.93
-```
-
-Parsed labels:
-| edge | label | prune score | confidence | score | clauses | words |
-|---|---|---|---|---|---|---|
-| lvl:floating_point_precision@L0#0 | not applied |  |  | 0.0 |  |  |
-| lvl:floating_point_precision@L2#1 | not applied |  |  | 0.0 |  |  |
-| lvl:floating_point_precision@L0#2 | not applied |  |  | 0.0 |  |  |
-
-**Kept on a path at this depth:** nothing
+mis:char_arithmetic->CharNotNumeric [held, tier 0, 0.60], mis:increment_operators->IncrementByTwo [correct, tier 2, 0.72], pre:assignment->increment_operators [confirmed, tier 2, 0.70]
 
 **Clause coverage after this depth:**
 | clause | text | covered by |
 |---|---|---|
-| c1 | 3.5 | not covered yet |
-| c2 | The cast makes it a double division | not covered yet |
-| c3 | so you get the decimal part | not covered yet |
+| c1 | b | mis:assignment->VariableKeepsOldValue |
+| c2 | because c++ moves to the next letter | mis:assignment->VariableKeepsOldValue |
+| c3 | Then k = c + 1 is the letter after b | mis:assignment->VariableKeepsOldValue |
+| c4 | so it prints c | pre:arithmetic_operators->expression |
 
-**Uncovered clauses bring in (BM25 of the uncovered clauses against unvisited concepts):** comparison_operators (2.85), control_flow (2.80), if_else_statement (1.78)
-
-**Graph check, not yet read (the walk may not stop while these remain):** own edges of comparison_operators, own edges of control_flow, own edges of if_else_statement, pre:comparison_operators->boolean_expression, pre:statement->println, pre:string_literal->println
+**Graph check, not yet read (the walk may not stop while these remain):** pre:char->char_arithmetic, pre:statement->println
 
 Figure 5 (the graph after depth 2): C:\Users\magnu\OneDrive\Desktop\ES_VIterbi_Personalized_Learning\results\viewer\MY30_figure05.png
 
-### Depth 3: current concepts 'println', 'boolean_expression', 'comparison_operators', 'control_flow', 'if_else_statement'
+### Depth 3: current concepts 'char_arithmetic', 'increment_operators', 'assignment', 'println'
 
-#### println, concept edges: 2 edges offered
+#### char_arithmetic, concept edges: 1 edges offered
 Edges offered:
 | edge |
 |---|
-| pre:statement->println \| rule: System.out.println(s); is itself a statement, so its line of output appears at its own place in the sequence. |
-| pre:string_literal->println \| rule: println("s") outputs exactly the characters between the quotes and then ends the line. |
+| pre:char->char_arithmetic \| rule: Char arithmetic uses the numeric code stored for each char. |
 
 Prune: the model's reply (edge id and score; the kept edges sum to 1):
 ```
-{pre:string_literal->println (Score: 0.7)}
-{pre:statement->println (Score: 0.3)}
+{pre:char->char_arithmetic (Score: 1.0)}
 ```
-Kept by pruning: pre:string_literal->println (0.70), pre:statement->println (0.30)
+Kept by pruning: pre:char->char_arithmetic (1.00)
 
-Label prompt for concept edge pre:string_literal->println (string_literal -> println, prerequisite):
-> println("s") outputs exactly the characters between the quotes and then ends the line.
+Label prompt for concept edge pre:char->char_arithmetic (char -> char_arithmetic, prerequisite):
+> Char arithmetic uses the numeric code stored for each char.
 
 Model's reply:
 ```
 Label: broken
-Clauses: 1
-Confidence: 0.55
+Clauses: 3, 4
+Confidence: 0.9
 ```
+
+Parsed labels:
+| edge | label | prune score | confidence | score | clauses | words |
+|---|---|---|---|---|---|---|
+| pre:char->char_arithmetic | broken | 1.0 | 0.9 | 0.9 | c3, c4 | Then k = c + 1 is the letter after b; so it prints c |
+
+#### println, concept edges: 1 edges offered
+Edges offered:
+| edge |
+|---|
+| pre:statement->println \| rule: System.out.println(s); is itself a statement, so its line of output appears at its own place in the sequence. |
+
+Prune: the model's reply (edge id and score; the kept edges sum to 1):
+```
+{pre:statement->println (Score: 1.0)}
+```
+Kept by pruning: pre:statement->println (1.00)
 
 Label prompt for concept edge pre:statement->println (statement -> println, prerequisite):
 > System.out.println(s); is itself a statement, so its line of output appears at its own place in the sequence.
 
 Model's reply:
 ```
-Label: not applied
-Clauses: none
-Confidence: 0.8
+Label: confirmed
+Clauses: 1, 4
+Confidence: 0.7
 ```
 
 Parsed labels:
 | edge | label | prune score | confidence | score | clauses | words |
 |---|---|---|---|---|---|---|
-| pre:string_literal->println | broken | 0.7 | 0.55 | 0.39 | c1 | 3.5 |
-| pre:statement->println | not applied |  |  | 0.0 |  |  |
+| pre:statement->println | confirmed | 1.0 | 0.7 | 0.7 | c1, c4 | b; so it prints c |
 
-#### boolean_expression, concept edges: 2 edges offered
+**Kept on a path at this depth** (best N in tiers: held misconception / broken edge, then held error, then correct / confirmed / shown):
+
+pre:char->char_arithmetic [broken, tier 0, 0.90], pre:statement->println [confirmed, tier 2, 0.70]
+
+reached across pre:char->char_arithmetic, entered next: char
+
+reached across pre:statement->println, entered next: statement
+
+**Clause coverage after this depth:**
+| clause | text | covered by |
+|---|---|---|
+| c1 | b | mis:assignment->VariableKeepsOldValue |
+| c2 | because c++ moves to the next letter | mis:assignment->VariableKeepsOldValue |
+| c3 | Then k = c + 1 is the letter after b | mis:assignment->VariableKeepsOldValue |
+| c4 | so it prints c | pre:arithmetic_operators->expression |
+
+**Graph check, not yet read (the walk may not stop while these remain):** own edges of char, own edges of statement
+
+Figure 6 (the graph after depth 3): C:\Users\magnu\OneDrive\Desktop\ES_VIterbi_Personalized_Learning\results\viewer\MY30_figure06.png
+
+### Depth 4: current concepts 'char', 'statement'
+
+#### char, misconceptions: 1 edges offered
 Edges offered:
 | edge |
 |---|
-| pre:boolean_expression->if_statement \| rule: An if runs its block only when its boolean expression evaluates to true. |
-| pre:comparison_operators->boolean_expression \| rule: A comparison such as x < y produces a boolean result; comparisons together with boolean logic provide the basis for decision-making. |
+| mis:char->CharNotNumeric \| wrong rule: A char is only a letter, so c + k is an error. \| right rule: A char is encoded as a 16-bit integer, so arithmetic such as 'b' + 'c' or 'a' + 4 works on the character codes. |
 
 Prune: the model's reply (edge id and score; the kept edges sum to 1):
 ```
-{pre:boolean_expression->if_statement (Score: 0.6)}
-{pre:comparison_operators->boolean_expression (Score: 0.4)}
+{mis:char->CharNotNumeric (Score: 1.0)}
 ```
-Kept by pruning: pre:boolean_expression->if_statement (0.60), pre:comparison_operators->boolean_expression (0.40)
-
-Label prompt for concept edge pre:boolean_expression->if_statement (boolean_expression -> if_statement, prerequisite):
-> An if runs its block only when its boolean expression evaluates to true.
-
-Model's reply:
-```
-Label: not applied
-Clauses: none
-Confidence: 0.8
-```
-
-Label prompt for concept edge pre:comparison_operators->boolean_expression (comparison_operators -> boolean_expression, prerequisite):
-> A comparison such as x < y produces a boolean result; comparisons together with boolean logic provide the basis for decision-making.
-
-Model's reply:
-```
-Label: not applied
-Clauses: none
-Confidence: 0.9
-```
-
-Parsed labels:
-| edge | label | prune score | confidence | score | clauses | words |
-|---|---|---|---|---|---|---|
-| pre:boolean_expression->if_statement | not applied |  |  | 0.0 |  |  |
-| pre:comparison_operators->boolean_expression | not applied |  |  | 0.0 |  |  |
-
-#### comparison_operators, misconceptions: 8 edges offered
-Edges offered:
-| edge |
-|---|
-| err:comparison_operators->ReversedRelationalOperator \| wrong rule: Writes =< or => instead of <= and >=. \| right rule: The operators are written <= and >=. |
-| mis:comparison_operators->AssignCompares \| wrong rule: = compares two values instead of assigning \| right rule: x = y copies the value of y into x; x == y is what compares them. |
-| mis:comparison_operators->ChainedComparison \| wrong rule: 90 <= grade <= 100 tests whether grade is between 90 and 100. \| right rule: a < b < c does not compile (a < b is a boolean); a range test is written 90 <= grade && grade <= 100. |
-| mis:comparison_operators->ComparisonWithBooleanLiteral \| wrong rule: you must write == true / == false to test a boolean \| right rule: if (b) already tests b, so writing == true adds nothing. |
-| mis:comparison_operators->EqualityOperatorComparesObjectsValues \| wrong rule: s == t is true whenever the two Strings contain the same text. \| right rule: s == t is true only when s and t refer to the same object; s.equals(t) compares the text. |
-| mis:comparison_operators->EqualsComparesReferences \| wrong rule: .equals() compares references, not contents \| right rule: s.equals(t) checks whether the two Strings contain the same characters. |
-| mis:comparison_operators->LessGreaterSwapped \| wrong rule: < and > mean the same thing (or a < b means a is greater than b). \| right rule: a < b is true when a is smaller than b; a > b when a is larger. |
-| mis:comparison_operators->StringRelationalComparison \| wrong rule: s < t compares two Strings alphabetically. \| right rule: < and > are defined only for primitive types; comparing Strings with them does not compile. |
-
-Prune: the model's reply (edge id and score; the kept edges sum to 1):
-```
-mis:comparison_operators->EqualityOperatorComparesObjectsValues (0.40), mis:comparison_operators->AssignCompares (0.30), mis:comparison_operators->EqualsComparesReferences (0.30)
-```
-Kept by pruning: mis:comparison_operators->EqualityOperatorComparesObjectsValues (0.40), mis:comparison_operators->AssignCompares (0.30), mis:comparison_operators->EqualsComparesReferences (0.30)
+Kept by pruning: mis:char->CharNotNumeric (1.00)
 
 Label prompt for the misconception / error edges (judged together). The model saw the program, the question, the numbered clauses, and these edges with their wrong rule and right rule:
 | edge |
 |---|
-| mis:comparison_operators->EqualityOperatorComparesObjectsValues \| wrong rule: s == t is true whenever the two Strings contain the same text. \| right rule: s == t is true only when s and t refer to the same object; s.equals(t) compares the text. |
-| mis:comparison_operators->AssignCompares \| wrong rule: = compares two values instead of assigning \| right rule: x = y copies the value of y into x; x == y is what compares them. |
-| mis:comparison_operators->EqualsComparesReferences \| wrong rule: .equals() compares references, not contents \| right rule: s.equals(t) checks whether the two Strings contain the same characters. |
+| mis:char->CharNotNumeric \| wrong rule: A char is only a letter, so c + k is an error. \| right rule: A char is encoded as a 16-bit integer, so arithmetic such as 'b' + 'c' or 'a' + 4 works on the character codes. |
 Model's reply:
 ```
-mis:comparison_operators->EqualityOperatorComparesObjectsValues | not applied | clauses: none | confidence: 0.95
-mis:comparison_operators->AssignCompares | not applied | clauses: none | confidence: 0.95
-mis:comparison_operators->EqualsComparesReferences | not applied | clauses: none | confidence: 0.95
+mis:char->CharNotNumeric | not applied | clauses: none | confidence: 0.6
 ```
 
 Parsed labels:
 | edge | label | prune score | confidence | score | clauses | words |
 |---|---|---|---|---|---|---|
-| mis:comparison_operators->EqualityOperatorComparesObjectsValues | not applied |  |  | 0.0 |  |  |
-| mis:comparison_operators->AssignCompares | not applied |  |  | 0.0 |  |  |
-| mis:comparison_operators->EqualsComparesReferences | not applied |  |  | 0.0 |  |  |
+| mis:char->CharNotNumeric | not applied |  |  | 0.0 |  |  |
 
-#### comparison_operators, level ways: 20 edges offered
+#### char, level ways: 19 edges offered
 Edges offered:
 | edge |
 |---|
-| lvl:comparison_operators@L0#0 \| level L0 way everyday_reading: Folk meaning: in maths = states that two things are equal, and inequalities can be chained (a < b < c) or spoken as 'equal or less than' (=<). Java rule: = assigns while == compares; the operators are spelled <= and >= only; a < b < c does not compile; and on Strings == compares references. |
-| lvl:comparison_operators@L0#5 \| level L0 way inconsistent_trace: Points to LT (evaluate both operands, promote to a common type, then compare). Applied unevenly: the student treats < as <= on the boundary pass of a loop, or compares an int with a double as ints on one line and as doubles on another. (here mixing in: "90 <= grade <= 100 tests whether grade is between 90 and 100") |
-| lvl:comparison_operators@L1#0 \| level L1 way names_the_element: Comparison (relational) operators ==, !=, <, <=, >, >= are mixed-type operators: they take two operands of a numeric type and produce a boolean. |
-| lvl:comparison_operators@L1#1 \| level L1 way states_the_rule: ==, !=, <, <=, >, >= are defined for each primitive numeric type and produce a boolean; they have lower precedence than arithmetic and higher than boolean operators; < and > are not defined for Strings, and == on non-primitive types compares identity. |
-| lvl:comparison_operators@L2#0 \| level L2 way line_by_line_trace: Evaluate the left operand (including its arithmetic), then the right operand; if their types differ, promote the narrower one (int to double); then compare and produce true or false. |
-| lvl:comparison_operators@L2#1 \| level L2 way output_prediction: The result is a boolean: (2 <= 2) is true, 2 < 2 is false, (x < 3.1) is true for int x = 3; any comparison involving NaN, even NaN == NaN, is false. |
-| lvl:comparison_operators@L2#2 \| level L2 way one_step_execution: A comparison changes no variable and only returns a boolean, unlike =, which changes the value of the variable on its left. |
-| lvl:comparison_operators@L3#0 \| level L3 way relation_to_neighbour: A comparison is itself an expression whose value is a boolean, so it can appear anywhere a boolean is needed, including on the right of an assignment (boolean ok = x > y;). |
-| lvl:comparison_operators@L3#1 \| level L3 way relation_to_neighbour: Comparisons are the building blocks of conditions: together with boolean logic they provide the basis for decision-making. |
-| lvl:comparison_operators@L3#2 \| level L3 way relation_to_neighbour: Comparisons bind tighter than && and \|\|, so they are evaluated first and logical operators combine their boolean results. |
-| lvl:comparison_operators@L3#3 \| level L3 way relation_to_neighbour: Comparisons take numbers and produce a boolean; boolean values themselves can be compared only with == and != (not <), and testing them against true is unnecessary. |
-| lvl:comparison_operators@L3#4 \| level L3 way relation_to_neighbour: x = y stores the value of y in x (a statement with a side effect); x == y only tests whether the two values are equal and gives a boolean. Writing = where == is meant is a compile error with int operands and a silent bug with boolean operands. |
-| lvl:comparison_operators@L3#5 \| level L3 way purpose_of_the_whole: Used to test a numeric condition: thresholds and sign checks, range tests, divisibility (n % k == 0), loop continuation (i < N), sentinel checks, and running-extreme updates (if (x > max) max = x). |
-| lvl:comparison_operators@L4#0 \| level L4 way predict_a_change: Changing < to <= (or > to >=) changes the result only at the boundary value, which in a loop guard means one more or one fewer iteration (off-by-one); mirroring the comparison (a < b to b > a) preserves the value; negating it gives the complementary operator (!(a < b) is a >= b). |
-| lvl:comparison_operators@L4#1 \| level L4 way diagnose_an_error: rule broken: The operators are written <= and >=. Kind: compile-time. Trigger class: Writing =< or => (e.g. if (x => 0)). |
-| lvl:comparison_operators@L4#2 \| level L4 way transfer_to_a_new_program: Use comparison operators for numeric and char tests; for Strings use equals (or compareTo); for computed doubles use a tolerance; for booleans use the variable itself instead of == true. |
-| lvl:comparison_operators@L4#3 \| level L4 way diagnose_an_error: rule broken: == compares, = assigns. Kind: compile-time. Trigger class: if (a = b) with int operands (with boolean operands it compiles and silently assigns). |
-| lvl:comparison_operators@L4#4 \| level L4 way diagnose_an_error: rule broken: == on Strings compares references, not text. Kind: silent logic error. Trigger class: Comparing a String built at run time (input, concatenation) with a literal using ==. |
-| lvl:comparison_operators@L4#5 \| level L4 way diagnose_an_error: rule broken: < and > are defined only for primitive types; comparisons cannot be chained; both operands must be compatible. Kind: compile-time. Trigger class: s < t on Strings, a < b < c, or 5 < "6". |
-| lvl:comparison_operators@L4#6 \| level L4 way diagnose_an_error: rule broken: Computed doubles should not be compared with ==. Kind: silent logic error. Trigger class: == between doubles produced by arithmetic, e.g. (0.1 + 0.1 + 0.1 == 0.3). |
+| lvl:char@L0#0 \| level L0 way everyday_reading: In everyday life '7' and 7 are the same thing, and a character is a letter, not a number. A Java char is a 16-bit numeric code: '7' has code 55, and 'a' + 1 is the int 98. |
+| lvl:char@L0#2 \| level L0 way inconsistent_trace: Points to LT (a char in arithmetic becomes its int code). Applied unevenly, a student treats 'b' + 'c' as 197 in one exercise but prints it as "bc" in another. (here mixing in: "char is not a numeric type") |
+| lvl:char@L1#0 \| level L1 way names_the_element: char: the primitive type for a single 16-bit Unicode character, such as 'a', '%' or '\n'. |
+| lvl:char@L1#1 \| level L1 way states_the_rule: A char literal is exactly one character (or one escape sequence) in single quotes. Values range from '\u0000' to '\uffff' (0 to 65535), and char is an integral type. A char literal is one character in single quotes ('a'); a String literal is any sequence in double quotes ("a"), so 'a' and "a" have different types and 'ab' does not compile. |
+| lvl:char@L2#0 \| level L2 way line_by_line_trace: When a char meets an arithmetic operator, it is first promoted to int (its code) and the operation runs in int. Storing the result back in a char needs an explicit cast. |
+| lvl:char@L2#1 \| level L2 way output_prediction: System.out.println('b') prints b. 'b' + 'c' is the int 197. (char) ('a' + 4) is 'e'. |
+| lvl:char@L2#2 \| level L2 way one_step_execution: c++ on char c = 'A' makes c 'B', because increment works on chars directly. c = c + 1; does not compile, because the right side is an int. |
+| lvl:char@L3#0 \| level L3 way relation_to_neighbour: A char is stored as an unsigned 16-bit code, so in arithmetic it acts as an int ('a' + 1 is 98). Going from int to char needs a cast. |
+| lvl:char@L3#1 \| level L3 way relation_to_neighbour: A char widens automatically to double (its code), but a double needs a cast to become a char. A char never holds a fractional part. |
+| lvl:char@L3#2 \| level L3 way relation_to_neighbour: char and boolean are unrelated: there is no conversion or cast between them, and 'c' is never true or false. |
+| lvl:char@L3#3 \| level L3 way relation_to_neighbour: Char arithmetic works on each char's numeric code and yields an int. A cast turns the result back into a character. |
+| lvl:char@L3#4 \| level L3 way relation_to_neighbour: char is one of the eight primitive types: the unsigned 16-bit integral one, used for single characters. |
+| lvl:char@L3#5 \| level L3 way relation_to_neighbour: 'a' is a char (one 16-bit character code, a primitive); "a" is a String (a sequence of characters, an object). 'a' + 'b' is the int 195, while "a" + "b" is "ab". |
+| lvl:char@L3#6 \| level L3 way purpose_of_the_whole: A char holds one character: processing text one character at a time (charAt), looping over 'A'..'Z', or shifting letters in a cipher. |
+| lvl:char@L4#0 \| level L4 way predict_a_change: Changing 'A' to "A" changes the type to String, so + concatenates instead of adding. Changing a char variable to int keeps the arithmetic, but println then prints numbers instead of letters. |
+| lvl:char@L4#1 \| level L4 way transfer_to_a_new_program: Use char for one character from a literal or from charAt, especially when the character's code matters (alphabet loops, ciphers). Use String for text of any length. |
+| lvl:char@L4#2 \| level L4 way diagnose_an_error: rule broken: A char literal holds exactly one character. Kind: compile-time. Trigger class: Several characters in single quotes ('ab') or a word in single quotes: 'unclosed character literal'. |
+| lvl:char@L4#3 \| level L4 way diagnose_an_error: rule broken: int arithmetic on chars yields an int, which cannot go into a char without a cast. Kind: compile-time. Trigger class: char c = 'a' + i; or c = c + 1; with variable i: 'possible lossy conversion from int to char'. |
+| lvl:char@L4#4 \| level L4 way diagnose_an_error: rule broken: A char compares by its code, not by the digit or letter it shows. Kind: silent logic error. Trigger class: Comparing a char with an int as if it were a digit (seat <= 3 for seat = 'A'), or printing c + 1 expecting a letter. |
 
 Prune: the model's reply (edge id and score; the kept edges sum to 1):
 ```
-{lvl:comparison_operators@L4#6 (Score: 0.4)}
-{lvl:comparison_operators@L2#0 (Score: 0.35)}
-{lvl:comparison_operators@L2#1 (Score: 0.25)}
+{lvl:char@L0#0 (Score: 0.5)}
+{lvl:char@L2#2 (Score: 0.3)}
+{lvl:char@L3#3 (Score: 0.2)}
 ```
-Kept by pruning: lvl:comparison_operators@L4#6 (0.40), lvl:comparison_operators@L2#0 (0.35), lvl:comparison_operators@L2#1 (0.25)
+Kept by pruning: lvl:char@L0#0 (0.50), lvl:char@L2#2 (0.30), lvl:char@L3#3 (0.20)
 
-Label prompt for level way lvl:comparison_operators@L4#6 (the model saw only the concept, the way's name 'diagnose an error' and its text; no level):
-> rule broken: Computed doubles should not be compared with ==. Kind: silent logic error. Trigger class: == between doubles produced by arithmetic, e.g. (0.1 + 0.1 + 0.1 == 0.3).
+Label prompt for level way lvl:char@L0#0 (the model saw only the concept, the way's name 'everyday reading' and its text; no level):
+> In everyday life '7' and 7 are the same thing, and a character is a letter, not a number. A Java char is a 16-bit numeric code: '7' has code 55, and 'a' + 1 is the int 98.
 
 Model's reply:
 ```
-Label: not shown
-Clauses: none
-Confidence: 0.97
+Label: shown
+Clauses: 3, 4
+Confidence: 0.85
 ```
 
-Label prompt for level way lvl:comparison_operators@L2#0 (the model saw only the concept, the way's name 'line by line trace' and its text; no level):
-> Evaluate the left operand (including its arithmetic), then the right operand; if their types differ, promote the narrower one (int to double); then compare and produce true or false.
+Label prompt for level way lvl:char@L2#2 (the model saw only the concept, the way's name 'one step execution' and its text; no level):
+> c++ on char c = 'A' makes c 'B', because increment works on chars directly. c = c + 1; does not compile, because the right side is an int.
 
 Model's reply:
 ```
-Label: not shown
-Clauses: none
-Confidence: 0.9
+Label: shown
+Clauses: 1, 2
+Confidence: 0.75
 ```
 
-Label prompt for level way lvl:comparison_operators@L2#1 (the model saw only the concept, the way's name 'output prediction' and its text; no level):
-> The result is a boolean: (2 <= 2) is true, 2 < 2 is false, (x < 3.1) is true for int x = 3; any comparison involving NaN, even NaN == NaN, is false.
-
-Model's reply:
-```
-Label: not shown
-Clauses: none
-Confidence: 0.92
-```
-
-Parsed labels:
-| edge | label | prune score | confidence | score | clauses | words |
-|---|---|---|---|---|---|---|
-| lvl:comparison_operators@L4#6 | not applied |  |  | 0.0 |  |  |
-| lvl:comparison_operators@L2#0 | not applied |  |  | 0.0 |  |  |
-| lvl:comparison_operators@L2#1 | not applied |  |  | 0.0 |  |  |
-
-#### control_flow, misconceptions: 11 edges offered
-Edges offered:
-| edge |
-|---|
-| mis:control_flow->CodeAfterIfSkipped \| wrong rule: When the then branch runs, the code after the if is skipped. \| right rule: After the if finishes, execution continues with the next statement either way. |
-| mis:control_flow->FalseConditionRestartsProgram \| wrong rule: When an if condition is false (and there is no else), control jumps back to the start of the program. \| right rule: A false condition skips the then branch and execution continues with the statement after the if statement. |
-| mis:control_flow->FalseLoopRepeatsNextCode \| wrong rule: A loop is an iterative if-else: while the condition is true the body repeats, and when it is false the code after the loop repeats. \| right rule: Only the body is repeated; once the condition is false the code after the loop runs once. |
-| mis:control_flow->IfConditionWatched \| wrong rule: An if statement watches its condition while the program runs and fires as soon as the condition becomes true (if = whenever). \| right rule: An if condition is tested once, when control reaches the if statement; later changes to the variables do not trigger the branch. |
-| mis:control_flow->IfWaitsForCondition \| wrong rule: An IF statement earlier in the program stays active and fires later, e.g. inside a later loop, when its condition becomes true. \| right rule: An if is evaluated once when control reaches it; afterwards it is inactive unless control returns to it. |
-| mis:control_flow->LoopImpliedByOneTest \| wrong rule: Testing one case is enough; Java will repeat the test for the other values by itself. \| right rule: A statement runs once each time control reaches it; repeating a test for many values needs a loop. |
-| mis:control_flow->NoShortCircuit \| wrong rule: logical AND/OR always evaluate both sides (Java short-circuits them) \| right rule: In p && q, q is evaluated only when p is true; in p \|\| q, q is evaluated only when p is false. |
-| mis:control_flow->ProgramEndsAfterLoop \| wrong rule: When a loop finishes the program ends, so code after the loop never runs. \| right rule: When the loop condition becomes false, control continues with the first statement after the loop. |
-| mis:control_flow->ProgramLooksAhead \| wrong rule: The program knows or sees what later lines will do and acts on those goals at the current line, e.g. it stops 'at ten' because it wants to draw a box. \| right rule: Each statement executes using only the current state; later lines have no effect until control reaches them. |
-| mis:control_flow->ReturnDoesNotExitLoop \| wrong rule: A return inside a loop does not end the loop; it sets a value each pass (the last one is returned) or returns several values. \| right rule: When return executes, the method ends at once, so the loop stops on that pass. |
-| mis:control_flow->StatementsRunInAnyOrder \| wrong rule: Statements in a program can run in any order. \| right rule: Without control statements, statements run once each, top to bottom. |
-
-Prune: the model's reply (edge id and score; the kept edges sum to 1):
-```
-mis:control_flow->StatementsRunInAnyOrder (0.40), mis:control_flow->CodeAfterIfSkipped (0.30), mis:control_flow->FalseConditionRestartsProgram (0.30)
-```
-Kept by pruning: mis:control_flow->StatementsRunInAnyOrder (0.40), mis:control_flow->CodeAfterIfSkipped (0.30), mis:control_flow->FalseConditionRestartsProgram (0.30)
-
-Label prompt for the misconception / error edges (judged together). The model saw the program, the question, the numbered clauses, and these edges with their wrong rule and right rule:
-| edge |
-|---|
-| mis:control_flow->StatementsRunInAnyOrder \| wrong rule: Statements in a program can run in any order. \| right rule: Without control statements, statements run once each, top to bottom. |
-| mis:control_flow->CodeAfterIfSkipped \| wrong rule: When the then branch runs, the code after the if is skipped. \| right rule: After the if finishes, execution continues with the next statement either way. |
-| mis:control_flow->FalseConditionRestartsProgram \| wrong rule: When an if condition is false (and there is no else), control jumps back to the start of the program. \| right rule: A false condition skips the then branch and execution continues with the statement after the if statement. |
-Model's reply:
-```
-mis:control_flow->StatementsRunInAnyOrder | not applied | clauses: none | confidence: 0.9
-mis:control_flow->CodeAfterIfSkipped | not applied | clauses: none | confidence: 0.9
-mis:control_flow->FalseConditionRestartsProgram | not applied | clauses: none | confidence: 0.9
-```
-
-Parsed labels:
-| edge | label | prune score | confidence | score | clauses | words |
-|---|---|---|---|---|---|---|
-| mis:control_flow->StatementsRunInAnyOrder | not applied |  |  | 0.0 |  |  |
-| mis:control_flow->CodeAfterIfSkipped | not applied |  |  | 0.0 |  |  |
-| mis:control_flow->FalseConditionRestartsProgram | not applied |  |  | 0.0 |  |  |
-
-#### control_flow, level ways: 15 edges offered
-Edges offered:
-| edge |
-|---|
-| lvl:control_flow@L0#0 \| level L0 way everyday_reading: Folk meaning: in everyday instructions a listener reads the whole list at once, does steps in a sensible order and infers what the writer wants. Java instead executes statements one at a time, top to bottom, each only when control reaches it, and nothing later in the program has any effect earlier. |
-| lvl:control_flow@L0#3 \| level L0 way inconsistent_trace: Applies the sequencing rule (LT) unevenly: e.g. runs a later line before an earlier one, lets an if that was already passed fire again later, or ends the program when a loop or a false if ends instead of continuing with the next statement. (here mixing in: "Statements in a program can run in any order") |
-| lvl:control_flow@L1#0 \| level L1 way names_the_element: Control flow is the order in which a program's statements are executed (statement sequencing); conditionals and loops are the statements that change it. |
-| lvl:control_flow@L1#1 \| level L1 way states_the_rule: Without control statements every statement executes once, in the order given; a block executes its statements in order from first to last; if/if-else choose between one or two alternatives and loops repeat statements depending on a condition. |
-| lvl:control_flow@L2#0 \| level L2 way line_by_line_trace: Execute the statement at the current point; when it completes normally, control passes to the next statement in the block. An if evaluates its condition once and then runs at most one branch; a loop evaluates its condition before each pass; after an if or a loop finishes, control continues with the statement after it. |
-| lvl:control_flow@L2#1 \| level L2 way output_prediction: The output is the sequence of print statements that control actually reaches, in the order reached: e.g. TenHellos prints 1st, 2nd, 3rd Hello once each, then 4th to 10th Hello from the loop. |
-| lvl:control_flow@L2#2 \| level L2 way one_step_execution: One step executes the single statement at the current control point using the current values, updates at most the variables it assigns, and moves the control point to the next statement (or, for an if/loop test, to the chosen branch, back to the test, or past the statement). |
-| lvl:control_flow@L3#0 \| level L3 way relation_to_neighbour: Control flow is defined over statements: statements are executed for their effect, and if/while/for are themselves statements that may be used wherever a statement is allowed, so they can nest. |
-| lvl:control_flow@L3#1 \| level L3 way relation_to_neighbour: An if changes the default top-to-bottom flow: its condition is tested once when control reaches it, its block runs only if true, and in both cases control then continues with the next statement. |
-| lvl:control_flow@L3#2 \| level L3 way relation_to_neighbour: A flowchart draws control flow: each path through the diagram is a possible path of execution, with a decision box for each if or loop test. |
-| lvl:control_flow@L3#3 \| level L3 way purpose_of_the_whole: Plan: control flow lets one program do different things for different inputs (selection) and do a thing many times (repetition), so a short program can specify a potentially unlimited number of executed statements. |
-| lvl:control_flow@L4#0 \| level L4 way predict_a_change: Reordering two statements generally changes the result whenever one reads a variable that the other writes (e.g. swapping x = x + 1 and print(x)); reordering is safe only for statements that touch disjoint variables. Moving a statement into or out of a branch or loop body changes how many times it runs (0, 1 or n). |
-| lvl:control_flow@L4#1 \| level L4 way transfer_to_a_new_program: Reason in terms of control flow whenever you must predict output or find why a statement did or did not run: trace which statement is reached next. Straight-line sequence suffices only when every input needs the same steps exactly once; otherwise add a conditional or a loop. |
-| lvl:control_flow@L4#2 \| level L4 way diagnose_an_error: rule broken: A local variable must be definitely assigned on every control-flow path before it is read. Kind: compile-time. Trigger class: A variable assigned only inside an if branch (or only in a loop body) and read after it: the compiler reports 'variable might not have been initialized'. |
-| lvl:control_flow@L4#3 \| level L4 way diagnose_an_error: rule broken: Statements run in the order written, so an update must come before the statement that needs the new value. Kind: silent logic error. Trigger class: Swapping two dependent statements (e.g. printing before updating, or incrementing the index before using it): output is shifted or off by one pass, with no error. |
-
-Prune: the model's reply (edge id and score; the kept edges sum to 1):
-```
-{lvl:control_flow@L0#0 (Score: 0.45)}
-{lvl:control_flow@L2#1 (Score: 0.3)}
-{lvl:control_flow@L0#3 (Score: 0.25)}
-```
-Kept by pruning: lvl:control_flow@L0#0 (0.45), lvl:control_flow@L2#1 (0.30), lvl:control_flow@L0#3 (0.25)
-
-Label prompt for level way lvl:control_flow@L0#0 (the model saw only the concept, the way's name 'everyday reading' and its text; no level):
-> Folk meaning: in everyday instructions a listener reads the whole list at once, does steps in a sensible order and infers what the writer wants. Java instead executes statements one at a time, top to bottom, each only when control reaches it, and nothing later in the program has any effect earlier.
-
-Model's reply:
-```
-Label: not shown
-Clauses: none
-Confidence: 0.95
-```
-
-Label prompt for level way lvl:control_flow@L2#1 (the model saw only the concept, the way's name 'output prediction' and its text; no level):
-> The output is the sequence of print statements that control actually reaches, in the order reached: e.g. TenHellos prints 1st, 2nd, 3rd Hello once each, then 4th to 10th Hello from the loop.
+Label prompt for level way lvl:char@L3#3 (the model saw only the concept, the way's name 'relation to neighbour' and its text; no level):
+> Char arithmetic works on each char's numeric code and yields an int. A cast turns the result back into a character.
 
 Model's reply:
 ```
@@ -1140,432 +972,324 @@ Clauses: none
 Confidence: 0.85
 ```
 
-Label prompt for level way lvl:control_flow@L0#3 (the model saw only the concept, the way's name 'inconsistent trace' and its text; no level):
-> Applies the sequencing rule (LT) unevenly: e.g. runs a later line before an earlier one, lets an if that was already passed fire again later, or ends the program when a loop or a false if ends instead of continuing with the next statement. (here mixing in: "Statements in a program can run in any order")
-
-Model's reply:
-```
-Label: not shown
-Clauses: none
-Confidence: 0.9
-```
-
 Parsed labels:
 | edge | label | prune score | confidence | score | clauses | words |
 |---|---|---|---|---|---|---|
-| lvl:control_flow@L0#0 | not applied |  |  | 0.0 |  |  |
-| lvl:control_flow@L2#1 | not applied |  |  | 0.0 |  |  |
-| lvl:control_flow@L0#3 | not applied |  |  | 0.0 |  |  |
+| lvl:char@L0#0 | shown | 0.5 | 0.85 | 0.42 | c3, c4 | Then k = c + 1 is the letter after b; so it prints c |
+| lvl:char@L2#2 | shown | 0.3 | 0.75 | 0.22 | c1, c2 | b; because c++ moves to the next letter |
+| lvl:char@L3#3 | not applied |  |  | 0.0 |  |  |
 
-#### if_else_statement, misconceptions: 6 edges offered
+#### statement, misconceptions: 5 edges offered
 Edges offered:
 | edge |
 |---|
-| err:if_else_statement->ElseWithCondition \| wrong rule: Writes else (x > 0) with a condition but no if. \| right rule: else takes no condition; use else if (x > 0). |
-| mis:if_else_statement->BothBranchesExecute \| wrong rule: Both the then branch and the else branch run. \| right rule: Exactly one of the two branches runs. |
-| mis:if_else_statement->BranchChosenByIntent \| wrong rule: Which branch runs is decided by what the programmer meant or by code outside the if, not by whether the condition is true. \| right rule: The then branch runs exactly when the condition evaluates to true at the moment it is tested; otherwise the else branch (if any) runs. |
-| mis:if_else_statement->ConditionalIsSequence \| wrong rule: if (c) A else B is the same as if (c) A followed by if (!c) B. \| right rule: In if-else, c is tested once and exactly one of A or B runs, even if A changes the variables that c uses. |
-| mis:if_else_statement->DuplicateCodeInBranches \| wrong rule: Writes the same statements in both branches of an if-else. \| right rule: Code common to both branches belongs before or after the if-else. |
-| mis:if_else_statement->ElseAlwaysExecutes \| wrong rule: The else branch of an if-else statement always executes. \| right rule: The else branch runs only when the if condition is false. |
+| err:statement->StatementNeedsNoTerminator \| wrong rule: A statement still compiles and runs if the semicolon at its end is left out, or if a stray ; is put right after if (c) or for (...). \| right rule: Each statement must end with ;, otherwise javac reports ';' expected. |
+| mis:statement->ComputerFillsInIntent \| wrong rule: The computer fills in omitted steps or values that the programmer meant, e.g. REPEAT 4 [FORWARD 30] draws a square without a turn command. \| right rule: The computer executes only what the code states; every needed step and value must be written. |
+| mis:statement->ProgramLooksAhead \| wrong rule: The program knows or sees what later lines will do and acts on those goals at the current line, e.g. it stops 'at ten' because it wants to draw a box. \| right rule: Each statement executes using only the current state; later lines have no effect until control reaches them. |
+| mis:statement->StatementsRunInAnyOrder \| wrong rule: Statements in a program can run in any order. \| right rule: Without control statements, statements run once each, top to bottom. |
+| mis:statement->WhitespaceIsSignificant \| wrong rule: Line breaks and indentation change what the program does, so each statement must be on its own line. \| right rule: Java compilers consider all whitespace in program text (outside quotation marks) to be equivalent; layout is for human readers. |
 
 Prune: the model's reply (edge id and score; the kept edges sum to 1):
 ```
-mis:if_else_statement->BranchChosenByIntent (0.50), mis:if_else_statement->ElseAlwaysExecutes (0.30), mis:if_else_statement->BothBranchesExecute (0.20)
+{mis:statement->StatementsRunInAnyOrder (Score: 0.45)}
+{mis:statement->ProgramLooksAhead (Score: 0.35)}
+{mis:statement->ComputerFillsInIntent (Score: 0.2)}
 ```
-Kept by pruning: mis:if_else_statement->BranchChosenByIntent (0.50), mis:if_else_statement->ElseAlwaysExecutes (0.30), mis:if_else_statement->BothBranchesExecute (0.20)
+Kept by pruning: mis:statement->StatementsRunInAnyOrder (0.45), mis:statement->ProgramLooksAhead (0.35), mis:statement->ComputerFillsInIntent (0.20)
 
 Label prompt for the misconception / error edges (judged together). The model saw the program, the question, the numbered clauses, and these edges with their wrong rule and right rule:
 | edge |
 |---|
-| mis:if_else_statement->BranchChosenByIntent \| wrong rule: Which branch runs is decided by what the programmer meant or by code outside the if, not by whether the condition is true. \| right rule: The then branch runs exactly when the condition evaluates to true at the moment it is tested; otherwise the else branch (if any) runs. |
-| mis:if_else_statement->ElseAlwaysExecutes \| wrong rule: The else branch of an if-else statement always executes. \| right rule: The else branch runs only when the if condition is false. |
-| mis:if_else_statement->BothBranchesExecute \| wrong rule: Both the then branch and the else branch run. \| right rule: Exactly one of the two branches runs. |
+| mis:statement->StatementsRunInAnyOrder \| wrong rule: Statements in a program can run in any order. \| right rule: Without control statements, statements run once each, top to bottom. |
+| mis:statement->ProgramLooksAhead \| wrong rule: The program knows or sees what later lines will do and acts on those goals at the current line, e.g. it stops 'at ten' because it wants to draw a box. \| right rule: Each statement executes using only the current state; later lines have no effect until control reaches them. |
+| mis:statement->ComputerFillsInIntent \| wrong rule: The computer fills in omitted steps or values that the programmer meant, e.g. REPEAT 4 [FORWARD 30] draws a square without a turn command. \| right rule: The computer executes only what the code states; every needed step and value must be written. |
 Model's reply:
 ```
-mis:if_else_statement->BranchChosenByIntent | not applied | clauses: none | confidence: 0.9
-mis:if_else_statement->ElseAlwaysExecutes | not applied | clauses: none | confidence: 0.9
-mis:if_else_statement->BothBranchesExecute | not applied | clauses: none | confidence: 0.9
+mis:statement->StatementsRunInAnyOrder | correct | clauses: 2, 3 | confidence: 0.7
+mis:statement->ProgramLooksAhead | not applied | clauses: none | confidence: 0.8
+mis:statement->ComputerFillsInIntent | not applied | clauses: none | confidence: 0.75
 ```
 
 Parsed labels:
 | edge | label | prune score | confidence | score | clauses | words |
 |---|---|---|---|---|---|---|
-| mis:if_else_statement->BranchChosenByIntent | not applied |  |  | 0.0 |  |  |
-| mis:if_else_statement->ElseAlwaysExecutes | not applied |  |  | 0.0 |  |  |
-| mis:if_else_statement->BothBranchesExecute | not applied |  |  | 0.0 |  |  |
+| mis:statement->StatementsRunInAnyOrder | correct | 0.45 | 0.7 | 0.32 | c2, c3 | because c++ moves to the next letter; Then k = c + 1 is the letter after b |
+| mis:statement->ProgramLooksAhead | not applied |  |  | 0.0 |  |  |
+| mis:statement->ComputerFillsInIntent | not applied |  |  | 0.0 |  |  |
 
-#### if_else_statement, level ways: 17 edges offered
+#### statement, level ways: 19 edges offered
 Edges offered:
 | edge |
 |---|
-| lvl:if_else_statement@L0#0 \| level L0 way everyday_reading: Folk meaning: in English 'otherwise' can be heard as 'and then also', and 'if ... else ...' as two separate rules that are each checked. In Java the condition is tested once and exactly one of the two branches runs. |
-| lvl:if_else_statement@L0#5 \| level L0 way inconsistent_trace: Applies the if-else rule (LT) unevenly: on some traces runs both branches, re-tests the condition after the then branch to decide whether to run the else branch, or runs the else branch whatever the condition. (here mixing in: "if-else is the same as two separate ifs") |
-| lvl:if_else_statement@L1#0 \| level L1 way names_the_element: The if-else statement is a two-way conditional: it executes one of two statements (or blocks) depending on a boolean condition. |
-| lvl:if_else_statement@L1#1 \| level L1 way states_the_rule: Syntax: if (<boolean expression>) <statements T> else <statements F>; it executes one or the other, but not both: T if the condition is true, F otherwise. |
-| lvl:if_else_statement@L2#0 \| level L2 way line_by_line_trace: Evaluate the condition once; if true execute the then branch, otherwise execute the else branch; then continue with the statement after the whole if-else (the condition is not re-tested). |
-| lvl:if_else_statement@L2#1 \| level L2 way output_prediction: Exactly one branch's effects occur; e.g. if (x > y) max = x; else max = y; leaves max equal to the larger value, and the coin flip prints either Heads or Tails, never both. |
-| lvl:if_else_statement@L2#2 \| level L2 way one_step_execution: One execution reads the condition's variables and applies the effects of exactly one branch; a change made by the then branch to the condition's variables cannot cause the else branch to run. |
-| lvl:if_else_statement@L3#0 \| level L3 way relation_to_neighbour: if-else is an if with a second branch for the false case; dropping the else gives a plain if in which the false case does nothing. |
-| lvl:if_else_statement@L3#1 \| level L3 way relation_to_neighbour: Either branch may itself be an if or if-else, which nests conditionals; without braces an inner else pairs with the innermost if. |
-| lvl:if_else_statement@L3#2 \| level L3 way relation_to_neighbour: c ? a : b is the expression form of if (c) v = a; else v = b;: it yields a value of one branch, evaluating only the selected operand. |
-| lvl:if_else_statement@L3#3 \| level L3 way relation_to_neighbour: An else-if chain is an if-else whose else part is another if-else, repeated; the final else catches all remaining cases. |
-| lvl:if_else_statement@L3#4 \| level L3 way purpose_of_the_whole: Plan: two-way choice / alternative action - compute one of two results (max of two values, heads or tails, error message or quotient). |
-| lvl:if_else_statement@L4#0 \| level L4 way predict_a_change: Swapping the two branches and negating the condition preserves behaviour; swapping the branches alone inverts it. Replacing if-else with two separate ifs is not equivalent when the then branch changes a variable used in the condition. |
-| lvl:if_else_statement@L4#1 \| level L4 way diagnose_an_error: rule broken: else takes no condition: it is the branch for the false case of the preceding if; a further test needs else if (...). Kind: compile-time. Trigger class: Writing else (x > 0) stmt; the compiler reads (x > 0) as the start of an expression statement, which is not a valid statement, and reports an error. |
-| lvl:if_else_statement@L4#2 \| level L4 way transfer_to_a_new_program: Use if-else when exactly one of two actions must happen; use a plain if when nothing happens in the false case, an else-if chain or switch for more than two mutually exclusive cases, and c ? a : b when you only need to choose a value. |
-| lvl:if_else_statement@L4#3 \| level L4 way diagnose_an_error: rule broken: Code common to both branches belongs before or after the if-else. Kind: silent logic error. Trigger class: A statement duplicated in both branches and later edited in only one: the two cases silently diverge. |
-| lvl:if_else_statement@L4#4 \| level L4 way diagnose_an_error: rule broken: An else must directly follow the then statement of an if. Kind: compile-time. Trigger class: if (c) x = 1; y = 2; else x = 0;: the else has no matching if ('else without if'). |
+| lvl:statement@L0#0 \| level L0 way everyday_reading: Everyday reading: a program is read like a text or a list of wishes that the computer takes in all at once, so line order, goals of later lines or what the writer meant can matter. Java rule: each statement is one step, ended by ;, executed once, in written order, using only the current state. |
+| lvl:statement@L0#2 \| level L0 way inconsistent_trace: Applies the sequencing rule (LT) unevenly: executes the statements in order on some lines but lets a later statement's effect leak into an earlier one, or skips or repeats a statement on one pass. (here mixing in: "The computer fills in omitted steps or values that the programmer meant, e.g. REPEAT 4 [FORWARD 30] draws a square without a turn command") |
+| lvl:statement@L1#0 \| level L1 way names_the_element: A statement is one step of a program (a declaration, assignment, method call such as System.out.println(...), or control statement), ended by a semicolon when it is a simple statement. |
+| lvl:statement@L1#1 \| level L1 way states_the_rule: A method body is a sequence of statements enclosed in braces and each followed by a semicolon; statements are executed for their effect and have no value; an expression statement evaluates its expression and discards any value. |
+| lvl:statement@L2#0 \| level L2 way line_by_line_trace: Statements run one at a time, from first to last; each completes (normally or abruptly) before the next starts. |
+| lvl:statement@L2#1 \| level L2 way output_prediction: A statement has no value; its result is its effect: a changed variable, printed output, or a change of control flow. |
+| lvl:statement@L2#2 \| level L2 way one_step_execution: Executing one statement applies its single effect to the current state (e.g. prints one string, or stores one value) and then control moves to the next statement. |
+| lvl:statement@L3#0 \| level L3 way relation_to_neighbour: Statements live in main's body; running the program executes main's statements in order. |
+| lvl:statement@L3#1 \| level L3 way relation_to_neighbour: A block groups a sequence of statements in braces; the body of main() is such a block. |
+| lvl:statement@L3#2 \| level L3 way relation_to_neighbour: System.out.print(s); is a statement, so its output appears exactly at its place in the sequence, with no newline. |
+| lvl:statement@L3#3 \| level L3 way relation_to_neighbour: System.out.println(s); is a statement, so its line of output appears at its place in the sequence; swapping two println statements swaps the output lines. |
+| lvl:statement@L3#4 \| level L3 way relation_to_neighbour: Control flow is the order in which statements run; without control statements it is straight-line, each once in order. |
+| lvl:statement@L3#5 \| level L3 way relation_to_neighbour: A lone ; is the empty statement, which does nothing; it can fill a for-loop part or, by accident, end an if or loop header. |
+| lvl:statement@L3#6 \| level L3 way relation_to_neighbour: An algorithm becomes a program as a sequence of statements, executed once each in the order given. |
+| lvl:statement@L3#7 \| level L3 way purpose_of_the_whole: Purpose: a statement is the unit of action; a program is characterized by its sequence of statements, each doing one step of the algorithm. |
+| lvl:statement@L4#0 \| level L4 way predict_a_change: Swapping two statements that touch the same variable or the output generally changes the result; swapping independent statements, or changing only whitespace between them, keeps it. |
+| lvl:statement@L4#1 \| level L4 way diagnose_an_error: rule broken: Each simple statement must end with ;. Kind: compile-time. Trigger class: omitting the ; at the end of a statement: javac reports ';' expected (often at the end of that line or the next) |
+| lvl:statement@L4#2 \| level L4 way transfer_to_a_new_program: Write one statement per step and order them as the algorithm requires; straight-line sequence suffices when every step runs once, otherwise use conditionals or loops. |
+| lvl:statement@L4#3 \| level L4 way diagnose_an_error: rule broken: A ; directly after an if/while/for header is an empty statement. Kind: silent logic error. Trigger class: if (x > 0); or while (cond); followed by the intended body |
 
 Prune: the model's reply (edge id and score; the kept edges sum to 1):
 ```
-{lvl:if_else_statement@L2#1 (Score: 0.5)}
-{lvl:if_else_statement@L2#0 (Score: 0.3)}
-{lvl:if_else_statement@L0#5 (Score: 0.2)}
+{lvl:statement@L2#0 (Score: 0.45)}
+{lvl:statement@L2#2 (Score: 0.35)}
+{lvl:statement@L2#1 (Score: 0.2)}
 ```
-Kept by pruning: lvl:if_else_statement@L2#1 (0.50), lvl:if_else_statement@L2#0 (0.30), lvl:if_else_statement@L0#5 (0.20)
+Kept by pruning: lvl:statement@L2#0 (0.45), lvl:statement@L2#2 (0.35), lvl:statement@L2#1 (0.20)
 
-Label prompt for level way lvl:if_else_statement@L2#1 (the model saw only the concept, the way's name 'output prediction' and its text; no level):
-> Exactly one branch's effects occur; e.g. if (x > y) max = x; else max = y; leaves max equal to the larger value, and the coin flip prints either Heads or Tails, never both.
-
-Model's reply:
-```
-Label: not shown
-Clauses: none
-Confidence: 0.95
-```
-
-Label prompt for level way lvl:if_else_statement@L2#0 (the model saw only the concept, the way's name 'line by line trace' and its text; no level):
-> Evaluate the condition once; if true execute the then branch, otherwise execute the else branch; then continue with the statement after the whole if-else (the condition is not re-tested).
+Label prompt for level way lvl:statement@L2#0 (the model saw only the concept, the way's name 'line by line trace' and its text; no level):
+> Statements run one at a time, from first to last; each completes (normally or abruptly) before the next starts.
 
 Model's reply:
 ```
-Label: not shown
-Clauses: none
-Confidence: 0.95
+Label: shown
+Clauses: 2, 3
+Confidence: 0.8
 ```
 
-Label prompt for level way lvl:if_else_statement@L0#5 (the model saw only the concept, the way's name 'inconsistent trace' and its text; no level):
-> Applies the if-else rule (LT) unevenly: on some traces runs both branches, re-tests the condition after the then branch to decide whether to run the else branch, or runs the else branch whatever the condition. (here mixing in: "if-else is the same as two separate ifs")
+Label prompt for level way lvl:statement@L2#2 (the model saw only the concept, the way's name 'one step execution' and its text; no level):
+> Executing one statement applies its single effect to the current state (e.g. prints one string, or stores one value) and then control moves to the next statement.
 
 Model's reply:
 ```
-Label: not shown
-Clauses: none
-Confidence: 0.95
+Label: shown
+Clauses: 1, 2, 3
+Confidence: 0.7
+```
+
+Label prompt for level way lvl:statement@L2#1 (the model saw only the concept, the way's name 'output prediction' and its text; no level):
+> A statement has no value; its result is its effect: a changed variable, printed output, or a change of control flow.
+
+Model's reply:
+```
+Label: shown
+Clauses: 1, 2
+Confidence: 0.7
 ```
 
 Parsed labels:
 | edge | label | prune score | confidence | score | clauses | words |
 |---|---|---|---|---|---|---|
-| lvl:if_else_statement@L2#1 | not applied |  |  | 0.0 |  |  |
-| lvl:if_else_statement@L2#0 | not applied |  |  | 0.0 |  |  |
-| lvl:if_else_statement@L0#5 | not applied |  |  | 0.0 |  |  |
+| lvl:statement@L2#0 | shown | 0.45 | 0.8 | 0.36 | c2, c3 | because c++ moves to the next letter; Then k = c + 1 is the letter after b |
+| lvl:statement@L2#2 | shown | 0.35 | 0.7 | 0.24 | c1, c2, c3 | b; because c++ moves to the next letter; Then k = c + 1 is the letter after b |
+| lvl:statement@L2#1 | shown | 0.2 | 0.7 | 0.14 | c1, c2 | b; because c++ moves to the next letter |
 
 **Kept on a path at this depth** (best N in tiers: held misconception / broken edge, then held error, then correct / confirmed / shown):
 
-pre:string_literal->println [broken, tier 0, 0.39]
-
-reached across pre:string_literal->println, entered next: string_literal
+lvl:char@L0#0 [shown, tier 2, 0.42], lvl:statement@L2#0 [shown, tier 2, 0.36], mis:statement->StatementsRunInAnyOrder [correct, tier 2, 0.32]
 
 **Clause coverage after this depth:**
 | clause | text | covered by |
 |---|---|---|
-| c1 | 3.5 | pre:string_literal->println |
-| c2 | The cast makes it a double division | not covered yet |
-| c3 | so you get the decimal part | not covered yet |
-
-**Graph check, not yet read (the walk may not stop while these remain):** own edges of string_literal, par:assignment~comparison_operators, pre:expression->comparison_operators, pre:statement->control_flow
-
-Figure 6 (the graph after depth 3): C:\Users\magnu\OneDrive\Desktop\ES_VIterbi_Personalized_Learning\results\viewer\MY30_figure06.png
-
-### Depth 4: current concepts 'string_literal'
-
-#### string_literal, misconceptions: 4 edges offered
-Edges offered:
-| edge |
-|---|
-| err:string_literal->SingleQuotedString \| wrong rule: Writes a string literal in single quotes: 'Hello'. \| right rule: String literals use double quotes; single quotes are for one char. |
-| err:string_literal->StringLiteralSpansLines \| wrong rule: Breaks a string literal across two lines of code. \| right rule: String literals must not span more than one line of a program. |
-| err:string_literal->UnclosedStringLiteral \| wrong rule: A string literal can be left without its closing quote. \| right rule: A String literal is enclosed in a pair of double quotes. |
-| mis:string_literal->PrintedTextIsExecuted \| wrong rule: System.out.println("x is 5"); sets x to 5 (text inside the quotes is run as code). \| right rule: Characters inside double quotes are printed literally; println only displays them and changes no variable. Only an assignment such as x = 5; sets x. |
-
-Prune: the model's reply (edge id and score; the kept edges sum to 1):
-```
-{mis:string_literal->PrintedTextIsExecuted (Score: 0.8)}
-{err:string_literal->UnclosedStringLiteral (Score: 0.1)}
-{err:string_literal->SingleQuotedString (Score: 0.1)}
-```
-Kept by pruning: mis:string_literal->PrintedTextIsExecuted (0.80), err:string_literal->UnclosedStringLiteral (0.10), err:string_literal->SingleQuotedString (0.10)
-
-Label prompt for the misconception / error edges (judged together). The model saw the program, the question, the numbered clauses, and these edges with their wrong rule and right rule:
-| edge |
-|---|
-| mis:string_literal->PrintedTextIsExecuted \| wrong rule: System.out.println("x is 5"); sets x to 5 (text inside the quotes is run as code). \| right rule: Characters inside double quotes are printed literally; println only displays them and changes no variable. Only an assignment such as x = 5; sets x. |
-| err:string_literal->UnclosedStringLiteral \| wrong rule: A string literal can be left without its closing quote. \| right rule: A String literal is enclosed in a pair of double quotes. |
-| err:string_literal->SingleQuotedString \| wrong rule: Writes a string literal in single quotes: 'Hello'. \| right rule: String literals use double quotes; single quotes are for one char. |
-Model's reply:
-```
-mis:string_literal->PrintedTextIsExecuted | not applied | clauses: none | confidence: 0.9
-err:string_literal->UnclosedStringLiteral | not applied | clauses: none | confidence: 0.95
-err:string_literal->SingleQuotedString | not applied | clauses: none | confidence: 0.95
-```
-
-Parsed labels:
-| edge | label | prune score | confidence | score | clauses | words |
-|---|---|---|---|---|---|---|
-| mis:string_literal->PrintedTextIsExecuted | not applied |  |  | 0.0 |  |  |
-| err:string_literal->UnclosedStringLiteral | not applied |  |  | 0.0 |  |  |
-| err:string_literal->SingleQuotedString | not applied |  |  | 0.0 |  |  |
-
-#### string_literal, level ways: 16 edges offered
-Edges offered:
-| edge |
-|---|
-| lvl:string_literal@L0#0 \| level L0 way everyday_reading: Everyday reading: quotation marks are just decoration, and spacing inside them is tidied up like ordinary text; single and double quotes mean the same thing. Java rule: characters within double quotes are taken literally (every space counts), the quotes are not part of the value, and single quotes are for one char. |
-| lvl:string_literal@L1#0 \| level L1 way names_the_element: A string literal is a sequence of characters written in double quotes in the source code, e.g. "Hello, World"; it is a value of type String. |
-| lvl:string_literal@L1#1 \| level L1 way states_the_rule: A String literal is enclosed in a pair of double quotes; everything inside is taken literally, special characters such as " and newline are written with escape sequences, and the literal must close on the same source line. |
-| lvl:string_literal@L2#0 \| level L2 way line_by_line_trace: The literal is a constant: it is fixed at compile time and simply supplies its value when the expression containing it is evaluated. |
-| lvl:string_literal@L2#1 \| level L2 way output_prediction: Value is the String of the characters between the quotes (escape sequences replaced by the characters they stand for), without the quotes: "Hi, " has 4 characters, and printing it shows Hi, followed by a space. |
-| lvl:string_literal@L2#2 \| level L2 way one_step_execution: Evaluating a literal changes no state; it just yields the same String value every time. |
-| lvl:string_literal@L3#0 \| level L3 way relation_to_neighbour: print("s") outputs exactly the characters between the quotes, without the quotes. |
-| lvl:string_literal@L3#1 \| level L3 way relation_to_neighbour: println("s") outputs exactly the characters between the quotes and then ends the line. |
-| lvl:string_literal@L3#2 \| level L3 way relation_to_neighbour: Escape sequences (\n, \t, \", \\) are written inside string or char literals to stand for one character that cannot be typed directly. |
-| lvl:string_literal@L3#3 \| level L3 way purpose_of_the_whole: Purpose: state fixed text exactly, such as messages, labels and prompts, so you can precisely specify what gets printed. |
-| lvl:string_literal@L4#0 \| level L4 way predict_a_change: Changing any character inside the quotes (including adding a space) changes the output by exactly that character; changing spaces outside the quotes changes nothing. |
-| lvl:string_literal@L4#1 \| level L4 way diagnose_an_error: rule broken: A String literal is enclosed in a pair of double quotes. Kind: compile-time. Trigger class: a missing closing (or opening) quote; the compiler may get very confused and report errors elsewhere |
-| lvl:string_literal@L4#2 \| level L4 way diagnose_an_error: rule broken: String literals use double quotes; single quotes are for one char. Kind: compile-time. Trigger class: 'Hello' (more than one character in single quotes): unclosed character literal |
-| lvl:string_literal@L4#3 \| level L4 way diagnose_an_error: rule broken: A string literal must not span source lines. Kind: compile-time. Trigger class: a line break inside "...": unclosed string literal |
-| lvl:string_literal@L4#4 \| level L4 way transfer_to_a_new_program: Use a string literal for fixed text known when the program is written; use args, input or variables for text that varies between runs, and char literals for a single character. |
-| lvl:string_literal@L4#5 \| level L4 way diagnose_an_error: rule broken: A double quote inside a string must be escaped. Kind: compile-time. Trigger class: "She said "Hi"" without \" |
-
-Prune: the model's reply (edge id and score; the kept edges sum to 1):
-```
-{lvl:string_literal@L2#1 (Score: 0.45)}
-{lvl:string_literal@L3#1 (Score: 0.35)}
-{lvl:string_literal@L3#3 (Score: 0.2)}
-```
-Kept by pruning: lvl:string_literal@L2#1 (0.45), lvl:string_literal@L3#1 (0.35), lvl:string_literal@L3#3 (0.20)
-
-Label prompt for level way lvl:string_literal@L2#1 (the model saw only the concept, the way's name 'output prediction' and its text; no level):
-> Value is the String of the characters between the quotes (escape sequences replaced by the characters they stand for), without the quotes: "Hi, " has 4 characters, and printing it shows Hi, followed by a space.
-
-Model's reply:
-```
-Label: not shown
-Clauses: none
-Confidence: 0.95
-```
-
-Label prompt for level way lvl:string_literal@L3#1 (the model saw only the concept, the way's name 'relation to neighbour' and its text; no level):
-> println("s") outputs exactly the characters between the quotes and then ends the line.
-
-Model's reply:
-```
-Label: not shown
-Clauses: none
-Confidence: 0.97
-```
-
-Label prompt for level way lvl:string_literal@L3#3 (the model saw only the concept, the way's name 'purpose of the whole' and its text; no level):
-> Purpose: state fixed text exactly, such as messages, labels and prompts, so you can precisely specify what gets printed.
-
-Model's reply:
-```
-Label: not shown
-Clauses: none
-Confidence: 0.97
-```
-
-Parsed labels:
-| edge | label | prune score | confidence | score | clauses | words |
-|---|---|---|---|---|---|---|
-| lvl:string_literal@L2#1 | not applied |  |  | 0.0 |  |  |
-| lvl:string_literal@L3#1 | not applied |  |  | 0.0 |  |  |
-| lvl:string_literal@L3#3 | not applied |  |  | 0.0 |  |  |
-
-**Kept on a path at this depth:** nothing
-
-**Clause coverage after this depth:**
-| clause | text | covered by |
-|---|---|---|
-| c1 | 3.5 | pre:string_literal->println |
-| c2 | The cast makes it a double division | not covered yet |
-| c3 | so you get the decimal part | not covered yet |
-
-**Graph check, not yet read (the walk may not stop while these remain):** par:assignment~comparison_operators, pre:expression->comparison_operators, pre:statement->control_flow
+| c1 | b | mis:assignment->VariableKeepsOldValue |
+| c2 | because c++ moves to the next letter | mis:assignment->VariableKeepsOldValue |
+| c3 | Then k = c + 1 is the letter after b | mis:assignment->VariableKeepsOldValue |
+| c4 | so it prints c | pre:arithmetic_operators->expression |
 
 Figure 7 (the graph after depth 4): C:\Users\magnu\OneDrive\Desktop\ES_VIterbi_Personalized_Learning\results\viewer\MY30_figure07.png
 
 ## 4. Diagnosis (rules over the labelled graph, no model)
-Root-cause walk: held on [], broken at ['println'], prerequisites {'expression': ['arithmetic_operators'], 'if_statement': ['boolean_expression', 'control_flow'], 'boolean_expression': ['comparison_operators'], 'floating_point_precision': ['double'], 'comparison_operators': ['expression'], 'if_else_statement': ['if_statement'], 'control_flow': ['statement'], 'println': ['statement', 'string_literal']}
-- arithmetic_operators: L4 via predict_a_change "The cast makes it a double division; so you get the decimal part"
-- double: L4 via diagnose_an_error "The cast makes it a double division; so you get the decimal part"
+Root-cause walk: held on ['char_arithmetic'], broken at [] (consequences: pre:char->char_arithmetic), prerequisites {'expression': ['arithmetic_operators'], 'increment_operators': ['assignment'], 'char_arithmetic': ['char'], 'println': ['statement']}
+- assignment: L2 via line_by_line_trace "because c++ moves to the next letter; Then k = c + 1 is the letter after b"
+- char: L2 via one_step_execution "b; because c++ moves to the next letter"
+- char_arithmetic: L0 via misconception "Then k = c + 1 is the letter after b; so it prints c"
+- expression: L3 via relation_to_neighbour "Then k = c + 1 is the letter after b"
+- increment_operators: L3 via relation_to_neighbour "b; because c++ moves to the next letter"
+- println: L3 via relation_to_neighbour "b; so it prints c"
+- statement: L2 via line_by_line_trace "because c++ moves to the next letter; Then k = c + 1 is the letter after b"
 
-**Stop:** max depth at depth 4; prompts {'prune': 25, 'label': 48}, fresh model calls 0, cache hits 73
+**Stop:** sufficient at depth 4; prompts {'prune': 20, 'label': 36}, fresh model calls 0, cache hits 56
 
 ### Held misconceptions
-(none)
+| concept | misconception | kind | quote | score | shares_evidence_with |
+|---|---|---|---|---|---|
+| char_arithmetic | CharNotNumeric | misconception | Then k = c + 1 is the letter after b; so it prints c | 0.6 |  |
 
 ### Broken concept edges
 | edge | quote | score | consequence_of |
 |---|---|---|---|
-| pre:string_literal->println | 3.5 | 0.385 |  |
+| pre:char->char_arithmetic | Then k = c + 1 is the letter after b; so it prints c | 0.9 | mis:char_arithmetic->CharNotNumeric |
 
-### Root cause: none
+### Root cause: char_arithmetic / CharNotNumeric
 
 ### Level per concept
 | concept | level | way | misconception | source | quote | rule | also | note |
 |---|---|---|---|---|---|---|---|---|
-| arithmetic_operators | L4 | predict_a_change |  | level_way | The cast makes it a double division; so you get the decimal part |  | L2 output_prediction, L1 states_the_rule |  |
-| double | L4 | diagnose_an_error |  | level_way | The cast makes it a double division; so you get the decimal part |  | L3 relation_to_neighbour, L1 states_the_rule |  |
+| assignment | L2 | line_by_line_trace |  | level_way | because c++ moves to the next letter; Then k = c + 1 is the letter after b |  |  |  |
+| char | L2 | one_step_execution |  | level_way | b; because c++ moves to the next letter |  | L0 everyday_reading |  |
+| char_arithmetic | L0 | misconception | CharNotNumeric | level_mis_links | Then k = c + 1 is the letter after b; so it prints c | wrong rule: char is not a numeric type. Right rule: A char is encoded as a 16-bit integer, so arithmetic such as 'b' + 'c' or 'a' + 4 works on the character codes. |  |  |
+| expression | L3 | relation_to_neighbour |  | level_way | Then k = c + 1 is the letter after b |  |  |  |
+| increment_operators | L3 | relation_to_neighbour |  | level_way | b; because c++ moves to the next letter |  | L2 one_step_execution, L2 output_prediction |  |
+| println | L3 | relation_to_neighbour |  | level_way | b; so it prints c |  | L2 output_prediction, L2 line_by_line_trace |  |
+| statement | L2 | line_by_line_trace |  | level_way | because c++ moves to the next letter; Then k = c + 1 is the letter after b |  | L2 one_step_execution, L2 output_prediction |  |
 
-### Overall level: L4
+### Overall level: L0
 
 Clause coverage (final):
 | clause | covered by |
 |---|---|
-| 3.5 | lvl:arithmetic_operators@L2#1 |
-| The cast makes it a double division | lvl:double@L3#0 |
-| so you get the decimal part | lvl:double@L3#0 |
+| b | mis:assignment->VariableKeepsOldValue |
+| because c++ moves to the next letter | mis:assignment->VariableKeepsOldValue |
+| Then k = c + 1 is the letter after b | mis:assignment->VariableKeepsOldValue |
+| so it prints c | pre:arithmetic_operators->expression |
 
 Figure 8 (final picture): C:\Users\magnu\OneDrive\Desktop\ES_VIterbi_Personalized_Learning\results\viewer\MY30_figure08.png
 
 ## 5. Every labelled edge (the evidence list, kept or not)
 | depth | source | edge | kind | label | prune_score | confidence | score | clauses | quote |
 |---|---|---|---|---|---|---|---|---|---|
-| 1 | double | lvl:double@L3#0 | level | shown | 0.5 | 0.7 | 0.35 | [2, 3] | The cast makes it a double division; so you get the decimal part |
-| 1 | double | lvl:double@L1#1 | level | shown | 0.3 | 0.7 | 0.21 | [2, 3] | The cast makes it a double division; so you get the decimal part |
-| 1 | double | lvl:double@L4#3 | level | shown | 0.2 | 0.6 | 0.12 | [2, 3] | The cast makes it a double division; so you get the decimal part |
-| 1 | arithmetic_operators | lvl:arithmetic_operators@L4#0 | level | shown | 0.45 | 0.75 | 0.3375 | [2, 3] | The cast makes it a double division; so you get the decimal part |
-| 1 | arithmetic_operators | lvl:arithmetic_operators@L2#1 | level | shown | 0.35 | 0.6 | 0.21 | [1, 2, 3] | 3.5; The cast makes it a double division; so you get the decimal part |
-| 1 | arithmetic_operators | lvl:arithmetic_operators@L1#1 | level | shown | 0.2 | 0.55 | 0.11 | [2, 3] | The cast makes it a double division; so you get the decimal part |
-| 3 | println | pre:string_literal->println | prerequisite | broken | 0.7 | 0.55 | 0.385 | [1] | 3.5 |
+| 1 | assignment | mis:assignment->VariableKeepsOldValue | misconception | correct | 0.45 | 0.85 | 0.3825 | [1, 2, 3] | b; because c++ moves to the next letter; Then k = c + 1 is the letter after b |
+| 1 | assignment | mis:assignment->AssignmentOppositeDirection | misconception | correct | 0.25 | 0.6 | 0.15 | [3] | Then k = c + 1 is the letter after b |
+| 1 | assignment | lvl:assignment@L2#0 | level | shown | 0.4 | 0.6 | 0.24 | [2, 3] | because c++ moves to the next letter; Then k = c + 1 is the letter after b |
+| 1 | expression | lvl:expression@L3#0 | level | shown | 0.25 | 0.7 | 0.175 | [3] | Then k = c + 1 is the letter after b |
+| 2 | assignment | pre:assignment->increment_operators | prerequisite | confirmed | 1.0 | 0.7 | 0.7 | [1, 2] | b; because c++ moves to the next letter |
+| 2 | expression | pre:arithmetic_operators->expression | prerequisite | confirmed | 1.0 | 0.6 | 0.6 | [3, 4] | Then k = c + 1 is the letter after b; so it prints c |
+| 2 | println | lvl:println@L2#1 | level | shown | 0.45 | 0.7 | 0.315 | [1, 4] | b; so it prints c |
+| 2 | println | lvl:println@L3#0 | level | shown | 0.3 | 0.6 | 0.18 | [1, 4] | b; so it prints c |
+| 2 | println | lvl:println@L2#0 | level | shown | 0.25 | 0.65 | 0.1625 | [1, 4] | b; so it prints c |
+| 2 | char_arithmetic | mis:char_arithmetic->CharNotNumeric | misconception | held | 1.0 | 0.6 | 0.6 | [3, 4] | Then k = c + 1 is the letter after b; so it prints c |
+| 2 | char_arithmetic | lvl:char_arithmetic@L2#2 | level | shown | 0.3 | 0.8 | 0.24 | [1, 2] | b; because c++ moves to the next letter |
+| 2 | increment_operators | mis:increment_operators->IncrementByTwo | misconception | correct | 0.8 | 0.9 | 0.72 | [1, 2] | b; because c++ moves to the next letter |
+| 2 | increment_operators | lvl:increment_operators@L2#2 | level | shown | 0.5 | 0.7 | 0.35 | [1, 2] | b; because c++ moves to the next letter |
+| 2 | increment_operators | lvl:increment_operators@L2#1 | level | shown | 0.3 | 0.7 | 0.21 | [1, 2] | b; because c++ moves to the next letter |
+| 2 | increment_operators | lvl:increment_operators@L3#2 | level | shown | 0.2 | 0.6 | 0.12 | [1, 2] | b; because c++ moves to the next letter |
+| 3 | char_arithmetic | pre:char->char_arithmetic | prerequisite | broken | 1.0 | 0.9 | 0.9 | [3, 4] | Then k = c + 1 is the letter after b; so it prints c |
+| 3 | println | pre:statement->println | prerequisite | confirmed | 1.0 | 0.7 | 0.7 | [1, 4] | b; so it prints c |
+| 4 | char | lvl:char@L0#0 | level | shown | 0.5 | 0.85 | 0.425 | [3, 4] | Then k = c + 1 is the letter after b; so it prints c |
+| 4 | char | lvl:char@L2#2 | level | shown | 0.3 | 0.75 | 0.225 | [1, 2] | b; because c++ moves to the next letter |
+| 4 | statement | mis:statement->StatementsRunInAnyOrder | misconception | correct | 0.45 | 0.7 | 0.315 | [2, 3] | because c++ moves to the next letter; Then k = c + 1 is the letter after b |
+| 4 | statement | lvl:statement@L2#0 | level | shown | 0.45 | 0.8 | 0.36 | [2, 3] | because c++ moves to the next letter; Then k = c + 1 is the letter after b |
+| 4 | statement | lvl:statement@L2#2 | level | shown | 0.35 | 0.7 | 0.245 | [1, 2, 3] | b; because c++ moves to the next letter; Then k = c + 1 is the letter after b |
+| 4 | statement | lvl:statement@L2#1 | level | shown | 0.2 | 0.7 | 0.14 | [1, 2] | b; because c++ moves to the next letter |
 
 ## 6. The paths (what the keep step kept, depth by depth)
 | depth | source | edge | kind | label | score | clauses |
 |---|---|---|---|---|---|---|
-| 1 | double | lvl:double@L3#0 | level | shown | 0.35 | [2, 3] |
-| 1 | arithmetic_operators | lvl:arithmetic_operators@L4#0 | level | shown | 0.3375 | [2, 3] |
-| 1 | double | lvl:double@L1#1 | level | shown | 0.21 | [2, 3] |
-| 3 | println | pre:string_literal->println | prerequisite | broken | 0.385 | [1] |
+| 1 | assignment | mis:assignment->VariableKeepsOldValue | misconception | correct | 0.3825 | [1, 2, 3] |
+| 1 | assignment | lvl:assignment@L2#0 | level | shown | 0.24 | [2, 3] |
+| 1 | expression | lvl:expression@L3#0 | level | shown | 0.175 | [3] |
+| 2 | char_arithmetic | mis:char_arithmetic->CharNotNumeric | misconception | held | 0.6 | [3, 4] |
+| 2 | increment_operators | mis:increment_operators->IncrementByTwo | misconception | correct | 0.72 | [1, 2] |
+| 2 | assignment | pre:assignment->increment_operators | prerequisite | confirmed | 0.7 | [1, 2] |
+| 3 | char_arithmetic | pre:char->char_arithmetic | prerequisite | broken | 0.9 | [3, 4] |
+| 3 | println | pre:statement->println | prerequisite | confirmed | 0.7 | [1, 4] |
+| 4 | char | lvl:char@L0#0 | level | shown | 0.425 | [3, 4] |
+| 4 | statement | lvl:statement@L2#0 | level | shown | 0.36 | [2, 3] |
+| 4 | statement | mis:statement->StatementsRunInAnyOrder | misconception | correct | 0.315 | [2, 3] |
 
 ## 7. Raw traversal log
 ```
-clauses: 3.5 | The cast makes it a double division | so you get the decimal part
-start: generic concepts whose tagging text occurs in the answer: double
-start: BM25 of the answer against each tagged concept: double 11.19 (hits 3), arithmetic_operators 6.38 (hits 1), if_statement 6.16 (hits 1), println 5.40 (hits 1), boolean_expression 4.54 (hits 1), floating_point_precision 3.23 (hits 3), control_flow 2.61 (hits 1), comparison_operators 1.98 (hits 1), if_else_statement 1.71 (hits 1)
-start: chosen double, arithmetic_operators, if_statement
-start concepts (3): double, arithmetic_operators, if_statement
---- depth 1: current concepts ['double', 'arithmetic_operators', 'if_statement']
-  double (misconceptions): 2 candidates -> kept mis:double->WholeNumberLiteralIsInt (0.60), mis:double->FloatingPointIsExact (0.40)
-    mis:double->WholeNumberLiteralIsInt -> not applied (0.00) ""
-    mis:double->FloatingPointIsExact -> not applied (0.00) ""
-  double (level ways): 19 candidates -> kept lvl:double@L3#0 (0.50), lvl:double@L1#1 (0.30), lvl:double@L4#3 (0.20)
-    lvl:double@L3#0 -> shown (0.35) "The cast makes it a double division; so you get the decimal part"
-    lvl:double@L1#1 -> shown (0.21) "The cast makes it a double division; so you get the decimal part"
-    lvl:double@L4#3 -> shown (0.12) "The cast makes it a double division; so you get the decimal part"
-  arithmetic_operators (misconceptions): 3 candidates -> kept 
-  arithmetic_operators (level ways): 18 candidates -> kept lvl:arithmetic_operators@L4#0 (0.45), lvl:arithmetic_operators@L2#1 (0.35), lvl:arithmetic_operators@L1#1 (0.20)
-    lvl:arithmetic_operators@L4#0 -> shown (0.34) "The cast makes it a double division; so you get the decimal part"
-    lvl:arithmetic_operators@L2#1 -> shown (0.21) "3.5; The cast makes it a double division; so you get the decimal part"
-    lvl:arithmetic_operators@L1#1 -> shown (0.11) "The cast makes it a double division; so you get the decimal part"
-  if_statement (misconceptions): 22 candidates -> kept mis:if_statement->BranchChosenByIntent (0.50), mis:if_statement->ThenAlwaysExecutes (0.30), mis:if_statement->ProgramLooksAhead (0.20)
-    mis:if_statement->BranchChosenByIntent -> not applied (0.00) ""
-    mis:if_statement->ThenAlwaysExecutes -> not applied (0.00) ""
-    mis:if_statement->ProgramLooksAhead -> not applied (0.00) ""
-  if_statement (level ways): 19 candidates -> kept lvl:if_statement@L2#1 (0.40), lvl:if_statement@L3#1 (0.35), lvl:if_statement@L0#14 (0.25)
-    lvl:if_statement@L2#1 -> not applied (0.00) ""
-    lvl:if_statement@L3#1 -> not applied (0.00) ""
-    lvl:if_statement@L0#14 -> not applied (0.00) ""
-  kept: lvl:double@L3#0 [shown, tier 2, 0.35], lvl:arithmetic_operators@L4#0 [shown, tier 2, 0.34], lvl:double@L1#1 [shown, tier 2, 0.21]
-  clause coverage: c1 uncovered; c2 uncovered; c3 uncovered
-  uncovered clauses bring in: println (5.41), boolean_expression (4.02), floating_point_precision (3.16)
-  not yet read: own edges of boolean_expression, own edges of floating_point_precision, own edges of println, pre:arithmetic_operators->expression, pre:boolean_expression->if_statement, pre:control_flow->if_statement, pre:double->floating_point_precision, pre:if_statement->if_else_statement
---- depth 2: current concepts ['double', 'arithmetic_operators', 'if_statement', 'println', 'boolean_expression', 'floating_point_precision']
-  double (concept edges): 1 candidates -> kept pre:double->floating_point_precision (1.00)
-    pre:double->floating_point_precision -> not applied (0.00) ""
-  arithmetic_operators (concept edges): 1 candidates -> kept pre:arithmetic_operators->expression (1.00)
-    pre:arithmetic_operators->expression -> not applied (0.00) ""
-  if_statement (concept edges): 3 candidates -> kept pre:if_statement->if_else_statement (0.50), pre:boolean_expression->if_statement (0.30), pre:control_flow->if_statement (0.20)
-    pre:if_statement->if_else_statement -> not applied (0.00) ""
-    pre:boolean_expression->if_statement -> not applied (0.00) ""
-    pre:control_flow->if_statement -> not applied (0.00) ""
-  println (misconceptions): 6 candidates -> kept mis:println->PrintedTextIsExecuted (0.60), mis:println->PrintNewLineFirst (0.20), mis:println->PrintEqualsPrintln (0.20)
-    mis:println->PrintedTextIsExecuted -> not applied (0.00) ""
-    mis:println->PrintNewLineFirst -> not applied (0.00) ""
+clauses: b | because c++ moves to the next letter | Then k = c + 1 is the letter after b | so it prints c
+start: generic concepts whose tagging text occurs in the answer: assignment, expression
+start: BM25 of the answer against each tagged concept: assignment 10.66 (hits 1), expression 8.88 (hits 2), arithmetic_operators 8.73 (hits 1), char_arithmetic 6.95 (hits 2), println 6.45 (hits 1), increment_operators 5.66 (hits 1)
+start: chosen assignment, expression, arithmetic_operators
+start concepts (3): assignment, expression, arithmetic_operators
+--- depth 1: current concepts ['assignment', 'expression', 'arithmetic_operators']
+  assignment (misconceptions): 15 candidates -> kept mis:assignment->VariableKeepsOldValue (0.45), mis:assignment->AssignmentIsEquation (0.30), mis:assignment->AssignmentOppositeDirection (0.25)
+    mis:assignment->VariableKeepsOldValue -> correct (0.38) "b; because c++ moves to the next letter; Then k = c + 1 is the letter after b"
+    mis:assignment->AssignmentIsEquation -> not applied (0.00) ""
+    mis:assignment->AssignmentOppositeDirection -> correct (0.15) "Then k = c + 1 is the letter after b"
+  assignment (level ways): 24 candidates -> kept lvl:assignment@L2#0 (0.40), lvl:assignment@L3#6 (0.35), lvl:assignment@L4#6 (0.25)
+    lvl:assignment@L2#0 -> shown (0.24) "because c++ moves to the next letter; Then k = c + 1 is the letter after b"
+    lvl:assignment@L3#6 -> not applied (0.00) ""
+    lvl:assignment@L4#6 -> not applied (0.00) ""
+  expression (misconceptions): 8 candidates -> kept mis:expression->TargetTyping (0.50), mis:expression->VariablesHoldExpressions (0.25), mis:expression->AssignmentIsEquation (0.25)
+    mis:expression->TargetTyping -> not applied (0.00) ""
+    mis:expression->VariablesHoldExpressions -> not applied (0.00) ""
+    mis:expression->AssignmentIsEquation -> not applied (0.00) ""
+  expression (level ways): 19 candidates -> kept lvl:expression@L2#1 (0.45), lvl:expression@L1#1 (0.30), lvl:expression@L3#0 (0.25)
+    lvl:expression@L2#1 -> not applied (0.00) ""
+    lvl:expression@L1#1 -> not applied (0.00) ""
+    lvl:expression@L3#0 -> shown (0.17) "Then k = c + 1 is the letter after b"
+  arithmetic_operators (misconceptions): 3 candidates -> kept mis:arithmetic_operators->ArithmeticOnNumericStrings (0.80), mis:arithmetic_operators->RemainderIsSubtraction (0.10), mis:arithmetic_operators->CaretIsPower (0.10)
+    mis:arithmetic_operators->ArithmeticOnNumericStrings -> not applied (0.00) ""
+    mis:arithmetic_operators->RemainderIsSubtraction -> not applied (0.00) ""
+    mis:arithmetic_operators->CaretIsPower -> not applied (0.00) ""
+  arithmetic_operators (level ways): 18 candidates -> kept lvl:arithmetic_operators@L1#1 (0.45), lvl:arithmetic_operators@L2#0 (0.35), lvl:arithmetic_operators@L0#0 (0.20)
+    lvl:arithmetic_operators@L1#1 -> not applied (0.00) ""
+    lvl:arithmetic_operators@L2#0 -> not applied (0.00) ""
+    lvl:arithmetic_operators@L0#0 -> not applied (0.00) ""
+  kept: mis:assignment->VariableKeepsOldValue [correct, tier 2, 0.38], lvl:assignment@L2#0 [shown, tier 2, 0.24], lvl:expression@L3#0 [shown, tier 2, 0.17]
+  clause coverage: c1 <- mis:assignment->VariableKeepsOldValue; c2 <- mis:assignment->VariableKeepsOldValue; c3 <- mis:assignment->VariableKeepsOldValue; c4 uncovered
+  uncovered clauses bring in: println (2.22), char_arithmetic (1.62), increment_operators (0.18)
+  not yet read: own edges of char_arithmetic, own edges of increment_operators, own edges of println, pre:arithmetic_operators->expression, pre:assignment->increment_operators
+--- depth 2: current concepts ['assignment', 'expression', 'arithmetic_operators', 'println', 'char_arithmetic', 'increment_operators']
+  assignment (concept edges): 1 candidates -> kept pre:assignment->increment_operators (1.00)
+    pre:assignment->increment_operators -> confirmed (0.70) "b; because c++ moves to the next letter"
+  expression (concept edges): 1 candidates -> kept pre:arithmetic_operators->expression (1.00)
+    pre:arithmetic_operators->expression -> confirmed (0.60) "Then k = c + 1 is the letter after b; so it prints c"
+  println (misconceptions): 6 candidates -> kept mis:println->PrintEqualsPrintln (0.50), mis:println->PrintNewLineFirst (0.30), mis:println->PrintedTextIsExecuted (0.20)
     mis:println->PrintEqualsPrintln -> not applied (0.00) ""
-  println (level ways): 17 candidates -> kept lvl:println@L2#1 (0.40), lvl:println@L3#1 (0.35), lvl:println@L3#3 (0.25)
-    lvl:println@L2#1 -> not applied (0.00) ""
-    lvl:println@L3#1 -> not applied (0.00) ""
-    lvl:println@L3#3 -> not applied (0.00) ""
-  boolean_expression (misconceptions): 8 candidates -> kept mis:boolean_expression->ArithmeticInsteadOfBoolean (0.80), mis:boolean_expression->MapToBooleanWithIf (0.10), mis:boolean_expression->ComparisonWithBooleanLiteral (0.10)
-    mis:boolean_expression->ArithmeticInsteadOfBoolean -> not applied (0.00) ""
-    mis:boolean_expression->MapToBooleanWithIf -> not applied (0.00) ""
-    mis:boolean_expression->ComparisonWithBooleanLiteral -> not applied (0.00) ""
-  boolean_expression (level ways): 19 candidates -> kept lvl:boolean_expression@L2#1 (0.50), lvl:boolean_expression@L3#2 (0.30), lvl:boolean_expression@L0#5 (0.20)
-    lvl:boolean_expression@L2#1 -> not applied (0.00) ""
-    lvl:boolean_expression@L3#2 -> not applied (0.00) ""
-    lvl:boolean_expression@L0#5 -> not applied (0.00) ""
-  floating_point_precision (misconceptions): 1 candidates -> kept mis:floating_point_precision->FloatingPointIsExact (1.00)
-    mis:floating_point_precision->FloatingPointIsExact -> not applied (0.00) ""
-  floating_point_precision (level ways): 14 candidates -> kept lvl:floating_point_precision@L0#0 (0.50), lvl:floating_point_precision@L2#1 (0.30), lvl:floating_point_precision@L0#2 (0.20)
-    lvl:floating_point_precision@L0#0 -> not applied (0.00) ""
-    lvl:floating_point_precision@L2#1 -> not applied (0.00) ""
-    lvl:floating_point_precision@L0#2 -> not applied (0.00) ""
-  nothing kept at this depth
-  clause coverage: c1 uncovered; c2 uncovered; c3 uncovered
-  uncovered clauses bring in: comparison_operators (2.85), control_flow (2.80), if_else_statement (1.78)
-  not yet read: own edges of comparison_operators, own edges of control_flow, own edges of if_else_statement, pre:comparison_operators->boolean_expression, pre:statement->println, pre:string_literal->println
---- depth 3: current concepts ['println', 'boolean_expression', 'comparison_operators', 'control_flow', 'if_else_statement']
-  println (concept edges): 2 candidates -> kept pre:string_literal->println (0.70), pre:statement->println (0.30)
-    pre:string_literal->println -> broken (0.39) "3.5"
-    pre:statement->println -> not applied (0.00) ""
-  boolean_expression (concept edges): 2 candidates -> kept pre:boolean_expression->if_statement (0.60), pre:comparison_operators->boolean_expression (0.40)
-    pre:boolean_expression->if_statement -> not applied (0.00) ""
-    pre:comparison_operators->boolean_expression -> not applied (0.00) ""
-  comparison_operators (misconceptions): 8 candidates -> kept mis:comparison_operators->EqualityOperatorComparesObjectsValues (0.40), mis:comparison_operators->AssignCompares (0.30), mis:comparison_operators->EqualsComparesReferences (0.30)
-    mis:comparison_operators->EqualityOperatorComparesObjectsValues -> not applied (0.00) ""
-    mis:comparison_operators->AssignCompares -> not applied (0.00) ""
-    mis:comparison_operators->EqualsComparesReferences -> not applied (0.00) ""
-  comparison_operators (level ways): 20 candidates -> kept lvl:comparison_operators@L4#6 (0.40), lvl:comparison_operators@L2#0 (0.35), lvl:comparison_operators@L2#1 (0.25)
-    lvl:comparison_operators@L4#6 -> not applied (0.00) ""
-    lvl:comparison_operators@L2#0 -> not applied (0.00) ""
-    lvl:comparison_operators@L2#1 -> not applied (0.00) ""
-  control_flow (misconceptions): 11 candidates -> kept mis:control_flow->StatementsRunInAnyOrder (0.40), mis:control_flow->CodeAfterIfSkipped (0.30), mis:control_flow->FalseConditionRestartsProgram (0.30)
-    mis:control_flow->StatementsRunInAnyOrder -> not applied (0.00) ""
-    mis:control_flow->CodeAfterIfSkipped -> not applied (0.00) ""
-    mis:control_flow->FalseConditionRestartsProgram -> not applied (0.00) ""
-  control_flow (level ways): 15 candidates -> kept lvl:control_flow@L0#0 (0.45), lvl:control_flow@L2#1 (0.30), lvl:control_flow@L0#3 (0.25)
-    lvl:control_flow@L0#0 -> not applied (0.00) ""
-    lvl:control_flow@L2#1 -> not applied (0.00) ""
-    lvl:control_flow@L0#3 -> not applied (0.00) ""
-  if_else_statement (misconceptions): 6 candidates -> kept mis:if_else_statement->BranchChosenByIntent (0.50), mis:if_else_statement->ElseAlwaysExecutes (0.30), mis:if_else_statement->BothBranchesExecute (0.20)
-    mis:if_else_statement->BranchChosenByIntent -> not applied (0.00) ""
-    mis:if_else_statement->ElseAlwaysExecutes -> not applied (0.00) ""
-    mis:if_else_statement->BothBranchesExecute -> not applied (0.00) ""
-  if_else_statement (level ways): 17 candidates -> kept lvl:if_else_statement@L2#1 (0.50), lvl:if_else_statement@L2#0 (0.30), lvl:if_else_statement@L0#5 (0.20)
-    lvl:if_else_statement@L2#1 -> not applied (0.00) ""
-    lvl:if_else_statement@L2#0 -> not applied (0.00) ""
-    lvl:if_else_statement@L0#5 -> not applied (0.00) ""
-  kept: pre:string_literal->println [broken, tier 0, 0.39]
-  reached across pre:string_literal->println, entered next: string_literal
-  clause coverage: c1 <- pre:string_literal->println; c2 uncovered; c3 uncovered
-  not yet read: own edges of string_literal, par:assignment~comparison_operators, pre:expression->comparison_operators, pre:statement->control_flow
---- depth 4: current concepts ['string_literal'] (closing round: own edges only)
-  string_literal (misconceptions): 4 candidates -> kept mis:string_literal->PrintedTextIsExecuted (0.80), err:string_literal->UnclosedStringLiteral (0.10), err:string_literal->SingleQuotedString (0.10)
-    mis:string_literal->PrintedTextIsExecuted -> not applied (0.00) ""
-    err:string_literal->UnclosedStringLiteral -> not applied (0.00) ""
-    err:string_literal->SingleQuotedString -> not applied (0.00) ""
-  string_literal (level ways): 16 candidates -> kept lvl:string_literal@L2#1 (0.45), lvl:string_literal@L3#1 (0.35), lvl:string_literal@L3#3 (0.20)
-    lvl:string_literal@L2#1 -> not applied (0.00) ""
-    lvl:string_literal@L3#1 -> not applied (0.00) ""
-    lvl:string_literal@L3#3 -> not applied (0.00) ""
-  nothing kept at this depth
-  clause coverage: c1 <- pre:string_literal->println; c2 uncovered; c3 uncovered
-  not yet read: par:assignment~comparison_operators, pre:expression->comparison_operators, pre:statement->control_flow
-  root-cause walk: held on [], broken at ['println'], prerequisites {'expression': ['arithmetic_operators'], 'if_statement': ['boolean_expression', 'control_flow'], 'boolean_expression': ['comparison_operators'], 'floating_point_precision': ['double'], 'comparison_operators': ['expression'], 'if_else_statement': ['if_statement'], 'control_flow': ['statement'], 'println': ['statement', 'string_literal']}
-  level arithmetic_operators: L4 via predict_a_change "The cast makes it a double division; so you get the decimal part"
-  level double: L4 via diagnose_an_error "The cast makes it a double division; so you get the decimal part"
+    mis:println->PrintNewLineFirst -> not applied (0.00) ""
+    mis:println->PrintedTextIsExecuted -> not applied (0.00) ""
+  println (level ways): 17 candidates -> kept lvl:println@L2#1 (0.45), lvl:println@L3#0 (0.30), lvl:println@L2#0 (0.25)
+    lvl:println@L2#1 -> shown (0.32) "b; so it prints c"
+    lvl:println@L3#0 -> shown (0.18) "b; so it prints c"
+    lvl:println@L2#0 -> shown (0.16) "b; so it prints c"
+  char_arithmetic (misconceptions): 1 candidates -> kept mis:char_arithmetic->CharNotNumeric (1.00)
+    mis:char_arithmetic->CharNotNumeric -> held (0.60) "Then k = c + 1 is the letter after b; so it prints c"
+  char_arithmetic (level ways): 14 candidates -> kept lvl:char_arithmetic@L0#2 (0.50), lvl:char_arithmetic@L2#2 (0.30), lvl:char_arithmetic@L3#0 (0.20)
+    lvl:char_arithmetic@L0#2 -> not applied (0.00) ""
+    lvl:char_arithmetic@L2#2 -> shown (0.24) "b; because c++ moves to the next letter"
+    lvl:char_arithmetic@L3#0 -> not applied (0.00) ""
+  increment_operators (misconceptions): 5 candidates -> kept mis:increment_operators->IncrementByTwo (0.80), mis:increment_operators->PrePostIncrementSameValue (0.12), mis:increment_operators->PostIncrementAssignsLater (0.08)
+    mis:increment_operators->IncrementByTwo -> correct (0.72) "b; because c++ moves to the next letter"
+    mis:increment_operators->PrePostIncrementSameValue -> not applied (0.00) ""
+    mis:increment_operators->PostIncrementAssignsLater -> not applied (0.00) ""
+  increment_operators (level ways): 16 candidates -> kept lvl:increment_operators@L2#2 (0.50), lvl:increment_operators@L2#1 (0.30), lvl:increment_operators@L3#2 (0.20)
+    lvl:increment_operators@L2#2 -> shown (0.35) "b; because c++ moves to the next letter"
+    lvl:increment_operators@L2#1 -> shown (0.21) "b; because c++ moves to the next letter"
+    lvl:increment_operators@L3#2 -> shown (0.12) "b; because c++ moves to the next letter"
+  kept: mis:char_arithmetic->CharNotNumeric [held, tier 0, 0.60], mis:increment_operators->IncrementByTwo [correct, tier 2, 0.72], pre:assignment->increment_operators [confirmed, tier 2, 0.70]
+  clause coverage: c1 <- mis:assignment->VariableKeepsOldValue; c2 <- mis:assignment->VariableKeepsOldValue; c3 <- mis:assignment->VariableKeepsOldValue; c4 <- pre:arithmetic_operators->expression
+  not yet read: pre:char->char_arithmetic, pre:statement->println
+--- depth 3: current concepts ['char_arithmetic', 'increment_operators', 'assignment', 'println']
+  char_arithmetic (concept edges): 1 candidates -> kept pre:char->char_arithmetic (1.00)
+    pre:char->char_arithmetic -> broken (0.90) "Then k = c + 1 is the letter after b; so it prints c"
+  println (concept edges): 1 candidates -> kept pre:statement->println (1.00)
+    pre:statement->println -> confirmed (0.70) "b; so it prints c"
+  kept: pre:char->char_arithmetic [broken, tier 0, 0.90], pre:statement->println [confirmed, tier 2, 0.70]
+  reached across pre:char->char_arithmetic, entered next: char
+  reached across pre:statement->println, entered next: statement
+  clause coverage: c1 <- mis:assignment->VariableKeepsOldValue; c2 <- mis:assignment->VariableKeepsOldValue; c3 <- mis:assignment->VariableKeepsOldValue; c4 <- pre:arithmetic_operators->expression
+  not yet read: own edges of char, own edges of statement
+--- depth 4: current concepts ['char', 'statement'] (closing round: own edges only)
+  char (misconceptions): 1 candidates -> kept mis:char->CharNotNumeric (1.00)
+    mis:char->CharNotNumeric -> not applied (0.00) ""
+  char (level ways): 19 candidates -> kept lvl:char@L0#0 (0.50), lvl:char@L2#2 (0.30), lvl:char@L3#3 (0.20)
+    lvl:char@L0#0 -> shown (0.42) "Then k = c + 1 is the letter after b; so it prints c"
+    lvl:char@L2#2 -> shown (0.22) "b; because c++ moves to the next letter"
+    lvl:char@L3#3 -> not applied (0.00) ""
+  statement (misconceptions): 5 candidates -> kept mis:statement->StatementsRunInAnyOrder (0.45), mis:statement->ProgramLooksAhead (0.35), mis:statement->ComputerFillsInIntent (0.20)
+    mis:statement->StatementsRunInAnyOrder -> correct (0.32) "because c++ moves to the next letter; Then k = c + 1 is the letter after b"
+    mis:statement->ProgramLooksAhead -> not applied (0.00) ""
+    mis:statement->ComputerFillsInIntent -> not applied (0.00) ""
+  statement (level ways): 19 candidates -> kept lvl:statement@L2#0 (0.45), lvl:statement@L2#2 (0.35), lvl:statement@L2#1 (0.20)
+    lvl:statement@L2#0 -> shown (0.36) "because c++ moves to the next letter; Then k = c + 1 is the letter after b"
+    lvl:statement@L2#2 -> shown (0.24) "b; because c++ moves to the next letter; Then k = c + 1 is the letter after b"
+    lvl:statement@L2#1 -> shown (0.14) "b; because c++ moves to the next letter"
+  kept: lvl:char@L0#0 [shown, tier 2, 0.42], lvl:statement@L2#0 [shown, tier 2, 0.36], mis:statement->StatementsRunInAnyOrder [correct, tier 2, 0.32]
+  clause coverage: c1 <- mis:assignment->VariableKeepsOldValue; c2 <- mis:assignment->VariableKeepsOldValue; c3 <- mis:assignment->VariableKeepsOldValue; c4 <- pre:arithmetic_operators->expression
+  root-cause walk: held on ['char_arithmetic'], broken at [] (consequences: pre:char->char_arithmetic), prerequisites {'expression': ['arithmetic_operators'], 'increment_operators': ['assignment'], 'char_arithmetic': ['char'], 'println': ['statement']}
+  level assignment: L2 via line_by_line_trace "because c++ moves to the next letter; Then k = c + 1 is the letter after b"
+  level char: L2 via one_step_execution "b; because c++ moves to the next letter"
+  level char_arithmetic: L0 via misconception "Then k = c + 1 is the letter after b; so it prints c"
+  level expression: L3 via relation_to_neighbour "Then k = c + 1 is the letter after b"
+  level increment_operators: L3 via relation_to_neighbour "b; because c++ moves to the next letter"
+  level println: L3 via relation_to_neighbour "b; so it prints c"
+  level statement: L2 via line_by_line_trace "because c++ moves to the next letter; Then k = c + 1 is the letter after b"
 ```
 
 ## 8. Full diagnosis JSON
@@ -1580,216 +1304,736 @@ start concepts (3): double, arithmetic_operators, if_statement
   "backend": "claude-cli"
  },
  "clauses": [
-  "3.5",
-  "The cast makes it a double division",
-  "so you get the decimal part"
+  "b",
+  "because c++ moves to the next letter",
+  "Then k = c + 1 is the letter after b",
+  "so it prints c"
  ],
  "start_concepts": [
-  "double",
-  "arithmetic_operators",
-  "if_statement"
+  "assignment",
+  "expression",
+  "arithmetic_operators"
  ],
- "held_misconceptions": [],
+ "held_misconceptions": [
+  {
+   "concept": "char_arithmetic",
+   "misconception": "CharNotNumeric",
+   "kind": "misconception",
+   "quote": "Then k = c + 1 is the letter after b; so it prints c",
+   "score": 0.6
+  }
+ ],
  "error_evidence": [],
  "shadowed": [],
  "broken_edges": [
   {
-   "edge": "pre:string_literal->println",
-   "quote": "3.5",
-   "score": 0.385
+   "edge": "pre:char->char_arithmetic",
+   "quote": "Then k = c + 1 is the letter after b; so it prints c",
+   "score": 0.9,
+   "consequence_of": "mis:char_arithmetic->CharNotNumeric"
   }
  ],
- "root_cause": null,
+ "root_cause": {
+  "concept": "char_arithmetic",
+  "misconception": "CharNotNumeric"
+ },
  "levels": {
-  "arithmetic_operators": {
-   "level": "L4",
-   "way": "predict_a_change",
-   "quote": "The cast makes it a double division; so you get the decimal part",
-   "edge": "lvl:arithmetic_operators@L4#0",
+  "assignment": {
+   "level": "L2",
+   "way": "line_by_line_trace",
+   "quote": "because c++ moves to the next letter; Then k = c + 1 is the letter after b",
+   "edge": "lvl:assignment@L2#0",
+   "source": "level_way",
+   "also_shown": []
+  },
+  "char": {
+   "level": "L2",
+   "way": "one_step_execution",
+   "quote": "b; because c++ moves to the next letter",
+   "edge": "lvl:char@L2#2",
+   "source": "level_way",
+   "also_shown": [
+    "L0 everyday_reading"
+   ]
+  },
+  "char_arithmetic": {
+   "level": "L0",
+   "way": "misconception",
+   "misconception": "CharNotNumeric",
+   "quote": "Then k = c + 1 is the letter after b; so it prints c",
+   "edge": "mis:char_arithmetic->CharNotNumeric",
+   "rule": "wrong rule: char is not a numeric type. Right rule: A char is encoded as a 16-bit integer, so arithmetic such as 'b' + 'c' or 'a' + 4 works on the character codes.",
+   "source": "level_mis_links"
+  },
+  "expression": {
+   "level": "L3",
+   "way": "relation_to_neighbour",
+   "quote": "Then k = c + 1 is the letter after b",
+   "edge": "lvl:expression@L3#0",
+   "source": "level_way",
+   "also_shown": []
+  },
+  "increment_operators": {
+   "level": "L3",
+   "way": "relation_to_neighbour",
+   "quote": "b; because c++ moves to the next letter",
+   "edge": "lvl:increment_operators@L3#2",
+   "source": "level_way",
+   "also_shown": [
+    "L2 one_step_execution",
+    "L2 output_prediction"
+   ]
+  },
+  "println": {
+   "level": "L3",
+   "way": "relation_to_neighbour",
+   "quote": "b; so it prints c",
+   "edge": "lvl:println@L3#0",
    "source": "level_way",
    "also_shown": [
     "L2 output_prediction",
-    "L1 states_the_rule"
+    "L2 line_by_line_trace"
    ]
   },
-  "double": {
-   "level": "L4",
-   "way": "diagnose_an_error",
-   "quote": "The cast makes it a double division; so you get the decimal part",
-   "edge": "lvl:double@L4#3",
+  "statement": {
+   "level": "L2",
+   "way": "line_by_line_trace",
+   "quote": "because c++ moves to the next letter; Then k = c + 1 is the letter after b",
+   "edge": "lvl:statement@L2#0",
    "source": "level_way",
    "also_shown": [
-    "L3 relation_to_neighbour",
-    "L1 states_the_rule"
+    "L2 one_step_execution",
+    "L2 output_prediction"
    ]
   }
  },
- "overall_level": "L4",
+ "overall_level": "L0",
  "paths": [
   {
    "depth": 1,
-   "source": "double",
-   "edge": "lvl:double@L3#0",
-   "target": "double@L3",
+   "source": "assignment",
+   "edge": "mis:assignment->VariableKeepsOldValue",
+   "target": "VariableKeepsOldValue",
+   "kind": "misconception",
+   "label": "correct",
+   "clauses": [
+    1,
+    2,
+    3
+   ],
+   "quote": "b; because c++ moves to the next letter; Then k = c + 1 is the letter after b",
+   "confidence": 0.85,
+   "prune_score": 0.45,
+   "score": 0.3825,
+   "logic": "A variable keeps its first value after a new assignment (the static model).",
+   "twin_logic": "Each assignment or read replaces the variable's current value.",
+   "role": "context"
+  },
+  {
+   "depth": 1,
+   "source": "assignment",
+   "edge": "lvl:assignment@L2#0",
+   "target": "assignment@L2",
    "kind": "level",
    "label": "shown",
    "clauses": [
     2,
     3
    ],
-   "quote": "The cast makes it a double division; so you get the decimal part",
+   "quote": "because c++ moves to the next letter; Then k = c + 1 is the letter after b",
+   "confidence": 0.6,
+   "prune_score": 0.4,
+   "score": 0.24,
+   "logic": "First the right-hand side is fully evaluated using the variables' current values (left to right). Then that value is stored in the left-hand variable, replacing its old value, and execution moves to the next statement.",
+   "twin_logic": null,
+   "level": "L2",
+   "way": "line_by_line_trace"
+  },
+  {
+   "depth": 1,
+   "source": "expression",
+   "edge": "lvl:expression@L3#0",
+   "target": "expression@L3",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    3
+   ],
+   "quote": "Then k = c + 1 is the letter after b",
    "confidence": 0.7,
-   "prune_score": 0.5,
-   "score": 0.35,
-   "logic": "Type flow decides the division: with two int operands a / b discards the fraction (10/3 is 3, and double d = 10/3; stores 3.0); if either operand is double the other is promoted and the fraction is kept (10/3.0 is 3.3333333333333335).",
+   "prune_score": 0.25,
+   "score": 0.175,
+   "logic": "A variable name inside an expression contributes the variable's value at the moment of evaluation.",
    "twin_logic": null,
    "level": "L3",
    "way": "relation_to_neighbour"
   },
   {
-   "depth": 1,
-   "source": "arithmetic_operators",
-   "edge": "lvl:arithmetic_operators@L4#0",
-   "target": "arithmetic_operators@L4",
-   "kind": "level",
-   "label": "shown",
+   "depth": 2,
+   "source": "char_arithmetic",
+   "edge": "mis:char_arithmetic->CharNotNumeric",
+   "target": "CharNotNumeric",
+   "kind": "misconception",
+   "label": "held",
    "clauses": [
-    2,
-    3
+    3,
+    4
    ],
-   "quote": "The cast makes it a double division; so you get the decimal part",
-   "confidence": 0.75,
-   "prune_score": 0.45,
-   "score": 0.3375,
-   "logic": "Changing an operand's type changes the operator's meaning (int / versus double /). Reordering * and / changes integer results (59 * 100 / 60 is 98, 59 / 60 * 100 is 0). Replacing ^ with Math.pow gives a real power.",
-   "twin_logic": null,
-   "level": "L4",
-   "way": "predict_a_change"
+   "quote": "Then k = c + 1 is the letter after b; so it prints c",
+   "confidence": 0.6,
+   "prune_score": 1.0,
+   "score": 0.6,
+   "logic": "char is not a numeric type",
+   "twin_logic": "A char is encoded as a 16-bit integer, so arithmetic such as 'b' + 'c' or 'a' + 4 works on the character codes.",
+   "role": "context"
   },
   {
-   "depth": 1,
-   "source": "double",
-   "edge": "lvl:double@L1#1",
-   "target": "double@L1",
-   "kind": "level",
-   "label": "shown",
+   "depth": 2,
+   "source": "increment_operators",
+   "edge": "mis:increment_operators->IncrementByTwo",
+   "target": "IncrementByTwo",
+   "kind": "misconception",
+   "label": "correct",
    "clauses": [
-    2,
-    3
+    1,
+    2
    ],
-   "quote": "The cast makes it a double division; so you get the decimal part",
+   "quote": "b; because c++ moves to the next letter",
+   "confidence": 0.9,
+   "prune_score": 0.8,
+   "score": 0.72,
+   "logic": "i++ increases i by 2.",
+   "twin_logic": "i++ (and ++i) increases i by exactly 1.",
+   "role": "primary"
+  },
+  {
+   "depth": 2,
+   "source": "assignment",
+   "edge": "pre:assignment->increment_operators",
+   "target": "increment_operators",
+   "kind": "prerequisite",
+   "label": "confirmed",
+   "clauses": [
+    1,
+    2
+   ],
+   "quote": "b; because c++ moves to the next letter",
    "confidence": 0.7,
-   "prune_score": 0.3,
-   "score": 0.21,
-   "logic": "Values are 64-bit IEEE 754 numbers (about 15 significant digits) plus the special values Infinity and NaN; +, -, *, / (and %) are defined; if at least one operand of a binary arithmetic operator is double, the operation is a floating-point operation.",
+   "prune_score": 1.0,
+   "score": 0.7,
+   "logic": "i++ is shorthand for the assignment i = i + 1.",
+   "twin_logic": null
+  },
+  {
+   "depth": 3,
+   "source": "char_arithmetic",
+   "edge": "pre:char->char_arithmetic",
+   "target": "char",
+   "kind": "prerequisite",
+   "label": "broken",
+   "clauses": [
+    3,
+    4
+   ],
+   "quote": "Then k = c + 1 is the letter after b; so it prints c",
+   "confidence": 0.9,
+   "prune_score": 1.0,
+   "score": 0.9,
+   "logic": "Char arithmetic uses the numeric code stored for each char.",
    "twin_logic": null,
-   "level": "L1",
-   "way": "states_the_rule"
+   "consequence_of": "mis:char_arithmetic->CharNotNumeric"
   },
   {
    "depth": 3,
    "source": "println",
-   "edge": "pre:string_literal->println",
-   "target": "string_literal",
+   "edge": "pre:statement->println",
+   "target": "statement",
    "kind": "prerequisite",
-   "label": "broken",
+   "label": "confirmed",
    "clauses": [
-    1
+    1,
+    4
    ],
-   "quote": "3.5",
-   "confidence": 0.55,
-   "prune_score": 0.7,
-   "score": 0.385,
-   "logic": "println(\"s\") outputs exactly the characters between the quotes and then ends the line.",
+   "quote": "b; so it prints c",
+   "confidence": 0.7,
+   "prune_score": 1.0,
+   "score": 0.7,
+   "logic": "System.out.println(s); is itself a statement, so its line of output appears at its own place in the sequence.",
    "twin_logic": null
+  },
+  {
+   "depth": 4,
+   "source": "char",
+   "edge": "lvl:char@L0#0",
+   "target": "char@L0",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    3,
+    4
+   ],
+   "quote": "Then k = c + 1 is the letter after b; so it prints c",
+   "confidence": 0.85,
+   "prune_score": 0.5,
+   "score": 0.425,
+   "logic": "In everyday life '7' and 7 are the same thing, and a character is a letter, not a number. A Java char is a 16-bit numeric code: '7' has code 55, and 'a' + 1 is the int 98.",
+   "twin_logic": null,
+   "level": "L0",
+   "way": "everyday_reading"
+  },
+  {
+   "depth": 4,
+   "source": "statement",
+   "edge": "lvl:statement@L2#0",
+   "target": "statement@L2",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    2,
+    3
+   ],
+   "quote": "because c++ moves to the next letter; Then k = c + 1 is the letter after b",
+   "confidence": 0.8,
+   "prune_score": 0.45,
+   "score": 0.36,
+   "logic": "Statements run one at a time, from first to last; each completes (normally or abruptly) before the next starts.",
+   "twin_logic": null,
+   "level": "L2",
+   "way": "line_by_line_trace"
+  },
+  {
+   "depth": 4,
+   "source": "statement",
+   "edge": "mis:statement->StatementsRunInAnyOrder",
+   "target": "StatementsRunInAnyOrder",
+   "kind": "misconception",
+   "label": "correct",
+   "clauses": [
+    2,
+    3
+   ],
+   "quote": "because c++ moves to the next letter; Then k = c + 1 is the letter after b",
+   "confidence": 0.7,
+   "prune_score": 0.45,
+   "score": 0.315,
+   "logic": "Statements in a program can run in any order.",
+   "twin_logic": "Without control statements, statements run once each, top to bottom.",
+   "role": "context"
   }
  ],
  "evidence": [
   {
    "depth": 1,
-   "source": "double",
-   "edge": "lvl:double@L3#0",
-   "target": "double@L3",
+   "source": "assignment",
+   "edge": "mis:assignment->VariableKeepsOldValue",
+   "target": "VariableKeepsOldValue",
+   "kind": "misconception",
+   "label": "correct",
+   "clauses": [
+    1,
+    2,
+    3
+   ],
+   "quote": "b; because c++ moves to the next letter; Then k = c + 1 is the letter after b",
+   "confidence": 0.85,
+   "prune_score": 0.45,
+   "score": 0.3825,
+   "logic": "A variable keeps its first value after a new assignment (the static model).",
+   "twin_logic": "Each assignment or read replaces the variable's current value.",
+   "role": "context"
+  },
+  {
+   "depth": 1,
+   "source": "assignment",
+   "edge": "mis:assignment->AssignmentOppositeDirection",
+   "target": "AssignmentOppositeDirection",
+   "kind": "misconception",
+   "label": "correct",
+   "clauses": [
+    3
+   ],
+   "quote": "Then k = c + 1 is the letter after b",
+   "confidence": 0.6,
+   "prune_score": 0.25,
+   "score": 0.15,
+   "logic": "a = b copies the value of a into b.",
+   "twin_logic": "Assignment stores the value of the right side into the variable on the left.",
+   "role": "primary"
+  },
+  {
+   "depth": 1,
+   "source": "assignment",
+   "edge": "lvl:assignment@L2#0",
+   "target": "assignment@L2",
    "kind": "level",
    "label": "shown",
    "clauses": [
     2,
     3
    ],
-   "quote": "The cast makes it a double division; so you get the decimal part",
+   "quote": "because c++ moves to the next letter; Then k = c + 1 is the letter after b",
+   "confidence": 0.6,
+   "prune_score": 0.4,
+   "score": 0.24,
+   "logic": "First the right-hand side is fully evaluated using the variables' current values (left to right). Then that value is stored in the left-hand variable, replacing its old value, and execution moves to the next statement.",
+   "twin_logic": null,
+   "level": "L2",
+   "way": "line_by_line_trace"
+  },
+  {
+   "depth": 1,
+   "source": "expression",
+   "edge": "lvl:expression@L3#0",
+   "target": "expression@L3",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    3
+   ],
+   "quote": "Then k = c + 1 is the letter after b",
    "confidence": 0.7,
-   "prune_score": 0.5,
-   "score": 0.35,
-   "logic": "Type flow decides the division: with two int operands a / b discards the fraction (10/3 is 3, and double d = 10/3; stores 3.0); if either operand is double the other is promoted and the fraction is kept (10/3.0 is 3.3333333333333335).",
+   "prune_score": 0.25,
+   "score": 0.175,
+   "logic": "A variable name inside an expression contributes the variable's value at the moment of evaluation.",
    "twin_logic": null,
    "level": "L3",
    "way": "relation_to_neighbour"
   },
   {
-   "depth": 1,
-   "source": "double",
-   "edge": "lvl:double@L1#1",
-   "target": "double@L1",
+   "depth": 2,
+   "source": "assignment",
+   "edge": "pre:assignment->increment_operators",
+   "target": "increment_operators",
+   "kind": "prerequisite",
+   "label": "confirmed",
+   "clauses": [
+    1,
+    2
+   ],
+   "quote": "b; because c++ moves to the next letter",
+   "confidence": 0.7,
+   "prune_score": 1.0,
+   "score": 0.7,
+   "logic": "i++ is shorthand for the assignment i = i + 1.",
+   "twin_logic": null
+  },
+  {
+   "depth": 2,
+   "source": "expression",
+   "edge": "pre:arithmetic_operators->expression",
+   "target": "arithmetic_operators",
+   "kind": "prerequisite",
+   "label": "confirmed",
+   "clauses": [
+    3,
+    4
+   ],
+   "quote": "Then k = c + 1 is the letter after b; so it prints c",
+   "confidence": 0.6,
+   "prune_score": 1.0,
+   "score": 0.6,
+   "logic": "An operator combines operand values a and b into a new value, so operators build larger expressions from smaller ones.",
+   "twin_logic": null
+  },
+  {
+   "depth": 2,
+   "source": "println",
+   "edge": "lvl:println@L2#1",
+   "target": "println@L2",
    "kind": "level",
    "label": "shown",
    "clauses": [
-    2,
-    3
+    1,
+    4
    ],
-   "quote": "The cast makes it a double division; so you get the decimal part",
+   "quote": "b; so it prints c",
+   "confidence": 0.7,
+   "prune_score": 0.45,
+   "score": 0.315,
+   "logic": "Output is the value's characters followed by a line break: println(\"Hello, \"); println(\"World!\"); prints two lines.",
+   "twin_logic": null,
+   "level": "L2",
+   "way": "output_prediction"
+  },
+  {
+   "depth": 2,
+   "source": "println",
+   "edge": "lvl:println@L3#0",
+   "target": "println@L3",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    1,
+    4
+   ],
+   "quote": "b; so it prints c",
+   "confidence": 0.6,
+   "prune_score": 0.3,
+   "score": 0.18,
+   "logic": "System.out.println(s); is a statement, so its line of output appears at its own place in the sequence.",
+   "twin_logic": null,
+   "level": "L3",
+   "way": "relation_to_neighbour"
+  },
+  {
+   "depth": 2,
+   "source": "println",
+   "edge": "lvl:println@L2#0",
+   "target": "println@L2",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    1,
+    4
+   ],
+   "quote": "b; so it prints c",
+   "confidence": 0.65,
+   "prune_score": 0.25,
+   "score": 0.1625,
+   "logic": "Evaluate the argument, print its characters at the current position, then write the line separator so the cursor moves to the beginning of the next line.",
+   "twin_logic": null,
+   "level": "L2",
+   "way": "line_by_line_trace"
+  },
+  {
+   "depth": 2,
+   "source": "char_arithmetic",
+   "edge": "mis:char_arithmetic->CharNotNumeric",
+   "target": "CharNotNumeric",
+   "kind": "misconception",
+   "label": "held",
+   "clauses": [
+    3,
+    4
+   ],
+   "quote": "Then k = c + 1 is the letter after b; so it prints c",
+   "confidence": 0.6,
+   "prune_score": 1.0,
+   "score": 0.6,
+   "logic": "char is not a numeric type",
+   "twin_logic": "A char is encoded as a 16-bit integer, so arithmetic such as 'b' + 'c' or 'a' + 4 works on the character codes.",
+   "role": "context"
+  },
+  {
+   "depth": 2,
+   "source": "char_arithmetic",
+   "edge": "lvl:char_arithmetic@L2#2",
+   "target": "char_arithmetic@L2",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    1,
+    2
+   ],
+   "quote": "b; because c++ moves to the next letter",
+   "confidence": 0.8,
+   "prune_score": 0.3,
+   "score": 0.24,
+   "logic": "For char c = 'A', c++ sets c to 'B'. c = c + 1; is rejected, because the right side is an int.",
+   "twin_logic": null,
+   "level": "L2",
+   "way": "one_step_execution"
+  },
+  {
+   "depth": 2,
+   "source": "increment_operators",
+   "edge": "mis:increment_operators->IncrementByTwo",
+   "target": "IncrementByTwo",
+   "kind": "misconception",
+   "label": "correct",
+   "clauses": [
+    1,
+    2
+   ],
+   "quote": "b; because c++ moves to the next letter",
+   "confidence": 0.9,
+   "prune_score": 0.8,
+   "score": 0.72,
+   "logic": "i++ increases i by 2.",
+   "twin_logic": "i++ (and ++i) increases i by exactly 1.",
+   "role": "primary"
+  },
+  {
+   "depth": 2,
+   "source": "increment_operators",
+   "edge": "lvl:increment_operators@L2#2",
+   "target": "increment_operators@L2",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    1,
+    2
+   ],
+   "quote": "b; because c++ moves to the next letter",
+   "confidence": 0.7,
+   "prune_score": 0.5,
+   "score": 0.35,
+   "logic": "One execution changes exactly one variable (i) by exactly 1 and returns its old (i++) or new (++i) value.",
+   "twin_logic": null,
+   "level": "L2",
+   "way": "one_step_execution"
+  },
+  {
+   "depth": 2,
+   "source": "increment_operators",
+   "edge": "lvl:increment_operators@L2#1",
+   "target": "increment_operators@L2",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    1,
+    2
+   ],
+   "quote": "b; because c++ moves to the next letter",
    "confidence": 0.7,
    "prune_score": 0.3,
    "score": 0.21,
-   "logic": "Values are 64-bit IEEE 754 numbers (about 15 significant digits) plus the special values Infinity and NaN; +, -, *, / (and %) are defined; if at least one operand of a binary arithmetic operator is double, the operation is a floating-point operation.",
+   "logic": "With i = 5: x = i++ gives x = 5, i = 6; x = ++i gives x = 6, i = 6; i = i++ leaves i = 5.",
    "twin_logic": null,
-   "level": "L1",
-   "way": "states_the_rule"
+   "level": "L2",
+   "way": "output_prediction"
   },
   {
-   "depth": 1,
-   "source": "double",
-   "edge": "lvl:double@L4#3",
-   "target": "double@L4",
+   "depth": 2,
+   "source": "increment_operators",
+   "edge": "lvl:increment_operators@L3#2",
+   "target": "increment_operators@L3",
    "kind": "level",
    "label": "shown",
    "clauses": [
-    2,
-    3
+    1,
+    2
    ],
-   "quote": "The cast makes it a double division; so you get the decimal part",
+   "quote": "b; because c++ moves to the next letter",
    "confidence": 0.6,
    "prune_score": 0.2,
    "score": 0.12,
-   "logic": "rule broken: Floating-point division needs at least one double operand. Kind: silent logic error. Trigger class: A formula assigned to a double whose division has only int operands, e.g. double y = 1 / 3; (gives 0.0) or (9/5)*c + 32.",
+   "logic": "i++ is shorthand for the assignment i = i + 1 (and i += k for i = i + k), so it changes the variable's stored value.",
    "twin_logic": null,
-   "level": "L4",
-   "way": "diagnose_an_error"
+   "level": "L3",
+   "way": "relation_to_neighbour"
   },
   {
-   "depth": 1,
-   "source": "arithmetic_operators",
-   "edge": "lvl:arithmetic_operators@L4#0",
-   "target": "arithmetic_operators@L4",
+   "depth": 3,
+   "source": "char_arithmetic",
+   "edge": "pre:char->char_arithmetic",
+   "target": "char",
+   "kind": "prerequisite",
+   "label": "broken",
+   "clauses": [
+    3,
+    4
+   ],
+   "quote": "Then k = c + 1 is the letter after b; so it prints c",
+   "confidence": 0.9,
+   "prune_score": 1.0,
+   "score": 0.9,
+   "logic": "Char arithmetic uses the numeric code stored for each char.",
+   "twin_logic": null,
+   "consequence_of": "mis:char_arithmetic->CharNotNumeric"
+  },
+  {
+   "depth": 3,
+   "source": "println",
+   "edge": "pre:statement->println",
+   "target": "statement",
+   "kind": "prerequisite",
+   "label": "confirmed",
+   "clauses": [
+    1,
+    4
+   ],
+   "quote": "b; so it prints c",
+   "confidence": 0.7,
+   "prune_score": 1.0,
+   "score": 0.7,
+   "logic": "System.out.println(s); is itself a statement, so its line of output appears at its own place in the sequence.",
+   "twin_logic": null
+  },
+  {
+   "depth": 4,
+   "source": "char",
+   "edge": "lvl:char@L0#0",
+   "target": "char@L0",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    3,
+    4
+   ],
+   "quote": "Then k = c + 1 is the letter after b; so it prints c",
+   "confidence": 0.85,
+   "prune_score": 0.5,
+   "score": 0.425,
+   "logic": "In everyday life '7' and 7 are the same thing, and a character is a letter, not a number. A Java char is a 16-bit numeric code: '7' has code 55, and 'a' + 1 is the int 98.",
+   "twin_logic": null,
+   "level": "L0",
+   "way": "everyday_reading"
+  },
+  {
+   "depth": 4,
+   "source": "char",
+   "edge": "lvl:char@L2#2",
+   "target": "char@L2",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    1,
+    2
+   ],
+   "quote": "b; because c++ moves to the next letter",
+   "confidence": 0.75,
+   "prune_score": 0.3,
+   "score": 0.225,
+   "logic": "c++ on char c = 'A' makes c 'B', because increment works on chars directly. c = c + 1; does not compile, because the right side is an int.",
+   "twin_logic": null,
+   "level": "L2",
+   "way": "one_step_execution"
+  },
+  {
+   "depth": 4,
+   "source": "statement",
+   "edge": "mis:statement->StatementsRunInAnyOrder",
+   "target": "StatementsRunInAnyOrder",
+   "kind": "misconception",
+   "label": "correct",
+   "clauses": [
+    2,
+    3
+   ],
+   "quote": "because c++ moves to the next letter; Then k = c + 1 is the letter after b",
+   "confidence": 0.7,
+   "prune_score": 0.45,
+   "score": 0.315,
+   "logic": "Statements in a program can run in any order.",
+   "twin_logic": "Without control statements, statements run once each, top to bottom.",
+   "role": "context"
+  },
+  {
+   "depth": 4,
+   "source": "statement",
+   "edge": "lvl:statement@L2#0",
+   "target": "statement@L2",
    "kind": "level",
    "label": "shown",
    "clauses": [
     2,
     3
    ],
-   "quote": "The cast makes it a double division; so you get the decimal part",
-   "confidence": 0.75,
+   "quote": "because c++ moves to the next letter; Then k = c + 1 is the letter after b",
+   "confidence": 0.8,
    "prune_score": 0.45,
-   "score": 0.3375,
-   "logic": "Changing an operand's type changes the operator's meaning (int / versus double /). Reordering * and / changes integer results (59 * 100 / 60 is 98, 59 / 60 * 100 is 0). Replacing ^ with Math.pow gives a real power.",
+   "score": 0.36,
+   "logic": "Statements run one at a time, from first to last; each completes (normally or abruptly) before the next starts.",
    "twin_logic": null,
-   "level": "L4",
-   "way": "predict_a_change"
+   "level": "L2",
+   "way": "line_by_line_trace"
   },
   {
-   "depth": 1,
-   "source": "arithmetic_operators",
-   "edge": "lvl:arithmetic_operators@L2#1",
-   "target": "arithmetic_operators@L2",
+   "depth": 4,
+   "source": "statement",
+   "edge": "lvl:statement@L2#2",
+   "target": "statement@L2",
    "kind": "level",
    "label": "shown",
    "clauses": [
@@ -1797,66 +2041,50 @@ start concepts (3): double, arithmetic_operators, if_statement
     2,
     3
    ],
-   "quote": "3.5; The cast makes it a double division; so you get the decimal part",
-   "confidence": 0.6,
+   "quote": "b; because c++ moves to the next letter; Then k = c + 1 is the letter after b",
+   "confidence": 0.7,
    "prune_score": 0.35,
-   "score": 0.21,
-   "logic": "With ints, 17 / 3 is 5 and 17 % 3 is 2. With doubles, 5.0 / 3.0 is 1.6666666666666667. With mixed operands, the int is promoted first (10 / 3.0 is 3.333...).",
+   "score": 0.245,
+   "logic": "Executing one statement applies its single effect to the current state (e.g. prints one string, or stores one value) and then control moves to the next statement.",
    "twin_logic": null,
    "level": "L2",
-   "way": "output_prediction"
+   "way": "one_step_execution"
   },
   {
-   "depth": 1,
-   "source": "arithmetic_operators",
-   "edge": "lvl:arithmetic_operators@L1#1",
-   "target": "arithmetic_operators@L1",
+   "depth": 4,
+   "source": "statement",
+   "edge": "lvl:statement@L2#1",
+   "target": "statement@L2",
    "kind": "level",
    "label": "shown",
    "clauses": [
-    2,
-    3
+    1,
+    2
    ],
-   "quote": "The cast makes it a double division; so you get the decimal part",
-   "confidence": 0.55,
+   "quote": "b; because c++ moves to the next letter",
+   "confidence": 0.7,
    "prune_score": 0.2,
-   "score": 0.11,
-   "logic": "Both operands must be numeric, and the result has the promoted type (int, long or double). * / % bind tighter than + -, all group left to right, and int / or % by zero throws ArithmeticException. Unary minus negates its operand (-x) and unary plus leaves it unchanged; they bind more tightly than * and /, so -a * b is (-a) * b.",
+   "score": 0.14,
+   "logic": "A statement has no value; its result is its effect: a changed variable, printed output, or a change of control flow.",
    "twin_logic": null,
-   "level": "L1",
-   "way": "states_the_rule"
-  },
-  {
-   "depth": 3,
-   "source": "println",
-   "edge": "pre:string_literal->println",
-   "target": "string_literal",
-   "kind": "prerequisite",
-   "label": "broken",
-   "clauses": [
-    1
-   ],
-   "quote": "3.5",
-   "confidence": 0.55,
-   "prune_score": 0.7,
-   "score": 0.385,
-   "logic": "println(\"s\") outputs exactly the characters between the quotes and then ends the line.",
-   "twin_logic": null
+   "level": "L2",
+   "way": "output_prediction"
   }
  ],
  "clause_coverage": {
-  "3.5": "lvl:arithmetic_operators@L2#1",
-  "The cast makes it a double division": "lvl:double@L3#0",
-  "so you get the decimal part": "lvl:double@L3#0"
+  "b": "mis:assignment->VariableKeepsOldValue",
+  "because c++ moves to the next letter": "mis:assignment->VariableKeepsOldValue",
+  "Then k = c + 1 is the letter after b": "mis:assignment->VariableKeepsOldValue",
+  "so it prints c": "pre:arithmetic_operators->expression"
  },
  "unexplained_clauses": [],
- "stop_reason": "max depth",
+ "stop_reason": "sufficient",
  "depth_reached": 4,
  "llm_calls": 0,
- "llm_cache_hits": 73,
+ "llm_cache_hits": 56,
  "llm_calls_by_step": {
-  "prune": 25,
-  "label": 48
+  "prune": 20,
+  "label": 36
  }
 }
 ```
