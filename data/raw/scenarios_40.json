@@ -1,6 +1,6 @@
 {
- "source": "The 41 scenarios run in notebooks/think_on_the_graph.ipynb (data/processed/MYnn_input.json), collected into one file",
- "note": "41 entries, 40 distinct: MY26 is the same code, question and answer as MY18. No gold labels yet; the earlier gold-labelled set is in tests/data/scenarios_gold.json.",
+ "source": "The 40 scenarios run in notebooks/think_on_the_graph.ipynb (data/processed/MYnn_input.json), collected into one file",
+ "note": "40 scenarios, MY01 to MY41 without MY26: MY26 was the same code, question and answer as MY18 and was removed. No gold labels yet; the earlier gold-labelled set is in tests/data/scenarios_gold.json.",
  "scenarios": [
   {
    "id": "MY01",
@@ -151,13 +151,6 @@
    "code": "int x = 4;\nif (x > 5) {\n    System.out.println(\"big\");\n}\nSystem.out.println(\"done\");",
    "question": "Explain which lines run and why.",
    "answer": "The program runs every line from top to bottom, so the println inside the if runs too, and then done is printed"
-  },
-  {
-   "id": "MY26",
-   "code": "int[] a = {5, 10, 15};\nfor (int i = 0; i <= a.length; i++) {\n    System.out.println(a[i]);\n}",
-   "question": "Explain which indexes the loop visits and why",
-   "answer": "i goes from 0 to a.length. Using <= or < makes no difference here, because both go through the whole array, so it visits each element once.",
-   "duplicate_of": "MY18"
   },
   {
    "id": "MY27",

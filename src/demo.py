@@ -3,7 +3,7 @@
 step, and open one full-screen HTML page in the browser with all of it.
 
     python src/demo.py                       # asks for the three inputs in the terminal
-    python src/demo.py --scenario MY07       # a scenario from data/raw/scenarios_41.json
+    python src/demo.py --scenario MY07       # a scenario from data/raw/scenarios_40.json
     python src/demo.py --input my.json       # {"code": ..., "question": ..., "answer": ...}
     python src/demo.py --id quiz3_s7         # choose the run id (default: next free MYnn)
 
@@ -184,7 +184,7 @@ blockquote {{ border-left: 4px solid #ccc; margin: 6px 0; padding: 2px 12px; col
 
 def main(argv=None) -> None:
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    ap.add_argument("--scenario", help="id in data/raw/scenarios_41.json")
+    ap.add_argument("--scenario", help="id in data/raw/scenarios_40.json")
     ap.add_argument("--input", help="JSON file with code, question, answer")
     ap.add_argument("--id", help="run id (default: next free MYnn)")
     ap.add_argument("--no-browser", action="store_true")

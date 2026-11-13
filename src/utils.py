@@ -11,7 +11,7 @@ from typing import Any
 
 ROOT = Path(__file__).resolve().parents[1]
 KG_PATH = ROOT / "data/raw/chapter1_kg_updated.json"
-SCENARIOS_PATH = ROOT / "data/raw/scenarios_41.json"
+SCENARIOS_PATH = ROOT / "data/raw/scenarios_40.json"
 GOLD_SCENARIOS_PATH = ROOT / "tests/data/scenarios_gold.json"  # the earlier gold-labelled set, kept for the tests
 SCENARIOS_NOT_FROM_CODE_PATH = ROOT / "data/raw/scenarios_not_from_code.json"
 PROCESSED_DIR = ROOT / "data/processed"

@@ -1,5 +1,5 @@
 """Compare Stage 2 diagnoses with the gold labels of the scenario file (checking only; gold is never an input).
-Scenarios without a gold block (the 41 in data/raw/scenarios_41.json have none yet) are skipped.
+Scenarios without a gold block (the 40 in data/raw/scenarios_40.json have none yet) are skipped.
 
     python src/compare.py                  # data/processed/<sid>_diagnosis.json  (default settings)
     python src/compare.py --tag bm25       # data/processed/<sid>_diagnosis.bm25.json (a run made with --tag bm25)
