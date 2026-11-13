@@ -3,19 +3,16 @@
     python src/concept_notebooks.py                 # all concepts
     python src/concept_notebooks.py char for_loop   # only these
 
-For every concept <c> this writes concept_wise_graph/<c>/ :
-    <c>.ipynb   the notebook that was run for the concept (visualizer code, then the concept's view), with its outputs
-    <c>.html    the interactive graph page (written by the notebook)
-    <c>.json    the nodes and edges of the view (written by the notebook)
-    <c>.png     the same graph as a still picture (written by the notebook)
-and concept_wise_graph/index.html to move between the pages.
+For every concept <c> this writes concept_wise_graph/<c>/ with three files:
+    <c>.ipynb   the short notebook that was run for the concept: it draws the picture and writes the other two files
+    <c>.png     the graph around the concept
+    <c>.md      the explanation: every relation of the concept and its reasoning, written out as text
 
-The visualizer code is taken from cell 1 of notebooks/kg_visualizer.ipynb, so there is one copy of it.
-Every edge in a view is an edge of data/raw/chapter1_kg_updated.json.
+The visualizer code stays in cell 1 of notebooks/kg_visualizer.ipynb; the concept notebooks load it from there.
+Every relation described is an edge of data/raw/chapter1_kg_updated.json.
 """
 import json
 import sys
-import html
 from concurrent.futures import ProcessPoolExecutor
 from pathlib import Path
 
@@ -23,12 +20,23 @@ import nbformat
 from nbclient import NotebookClient
 
 ROOT = Path(__file__).resolve().parents[1]
-SOURCE_NB = ROOT / "notebooks" / "kg_visualizer.ipynb"
 OUT_DIR = ROOT / "concept_wise_graph"
 KG = ROOT / "data" / "raw" / "chapter1_kg_updated.json"
 
+LOAD_CODE = r'''# 1. Load the knowledge graph visualizer (cell 1 of notebooks/kg_visualizer.ipynb) and the graph itself.
+import json
+from pathlib import Path
+
+ROOT = Path.cwd().resolve()
+while not (ROOT / 'data' / 'raw').exists() and ROOT.parent != ROOT:
+    ROOT = ROOT.parent
+_visualizer = json.load(open(ROOT / 'notebooks' / 'kg_visualizer.ipynb', encoding='utf-8'))
+exec(''.join(_visualizer['cells'][1]['source']))
+print(_loaded)
+'''
+
 VIEW_CODE = r'''
-# The view of one concept: every node the knowledge graph relates to it, and only edges that are in the graph.
+# 2. The view of the concept: the picture, and the explanation of every relation.
 import re
 import matplotlib.pyplot as plt
 from matplotlib.lines import Line2D
@@ -36,44 +44,9 @@ from matplotlib.lines import Line2D
 HERE = Path.cwd()                      # concept_wise_graph/<concept>/
 VIEW_LAYERS = {'topic', 'concept', 'learning_level', 'misconception', 'error'}
 VIEW_ETYPES = {'contains', 'prerequisite', 'parallel', 'has_level', 'misconception', 'error'}
-HOPS = 1
-hops_sl.value = HOPS
+H, _ = filter_graph(VIEW_LAYERS, VIEW_ETYPES, 'All', '', 1, True, CONCEPT)   # only edges of the knowledge graph
 
-def _share_library(page):
-    """The drawing library is the same in every page: one copy is kept one folder up."""
-    def swap(m, name, tag):
-        body = m.group(1)
-        if len(body) < 100_000 or 'drawGraph' in body:      # the page's own script (its nodes and edges) stays
-            return m.group(0)
-        lib = HERE.parent / name
-        if not lib.exists():
-            lib.write_text(body, encoding='utf-8')
-        return tag
-    page = re.sub(r'<style[^>]*>(.*?)</style>',
-                  lambda m: swap(m, 'vis-network.min.css', '<link rel="stylesheet" href="../vis-network.min.css">'),
-                  page, flags=re.S)
-    return re.sub(r'<script[^>]*>(.*?)</script>',
-                  lambda m: swap(m, 'vis-network.min.js', '<script src="../vis-network.min.js"></script>'),
-                  page, flags=re.S)
-
-H, _ = filter_graph(VIEW_LAYERS, VIEW_ETYPES, 'All', '', HOPS, True, CONCEPT)
-report, writeup = concept_report(CONCEPT), edges_writeup(H, CONCEPT)
-
-# 1. the interactive page
-page = _tips(_freeze(render(H, False, True, {CONCEPT}, CONCEPT, CONCEPT).generate_html(), False))
-page = _share_library(page.replace('</body>', report + writeup + '</body>', 1))
-(HERE / f'{CONCEPT}.html').write_text(page, encoding='utf-8')
-
-# 2. the same view as data
-(HERE / f'{CONCEPT}.json').write_text(json.dumps({
-    'concept': CONCEPT, 'label': _CONCEPT[CONCEPT].get('label', CONCEPT), 'graph_version': DATA.get('version'),
-    'nodes': [{'id': n, 'kind': d['layer'], 'label': d['label']}
-              for n, d in sorted(H.nodes(data=True), key=lambda x: (x[1]['layer'], str(x[0])))],
-    'edges': [{'from': u, 'to': v, 'type': d['etype'], 'label': d.get('elogic', '')}
-              for u, v, d in sorted(H.edges(data=True), key=lambda x: (x[2]['etype'], str(x[0]), str(x[1])))],
-}, indent=1, ensure_ascii=False), encoding='utf-8')
-
-# 3. a still picture of the graph (same positions as the interactive page)
+# ---- the picture ----
 pos = {n: (x, -y) for n, (x, y) in radial_layout(H, CONCEPT).items()}
 S = nx.DiGraph()
 S.add_nodes_from(H.nodes())
@@ -104,25 +77,147 @@ ax.axis('off')
 fig.savefig(HERE / f'{CONCEPT}.png', dpi=110, bbox_inches='tight')
 plt.show()
 
-# 4. the interactive graph, then the concept's report and every edge with its full label
-rel = HERE.resolve().relative_to(ROOT).as_posix()
-by = {}
-for u, v, d in H.edges(data=True):
-    by[d['etype']] = by.get(d['etype'], 0) + 1
-display(HTML(
-    f"<div style='background:#fff;color:#111;padding:10px;font:16px/1.6 arial'><b>{_esc(CONCEPT)}</b>: "
-    f"{H.number_of_nodes()} nodes / {H.number_of_edges()} edges ("
-    + ', '.join(f'{k} {n}' for k, n in sorted(by.items())) + "). <b>Click an edge to read its exact reasoning</b>; click a node for its rules. Interactive graph: "
-    f"<a href='/files/{rel}/{CONCEPT}.html' target='_blank'>{CONCEPT}.html</a> "
-    "(shown below when the notebook server is running from the repository folder)</div>"
-    f"<iframe src='/files/{rel}/{CONCEPT}.html' style='width:100%;height:1040px;border:1px solid #ddd;background:#fff'></iframe>"))
-display(HTML(report + writeup))
+# ---- the explanation (<concept>.md): plain text, no tables ----
+def md(t):
+    """Text from the graph, safe to put in markdown."""
+    t = str(t or '').replace('&', '&amp;').replace('<', '&lt;').replace('>', '&gt;')
+    return re.sub(r'([*_`|])', r'\\\1', t).strip()
+
+def way(w):
+    return md(str(w.get('way') or '').replace('_', ' '))
+
+def ids(xs):
+    return ', '.join('`' + str(x) + '`' for x in xs)
+
+def about(o):
+    """One line saying what another concept is."""
+    d = _CONCEPT.get(o, {})
+    lab, desc = d.get('label', o), d.get('description', '')
+    if lab == o:                       # no separate label: the description says what it is
+        return '*' + md(desc or o) + '*'
+    return '*' + md(lab) + (': ' + md(desc) if desc and desc != lab else '') + '*'
+
+def relation(e, other, heading):
+    out = [f"### {heading}", '', about(other), '',
+           md(e.get('logic') or e.get('edge_logic')) or 'No reasoning is stored on this edge.', '']
+    if e.get('grounding'):
+        out.append(f"- **Grounding:** {md(str(e['grounding']).replace('_', ' '))}")
+    for a, b in ((CONCEPT, other), (other, CONCEPT)):
+        if (a, b) in _R_RULE:
+            out.append(f"- **How `{a}` combines with `{b}`:** {md(_R_RULE[(a, b)])}")
+    return out + ['']
+
+d0 = _CONCEPT[CONCEPT]
+rel = concept_related(CONCEPT)
+shown = set(H.nodes())
+siblings = sorted({v for u, v, d in H.edges(data=True) if d['etype'] == 'contains' and v != CONCEPT})
+needs = sorted(rel['needs'], key=lambda e: e['source'])
+leads = sorted(rel['unlocks'], key=lambda e: e['target'])
+par = sorted(rel['parallel'], key=lambda e: str(sorted((e['source'], e['target']))))
+par_other = [e['target'] if e['source'] == CONCEPT else e['source'] for e in par]
+L0 = rel['levels'].get('L0', {})
+
+out = [f"# {d0.get('label', CONCEPT)} (`{CONCEPT}`)", '',
+       md(d0.get('description', '')), '',
+       f"Section {md(d0.get('section', ''))} {md(d0.get('section_title', ''))}, "
+       f"topic {md(d0.get('topic', ''))} {md(d0.get('topic_title', ''))}.", '',
+       f"![The knowledge graph around {CONCEPT}]({CONCEPT}.png)", '',
+       '## At a glance', '',
+       '- **Needs first:** ' + (ids(e['source'] for e in needs) or 'nothing'),
+       '- **Leads to:** ' + (ids(e['target'] for e in leads) or 'nothing'),
+       '- **Learned alongside:** ' + (ids(par_other) or 'nothing'),
+       '- **Misconceptions:** ' + (ids(sorted(e['target'] for e in rel['mis'])) or 'none'),
+       '- **Errors:** ' + (ids(sorted(e['target'] for e in rel['err'])) or 'none'),
+       '- **Levels:** ' + (', '.join(L for L in LEVELS if L in rel['levels']) or 'none'), '',
+       f"Everything below comes from the knowledge graph {str(DATA.get('version'))[:5]} "
+       f"(`data/raw/chapter1_kg_updated.json`): {H.number_of_edges()} edges around this concept, each explained in the "
+       "graph's own words.", '']
+
+out += [f"## What it needs first ({len(needs)})", '',
+        f"A prerequisite edge means the other concept has to be understood before `{CONCEPT}`.", '']
+for e in needs:
+    out += relation(e, e['source'], f"`{e['source']}` comes before `{CONCEPT}`")
+if not needs:
+    out += ['No prerequisite edge leads into this concept.', '']
+
+out += [f"## What it leads to ({len(leads)})", '', f"These concepts need `{CONCEPT}` first.", '']
+for e in leads:
+    out += relation(e, e['target'], f"`{CONCEPT}` comes before `{e['target']}`")
+if not leads:
+    out += ['No concept has this one as a prerequisite.', '']
+
+out += [f"## Learned alongside ({len(par)})", '',
+        "A parallel edge joins two concepts that sit side by side: neither is needed before the other.", '']
+for e, o in zip(par, par_other):
+    out += relation(e, o, f"`{CONCEPT}` alongside `{o}`")
+if not par:
+    out += ['No parallel edge touches this concept.', '']
+
+for title, one, edges, intro in (
+        ('Misconceptions', 'misconception', rel['mis'],
+         'A misconception edge states the wrong rule a student may hold about this concept, and the right rule.'),
+        ('Errors', 'error', rel['err'],
+         'An error edge states the rule that gets broken in a program, and the right rule.')):
+    out += [f"## {title} ({len(edges)})", '', intro, '']
+    for e in sorted(edges, key=lambda e: e['target']):
+        m = e['target']
+        node = _MISNODE.get(m, {})
+        out += [f"### {m}", '']
+        if node.get('label') and node['label'] != m:
+            out += ['*' + md(node['label']) + '*', '']
+        out += ['- **Wrong rule:** ' + (md(e.get('logic')) or 'not stated on the edge'),
+                '- **Right rule:** ' + (md(e.get('twin_logic')) or 'not stated on the edge')]
+        if e.get('role'):
+            out.append('- **Role of this concept:** ' + md(e['role']))
+        for w in L0.get('ways', []):
+            if m in (w.get('linked_misconception') or []):
+                out.append('- **Shows at level L0 as:** ' + way(w) + ': ' + md(w.get('exact_rule')))
+        for o in sorted(_MIS_OWNERS.get(m, set()) - {CONCEPT}):
+            if o in shown:
+                out.append(f"- **Also an edge from `{o}`:** "
+                           + (md(_MIS_EDGE.get((o, m), {}).get('logic')) or 'no rule stated'))
+        out.append('')
+    if not edges:
+        out += [f"The graph has no {one} edge from this concept.", '']
+
+out += [f"## Levels L0 to L4 ({len(rel['levels'])} of 5)", '',
+        "Each level edge lists the ways a student shows that level, each with its exact rule.", '']
+for L in LEVELS:
+    ln, e = _LEVEL_NODE.get(f'{CONCEPT}@{L}'), rel['levels'].get(L)
+    if not (ln or e):
+        out += [f"### {L}", '', 'The graph has no node for this level.', '']
+        continue
+    out += [f"### {L}: {md((ln or {}).get('name', ''))}", '']
+    if ln and ln.get('criterion'):
+        out += [md(ln['criterion']), '']
+    if ln and ln.get('deciding_question'):
+        out += ['*Deciding question: ' + md(ln['deciding_question']) + '*', '']
+    if e and e.get('logic'):
+        out += [md(e['logic']), '']
+    for w in (e or {}).get('ways', []):
+        link = w.get('linked_misconception') or []
+        out.append('- **' + way(w) + '** (' + md(RULE_TYPE_NAMES.get(w.get('rule_type'), w.get('rule_type')))
+                   + ('; shows ' + ids(link) if link else '') + '): ' + md(w.get('exact_rule')))
+    out.append('')
+
+out += ['## Same topic', '']
+if rel['topics']:
+    t = rel['topics'][0]
+    out += [f"`{CONCEPT}` belongs to the topic **{md(G.nodes[t]['label'] if t in G else t)}** (`{t}`). "
+            + ('The topic also contains: ' + ids(siblings) + '.' if siblings else 'It is the only concept of that topic.'), '']
+else:
+    out += ['No topic contains this concept.', '']
+
+rules = G.nodes[CONCEPT].get('rules', [])
+out += [f"## Rules of the concept ({len(rules)})", '']
+out += ['- **' + md(RULE_TYPE_NAMES.get(t, t)) + ':** ' + md(r) for t, r in rules] or ['No rule is stated on the concept.']
+out += ['', '## The whole prerequisite chain', '',
+        f"- **Everything it builds on ({len(rel['all_needs'])}):** " + (ids(rel['all_needs']) or 'nothing'),
+        f"- **Everything that builds on it ({len(rel['all_unlocks'])}):** " + (ids(rel['all_unlocks']) or 'nothing'),
+        '']
+(HERE / f'{CONCEPT}.md').write_text('\n'.join(out), encoding='utf-8')
+print(f"{CONCEPT}: {H.number_of_nodes()} nodes, {H.number_of_edges()} edges. Written: {CONCEPT}.png, {CONCEPT}.md")
 '''
-
-
-def visualizer_code():
-    nb = json.loads(SOURCE_NB.read_text(encoding="utf-8"))
-    return "".join(nb["cells"][1]["source"])
 
 
 def concepts():
@@ -130,7 +225,7 @@ def concepts():
     return {c["id"]: c.get("label", c["id"]) for c in data["concepts"]}
 
 
-def run_concept(c, label, code):
+def run_concept(c, label):
     """Build the notebook of one concept, run it, save it with its outputs."""
     folder = OUT_DIR / c
     folder.mkdir(parents=True, exist_ok=True)
@@ -139,60 +234,44 @@ def run_concept(c, label, code):
     nb.cells = [
         nbformat.v4.new_markdown_cell(
             f"# {label} (`{c}`)\n\n"
-            f"The knowledge graph around the concept `{c}`, from `data/raw/chapter1_kg_updated.json`. "
-            "Every edge drawn is an edge of that graph.\n\n"
-            "Cell 1 is the knowledge graph visualizer (the same code as `notebooks/kg_visualizer.ipynb`). "
-            f"Cell 2 draws the view of `{c}` and writes `{c}.html` (interactive graph), `{c}.json` (nodes and edges) "
-            f"and `{c}.png` (still picture) next to this notebook."),
-        nbformat.v4.new_code_cell(code),
+            f"The knowledge graph around `{c}`. This notebook draws the picture (`{c}.png`) and writes the explanation of "
+            f"every relation of the concept: read it in [{c}.md]({c}.md)."),
+        nbformat.v4.new_code_cell(LOAD_CODE),
         nbformat.v4.new_code_cell(f"CONCEPT = {c!r}\n" + VIEW_CODE),
     ]
     NotebookClient(nb, timeout=600, kernel_name="python3", resources={"metadata": {"path": str(folder)}}).execute()
+    # the visualizer's control panel is of no use in a saved notebook: keep only the line that says what was loaded
+    nb.cells[1].outputs = [o for o in nb.cells[1].outputs if o.output_type == "stream"]
+    nb.metadata.pop("widgets", None)
     nbformat.write(nb, folder / f"{c}.ipynb")
-    for old in (OUT_DIR / f"{c}.html", OUT_DIR / f"{c}.json"):     # the earlier flat copy of this view
-        if old.exists():
+    keep = {f"{c}.ipynb", f"{c}.png", f"{c}.md"}
+    for old in folder.iterdir():                       # files of the earlier layout (html page, json, README)
+        if old.is_file() and old.name not in keep:
             old.unlink()
     return c
 
 
-def write_index(all_concepts):
-    done = [c for c in sorted(all_concepts) if (OUT_DIR / c / f"{c}.html").exists()]
-    links = "".join(f'<a href="{c}/{c}.html" target="view">{html.escape(c)}</a>' for c in done)
-    (OUT_DIR / "index.html").write_text(
-        "<!doctype html><html><head><meta charset='utf-8'><title>Knowledge graph: every concept</title><style>"
-        "body{margin:0;display:flex;height:100vh;font:13px arial;color:#111;background:#fff}"
-        "#list{width:250px;overflow:auto;border-right:1px solid #ddd;padding:8px;box-sizing:border-box}"
-        "#list a{display:block;padding:2px 4px;color:#1a4fa0;text-decoration:none}#list a:hover{background:#eef}"
-        "#q{width:100%;box-sizing:border-box;margin-bottom:6px;padding:4px}iframe{flex:1;border:0}</style></head><body>"
-        f"<div id='list'><b>{len(done)} concepts</b><input id='q' placeholder='filter'>{links}</div>"
-        f"<iframe name='view' src='{done[0]}/{done[0]}.html'></iframe>"
-        "<script>document.getElementById('q').oninput=function(){var v=this.value.toLowerCase();"
-        "document.querySelectorAll('#list a').forEach(function(a){a.style.display=a.textContent.toLowerCase().indexOf(v)<0?'none':'block'})}</script>"
-        "</body></html>", encoding="utf-8")
-
-
 def main(argv):
     every = concepts()
-    todo = [c for c in argv if c in every] or sorted(every)
     unknown = [c for c in argv if c not in every]
     if unknown:
         sys.exit(f"not a concept id: {', '.join(unknown)}")
-    code = visualizer_code()
+    todo = list(argv) or sorted(every)
     OUT_DIR.mkdir(parents=True, exist_ok=True)
     failed = []
     print(f"running {len(todo)} concept notebooks into {OUT_DIR}", flush=True)
-    run_concept(todo[0], every[todo[0]], code)          # the first one alone: it writes the shared drawing library
-    print(f"[1/{len(todo)}] {todo[0]}", flush=True)
     with ProcessPoolExecutor(max_workers=4) as pool:
-        jobs = {c: pool.submit(run_concept, c, every[c], code) for c in todo[1:]}
-        for i, (c, job) in enumerate(jobs.items(), 2):
+        jobs = {c: pool.submit(run_concept, c, every[c]) for c in todo}
+        for i, (c, job) in enumerate(jobs.items(), 1):
             try:
                 job.result()
                 print(f"[{i}/{len(todo)}] {c}", flush=True)
             except Exception as err:                     # keep going, report at the end
                 failed.append(c)
                 print(f"[{i}/{len(todo)}] {c} FAILED: {str(err)[-400:]}", flush=True)
-    write_index(every)
+    for old in OUT_DIR.iterdir():                        # shared files of the earlier layout
+        if old.is_file():
+            old.unlink()
     print(f"done: {len(todo) - len(failed)} run, {len(failed)} failed {failed if failed else ''}", flush=True)
     return 1 if failed else 0
 
