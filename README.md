@@ -84,6 +84,11 @@ Notes on the set:
 
 - **Numbering.** An exact repeat of MY18 was removed and the scenarios after it were renumbered, so MY26 to MY40 were
   MY27 to MY41 before. Commit messages before 2026-11-13 use the old numbers.
+- **Code.** The notebook has no copy of the method. `think_on_the_graph.ipynb` imports `src/` and calls
+  `model.subgraph_from_code` and `traverse.traverse` with the settings of `experiments/config.json`, as
+  `src/demo.py` does; its own cells only draw and print. Replaying the recorded model answers through the code of
+  this repository on each run's stored subgraph gives the stored result in 39 of the 40. The exception is MY18,
+  which was run before the last change to the walk (the rule that files a misconception at its primary concept).
 - **Graph version.** MY01 to MY25 were run on graph 3.9.7 and MY26 to MY40 on 3.9.8, the graph in this repository.
   For these scenarios the two differ only in the `primary` / `context` role of some misconception edges; no text,
   concept or edge differs. Replaying the recorded model answers on the current graph gives the same held rules, root
@@ -164,7 +169,7 @@ experiments/
   config.json                                default paths and extractor settings (hops 0, keep_generic false)
   pattern_bank.json                          the compiled pattern bank summary written by train.py (the model "checkpoint")
   logs/train_log.txt                         pattern compile + pattern-test check
-  logs/subgraph_report.txt                   one line per scenario over tests/data/scenarios_gold.json, "fully covered: 10 / 10"
+  logs/subgraph_report.txt                   one line per scenario over tests/data/scenarios_gold.json, "fully covered: 30 / 30"
   logs/subgraph_report_not_from_code.txt     the same over scenarios_not_from_code.json (misses expected)
   logs/traverse_<sid>.txt                    Stage 2 trace: start ranking, candidates, kept edges, labels, quotes, clause coverage, levels
   llm_cache/<hash>.json                      every prompt sent in Stage 2 and the model's reply (re-runs are free and deterministic)
@@ -192,16 +197,22 @@ tests/
 ```bash
 pytest -q                      # 247 tests (Stage 2 tests use a mocked model, no real call)
 python src/train.py            # compile every pattern, check the 372 labelled snippets, write experiments/pattern_bank.json
-python src/evaluate.py         # data/processed, experiments/logs/subgraph_report.txt, results/ (figures, summary.csv, results.md, metrics.json)
+python src/evaluate.py --scenarios tests/data/scenarios_gold.json --log experiments/logs/subgraph_report.txt
+                               # Stage 1 on the gold-labelled set: data/processed, the report, results/ (figures, summary.csv, results.md, metrics.json)
 python src/evaluate.py --scenarios data/raw/scenarios_not_from_code.json --no-figures --no-json
 jupyter notebook scenario_explanations/explore_subgraph.ipynb
 python src/traverse.py MY07      # Stage 2 on one scenario (needs the claude CLI, or `--backend anthropic` with the SDK and a key)
-python src/traverse.py --all     # every scenario
-python src/compare.py            # Stage 2 diagnoses against the gold (gold is used for checking only)
+python src/traverse.py --all     # every scenario of the scenario file (cached replies are reused; anything else is asked again)
+python src/compare.py            # Stage 2 diagnoses of tests/data/scenarios_gold.json against its gold (checking only)
 python src/demo.py --scenario MY07   # Stage 1 and Stage 2 on one of the 40 scenarios, with its step report
 python src/concept_notebooks.py      # one notebook per concept into concept_wise_graph/ (or name concepts to run only those)
 scenario_explanations\start_notebook.bat   # open think_on_the_graph.ipynb to run a new scenario
 ```
+
+Without `--scenarios`, `evaluate.py`, `traverse.py` and `demo.py` read the scenario file named in
+`experiments/config.json`, which is the 40 scenarios. `evaluate.py` and `traverse.py` then write over the stored
+`data/processed/MYnn_subgraph.json` and `MYnn_diagnosis.json` of those runs, so use them on the 40 only to re-run
+them on purpose.
 
 ## Stage 2: ToG traversal (`traverse.py`, `prompts.py`)
 
@@ -253,16 +264,19 @@ level ways are edges of the search like everything else.
    prerequisite and parallel links to the other concepts of its piece, read before the walk may stop. For a
    faulted concept that is where the root cause lies; for a concept the student got right it is the conceptual
    trace, the confirmed links between concepts, which is as much part of the diagnosis as the faults. (ii) Clause
-   coverage: a clause is covered when some labelled edge names it. The walk stops with reason "sufficient" when
-   no concept edge is pending and every clause is covered; at max depth the uncovered clauses are reported as
-   unexplained.
+   coverage: a clause is covered when a labelled rule edge names it (a misconception / error edge labelled held or
+   correct, a concept edge labelled confirmed or broken). A shown level way does not count here: it says how the
+   student reads the code, not which rule the clause applies. The walk stops with reason "sufficient" when nothing
+   is pending and every clause is covered, with "half_stop" when no concept is left to go to, and otherwise at
+   depth D, followed by one closing round in which the concepts entered last have their own misconception edges and
+   level ways read (reason "max depth"). The clauses no evidence covers are reported as unexplained.
 7. **Next concepts**: every entered concept whose concept edges are unread (it reads them next); the far end of
    each kept concept edge, entered as a start concept so its own misconception edges and level ways are read and
    it gets a level of its own; the source of each held misconception (to walk back). An edge is offered once per
    depth, not from each of its ends. A level way leads nowhere: it describes the concept itself. When clauses
-   remain uncovered and the width is
-   not full, the uncovered clauses bring in concepts the walk has not entered yet: BM25 of those clauses against
-   the unvisited concepts of the start pool, best first, no model call. Such a concept enters as a start concept,
+   remain uncovered (up to depth D), the uncovered clauses bring in concepts the walk has not entered yet: BM25 of
+   those clauses against the unvisited concepts of the start pool, the best N, no model call. This has its own cap
+   of N, so it does not compete with the concepts already waiting to be read. Such a concept enters as a start concept,
    so its own misconception edges and level ways are read at the next depth. This is what lets a correct
    multi-concept answer, whose labels give no direction of their own, reach every concept the student wrote about.
 8. **Diagnose.** A held error beside a held misconception on the same concept is evidence, not a second diagnosis.
@@ -271,31 +285,38 @@ level ways are edges of the search like everything else.
    marked `shares_evidence_with` that edge (the graph words one wrong idea in several ways, e.g.
    IfConditionWatched / IfWaitsForCondition on if_statement; both come out held, and the comparison counts the
    pair as one). One fault, one location: the same misconception held at both ends of a prerequisite edge is
-   filed at the dependent concept, and a broken edge shown by the same words as a held misconception is that
-   misconception's consequence (`consequence_of`), so neither marks a root cause of its own.
+   filed at the concept the graph marks as `primary` for it when the roles decide, and otherwise at the dependent
+   concept. A held label on a prerequisite or on a generic concept that rests only on the clauses of a stronger,
+   more specific label is a shadow of that label: it is listed under `shadowed`, marks no root cause and sets no
+   level. A broken edge shown by the same words as a held misconception is that misconception's consequence
+   (`consequence_of`), so it marks no root cause of its own either.
    Root cause: walk prerequisite edges back from the concepts with a held misconception and take the furthest-back
    concept that itself holds a misconception or is the target of a broken prerequisite edge (a broken A → B says
-   the student did not carry A into B, so the fault sits at B). Level per concept, by rule from the evidence and
+   the student did not carry A into B, so the fault sits at B). Between candidates the one with fewer prerequisites
+   of its own in the subgraph is taken, and at a tie the one whose label has the higher confidence. Level per concept, by rule from the evidence and
    with no model call: L0 when the concept holds a misconception (the level then reads the edge of that one
    misconception, the kept finding, and carries the L0 way's own text from `level_mis_links` as `rule`) or an L0
    way (everyday reading, inconsistent trace) is shown, since the L0 deciding question asks whether every rule the
    answer applies agrees with the language rule; otherwise the highest level with a shown way, because the levels are cumulative and an answer
    at L4 also does L3. A concept with no held misconception and no shown way gets no level. Overall level: the
-   root-cause concept's level (for an answer with no error, the lowest level reached). Output also lists the
+   root-cause concept's level; for an answer with no fault, the level reached on at least half of the concepts the
+   answer touched (the levels sorted from high to low, the middle one). A held error node sets no level, so when the
+   root cause carries only an error the overall level is empty (MY35). Output also lists the
    evidence, which edge covers each clause, the uncovered clauses, the stop reason (sufficient / half_stop / max
    depth) and the number of prompts per step (prune, label).
 
 The model never answers from its own knowledge: every label is an edge of the graph plus a quote. Replies are
 cached in `experiments/llm_cache/`, so a re-run costs only the prompts that changed.
 
-Results over the 10 gold scenarios (`python src/compare.py`, full table in `results/stage2_results.md`; gold is
-used for checking only): held misconception set right in 9/10, every gold "correct" misconception found in 8/10,
-root cause right in 10/10, overall level right in 9/10, 47 of 72 points (one point each for held set, correct set,
-root cause and overall level, plus one per gold-scored concept level and per gold edge), 195 prompts in all, every
-one of them a prune or a label. S134 is found through the generic-concept rule: its only tagged concept is
+Results over the 27 gold-labelled scenarios that have a stored diagnosis (`python src/compare.py`, full table in
+`results/stage2_results.md`; gold is used for checking only): held misconception set right in 27/27, every gold
+"correct" misconception found in 24/27 (not in S026, S047, S057), root cause right in 26/27 (not in T017), overall
+level right in 25/27 (not in S052, T019), 148 of 191 points (one point each for held set, correct set, root cause
+and overall level, plus one per gold-scored concept level and per gold edge), 839 prompts in all, every one of
+them a prune or a label. S134 is found through the generic-concept rule: its only tagged concept is
 variable_swap, the gold misconception (VariablesHoldExpressions) sits on assignment, which Stage 1 marks generic,
 and the answer repeats the `=` that tagged it. On S007 the held set is exact (OffByOneBound at loop_control, root
-cause loop_control, L0). The one remaining level miss is S052, L3 where the gold says L2: the student's "an
+cause loop_control, L0). One of the two overall-level misses is S052, L3 where the gold says L2: the student's "an
 average of 5 new numbers, no file" matches the redirection way "`A > f` followed by `B < f` has the same effect as
 `A | B`, except that the pipe creates no file", and "args is empty" matches "args.length is the number of arguments
 typed (0 if none)"; the graph files both ways at L3, the gold levels the answer L2. The walk read the edges as the
@@ -359,8 +380,8 @@ error or failed snippet.
    (name, criterion, deciding question).
 5. `linked_misconception` entries of every way, as `{level_node, misconception, way, rule_type, exact_rule}`.
 6. **Connectivity is reported, never repaired.** `components` lists the connected pieces of the concept
-   nodes over the concept edges. When there is more than one piece a warning names them. Six of the eleven
-   subgraphs fall into several pieces because the KG has no edge between concepts that occur together
+   nodes over the concept edges. When there is more than one piece a warning names them. Six of the eleven S
+   subgraphs (20 of all 31) fall into several pieces because the KG has no edge between concepts that occur together
    (for example loop_body and for_loop, arithmetic_operators and remainder_operator, run and
    command_line_args, do_while_loop and loop_control). Those are gaps in the KG; the extractor does not invent
    edges to close them.
@@ -384,7 +405,8 @@ node ids) and then lists each scenario with its code, figure, concept nodes, edg
 nodes and level counts. `results/tables/summary.csv` holds the same per-scenario data. The order of every list in the outputs is
 fixed (sorted ids), so two runs produce identical files.
 
-Current run over the earlier gold-labelled set (`tests/data/scenarios_gold.json`):
+Current run over the earlier gold-labelled set (`tests/data/scenarios_gold.json`). The eleven S scenarios are shown
+here; all 31, with the twenty T scenarios, are in `results/tables/summary.csv`:
 
 | scenario | concept nodes | concept edges | misconception/error edges | misconception nodes | level nodes | pieces |
 |---|---|---|---|---|---|---|
@@ -403,9 +425,9 @@ Current run over the earlier gold-labelled set (`tests/data/scenarios_gold.json`
 ## Coverage report and dataset split
 
 `evaluate.py` also prints one line per scenario (tagged concepts, node / edge / misconception / level counts,
-pieces, and the gold concepts not found) and ends with `fully covered: N / 10`; `results/metrics.json` holds
+pieces, and the gold concepts not found) and ends with `fully covered: N / 30`; `results/metrics.json` holds
 the same as numbers (mean gold-concept recall, share of gold among the nodes, mean sizes, subgraphs in one piece). On the earlier gold-labelled set (`tests/data/scenarios_gold.json`) every gold
-concept of all ten scenarios is found from the code: 10 / 10. The extra nodes relative to gold are
+concept of all thirty scenarios is found from the code: 30 / 30 (S000 is the reference case and is not counted). The extra nodes relative to gold are
 non-generic constructs really present in the code (the loop around S057's division, for instance); only the
 question and answer, read in a later stage, can say which of them a scenario is about.
 
