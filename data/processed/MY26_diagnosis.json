@@ -10,13 +10,12 @@
  "clauses": [
   "It wont compile",
   "Dividing by zero isnt allowed",
-  "so the compiler stops you before it runs",
-  "Actual: it compiles, then crashes at run time with ArithmeticException: / by zero"
+  "so the compiler stops you before it runs"
  ],
  "start_concepts": [
   "division_by_zero",
   "run_time_error",
-  "println"
+  "integer_division"
  ],
  "held_misconceptions": [
   {
@@ -41,13 +40,13 @@
   {
    "edge": "pre:division_by_zero->run_time_error",
    "quote": "It wont compile; so the compiler stops you before it runs",
-   "score": 0.6175,
+   "score": 0.665,
    "consequence_of": "mis:division_by_zero->DivisionByZeroIsCompileError"
   },
   {
    "edge": "pre:arithmetic_operators->division_by_zero",
    "quote": "It wont compile; so the compiler stops you before it runs",
-   "score": 0.315,
+   "score": 0.27,
    "consequence_of": "mis:division_by_zero->DivisionByZeroIsCompileError"
   }
  ],
@@ -64,14 +63,6 @@
    "edge": "mis:division_by_zero->DivisionByZeroIsCompileError",
    "rule": "wrong rule: System.out.println(5 / 0); is rejected by the compiler. Right rule: It compiles; the ArithmeticException (/ by zero) is thrown when the program runs and reaches the division.",
    "source": "level_mis_links"
-  },
-  "integer_division": {
-   "level": "L4",
-   "way": "diagnose_an_error",
-   "quote": "Dividing by zero isnt allowed",
-   "edge": "lvl:integer_division@L4#3",
-   "source": "level_way",
-   "also_shown": []
   },
   "run_time_error": {
    "level": "L0",
@@ -138,7 +129,7 @@
    ],
    "quote": "It wont compile; Dividing by zero isnt allowed; so the compiler stops you before it runs",
    "confidence": 0.93,
-   "prune_score": 0.7,
+   "prune_score": 0.7000000000000001,
    "score": 0.651,
    "logic": "Folk meaning: in maths division by zero is 'impossible', so every x / 0 must be rejected, ideally by the compiler. Java rule: the compiler accepts it; int or long / and % by zero throw ArithmeticException at run time, while double division by zero is legal and gives Infinity or NaN.",
    "twin_logic": null,
@@ -158,8 +149,8 @@
    ],
    "quote": "It wont compile; so the compiler stops you before it runs",
    "confidence": 0.95,
-   "prune_score": 0.65,
-   "score": 0.6175,
+   "prune_score": 0.7,
+   "score": 0.665,
    "logic": "Dividing an int by zero compiles but throws ArithmeticException when the program runs: a run-time error.",
    "twin_logic": null,
    "consequence_of": "mis:division_by_zero->DivisionByZeroIsCompileError"
@@ -177,30 +168,11 @@
    ],
    "quote": "It wont compile; so the compiler stops you before it runs",
    "confidence": 0.9,
-   "prune_score": 0.35,
-   "score": 0.315,
+   "prune_score": 0.3,
+   "score": 0.27,
    "logic": "Integer division by zero (1/0) generates a run-time exception, while floating-point 1.0/0.0 is legal and has the value Infinity.",
    "twin_logic": null,
    "consequence_of": "mis:division_by_zero->DivisionByZeroIsCompileError"
-  },
-  {
-   "depth": 2,
-   "source": "integer_division",
-   "edge": "lvl:integer_division@L4#3",
-   "target": "integer_division@L4",
-   "kind": "level",
-   "label": "shown",
-   "clauses": [
-    2
-   ],
-   "quote": "Dividing by zero isnt allowed",
-   "confidence": 0.6,
-   "prune_score": 0.6,
-   "score": 0.36,
-   "logic": "rule broken: int division by zero is undefined. Kind: run-time exception. Trigger class: A divisor that evaluates to 0: ArithmeticException: / by zero.",
-   "twin_logic": null,
-   "level": "L4",
-   "way": "diagnose_an_error"
   }
  ],
  "evidence": [
@@ -238,7 +210,7 @@
    ],
    "quote": "It wont compile; Dividing by zero isnt allowed; so the compiler stops you before it runs",
    "confidence": 0.93,
-   "prune_score": 0.7,
+   "prune_score": 0.7000000000000001,
    "score": 0.651,
    "logic": "Folk meaning: in maths division by zero is 'impossible', so every x / 0 must be rejected, ideally by the compiler. Java rule: the compiler accepts it; int or long / and % by zero throw ArithmeticException at run time, while double division by zero is legal and gives Infinity or NaN.",
    "twin_logic": null,
@@ -278,8 +250,8 @@
    ],
    "quote": "It wont compile; so the compiler stops you before it runs",
    "confidence": 0.85,
-   "prune_score": 0.3,
-   "score": 0.255,
+   "prune_score": 0.2,
+   "score": 0.17,
    "logic": "Everyday reading: if the program compiled, the computer has accepted it, so any problem would have been reported then. Java rule: run-time errors are detected only while the program executes, on particular data (e.g. no argument, a divisor of 0), and stop it with an exception.",
    "twin_logic": null,
    "level": "L0",
@@ -298,8 +270,8 @@
    ],
    "quote": "It wont compile; so the compiler stops you before it runs",
    "confidence": 0.95,
-   "prune_score": 0.65,
-   "score": 0.6175,
+   "prune_score": 0.7,
+   "score": 0.665,
    "logic": "Dividing an int by zero compiles but throws ArithmeticException when the program runs: a run-time error.",
    "twin_logic": null,
    "consequence_of": "mis:division_by_zero->DivisionByZeroIsCompileError"
@@ -317,30 +289,11 @@
    ],
    "quote": "It wont compile; so the compiler stops you before it runs",
    "confidence": 0.9,
-   "prune_score": 0.35,
-   "score": 0.315,
+   "prune_score": 0.3,
+   "score": 0.27,
    "logic": "Integer division by zero (1/0) generates a run-time exception, while floating-point 1.0/0.0 is legal and has the value Infinity.",
    "twin_logic": null,
    "consequence_of": "mis:division_by_zero->DivisionByZeroIsCompileError"
-  },
-  {
-   "depth": 2,
-   "source": "integer_division",
-   "edge": "lvl:integer_division@L4#3",
-   "target": "integer_division@L4",
-   "kind": "level",
-   "label": "shown",
-   "clauses": [
-    2
-   ],
-   "quote": "Dividing by zero isnt allowed",
-   "confidence": 0.6,
-   "prune_score": 0.6,
-   "score": 0.36,
-   "logic": "rule broken: int division by zero is undefined. Kind: run-time exception. Trigger class: A divisor that evaluates to 0: ArithmeticException: / by zero.",
-   "twin_logic": null,
-   "level": "L4",
-   "way": "diagnose_an_error"
   }
  ],
  "clause_coverage": {
@@ -348,15 +301,13 @@
   "Dividing by zero isnt allowed": "mis:division_by_zero->DivisionByZeroIsCompileError",
   "so the compiler stops you before it runs": "mis:division_by_zero->DivisionByZeroIsCompileError"
  },
- "unexplained_clauses": [
-  "Actual: it compiles, then crashes at run time with ArithmeticException: / by zero"
- ],
- "stop_reason": "half_stop",
+ "unexplained_clauses": [],
+ "stop_reason": "max depth",
  "depth_reached": 3,
- "llm_calls": 0,
- "llm_cache_hits": 36,
+ "llm_calls": 28,
+ "llm_cache_hits": 0,
  "llm_calls_by_step": {
-  "prune": 13,
-  "label": 23
+  "prune": 10,
+  "label": 18
  }
 }

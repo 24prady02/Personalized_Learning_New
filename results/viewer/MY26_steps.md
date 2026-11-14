@@ -9,7 +9,6 @@ System.out.println(total / count);
 Question: Will this compile? What happens when you run it? Explain your reasoning
 
 Student's answer: It won’t compile. Dividing by zero isn’t allowed, so the compiler stops you before it runs.”
-Actual: it compiles, then crashes at run time with ArithmeticException: / by zero.
 Settings: width 3, depth 3, prune llm, backend claude-cli, model claude-opus-5-5
 ## 1. Stage 1: the subgraph G from the code (no model)
 Masked code (string and char literals and comments blanked; this is what the patterns see):
@@ -64,22 +63,21 @@ The answer split into clauses (at sentence ends, ';', and before 'because' / 'so
 | c1 | It wont compile |
 | c2 | Dividing by zero isnt allowed |
 | c3 | so the compiler stops you before it runs |
-| c4 | Actual: it compiles, then crashes at run time with ArithmeticException: / by zero |
 
-start: BM25 of the answer against each tagged concept: division_by_zero 17.10 (hits 1), run_time_error 15.59 (hits 1), println 7.20 (hits 1), integer_division 5.84 (hits 1), arithmetic_operators 5.55 (hits 1)
+start: BM25 of the answer against each tagged concept: division_by_zero 8.98 (hits 1), run_time_error 6.97 (hits 1), integer_division 3.98 (hits 1), println 2.74 (hits 1), arithmetic_operators 2.43 (hits 1)
 
-start: chosen division_by_zero, run_time_error, println
+start: chosen division_by_zero, run_time_error, integer_division
 
-start concepts (3): division_by_zero, run_time_error, println
+start concepts (3): division_by_zero, run_time_error, integer_division
 
-Start concepts: division_by_zero, run_time_error, println
+Start concepts: division_by_zero, run_time_error, integer_division
 
 Figure 3: C:\Users\magnu\OneDrive\Desktop\ES_VIterbi_Personalized_Learning\results\viewer\MY26_figure03.png
 
 ## 3. The walk, depth by depth
 At each depth, for each current concept: the edges offered (a concept entering as a start concept offers its misconception / error edges and its level ways, as two families; otherwise it offers its concept edges), the prune prompt and the model's reply, then the label prompt(s) and the model's reply, parsed into label / clauses / confidence. Score = prune score x confidence.
 
-### Depth 1: current concepts 'division_by_zero', 'run_time_error', 'println'
+### Depth 1: current concepts 'division_by_zero', 'run_time_error', 'integer_division'
 
 #### division_by_zero, misconceptions: 3 edges offered
 Edges offered:
@@ -104,7 +102,7 @@ Label prompt for the misconception / error edges (judged together). The model sa
 Model's reply:
 ```
 mis:division_by_zero->DivisionByZeroIsCompileError | held | clauses: 1, 2, 3 | confidence: 0.95
-mis:division_by_zero->ZeroDivisionAlwaysCrashes | not applied | clauses: none | confidence: 0.7
+mis:division_by_zero->ZeroDivisionAlwaysCrashes | not applied | clauses: none | confidence: 0.75
 err:division_by_zero->AverageWithoutZeroGuard | not applied | clauses: none | confidence: 0.85
 ```
 
@@ -138,10 +136,10 @@ Edges offered:
 Prune: the model's reply (edge id and score; the kept edges sum to 1):
 ```
 {lvl:division_by_zero@L0#0 (Score: 0.7)}
-{lvl:division_by_zero@L4#3 (Score: 0.15)}
-{lvl:division_by_zero@L2#1 (Score: 0.15)}
+{lvl:division_by_zero@L4#3 (Score: 0.2)}
+{lvl:division_by_zero@L2#1 (Score: 0.1)}
 ```
-Kept by pruning: lvl:division_by_zero@L0#0 (0.70), lvl:division_by_zero@L4#3 (0.15), lvl:division_by_zero@L2#1 (0.15)
+Kept by pruning: lvl:division_by_zero@L0#0 (0.70), lvl:division_by_zero@L4#3 (0.20), lvl:division_by_zero@L2#1 (0.10)
 
 Label prompt for level way lvl:division_by_zero@L0#0 (the model saw only the concept, the way's name 'everyday reading' and its text; no level):
 > Folk meaning: in maths division by zero is 'impossible', so every x / 0 must be rejected, ideally by the compiler. Java rule: the compiler accepts it; int or long / and % by zero throw ArithmeticException at run time, while double division by zero is legal and gives Infinity or NaN.
@@ -160,7 +158,7 @@ Model's reply:
 ```
 Label: not shown
 Clauses: none
-Confidence: 0.75
+Confidence: 0.6
 ```
 
 Label prompt for level way lvl:division_by_zero@L2#1 (the model saw only the concept, the way's name 'output prediction' and its text; no level):
@@ -170,13 +168,13 @@ Model's reply:
 ```
 Label: not shown
 Clauses: none
-Confidence: 0.85
+Confidence: 0.9
 ```
 
 Parsed labels:
 | edge | label | prune score | confidence | score | clauses | words |
 |---|---|---|---|---|---|---|
-| lvl:division_by_zero@L0#0 | shown | 0.7 | 0.93 | 0.65 | c1, c2, c3 | It wont compile; Dividing by zero isnt allowed; so the compiler stops you before it runs |
+| lvl:division_by_zero@L0#0 | shown | 0.7000000000000001 | 0.93 | 0.65 | c1, c2, c3 | It wont compile; Dividing by zero isnt allowed; so the compiler stops you before it runs |
 | lvl:division_by_zero@L4#3 | not applied |  |  | 0.0 |  |  |
 | lvl:division_by_zero@L2#1 | not applied |  |  | 0.0 |  |  |
 
@@ -196,21 +194,21 @@ Prune: the model's reply (edge id and score; the kept edges sum to 1):
 ```
 {mis:run_time_error->DivisionByZeroIsCompileError (Score: 0.8)}
 {mis:run_time_error->CompilesMeansWorks (Score: 0.15)}
-{err:run_time_error->NegativeArraySize (Score: 0.05)}
+{err:run_time_error->InputTypeMismatch (Score: 0.05)}
 ```
-Kept by pruning: mis:run_time_error->DivisionByZeroIsCompileError (0.80), mis:run_time_error->CompilesMeansWorks (0.15), err:run_time_error->NegativeArraySize (0.05)
+Kept by pruning: mis:run_time_error->DivisionByZeroIsCompileError (0.80), mis:run_time_error->CompilesMeansWorks (0.15), err:run_time_error->InputTypeMismatch (0.05)
 
 Label prompt for the misconception / error edges (judged together). The model saw the program, the question, the numbered clauses, and these edges with their wrong rule and right rule:
 | edge |
 |---|
 | mis:run_time_error->DivisionByZeroIsCompileError \| wrong rule: System.out.println(5 / 0); is rejected by the compiler. \| right rule: It compiles; the ArithmeticException happens when the program runs. |
 | mis:run_time_error->CompilesMeansWorks \| wrong rule: Code that compiles is code that works. \| right rule: Code that compiles can still have run-time and logical errors. |
-| err:run_time_error->NegativeArraySize \| wrong rule: new int[n] with a negative n creates an empty array. \| right rule: Creating an array with a negative length throws NegativeArraySizeException at run time. |
+| err:run_time_error->InputTypeMismatch \| wrong rule: StdIn.readInt() accepts any typed text such as abc or 12.2. \| right rule: If the next token is not an int (e.g. abc, 12.2, true), StdIn.readInt() throws a NumberFormatException at run time (Scanner.nextInt throws InputMismatchException). |
 Model's reply:
 ```
 mis:run_time_error->DivisionByZeroIsCompileError | held | clauses: 1, 2, 3 | confidence: 0.95
-mis:run_time_error->CompilesMeansWorks | not applied | clauses: none | confidence: 0.85
-err:run_time_error->NegativeArraySize | not applied | clauses: none | confidence: 0.97
+mis:run_time_error->CompilesMeansWorks | not applied | clauses: none | confidence: 0.8
+err:run_time_error->InputTypeMismatch | not applied | clauses: none | confidence: 0.95
 ```
 
 Parsed labels:
@@ -218,7 +216,7 @@ Parsed labels:
 |---|---|---|---|---|---|---|
 | mis:run_time_error->DivisionByZeroIsCompileError | held | 0.8 | 0.95 | 0.76 | c1, c2, c3 | It wont compile; Dividing by zero isnt allowed; so the compiler stops you before it runs |
 | mis:run_time_error->CompilesMeansWorks | not applied |  |  | 0.0 |  |  |
-| err:run_time_error->NegativeArraySize | not applied |  |  | 0.0 |  |  |
+| err:run_time_error->InputTypeMismatch | not applied |  |  | 0.0 |  |  |
 
 #### run_time_error, level ways: 19 edges offered
 Edges offered:
@@ -247,10 +245,10 @@ Edges offered:
 Prune: the model's reply (edge id and score; the kept edges sum to 1):
 ```
 {lvl:run_time_error@L3#1 (Score: 0.45)}
-{lvl:run_time_error@L0#0 (Score: 0.3)}
-{lvl:run_time_error@L4#6 (Score: 0.25)}
+{lvl:run_time_error@L4#6 (Score: 0.35)}
+{lvl:run_time_error@L0#0 (Score: 0.2)}
 ```
-Kept by pruning: lvl:run_time_error@L3#1 (0.45), lvl:run_time_error@L0#0 (0.30), lvl:run_time_error@L4#6 (0.25)
+Kept by pruning: lvl:run_time_error@L3#1 (0.45), lvl:run_time_error@L4#6 (0.35), lvl:run_time_error@L0#0 (0.20)
 
 Label prompt for level way lvl:run_time_error@L3#1 (the model saw only the concept, the way's name 'relation to neighbour' and its text; no level):
 > javac cannot detect it because it depends on run-time values (the argument typed, the divisor's value).
@@ -259,17 +257,7 @@ Model's reply:
 ```
 Label: not shown
 Clauses: none
-Confidence: 0.92
-```
-
-Label prompt for level way lvl:run_time_error@L0#0 (the model saw only the concept, the way's name 'everyday reading' and its text; no level):
-> Everyday reading: if the program compiled, the computer has accepted it, so any problem would have been reported then. Java rule: run-time errors are detected only while the program executes, on particular data (e.g. no argument, a divisor of 0), and stop it with an exception.
-
-Model's reply:
-```
-Label: shown
-Clauses: 1, 3
-Confidence: 0.85
+Confidence: 0.95
 ```
 
 Label prompt for level way lvl:run_time_error@L4#6 (the model saw only the concept, the way's name 'diagnose an error' and its text; no level):
@@ -282,102 +270,111 @@ Clauses: none
 Confidence: 0.8
 ```
 
+Label prompt for level way lvl:run_time_error@L0#0 (the model saw only the concept, the way's name 'everyday reading' and its text; no level):
+> Everyday reading: if the program compiled, the computer has accepted it, so any problem would have been reported then. Java rule: run-time errors are detected only while the program executes, on particular data (e.g. no argument, a divisor of 0), and stop it with an exception.
+
+Model's reply:
+```
+Label: shown
+Clauses: 1, 3
+Confidence: 0.85
+```
+
 Parsed labels:
 | edge | label | prune score | confidence | score | clauses | words |
 |---|---|---|---|---|---|---|
 | lvl:run_time_error@L3#1 | not applied |  |  | 0.0 |  |  |
-| lvl:run_time_error@L0#0 | shown | 0.3 | 0.85 | 0.26 | c1, c3 | It wont compile; so the compiler stops you before it runs |
 | lvl:run_time_error@L4#6 | not applied |  |  | 0.0 |  |  |
+| lvl:run_time_error@L0#0 | shown | 0.2 | 0.85 | 0.17 | c1, c3 | It wont compile; so the compiler stops you before it runs |
 
-#### println, misconceptions: 6 edges offered
+#### integer_division, misconceptions: 6 edges offered
 Edges offered:
 | edge |
 |---|
-| err:println->PrintWithoutFinalNewline \| wrong rule: Ends the output with print and expects it to appear right away. \| right rule: Finish a line of print calls with println; some systems hold print output until a newline is printed. |
-| mis:println->IdentifierCaseInsensitive \| wrong rule: System.out.Println and System.out.println name the same method. \| right rule: Java is case-sensitive: names of variables, methods and classes that differ only in capitalization are different names. |
-| mis:println->ParenthesesOnlyIfArgument \| wrong rule: println with nothing to print can be written System.out.println; without the parentheses. \| right rule: A method call always needs parentheses, so an empty line is printed with System.out.println();. |
-| mis:println->PrintEqualsPrintln \| wrong rule: print and println do the same thing, so print(s1); print(s2); puts s1 and s2 on separate lines. \| right rule: println ends the line after printing and print does not, so print(s1); print(s2); puts s1 and s2 on the same line. |
-| mis:println->PrintNewLineFirst \| wrong rule: println(s) prints a newline and then s. \| right rule: println(s) prints s and then the newline. |
-| mis:println->PrintedTextIsExecuted \| wrong rule: System.out.println("x is 5"); sets x to 5 (text inside the quotes is run as code). \| right rule: Characters inside double quotes are printed literally; println only displays them and changes no variable. Only an assignment such as x = 5; sets x. |
+| mis:integer_division->AllDoublesToAvoidDivision \| wrong rule: Making every variable a double is the right fix for integer division. \| right rule: Use int for countable things and double for measured ones; where a fraction is needed, make one operand of the division a double (or cast) instead of changing every type. |
+| mis:integer_division->CastAfterIntDivision \| wrong rule: (double) (3 / 5) is 0.6. \| right rule: The integer division 3 / 5 = 0 happens before the cast, so the result is 0.0. |
+| mis:integer_division->IntegerDivisionGivesFraction \| wrong rule: 10 / 3 evaluates to 3.333.... \| right rule: Dividing two ints gives an int: the fractional part is discarded. |
+| mis:integer_division->LaterDoubleLiteralFixesDivision \| wrong rule: Changing a later literal to 100.0 fixes an earlier int division. \| right rule: The int division happens first; the double must be in the division itself. |
+| mis:integer_division->NegativeRemainderSign \| wrong rule: a % b is never negative, and integer division of a negative number rounds down. \| right rule: a / b rounds toward 0 and a % b takes the sign of a: -14 / 3 is -4 and -14 % 3 is -2. |
+| mis:integer_division->TargetTyping \| wrong rule: The type of a numerical expression depends on the type expected by the surrounding context, so double d = a / b; keeps the fraction. \| right rule: The type of a numerical expression is determined by the expression, so double d = a / b; with int a and b still divides as ints. |
 
 Prune: the model's reply (edge id and score; the kept edges sum to 1):
 ```
-mis:println->PrintedTextIsExecuted (0.50), mis:println->ParenthesesOnlyIfArgument (0.25), mis:println->IdentifierCaseInsensitive (0.25)
+mis:integer_division->IntegerDivisionGivesFraction (0.50), mis:integer_division->TargetTyping (0.30), mis:integer_division->NegativeRemainderSign (0.20)
 ```
-Kept by pruning: mis:println->PrintedTextIsExecuted (0.50), mis:println->ParenthesesOnlyIfArgument (0.25), mis:println->IdentifierCaseInsensitive (0.25)
+Kept by pruning: mis:integer_division->IntegerDivisionGivesFraction (0.50), mis:integer_division->TargetTyping (0.30), mis:integer_division->NegativeRemainderSign (0.20)
 
 Label prompt for the misconception / error edges (judged together). The model saw the program, the question, the numbered clauses, and these edges with their wrong rule and right rule:
 | edge |
 |---|
-| mis:println->PrintedTextIsExecuted \| wrong rule: System.out.println("x is 5"); sets x to 5 (text inside the quotes is run as code). \| right rule: Characters inside double quotes are printed literally; println only displays them and changes no variable. Only an assignment such as x = 5; sets x. |
-| mis:println->ParenthesesOnlyIfArgument \| wrong rule: println with nothing to print can be written System.out.println; without the parentheses. \| right rule: A method call always needs parentheses, so an empty line is printed with System.out.println();. |
-| mis:println->IdentifierCaseInsensitive \| wrong rule: System.out.Println and System.out.println name the same method. \| right rule: Java is case-sensitive: names of variables, methods and classes that differ only in capitalization are different names. |
+| mis:integer_division->IntegerDivisionGivesFraction \| wrong rule: 10 / 3 evaluates to 3.333.... \| right rule: Dividing two ints gives an int: the fractional part is discarded. |
+| mis:integer_division->TargetTyping \| wrong rule: The type of a numerical expression depends on the type expected by the surrounding context, so double d = a / b; keeps the fraction. \| right rule: The type of a numerical expression is determined by the expression, so double d = a / b; with int a and b still divides as ints. |
+| mis:integer_division->NegativeRemainderSign \| wrong rule: a % b is never negative, and integer division of a negative number rounds down. \| right rule: a / b rounds toward 0 and a % b takes the sign of a: -14 / 3 is -4 and -14 % 3 is -2. |
 Model's reply:
 ```
-mis:println->PrintedTextIsExecuted | not applied | clauses: none | confidence: 0.95
-mis:println->ParenthesesOnlyIfArgument | not applied | clauses: none | confidence: 0.95
-mis:println->IdentifierCaseInsensitive | not applied | clauses: none | confidence: 0.95
+mis:integer_division->IntegerDivisionGivesFraction | not applied | clauses: none | confidence: 0.9
+mis:integer_division->TargetTyping | not applied | clauses: none | confidence: 0.92
+mis:integer_division->NegativeRemainderSign | not applied | clauses: none | confidence: 0.95
 ```
 
 Parsed labels:
 | edge | label | prune score | confidence | score | clauses | words |
 |---|---|---|---|---|---|---|
-| mis:println->PrintedTextIsExecuted | not applied |  |  | 0.0 |  |  |
-| mis:println->ParenthesesOnlyIfArgument | not applied |  |  | 0.0 |  |  |
-| mis:println->IdentifierCaseInsensitive | not applied |  |  | 0.0 |  |  |
+| mis:integer_division->IntegerDivisionGivesFraction | not applied |  |  | 0.0 |  |  |
+| mis:integer_division->TargetTyping | not applied |  |  | 0.0 |  |  |
+| mis:integer_division->NegativeRemainderSign | not applied |  |  | 0.0 |  |  |
 
-#### println, level ways: 17 edges offered
+#### integer_division, level ways: 16 edges offered
 Edges offered:
 | edge |
 |---|
-| lvl:println@L0#0 \| level L0 way everyday_reading: Everyday reading: 'println' is just 'print', and 'new line' is something you do before writing. Java rule: println(x) prints x and then ends the line; println() alone just ends the line. |
-| lvl:println@L0#3 \| level L0 way inconsistent_trace: Applies the println rule (print, then end line) unevenly: puts the newline before the text on one call and after it on another, or forgets that the next output starts on a new line. (here mixing in: "print and println behave the same (no newline difference)") |
-| lvl:println@L1#0 \| level L1 way names_the_element: System.out.println is a library method that prints its argument followed by a line terminator ('print line'). |
-| lvl:println@L1#1 \| level L1 way states_the_rule: println(String x) behaves as though it calls print(x) and then println(); println() terminates the current line by writing the line separator string. |
-| lvl:println@L2#0 \| level L2 way line_by_line_trace: Evaluate the argument, print its characters at the current position, then write the line separator so the cursor moves to the beginning of the next line. |
-| lvl:println@L2#1 \| level L2 way output_prediction: Output is the value's characters followed by a line break: println("Hello, "); println("World!"); prints two lines. |
-| lvl:println@L2#2 \| level L2 way one_step_execution: One call appends the text and a line separator to the output; the cursor ends at the start of the next line; no variable changes and nothing is returned. |
-| lvl:println@L3#0 \| level L3 way relation_to_neighbour: System.out.println(s); is a statement, so its line of output appears at its own place in the sequence. |
-| lvl:println@L3#1 \| level L3 way relation_to_neighbour: println("s") outputs exactly the characters between the quotes and then ends the line. |
-| lvl:println@L3#2 \| level L3 way relation_to_neighbour: print leaves the cursor on the line; println ends it; several prints followed by one println make one line. |
-| lvl:println@L3#3 \| level L3 way relation_to_neighbour: println prints numbers with all their digits and always ends the line; printf formats each value by its conversion code and ends the line only where the format has %n or \n. |
-| lvl:println@L3#4 \| level L3 way purpose_of_the_whole: Purpose: produce one complete line of output, e.g. each result on its own line, or end a line built with print. |
-| lvl:println@L4#0 \| level L4 way predict_a_change: Replacing println with print joins the next output onto the same line (a typical logic error); the characters printed stay the same. |
-| lvl:println@L4#1 \| level L4 way transfer_to_a_new_program: Use println when each output item belongs on its own line or to end a line; use print to continue a line and printf to control number formatting. |
-| lvl:println@L4#2 \| level L4 way diagnose_an_error: rule broken: Finish a line of print calls with println. Kind: silent logic error. Trigger class: output ends with print, so the last line may not be shown or runs into the shell prompt |
-| lvl:println@L4#3 \| level L4 way diagnose_an_error: rule broken: Method names are case-sensitive. Kind: compile-time. Trigger class: System.out.Println or system.out.println: cannot find symbol |
-| lvl:println@L4#4 \| level L4 way diagnose_an_error: rule broken: Calls need parentheses. Kind: compile-time. Trigger class: System.out.println; without () |
+| lvl:integer_division@L0#0 \| level L0 way everyday_reading: In everyday and school arithmetic, 'divide' gives an exact answer or a fraction (10 ÷ 3 = 3 1/3), and rounding goes to the nearest whole number. In Java, / with two int operands discards the fraction, rounding toward zero (59 / 60 is 0). |
+| lvl:integer_division@L0#4 \| level L0 way inconsistent_trace: Points to LT (each / looks at its own two operand types when it is evaluated). Applied unevenly, a student evaluates 9/5 as 1.8 in f = (9/5)*c + 32 but as 1 elsewhere, or assumes a later double operand rescues an earlier int division. (here mixing in: "The type of a numerical expression depends on the type expected by the surrounding context, so double d = a / b; keeps the fraction") |
+| lvl:integer_division@L1#0 \| level L1 way names_the_element: Integer division: / applied to two integer operands, giving the whole-number quotient with the fractional part discarded. |
+| lvl:integer_division@L1#1 \| level L1 way states_the_rule: If both operands of / are integral types, the result is an integer that rounds toward 0 (-14 / 3 is -4). If either operand is a double, the division is floating point. |
+| lvl:integer_division@L2#0 \| level L2 way line_by_line_trace: Each / is evaluated when its turn comes (precedence, then left to right), using the types of its own two operands. Promoting the result to double, by a cast or by assignment, happens only afterwards and cannot restore the lost fraction. |
+| lvl:integer_division@L2#1 \| level L2 way output_prediction: 10 / 3 is 3, 59 / 60 is 0, 1234 / 99 is 12, -14 / 3 is -4, and (double) (3 / 5) is 0.0. |
+| lvl:integer_division@L2#2 \| level L2 way one_step_execution: q = a / b stores the truncated quotient in q and leaves a and b unchanged. If b is 0, an ArithmeticException stops execution before anything is stored. |
+| lvl:integer_division@L3#0 \| level L3 way relation_to_neighbour: / and % on ints are paired: q = a / b and r = a % b always satisfy a = b * q + r. |
+| lvl:integer_division@L3#1 \| level L3 way relation_to_neighbour: Normalizing counts must divide as doubles. With two ints, counts / total truncates to 0 whenever counts < total. |
+| lvl:integer_division@L3#2 \| level L3 way relation_to_neighbour: % gives the remainder of the same truncating division: (a / b) * b + a % b == a. |
+| lvl:integer_division@L3#3 \| level L3 way purpose_of_the_whole: Quotient plans: unit conversion (76 / 12 feet), dropping a digit (n / 10), finding a midpoint ((lo + hi) / 2), and computing a bucket or row index (i / cols). |
+| lvl:integer_division@L4#0 \| level L4 way predict_a_change: Making one operand a double (10.0 / 3) keeps the fraction (3.333...). Casting after the division does not. Multiplying before dividing preserves precision (59 * 100 / 60 is 98). Changing an operand's sign changes only the quotient's sign, since rounding is toward zero. |
+| lvl:integer_division@L4#1 \| level L4 way transfer_to_a_new_program: Use integer division when you want the whole quotient (units, digits, indices, half a size). When a fraction is needed, make one operand a double (10.0 / 3 or (double) a / b) rather than turning every variable into a double. |
+| lvl:integer_division@L4#2 \| level L4 way diagnose_an_error: rule broken: With two int operands, / discards the fraction. Kind: silent logic error. Trigger class: Two int operands where a fraction is intended: 9/5 in a temperature formula, count / total, 1 / n, sum / n for an average. |
+| lvl:integer_division@L4#3 \| level L4 way diagnose_an_error: rule broken: int division by zero is undefined. Kind: run-time exception. Trigger class: A divisor that evaluates to 0: ArithmeticException: / by zero. |
+| lvl:integer_division@L4#4 \| level L4 way diagnose_an_error: rule broken: Integer division rounds toward zero, not down. Kind: silent logic error. Trigger class: Negative operands where floor was expected (-7 / 2 is -3, not -4). |
 
 Prune: the model's reply (edge id and score; the kept edges sum to 1):
 ```
-{lvl:println@L2#0 (Score: 0.5)}
-{lvl:println@L2#2 (Score: 0.25)}
-{lvl:println@L3#0 (Score: 0.25)}
+{lvl:integer_division@L4#3 (Score: 0.5)}
+{lvl:integer_division@L2#2 (Score: 0.35)}
+{lvl:integer_division@L0#0 (Score: 0.15)}
 ```
-Kept by pruning: lvl:println@L2#0 (0.50), lvl:println@L2#2 (0.25), lvl:println@L3#0 (0.25)
+Kept by pruning: lvl:integer_division@L4#3 (0.50), lvl:integer_division@L2#2 (0.35), lvl:integer_division@L0#0 (0.15)
 
-Label prompt for level way lvl:println@L2#0 (the model saw only the concept, the way's name 'line by line trace' and its text; no level):
-> Evaluate the argument, print its characters at the current position, then write the line separator so the cursor moves to the beginning of the next line.
-
-Model's reply:
-```
-Label: not shown
-Clauses: none
-Confidence: 0.92
-```
-
-Label prompt for level way lvl:println@L2#2 (the model saw only the concept, the way's name 'one step execution' and its text; no level):
-> One call appends the text and a line separator to the output; the cursor ends at the start of the next line; no variable changes and nothing is returned.
+Label prompt for level way lvl:integer_division@L4#3 (the model saw only the concept, the way's name 'diagnose an error' and its text; no level):
+> rule broken: int division by zero is undefined. Kind: run-time exception. Trigger class: A divisor that evaluates to 0: ArithmeticException: / by zero.
 
 Model's reply:
 ```
 Label: not shown
 Clauses: none
-Confidence: 0.95
+Confidence: 0.6
 ```
 
-Label prompt for level way lvl:println@L3#0 (the model saw only the concept, the way's name 'relation to neighbour' and its text; no level):
-> System.out.println(s); is a statement, so its line of output appears at its own place in the sequence.
+Label prompt for level way lvl:integer_division@L2#2 (the model saw only the concept, the way's name 'one step execution' and its text; no level):
+> q = a / b stores the truncated quotient in q and leaves a and b unchanged. If b is 0, an ArithmeticException stops execution before anything is stored.
+
+Model's reply:
+```
+Label: not shown
+Clauses: none
+Confidence: 0.8
+```
+
+Label prompt for level way lvl:integer_division@L0#0 (the model saw only the concept, the way's name 'everyday reading' and its text; no level):
+> In everyday and school arithmetic, 'divide' gives an exact answer or a fraction (10 ÷ 3 = 3 1/3), and rounding goes to the nearest whole number. In Java, / with two int operands discards the fraction, rounding toward zero (59 / 60 is 0).
 
 Model's reply:
 ```
@@ -389,9 +386,9 @@ Confidence: 0.9
 Parsed labels:
 | edge | label | prune score | confidence | score | clauses | words |
 |---|---|---|---|---|---|---|
-| lvl:println@L2#0 | not applied |  |  | 0.0 |  |  |
-| lvl:println@L2#2 | not applied |  |  | 0.0 |  |  |
-| lvl:println@L3#0 | not applied |  |  | 0.0 |  |  |
+| lvl:integer_division@L4#3 | not applied |  |  | 0.0 |  |  |
+| lvl:integer_division@L2#2 | not applied |  |  | 0.0 |  |  |
+| lvl:integer_division@L0#0 | not applied |  |  | 0.0 |  |  |
 
 **Kept on a path at this depth** (best N in tiers: held misconception / broken edge, then held error, then correct / confirmed / shown):
 
@@ -403,15 +400,12 @@ mis:division_by_zero->DivisionByZeroIsCompileError [held, tier 0, 0.76], mis:run
 | c1 | It wont compile | mis:division_by_zero->DivisionByZeroIsCompileError |
 | c2 | Dividing by zero isnt allowed | mis:division_by_zero->DivisionByZeroIsCompileError |
 | c3 | so the compiler stops you before it runs | mis:division_by_zero->DivisionByZeroIsCompileError |
-| c4 | Actual: it compiles, then crashes at run time with ArithmeticException: / by zero | not covered yet |
 
-**Uncovered clauses bring in (BM25 of the uncovered clauses against unvisited concepts):** arithmetic_operators (4.12), integer_division (2.02)
-
-**Graph check, not yet read (the walk may not stop while these remain):** own edges of arithmetic_operators, own edges of integer_division, pre:arithmetic_operators->division_by_zero, pre:division_by_zero->run_time_error, pre:statement->println
+**Graph check, not yet read (the walk may not stop while these remain):** pre:arithmetic_operators->division_by_zero, pre:arithmetic_operators->integer_division, pre:division_by_zero->run_time_error
 
 Figure 4 (the graph after depth 1): C:\Users\magnu\OneDrive\Desktop\ES_VIterbi_Personalized_Learning\results\viewer\MY26_figure04.png
 
-### Depth 2: current concepts 'division_by_zero', 'run_time_error', 'println', 'arithmetic_operators', 'integer_division'
+### Depth 2: current concepts 'division_by_zero', 'run_time_error', 'integer_division'
 
 #### division_by_zero, concept edges: 2 edges offered
 Edges offered:
@@ -422,10 +416,10 @@ Edges offered:
 
 Prune: the model's reply (edge id and score; the kept edges sum to 1):
 ```
-{pre:division_by_zero->run_time_error (Score: 0.65)}
-{pre:arithmetic_operators->division_by_zero (Score: 0.35)}
+{pre:division_by_zero->run_time_error (Score: 0.7)}
+{pre:arithmetic_operators->division_by_zero (Score: 0.3)}
 ```
-Kept by pruning: pre:division_by_zero->run_time_error (0.65), pre:arithmetic_operators->division_by_zero (0.35)
+Kept by pruning: pre:division_by_zero->run_time_error (0.70), pre:arithmetic_operators->division_by_zero (0.30)
 
 Label prompt for concept edge pre:division_by_zero->run_time_error (division_by_zero -> run_time_error, prerequisite):
 > Dividing an int by zero compiles but throws ArithmeticException when the program runs: a run-time error.
@@ -450,35 +444,54 @@ Confidence: 0.9
 Parsed labels:
 | edge | label | prune score | confidence | score | clauses | words |
 |---|---|---|---|---|---|---|
-| pre:division_by_zero->run_time_error | broken | 0.65 | 0.95 | 0.62 | c1, c3 | It wont compile; so the compiler stops you before it runs |
-| pre:arithmetic_operators->division_by_zero | broken | 0.35 | 0.9 | 0.32 | c1, c3 | It wont compile; so the compiler stops you before it runs |
+| pre:division_by_zero->run_time_error | broken | 0.7 | 0.95 | 0.66 | c1, c3 | It wont compile; so the compiler stops you before it runs |
+| pre:arithmetic_operators->division_by_zero | broken | 0.3 | 0.9 | 0.27 | c1, c3 | It wont compile; so the compiler stops you before it runs |
 
-#### println, concept edges: 1 edges offered
+#### integer_division, concept edges: 1 edges offered
 Edges offered:
 | edge |
 |---|
-| pre:statement->println \| rule: System.out.println(s); is itself a statement, so its line of output appears at its own place in the sequence. |
+| pre:arithmetic_operators->integer_division \| rule: For ints a and b, / gives the whole quotient q and % gives the remainder r, so that a = b * q + r. |
 
 Prune: the model's reply (edge id and score; the kept edges sum to 1):
 ```
-{pre:statement->println (Score: 1.0)}
+{pre:arithmetic_operators->integer_division (Score: 1.0)}
 ```
-Kept by pruning: pre:statement->println (1.00)
+Kept by pruning: pre:arithmetic_operators->integer_division (1.00)
 
-Label prompt for concept edge pre:statement->println (statement -> println, prerequisite):
-> System.out.println(s); is itself a statement, so its line of output appears at its own place in the sequence.
+Label prompt for concept edge pre:arithmetic_operators->integer_division (arithmetic_operators -> integer_division, prerequisite):
+> For ints a and b, / gives the whole quotient q and % gives the remainder r, so that a = b * q + r.
 
 Model's reply:
 ```
 Label: not applied
 Clauses: none
-Confidence: 0.85
+Confidence: 0.6
 ```
 
 Parsed labels:
 | edge | label | prune score | confidence | score | clauses | words |
 |---|---|---|---|---|---|---|
-| pre:statement->println | not applied |  |  | 0.0 |  |  |
+| pre:arithmetic_operators->integer_division | not applied |  |  | 0.0 |  |  |
+
+**Kept on a path at this depth** (best N in tiers: held misconception / broken edge, then held error, then correct / confirmed / shown):
+
+pre:division_by_zero->run_time_error [broken, tier 0, 0.67], pre:arithmetic_operators->division_by_zero [broken, tier 0, 0.27]
+
+reached across pre:arithmetic_operators->division_by_zero, entered next: arithmetic_operators
+
+**Clause coverage after this depth:**
+| clause | text | covered by |
+|---|---|---|
+| c1 | It wont compile | mis:division_by_zero->DivisionByZeroIsCompileError |
+| c2 | Dividing by zero isnt allowed | mis:division_by_zero->DivisionByZeroIsCompileError |
+| c3 | so the compiler stops you before it runs | mis:division_by_zero->DivisionByZeroIsCompileError |
+
+**Graph check, not yet read (the walk may not stop while these remain):** own edges of arithmetic_operators
+
+Figure 5 (the graph after depth 2): C:\Users\magnu\OneDrive\Desktop\ES_VIterbi_Personalized_Learning\results\viewer\MY26_figure05.png
+
+### Depth 3: current concepts 'run_time_error', 'division_by_zero', 'arithmetic_operators'
 
 #### arithmetic_operators, misconceptions: 3 edges offered
 Edges offered:
@@ -545,7 +558,7 @@ Model's reply:
 ```
 Label: not shown
 Clauses: none
-Confidence: 0.9
+Confidence: 0.92
 ```
 
 Label prompt for level way lvl:arithmetic_operators@L1#1 (the model saw only the concept, the way's name 'states the rule' and its text; no level):
@@ -555,7 +568,7 @@ Model's reply:
 ```
 Label: not shown
 Clauses: none
-Confidence: 0.75
+Confidence: 0.7
 ```
 
 Parsed labels:
@@ -565,150 +578,6 @@ Parsed labels:
 | lvl:arithmetic_operators@L3#2 | not applied |  |  | 0.0 |  |  |
 | lvl:arithmetic_operators@L1#1 | not applied |  |  | 0.0 |  |  |
 
-#### integer_division, misconceptions: 6 edges offered
-Edges offered:
-| edge |
-|---|
-| mis:integer_division->AllDoublesToAvoidDivision \| wrong rule: Making every variable a double is the right fix for integer division. \| right rule: Use int for countable things and double for measured ones; where a fraction is needed, make one operand of the division a double (or cast) instead of changing every type. |
-| mis:integer_division->CastAfterIntDivision \| wrong rule: (double) (3 / 5) is 0.6. \| right rule: The integer division 3 / 5 = 0 happens before the cast, so the result is 0.0. |
-| mis:integer_division->IntegerDivisionGivesFraction \| wrong rule: 10 / 3 evaluates to 3.333.... \| right rule: Dividing two ints gives an int: the fractional part is discarded. |
-| mis:integer_division->LaterDoubleLiteralFixesDivision \| wrong rule: Changing a later literal to 100.0 fixes an earlier int division. \| right rule: The int division happens first; the double must be in the division itself. |
-| mis:integer_division->NegativeRemainderSign \| wrong rule: a % b is never negative, and integer division of a negative number rounds down. \| right rule: a / b rounds toward 0 and a % b takes the sign of a: -14 / 3 is -4 and -14 % 3 is -2. |
-| mis:integer_division->TargetTyping \| wrong rule: The type of a numerical expression depends on the type expected by the surrounding context, so double d = a / b; keeps the fraction. \| right rule: The type of a numerical expression is determined by the expression, so double d = a / b; with int a and b still divides as ints. |
-
-Prune: the model's reply (edge id and score; the kept edges sum to 1):
-```
-
-```
-Kept by pruning: 
-
-Parsed labels:
-(none)
-
-#### integer_division, level ways: 16 edges offered
-Edges offered:
-| edge |
-|---|
-| lvl:integer_division@L0#0 \| level L0 way everyday_reading: In everyday and school arithmetic, 'divide' gives an exact answer or a fraction (10 ÷ 3 = 3 1/3), and rounding goes to the nearest whole number. In Java, / with two int operands discards the fraction, rounding toward zero (59 / 60 is 0). |
-| lvl:integer_division@L0#4 \| level L0 way inconsistent_trace: Points to LT (each / looks at its own two operand types when it is evaluated). Applied unevenly, a student evaluates 9/5 as 1.8 in f = (9/5)*c + 32 but as 1 elsewhere, or assumes a later double operand rescues an earlier int division. (here mixing in: "The type of a numerical expression depends on the type expected by the surrounding context, so double d = a / b; keeps the fraction") |
-| lvl:integer_division@L1#0 \| level L1 way names_the_element: Integer division: / applied to two integer operands, giving the whole-number quotient with the fractional part discarded. |
-| lvl:integer_division@L1#1 \| level L1 way states_the_rule: If both operands of / are integral types, the result is an integer that rounds toward 0 (-14 / 3 is -4). If either operand is a double, the division is floating point. |
-| lvl:integer_division@L2#0 \| level L2 way line_by_line_trace: Each / is evaluated when its turn comes (precedence, then left to right), using the types of its own two operands. Promoting the result to double, by a cast or by assignment, happens only afterwards and cannot restore the lost fraction. |
-| lvl:integer_division@L2#1 \| level L2 way output_prediction: 10 / 3 is 3, 59 / 60 is 0, 1234 / 99 is 12, -14 / 3 is -4, and (double) (3 / 5) is 0.0. |
-| lvl:integer_division@L2#2 \| level L2 way one_step_execution: q = a / b stores the truncated quotient in q and leaves a and b unchanged. If b is 0, an ArithmeticException stops execution before anything is stored. |
-| lvl:integer_division@L3#0 \| level L3 way relation_to_neighbour: / and % on ints are paired: q = a / b and r = a % b always satisfy a = b * q + r. |
-| lvl:integer_division@L3#1 \| level L3 way relation_to_neighbour: Normalizing counts must divide as doubles. With two ints, counts / total truncates to 0 whenever counts < total. |
-| lvl:integer_division@L3#2 \| level L3 way relation_to_neighbour: % gives the remainder of the same truncating division: (a / b) * b + a % b == a. |
-| lvl:integer_division@L3#3 \| level L3 way purpose_of_the_whole: Quotient plans: unit conversion (76 / 12 feet), dropping a digit (n / 10), finding a midpoint ((lo + hi) / 2), and computing a bucket or row index (i / cols). |
-| lvl:integer_division@L4#0 \| level L4 way predict_a_change: Making one operand a double (10.0 / 3) keeps the fraction (3.333...). Casting after the division does not. Multiplying before dividing preserves precision (59 * 100 / 60 is 98). Changing an operand's sign changes only the quotient's sign, since rounding is toward zero. |
-| lvl:integer_division@L4#1 \| level L4 way transfer_to_a_new_program: Use integer division when you want the whole quotient (units, digits, indices, half a size). When a fraction is needed, make one operand a double (10.0 / 3 or (double) a / b) rather than turning every variable into a double. |
-| lvl:integer_division@L4#2 \| level L4 way diagnose_an_error: rule broken: With two int operands, / discards the fraction. Kind: silent logic error. Trigger class: Two int operands where a fraction is intended: 9/5 in a temperature formula, count / total, 1 / n, sum / n for an average. |
-| lvl:integer_division@L4#3 \| level L4 way diagnose_an_error: rule broken: int division by zero is undefined. Kind: run-time exception. Trigger class: A divisor that evaluates to 0: ArithmeticException: / by zero. |
-| lvl:integer_division@L4#4 \| level L4 way diagnose_an_error: rule broken: Integer division rounds toward zero, not down. Kind: silent logic error. Trigger class: Negative operands where floor was expected (-7 / 2 is -3, not -4). |
-
-Prune: the model's reply (edge id and score; the kept edges sum to 1):
-```
-{lvl:integer_division@L4#3 (Score: 0.6)}
-{lvl:integer_division@L2#2 (Score: 0.25)}
-{lvl:integer_division@L0#0 (Score: 0.15)}
-```
-Kept by pruning: lvl:integer_division@L4#3 (0.60), lvl:integer_division@L2#2 (0.25), lvl:integer_division@L0#0 (0.15)
-
-Label prompt for level way lvl:integer_division@L4#3 (the model saw only the concept, the way's name 'diagnose an error' and its text; no level):
-> rule broken: int division by zero is undefined. Kind: run-time exception. Trigger class: A divisor that evaluates to 0: ArithmeticException: / by zero.
-
-Model's reply:
-```
-Label: shown
-Clauses: 2
-Confidence: 0.6
-```
-
-Label prompt for level way lvl:integer_division@L2#2 (the model saw only the concept, the way's name 'one step execution' and its text; no level):
-> q = a / b stores the truncated quotient in q and leaves a and b unchanged. If b is 0, an ArithmeticException stops execution before anything is stored.
-
-Model's reply:
-```
-Label: not shown
-Clauses: none
-Confidence: 0.7
-```
-
-Label prompt for level way lvl:integer_division@L0#0 (the model saw only the concept, the way's name 'everyday reading' and its text; no level):
-> In everyday and school arithmetic, 'divide' gives an exact answer or a fraction (10 ÷ 3 = 3 1/3), and rounding goes to the nearest whole number. In Java, / with two int operands discards the fraction, rounding toward zero (59 / 60 is 0).
-
-Model's reply:
-```
-Label: not shown
-Clauses: none
-Confidence: 0.85
-```
-
-Parsed labels:
-| edge | label | prune score | confidence | score | clauses | words |
-|---|---|---|---|---|---|---|
-| lvl:integer_division@L4#3 | shown | 0.6 | 0.6 | 0.36 | c2 | Dividing by zero isnt allowed |
-| lvl:integer_division@L2#2 | not applied |  |  | 0.0 |  |  |
-| lvl:integer_division@L0#0 | not applied |  |  | 0.0 |  |  |
-
-**Kept on a path at this depth** (best N in tiers: held misconception / broken edge, then held error, then correct / confirmed / shown):
-
-pre:division_by_zero->run_time_error [broken, tier 0, 0.62], pre:arithmetic_operators->division_by_zero [broken, tier 0, 0.32], lvl:integer_division@L4#3 [shown, tier 2, 0.36]
-
-**Clause coverage after this depth:**
-| clause | text | covered by |
-|---|---|---|
-| c1 | It wont compile | mis:division_by_zero->DivisionByZeroIsCompileError |
-| c2 | Dividing by zero isnt allowed | mis:division_by_zero->DivisionByZeroIsCompileError |
-| c3 | so the compiler stops you before it runs | mis:division_by_zero->DivisionByZeroIsCompileError |
-| c4 | Actual: it compiles, then crashes at run time with ArithmeticException: / by zero | not covered yet |
-
-**Graph check, not yet read (the walk may not stop while these remain):** pre:arithmetic_operators->expression, pre:arithmetic_operators->integer_division
-
-Figure 5 (the graph after depth 2): C:\Users\magnu\OneDrive\Desktop\ES_VIterbi_Personalized_Learning\results\viewer\MY26_figure05.png
-
-### Depth 3: current concepts 'run_time_error', 'division_by_zero', 'arithmetic_operators', 'integer_division'
-
-#### arithmetic_operators, concept edges: 2 edges offered
-Edges offered:
-| edge |
-|---|
-| pre:arithmetic_operators->division_by_zero \| rule: Integer division by zero (1/0) generates a run-time exception, while floating-point 1.0/0.0 is legal and has the value Infinity. |
-| pre:arithmetic_operators->expression \| rule: An operator combines operand values a and b into a new value, so operators build larger expressions from smaller ones. |
-| pre:arithmetic_operators->integer_division \| rule: For ints a and b, / gives the whole quotient q and % gives the remainder r, so that a = b * q + r. |
-
-Prune: the model's reply (edge id and score; the kept edges sum to 1):
-```
-pre:arithmetic_operators->integer_division (0.70), pre:arithmetic_operators->expression (0.30)
-```
-Kept by pruning: pre:arithmetic_operators->integer_division (0.70), pre:arithmetic_operators->expression (0.30)
-
-Label prompt for concept edge pre:arithmetic_operators->integer_division (arithmetic_operators -> integer_division, prerequisite):
-> For ints a and b, / gives the whole quotient q and % gives the remainder r, so that a = b * q + r.
-
-Model's reply:
-```
-Label: not applied
-Clauses: none
-Confidence: 0.7
-```
-
-Label prompt for concept edge pre:arithmetic_operators->expression (arithmetic_operators -> expression, prerequisite):
-> An operator combines operand values a and b into a new value, so operators build larger expressions from smaller ones.
-
-Model's reply:
-```
-Label: not applied
-Clauses: none
-Confidence: 0.6
-```
-
-Parsed labels:
-| edge | label | prune score | confidence | score | clauses | words |
-|---|---|---|---|---|---|---|
-| pre:arithmetic_operators->integer_division | not applied |  |  | 0.0 |  |  |
-| pre:arithmetic_operators->expression | not applied |  |  | 0.0 |  |  |
-
 **Kept on a path at this depth:** nothing
 
 **Clause coverage after this depth:**
@@ -717,9 +586,8 @@ Parsed labels:
 | c1 | It wont compile | mis:division_by_zero->DivisionByZeroIsCompileError |
 | c2 | Dividing by zero isnt allowed | mis:division_by_zero->DivisionByZeroIsCompileError |
 | c3 | so the compiler stops you before it runs | mis:division_by_zero->DivisionByZeroIsCompileError |
-| c4 | Actual: it compiles, then crashes at run time with ArithmeticException: / by zero | not covered yet |
 
-**No next nodes -> half_stop**
+**Graph check, not yet read (the walk may not stop while these remain):** pre:arithmetic_operators->expression
 
 Figure 6 (the graph after depth 3): C:\Users\magnu\OneDrive\Desktop\ES_VIterbi_Personalized_Learning\results\viewer\MY26_figure06.png
 
@@ -730,10 +598,9 @@ Shadows (a held label on a prerequisite, on a generic concept, or at a concept w
 ## 4. Diagnosis (rules over the labelled graph, no model)
 Root-cause walk: held on ['division_by_zero'], broken at [] (consequences: pre:division_by_zero->run_time_error, pre:arithmetic_operators->division_by_zero), prerequisites {'division_by_zero': ['arithmetic_operators'], 'expression': ['arithmetic_operators'], 'integer_division': ['arithmetic_operators'], 'run_time_error': ['division_by_zero'], 'println': ['statement']}
 - division_by_zero: L0 via misconception "It wont compile; Dividing by zero isnt allowed; so the compiler stops you before it runs"
-- integer_division: L4 via diagnose_an_error "Dividing by zero isnt allowed"
 - run_time_error: L0 via everyday_reading "It wont compile; so the compiler stops you before it runs"
 
-**Stop:** half_stop at depth 3; prompts {'prune': 13, 'label': 23}, fresh model calls 0, cache hits 36
+**Stop:** max depth at depth 3; prompts {'prune': 10, 'label': 18}, fresh model calls 28, cache hits 0
 
 ### Held misconceptions
 | concept | misconception | kind | quote | score | shares_evidence_with |
@@ -748,8 +615,8 @@ Root-cause walk: held on ['division_by_zero'], broken at [] (consequences: pre:d
 ### Broken concept edges
 | edge | quote | score | consequence_of |
 |---|---|---|---|
-| pre:division_by_zero->run_time_error | It wont compile; so the compiler stops you before it runs | 0.6175 | mis:division_by_zero->DivisionByZeroIsCompileError |
-| pre:arithmetic_operators->division_by_zero | It wont compile; so the compiler stops you before it runs | 0.315 | mis:division_by_zero->DivisionByZeroIsCompileError |
+| pre:division_by_zero->run_time_error | It wont compile; so the compiler stops you before it runs | 0.665 | mis:division_by_zero->DivisionByZeroIsCompileError |
+| pre:arithmetic_operators->division_by_zero | It wont compile; so the compiler stops you before it runs | 0.27 | mis:division_by_zero->DivisionByZeroIsCompileError |
 
 ### Root cause: division_by_zero / DivisionByZeroIsCompileError
 
@@ -757,7 +624,6 @@ Root-cause walk: held on ['division_by_zero'], broken at [] (consequences: pre:d
 | concept | level | way | misconception | source | quote | rule | also | note |
 |---|---|---|---|---|---|---|---|---|
 | division_by_zero | L0 | misconception | DivisionByZeroIsCompileError | level_mis_links | It wont compile; Dividing by zero isnt allowed; so the compiler stops you before it runs | wrong rule: System.out.println(5 / 0); is rejected by the compiler. Right rule: It compiles; the ArithmeticException (/ by zero) is thrown when the program runs and reaches the division. |  |  |
-| integer_division | L4 | diagnose_an_error |  | level_way | Dividing by zero isnt allowed |  |  |  |
 | run_time_error | L0 | everyday_reading |  | level_way | It wont compile; so the compiler stops you before it runs |  |  |  |
 
 ### Overall level: L0
@@ -769,20 +635,17 @@ Clause coverage (final):
 | Dividing by zero isnt allowed | mis:division_by_zero->DivisionByZeroIsCompileError |
 | so the compiler stops you before it runs | mis:division_by_zero->DivisionByZeroIsCompileError |
 
-Clauses no evidence explains: Actual: it compiles, then crashes at run time with ArithmeticException: / by zero
-
 Figure 7 (final picture): C:\Users\magnu\OneDrive\Desktop\ES_VIterbi_Personalized_Learning\results\viewer\MY26_figure07.png
 
 ## 5. Every labelled edge (the evidence list, kept or not)
 | depth | source | edge | kind | label | prune_score | confidence | score | clauses | quote |
 |---|---|---|---|---|---|---|---|---|---|
 | 1 | division_by_zero | mis:division_by_zero->DivisionByZeroIsCompileError | misconception | held | 0.8 | 0.95 | 0.76 | [1, 2, 3] | It wont compile; Dividing by zero isnt allowed; so the compiler stops you before it runs |
-| 1 | division_by_zero | lvl:division_by_zero@L0#0 | level | shown | 0.7 | 0.93 | 0.651 | [1, 2, 3] | It wont compile; Dividing by zero isnt allowed; so the compiler stops you before it runs |
+| 1 | division_by_zero | lvl:division_by_zero@L0#0 | level | shown | 0.7000000000000001 | 0.93 | 0.651 | [1, 2, 3] | It wont compile; Dividing by zero isnt allowed; so the compiler stops you before it runs |
 | 1 | run_time_error | mis:run_time_error->DivisionByZeroIsCompileError | misconception | held | 0.8 | 0.95 | 0.76 | [1, 2, 3] | It wont compile; Dividing by zero isnt allowed; so the compiler stops you before it runs |
-| 1 | run_time_error | lvl:run_time_error@L0#0 | level | shown | 0.3 | 0.85 | 0.255 | [1, 3] | It wont compile; so the compiler stops you before it runs |
-| 2 | division_by_zero | pre:division_by_zero->run_time_error | prerequisite | broken | 0.65 | 0.95 | 0.6175 | [1, 3] | It wont compile; so the compiler stops you before it runs |
-| 2 | division_by_zero | pre:arithmetic_operators->division_by_zero | prerequisite | broken | 0.35 | 0.9 | 0.315 | [1, 3] | It wont compile; so the compiler stops you before it runs |
-| 2 | integer_division | lvl:integer_division@L4#3 | level | shown | 0.6 | 0.6 | 0.36 | [2] | Dividing by zero isnt allowed |
+| 1 | run_time_error | lvl:run_time_error@L0#0 | level | shown | 0.2 | 0.85 | 0.17 | [1, 3] | It wont compile; so the compiler stops you before it runs |
+| 2 | division_by_zero | pre:division_by_zero->run_time_error | prerequisite | broken | 0.7 | 0.95 | 0.665 | [1, 3] | It wont compile; so the compiler stops you before it runs |
+| 2 | division_by_zero | pre:arithmetic_operators->division_by_zero | prerequisite | broken | 0.3 | 0.9 | 0.27 | [1, 3] | It wont compile; so the compiler stops you before it runs |
 
 ## 6. The paths (what the keep step kept, depth by depth)
 | depth | source | edge | kind | label | score | clauses |
@@ -790,76 +653,66 @@ Figure 7 (final picture): C:\Users\magnu\OneDrive\Desktop\ES_VIterbi_Personalize
 | 1 | division_by_zero | mis:division_by_zero->DivisionByZeroIsCompileError | misconception | held | 0.76 | [1, 2, 3] |
 | 1 | run_time_error | mis:run_time_error->DivisionByZeroIsCompileError | misconception | held | 0.76 | [1, 2, 3] |
 | 1 | division_by_zero | lvl:division_by_zero@L0#0 | level | shown | 0.651 | [1, 2, 3] |
-| 2 | division_by_zero | pre:division_by_zero->run_time_error | prerequisite | broken | 0.6175 | [1, 3] |
-| 2 | division_by_zero | pre:arithmetic_operators->division_by_zero | prerequisite | broken | 0.315 | [1, 3] |
-| 2 | integer_division | lvl:integer_division@L4#3 | level | shown | 0.36 | [2] |
+| 2 | division_by_zero | pre:division_by_zero->run_time_error | prerequisite | broken | 0.665 | [1, 3] |
+| 2 | division_by_zero | pre:arithmetic_operators->division_by_zero | prerequisite | broken | 0.27 | [1, 3] |
 
 ## 7. Raw traversal log
 ```
-clauses: It wont compile | Dividing by zero isnt allowed | so the compiler stops you before it runs | Actual: it compiles, then crashes at run time with ArithmeticException: / by zero
-start: BM25 of the answer against each tagged concept: division_by_zero 17.10 (hits 1), run_time_error 15.59 (hits 1), println 7.20 (hits 1), integer_division 5.84 (hits 1), arithmetic_operators 5.55 (hits 1)
-start: chosen division_by_zero, run_time_error, println
-start concepts (3): division_by_zero, run_time_error, println
---- depth 1: current concepts ['division_by_zero', 'run_time_error', 'println']
+clauses: It wont compile | Dividing by zero isnt allowed | so the compiler stops you before it runs
+start: BM25 of the answer against each tagged concept: division_by_zero 8.98 (hits 1), run_time_error 6.97 (hits 1), integer_division 3.98 (hits 1), println 2.74 (hits 1), arithmetic_operators 2.43 (hits 1)
+start: chosen division_by_zero, run_time_error, integer_division
+start concepts (3): division_by_zero, run_time_error, integer_division
+--- depth 1: current concepts ['division_by_zero', 'run_time_error', 'integer_division']
   division_by_zero (misconceptions): 3 candidates -> kept mis:division_by_zero->DivisionByZeroIsCompileError (0.80), mis:division_by_zero->ZeroDivisionAlwaysCrashes (0.15), err:division_by_zero->AverageWithoutZeroGuard (0.05)
     mis:division_by_zero->DivisionByZeroIsCompileError -> held (0.76) "It wont compile; Dividing by zero isnt allowed; so the compiler stops you before it runs"
     mis:division_by_zero->ZeroDivisionAlwaysCrashes -> not applied (0.00) ""
     err:division_by_zero->AverageWithoutZeroGuard -> not applied (0.00) ""
-  division_by_zero (level ways): 15 candidates -> kept lvl:division_by_zero@L0#0 (0.70), lvl:division_by_zero@L4#3 (0.15), lvl:division_by_zero@L2#1 (0.15)
+  division_by_zero (level ways): 15 candidates -> kept lvl:division_by_zero@L0#0 (0.70), lvl:division_by_zero@L4#3 (0.20), lvl:division_by_zero@L2#1 (0.10)
     lvl:division_by_zero@L0#0 -> shown (0.65) "It wont compile; Dividing by zero isnt allowed; so the compiler stops you before it runs"
     lvl:division_by_zero@L4#3 -> not applied (0.00) ""
     lvl:division_by_zero@L2#1 -> not applied (0.00) ""
-  run_time_error (misconceptions): 7 candidates -> kept mis:run_time_error->DivisionByZeroIsCompileError (0.80), mis:run_time_error->CompilesMeansWorks (0.15), err:run_time_error->NegativeArraySize (0.05)
+  run_time_error (misconceptions): 7 candidates -> kept mis:run_time_error->DivisionByZeroIsCompileError (0.80), mis:run_time_error->CompilesMeansWorks (0.15), err:run_time_error->InputTypeMismatch (0.05)
     mis:run_time_error->DivisionByZeroIsCompileError -> held (0.76) "It wont compile; Dividing by zero isnt allowed; so the compiler stops you before it runs"
     mis:run_time_error->CompilesMeansWorks -> not applied (0.00) ""
-    err:run_time_error->NegativeArraySize -> not applied (0.00) ""
-  run_time_error (level ways): 19 candidates -> kept lvl:run_time_error@L3#1 (0.45), lvl:run_time_error@L0#0 (0.30), lvl:run_time_error@L4#6 (0.25)
+    err:run_time_error->InputTypeMismatch -> not applied (0.00) ""
+  run_time_error (level ways): 19 candidates -> kept lvl:run_time_error@L3#1 (0.45), lvl:run_time_error@L4#6 (0.35), lvl:run_time_error@L0#0 (0.20)
     lvl:run_time_error@L3#1 -> not applied (0.00) ""
-    lvl:run_time_error@L0#0 -> shown (0.26) "It wont compile; so the compiler stops you before it runs"
     lvl:run_time_error@L4#6 -> not applied (0.00) ""
-  println (misconceptions): 6 candidates -> kept mis:println->PrintedTextIsExecuted (0.50), mis:println->ParenthesesOnlyIfArgument (0.25), mis:println->IdentifierCaseInsensitive (0.25)
-    mis:println->PrintedTextIsExecuted -> not applied (0.00) ""
-    mis:println->ParenthesesOnlyIfArgument -> not applied (0.00) ""
-    mis:println->IdentifierCaseInsensitive -> not applied (0.00) ""
-  println (level ways): 17 candidates -> kept lvl:println@L2#0 (0.50), lvl:println@L2#2 (0.25), lvl:println@L3#0 (0.25)
-    lvl:println@L2#0 -> not applied (0.00) ""
-    lvl:println@L2#2 -> not applied (0.00) ""
-    lvl:println@L3#0 -> not applied (0.00) ""
+    lvl:run_time_error@L0#0 -> shown (0.17) "It wont compile; so the compiler stops you before it runs"
+  integer_division (misconceptions): 6 candidates -> kept mis:integer_division->IntegerDivisionGivesFraction (0.50), mis:integer_division->TargetTyping (0.30), mis:integer_division->NegativeRemainderSign (0.20)
+    mis:integer_division->IntegerDivisionGivesFraction -> not applied (0.00) ""
+    mis:integer_division->TargetTyping -> not applied (0.00) ""
+    mis:integer_division->NegativeRemainderSign -> not applied (0.00) ""
+  integer_division (level ways): 16 candidates -> kept lvl:integer_division@L4#3 (0.50), lvl:integer_division@L2#2 (0.35), lvl:integer_division@L0#0 (0.15)
+    lvl:integer_division@L4#3 -> not applied (0.00) ""
+    lvl:integer_division@L2#2 -> not applied (0.00) ""
+    lvl:integer_division@L0#0 -> not applied (0.00) ""
   kept: mis:division_by_zero->DivisionByZeroIsCompileError [held, tier 0, 0.76], mis:run_time_error->DivisionByZeroIsCompileError [held, tier 0, 0.76], lvl:division_by_zero@L0#0 [shown, tier 2, 0.65]
-  clause coverage: c1 <- mis:division_by_zero->DivisionByZeroIsCompileError; c2 <- mis:division_by_zero->DivisionByZeroIsCompileError; c3 <- mis:division_by_zero->DivisionByZeroIsCompileError; c4 uncovered
-  uncovered clauses bring in: arithmetic_operators (4.12), integer_division (2.02)
-  not yet read: own edges of arithmetic_operators, own edges of integer_division, pre:arithmetic_operators->division_by_zero, pre:division_by_zero->run_time_error, pre:statement->println
---- depth 2: current concepts ['division_by_zero', 'run_time_error', 'println', 'arithmetic_operators', 'integer_division']
-  division_by_zero (concept edges): 2 candidates -> kept pre:division_by_zero->run_time_error (0.65), pre:arithmetic_operators->division_by_zero (0.35)
-    pre:division_by_zero->run_time_error -> broken (0.62) "It wont compile; so the compiler stops you before it runs"
-    pre:arithmetic_operators->division_by_zero -> broken (0.32) "It wont compile; so the compiler stops you before it runs"
-  println (concept edges): 1 candidates -> kept pre:statement->println (1.00)
-    pre:statement->println -> not applied (0.00) ""
+  clause coverage: c1 <- mis:division_by_zero->DivisionByZeroIsCompileError; c2 <- mis:division_by_zero->DivisionByZeroIsCompileError; c3 <- mis:division_by_zero->DivisionByZeroIsCompileError
+  not yet read: pre:arithmetic_operators->division_by_zero, pre:arithmetic_operators->integer_division, pre:division_by_zero->run_time_error
+--- depth 2: current concepts ['division_by_zero', 'run_time_error', 'integer_division']
+  division_by_zero (concept edges): 2 candidates -> kept pre:division_by_zero->run_time_error (0.70), pre:arithmetic_operators->division_by_zero (0.30)
+    pre:division_by_zero->run_time_error -> broken (0.66) "It wont compile; so the compiler stops you before it runs"
+    pre:arithmetic_operators->division_by_zero -> broken (0.27) "It wont compile; so the compiler stops you before it runs"
+  integer_division (concept edges): 1 candidates -> kept pre:arithmetic_operators->integer_division (1.00)
+    pre:arithmetic_operators->integer_division -> not applied (0.00) ""
+  kept: pre:division_by_zero->run_time_error [broken, tier 0, 0.67], pre:arithmetic_operators->division_by_zero [broken, tier 0, 0.27]
+  reached across pre:arithmetic_operators->division_by_zero, entered next: arithmetic_operators
+  clause coverage: c1 <- mis:division_by_zero->DivisionByZeroIsCompileError; c2 <- mis:division_by_zero->DivisionByZeroIsCompileError; c3 <- mis:division_by_zero->DivisionByZeroIsCompileError
+  not yet read: own edges of arithmetic_operators
+--- depth 3: current concepts ['run_time_error', 'division_by_zero', 'arithmetic_operators']
   arithmetic_operators (misconceptions): 3 candidates -> kept 
   arithmetic_operators (level ways): 18 candidates -> kept lvl:arithmetic_operators@L4#2 (0.50), lvl:arithmetic_operators@L3#2 (0.30), lvl:arithmetic_operators@L1#1 (0.20)
     lvl:arithmetic_operators@L4#2 -> not applied (0.00) ""
     lvl:arithmetic_operators@L3#2 -> not applied (0.00) ""
     lvl:arithmetic_operators@L1#1 -> not applied (0.00) ""
-  integer_division (misconceptions): 6 candidates -> kept 
-  integer_division (level ways): 16 candidates -> kept lvl:integer_division@L4#3 (0.60), lvl:integer_division@L2#2 (0.25), lvl:integer_division@L0#0 (0.15)
-    lvl:integer_division@L4#3 -> shown (0.36) "Dividing by zero isnt allowed"
-    lvl:integer_division@L2#2 -> not applied (0.00) ""
-    lvl:integer_division@L0#0 -> not applied (0.00) ""
-  kept: pre:division_by_zero->run_time_error [broken, tier 0, 0.62], pre:arithmetic_operators->division_by_zero [broken, tier 0, 0.32], lvl:integer_division@L4#3 [shown, tier 2, 0.36]
-  clause coverage: c1 <- mis:division_by_zero->DivisionByZeroIsCompileError; c2 <- mis:division_by_zero->DivisionByZeroIsCompileError; c3 <- mis:division_by_zero->DivisionByZeroIsCompileError; c4 uncovered
-  not yet read: pre:arithmetic_operators->expression, pre:arithmetic_operators->integer_division
---- depth 3: current concepts ['run_time_error', 'division_by_zero', 'arithmetic_operators', 'integer_division']
-  arithmetic_operators (concept edges): 2 candidates -> kept pre:arithmetic_operators->integer_division (0.70), pre:arithmetic_operators->expression (0.30)
-    pre:arithmetic_operators->integer_division -> not applied (0.00) ""
-    pre:arithmetic_operators->expression -> not applied (0.00) ""
   nothing kept at this depth
-  clause coverage: c1 <- mis:division_by_zero->DivisionByZeroIsCompileError; c2 <- mis:division_by_zero->DivisionByZeroIsCompileError; c3 <- mis:division_by_zero->DivisionByZeroIsCompileError; c4 uncovered
-  no next nodes -> half_stop
+  clause coverage: c1 <- mis:division_by_zero->DivisionByZeroIsCompileError; c2 <- mis:division_by_zero->DivisionByZeroIsCompileError; c3 <- mis:division_by_zero->DivisionByZeroIsCompileError
+  not yet read: pre:arithmetic_operators->expression
   held: mis:division_by_zero->DivisionByZeroIsCompileError; filed at the dependent concept: mis:run_time_error->DivisionByZeroIsCompileError
   shadows: mis:run_time_error->DivisionByZeroIsCompileError (shadow of mis:division_by_zero->DivisionByZeroIsCompileError)
   root-cause walk: held on ['division_by_zero'], broken at [] (consequences: pre:division_by_zero->run_time_error, pre:arithmetic_operators->division_by_zero), prerequisites {'division_by_zero': ['arithmetic_operators'], 'expression': ['arithmetic_operators'], 'integer_division': ['arithmetic_operators'], 'run_time_error': ['division_by_zero'], 'println': ['statement']}
   level division_by_zero: L0 via misconception "It wont compile; Dividing by zero isnt allowed; so the compiler stops you before it runs"
-  level integer_division: L4 via diagnose_an_error "Dividing by zero isnt allowed"
   level run_time_error: L0 via everyday_reading "It wont compile; so the compiler stops you before it runs"
 ```
 
@@ -877,13 +730,12 @@ start concepts (3): division_by_zero, run_time_error, println
  "clauses": [
   "It wont compile",
   "Dividing by zero isnt allowed",
-  "so the compiler stops you before it runs",
-  "Actual: it compiles, then crashes at run time with ArithmeticException: / by zero"
+  "so the compiler stops you before it runs"
  ],
  "start_concepts": [
   "division_by_zero",
   "run_time_error",
-  "println"
+  "integer_division"
  ],
  "held_misconceptions": [
   {
@@ -908,13 +760,13 @@ start concepts (3): division_by_zero, run_time_error, println
   {
    "edge": "pre:division_by_zero->run_time_error",
    "quote": "It wont compile; so the compiler stops you before it runs",
-   "score": 0.6175,
+   "score": 0.665,
    "consequence_of": "mis:division_by_zero->DivisionByZeroIsCompileError"
   },
   {
    "edge": "pre:arithmetic_operators->division_by_zero",
    "quote": "It wont compile; so the compiler stops you before it runs",
-   "score": 0.315,
+   "score": 0.27,
    "consequence_of": "mis:division_by_zero->DivisionByZeroIsCompileError"
   }
  ],
@@ -931,14 +783,6 @@ start concepts (3): division_by_zero, run_time_error, println
    "edge": "mis:division_by_zero->DivisionByZeroIsCompileError",
    "rule": "wrong rule: System.out.println(5 / 0); is rejected by the compiler. Right rule: It compiles; the ArithmeticException (/ by zero) is thrown when the program runs and reaches the division.",
    "source": "level_mis_links"
-  },
-  "integer_division": {
-   "level": "L4",
-   "way": "diagnose_an_error",
-   "quote": "Dividing by zero isnt allowed",
-   "edge": "lvl:integer_division@L4#3",
-   "source": "level_way",
-   "also_shown": []
   },
   "run_time_error": {
    "level": "L0",
@@ -1005,7 +849,7 @@ start concepts (3): division_by_zero, run_time_error, println
    ],
    "quote": "It wont compile; Dividing by zero isnt allowed; so the compiler stops you before it runs",
    "confidence": 0.93,
-   "prune_score": 0.7,
+   "prune_score": 0.7000000000000001,
    "score": 0.651,
    "logic": "Folk meaning: in maths division by zero is 'impossible', so every x / 0 must be rejected, ideally by the compiler. Java rule: the compiler accepts it; int or long / and % by zero throw ArithmeticException at run time, while double division by zero is legal and gives Infinity or NaN.",
    "twin_logic": null,
@@ -1025,8 +869,8 @@ start concepts (3): division_by_zero, run_time_error, println
    ],
    "quote": "It wont compile; so the compiler stops you before it runs",
    "confidence": 0.95,
-   "prune_score": 0.65,
-   "score": 0.6175,
+   "prune_score": 0.7,
+   "score": 0.665,
    "logic": "Dividing an int by zero compiles but throws ArithmeticException when the program runs: a run-time error.",
    "twin_logic": null,
    "consequence_of": "mis:division_by_zero->DivisionByZeroIsCompileError"
@@ -1044,30 +888,11 @@ start concepts (3): division_by_zero, run_time_error, println
    ],
    "quote": "It wont compile; so the compiler stops you before it runs",
    "confidence": 0.9,
-   "prune_score": 0.35,
-   "score": 0.315,
+   "prune_score": 0.3,
+   "score": 0.27,
    "logic": "Integer division by zero (1/0) generates a run-time exception, while floating-point 1.0/0.0 is legal and has the value Infinity.",
    "twin_logic": null,
    "consequence_of": "mis:division_by_zero->DivisionByZeroIsCompileError"
-  },
-  {
-   "depth": 2,
-   "source": "integer_division",
-   "edge": "lvl:integer_division@L4#3",
-   "target": "integer_division@L4",
-   "kind": "level",
-   "label": "shown",
-   "clauses": [
-    2
-   ],
-   "quote": "Dividing by zero isnt allowed",
-   "confidence": 0.6,
-   "prune_score": 0.6,
-   "score": 0.36,
-   "logic": "rule broken: int division by zero is undefined. Kind: run-time exception. Trigger class: A divisor that evaluates to 0: ArithmeticException: / by zero.",
-   "twin_logic": null,
-   "level": "L4",
-   "way": "diagnose_an_error"
   }
  ],
  "evidence": [
@@ -1105,7 +930,7 @@ start concepts (3): division_by_zero, run_time_error, println
    ],
    "quote": "It wont compile; Dividing by zero isnt allowed; so the compiler stops you before it runs",
    "confidence": 0.93,
-   "prune_score": 0.7,
+   "prune_score": 0.7000000000000001,
    "score": 0.651,
    "logic": "Folk meaning: in maths division by zero is 'impossible', so every x / 0 must be rejected, ideally by the compiler. Java rule: the compiler accepts it; int or long / and % by zero throw ArithmeticException at run time, while double division by zero is legal and gives Infinity or NaN.",
    "twin_logic": null,
@@ -1145,8 +970,8 @@ start concepts (3): division_by_zero, run_time_error, println
    ],
    "quote": "It wont compile; so the compiler stops you before it runs",
    "confidence": 0.85,
-   "prune_score": 0.3,
-   "score": 0.255,
+   "prune_score": 0.2,
+   "score": 0.17,
    "logic": "Everyday reading: if the program compiled, the computer has accepted it, so any problem would have been reported then. Java rule: run-time errors are detected only while the program executes, on particular data (e.g. no argument, a divisor of 0), and stop it with an exception.",
    "twin_logic": null,
    "level": "L0",
@@ -1165,8 +990,8 @@ start concepts (3): division_by_zero, run_time_error, println
    ],
    "quote": "It wont compile; so the compiler stops you before it runs",
    "confidence": 0.95,
-   "prune_score": 0.65,
-   "score": 0.6175,
+   "prune_score": 0.7,
+   "score": 0.665,
    "logic": "Dividing an int by zero compiles but throws ArithmeticException when the program runs: a run-time error.",
    "twin_logic": null,
    "consequence_of": "mis:division_by_zero->DivisionByZeroIsCompileError"
@@ -1184,30 +1009,11 @@ start concepts (3): division_by_zero, run_time_error, println
    ],
    "quote": "It wont compile; so the compiler stops you before it runs",
    "confidence": 0.9,
-   "prune_score": 0.35,
-   "score": 0.315,
+   "prune_score": 0.3,
+   "score": 0.27,
    "logic": "Integer division by zero (1/0) generates a run-time exception, while floating-point 1.0/0.0 is legal and has the value Infinity.",
    "twin_logic": null,
    "consequence_of": "mis:division_by_zero->DivisionByZeroIsCompileError"
-  },
-  {
-   "depth": 2,
-   "source": "integer_division",
-   "edge": "lvl:integer_division@L4#3",
-   "target": "integer_division@L4",
-   "kind": "level",
-   "label": "shown",
-   "clauses": [
-    2
-   ],
-   "quote": "Dividing by zero isnt allowed",
-   "confidence": 0.6,
-   "prune_score": 0.6,
-   "score": 0.36,
-   "logic": "rule broken: int division by zero is undefined. Kind: run-time exception. Trigger class: A divisor that evaluates to 0: ArithmeticException: / by zero.",
-   "twin_logic": null,
-   "level": "L4",
-   "way": "diagnose_an_error"
   }
  ],
  "clause_coverage": {
@@ -1215,16 +1021,14 @@ start concepts (3): division_by_zero, run_time_error, println
   "Dividing by zero isnt allowed": "mis:division_by_zero->DivisionByZeroIsCompileError",
   "so the compiler stops you before it runs": "mis:division_by_zero->DivisionByZeroIsCompileError"
  },
- "unexplained_clauses": [
-  "Actual: it compiles, then crashes at run time with ArithmeticException: / by zero"
- ],
- "stop_reason": "half_stop",
+ "unexplained_clauses": [],
+ "stop_reason": "max depth",
  "depth_reached": 3,
- "llm_calls": 0,
- "llm_cache_hits": 36,
+ "llm_calls": 28,
+ "llm_cache_hits": 0,
  "llm_calls_by_step": {
-  "prune": 13,
-  "label": 23
+  "prune": 10,
+  "label": 18
  }
 }
 ```

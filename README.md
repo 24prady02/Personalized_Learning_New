@@ -21,8 +21,8 @@ Every scenario has its own folder, `scenario_explanations/runs/MYnn/`:
 | `figureNN.png` | the pictures of the walk, depth by depth |
 
 Results. In 29 of the 40 the walk holds at least one wrong rule; in 11 it holds none. The last
-column is a reading of each stored result by hand against the student's answer (2026-11-13; the four results that
-changed in the re-run of 2026-11-14 were read again), not a gold label:
+column is a reading of each stored result by hand against the student's answer (2026-11-13; the results that
+changed in the re-runs of 2026-11-14 were read again), not a gold label:
 35 correct, 3 partly right, 1 not right, 1 with a faulty input.
 
 | Scenario | Wrong rules held | Root cause | Overall level | Check by hand |
@@ -66,7 +66,7 @@ changed in the re-run of 2026-11-14 were read again), not a gold label:
 | [MY37](scenario_explanations/runs/MY37/) | none | none | L4 | Correct |
 | [MY38](scenario_explanations/runs/MY38/) | none | none | L4 | Correct |
 | [MY39](scenario_explanations/runs/MY39/) | RaggedRowsSameLength, NoJaggedArrays | `ragged_array` | L0 | Correct |
-| [MY40](scenario_explanations/runs/MY40/) | ProbabilityIsPrediction | `math_random` | L0 | Correct |
+| [MY40](scenario_explanations/runs/MY40/) | FewTrialsAreExact, ProbabilityIsPrediction | `frequency_counting` | L0 | Correct |
 
 The five that are not simply correct:
 
@@ -78,8 +78,10 @@ The five that are not simply correct:
 | MY35 | the right error is found, but the overall level is empty | the graph has no misconception for "0 / 0 is 0", and the level rule sets L0 only for a misconception |
 | MY06 | the fitting label, `LoopBodyScopeImpliesLoopLifetime`, is held but only second; the root went to a neighbour | how the root cause is chosen |
 
-Two more inputs carry a slip that does not change the diagnosis: in MY26 and MY40 a line beginning "Actual:" was
-pasted into the answer box.
+In MY26 and MY40 a line beginning "Actual:" had been pasted into the answer box, so it was read as part of the
+student's answer. Both were run again on 2026-11-14 with only the student's own words. MY26 gives the same held rule
+and root cause. MY40 now also holds FewTrialsAreExact at `frequency_counting`, which becomes the root cause;
+ProbabilityIsPrediction is still held.
 
 Notes on the set:
 

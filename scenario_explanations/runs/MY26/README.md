@@ -12,7 +12,7 @@ System.out.println(total / count);
 ```
 **Question.** Will this compile? What happens when you run it? Explain your reasoning
 
-**Student's answer.** It won’t compile. Dividing by zero isn’t allowed, so the compiler stops you before it runs.” Actual: it compiles, then crashes at run time with ArithmeticException: / by zero.
+**Student's answer.** It won’t compile. Dividing by zero isn’t allowed, so the compiler stops you before it runs.”
 
 **What the program really does.** The program compiles: count is a variable, so the compiler does not know its value. When it runs, the integer division 50 / 0 throws ArithmeticException: / by zero, and nothing is printed.
 
@@ -21,9 +21,9 @@ System.out.println(total / count);
 - **Wrong rules held:** DivisionByZeroIsCompileError at `division_by_zero`
 - **Root cause:** `division_by_zero` / DivisionByZeroIsCompileError
 - **Overall level:** L0
-- **Level per concept:** `division_by_zero` L0, `integer_division` L4, `run_time_error` L0
+- **Level per concept:** `division_by_zero` L0, `run_time_error` L0
 
-**Check of this result (read by hand, 2026-11-13).** The diagnosis matches the answer. One flaw in the input: the line beginning 'Actual:' was pasted into the answer box, so it was read as part of the student's answer and is listed as an unexplained clause.
+**Check of this result (read by hand, 2026-11-14).** The diagnosis matches the answer. This scenario was run again without the line beginning 'Actual:', which had been pasted into the answer box; with only the student's own words, the held rule and root cause are the same and no clause is left unexplained.
 
 ## The idea
 
@@ -55,11 +55,11 @@ This stage reads only the program, never the student's answer. Its job is to dec
 
 **2.1 Split the answer into clauses.** A **clause** is one statement the student makes. The answer is cut at sentence ends, at ';', and before 'because' and 'so' (a reason and its conclusion are separate claims); a remark in parentheses becomes its own clause. The clauses are numbered c1, c2, … This numbering is what keeps the model honest later: every label it gives must name the clause numbers it rests on, so each finding points at words the student actually wrote.
 
-*One of the outputs at this stage:* 4 clauses. c1: “It wont compile” c2: “Dividing by zero isnt allowed” …
+*One of the outputs at this stage:* 3 clauses. c1: “It wont compile” c2: “Dividing by zero isnt allowed” …
 
 **2.2 Choose the start concepts.** The walk has to begin somewhere; these are the **start concepts** (in Think on the Graph, the *topic entities*). The candidates are the non-generic concepts of G, plus a generic one when the answer itself repeats the code text that tagged it (for example the student writes `=`). If there are more than N, they are ranked by **BM25**, the standard search-engine score: it compares the words of the answer with the words of a concept's text (its name and the texts of its edges), counting shared words, giving rare words more weight and long texts less. The top N = 3 are the start concepts. No model is used, so the same answer always starts at the same place.
 
-*One of the outputs at this stage:* `division_by_zero` scores 17.10, the highest of 5 candidates; `integer_division` is 4th with 5.84 and is left out. Start concepts: `division_by_zero`, `run_time_error`, `println`.
+*One of the outputs at this stage:* `division_by_zero` scores 8.98, the highest of 5 candidates; `println` is 4th with 2.74 and is left out. Start concepts: `division_by_zero`, `run_time_error`, `integer_division`.
 
 ## Stage 3. The traversal: walking G (the model is asked here)
 
@@ -85,11 +85,11 @@ At each depth, for each current concept, the following happens.
 
 **3.5 Move to the next concepts.** Three things decide where the walk goes next. A kept prerequisite or parallel edge leads to the concept at its other end; that concept is **entered** and will be read inwards at the next depth, so it gets misconceptions and a level of its own. A concept with a held misconception stays current, so that its prerequisites are examined: the fault may begin further back. And any entered concept whose outward edges have not been read yet stays current until they are.
 
-*One of the outputs at this stage:* `uncovered clauses bring in: arithmetic_operators (4.12), integer_division (2.02)`.
+*One of the outputs at this stage:* `reached across pre:arithmetic_operators->division_by_zero, entered next: arithmetic_operators`.
 
 **3.6 Stop test (no model).** After each depth two checks are made. The **graph check**: has every entered concept had both its inward and its outward edges read? The **clause coverage** check: is every clause covered by at least one labelled rule edge (a level way does not count here, since it describes how the student reads the code, not which rule a clause applies)? If both hold, the walk stops as *sufficient*. If some clauses are still uncovered, they are matched by BM25 against the concepts not visited yet and the best N are entered. Otherwise the walk continues to depth D = 3, followed by one **closing round** in which the concepts entered last have their inward edges read, so that no concept is left half-read. The model's replies are cached by the exact text of the question, so running the same scenario again gives the same result without asking again.
 
-*One of the outputs at this stage:* the walk stopped at depth 3 because no concept was left to go to. At the end 3 of 4 clauses were covered. The model was asked 13 prune questions and 23 label questions in all.
+*One of the outputs at this stage:* the walk stopped at depth 3 because the depth limit was reached. At the end 3 of 3 clauses were covered. The model was asked 10 prune questions and 18 label questions in all.
 
 ## Stage 4. From labels to faults (rules, no model)
 
@@ -114,15 +114,13 @@ Every concept has five **levels**, taken from the SOLO taxonomy: **L0** prestruc
 
 The model is never asked for a level. In stage 3 it only said whether a way was *shown*; the level is read from where that way sits in the graph. The rule: a concept is **L0** if a fault is kept on it, or if the only ways shown on it are L0 ways. Otherwise it gets the **highest** level among the ways shown, because the levels build on each other (an answer that relates the parts has also applied the rules). A concept with no fault and no way shown gets no level.
 
-*One of the outputs at this stage:* `division_by_zero` keeps DivisionByZeroIsCompileError, so it is L0; on `integer_division` the ways shown are L4 “diagnose an error”, so it is L4.
+*One of the outputs at this stage:* `division_by_zero` keeps DivisionByZeroIsCompileError, so it is L0; on `run_time_error` the ways shown are L0 “everyday reading”, so it is L0.
 
 ## Stage 7. Overall level (rule, no model)
 
 One level is reported for the whole answer. If there is a root cause, it is the level of the root concept: the student stands where the fault begins, however well the rest is handled. If there is no fault, it is the level reached on at least half of the concepts the answer touched (the levels are sorted from high to low and the middle one is taken), so that a single weaker concept does not pull the whole answer down and a single strong one does not lift it.
 
 *One of the outputs at this stage:* the root is `division_by_zero` and its level is L0, so the overall level is **L0**.
-
-Clauses that no edge covered: “Actual: it compiles, then crashes at run time with ArithmeticException: / by zero”.
 
 ## The final picture
 
