@@ -46,7 +46,7 @@ start concepts (3): arithmetic_operators, char_arithmetic, println
     lvl:char@L0#0 -> shown (0.56) "A letter is not a number; so Java cannot add 1 to it, and this line gives a compile error"
     lvl:char@L3#0 -> not applied (0.00) ""
     lvl:char@L2#0 -> not applied (0.00) ""
-  expression (misconceptions): 8 candidates -> kept mis:expression->TargetTyping (0.60), mis:expression->NoAtomicExpression (0.25), mis:expression->VariablesHoldExpressions (0.15)
+  expression (misconceptions): 8 candidates -> kept mis:expression->TargetTyping (0.45), mis:expression->NoAtomicExpression (0.35), mis:expression->VariablesHoldExpressions (0.20)
     mis:expression->TargetTyping -> not applied (0.00) ""
     mis:expression->NoAtomicExpression -> not applied (0.00) ""
     mis:expression->VariablesHoldExpressions -> not applied (0.00) ""
@@ -56,9 +56,9 @@ start concepts (3): arithmetic_operators, char_arithmetic, println
     lvl:expression@L0#0 -> not applied (0.00) ""
   kept: mis:char->CharNotNumeric [held, tier 0, 0.97], lvl:char@L0#0 [shown, tier 2, 0.56], lvl:expression@L4#4 [shown, tier 2, 0.36]
   clause coverage: c1 uncovered; c2 <- mis:char_arithmetic->CharNotNumeric; c3 <- mis:char_arithmetic->CharNotNumeric
-  held: mis:char_arithmetic->CharNotNumeric; filed at the dependent concept: mis:char->CharNotNumeric
-  shadows: mis:char->CharNotNumeric (shadow of mis:char_arithmetic->CharNotNumeric)
-  root-cause walk: held on ['char_arithmetic'], broken at [] (consequences: pre:char->char_arithmetic, pre:arithmetic_operators->expression), prerequisites {'expression': ['arithmetic_operators'], 'char_arithmetic': ['char'], 'println': ['statement']}
-  level char: L0 via everyday_reading "A letter is not a number; so Java cannot add 1 to it, and this line gives a compile error"
-  level char_arithmetic: L0 via misconception "A letter is not a number; so Java cannot add 1 to it, and this line gives a compile error"
+  held: mis:char->CharNotNumeric; filed at the dependent concept: mis:char_arithmetic->CharNotNumeric
+  shadows: mis:char_arithmetic->CharNotNumeric (shadow of mis:char->CharNotNumeric)
+  root-cause walk: held on ['char'], broken at [] (consequences: pre:char->char_arithmetic, pre:arithmetic_operators->expression), prerequisites {'expression': ['arithmetic_operators'], 'char_arithmetic': ['char'], 'println': ['statement']}
+  level char: L0 via misconception "A letter is not a number; so Java cannot add 1 to it, and this line gives a compile error"
+  level char_arithmetic: L0 via everyday_reading "A letter is not a number; so Java cannot add 1 to it, and this line gives a compile error"
   level expression: L4 via diagnose_an_error "A letter is not a number; so Java cannot add 1 to it, and this line gives a compile error"

@@ -30,15 +30,7 @@
   }
  ],
  "error_evidence": [],
- "shadowed": [
-  {
-   "concept": "integer_division",
-   "misconception": "NegativeRemainderSign",
-   "shadow_of": "mis:remainder_operator->NegativeRemainderSign",
-   "quote": "-7 / 2 is -3.5, and integer division rounds down; so it becomes -4; A remainder is never negative; so -7 % 2 is 1",
-   "score": 0.7275
-  }
- ],
+ "shadowed": [],
  "broken_edges": [],
  "root_cause": {
   "concept": "remainder_operator",
@@ -65,22 +57,13 @@
    ]
   },
   "integer_division": {
-   "level": "L3",
-   "way": "relation_to_neighbour",
-   "quote": "because -4 * 2 + 1 = -7",
-   "edge": "lvl:integer_division@L3#0",
-   "source": "level_way",
-   "also_shown": []
-  },
-  "println": {
-   "level": "L3",
-   "way": "relation_to_neighbour",
-   "quote": "It prints -4 and then 1",
-   "edge": "lvl:println@L3#0",
-   "source": "level_way",
-   "also_shown": [
-    "L2 output_prediction"
-   ]
+   "level": "L0",
+   "way": "misconception",
+   "misconception": "NegativeRemainderSign",
+   "quote": "It prints -4 and then 1; -7 / 2 is -3.5, and integer division rounds down; so it becomes -4; A remainder is never negative; so -7 % 2 is 1; because -4 * 2 + 1 = -7",
+   "edge": "mis:integer_division->NegativeRemainderSign",
+   "rule": "wrong rule: a % b is never negative, and integer division of a negative number rounds down. Right rule: a / b rounds toward 0 and a % b takes the sign of a: -14 / 3 is -4 and -14 % 3 is -2.",
+   "source": "level_mis_links"
   },
   "remainder_operator": {
    "level": "L0",
@@ -90,17 +73,6 @@
    "edge": "mis:remainder_operator->NegativeRemainderSign",
    "rule": "wrong rule: a % b is never negative, and integer division of a negative number rounds down. Right rule: a / b rounds toward 0 and a % b takes the sign of a: -14 / 3 is -4 and -14 % 3 is -2.",
    "source": "level_mis_links"
-  },
-  "statement": {
-   "level": "L3",
-   "way": "relation_to_neighbour",
-   "quote": "It prints -4 and then 1",
-   "edge": "lvl:statement@L3#3",
-   "source": "level_way",
-   "also_shown": [
-    "L2 one_step_execution",
-    "L2 line_by_line_trace"
-   ]
   }
  },
  "overall_level": "L0",
@@ -134,12 +106,14 @@
    "kind": "misconception",
    "label": "held",
    "clauses": [
+    1,
     2,
     3,
     4,
-    5
+    5,
+    6
    ],
-   "quote": "-7 / 2 is -3.5, and integer division rounds down; so it becomes -4; A remainder is never negative; so -7 % 2 is 1",
+   "quote": "It prints -4 and then 1; -7 / 2 is -3.5, and integer division rounds down; so it becomes -4; A remainder is never negative; so -7 % 2 is 1; because -4 * 2 + 1 = -7",
    "confidence": 0.97,
    "prune_score": 0.75,
    "score": 0.7275,
@@ -223,23 +197,6 @@
   },
   {
    "depth": 3,
-   "source": "println",
-   "edge": "pre:statement->println",
-   "target": "statement",
-   "kind": "prerequisite",
-   "label": "confirmed",
-   "clauses": [
-    1
-   ],
-   "quote": "It prints -4 and then 1",
-   "confidence": 0.7,
-   "prune_score": 1.0,
-   "score": 0.7,
-   "logic": "System.out.println(s); is itself a statement, so its line of output appears at its own place in the sequence.",
-   "twin_logic": null
-  },
-  {
-   "depth": 3,
    "source": "arithmetic_operators",
    "edge": "pre:arithmetic_operators->remainder_operator",
    "target": "remainder_operator",
@@ -277,60 +234,23 @@
    "way": "relation_to_neighbour"
   },
   {
-   "depth": 4,
-   "source": "statement",
-   "edge": "mis:statement->StatementsRunInAnyOrder",
-   "target": "StatementsRunInAnyOrder",
-   "kind": "misconception",
-   "label": "correct",
-   "clauses": [
-    1
-   ],
-   "quote": "It prints -4 and then 1",
-   "confidence": 0.6,
-   "prune_score": 0.6,
-   "score": 0.36,
-   "logic": "Statements in a program can run in any order.",
-   "twin_logic": "Without control statements, statements run once each, top to bottom.",
-   "role": "primary"
-  },
-  {
-   "depth": 4,
-   "source": "statement",
-   "edge": "lvl:statement@L3#3",
-   "target": "statement@L3",
+   "depth": 3,
+   "source": "expression",
+   "edge": "lvl:expression@L0#0",
+   "target": "expression@L0",
    "kind": "level",
    "label": "shown",
    "clauses": [
-    1
+    2
    ],
-   "quote": "It prints -4 and then 1",
-   "confidence": 0.55,
-   "prune_score": 0.4,
-   "score": 0.22,
-   "logic": "System.out.println(s); is a statement, so its line of output appears at its place in the sequence; swapping two println statements swaps the output lines.",
-   "twin_logic": null,
-   "level": "L3",
-   "way": "relation_to_neighbour"
-  },
-  {
-   "depth": 4,
-   "source": "statement",
-   "edge": "lvl:statement@L2#2",
-   "target": "statement@L2",
-   "kind": "level",
-   "label": "shown",
-   "clauses": [
-    1
-   ],
-   "quote": "It prints -4 and then 1",
-   "confidence": 0.6,
+   "quote": "-7 / 2 is -3.5, and integer division rounds down",
+   "confidence": 0.65,
    "prune_score": 0.3,
-   "score": 0.18,
-   "logic": "Executing one statement applies its single effect to the current state (e.g. prints one string, or stores one value) and then control moves to the next statement.",
+   "score": 0.195,
+   "logic": "In maths an expression such as 7/2 or x + y names an exact number, and 'expression' means a formula with operators. In Java, any code that evaluates to a typed value is an expression, including a lone literal or variable, and with ints 7/2 evaluates to 3.",
    "twin_logic": null,
-   "level": "L2",
-   "way": "one_step_execution"
+   "level": "L0",
+   "way": "everyday_reading"
   }
  ],
  "evidence": [
@@ -461,12 +381,14 @@
    "kind": "misconception",
    "label": "held",
    "clauses": [
+    1,
     2,
     3,
     4,
-    5
+    5,
+    6
    ],
-   "quote": "-7 / 2 is -3.5, and integer division rounds down; so it becomes -4; A remainder is never negative; so -7 % 2 is 1",
+   "quote": "It prints -4 and then 1; -7 / 2 is -3.5, and integer division rounds down; so it becomes -4; A remainder is never negative; so -7 % 2 is 1; because -4 * 2 + 1 = -7",
    "confidence": 0.97,
    "prune_score": 0.75,
    "score": 0.7275,
@@ -586,44 +508,6 @@
    "twin_logic": null
   },
   {
-   "depth": 2,
-   "source": "println",
-   "edge": "lvl:println@L2#1",
-   "target": "println@L2",
-   "kind": "level",
-   "label": "shown",
-   "clauses": [
-    1
-   ],
-   "quote": "It prints -4 and then 1",
-   "confidence": 0.6,
-   "prune_score": 0.4,
-   "score": 0.24,
-   "logic": "Output is the value's characters followed by a line break: println(\"Hello, \"); println(\"World!\"); prints two lines.",
-   "twin_logic": null,
-   "level": "L2",
-   "way": "output_prediction"
-  },
-  {
-   "depth": 2,
-   "source": "println",
-   "edge": "lvl:println@L3#0",
-   "target": "println@L3",
-   "kind": "level",
-   "label": "shown",
-   "clauses": [
-    1
-   ],
-   "quote": "It prints -4 and then 1",
-   "confidence": 0.7,
-   "prune_score": 0.35,
-   "score": 0.245,
-   "logic": "System.out.println(s); is a statement, so its line of output appears at its own place in the sequence.",
-   "twin_logic": null,
-   "level": "L3",
-   "way": "relation_to_neighbour"
-  },
-  {
    "depth": 3,
    "source": "expression",
    "edge": "lvl:expression@L3#1",
@@ -701,102 +585,10 @@
    "score": 0.6,
    "logic": "% is one of the int arithmetic operators; it gives the remainder of the division.",
    "twin_logic": null
-  },
-  {
-   "depth": 3,
-   "source": "println",
-   "edge": "pre:statement->println",
-   "target": "statement",
-   "kind": "prerequisite",
-   "label": "confirmed",
-   "clauses": [
-    1
-   ],
-   "quote": "It prints -4 and then 1",
-   "confidence": 0.7,
-   "prune_score": 1.0,
-   "score": 0.7,
-   "logic": "System.out.println(s); is itself a statement, so its line of output appears at its own place in the sequence.",
-   "twin_logic": null
-  },
-  {
-   "depth": 4,
-   "source": "statement",
-   "edge": "mis:statement->StatementsRunInAnyOrder",
-   "target": "StatementsRunInAnyOrder",
-   "kind": "misconception",
-   "label": "correct",
-   "clauses": [
-    1
-   ],
-   "quote": "It prints -4 and then 1",
-   "confidence": 0.6,
-   "prune_score": 0.6,
-   "score": 0.36,
-   "logic": "Statements in a program can run in any order.",
-   "twin_logic": "Without control statements, statements run once each, top to bottom.",
-   "role": "primary"
-  },
-  {
-   "depth": 4,
-   "source": "statement",
-   "edge": "lvl:statement@L3#3",
-   "target": "statement@L3",
-   "kind": "level",
-   "label": "shown",
-   "clauses": [
-    1
-   ],
-   "quote": "It prints -4 and then 1",
-   "confidence": 0.55,
-   "prune_score": 0.4,
-   "score": 0.22,
-   "logic": "System.out.println(s); is a statement, so its line of output appears at its place in the sequence; swapping two println statements swaps the output lines.",
-   "twin_logic": null,
-   "level": "L3",
-   "way": "relation_to_neighbour"
-  },
-  {
-   "depth": 4,
-   "source": "statement",
-   "edge": "lvl:statement@L2#0",
-   "target": "statement@L2",
-   "kind": "level",
-   "label": "shown",
-   "clauses": [
-    1
-   ],
-   "quote": "It prints -4 and then 1",
-   "confidence": 0.55,
-   "prune_score": 0.3,
-   "score": 0.165,
-   "logic": "Statements run one at a time, from first to last; each completes (normally or abruptly) before the next starts.",
-   "twin_logic": null,
-   "level": "L2",
-   "way": "line_by_line_trace"
-  },
-  {
-   "depth": 4,
-   "source": "statement",
-   "edge": "lvl:statement@L2#2",
-   "target": "statement@L2",
-   "kind": "level",
-   "label": "shown",
-   "clauses": [
-    1
-   ],
-   "quote": "It prints -4 and then 1",
-   "confidence": 0.6,
-   "prune_score": 0.3,
-   "score": 0.18,
-   "logic": "Executing one statement applies its single effect to the current state (e.g. prints one string, or stores one value) and then control moves to the next statement.",
-   "twin_logic": null,
-   "level": "L2",
-   "way": "one_step_execution"
   }
  ],
  "clause_coverage": {
-  "It prints -4 and then 1": "lvl:println@L2#1",
+  "It prints -4 and then 1": "mis:integer_division->NegativeRemainderSign",
   "-7 / 2 is -3.5, and integer division rounds down": "mis:remainder_operator->NegativeRemainderSign",
   "so it becomes -4": "mis:remainder_operator->NegativeRemainderSign",
   "A remainder is never negative": "mis:remainder_operator->NegativeRemainderSign",
@@ -805,11 +597,11 @@
  },
  "unexplained_clauses": [],
  "stop_reason": "sufficient",
- "depth_reached": 4,
- "llm_calls": 0,
- "llm_cache_hits": 47,
+ "depth_reached": 3,
+ "llm_calls": 3,
+ "llm_cache_hits": 30,
  "llm_calls_by_step": {
-  "prune": 17,
-  "label": 30
+  "prune": 12,
+  "label": 21
  }
 }

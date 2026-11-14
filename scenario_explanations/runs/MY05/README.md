@@ -18,12 +18,12 @@ System.out.println(n);
 
 ## Result
 
-- **Wrong rules held:** CharNotNumeric at `char_arithmetic`
-- **Root cause:** `char_arithmetic` / CharNotNumeric
+- **Wrong rules held:** CharNotNumeric at `char`
+- **Root cause:** `char` / CharNotNumeric
 - **Overall level:** L0
 - **Level per concept:** `char` L0, `char_arithmetic` L0, `expression` L4
 
-**Check of this result (read by hand, 2026-11-13).** The diagnosis matches the answer.
+**Check of this result (read by hand, 2026-11-14).** The diagnosis matches the answer. On graph 3.9.8 CharNotNumeric is filed at `char`, the concept the graph names as primary for it, instead of `char_arithmetic`; it is the same wrong rule.
 
 ## The idea
 
@@ -41,7 +41,7 @@ This stage reads only the program, never the student's answer. Its job is to dec
 
 **1.2 Tag concepts.** Every concept node stores a *reader block*: regular expressions that describe how the concept looks in Java, in several *channels* (code patterns, signals, operator symbols, type names). All of them are run over the masked code. Each match is a **hit**: which channel and pattern, the matched text, and the line. A concept with at least one hit is **tagged**. There is nothing learned here; the patterns in the graph are the whole "model".
 
-*One of the outputs at this stage:* `char_arithmetic` is tagged: its signal `char_variable_arithmetic` matches `char c = 'A'; int n = c + 1` on line 1.
+*One of the outputs at this stage:* `char` is tagged: its pattern `\bchar\b` matches `char` on line 1.
 
 **1.3 Handle generic concepts.** The graph marks some concepts **generic**: they are so basic (statement, expression, assignment, a literal, `int`) that their pattern fires on almost any line of Java. If all of them were kept, every program would seem to be "about" them and the diagnosis would drift to vague places. So a tagged generic concept is kept only when the code ties it to something specific: the graph has a prerequisite or parallel edge between it and a non-generic tagged concept, or one of its *decisive* signals fired (a pattern that by itself shows the concept is the point of the code). A kept generic concept stays marked generic: the walk can reach it and it can get a level, but it cannot be a starting point by itself, and a wrong-rule label on it is treated as a shadow of a more specific one (stage 4).
 
@@ -69,19 +69,19 @@ At each depth, for each current concept, the following happens.
 
 **3.1 Edge search (no model).** The edges of the concept are collected as **candidates**. A concept that has just been entered is read *inwards*: its misconception and error edges (the wrong rules a student could hold about it) and its **level ways** (each way of each level is treated as an edge of its own, whose text is the way's exact rule). These are two separate *families*. A concept that has already been read inwards is read *outwards*: its prerequisite and parallel edges to other concepts in the same piece. So depth 1 asks "what does the answer show about these concepts?" and the later depths ask "which neighbouring concepts does that involve?".
 
-*One of the outputs at this stage:* at `char_arithmetic`, 1 misconception / error edges and 14 level ways are offered when it is entered.
+*One of the outputs at this stage:* at `char`, 1 misconception / error edges and 19 level ways are offered when it is entered, and 1 concept edges when it is read outwards.
 
 **3.2 Prune (model, first question).** There are usually far more candidates than can be judged carefully, so they are first **pruned**. The model sees the program, the question, the answer and the text of each candidate edge of one family, and returns at most N of them with a relevance score. The scores are rescaled so they add up to 1: this is the **prune score**, the share of relevance the model gives to that edge. Each family is pruned separately, so a level way never pushes out a misconception or the other way round. Edge ids the model invents are ignored.
 
-*One of the outputs at this stage:* at `char_arithmetic` the misconception family is pruned to: CharNotNumeric 1.00.
+*One of the outputs at this stage:* at `char` the misconception family is pruned to: CharNotNumeric 1.00.
 
 **3.3 Label (model, second question).** Each edge that survived is now read against the numbered clauses and gets a **label**. For a misconception or error edge: **held** (the student's words state this wrong rule), **correct** (they state the right rule, its twin) or **not applied** (the answer says nothing about it). For a level way: **shown** or not applied. For a prerequisite or parallel edge: **confirmed** (the answer carries the rule from one concept into the other) or **broken** (it fails to). The misconception edges of one concept are judged together in a single question, because the same sentence can fit several wrong rules and the model should give *held* only to the one the student really claims. With the label the model must return the **clause numbers** it rests on and a **confidence** from 0 to 1. A label with no clause is discarded. This is the safeguard of the method: the model never diagnoses from its own knowledge; every label is attached to one edge of G and to the student's words.
 
-*One of the outputs at this stage:* CharNotNumeric at `char_arithmetic` is labelled **held** on clauses 1, 2, 3, 4 (“It does not compile; c is a letter, not a number; so you cannot add 1 to it; Java will gi…”) with confidence 0.95. The rule on that edge: “char is not a numeric type”
+*One of the outputs at this stage:* CharNotNumeric at `char` is labelled **held** on clauses 1, 2, 3, 4 (“It does not compile; c is a letter, not a number; so you cannot add 1 to it; Java will gi…”) with confidence 0.97. The rule on that edge: “A char is only a letter, so c + k is an error.”
 
 **3.4 Score and keep.** The **score** of a labelled edge is prune score × confidence: an edge counts for much only if it was both relevant and confidently labelled. The edges are then ranked in **tiers**. Tier 0 is a held misconception or a broken edge: these are findings about a fault and are always kept. Tier 1 is a held error. Tier 2 is everything that only confirms understanding (correct, confirmed, shown); these fill whatever is left of the N = 3 places, best score first. Kept edges are added to the paths. Every labelled edge, kept or not, is added to the evidence, because the levels in stage 6 are read from all of it.
 
-*One of the outputs at this stage:* the score of CharNotNumeric is 1.00 × 0.95 = 0.95. At depth 1 the kept edges are: CharNotNumeric (held, tier 0, 0.97); L0 way “everyday reading” (shown, tier 2, 0.54).
+*One of the outputs at this stage:* the score of CharNotNumeric is 1.00 × 0.97 = 0.97. At depth 1 the kept edges are: CharNotNumeric (held, tier 0, 0.97); L0 way “everyday reading” (shown, tier 2, 0.54).
 
 **3.5 Move to the next concepts.** Three things decide where the walk goes next. A kept prerequisite or parallel edge leads to the concept at its other end; that concept is **entered** and will be read inwards at the next depth, so it gets misconceptions and a level of its own. A concept with a held misconception stays current, so that its prerequisites are examined: the fault may begin further back. And any entered concept whose outward edges have not been read yet stays current until they are.
 
@@ -100,13 +100,13 @@ The walk leaves a set of labelled edges. Each kept edge labelled *held* is a can
 - **Shadows.** A held label is a **shadow** when it sits on a prerequisite or on a generic concept and rests only on clauses that a stronger, more specific label already rests on. It is the same wrong sentence read a second time at a vaguer place. A shadow is kept in the record but is not a fault, cannot be the root cause and does not set a level.
 - **Broken edges.** A prerequisite edge A → B labelled *broken* says the student did not carry the rule of A into B, so the fault sits at B. If the broken edge rests on the same clauses as a held misconception, it is that misconception's **consequence**, not a separate fault.
 
-*One of the outputs at this stage:* the fault is **CharNotNumeric** at `char_arithmetic`. For CharNotNumeric the graph's wrong rule is “char is not a numeric type” and its twin, the right rule, is “A char is encoded as a 16-bit integer, so arithmetic such as 'b' + 'c' or 'a' + 4 works on the character codes.”. Filed once at the other end: CharNotNumeric at `char`. 1 shadow, e.g. CharNotNumeric at `char` (shadow of CharNotNumeric). 2 broken edges, e.g. char → char_arithmetic; 2 of them are consequences of a held misconception.
+*One of the outputs at this stage:* the fault is **CharNotNumeric** at `char`. For CharNotNumeric the graph's wrong rule is “A char is only a letter, so c + k is an error.” and its twin, the right rule, is “A char is encoded as a 16-bit integer, so arithmetic such as 'b' + 'c' or 'a' + 4 works on the character codes.”. Filed once at the other end: CharNotNumeric at `char_arithmetic`. 1 shadow, e.g. CharNotNumeric at `char_arithmetic` (shadow of CharNotNumeric). 2 broken edges, e.g. char → char_arithmetic; 2 of them are consequences of a held misconception.
 
 ## Stage 5. Root cause (rule, no model)
 
 Several concepts may carry a fault, and the **root cause** is the one to teach first. The rule uses the prerequisite edges of G. From each faulty concept it walks backwards (from a concept to what it depends on). Whenever a concept reached that way also has a fault of its own, the candidate moves back to it, because a fault in what a concept depends on explains the fault in the concept. Among the candidates found, the root is the one with the fewest prerequisites of its own in G, that is, the one furthest back; at a tie, the one whose label the model gave the higher confidence. Alphabetical order never decides.
 
-*One of the outputs at this stage:* only `char_arithmetic` has a fault, and none of its prerequisites in G (`char`) has one, so the root is `char_arithmetic`.
+*One of the outputs at this stage:* only `char` has a fault, and none of its prerequisites in G (it has none) has one, so the root is `char`.
 
 ## Stage 6. Level of each concept (rule, no model)
 
@@ -114,13 +114,13 @@ Every concept has five **levels**, taken from the SOLO taxonomy: **L0** prestruc
 
 The model is never asked for a level. In stage 3 it only said whether a way was *shown*; the level is read from where that way sits in the graph. The rule: a concept is **L0** if a fault is kept on it, or if the only ways shown on it are L0 ways. Otherwise it gets the **highest** level among the ways shown, because the levels build on each other (an answer that relates the parts has also applied the rules). A concept with no fault and no way shown gets no level.
 
-*One of the outputs at this stage:* `char_arithmetic` keeps CharNotNumeric, so it is L0; on `expression` the ways shown are L4 “diagnose an error”, so it is L4.
+*One of the outputs at this stage:* `char` keeps CharNotNumeric, so it is L0; on `expression` the ways shown are L4 “diagnose an error”, so it is L4.
 
 ## Stage 7. Overall level (rule, no model)
 
 One level is reported for the whole answer. If there is a root cause, it is the level of the root concept: the student stands where the fault begins, however well the rest is handled. If there is no fault, it is the level reached on at least half of the concepts the answer touched (the levels are sorted from high to low and the middle one is taken), so that a single weaker concept does not pull the whole answer down and a single strong one does not lift it.
 
-*One of the outputs at this stage:* the root is `char_arithmetic` and its level is L0, so the overall level is **L0**.
+*One of the outputs at this stage:* the root is `char` and its level is L0, so the overall level is **L0**.
 
 ## The final picture
 

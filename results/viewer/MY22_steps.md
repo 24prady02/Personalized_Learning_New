@@ -78,29 +78,29 @@ Edges offered:
 
 Prune: the model's reply (edge id and score; the kept edges sum to 1):
 ```
-mis:increment_operators->IncrementByTwo (0.80), mis:increment_operators->PrePostIncrementSameValue (0.10), mis:increment_operators->PostIncrementAssignsLater (0.10)
+mis:increment_operators->IncrementByTwo (0.90), mis:increment_operators->PostIncrementAssignsLater (0.06), mis:increment_operators->PrePostIncrementSameValue (0.04)
 ```
-Kept by pruning: mis:increment_operators->IncrementByTwo (0.80), mis:increment_operators->PrePostIncrementSameValue (0.10), mis:increment_operators->PostIncrementAssignsLater (0.10)
+Kept by pruning: mis:increment_operators->IncrementByTwo (0.90), mis:increment_operators->PostIncrementAssignsLater (0.06), mis:increment_operators->PrePostIncrementSameValue (0.04)
 
 Label prompt for the misconception / error edges (judged together). The model saw the program, the question, the numbered clauses, and these edges with their wrong rule and right rule:
 | edge |
 |---|
 | mis:increment_operators->IncrementByTwo \| wrong rule: i++ increases i by 2. \| right rule: i++ (and ++i) increases i by exactly 1. |
-| mis:increment_operators->PrePostIncrementSameValue \| wrong rule: x = i++ and x = ++i store the same value in x. \| right rule: Both increment i, but ++i has the value after the increment and i++ the value before. |
 | mis:increment_operators->PostIncrementAssignsLater \| wrong rule: i = i++ increases i by 1. \| right rule: i++ evaluates to the old value, so i = i++ stores the old value back. |
+| mis:increment_operators->PrePostIncrementSameValue \| wrong rule: x = i++ and x = ++i store the same value in x. \| right rule: Both increment i, but ++i has the value after the increment and i++ the value before. |
 Model's reply:
 ```
 mis:increment_operators->IncrementByTwo | correct | clauses: 1, 2 | confidence: 0.6
-mis:increment_operators->PrePostIncrementSameValue | not applied | clauses: none | confidence: 0.9
 mis:increment_operators->PostIncrementAssignsLater | not applied | clauses: none | confidence: 0.9
+mis:increment_operators->PrePostIncrementSameValue | not applied | clauses: none | confidence: 0.9
 ```
 
 Parsed labels:
 | edge | label | prune score | confidence | score | clauses | words |
 |---|---|---|---|---|---|---|
-| mis:increment_operators->IncrementByTwo | correct | 0.8 | 0.6 | 0.48 | c1, c2 | I think i++ adds 1 to i, though it might add 2, Im not sure; Probably it makes i 6 |
-| mis:increment_operators->PrePostIncrementSameValue | not applied |  |  | 0.0 |  |  |
+| mis:increment_operators->IncrementByTwo | correct | 0.9 | 0.6 | 0.54 | c1, c2 | I think i++ adds 1 to i, though it might add 2, Im not sure; Probably it makes i 6 |
 | mis:increment_operators->PostIncrementAssignsLater | not applied |  |  | 0.0 |  |  |
+| mis:increment_operators->PrePostIncrementSameValue | not applied |  |  | 0.0 |  |  |
 
 #### increment_operators, level ways: 16 edges offered
 Edges offered:
@@ -274,7 +274,7 @@ Parsed labels:
 
 **Kept on a path at this depth** (best N in tiers: held misconception / broken edge, then held error, then correct / confirmed / shown):
 
-mis:increment_operators->IncrementByTwo [correct, tier 2, 0.48], lvl:increment_operators@L0#0 [shown, tier 2, 0.25], lvl:increment_operators@L1#0 [shown, tier 2, 0.18]
+mis:increment_operators->IncrementByTwo [correct, tier 2, 0.54], lvl:increment_operators@L0#0 [shown, tier 2, 0.25], lvl:increment_operators@L1#0 [shown, tier 2, 0.18]
 
 **Clause coverage after this depth:**
 | clause | text | covered by |
@@ -382,29 +382,29 @@ Edges offered:
 
 Prune: the model's reply (edge id and score; the kept edges sum to 1):
 ```
-mis:assignment->VariableKeepsOldValue (0.50), mis:assignment->AssignmentIsEquation (0.30), mis:assignment->AssignmentAddsToTarget (0.20)
+mis:assignment->VariableKeepsOldValue (0.50), mis:assignment->AssignmentAddsToTarget (0.30), mis:assignment->AssignmentIsEquation (0.20)
 ```
-Kept by pruning: mis:assignment->VariableKeepsOldValue (0.50), mis:assignment->AssignmentIsEquation (0.30), mis:assignment->AssignmentAddsToTarget (0.20)
+Kept by pruning: mis:assignment->VariableKeepsOldValue (0.50), mis:assignment->AssignmentAddsToTarget (0.30), mis:assignment->AssignmentIsEquation (0.20)
 
 Label prompt for the misconception / error edges (judged together). The model saw the program, the question, the numbered clauses, and these edges with their wrong rule and right rule:
 | edge |
 |---|
 | mis:assignment->VariableKeepsOldValue \| wrong rule: A variable keeps its first value after a new assignment (the static model). \| right rule: Each assignment or read replaces the variable's current value. |
-| mis:assignment->AssignmentIsEquation \| wrong rule: An assignment states a lasting equality between its two sides, so y = x - y can be solved like the equation x = 2y and x = x + 5 relates two equal quantities. \| right rule: An assignment is a one-time action: evaluate the right side with current values, then store the result in the left variable. |
 | mis:assignment->AssignmentAddsToTarget \| wrong rule: a = b adds the value of b to the value already in a (the accumulator model). \| right rule: a = b replaces the old value of a with the value of b; the old value is lost. |
+| mis:assignment->AssignmentIsEquation \| wrong rule: An assignment states a lasting equality between its two sides, so y = x - y can be solved like the equation x = 2y and x = x + 5 relates two equal quantities. \| right rule: An assignment is a one-time action: evaluate the right side with current values, then store the result in the left variable. |
 Model's reply:
 ```
-mis:assignment->VariableKeepsOldValue | correct | clauses: 2 | confidence: 0.8
+mis:assignment->VariableKeepsOldValue | correct | clauses: 1, 2 | confidence: 0.75
+mis:assignment->AssignmentAddsToTarget | not applied | clauses: none | confidence: 0.8
 mis:assignment->AssignmentIsEquation | not applied | clauses: none | confidence: 0.9
-mis:assignment->AssignmentAddsToTarget | not applied | clauses: none | confidence: 0.85
 ```
 
 Parsed labels:
 | edge | label | prune score | confidence | score | clauses | words |
 |---|---|---|---|---|---|---|
-| mis:assignment->VariableKeepsOldValue | correct | 0.5 | 0.8 | 0.4 | c2 | Probably it makes i 6 |
-| mis:assignment->AssignmentIsEquation | not applied |  |  | 0.0 |  |  |
+| mis:assignment->VariableKeepsOldValue | correct | 0.5 | 0.75 | 0.38 | c1, c2 | I think i++ adds 1 to i, though it might add 2, Im not sure; Probably it makes i 6 |
 | mis:assignment->AssignmentAddsToTarget | not applied |  |  | 0.0 |  |  |
+| mis:assignment->AssignmentIsEquation | not applied |  |  | 0.0 |  |  |
 
 #### assignment, level ways: 24 edges offered
 Edges offered:
@@ -482,7 +482,7 @@ Parsed labels:
 
 **Kept on a path at this depth** (best N in tiers: held misconception / broken edge, then held error, then correct / confirmed / shown):
 
-mis:assignment->VariableKeepsOldValue [correct, tier 2, 0.40], lvl:assignment@L2#2 [shown, tier 2, 0.17]
+mis:assignment->VariableKeepsOldValue [correct, tier 2, 0.38], lvl:assignment@L2#2 [shown, tier 2, 0.17]
 
 **Clause coverage after this depth:**
 | clause | text | covered by |
@@ -497,7 +497,7 @@ Root-cause walk: held on [], broken at [], prerequisites {'increment_operators':
 - assignment: L2 via one_step_execution "Probably it makes i 6"
 - increment_operators: L2 via output_prediction "Probably it makes i 6"
 
-**Stop:** sufficient at depth 3; prompts {'prune': 8, 'label': 14}, fresh model calls 1, cache hits 21
+**Stop:** sufficient at depth 3; prompts {'prune': 8, 'label': 14}, fresh model calls 4, cache hits 18
 
 ### Held misconceptions
 (none)
@@ -526,22 +526,22 @@ Figure 7 (final picture): C:\Users\magnu\OneDrive\Desktop\ES_VIterbi_Personalize
 ## 5. Every labelled edge (the evidence list, kept or not)
 | depth | source | edge | kind | label | prune_score | confidence | score | clauses | quote |
 |---|---|---|---|---|---|---|---|---|---|
-| 1 | increment_operators | mis:increment_operators->IncrementByTwo | misconception | correct | 0.8 | 0.6 | 0.48 | [1, 2] | I think i++ adds 1 to i, though it might add 2, Im not sure; Probably it makes i 6 |
+| 1 | increment_operators | mis:increment_operators->IncrementByTwo | misconception | correct | 0.9 | 0.6 | 0.54 | [1, 2] | I think i++ adds 1 to i, though it might add 2, Im not sure; Probably it makes i 6 |
 | 1 | increment_operators | lvl:increment_operators@L0#0 | level | shown | 0.45 | 0.55 | 0.2475 | [1] | I think i++ adds 1 to i, though it might add 2, Im not sure |
 | 1 | increment_operators | lvl:increment_operators@L1#0 | level | shown | 0.3 | 0.6 | 0.18 | [1, 2] | I think i++ adds 1 to i, though it might add 2, Im not sure; Probably it makes i 6 |
 | 1 | increment_operators | lvl:increment_operators@L2#1 | level | shown | 0.25 | 0.6 | 0.15 | [2] | Probably it makes i 6 |
 | 2 | increment_operators | pre:assignment->increment_operators | prerequisite | confirmed | 1.0 | 0.6 | 0.6 | [1, 2] | I think i++ adds 1 to i, though it might add 2, Im not sure; Probably it makes i 6 |
-| 3 | assignment | mis:assignment->VariableKeepsOldValue | misconception | correct | 0.5 | 0.8 | 0.4 | [2] | Probably it makes i 6 |
+| 3 | assignment | mis:assignment->VariableKeepsOldValue | misconception | correct | 0.5 | 0.75 | 0.375 | [1, 2] | I think i++ adds 1 to i, though it might add 2, Im not sure; Probably it makes i 6 |
 | 3 | assignment | lvl:assignment@L2#2 | level | shown | 0.3 | 0.55 | 0.165 | [2] | Probably it makes i 6 |
 
 ## 6. The paths (what the keep step kept, depth by depth)
 | depth | source | edge | kind | label | score | clauses |
 |---|---|---|---|---|---|---|
-| 1 | increment_operators | mis:increment_operators->IncrementByTwo | misconception | correct | 0.48 | [1, 2] |
+| 1 | increment_operators | mis:increment_operators->IncrementByTwo | misconception | correct | 0.54 | [1, 2] |
 | 1 | increment_operators | lvl:increment_operators@L0#0 | level | shown | 0.2475 | [1] |
 | 1 | increment_operators | lvl:increment_operators@L1#0 | level | shown | 0.18 | [1, 2] |
 | 2 | increment_operators | pre:assignment->increment_operators | prerequisite | confirmed | 0.6 | [1, 2] |
-| 3 | assignment | mis:assignment->VariableKeepsOldValue | misconception | correct | 0.4 | [2] |
+| 3 | assignment | mis:assignment->VariableKeepsOldValue | misconception | correct | 0.375 | [1, 2] |
 | 3 | assignment | lvl:assignment@L2#2 | level | shown | 0.165 | [2] |
 
 ## 7. Raw traversal log
@@ -550,10 +550,10 @@ clauses: I think i++ adds 1 to i, though it might add 2, Im not sure | Probably 
 start: 2 tagged concepts, all used
 start concepts (2): increment_operators, println
 --- depth 1: current concepts ['increment_operators', 'println']
-  increment_operators (misconceptions): 5 candidates -> kept mis:increment_operators->IncrementByTwo (0.80), mis:increment_operators->PrePostIncrementSameValue (0.10), mis:increment_operators->PostIncrementAssignsLater (0.10)
-    mis:increment_operators->IncrementByTwo -> correct (0.48) "I think i++ adds 1 to i, though it might add 2, Im not sure; Probably it makes i 6"
-    mis:increment_operators->PrePostIncrementSameValue -> not applied (0.00) ""
+  increment_operators (misconceptions): 5 candidates -> kept mis:increment_operators->IncrementByTwo (0.90), mis:increment_operators->PostIncrementAssignsLater (0.06), mis:increment_operators->PrePostIncrementSameValue (0.04)
+    mis:increment_operators->IncrementByTwo -> correct (0.54) "I think i++ adds 1 to i, though it might add 2, Im not sure; Probably it makes i 6"
     mis:increment_operators->PostIncrementAssignsLater -> not applied (0.00) ""
+    mis:increment_operators->PrePostIncrementSameValue -> not applied (0.00) ""
   increment_operators (level ways): 16 candidates -> kept lvl:increment_operators@L0#0 (0.45), lvl:increment_operators@L1#0 (0.30), lvl:increment_operators@L2#1 (0.25)
     lvl:increment_operators@L0#0 -> shown (0.25) "I think i++ adds 1 to i, though it might add 2, Im not sure"
     lvl:increment_operators@L1#0 -> shown (0.18) "I think i++ adds 1 to i, though it might add 2, Im not sure; Probably it makes i 6"
@@ -566,7 +566,7 @@ start concepts (2): increment_operators, println
     lvl:println@L2#1 -> not applied (0.00) ""
     lvl:println@L2#0 -> not applied (0.00) ""
     lvl:println@L0#3 -> not applied (0.00) ""
-  kept: mis:increment_operators->IncrementByTwo [correct, tier 2, 0.48], lvl:increment_operators@L0#0 [shown, tier 2, 0.25], lvl:increment_operators@L1#0 [shown, tier 2, 0.18]
+  kept: mis:increment_operators->IncrementByTwo [correct, tier 2, 0.54], lvl:increment_operators@L0#0 [shown, tier 2, 0.25], lvl:increment_operators@L1#0 [shown, tier 2, 0.18]
   clause coverage: c1 <- mis:increment_operators->IncrementByTwo; c2 <- mis:increment_operators->IncrementByTwo
   not yet read: pre:assignment->increment_operators, pre:statement->println
 --- depth 2: current concepts ['increment_operators', 'println']
@@ -579,15 +579,15 @@ start concepts (2): increment_operators, println
   clause coverage: c1 <- mis:increment_operators->IncrementByTwo; c2 <- mis:increment_operators->IncrementByTwo
   not yet read: own edges of assignment
 --- depth 3: current concepts ['assignment', 'increment_operators']
-  assignment (misconceptions): 15 candidates -> kept mis:assignment->VariableKeepsOldValue (0.50), mis:assignment->AssignmentIsEquation (0.30), mis:assignment->AssignmentAddsToTarget (0.20)
-    mis:assignment->VariableKeepsOldValue -> correct (0.40) "Probably it makes i 6"
-    mis:assignment->AssignmentIsEquation -> not applied (0.00) ""
+  assignment (misconceptions): 15 candidates -> kept mis:assignment->VariableKeepsOldValue (0.50), mis:assignment->AssignmentAddsToTarget (0.30), mis:assignment->AssignmentIsEquation (0.20)
+    mis:assignment->VariableKeepsOldValue -> correct (0.38) "I think i++ adds 1 to i, though it might add 2, Im not sure; Probably it makes i 6"
     mis:assignment->AssignmentAddsToTarget -> not applied (0.00) ""
+    mis:assignment->AssignmentIsEquation -> not applied (0.00) ""
   assignment (level ways): 24 candidates -> kept lvl:assignment@L3#6 (0.50), lvl:assignment@L2#2 (0.30), lvl:assignment@L0#9 (0.20)
     lvl:assignment@L3#6 -> not applied (0.00) ""
     lvl:assignment@L2#2 -> shown (0.17) "Probably it makes i 6"
     lvl:assignment@L0#9 -> not applied (0.00) ""
-  kept: mis:assignment->VariableKeepsOldValue [correct, tier 2, 0.40], lvl:assignment@L2#2 [shown, tier 2, 0.17]
+  kept: mis:assignment->VariableKeepsOldValue [correct, tier 2, 0.38], lvl:assignment@L2#2 [shown, tier 2, 0.17]
   clause coverage: c1 <- mis:increment_operators->IncrementByTwo; c2 <- mis:increment_operators->IncrementByTwo
   root-cause walk: held on [], broken at [], prerequisites {'increment_operators': ['assignment'], 'println': ['statement']}
   level assignment: L2 via one_step_execution "Probably it makes i 6"
@@ -654,8 +654,8 @@ start concepts (2): increment_operators, println
    ],
    "quote": "I think i++ adds 1 to i, though it might add 2, Im not sure; Probably it makes i 6",
    "confidence": 0.6,
-   "prune_score": 0.8,
-   "score": 0.48,
+   "prune_score": 0.9,
+   "score": 0.54,
    "logic": "i++ increases i by 2.",
    "twin_logic": "i++ (and ++i) increases i by exactly 1.",
    "role": "primary"
@@ -725,12 +725,13 @@ start concepts (2): increment_operators, println
    "kind": "misconception",
    "label": "correct",
    "clauses": [
+    1,
     2
    ],
-   "quote": "Probably it makes i 6",
-   "confidence": 0.8,
+   "quote": "I think i++ adds 1 to i, though it might add 2, Im not sure; Probably it makes i 6",
+   "confidence": 0.75,
    "prune_score": 0.5,
-   "score": 0.4,
+   "score": 0.375,
    "logic": "A variable keeps its first value after a new assignment (the static model).",
    "twin_logic": "Each assignment or read replaces the variable's current value.",
    "role": "context"
@@ -769,8 +770,8 @@ start concepts (2): increment_operators, println
    ],
    "quote": "I think i++ adds 1 to i, though it might add 2, Im not sure; Probably it makes i 6",
    "confidence": 0.6,
-   "prune_score": 0.8,
-   "score": 0.48,
+   "prune_score": 0.9,
+   "score": 0.54,
    "logic": "i++ increases i by 2.",
    "twin_logic": "i++ (and ++i) increases i by exactly 1.",
    "role": "primary"
@@ -859,12 +860,13 @@ start concepts (2): increment_operators, println
    "kind": "misconception",
    "label": "correct",
    "clauses": [
+    1,
     2
    ],
-   "quote": "Probably it makes i 6",
-   "confidence": 0.8,
+   "quote": "I think i++ adds 1 to i, though it might add 2, Im not sure; Probably it makes i 6",
+   "confidence": 0.75,
    "prune_score": 0.5,
-   "score": 0.4,
+   "score": 0.375,
    "logic": "A variable keeps its first value after a new assignment (the static model).",
    "twin_logic": "Each assignment or read replaces the variable's current value.",
    "role": "context"
@@ -896,8 +898,8 @@ start concepts (2): increment_operators, println
  "unexplained_clauses": [],
  "stop_reason": "sufficient",
  "depth_reached": 3,
- "llm_calls": 1,
- "llm_cache_hits": 21,
+ "llm_calls": 4,
+ "llm_cache_hits": 18,
  "llm_calls_by_step": {
   "prune": 8,
   "label": 14

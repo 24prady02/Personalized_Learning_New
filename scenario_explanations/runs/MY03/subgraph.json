@@ -856,7 +856,7 @@
    "type": "misconception",
    "source": "statement",
    "target": "StatementsRunInAnyOrder",
-   "role": "primary",
+   "role": "context",
    "logic": "Statements in a program can run in any order.",
    "twin_logic": "Without control statements, statements run once each, top to bottom."
   },
@@ -883,7 +883,7 @@
    "type": "misconception",
    "source": "string_concatenation",
    "target": "StringPlusLeftToRight",
-   "role": "primary",
+   "role": "context",
    "logic": "2 + 3 + \"bc\" and \"bc\" + 2 + 3 give the same text.",
    "twin_logic": "+ is evaluated left to right: 2 + 3 + \"bc\" is \"5bc\" but \"bc\" + 2 + 3 is \"bc23\"."
   },

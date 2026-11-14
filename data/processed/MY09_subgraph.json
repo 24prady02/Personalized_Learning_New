@@ -441,7 +441,7 @@
    "type": "misconception",
    "source": "expression",
    "target": "ParenthesesOnlyIfArgument",
-   "role": "primary",
+   "role": "context",
    "logic": "() are optional on a no-argument call like println",
    "twin_logic": "A method call always needs parentheses, so an empty line is printed with System.out.println();."
   },
@@ -477,7 +477,7 @@
    "type": "misconception",
    "source": "integer_division",
    "target": "CastAfterIntDivision",
-   "role": "primary",
+   "role": "context",
    "logic": "(double) (3 / 5) is 0.6.",
    "twin_logic": "The integer division 3 / 5 = 0 happens before the cast, so the result is 0.0."
   },
@@ -603,7 +603,7 @@
    "type": "misconception",
    "source": "statement",
    "target": "StatementsRunInAnyOrder",
-   "role": "primary",
+   "role": "context",
    "logic": "Statements in a program can run in any order.",
    "twin_logic": "Without control statements, statements run once each, top to bottom."
   },
@@ -621,7 +621,7 @@
    "type": "misconception",
    "source": "type_conversion",
    "target": "NarrowingAssignmentAllowed",
-   "role": "primary",
+   "role": "context",
    "logic": "A double value can be stored in an int variable like an int in a double.",
    "twin_logic": "int to double is automatic; double to int needs a cast."
   },
@@ -657,7 +657,7 @@
    "type": "misconception",
    "source": "widening_conversion",
    "target": "NoCastIfSameSize",
-   "role": "primary",
+   "role": "context",
    "logic": "If a variable is at least as big as a value, no cast is needed to assign the value.",
    "twin_logic": "Assigning a double to an int needs a cast even when the value would fit, because a conversion that might involve loss of information leads to a compile-time error."
   }

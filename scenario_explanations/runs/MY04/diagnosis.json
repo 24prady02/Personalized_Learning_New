@@ -35,7 +35,7 @@
    "misconception": "ComputerFillsInIntent",
    "shadow_of": "mis:switch_statement->SwitchNoFallThrough",
    "quote": "It prints only Tue; so the switch jumps to case 2, prints Tue, and then the switch is finished",
-   "score": 0.275
+   "score": 0.33
   }
  ],
  "broken_edges": [
@@ -233,8 +233,8 @@
    ],
    "quote": "It prints only Tue; so the switch jumps to case 2, prints Tue, and then the switch is finished",
    "confidence": 0.55,
-   "prune_score": 0.5,
-   "score": 0.275,
+   "prune_score": 0.6,
+   "score": 0.33,
    "logic": "The computer fills in omitted steps or values that the programmer meant, e.g. REPEAT 4 [FORWARD 30] draws a square without a turn command.",
    "twin_logic": "The computer executes only what the code states; every needed step and value must be written.",
    "role": "primary"
@@ -497,8 +497,8 @@
    ],
    "quote": "It prints only Tue; so the switch jumps to case 2, prints Tue, and then the switch is finished",
    "confidence": 0.55,
-   "prune_score": 0.5,
-   "score": 0.275,
+   "prune_score": 0.6,
+   "score": 0.33,
    "logic": "The computer fills in omitted steps or values that the programmer meant, e.g. REPEAT 4 [FORWARD 30] draws a square without a turn command.",
    "twin_logic": "The computer executes only what the code states; every needed step and value must be written.",
    "role": "primary"
@@ -575,8 +575,8 @@
  "unexplained_clauses": [],
  "stop_reason": "sufficient",
  "depth_reached": 3,
- "llm_calls": 0,
- "llm_cache_hits": 39,
+ "llm_calls": 2,
+ "llm_cache_hits": 37,
  "llm_calls_by_step": {
   "prune": 14,
   "label": 25

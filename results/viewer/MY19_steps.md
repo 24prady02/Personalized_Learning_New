@@ -110,29 +110,29 @@ Edges offered:
 
 Prune: the model's reply (edge id and score; the kept edges sum to 1):
 ```
-mis:integer_division->TargetTyping (0.55), mis:integer_division->IntegerDivisionGivesFraction (0.35), mis:integer_division->NegativeRemainderSign (0.10)
+mis:integer_division->TargetTyping (0.50), mis:integer_division->IntegerDivisionGivesFraction (0.35), mis:integer_division->CastAfterIntDivision (0.15)
 ```
-Kept by pruning: mis:integer_division->TargetTyping (0.55), mis:integer_division->IntegerDivisionGivesFraction (0.35), mis:integer_division->NegativeRemainderSign (0.10)
+Kept by pruning: mis:integer_division->TargetTyping (0.50), mis:integer_division->IntegerDivisionGivesFraction (0.35), mis:integer_division->CastAfterIntDivision (0.15)
 
 Label prompt for the misconception / error edges (judged together). The model saw the program, the question, the numbered clauses, and these edges with their wrong rule and right rule:
 | edge |
 |---|
 | mis:integer_division->TargetTyping \| wrong rule: The type of a numerical expression depends on the type expected by the surrounding context, so double d = a / b; keeps the fraction. \| right rule: The type of a numerical expression is determined by the expression, so double d = a / b; with int a and b still divides as ints. |
 | mis:integer_division->IntegerDivisionGivesFraction \| wrong rule: 10 / 3 evaluates to 3.333.... \| right rule: Dividing two ints gives an int: the fractional part is discarded. |
-| mis:integer_division->NegativeRemainderSign \| wrong rule: a % b is never negative, and integer division of a negative number rounds down. \| right rule: a / b rounds toward 0 and a % b takes the sign of a: -14 / 3 is -4 and -14 % 3 is -2. |
+| mis:integer_division->CastAfterIntDivision \| wrong rule: (double) (3 / 5) is 0.6. \| right rule: The integer division 3 / 5 = 0 happens before the cast, so the result is 0.0. |
 Model's reply:
 ```
 mis:integer_division->TargetTyping | held | clauses: 1, 2 | confidence: 0.9
 mis:integer_division->IntegerDivisionGivesFraction | not applied | clauses: none | confidence: 0.6
-mis:integer_division->NegativeRemainderSign | not applied | clauses: none | confidence: 0.95
+mis:integer_division->CastAfterIntDivision | not applied | clauses: none | confidence: 0.85
 ```
 
 Parsed labels:
 | edge | label | prune score | confidence | score | clauses | words |
 |---|---|---|---|---|---|---|
-| mis:integer_division->TargetTyping | held | 0.55 | 0.9 | 0.5 | c1, c2 | q is a double; so 7 / 2 is done with decimals and gives 3.5, and 7 % 2 is the half that is left over, 0.5 |
+| mis:integer_division->TargetTyping | held | 0.5 | 0.9 | 0.45 | c1, c2 | q is a double; so 7 / 2 is done with decimals and gives 3.5, and 7 % 2 is the half that is left over, 0.5 |
 | mis:integer_division->IntegerDivisionGivesFraction | not applied |  |  | 0.0 |  |  |
-| mis:integer_division->NegativeRemainderSign | not applied |  |  | 0.0 |  |  |
+| mis:integer_division->CastAfterIntDivision | not applied |  |  | 0.0 |  |  |
 
 #### integer_division, level ways: 16 edges offered
 Edges offered:
@@ -404,7 +404,7 @@ Parsed labels:
 
 **Kept on a path at this depth** (best N in tiers: held misconception / broken edge, then held error, then correct / confirmed / shown):
 
-mis:integer_division->TargetTyping [held, tier 0, 0.49], lvl:integer_division@L0#4 [shown, tier 2, 0.35], lvl:arithmetic_operators@L0#0 [shown, tier 2, 0.34]
+mis:integer_division->TargetTyping [held, tier 0, 0.45], lvl:integer_division@L0#4 [shown, tier 2, 0.35], lvl:arithmetic_operators@L0#0 [shown, tier 2, 0.34]
 
 **Clause coverage after this depth:**
 | clause | text | covered by |
@@ -573,29 +573,29 @@ Edges offered:
 
 Prune: the model's reply (edge id and score; the kept edges sum to 1):
 ```
-mis:expression->TargetTyping (0.80), mis:expression->VariablesHoldExpressions (0.10), mis:expression->AssignmentIsEquation (0.10)
+mis:expression->TargetTyping (0.80), mis:expression->AssignmentIsEquation (0.10), mis:expression->VariablesHoldExpressions (0.10)
 ```
-Kept by pruning: mis:expression->TargetTyping (0.80), mis:expression->VariablesHoldExpressions (0.10), mis:expression->AssignmentIsEquation (0.10)
+Kept by pruning: mis:expression->TargetTyping (0.80), mis:expression->AssignmentIsEquation (0.10), mis:expression->VariablesHoldExpressions (0.10)
 
 Label prompt for the misconception / error edges (judged together). The model saw the program, the question, the numbered clauses, and these edges with their wrong rule and right rule:
 | edge |
 |---|
 | mis:expression->TargetTyping \| wrong rule: The type of a numerical expression depends on the type expected by the surrounding context, so double d = a / b; keeps the fraction. \| right rule: The type of a numerical expression is determined by the expression, so double d = a / b; with int a and b still divides as ints. |
-| mis:expression->VariablesHoldExpressions \| wrong rule: = stores the expression itself, not its computed value \| right rule: y = x + k; stores the value that x + k has at that moment, so later changes to x do not change y. |
 | mis:expression->AssignmentIsEquation \| wrong rule: An assignment states a lasting equality between its two sides, so y = x - y can be solved like the equation x = 2y and x = x + 5 relates two equal quantities. \| right rule: An assignment is a one-time action: evaluate the right side with current values, then store the result in the left variable. |
+| mis:expression->VariablesHoldExpressions \| wrong rule: = stores the expression itself, not its computed value \| right rule: y = x + k; stores the value that x + k has at that moment, so later changes to x do not change y. |
 Model's reply:
 ```
 mis:expression->TargetTyping | held | clauses: 1, 2 | confidence: 0.93
+mis:expression->AssignmentIsEquation | not applied | clauses: none | confidence: 0.9
 mis:expression->VariablesHoldExpressions | not applied | clauses: none | confidence: 0.88
-mis:expression->AssignmentIsEquation | not applied | clauses: none | confidence: 0.88
 ```
 
 Parsed labels:
 | edge | label | prune score | confidence | score | clauses | words |
 |---|---|---|---|---|---|---|
 | mis:expression->TargetTyping | held | 0.8 | 0.93 | 0.74 | c1, c2 | q is a double; so 7 / 2 is done with decimals and gives 3.5, and 7 % 2 is the half that is left over, 0.5 |
-| mis:expression->VariablesHoldExpressions | not applied |  |  | 0.0 |  |  |
 | mis:expression->AssignmentIsEquation | not applied |  |  | 0.0 |  |  |
+| mis:expression->VariablesHoldExpressions | not applied |  |  | 0.0 |  |  |
 
 #### expression, level ways: 19 edges offered
 Edges offered:
@@ -678,6 +678,8 @@ mis:expression->TargetTyping [held, tier 0, 0.74], lvl:expression@L0#0 [shown, t
 
 Figure 6 (the graph after depth 3): C:\Users\magnu\OneDrive\Desktop\ES_VIterbi_Personalized_Learning\results\viewer\MY19_figure06.png
 
+Held set after the one-fault rules: mis:integer_division->TargetTyping; filed at the dependent concept: mis:expression->TargetTyping
+
 Shadows (a held label on a prerequisite, on a generic concept, or at a concept where the graph attaches the misconception as context, resting on the words of a stronger label at the specific or primary concept, is one wrong sentence read twice; it marks no root cause and sets no level): mis:expression->TargetTyping (shadow of mis:integer_division->TargetTyping)
 
 ## 4. Diagnosis (rules over the labelled graph, no model)
@@ -686,12 +688,12 @@ Root-cause walk: held on ['integer_division'], broken at [] (consequences: pre:a
 - expression: L0 via everyday_reading "so 7 / 2 is done with decimals and gives 3.5, and 7 % 2 is the half that is left over, 0.5"
 - integer_division: L0 via misconception "q is a double; so 7 / 2 is done with decimals and gives 3.5, and 7 % 2 is the half that is left over, 0.5"
 
-**Stop:** sufficient at depth 3; prompts {'prune': 11, 'label': 22}, fresh model calls 5, cache hits 28
+**Stop:** sufficient at depth 3; prompts {'prune': 11, 'label': 22}, fresh model calls 3, cache hits 30
 
 ### Held misconceptions
 | concept | misconception | kind | quote | score | shares_evidence_with |
 |---|---|---|---|---|---|
-| integer_division | TargetTyping | misconception | q is a double; so 7 / 2 is done with decimals and gives 3.5, and 7 % 2 is the half that is left over, 0.5 | 0.495 |  |
+| integer_division | TargetTyping | misconception | q is a double; so 7 / 2 is done with decimals and gives 3.5, and 7 % 2 is the half that is left over, 0.5 | 0.45 |  |
 
 ### Shadowed labels (held in the reading, folded into the label they shadow; not faults of their own)
 | concept | misconception | shadow_of | quote | score |
@@ -728,7 +730,7 @@ Figure 7 (final picture): C:\Users\magnu\OneDrive\Desktop\ES_VIterbi_Personalize
 ## 5. Every labelled edge (the evidence list, kept or not)
 | depth | source | edge | kind | label | prune_score | confidence | score | clauses | quote |
 |---|---|---|---|---|---|---|---|---|---|
-| 1 | integer_division | mis:integer_division->TargetTyping | misconception | held | 0.55 | 0.9 | 0.495 | [1, 2] | q is a double; so 7 / 2 is done with decimals and gives 3.5, and 7 % 2 is the half that is left over, 0.5 |
+| 1 | integer_division | mis:integer_division->TargetTyping | misconception | held | 0.5 | 0.9 | 0.45 | [1, 2] | q is a double; so 7 / 2 is done with decimals and gives 3.5, and 7 % 2 is the half that is left over, 0.5 |
 | 1 | integer_division | lvl:integer_division@L0#4 | level | shown | 0.5 | 0.7 | 0.35 | [1, 2] | q is a double; so 7 / 2 is done with decimals and gives 3.5, and 7 % 2 is the half that is left over, 0.5 |
 | 1 | integer_division | lvl:integer_division@L0#0 | level | shown | 0.3 | 0.9 | 0.27 | [2] | so 7 / 2 is done with decimals and gives 3.5, and 7 % 2 is the half that is left over, 0.5 |
 | 1 | arithmetic_operators | lvl:arithmetic_operators@L0#0 | level | shown | 0.45 | 0.75 | 0.3375 | [2] | so 7 / 2 is done with decimals and gives 3.5, and 7 % 2 is the half that is left over, 0.5 |
@@ -742,7 +744,7 @@ Figure 7 (final picture): C:\Users\magnu\OneDrive\Desktop\ES_VIterbi_Personalize
 ## 6. The paths (what the keep step kept, depth by depth)
 | depth | source | edge | kind | label | score | clauses |
 |---|---|---|---|---|---|---|
-| 1 | integer_division | mis:integer_division->TargetTyping | misconception | held | 0.495 | [1, 2] |
+| 1 | integer_division | mis:integer_division->TargetTyping | misconception | held | 0.45 | [1, 2] |
 | 1 | integer_division | lvl:integer_division@L0#4 | level | shown | 0.35 | [1, 2] |
 | 1 | arithmetic_operators | lvl:arithmetic_operators@L0#0 | level | shown | 0.3375 | [2] |
 | 2 | integer_division | pre:arithmetic_operators->integer_division | prerequisite | broken | 0.57 | [2] |
@@ -759,10 +761,10 @@ start: BM25 of the answer against each tagged concept: integer_division 16.07 (h
 start: chosen integer_division, arithmetic_operators, remainder_operator
 start concepts (3): integer_division, arithmetic_operators, remainder_operator
 --- depth 1: current concepts ['integer_division', 'arithmetic_operators', 'remainder_operator']
-  integer_division (misconceptions): 6 candidates -> kept mis:integer_division->TargetTyping (0.55), mis:integer_division->IntegerDivisionGivesFraction (0.35), mis:integer_division->NegativeRemainderSign (0.10)
-    mis:integer_division->TargetTyping -> held (0.50) "q is a double; so 7 / 2 is done with decimals and gives 3.5, and 7 % 2 is the half that is left over, 0.5"
+  integer_division (misconceptions): 6 candidates -> kept mis:integer_division->TargetTyping (0.50), mis:integer_division->IntegerDivisionGivesFraction (0.35), mis:integer_division->CastAfterIntDivision (0.15)
+    mis:integer_division->TargetTyping -> held (0.45) "q is a double; so 7 / 2 is done with decimals and gives 3.5, and 7 % 2 is the half that is left over, 0.5"
     mis:integer_division->IntegerDivisionGivesFraction -> not applied (0.00) ""
-    mis:integer_division->NegativeRemainderSign -> not applied (0.00) ""
+    mis:integer_division->CastAfterIntDivision -> not applied (0.00) ""
   integer_division (level ways): 16 candidates -> kept lvl:integer_division@L0#4 (0.50), lvl:integer_division@L0#0 (0.30), lvl:integer_division@L3#2 (0.20)
     lvl:integer_division@L0#4 -> shown (0.35) "q is a double; so 7 / 2 is done with decimals and gives 3.5, and 7 % 2 is the half that is left over, 0.5"
     lvl:integer_division@L0#0 -> shown (0.27) "so 7 / 2 is done with decimals and gives 3.5, and 7 % 2 is the half that is left over, 0.5"
@@ -783,7 +785,7 @@ start concepts (3): integer_division, arithmetic_operators, remainder_operator
     lvl:remainder_operator@L0#3 -> not applied (0.00) ""
     lvl:remainder_operator@L3#0 -> not applied (0.00) ""
     lvl:remainder_operator@L1#0 -> not applied (0.00) ""
-  kept: mis:integer_division->TargetTyping [held, tier 0, 0.49], lvl:integer_division@L0#4 [shown, tier 2, 0.35], lvl:arithmetic_operators@L0#0 [shown, tier 2, 0.34]
+  kept: mis:integer_division->TargetTyping [held, tier 0, 0.45], lvl:integer_division@L0#4 [shown, tier 2, 0.35], lvl:arithmetic_operators@L0#0 [shown, tier 2, 0.34]
   clause coverage: c1 <- mis:integer_division->TargetTyping; c2 <- mis:integer_division->TargetTyping
   not yet read: par:string_concatenation~arithmetic_operators, pre:arithmetic_operators->expression, pre:arithmetic_operators->integer_division, pre:arithmetic_operators->remainder_operator, pre:integer_division->remainder_operator
 --- depth 2: current concepts ['integer_division', 'arithmetic_operators', 'remainder_operator']
@@ -801,16 +803,17 @@ start concepts (3): integer_division, arithmetic_operators, remainder_operator
 --- depth 3: current concepts ['arithmetic_operators', 'integer_division', 'remainder_operator', 'expression']
   arithmetic_operators (concept edges): 1 candidates -> kept par:string_concatenation~arithmetic_operators (1.00)
     par:string_concatenation~arithmetic_operators -> not applied (0.00) ""
-  expression (misconceptions): 8 candidates -> kept mis:expression->TargetTyping (0.80), mis:expression->VariablesHoldExpressions (0.10), mis:expression->AssignmentIsEquation (0.10)
+  expression (misconceptions): 8 candidates -> kept mis:expression->TargetTyping (0.80), mis:expression->AssignmentIsEquation (0.10), mis:expression->VariablesHoldExpressions (0.10)
     mis:expression->TargetTyping -> held (0.74) "q is a double; so 7 / 2 is done with decimals and gives 3.5, and 7 % 2 is the half that is left over, 0.5"
-    mis:expression->VariablesHoldExpressions -> not applied (0.00) ""
     mis:expression->AssignmentIsEquation -> not applied (0.00) ""
+    mis:expression->VariablesHoldExpressions -> not applied (0.00) ""
   expression (level ways): 19 candidates -> kept lvl:expression@L3#1 (0.50), lvl:expression@L0#0 (0.30), lvl:expression@L2#1 (0.20)
     lvl:expression@L3#1 -> not applied (0.00) ""
     lvl:expression@L0#0 -> shown (0.24) "so 7 / 2 is done with decimals and gives 3.5, and 7 % 2 is the half that is left over, 0.5"
     lvl:expression@L2#1 -> not applied (0.00) ""
   kept: mis:expression->TargetTyping [held, tier 0, 0.74], lvl:expression@L0#0 [shown, tier 2, 0.24]
   clause coverage: c1 <- mis:integer_division->TargetTyping; c2 <- mis:integer_division->TargetTyping
+  held: mis:integer_division->TargetTyping; filed at the dependent concept: mis:expression->TargetTyping
   shadows: mis:expression->TargetTyping (shadow of mis:integer_division->TargetTyping)
   root-cause walk: held on ['integer_division'], broken at [] (consequences: pre:arithmetic_operators->integer_division, pre:arithmetic_operators->remainder_operator, pre:integer_division->remainder_operator, pre:arithmetic_operators->expression), prerequisites {'expression': ['arithmetic_operators'], 'integer_division': ['arithmetic_operators'], 'remainder_operator': ['arithmetic_operators', 'integer_division'], 'type_conversion': ['primitive_type'], 'println': ['statement', 'string_literal'], 'string_conversion': ['string_concatenation'], 'widening_conversion': ['type_conversion']}
   level arithmetic_operators: L0 via everyday_reading "so 7 / 2 is done with decimals and gives 3.5, and 7 % 2 is the half that is left over, 0.5"
@@ -844,7 +847,7 @@ start concepts (3): integer_division, arithmetic_operators, remainder_operator
    "misconception": "TargetTyping",
    "kind": "misconception",
    "quote": "q is a double; so 7 / 2 is done with decimals and gives 3.5, and 7 % 2 is the half that is left over, 0.5",
-   "score": 0.495
+   "score": 0.45
   }
  ],
  "error_evidence": [],
@@ -929,8 +932,8 @@ start concepts (3): integer_division, arithmetic_operators, remainder_operator
    ],
    "quote": "q is a double; so 7 / 2 is done with decimals and gives 3.5, and 7 % 2 is the half that is left over, 0.5",
    "confidence": 0.9,
-   "prune_score": 0.55,
-   "score": 0.495,
+   "prune_score": 0.5,
+   "score": 0.45,
    "logic": "The type of a numerical expression depends on the type expected by the surrounding context, so double d = a / b; keeps the fraction.",
    "twin_logic": "The type of a numerical expression is determined by the expression, so double d = a / b; with int a and b still divides as ints.",
    "role": "primary"
@@ -1100,8 +1103,8 @@ start concepts (3): integer_division, arithmetic_operators, remainder_operator
    ],
    "quote": "q is a double; so 7 / 2 is done with decimals and gives 3.5, and 7 % 2 is the half that is left over, 0.5",
    "confidence": 0.9,
-   "prune_score": 0.55,
-   "score": 0.495,
+   "prune_score": 0.5,
+   "score": 0.45,
    "logic": "The type of a numerical expression depends on the type expected by the surrounding context, so double d = a / b; keeps the fraction.",
    "twin_logic": "The type of a numerical expression is determined by the expression, so double d = a / b; with int a and b still divides as ints.",
    "role": "primary"
@@ -1283,8 +1286,8 @@ start concepts (3): integer_division, arithmetic_operators, remainder_operator
  "unexplained_clauses": [],
  "stop_reason": "sufficient",
  "depth_reached": 3,
- "llm_calls": 5,
- "llm_cache_hits": 28,
+ "llm_calls": 3,
+ "llm_cache_hits": 30,
  "llm_calls_by_step": {
   "prune": 11,
   "label": 22

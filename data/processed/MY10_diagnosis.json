@@ -793,11 +793,11 @@
    ],
    "quote": "It prints 0, then 5, 10 and 15; Then a[1], a[2] and a[3] are 5, 10 and 15",
    "confidence": 0.6,
-   "prune_score": 0.6,
+   "prune_score": 0.6000000000000001,
    "score": 0.36,
    "logic": "< vs <= and 0..n vs 0..n-1 are interchangeable",
    "twin_logic": "for (i = 0; i < n; i++) runs n times with i going up to n - 1; with <= it runs n + 1 times and reaches i = n.",
-   "role": "primary"
+   "role": "context"
   },
   {
    "depth": 3,
@@ -812,8 +812,8 @@
    ],
    "quote": "It prints 0, then 5, 10 and 15; Then a[1], a[2] and a[3] are 5, 10 and 15",
    "confidence": 0.55,
-   "prune_score": 0.35,
-   "score": 0.1925,
+   "prune_score": 0.30000000000000004,
+   "score": 0.165,
    "logic": "Updates the loop counter so that the loop runs the wrong number of times.",
    "twin_logic": "The init, test and update together decide the number of passes; trace them to check the count.",
    "role": "context"
@@ -929,8 +929,8 @@
  "unexplained_clauses": [],
  "stop_reason": "max depth",
  "depth_reached": 3,
- "llm_calls": 12,
- "llm_cache_hits": 45,
+ "llm_calls": 1,
+ "llm_cache_hits": 56,
  "llm_calls_by_step": {
   "prune": 19,
   "label": 38

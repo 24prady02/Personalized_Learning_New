@@ -202,9 +202,9 @@ Edges offered:
 
 Prune: the model's reply (edge id and score; the kept edges sum to 1):
 ```
-mis:explicit_cast->CastRounds (0.60), mis:explicit_cast->CastAppliesToWholeExpression (0.30), err:explicit_cast->RoundReturnsInt (0.10)
+mis:explicit_cast->CastRounds (0.70), mis:explicit_cast->CastAppliesToWholeExpression (0.20), err:explicit_cast->RoundReturnsInt (0.10)
 ```
-Kept by pruning: mis:explicit_cast->CastRounds (0.60), mis:explicit_cast->CastAppliesToWholeExpression (0.30), err:explicit_cast->RoundReturnsInt (0.10)
+Kept by pruning: mis:explicit_cast->CastRounds (0.70), mis:explicit_cast->CastAppliesToWholeExpression (0.20), err:explicit_cast->RoundReturnsInt (0.10)
 
 Label prompt for the misconception / error edges (judged together). The model saw the program, the question, the numbered clauses, and these edges with their wrong rule and right rule:
 | edge |
@@ -222,7 +222,7 @@ err:explicit_cast->RoundReturnsInt | not applied | clauses: none | confidence: 0
 Parsed labels:
 | edge | label | prune score | confidence | score | clauses | words |
 |---|---|---|---|---|---|---|
-| mis:explicit_cast->CastRounds | correct | 0.6000000000000001 | 0.8 | 0.48 | c1 | n is a whole number from 1 to 6, for example 4 |
+| mis:explicit_cast->CastRounds | correct | 0.7000000000000001 | 0.8 | 0.56 | c1 | n is a whole number from 1 to 6, for example 4 |
 | mis:explicit_cast->CastAppliesToWholeExpression | not applied |  |  | 0.0 |  |  |
 | err:explicit_cast->RoundReturnsInt | not applied |  |  | 0.0 |  |  |
 
@@ -394,7 +394,7 @@ Parsed labels:
 
 **Kept on a path at this depth** (best N in tiers: held misconception / broken edge, then held error, then correct / confirmed / shown):
 
-mis:math_random->RandomCanReturnOne [correct, tier 2, 0.72], lvl:math_random@L2#1 [shown, tier 2, 0.54], mis:explicit_cast->CastRounds [correct, tier 2, 0.48]
+mis:math_random->RandomCanReturnOne [correct, tier 2, 0.72], mis:explicit_cast->CastRounds [correct, tier 2, 0.56], lvl:math_random@L2#1 [shown, tier 2, 0.54]
 
 **Clause coverage after this depth:**
 | clause | text | covered by |
@@ -536,7 +536,7 @@ Prune: the model's reply (edge id and score; the kept edges sum to 1):
 {err:math_library->MathMethodWithoutClassName (Score: 0.05)}
 {err:math_library->WrongArgumentType (Score: 0.05)}
 ```
-Kept by pruning: mis:math_library->CastRounds (0.90), err:math_library->MathMethodWithoutClassName (0.05), err:math_library->WrongArgumentType (0.05)
+Kept by pruning: mis:math_library->CastRounds (0.80), err:math_library->MathMethodWithoutClassName (0.10), err:math_library->WrongArgumentType (0.10)
 
 Label prompt for the misconception / error edges (judged together). The model saw the program, the question, the numbered clauses, and these edges with their wrong rule and right rule:
 | edge |
@@ -554,7 +554,7 @@ err:math_library->WrongArgumentType | not applied | clauses: none | confidence: 
 Parsed labels:
 | edge | label | prune score | confidence | score | clauses | words |
 |---|---|---|---|---|---|---|
-| mis:math_library->CastRounds | correct | 0.9 | 0.75 | 0.68 | c1 | n is a whole number from 1 to 6, for example 4 |
+| mis:math_library->CastRounds | correct | 0.8 | 0.75 | 0.6 | c1 | n is a whole number from 1 to 6, for example 4 |
 | err:math_library->MathMethodWithoutClassName | not applied |  |  | 0.0 |  |  |
 | err:math_library->WrongArgumentType | not applied |  |  | 0.0 |  |  |
 
@@ -643,29 +643,29 @@ Edges offered:
 
 Prune: the model's reply (edge id and score; the kept edges sum to 1):
 ```
-mis:expression->VariablesHoldExpressions (0.40), mis:expression->TargetTyping (0.35), mis:expression->AssignmentIsEquation (0.25)
+mis:expression->VariablesHoldExpressions (0.45), mis:expression->AssignmentIsEquation (0.30), mis:expression->TargetTyping (0.25)
 ```
-Kept by pruning: mis:expression->VariablesHoldExpressions (0.40), mis:expression->TargetTyping (0.35), mis:expression->AssignmentIsEquation (0.25)
+Kept by pruning: mis:expression->VariablesHoldExpressions (0.45), mis:expression->AssignmentIsEquation (0.30), mis:expression->TargetTyping (0.25)
 
 Label prompt for the misconception / error edges (judged together). The model saw the program, the question, the numbered clauses, and these edges with their wrong rule and right rule:
 | edge |
 |---|
 | mis:expression->VariablesHoldExpressions \| wrong rule: = stores the expression itself, not its computed value \| right rule: y = x + k; stores the value that x + k has at that moment, so later changes to x do not change y. |
-| mis:expression->TargetTyping \| wrong rule: The type of a numerical expression depends on the type expected by the surrounding context, so double d = a / b; keeps the fraction. \| right rule: The type of a numerical expression is determined by the expression, so double d = a / b; with int a and b still divides as ints. |
 | mis:expression->AssignmentIsEquation \| wrong rule: An assignment states a lasting equality between its two sides, so y = x - y can be solved like the equation x = 2y and x = x + 5 relates two equal quantities. \| right rule: An assignment is a one-time action: evaluate the right side with current values, then store the result in the left variable. |
+| mis:expression->TargetTyping \| wrong rule: The type of a numerical expression depends on the type expected by the surrounding context, so double d = a / b; keeps the fraction. \| right rule: The type of a numerical expression is determined by the expression, so double d = a / b; with int a and b still divides as ints. |
 Model's reply:
 ```
-mis:expression->VariablesHoldExpressions | not applied | clauses: none | confidence: 0.85
-mis:expression->TargetTyping | not applied | clauses: none | confidence: 0.7
+mis:expression->VariablesHoldExpressions | correct | clauses: 1 | confidence: 0.6
 mis:expression->AssignmentIsEquation | not applied | clauses: none | confidence: 0.85
+mis:expression->TargetTyping | not applied | clauses: none | confidence: 0.85
 ```
 
 Parsed labels:
 | edge | label | prune score | confidence | score | clauses | words |
 |---|---|---|---|---|---|---|
-| mis:expression->VariablesHoldExpressions | not applied |  |  | 0.0 |  |  |
-| mis:expression->TargetTyping | not applied |  |  | 0.0 |  |  |
+| mis:expression->VariablesHoldExpressions | correct | 0.45 | 0.6 | 0.27 | c1 | n is a whole number from 1 to 6, for example 4 |
 | mis:expression->AssignmentIsEquation | not applied |  |  | 0.0 |  |  |
+| mis:expression->TargetTyping | not applied |  |  | 0.0 |  |  |
 
 #### expression, level ways: 19 edges offered
 Edges offered:
@@ -766,7 +766,7 @@ Parsed labels:
 
 **Kept on a path at this depth** (best N in tiers: held misconception / broken edge, then held error, then correct / confirmed / shown):
 
-pre:type_conversion->explicit_cast [confirmed, tier 2, 0.80], mis:math_library->CastRounds [correct, tier 2, 0.68], lvl:expression@L2#1 [shown, tier 2, 0.38]
+pre:type_conversion->explicit_cast [confirmed, tier 2, 0.80], mis:math_library->CastRounds [correct, tier 2, 0.60], lvl:expression@L2#1 [shown, tier 2, 0.38]
 
 reached across pre:type_conversion->explicit_cast, entered next: type_conversion
 
@@ -795,7 +795,7 @@ Prune: the model's reply (edge id and score; the kept edges sum to 1):
 {mis:type_conversion->NoCastIfSameSize (Score: 0.3)}
 {mis:type_conversion->TargetTyping (Score: 0.25)}
 ```
-Kept by pruning: mis:type_conversion->NarrowingAssignmentAllowed (0.45), mis:type_conversion->NoCastIfSameSize (0.30), mis:type_conversion->TargetTyping (0.25)
+Kept by pruning: mis:type_conversion->NarrowingAssignmentAllowed (0.50), mis:type_conversion->NoCastIfSameSize (0.30), mis:type_conversion->TargetTyping (0.20)
 
 Label prompt for the misconception / error edges (judged together). The model saw the program, the question, the numbered clauses, and these edges with their wrong rule and right rule:
 | edge |
@@ -906,7 +906,7 @@ Root-cause walk: held on [], broken at [], prerequisites {'expression': ['arithm
 - math_random: L2 via output_prediction "n is a whole number from 1 to 6, for example 4"
 - type_conversion: L3 via relation_to_neighbour "n is a whole number from 1 to 6, for example 4"
 
-**Stop:** max depth at depth 4; prompts {'prune': 16, 'label': 29}, fresh model calls 1, cache hits 44
+**Stop:** max depth at depth 4; prompts {'prune': 16, 'label': 29}, fresh model calls 6, cache hits 39
 
 ### Held misconceptions
 (none)
@@ -938,7 +938,7 @@ Figure 8 (final picture): C:\Users\magnu\OneDrive\Desktop\ES_VIterbi_Personalize
 | depth | source | edge | kind | label | prune_score | confidence | score | clauses | quote |
 |---|---|---|---|---|---|---|---|---|---|
 | 1 | arithmetic_operators | lvl:arithmetic_operators@L2#1 | level | shown | 0.5 | 0.6 | 0.3 | [1] | n is a whole number from 1 to 6, for example 4 |
-| 1 | explicit_cast | mis:explicit_cast->CastRounds | misconception | correct | 0.6000000000000001 | 0.8 | 0.48 | [1] | n is a whole number from 1 to 6, for example 4 |
+| 1 | explicit_cast | mis:explicit_cast->CastRounds | misconception | correct | 0.7000000000000001 | 0.8 | 0.56 | [1] | n is a whole number from 1 to 6, for example 4 |
 | 1 | explicit_cast | lvl:explicit_cast@L2#1 | level | shown | 0.2 | 0.6 | 0.12 | [1] | n is a whole number from 1 to 6, for example 4 |
 | 1 | math_random | mis:math_random->RandomCanReturnOne | misconception | correct | 0.85 | 0.85 | 0.7225 | [1] | n is a whole number from 1 to 6, for example 4 |
 | 1 | math_random | lvl:math_random@L2#1 | level | shown | 0.6 | 0.9 | 0.54 | [1] | n is a whole number from 1 to 6, for example 4 |
@@ -947,7 +947,8 @@ Figure 8 (final picture): C:\Users\magnu\OneDrive\Desktop\ES_VIterbi_Personalize
 | 2 | explicit_cast | pre:explicit_cast->math_random | prerequisite | confirmed | 0.6 | 0.85 | 0.51 | [1] | n is a whole number from 1 to 6, for example 4 |
 | 2 | explicit_cast | pre:type_conversion->explicit_cast | prerequisite | confirmed | 0.4 | 0.8 | 0.32 | [1] | n is a whole number from 1 to 6, for example 4 |
 | 2 | math_random | pre:math_library->math_random | prerequisite | confirmed | 1.0 | 0.8 | 0.8 | [1] | n is a whole number from 1 to 6, for example 4 |
-| 3 | math_library | mis:math_library->CastRounds | misconception | correct | 0.9 | 0.75 | 0.675 | [1] | n is a whole number from 1 to 6, for example 4 |
+| 3 | math_library | mis:math_library->CastRounds | misconception | correct | 0.8 | 0.75 | 0.6 | [1] | n is a whole number from 1 to 6, for example 4 |
+| 3 | expression | mis:expression->VariablesHoldExpressions | misconception | correct | 0.45 | 0.6 | 0.27 | [1] | n is a whole number from 1 to 6, for example 4 |
 | 3 | expression | lvl:expression@L2#1 | level | shown | 0.5 | 0.75 | 0.375 | [1] | n is a whole number from 1 to 6, for example 4 |
 | 3 | explicit_cast | pre:type_conversion->explicit_cast | prerequisite | confirmed | 1.0 | 0.8 | 0.8 | [1] | n is a whole number from 1 to 6, for example 4 |
 | 4 | type_conversion | lvl:type_conversion@L2#1 | level | shown | 0.4 | 0.6 | 0.24 | [1] | n is a whole number from 1 to 6, for example 4 |
@@ -957,13 +958,13 @@ Figure 8 (final picture): C:\Users\magnu\OneDrive\Desktop\ES_VIterbi_Personalize
 | depth | source | edge | kind | label | score | clauses |
 |---|---|---|---|---|---|---|
 | 1 | math_random | mis:math_random->RandomCanReturnOne | misconception | correct | 0.7225 | [1] |
+| 1 | explicit_cast | mis:explicit_cast->CastRounds | misconception | correct | 0.56 | [1] |
 | 1 | math_random | lvl:math_random@L2#1 | level | shown | 0.54 | [1] |
-| 1 | explicit_cast | mis:explicit_cast->CastRounds | misconception | correct | 0.48 | [1] |
 | 2 | math_random | pre:math_library->math_random | prerequisite | confirmed | 0.8 | [1] |
 | 2 | arithmetic_operators | pre:arithmetic_operators->expression | prerequisite | confirmed | 0.75 | [1] |
 | 2 | explicit_cast | pre:explicit_cast->math_random | prerequisite | confirmed | 0.51 | [1] |
 | 3 | explicit_cast | pre:type_conversion->explicit_cast | prerequisite | confirmed | 0.8 | [1] |
-| 3 | math_library | mis:math_library->CastRounds | misconception | correct | 0.675 | [1] |
+| 3 | math_library | mis:math_library->CastRounds | misconception | correct | 0.6 | [1] |
 | 3 | expression | lvl:expression@L2#1 | level | shown | 0.375 | [1] |
 | 4 | type_conversion | lvl:type_conversion@L2#1 | level | shown | 0.24 | [1] |
 | 4 | type_conversion | lvl:type_conversion@L3#2 | level | shown | 0.21 | [1] |
@@ -983,8 +984,8 @@ start concepts (3): arithmetic_operators, explicit_cast, math_random
     lvl:arithmetic_operators@L2#1 -> shown (0.30) "n is a whole number from 1 to 6, for example 4"
     lvl:arithmetic_operators@L2#0 -> not applied (0.00) ""
     lvl:arithmetic_operators@L3#0 -> not applied (0.00) ""
-  explicit_cast (misconceptions): 6 candidates -> kept mis:explicit_cast->CastRounds (0.60), mis:explicit_cast->CastAppliesToWholeExpression (0.30), err:explicit_cast->RoundReturnsInt (0.10)
-    mis:explicit_cast->CastRounds -> correct (0.48) "n is a whole number from 1 to 6, for example 4"
+  explicit_cast (misconceptions): 6 candidates -> kept mis:explicit_cast->CastRounds (0.70), mis:explicit_cast->CastAppliesToWholeExpression (0.20), err:explicit_cast->RoundReturnsInt (0.10)
+    mis:explicit_cast->CastRounds -> correct (0.56) "n is a whole number from 1 to 6, for example 4"
     mis:explicit_cast->CastAppliesToWholeExpression -> not applied (0.00) ""
     err:explicit_cast->RoundReturnsInt -> not applied (0.00) ""
   explicit_cast (level ways): 19 candidates -> kept lvl:explicit_cast@L3#1 (0.50), lvl:explicit_cast@L3#5 (0.30), lvl:explicit_cast@L2#1 (0.20)
@@ -998,7 +999,7 @@ start concepts (3): arithmetic_operators, explicit_cast, math_random
     lvl:math_random@L2#1 -> shown (0.54) "n is a whole number from 1 to 6, for example 4"
     lvl:math_random@L4#0 -> not applied (0.00) ""
     lvl:math_random@L1#1 -> shown (0.09) "n is a whole number from 1 to 6, for example 4"
-  kept: mis:math_random->RandomCanReturnOne [correct, tier 2, 0.72], lvl:math_random@L2#1 [shown, tier 2, 0.54], mis:explicit_cast->CastRounds [correct, tier 2, 0.48]
+  kept: mis:math_random->RandomCanReturnOne [correct, tier 2, 0.72], mis:explicit_cast->CastRounds [correct, tier 2, 0.56], lvl:math_random@L2#1 [shown, tier 2, 0.54]
   clause coverage: c1 <- mis:explicit_cast->CastRounds
   not yet read: pre:arithmetic_operators->expression, pre:explicit_cast->math_random, pre:math_library->math_random, pre:type_conversion->explicit_cast
 --- depth 2: current concepts ['arithmetic_operators', 'explicit_cast', 'math_random']
@@ -1015,30 +1016,30 @@ start concepts (3): arithmetic_operators, explicit_cast, math_random
   clause coverage: c1 <- mis:explicit_cast->CastRounds
   not yet read: own edges of expression, own edges of math_library
 --- depth 3: current concepts ['math_library', 'math_random', 'expression', 'arithmetic_operators', 'explicit_cast']
-  math_library (misconceptions): 4 candidates -> kept mis:math_library->CastRounds (0.90), err:math_library->MathMethodWithoutClassName (0.05), err:math_library->WrongArgumentType (0.05)
-    mis:math_library->CastRounds -> correct (0.68) "n is a whole number from 1 to 6, for example 4"
+  math_library (misconceptions): 4 candidates -> kept mis:math_library->CastRounds (0.80), err:math_library->MathMethodWithoutClassName (0.10), err:math_library->WrongArgumentType (0.10)
+    mis:math_library->CastRounds -> correct (0.60) "n is a whole number from 1 to 6, for example 4"
     err:math_library->MathMethodWithoutClassName -> not applied (0.00) ""
     err:math_library->WrongArgumentType -> not applied (0.00) ""
   math_library (level ways): 20 candidates -> kept lvl:math_library@L3#1 (0.50), lvl:math_library@L3#3 (0.30), lvl:math_library@L2#2 (0.20)
     lvl:math_library@L3#1 -> not applied (0.00) ""
     lvl:math_library@L3#3 -> not applied (0.00) ""
     lvl:math_library@L2#2 -> not applied (0.00) ""
-  expression (misconceptions): 8 candidates -> kept mis:expression->VariablesHoldExpressions (0.40), mis:expression->TargetTyping (0.35), mis:expression->AssignmentIsEquation (0.25)
-    mis:expression->VariablesHoldExpressions -> not applied (0.00) ""
-    mis:expression->TargetTyping -> not applied (0.00) ""
+  expression (misconceptions): 8 candidates -> kept mis:expression->VariablesHoldExpressions (0.45), mis:expression->AssignmentIsEquation (0.30), mis:expression->TargetTyping (0.25)
+    mis:expression->VariablesHoldExpressions -> correct (0.27) "n is a whole number from 1 to 6, for example 4"
     mis:expression->AssignmentIsEquation -> not applied (0.00) ""
+    mis:expression->TargetTyping -> not applied (0.00) ""
   expression (level ways): 19 candidates -> kept lvl:expression@L2#1 (0.50), lvl:expression@L1#1 (0.30), lvl:expression@L3#1 (0.20)
     lvl:expression@L2#1 -> shown (0.38) "n is a whole number from 1 to 6, for example 4"
     lvl:expression@L1#1 -> not applied (0.00) ""
     lvl:expression@L3#1 -> not applied (0.00) ""
   explicit_cast (concept edges): 1 candidates -> kept pre:type_conversion->explicit_cast (1.00)
     pre:type_conversion->explicit_cast -> confirmed (0.80) "n is a whole number from 1 to 6, for example 4"
-  kept: pre:type_conversion->explicit_cast [confirmed, tier 2, 0.80], mis:math_library->CastRounds [correct, tier 2, 0.68], lvl:expression@L2#1 [shown, tier 2, 0.38]
+  kept: pre:type_conversion->explicit_cast [confirmed, tier 2, 0.80], mis:math_library->CastRounds [correct, tier 2, 0.60], lvl:expression@L2#1 [shown, tier 2, 0.38]
   reached across pre:type_conversion->explicit_cast, entered next: type_conversion
   clause coverage: c1 <- mis:explicit_cast->CastRounds
   not yet read: own edges of type_conversion, pre:expression->method_call, pre:method_call->math_library
 --- depth 4: current concepts ['type_conversion'] (closing round: own edges only)
-  type_conversion (misconceptions): 3 candidates -> kept mis:type_conversion->NarrowingAssignmentAllowed (0.45), mis:type_conversion->NoCastIfSameSize (0.30), mis:type_conversion->TargetTyping (0.25)
+  type_conversion (misconceptions): 3 candidates -> kept mis:type_conversion->NarrowingAssignmentAllowed (0.50), mis:type_conversion->NoCastIfSameSize (0.30), mis:type_conversion->TargetTyping (0.20)
     mis:type_conversion->NarrowingAssignmentAllowed -> not applied (0.00) ""
     mis:type_conversion->NoCastIfSameSize -> not applied (0.00) ""
     mis:type_conversion->TargetTyping -> not applied (0.00) ""
@@ -1149,6 +1150,24 @@ start concepts (3): arithmetic_operators, explicit_cast, math_random
   },
   {
    "depth": 1,
+   "source": "explicit_cast",
+   "edge": "mis:explicit_cast->CastRounds",
+   "target": "CastRounds",
+   "kind": "misconception",
+   "label": "correct",
+   "clauses": [
+    1
+   ],
+   "quote": "n is a whole number from 1 to 6, for example 4",
+   "confidence": 0.8,
+   "prune_score": 0.7000000000000001,
+   "score": 0.56,
+   "logic": "(int) 2.7 evaluates to 3.",
+   "twin_logic": "A cast to int discards the fractional part (rounds toward zero, so (int) -2.7 is -2); Math.round rounds to the nearest integer.",
+   "role": "primary"
+  },
+  {
+   "depth": 1,
    "source": "math_random",
    "edge": "lvl:math_random@L2#1",
    "target": "math_random@L2",
@@ -1165,24 +1184,6 @@ start concepts (3): arithmetic_operators, explicit_cast, math_random
    "twin_logic": null,
    "level": "L2",
    "way": "output_prediction"
-  },
-  {
-   "depth": 1,
-   "source": "explicit_cast",
-   "edge": "mis:explicit_cast->CastRounds",
-   "target": "CastRounds",
-   "kind": "misconception",
-   "label": "correct",
-   "clauses": [
-    1
-   ],
-   "quote": "n is a whole number from 1 to 6, for example 4",
-   "confidence": 0.8,
-   "prune_score": 0.6000000000000001,
-   "score": 0.48,
-   "logic": "(int) 2.7 evaluates to 3.",
-   "twin_logic": "A cast to int discards the fractional part (rounds toward zero, so (int) -2.7 is -2); Math.round rounds to the nearest integer.",
-   "role": "primary"
   },
   {
    "depth": 2,
@@ -1264,8 +1265,8 @@ start concepts (3): arithmetic_operators, explicit_cast, math_random
    ],
    "quote": "n is a whole number from 1 to 6, for example 4",
    "confidence": 0.75,
-   "prune_score": 0.9,
-   "score": 0.675,
+   "prune_score": 0.8,
+   "score": 0.6,
    "logic": "(int) 2.7 evaluates to 3.",
    "twin_logic": "A cast to int discards the fractional part (rounds toward zero, so (int) -2.7 is -2); Math.round rounds to the nearest integer.",
    "role": "context"
@@ -1360,8 +1361,8 @@ start concepts (3): arithmetic_operators, explicit_cast, math_random
    ],
    "quote": "n is a whole number from 1 to 6, for example 4",
    "confidence": 0.8,
-   "prune_score": 0.6000000000000001,
-   "score": 0.48,
+   "prune_score": 0.7000000000000001,
+   "score": 0.56,
    "logic": "(int) 2.7 evaluates to 3.",
    "twin_logic": "A cast to int discards the fractional part (rounds toward zero, so (int) -2.7 is -2); Math.round rounds to the nearest integer.",
    "role": "primary"
@@ -1521,10 +1522,28 @@ start concepts (3): arithmetic_operators, explicit_cast, math_random
    ],
    "quote": "n is a whole number from 1 to 6, for example 4",
    "confidence": 0.75,
-   "prune_score": 0.9,
-   "score": 0.675,
+   "prune_score": 0.8,
+   "score": 0.6,
    "logic": "(int) 2.7 evaluates to 3.",
    "twin_logic": "A cast to int discards the fractional part (rounds toward zero, so (int) -2.7 is -2); Math.round rounds to the nearest integer.",
+   "role": "context"
+  },
+  {
+   "depth": 3,
+   "source": "expression",
+   "edge": "mis:expression->VariablesHoldExpressions",
+   "target": "VariablesHoldExpressions",
+   "kind": "misconception",
+   "label": "correct",
+   "clauses": [
+    1
+   ],
+   "quote": "n is a whole number from 1 to 6, for example 4",
+   "confidence": 0.6,
+   "prune_score": 0.45,
+   "score": 0.27,
+   "logic": "= stores the expression itself, not its computed value",
+   "twin_logic": "y = x + k; stores the value that x + k has at that moment, so later changes to x do not change y.",
    "role": "context"
   },
   {
@@ -1608,8 +1627,8 @@ start concepts (3): arithmetic_operators, explicit_cast, math_random
  "unexplained_clauses": [],
  "stop_reason": "max depth",
  "depth_reached": 4,
- "llm_calls": 1,
- "llm_cache_hits": 44,
+ "llm_calls": 6,
+ "llm_cache_hits": 39,
  "llm_calls_by_step": {
   "prune": 16,
   "label": 29

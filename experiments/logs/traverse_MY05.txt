@@ -58,9 +58,9 @@ start concepts (3): println, arithmetic_operators, char
     lvl:expression@L0#0 -> not applied (0.00) ""
   kept: mis:char_arithmetic->CharNotNumeric [held, tier 0, 0.95], lvl:char_arithmetic@L0#0 [shown, tier 2, 0.54], lvl:expression@L4#4 [shown, tier 2, 0.40]
   clause coverage: c1 <- mis:char->CharNotNumeric; c2 <- mis:char->CharNotNumeric; c3 <- mis:char->CharNotNumeric; c4 <- mis:char->CharNotNumeric
-  held: mis:char_arithmetic->CharNotNumeric; filed at the dependent concept: mis:char->CharNotNumeric
-  shadows: mis:char->CharNotNumeric (shadow of mis:char_arithmetic->CharNotNumeric)
-  root-cause walk: held on ['char_arithmetic'], broken at [] (consequences: pre:char->char_arithmetic, pre:arithmetic_operators->expression), prerequisites {'expression': ['arithmetic_operators'], 'char_arithmetic': ['char'], 'println': ['statement']}
-  level char: L0 via everyday_reading "c is a letter, not a number; so you cannot add 1 to it; Java will give an error that a char and an int cannot be added"
-  level char_arithmetic: L0 via misconception "It does not compile; c is a letter, not a number; so you cannot add 1 to it; Java will give an error that a char and an int cannot be added"
+  held: mis:char->CharNotNumeric; filed at the dependent concept: mis:char_arithmetic->CharNotNumeric
+  shadows: mis:char_arithmetic->CharNotNumeric (shadow of mis:char->CharNotNumeric)
+  root-cause walk: held on ['char'], broken at [] (consequences: pre:char->char_arithmetic, pre:arithmetic_operators->expression), prerequisites {'expression': ['arithmetic_operators'], 'char_arithmetic': ['char'], 'println': ['statement']}
+  level char: L0 via misconception "It does not compile; c is a letter, not a number; so you cannot add 1 to it; Java will give an error that a char and an int cannot be added"
+  level char_arithmetic: L0 via everyday_reading "c is a letter, not a number; so you cannot add 1 to it; Java will give an error that a char and an int cannot be added"
   level expression: L4 via diagnose_an_error "It does not compile; c is a letter, not a number; so you cannot add 1 to it; Java will give an error that a char and an int cannot be added"

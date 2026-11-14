@@ -68,9 +68,9 @@ start concepts (3): indexing, array_traversal, array_initializer
   array_initializer (concept edges): 2 candidates -> kept pre:array_initializer->length_field (0.60), pre:array_declaration->array_initializer (0.40)
     pre:array_initializer->length_field -> confirmed (0.36) "It prints 0, then 5, 10 and 15; Then a[1], a[2] and a[3] are 5, 10 and 15"
     pre:array_declaration->array_initializer -> confirmed (0.24) "Then a[1], a[2] and a[3] are 5, 10 and 15"
-  off_by_one_error (misconceptions): 4 candidates -> kept mis:off_by_one_error->OffByOneBound (0.60), err:off_by_one_error->WrongIterationCount (0.35), err:off_by_one_error->FencepostExtraSeparator (0.05)
+  off_by_one_error (misconceptions): 4 candidates -> kept mis:off_by_one_error->OffByOneBound (0.60), err:off_by_one_error->WrongIterationCount (0.30), err:off_by_one_error->FencepostExtraSeparator (0.10)
     mis:off_by_one_error->OffByOneBound -> correct (0.36) "It prints 0, then 5, 10 and 15; Then a[1], a[2] and a[3] are 5, 10 and 15"
-    err:off_by_one_error->WrongIterationCount -> correct (0.19) "It prints 0, then 5, 10 and 15; Then a[1], a[2] and a[3] are 5, 10 and 15"
+    err:off_by_one_error->WrongIterationCount -> correct (0.17) "It prints 0, then 5, 10 and 15; Then a[1], a[2] and a[3] are 5, 10 and 15"
     err:off_by_one_error->FencepostExtraSeparator -> not applied (0.00) ""
   off_by_one_error (level ways): 16 candidates -> kept lvl:off_by_one_error@L0#0 (0.60), lvl:off_by_one_error@L4#3 (0.25), lvl:off_by_one_error@L3#0 (0.15)
     lvl:off_by_one_error@L0#0 -> shown (0.42) "Arrays start at a[1]; so a[0] is before the first element and just gives 0; Then a[1], a[2] and a[3] are 5, 10 and 15"

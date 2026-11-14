@@ -525,9 +525,9 @@ Confidence: 0.97
 | mis:expression-&gt;TargetTyping | wrong rule: The type of a numerical expression depends on the type expected by the surrounding context, so double d = a / b; keeps the fraction. | right rule: The type of a numerical expression is determined by the expression, so double d = a / b; with int a and b still divides as ints. |
 | mis:expression-&gt;VariablesHoldExpressions | wrong rule: = stores the expression itself, not its computed value | right rule: y = x + k; stores the value that x + k has at that moment, so later changes to x do not change y. |</p>
 <p>Prune: the model's reply (edge id and score; the kept edges sum to 1):</p>
-<pre><code>mis:expression-&gt;TargetTyping (0.60), mis:expression-&gt;AssignmentIsEquation (0.20), mis:expression-&gt;VariablesHoldExpressions (0.20)
+<pre><code>mis:expression-&gt;TargetTyping (0.60), mis:expression-&gt;AssignmentIsEquation (0.25), mis:expression-&gt;VariablesHoldExpressions (0.15)
 </code></pre>
-<p>Kept by pruning: mis:expression-&gt;TargetTyping (0.60), mis:expression-&gt;AssignmentIsEquation (0.20), mis:expression-&gt;VariablesHoldExpressions (0.20)</p>
+<p>Kept by pruning: mis:expression-&gt;TargetTyping (0.60), mis:expression-&gt;AssignmentIsEquation (0.25), mis:expression-&gt;VariablesHoldExpressions (0.15)</p>
 <p>Label prompt for the misconception / error edges (judged together). The model saw the program, the question, the numbered clauses, and these edges with their wrong rule and right rule:
 | edge |
 |---|
@@ -543,8 +543,8 @@ mis:expression-&gt;VariablesHoldExpressions | correct | clauses: 2 | confidence:
 | edge | label | prune score | confidence | score | clauses | words |
 |---|---|---|---|---|---|---|
 | mis:expression-&gt;TargetTyping | not applied |  |  | 0.0 |  |  |
-| mis:expression-&gt;AssignmentIsEquation | correct | 0.2 | 0.6 | 0.12 | c2 | Adding 1 to 2147483647 gives 2147483648, and Java just stores the bigger number in big |
-| mis:expression-&gt;VariablesHoldExpressions | correct | 0.2 | 0.6 | 0.12 | c2 | Adding 1 to 2147483647 gives 2147483648, and Java just stores the bigger number in big |</p>
+| mis:expression-&gt;AssignmentIsEquation | correct | 0.25 | 0.6 | 0.15 | c2 | Adding 1 to 2147483647 gives 2147483648, and Java just stores the bigger number in big |
+| mis:expression-&gt;VariablesHoldExpressions | correct | 0.15 | 0.6 | 0.09 | c2 | Adding 1 to 2147483647 gives 2147483648, and Java just stores the bigger number in big |</p>
 <h4>expression, level ways: 19 edges offered</h4>
 <p>Edges offered:
 | edge |
@@ -626,7 +626,7 @@ Confidence: 0.7
 - int: L0 via everyday_reading "It prints 2147483648; Adding 1 to 2147483647 gives 2147483648, and Java just stores the bigger number in big; because it makes room for it automatically"
 - overflow: L0 via misconception "It prints 2147483648; Adding 1 to 2147483647 gives 2147483648, and Java just stores the bigger number in big; because it makes room for it automatically"
 - println: L2 via output_prediction "It prints 2147483648"</p>
-<p><strong>Stop:</strong> sufficient at depth 3; prompts {'prune': 13, 'label': 23}, fresh model calls 0, cache hits 36</p>
+<p><strong>Stop:</strong> sufficient at depth 3; prompts {'prune': 13, 'label': 23}, fresh model calls 1, cache hits 35</p>
 <h3>Held misconceptions</h3>
 <table>
 <thead>
@@ -904,9 +904,9 @@ Confidence: 0.7
 <td>mis:expression-&gt;AssignmentIsEquation</td>
 <td>misconception</td>
 <td>correct</td>
-<td>0.2</td>
+<td>0.25</td>
 <td>0.6</td>
-<td>0.12</td>
+<td>0.15</td>
 <td>[2]</td>
 <td>Adding 1 to 2147483647 gives 2147483648, and Java just stores the bigger number in big</td>
 </tr>
@@ -916,9 +916,9 @@ Confidence: 0.7
 <td>mis:expression-&gt;VariablesHoldExpressions</td>
 <td>misconception</td>
 <td>correct</td>
-<td>0.2</td>
+<td>0.15</td>
 <td>0.6</td>
-<td>0.12</td>
+<td>0.09</td>
 <td>[2]</td>
 <td>Adding 1 to 2147483647 gives 2147483648, and Java just stores the bigger number in big</td>
 </tr>
@@ -1075,10 +1075,10 @@ start concepts (3): arithmetic_operators, overflow, println
     lvl:int@L0#0 -&gt; shown (0.42) &quot;It prints 2147483648; Adding 1 to 2147483647 gives 2147483648, and Java just stores the bigger number in big; because it makes room for it automatically&quot;
     lvl:int@L2#2 -&gt; not applied (0.00) &quot;&quot;
     lvl:int@L3#3 -&gt; not applied (0.00) &quot;&quot;
-  expression (misconceptions): 8 candidates -&gt; kept mis:expression-&gt;TargetTyping (0.60), mis:expression-&gt;AssignmentIsEquation (0.20), mis:expression-&gt;VariablesHoldExpressions (0.20)
+  expression (misconceptions): 8 candidates -&gt; kept mis:expression-&gt;TargetTyping (0.60), mis:expression-&gt;AssignmentIsEquation (0.25), mis:expression-&gt;VariablesHoldExpressions (0.15)
     mis:expression-&gt;TargetTyping -&gt; not applied (0.00) &quot;&quot;
-    mis:expression-&gt;AssignmentIsEquation -&gt; correct (0.12) &quot;Adding 1 to 2147483647 gives 2147483648, and Java just stores the bigger number in big&quot;
-    mis:expression-&gt;VariablesHoldExpressions -&gt; correct (0.12) &quot;Adding 1 to 2147483647 gives 2147483648, and Java just stores the bigger number in big&quot;
+    mis:expression-&gt;AssignmentIsEquation -&gt; correct (0.15) &quot;Adding 1 to 2147483647 gives 2147483648, and Java just stores the bigger number in big&quot;
+    mis:expression-&gt;VariablesHoldExpressions -&gt; correct (0.09) &quot;Adding 1 to 2147483647 gives 2147483648, and Java just stores the bigger number in big&quot;
   expression (level ways): 19 candidates -&gt; kept lvl:expression@L0#0 (0.50), lvl:expression@L2#1 (0.30), lvl:expression@L3#1 (0.20)
     lvl:expression@L0#0 -&gt; shown (0.42) &quot;It prints 2147483648; Adding 1 to 2147483647 gives 2147483648, and Java just stores the bigger number in big; because it makes room for it automatically&quot;
     lvl:expression@L2#1 -&gt; not applied (0.00) &quot;&quot;
@@ -1306,7 +1306,7 @@ start concepts (3): arithmetic_operators, overflow, println
    &quot;score&quot;: 0.9215,
    &quot;logic&quot;: &quot;An int result that is too large is automatically stored as a bigger number.&quot;,
    &quot;twin_logic&quot;: &quot;int arithmetic is 32-bit; a result outside the range wraps around.&quot;,
-   &quot;role&quot;: &quot;primary&quot;
+   &quot;role&quot;: &quot;context&quot;
   },
   {
    &quot;depth&quot;: 3,
@@ -1504,7 +1504,7 @@ start concepts (3): arithmetic_operators, overflow, println
    &quot;score&quot;: 0.9215,
    &quot;logic&quot;: &quot;An int result that is too large is automatically stored as a bigger number.&quot;,
    &quot;twin_logic&quot;: &quot;int arithmetic is 32-bit; a result outside the range wraps around.&quot;,
-   &quot;role&quot;: &quot;primary&quot;
+   &quot;role&quot;: &quot;context&quot;
   },
   {
    &quot;depth&quot;: 3,
@@ -1539,8 +1539,8 @@ start concepts (3): arithmetic_operators, overflow, println
    ],
    &quot;quote&quot;: &quot;Adding 1 to 2147483647 gives 2147483648, and Java just stores the bigger number in big&quot;,
    &quot;confidence&quot;: 0.6,
-   &quot;prune_score&quot;: 0.2,
-   &quot;score&quot;: 0.12,
+   &quot;prune_score&quot;: 0.25,
+   &quot;score&quot;: 0.15,
    &quot;logic&quot;: &quot;An assignment states a lasting equality between its two sides, so y = x - y can be solved like the equation x = 2y and x = x + 5 relates two equal quantities.&quot;,
    &quot;twin_logic&quot;: &quot;An assignment is a one-time action: evaluate the right side with current values, then store the result in the left variable.&quot;,
    &quot;role&quot;: &quot;context&quot;
@@ -1557,8 +1557,8 @@ start concepts (3): arithmetic_operators, overflow, println
    ],
    &quot;quote&quot;: &quot;Adding 1 to 2147483647 gives 2147483648, and Java just stores the bigger number in big&quot;,
    &quot;confidence&quot;: 0.6,
-   &quot;prune_score&quot;: 0.2,
-   &quot;score&quot;: 0.12,
+   &quot;prune_score&quot;: 0.15,
+   &quot;score&quot;: 0.09,
    &quot;logic&quot;: &quot;= stores the expression itself, not its computed value&quot;,
    &quot;twin_logic&quot;: &quot;y = x + k; stores the value that x + k has at that moment, so later changes to x do not change y.&quot;,
    &quot;role&quot;: &quot;context&quot;
@@ -1593,8 +1593,8 @@ start concepts (3): arithmetic_operators, overflow, println
  &quot;unexplained_clauses&quot;: [],
  &quot;stop_reason&quot;: &quot;sufficient&quot;,
  &quot;depth_reached&quot;: 3,
- &quot;llm_calls&quot;: 0,
- &quot;llm_cache_hits&quot;: 36,
+ &quot;llm_calls&quot;: 1,
+ &quot;llm_cache_hits&quot;: 35,
  &quot;llm_calls_by_step&quot;: {
   &quot;prune&quot;: 13,
   &quot;label&quot;: 23

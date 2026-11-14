@@ -30,7 +30,7 @@
    "misconception": "LoopBodyStatementOutsideLoop",
    "kind": "misconception",
    "quote": "Three lines; The outer loop finishes first; so i ends at 2, then the inner loop runs j from 1 to 3: 2 1, 2 2, 2 3",
-   "score": 0.425
+   "score": 0.51
   },
   {
    "concept": "loop_scope",
@@ -52,47 +52,54 @@
   {
    "concept": "loop_control",
    "misconception": "ForLoopPartSkipped",
-   "shadow_of": "mis:loop_body->LoopBodyStatementOutsideLoop",
+   "shadow_of": "mis:loop_scope->ForVariableScopeBeyondLoop",
    "quote": "The outer loop finishes first; so i ends at 2, then the inner loop runs j from 1 to 3: 2 1, 2 2, 2 3",
-   "score": 0.4
+   "score": 0.18
+  },
+  {
+   "concept": "statement",
+   "misconception": "StatementsRunInAnyOrder",
+   "shadow_of": "mis:for_loop->ForLoopPartSkipped",
+   "quote": "The outer loop finishes first; so i ends at 2, then the inner loop runs j from 1 to 3: 2 1, 2 2, 2 3",
+   "score": 0.35
   }
  ],
  "broken_edges": [
   {
    "edge": "pre:for_loop->nested_loops",
    "quote": "The outer loop finishes first; so i ends at 2, then the inner loop runs j from 1 to 3: 2 1, 2 2, 2 3",
-   "score": 0.644,
-   "consequence_of": "mis:loop_control->ForLoopPartSkipped"
-  },
-  {
-   "edge": "pre:loop_control->for_loop",
-   "quote": "The outer loop finishes first; so i ends at 2, then the inner loop runs j from 1 to 3: 2 1, 2 2, 2 3",
-   "score": 0.51,
-   "consequence_of": "mis:loop_control->ForLoopPartSkipped"
+   "score": 0.552,
+   "consequence_of": "mis:for_loop->ForLoopPartSkipped"
   },
   {
    "edge": "pre:for_loop->loop_body",
    "quote": "The outer loop finishes first; so i ends at 2, then the inner loop runs j from 1 to 3: 2 1, 2 2, 2 3",
-   "score": 0.17,
-   "consequence_of": "mis:loop_control->ForLoopPartSkipped"
+   "score": 0.2125,
+   "consequence_of": "mis:for_loop->ForLoopPartSkipped"
   },
   {
    "edge": "pre:for_loop->loop_scope",
    "quote": "The outer loop finishes first; so i ends at 2, then the inner loop runs j from 1 to 3: 2 1, 2 2, 2 3",
-   "score": 0.06,
-   "consequence_of": "mis:loop_control->ForLoopPartSkipped"
+   "score": 0.09,
+   "consequence_of": "mis:for_loop->ForLoopPartSkipped"
+  },
+  {
+   "edge": "pre:loop_control->for_loop",
+   "quote": "The outer loop finishes first; so i ends at 2, then the inner loop runs j from 1 to 3: 2 1, 2 2, 2 3",
+   "score": 0.85,
+   "consequence_of": "mis:for_loop->ForLoopPartSkipped"
   },
   {
    "edge": "pre:statement->control_flow",
    "quote": "The outer loop finishes first; so i ends at 2, then the inner loop runs j from 1 to 3: 2 1, 2 2, 2 3",
    "score": 0.8,
-   "consequence_of": "mis:loop_control->ForLoopPartSkipped"
+   "consequence_of": "mis:for_loop->ForLoopPartSkipped"
   },
   {
    "edge": "pre:statement->println",
    "quote": "Three lines; so i ends at 2, then the inner loop runs j from 1 to 3: 2 1, 2 2, 2 3",
    "score": 0.48,
-   "consequence_of": "mis:loop_control->ForLoopPartSkipped"
+   "consequence_of": "mis:for_loop->ForLoopPartSkipped"
   }
  ],
  "root_cause": {
@@ -180,25 +187,6 @@
  "paths": [
   {
    "depth": 1,
-   "source": "loop_control",
-   "edge": "mis:loop_control->ForLoopPartSkipped",
-   "target": "ForLoopPartSkipped",
-   "kind": "misconception",
-   "label": "held",
-   "clauses": [
-    2,
-    3
-   ],
-   "quote": "The outer loop finishes first; so i ends at 2, then the inner loop runs j from 1 to 3: 2 1, 2 2, 2 3",
-   "confidence": 0.8,
-   "prune_score": 0.5,
-   "score": 0.4,
-   "logic": "A pass of a loop may leave out one of its parts (the condition test, the body, the update, or the initialization).",
-   "twin_logic": "Each pass of a for loop runs test, then body, then update, every time; the initialization runs once, at the start.",
-   "role": "context"
-  },
-  {
-   "depth": 1,
    "source": "for_loop",
    "edge": "mis:for_loop->ForLoopPartSkipped",
    "target": "ForLoopPartSkipped",
@@ -215,6 +203,25 @@
    "logic": "A pass of a loop may leave out one of its parts (the condition test, the body, the update, or the initialization).",
    "twin_logic": "Each pass of a for loop runs test, then body, then update, every time; the initialization runs once, at the start.",
    "role": "primary"
+  },
+  {
+   "depth": 1,
+   "source": "loop_control",
+   "edge": "mis:loop_control->ForLoopPartSkipped",
+   "target": "ForLoopPartSkipped",
+   "kind": "misconception",
+   "label": "held",
+   "clauses": [
+    2,
+    3
+   ],
+   "quote": "The outer loop finishes first; so i ends at 2, then the inner loop runs j from 1 to 3: 2 1, 2 2, 2 3",
+   "confidence": 0.6,
+   "prune_score": 0.3,
+   "score": 0.18,
+   "logic": "A pass of a loop may leave out one of its parts (the condition test, the body, the update, or the initialization).",
+   "twin_logic": "Each pass of a for loop runs test, then body, then update, every time; the initialization runs once, at the start.",
+   "role": "context"
   },
   {
    "depth": 1,
@@ -249,30 +256,11 @@
    ],
    "quote": "The outer loop finishes first; so i ends at 2, then the inner loop runs j from 1 to 3: 2 1, 2 2, 2 3",
    "confidence": 0.92,
-   "prune_score": 0.7000000000000001,
-   "score": 0.644,
+   "prune_score": 0.6,
+   "score": 0.552,
    "logic": "In nested loops the inner for runs its complete set of passes for every single pass of the outer for.",
    "twin_logic": null,
-   "consequence_of": "mis:loop_control->ForLoopPartSkipped"
-  },
-  {
-   "depth": 2,
-   "source": "loop_control",
-   "edge": "pre:loop_control->for_loop",
-   "target": "for_loop",
-   "kind": "prerequisite",
-   "label": "broken",
-   "clauses": [
-    2,
-    3
-   ],
-   "quote": "The outer loop finishes first; so i ends at 2, then the inner loop runs j from 1 to 3: 2 1, 2 2, 2 3",
-   "confidence": 0.85,
-   "prune_score": 0.6000000000000001,
-   "score": 0.51,
-   "logic": "The for header is exactly the three control slots, and the body runs after the test and before the update on each pass.",
-   "twin_logic": null,
-   "consequence_of": "mis:loop_control->ForLoopPartSkipped"
+   "consequence_of": "mis:for_loop->ForLoopPartSkipped"
   },
   {
    "depth": 2,
@@ -287,11 +275,11 @@
    ],
    "quote": "The outer loop finishes first; so i ends at 2, then the inner loop runs j from 1 to 3: 2 1, 2 2, 2 3",
    "confidence": 0.85,
-   "prune_score": 0.20000000000000004,
-   "score": 0.17,
+   "prune_score": 0.25,
+   "score": 0.2125,
    "logic": "The statements in braces after the for header are the loop body; they run once on every pass, between the test and the increment, exactly as in a while loop.",
    "twin_logic": null,
-   "consequence_of": "mis:loop_control->ForLoopPartSkipped"
+   "consequence_of": "mis:for_loop->ForLoopPartSkipped"
   },
   {
    "depth": 2,
@@ -306,11 +294,30 @@
    ],
    "quote": "The outer loop finishes first; so i ends at 2, then the inner loop runs j from 1 to 3: 2 1, 2 2, 2 3",
    "confidence": 0.6,
-   "prune_score": 0.10000000000000002,
-   "score": 0.06,
+   "prune_score": 0.15,
+   "score": 0.09,
    "logic": "A variable declared in the for header exists only from its declaration to the end of the for statement's block.",
    "twin_logic": null,
-   "consequence_of": "mis:loop_control->ForLoopPartSkipped"
+   "consequence_of": "mis:for_loop->ForLoopPartSkipped"
+  },
+  {
+   "depth": 3,
+   "source": "for_loop",
+   "edge": "pre:loop_control->for_loop",
+   "target": "loop_control",
+   "kind": "prerequisite",
+   "label": "broken",
+   "clauses": [
+    2,
+    3
+   ],
+   "quote": "The outer loop finishes first; so i ends at 2, then the inner loop runs j from 1 to 3: 2 1, 2 2, 2 3",
+   "confidence": 0.85,
+   "prune_score": 1.0,
+   "score": 0.85,
+   "logic": "The for header is exactly the three control slots, and the body runs after the test and before the update on each pass.",
+   "twin_logic": null,
+   "consequence_of": "mis:for_loop->ForLoopPartSkipped"
   },
   {
    "depth": 3,
@@ -329,7 +336,7 @@
    "score": 0.8,
    "logic": "Control flow is the order in which statements run.",
    "twin_logic": null,
-   "consequence_of": "mis:loop_control->ForLoopPartSkipped"
+   "consequence_of": "mis:for_loop->ForLoopPartSkipped"
   },
   {
    "depth": 3,
@@ -352,6 +359,26 @@
   },
   {
    "depth": 3,
+   "source": "loop_body",
+   "edge": "mis:loop_body->LoopBodyStatementOutsideLoop",
+   "target": "LoopBodyStatementOutsideLoop",
+   "kind": "misconception",
+   "label": "held",
+   "clauses": [
+    1,
+    2,
+    3
+   ],
+   "quote": "Three lines; The outer loop finishes first; so i ends at 2, then the inner loop runs j from 1 to 3: 2 1, 2 2, 2 3",
+   "confidence": 0.85,
+   "prune_score": 0.6,
+   "score": 0.51,
+   "logic": "Some statements inside the braces of a loop body are not repeated; they run once, before or after the loop.",
+   "twin_logic": "Every statement inside the loop braces is part of the body and runs on every pass.",
+   "role": "primary"
+  },
+  {
+   "depth": 3,
    "source": "println",
    "edge": "pre:statement->println",
    "target": "statement",
@@ -367,27 +394,7 @@
    "score": 0.48,
    "logic": "System.out.println(s); is itself a statement, so its line of output appears at its own place in the sequence.",
    "twin_logic": null,
-   "consequence_of": "mis:loop_control->ForLoopPartSkipped"
-  },
-  {
-   "depth": 3,
-   "source": "loop_body",
-   "edge": "mis:loop_body->LoopBodyStatementOutsideLoop",
-   "target": "LoopBodyStatementOutsideLoop",
-   "kind": "misconception",
-   "label": "held",
-   "clauses": [
-    1,
-    2,
-    3
-   ],
-   "quote": "Three lines; The outer loop finishes first; so i ends at 2, then the inner loop runs j from 1 to 3: 2 1, 2 2, 2 3",
-   "confidence": 0.85,
-   "prune_score": 0.5,
-   "score": 0.425,
-   "logic": "Some statements inside the braces of a loop body are not repeated; they run once, before or after the loop.",
-   "twin_logic": "Every statement inside the loop braces is part of the body and runs on every pass.",
-   "role": "primary"
+   "consequence_of": "mis:for_loop->ForLoopPartSkipped"
   },
   {
    "depth": 3,
@@ -407,6 +414,25 @@
    "logic": "i declared in the for header can still be used after the loop has ended.",
    "twin_logic": "i declared in the for header exists only inside the loop, so using it after the loop does not compile.",
    "role": "primary"
+  },
+  {
+   "depth": 4,
+   "source": "statement",
+   "edge": "mis:statement->StatementsRunInAnyOrder",
+   "target": "StatementsRunInAnyOrder",
+   "kind": "misconception",
+   "label": "held",
+   "clauses": [
+    2,
+    3
+   ],
+   "quote": "The outer loop finishes first; so i ends at 2, then the inner loop runs j from 1 to 3: 2 1, 2 2, 2 3",
+   "confidence": 0.5,
+   "prune_score": 0.7000000000000001,
+   "score": 0.35,
+   "logic": "Statements in a program can run in any order.",
+   "twin_logic": "Without control statements, statements run once each, top to bottom.",
+   "role": "context"
   },
   {
    "depth": 4,
@@ -461,9 +487,9 @@
     3
    ],
    "quote": "The outer loop finishes first; so i ends at 2, then the inner loop runs j from 1 to 3: 2 1, 2 2, 2 3",
-   "confidence": 0.8,
-   "prune_score": 0.5,
-   "score": 0.4,
+   "confidence": 0.6,
+   "prune_score": 0.3,
+   "score": 0.18,
    "logic": "A pass of a loop may leave out one of its parts (the condition test, the body, the update, or the initialization).",
    "twin_logic": "Each pass of a for loop runs test, then body, then update, every time; the initialization runs once, at the start.",
    "role": "context"
@@ -528,42 +554,6 @@
   },
   {
    "depth": 2,
-   "source": "loop_control",
-   "edge": "pre:loop_control->for_loop",
-   "target": "for_loop",
-   "kind": "prerequisite",
-   "label": "broken",
-   "clauses": [
-    2,
-    3
-   ],
-   "quote": "The outer loop finishes first; so i ends at 2, then the inner loop runs j from 1 to 3: 2 1, 2 2, 2 3",
-   "confidence": 0.85,
-   "prune_score": 0.6000000000000001,
-   "score": 0.51,
-   "logic": "The for header is exactly the three control slots, and the body runs after the test and before the update on each pass.",
-   "twin_logic": null,
-   "consequence_of": "mis:loop_control->ForLoopPartSkipped"
-  },
-  {
-   "depth": 2,
-   "source": "loop_control",
-   "edge": "pre:loop_variable->loop_control",
-   "target": "loop_variable",
-   "kind": "prerequisite",
-   "label": "confirmed",
-   "clauses": [
-    3
-   ],
-   "quote": "so i ends at 2, then the inner loop runs j from 1 to 3: 2 1, 2 2, 2 3",
-   "confidence": 0.6,
-   "prune_score": 0.30000000000000004,
-   "score": 0.18,
-   "logic": "The init, condition and update all act on the loop variable: the init sets it, the condition tests it, the update changes it.",
-   "twin_logic": null
-  },
-  {
-   "depth": 2,
    "source": "for_loop",
    "edge": "pre:for_loop->nested_loops",
    "target": "nested_loops",
@@ -575,11 +565,11 @@
    ],
    "quote": "The outer loop finishes first; so i ends at 2, then the inner loop runs j from 1 to 3: 2 1, 2 2, 2 3",
    "confidence": 0.92,
-   "prune_score": 0.7000000000000001,
-   "score": 0.644,
+   "prune_score": 0.6,
+   "score": 0.552,
    "logic": "In nested loops the inner for runs its complete set of passes for every single pass of the outer for.",
    "twin_logic": null,
-   "consequence_of": "mis:loop_control->ForLoopPartSkipped"
+   "consequence_of": "mis:for_loop->ForLoopPartSkipped"
   },
   {
    "depth": 2,
@@ -594,11 +584,11 @@
    ],
    "quote": "The outer loop finishes first; so i ends at 2, then the inner loop runs j from 1 to 3: 2 1, 2 2, 2 3",
    "confidence": 0.85,
-   "prune_score": 0.20000000000000004,
-   "score": 0.17,
+   "prune_score": 0.25,
+   "score": 0.2125,
    "logic": "The statements in braces after the for header are the loop body; they run once on every pass, between the test and the increment, exactly as in a while loop.",
    "twin_logic": null,
-   "consequence_of": "mis:loop_control->ForLoopPartSkipped"
+   "consequence_of": "mis:for_loop->ForLoopPartSkipped"
   },
   {
    "depth": 2,
@@ -613,11 +603,28 @@
    ],
    "quote": "The outer loop finishes first; so i ends at 2, then the inner loop runs j from 1 to 3: 2 1, 2 2, 2 3",
    "confidence": 0.6,
-   "prune_score": 0.10000000000000002,
-   "score": 0.06,
+   "prune_score": 0.15,
+   "score": 0.09,
    "logic": "A variable declared in the for header exists only from its declaration to the end of the for statement's block.",
    "twin_logic": null,
-   "consequence_of": "mis:loop_control->ForLoopPartSkipped"
+   "consequence_of": "mis:for_loop->ForLoopPartSkipped"
+  },
+  {
+   "depth": 2,
+   "source": "loop_control",
+   "edge": "pre:loop_variable->loop_control",
+   "target": "loop_variable",
+   "kind": "prerequisite",
+   "label": "confirmed",
+   "clauses": [
+    3
+   ],
+   "quote": "so i ends at 2, then the inner loop runs j from 1 to 3: 2 1, 2 2, 2 3",
+   "confidence": 0.6,
+   "prune_score": 0.8,
+   "score": 0.48,
+   "logic": "The init, condition and update all act on the loop variable: the init sets it, the condition tests it, the update changes it.",
+   "twin_logic": null
   },
   {
    "depth": 2,
@@ -635,25 +642,6 @@
    "score": 0.6,
    "logic": "When one operand of + is a String, Java converts the other operand to a String before concatenating.",
    "twin_logic": null
-  },
-  {
-   "depth": 2,
-   "source": "control_flow",
-   "edge": "mis:control_flow->ProgramEndsAfterLoop",
-   "target": "ProgramEndsAfterLoop",
-   "kind": "misconception",
-   "label": "correct",
-   "clauses": [
-    2,
-    3
-   ],
-   "quote": "The outer loop finishes first; so i ends at 2, then the inner loop runs j from 1 to 3: 2 1, 2 2, 2 3",
-   "confidence": 0.55,
-   "prune_score": 0.15,
-   "score": 0.0825,
-   "logic": "When a loop finishes the program ends, so code after the loop never runs.",
-   "twin_logic": "When the loop condition becomes false, control continues with the first statement after the loop.",
-   "role": "context"
   },
   {
    "depth": 2,
@@ -835,20 +823,22 @@
   },
   {
    "depth": 3,
-   "source": "loop_control",
-   "edge": "pre:loop_variable->loop_control",
-   "target": "loop_variable",
+   "source": "for_loop",
+   "edge": "pre:loop_control->for_loop",
+   "target": "loop_control",
    "kind": "prerequisite",
-   "label": "confirmed",
+   "label": "broken",
    "clauses": [
+    2,
     3
    ],
-   "quote": "so i ends at 2, then the inner loop runs j from 1 to 3: 2 1, 2 2, 2 3",
-   "confidence": 0.6,
-   "prune_score": 0.8,
-   "score": 0.48,
-   "logic": "The init, condition and update all act on the loop variable: the init sets it, the condition tests it, the update changes it.",
-   "twin_logic": null
+   "quote": "The outer loop finishes first; so i ends at 2, then the inner loop runs j from 1 to 3: 2 1, 2 2, 2 3",
+   "confidence": 0.85,
+   "prune_score": 1.0,
+   "score": 0.85,
+   "logic": "The for header is exactly the three control slots, and the body runs after the test and before the update on each pass.",
+   "twin_logic": null,
+   "consequence_of": "mis:for_loop->ForLoopPartSkipped"
   },
   {
    "depth": 3,
@@ -864,8 +854,8 @@
    ],
    "quote": "Three lines; The outer loop finishes first; so i ends at 2, then the inner loop runs j from 1 to 3: 2 1, 2 2, 2 3",
    "confidence": 0.85,
-   "prune_score": 0.5,
-   "score": 0.425,
+   "prune_score": 0.6,
+   "score": 0.51,
    "logic": "Some statements inside the braces of a loop body are not repeated; they run once, before or after the loop.",
    "twin_logic": "Every statement inside the loop braces is part of the body and runs on every pass.",
    "role": "primary"
@@ -965,7 +955,7 @@
    "score": 0.8,
    "logic": "Control flow is the order in which statements run.",
    "twin_logic": null,
-   "consequence_of": "mis:loop_control->ForLoopPartSkipped"
+   "consequence_of": "mis:for_loop->ForLoopPartSkipped"
   },
   {
    "depth": 3,
@@ -984,7 +974,7 @@
    "score": 0.48,
    "logic": "System.out.println(s); is itself a statement, so its line of output appears at its own place in the sequence.",
    "twin_logic": null,
-   "consequence_of": "mis:loop_control->ForLoopPartSkipped"
+   "consequence_of": "mis:for_loop->ForLoopPartSkipped"
   },
   {
    "depth": 3,
@@ -1002,6 +992,25 @@
    "score": 0.12,
    "logic": "println(\"s\") outputs exactly the characters between the quotes and then ends the line.",
    "twin_logic": null
+  },
+  {
+   "depth": 4,
+   "source": "statement",
+   "edge": "mis:statement->StatementsRunInAnyOrder",
+   "target": "StatementsRunInAnyOrder",
+   "kind": "misconception",
+   "label": "held",
+   "clauses": [
+    2,
+    3
+   ],
+   "quote": "The outer loop finishes first; so i ends at 2, then the inner loop runs j from 1 to 3: 2 1, 2 2, 2 3",
+   "confidence": 0.5,
+   "prune_score": 0.7000000000000001,
+   "score": 0.35,
+   "logic": "Statements in a program can run in any order.",
+   "twin_logic": "Without control statements, statements run once each, top to bottom.",
+   "role": "context"
   },
   {
    "depth": 4,
@@ -1032,10 +1041,10 @@
  "unexplained_clauses": [],
  "stop_reason": "sufficient",
  "depth_reached": 4,
- "llm_calls": 0,
- "llm_cache_hits": 72,
+ "llm_calls": 11,
+ "llm_cache_hits": 59,
  "llm_calls_by_step": {
   "prune": 24,
-  "label": 48
+  "label": 46
  }
 }

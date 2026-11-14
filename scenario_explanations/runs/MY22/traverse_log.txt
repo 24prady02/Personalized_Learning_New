@@ -2,10 +2,10 @@ clauses: I think i++ adds 1 to i, though it might add 2, Im not sure | Probably 
 start: 2 tagged concepts, all used
 start concepts (2): increment_operators, println
 --- depth 1: current concepts ['increment_operators', 'println']
-  increment_operators (misconceptions): 5 candidates -> kept mis:increment_operators->IncrementByTwo (0.80), mis:increment_operators->PrePostIncrementSameValue (0.10), mis:increment_operators->PostIncrementAssignsLater (0.10)
-    mis:increment_operators->IncrementByTwo -> correct (0.48) "I think i++ adds 1 to i, though it might add 2, Im not sure; Probably it makes i 6"
-    mis:increment_operators->PrePostIncrementSameValue -> not applied (0.00) ""
+  increment_operators (misconceptions): 5 candidates -> kept mis:increment_operators->IncrementByTwo (0.90), mis:increment_operators->PostIncrementAssignsLater (0.06), mis:increment_operators->PrePostIncrementSameValue (0.04)
+    mis:increment_operators->IncrementByTwo -> correct (0.54) "I think i++ adds 1 to i, though it might add 2, Im not sure; Probably it makes i 6"
     mis:increment_operators->PostIncrementAssignsLater -> not applied (0.00) ""
+    mis:increment_operators->PrePostIncrementSameValue -> not applied (0.00) ""
   increment_operators (level ways): 16 candidates -> kept lvl:increment_operators@L0#0 (0.45), lvl:increment_operators@L1#0 (0.30), lvl:increment_operators@L2#1 (0.25)
     lvl:increment_operators@L0#0 -> shown (0.25) "I think i++ adds 1 to i, though it might add 2, Im not sure"
     lvl:increment_operators@L1#0 -> shown (0.18) "I think i++ adds 1 to i, though it might add 2, Im not sure; Probably it makes i 6"
@@ -18,7 +18,7 @@ start concepts (2): increment_operators, println
     lvl:println@L2#1 -> not applied (0.00) ""
     lvl:println@L2#0 -> not applied (0.00) ""
     lvl:println@L0#3 -> not applied (0.00) ""
-  kept: mis:increment_operators->IncrementByTwo [correct, tier 2, 0.48], lvl:increment_operators@L0#0 [shown, tier 2, 0.25], lvl:increment_operators@L1#0 [shown, tier 2, 0.18]
+  kept: mis:increment_operators->IncrementByTwo [correct, tier 2, 0.54], lvl:increment_operators@L0#0 [shown, tier 2, 0.25], lvl:increment_operators@L1#0 [shown, tier 2, 0.18]
   clause coverage: c1 <- mis:increment_operators->IncrementByTwo; c2 <- mis:increment_operators->IncrementByTwo
   not yet read: pre:assignment->increment_operators, pre:statement->println
 --- depth 2: current concepts ['increment_operators', 'println']
@@ -31,15 +31,15 @@ start concepts (2): increment_operators, println
   clause coverage: c1 <- mis:increment_operators->IncrementByTwo; c2 <- mis:increment_operators->IncrementByTwo
   not yet read: own edges of assignment
 --- depth 3: current concepts ['assignment', 'increment_operators']
-  assignment (misconceptions): 15 candidates -> kept mis:assignment->VariableKeepsOldValue (0.50), mis:assignment->AssignmentIsEquation (0.30), mis:assignment->AssignmentAddsToTarget (0.20)
-    mis:assignment->VariableKeepsOldValue -> correct (0.40) "Probably it makes i 6"
-    mis:assignment->AssignmentIsEquation -> not applied (0.00) ""
+  assignment (misconceptions): 15 candidates -> kept mis:assignment->VariableKeepsOldValue (0.50), mis:assignment->AssignmentAddsToTarget (0.30), mis:assignment->AssignmentIsEquation (0.20)
+    mis:assignment->VariableKeepsOldValue -> correct (0.38) "I think i++ adds 1 to i, though it might add 2, Im not sure; Probably it makes i 6"
     mis:assignment->AssignmentAddsToTarget -> not applied (0.00) ""
+    mis:assignment->AssignmentIsEquation -> not applied (0.00) ""
   assignment (level ways): 24 candidates -> kept lvl:assignment@L3#6 (0.50), lvl:assignment@L2#2 (0.30), lvl:assignment@L0#9 (0.20)
     lvl:assignment@L3#6 -> not applied (0.00) ""
     lvl:assignment@L2#2 -> shown (0.17) "Probably it makes i 6"
     lvl:assignment@L0#9 -> not applied (0.00) ""
-  kept: mis:assignment->VariableKeepsOldValue [correct, tier 2, 0.40], lvl:assignment@L2#2 [shown, tier 2, 0.17]
+  kept: mis:assignment->VariableKeepsOldValue [correct, tier 2, 0.38], lvl:assignment@L2#2 [shown, tier 2, 0.17]
   clause coverage: c1 <- mis:increment_operators->IncrementByTwo; c2 <- mis:increment_operators->IncrementByTwo
   root-cause walk: held on [], broken at [], prerequisites {'increment_operators': ['assignment'], 'println': ['statement']}
   level assignment: L2 via one_step_execution "Probably it makes i 6"

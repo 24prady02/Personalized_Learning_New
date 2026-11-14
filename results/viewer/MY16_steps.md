@@ -1408,7 +1408,7 @@ Prune: the model's reply (edge id and score; the kept edges sum to 1):
 {mis:type_conversion->NarrowingAssignmentAllowed (Score: 0.1)}
 {mis:type_conversion->NoCastIfSameSize (Score: 0.1)}
 ```
-Kept by pruning: mis:type_conversion->TargetTyping (0.80), mis:type_conversion->NarrowingAssignmentAllowed (0.10), mis:type_conversion->NoCastIfSameSize (0.10)
+Kept by pruning: mis:type_conversion->TargetTyping (0.80), mis:type_conversion->NarrowingAssignmentAllowed (0.12), mis:type_conversion->NoCastIfSameSize (0.08)
 
 Label prompt for the misconception / error edges (judged together). The model saw the program, the question, the numbered clauses, and these edges with their wrong rule and right rule:
 | edge |
@@ -1524,7 +1524,7 @@ Root-cause walk: held on ['explicit_cast'], broken at [] (consequences: pre:type
 - for_loop: L3 via relation_to_neighbour "sum adds every element, giving 22"
 - running_extreme: L2 via output_prediction "max starts at 4 and keeps the biggest, 9"
 
-**Stop:** max depth at depth 4; prompts {'prune': 26, 'label': 52}, fresh model calls 19, cache hits 59
+**Stop:** max depth at depth 4; prompts {'prune': 26, 'label': 52}, fresh model calls 3, cache hits 75
 
 ### Held misconceptions
 | concept | misconception | kind | quote | score | shares_evidence_with |
@@ -1725,7 +1725,7 @@ start concepts (3): accumulator_pattern, arithmetic_operators, running_extreme
   clause coverage: c1 <- mis:accumulator_pattern->StateChangeIgnoredAcrossPasses; c2 <- mis:accumulator_pattern->StateChangeIgnoredAcrossPasses; c3 <- mis:explicit_cast->CastAppliesToWholeExpression
   not yet read: own edges of type_conversion, pre:expression->comparison_operators, pre:indexing->array_traversal, pre:length_field->array_traversal
 --- depth 4: current concepts ['type_conversion'] (closing round: own edges only)
-  type_conversion (misconceptions): 3 candidates -> kept mis:type_conversion->TargetTyping (0.80), mis:type_conversion->NarrowingAssignmentAllowed (0.10), mis:type_conversion->NoCastIfSameSize (0.10)
+  type_conversion (misconceptions): 3 candidates -> kept mis:type_conversion->TargetTyping (0.80), mis:type_conversion->NarrowingAssignmentAllowed (0.12), mis:type_conversion->NoCastIfSameSize (0.08)
     mis:type_conversion->TargetTyping -> correct (0.48) "For avg, sum / a.length is divided first as ints, 22 / 4 = 5, and then the (double) makes it 5.0"
     mis:type_conversion->NarrowingAssignmentAllowed -> not applied (0.00) ""
     mis:type_conversion->NoCastIfSameSize -> not applied (0.00) ""
@@ -2785,8 +2785,8 @@ start concepts (3): accumulator_pattern, arithmetic_operators, running_extreme
  "unexplained_clauses": [],
  "stop_reason": "max depth",
  "depth_reached": 4,
- "llm_calls": 19,
- "llm_cache_hits": 59,
+ "llm_calls": 3,
+ "llm_cache_hits": 75,
  "llm_calls_by_step": {
   "prune": 26,
   "label": 52

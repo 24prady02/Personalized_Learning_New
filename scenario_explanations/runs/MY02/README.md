@@ -22,9 +22,9 @@ System.out.println(a % b);
 - **Wrong rules held:** NegativeRemainderSign at `remainder_operator`
 - **Root cause:** `remainder_operator` / NegativeRemainderSign
 - **Overall level:** L0
-- **Level per concept:** `arithmetic_operators` L3, `expression` L3, `integer_division` L3, `println` L3, `remainder_operator` L0, `statement` L3
+- **Level per concept:** `arithmetic_operators` L3, `expression` L3, `integer_division` L0, `remainder_operator` L0
 
-**Check of this result (read by hand, 2026-11-13).** The diagnosis matches the answer: NegativeRemainderSign covers both wrong statements (the remainder is never negative, and division of a negative number rounds down).
+**Check of this result (read by hand, 2026-11-14).** The diagnosis matches the answer: NegativeRemainderSign covers both wrong statements (the remainder is never negative, and division of a negative number rounds down). On graph 3.9.8 the same misconception also sets `integer_division` to L0, which fits the student's "integer division rounds down".
 
 ## The idea
 
@@ -86,11 +86,11 @@ At each depth, for each current concept, the following happens.
 
 **3.5 Move to the next concepts.** Three things decide where the walk goes next. A kept prerequisite or parallel edge leads to the concept at its other end; that concept is **entered** and will be read inwards at the next depth, so it gets misconceptions and a level of its own. A concept with a held misconception stays current, so that its prerequisites are examined: the fault may begin further back. And any entered concept whose outward edges have not been read yet stays current until they are.
 
-*One of the outputs at this stage:* `uncovered clauses bring in: println (2.34)`.
+*One of the outputs at this stage:* `reached across pre:arithmetic_operators->expression, entered next: expression`.
 
 **3.6 Stop test (no model).** After each depth two checks are made. The **graph check**: has every entered concept had both its inward and its outward edges read? The **clause coverage** check: is every clause covered by at least one labelled rule edge (a level way does not count here, since it describes how the student reads the code, not which rule a clause applies)? If both hold, the walk stops as *sufficient*. If some clauses are still uncovered, they are matched by BM25 against the concepts not visited yet and the best N are entered. Otherwise the walk continues to depth D = 3, followed by one **closing round** in which the concepts entered last have their inward edges read, so that no concept is left half-read. The model's replies are cached by the exact text of the question, so running the same scenario again gives the same result without asking again.
 
-*One of the outputs at this stage:* the walk stopped at depth 4 because every clause was covered and no entered concept had an unread edge. At the end 6 of 6 clauses were covered. The model was asked 17 prune questions and 30 label questions in all.
+*One of the outputs at this stage:* the walk stopped at depth 3 because every clause was covered and no entered concept had an unread edge. At the end 6 of 6 clauses were covered. The model was asked 12 prune questions and 21 label questions in all.
 
 ## Stage 4. From labels to faults (rules, no model)
 
@@ -101,7 +101,7 @@ The walk leaves a set of labelled edges. Each kept edge labelled *held* is a can
 - **Shadows.** A held label is a **shadow** when it sits on a prerequisite or on a generic concept and rests only on clauses that a stronger, more specific label already rests on. It is the same wrong sentence read a second time at a vaguer place. A shadow is kept in the record but is not a fault, cannot be the root cause and does not set a level.
 - **Broken edges.** A prerequisite edge A → B labelled *broken* says the student did not carry the rule of A into B, so the fault sits at B. If the broken edge rests on the same clauses as a held misconception, it is that misconception's **consequence**, not a separate fault.
 
-*One of the outputs at this stage:* the fault is **NegativeRemainderSign** at `remainder_operator`. For NegativeRemainderSign the graph's wrong rule is “a % b is never negative, and integer division of a negative number rounds down.” and its twin, the right rule, is “a / b rounds toward 0 and a % b takes the sign of a: -14 / 3 is -4 and -14 % 3 is -2.”. Filed once at the other end: NegativeRemainderSign at `integer_division`. 1 shadow, e.g. NegativeRemainderSign at `integer_division` (shadow of NegativeRemainderSign).
+*One of the outputs at this stage:* the fault is **NegativeRemainderSign** at `remainder_operator`. For NegativeRemainderSign the graph's wrong rule is “a % b is never negative, and integer division of a negative number rounds down.” and its twin, the right rule, is “a / b rounds toward 0 and a % b takes the sign of a: -14 / 3 is -4 and -14 % 3 is -2.”. Filed once at the other end: NegativeRemainderSign at `integer_division`.
 
 ## Stage 5. Root cause (rule, no model)
 
@@ -115,7 +115,7 @@ Every concept has five **levels**, taken from the SOLO taxonomy: **L0** prestruc
 
 The model is never asked for a level. In stage 3 it only said whether a way was *shown*; the level is read from where that way sits in the graph. The rule: a concept is **L0** if a fault is kept on it, or if the only ways shown on it are L0 ways. Otherwise it gets the **highest** level among the ways shown, because the levels build on each other (an answer that relates the parts has also applied the rules). A concept with no fault and no way shown gets no level.
 
-*One of the outputs at this stage:* `remainder_operator` keeps NegativeRemainderSign, so it is L0; on `statement` the ways shown are L2 “one step execution”, L2 “line by line trace”, L3 “relation to neighbour”, so it is L3.
+*One of the outputs at this stage:* `integer_division` keeps NegativeRemainderSign, so it is L0; on `expression` the ways shown are L0 “everyday reading”, L2 “output prediction”, L3 “relation to neighbour”, so it is L3.
 
 ## Stage 7. Overall level (rule, no model)
 

@@ -103,7 +103,7 @@ start concepts (3): accumulator_pattern, arithmetic_operators, running_extreme
   clause coverage: c1 <- mis:accumulator_pattern->StateChangeIgnoredAcrossPasses; c2 <- mis:accumulator_pattern->StateChangeIgnoredAcrossPasses; c3 <- mis:explicit_cast->CastAppliesToWholeExpression
   not yet read: own edges of type_conversion, pre:expression->comparison_operators, pre:indexing->array_traversal, pre:length_field->array_traversal
 --- depth 4: current concepts ['type_conversion'] (closing round: own edges only)
-  type_conversion (misconceptions): 3 candidates -> kept mis:type_conversion->TargetTyping (0.80), mis:type_conversion->NarrowingAssignmentAllowed (0.10), mis:type_conversion->NoCastIfSameSize (0.10)
+  type_conversion (misconceptions): 3 candidates -> kept mis:type_conversion->TargetTyping (0.80), mis:type_conversion->NarrowingAssignmentAllowed (0.12), mis:type_conversion->NoCastIfSameSize (0.08)
     mis:type_conversion->TargetTyping -> correct (0.48) "For avg, sum / a.length is divided first as ints, 22 / 4 = 5, and then the (double) makes it 5.0"
     mis:type_conversion->NarrowingAssignmentAllowed -> not applied (0.00) ""
     mis:type_conversion->NoCastIfSameSize -> not applied (0.00) ""

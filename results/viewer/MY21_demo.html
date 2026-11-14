@@ -490,9 +490,9 @@ Confidence: 0.75
 | mis:loop_control-&gt;OffByOneBound | wrong rule: i &lt; n and i &lt;= n mean the same, so the loop runs until i equals n and the last pass can use a[n]. | right rule: for (i = 0; i &lt; n; i++) runs n times with i going up to n - 1; with &lt;= it runs n + 1 times and reaches i = n. |
 | mis:loop_control-&gt;PreIncrementBeforeLoop | wrong rule: With ++i in the update of for (int i = s; i &lt; n; ++i), i is increased before the body runs, so the first pass uses s + 1. | right rule: The update runs after each pass of the body, so with either ++i or i++ the first pass uses i = s. |</p>
 <p>Prune: the model's reply (edge id and score; the kept edges sum to 1):</p>
-<pre><code>mis:loop_control-&gt;OffByOneBound (0.45), mis:loop_control-&gt;ForUpdateBeforeBody (0.30), err:loop_control-&gt;WrongIterationCount (0.25)
+<pre><code>mis:loop_control-&gt;OffByOneBound (0.40), mis:loop_control-&gt;ForUpdateBeforeBody (0.30), err:loop_control-&gt;WrongIterationCount (0.30)
 </code></pre>
-<p>Kept by pruning: mis:loop_control-&gt;OffByOneBound (0.45), mis:loop_control-&gt;ForUpdateBeforeBody (0.30), err:loop_control-&gt;WrongIterationCount (0.25)</p>
+<p>Kept by pruning: mis:loop_control-&gt;OffByOneBound (0.40), mis:loop_control-&gt;ForUpdateBeforeBody (0.30), err:loop_control-&gt;WrongIterationCount (0.30)</p>
 <p>Label prompt for the misconception / error edges (judged together). The model saw the program, the question, the numbered clauses, and these edges with their wrong rule and right rule:
 | edge |
 |---|
@@ -507,9 +507,9 @@ err:loop_control-&gt;WrongIterationCount | correct | clauses: 1 | confidence: 0.
 <p>Parsed labels:
 | edge | label | prune score | confidence | score | clauses | words |
 |---|---|---|---|---|---|---|
-| mis:loop_control-&gt;OffByOneBound | correct | 0.45 | 0.9 | 0.41 | c1 | The first pass prints 0, the second prints 1, the third prints 2, and then the loop ends |
+| mis:loop_control-&gt;OffByOneBound | correct | 0.4 | 0.9 | 0.36 | c1 | The first pass prints 0, the second prints 1, the third prints 2, and then the loop ends |
 | mis:loop_control-&gt;ForUpdateBeforeBody | correct | 0.3 | 0.85 | 0.26 | c1 | The first pass prints 0, the second prints 1, the third prints 2, and then the loop ends |
-| err:loop_control-&gt;WrongIterationCount | correct | 0.25 | 0.85 | 0.21 | c1 | The first pass prints 0, the second prints 1, the third prints 2, and then the loop ends |</p>
+| err:loop_control-&gt;WrongIterationCount | correct | 0.3 | 0.85 | 0.26 | c1 | The first pass prints 0, the second prints 1, the third prints 2, and then the loop ends |</p>
 <h4>loop_control, level ways: 19 edges offered</h4>
 <p>Edges offered:
 | edge |
@@ -597,7 +597,7 @@ Confidence: 0.9
 |---|---|---|---|---|---|---|
 | pre:for_loop-&gt;loop_scope | not applied |  |  | 0.0 |  |  |</p>
 <p><strong>Kept on a path at this depth</strong> (best N in tiers: held misconception / broken edge, then held error, then correct / confirmed / shown):</p>
-<p>lvl:loop_control@L2#1 [shown, tier 2, 0.42], mis:loop_control-&gt;OffByOneBound [correct, tier 2, 0.41], mis:loop_control-&gt;ForUpdateBeforeBody [correct, tier 2, 0.26]</p>
+<p>lvl:loop_control@L2#1 [shown, tier 2, 0.42], mis:loop_control-&gt;OffByOneBound [correct, tier 2, 0.36], mis:loop_control-&gt;ForUpdateBeforeBody [correct, tier 2, 0.26]</p>
 <p><strong>Clause coverage after this depth:</strong>
 | clause | text | covered by |
 |---|---|---|
@@ -611,7 +611,7 @@ Confidence: 0.9
 - loop_body: L2 via output_prediction "The first pass prints 0, the second prints 1, the third prints 2, and then the loop ends"
 - loop_control: L3 via purpose_of_the_whole "The first pass prints 0, the second prints 1, the third prints 2, and then the loop ends"
 - loop_variable: L2 via output_prediction "The first pass prints 0, the second prints 1, the third prints 2, and then the loop ends"</p>
-<p><strong>Stop:</strong> max depth at depth 3; prompts {'prune': 11, 'label': 21}, fresh model calls 4, cache hits 28</p>
+<p><strong>Stop:</strong> max depth at depth 3; prompts {'prune': 11, 'label': 21}, fresh model calls 3, cache hits 29</p>
 <h3>Held misconceptions</h3>
 <p>(none)</p>
 <h3>Broken concept edges</h3>
@@ -961,9 +961,9 @@ Confidence: 0.9
 <td>mis:loop_control-&gt;OffByOneBound</td>
 <td>misconception</td>
 <td>correct</td>
-<td>0.45</td>
+<td>0.4</td>
 <td>0.9</td>
-<td>0.405</td>
+<td>0.36</td>
 <td>[1]</td>
 <td>The first pass prints 0, the second prints 1, the third prints 2, and then the loop ends</td>
 </tr>
@@ -985,9 +985,9 @@ Confidence: 0.9
 <td>err:loop_control-&gt;WrongIterationCount</td>
 <td>error</td>
 <td>correct</td>
-<td>0.25</td>
+<td>0.3</td>
 <td>0.85</td>
-<td>0.2125</td>
+<td>0.255</td>
 <td>[1]</td>
 <td>The first pass prints 0, the second prints 1, the third prints 2, and then the loop ends</td>
 </tr>
@@ -1112,7 +1112,7 @@ Confidence: 0.9
 <td>mis:loop_control-&gt;OffByOneBound</td>
 <td>misconception</td>
 <td>correct</td>
-<td>0.405</td>
+<td>0.36</td>
 <td>[1]</td>
 </tr>
 <tr>
@@ -1171,17 +1171,17 @@ start concepts (3): for_loop, loop_body, loop_variable
   clause coverage: c1 &lt;- mis:for_loop-&gt;ForUpdateBeforeBody
   not yet read: own edges of loop_control
 --- depth 3: current concepts ['loop_control', 'loop_variable', 'loop_body', 'for_loop']
-  loop_control (misconceptions): 11 candidates -&gt; kept mis:loop_control-&gt;OffByOneBound (0.45), mis:loop_control-&gt;ForUpdateBeforeBody (0.30), err:loop_control-&gt;WrongIterationCount (0.25)
-    mis:loop_control-&gt;OffByOneBound -&gt; correct (0.41) &quot;The first pass prints 0, the second prints 1, the third prints 2, and then the loop ends&quot;
+  loop_control (misconceptions): 11 candidates -&gt; kept mis:loop_control-&gt;OffByOneBound (0.40), mis:loop_control-&gt;ForUpdateBeforeBody (0.30), err:loop_control-&gt;WrongIterationCount (0.30)
+    mis:loop_control-&gt;OffByOneBound -&gt; correct (0.36) &quot;The first pass prints 0, the second prints 1, the third prints 2, and then the loop ends&quot;
     mis:loop_control-&gt;ForUpdateBeforeBody -&gt; correct (0.26) &quot;The first pass prints 0, the second prints 1, the third prints 2, and then the loop ends&quot;
-    err:loop_control-&gt;WrongIterationCount -&gt; correct (0.21) &quot;The first pass prints 0, the second prints 1, the third prints 2, and then the loop ends&quot;
+    err:loop_control-&gt;WrongIterationCount -&gt; correct (0.26) &quot;The first pass prints 0, the second prints 1, the third prints 2, and then the loop ends&quot;
   loop_control (level ways): 19 candidates -&gt; kept lvl:loop_control@L2#1 (0.50), lvl:loop_control@L2#0 (0.30), lvl:loop_control@L3#6 (0.20)
     lvl:loop_control@L2#1 -&gt; shown (0.42) &quot;The first pass prints 0, the second prints 1, the third prints 2, and then the loop ends&quot;
     lvl:loop_control@L2#0 -&gt; shown (0.18) &quot;The first pass prints 0, the second prints 1, the third prints 2, and then the loop ends&quot;
     lvl:loop_control@L3#6 -&gt; shown (0.14) &quot;The first pass prints 0, the second prints 1, the third prints 2, and then the loop ends&quot;
   for_loop (concept edges): 1 candidates -&gt; kept pre:for_loop-&gt;loop_scope (1.00)
     pre:for_loop-&gt;loop_scope -&gt; not applied (0.00) &quot;&quot;
-  kept: lvl:loop_control@L2#1 [shown, tier 2, 0.42], mis:loop_control-&gt;OffByOneBound [correct, tier 2, 0.41], mis:loop_control-&gt;ForUpdateBeforeBody [correct, tier 2, 0.26]
+  kept: lvl:loop_control@L2#1 [shown, tier 2, 0.42], mis:loop_control-&gt;OffByOneBound [correct, tier 2, 0.36], mis:loop_control-&gt;ForUpdateBeforeBody [correct, tier 2, 0.26]
   clause coverage: c1 &lt;- mis:for_loop-&gt;ForUpdateBeforeBody
   not yet read: pre:loop_control-&gt;increment_operators
   root-cause walk: held on [], broken at [], prerequisites {'increment_operators': ['assignment', 'loop_control'], 'boolean_expression': ['comparison_operators'], 'comparison_operators': ['expression'], 'loop_body': ['for_loop'], 'loop_scope': ['for_loop'], 'for_loop': ['loop_control'], 'loop_control': ['loop_variable'], 'control_flow': ['statement'], 'println': ['statement']}
@@ -1398,8 +1398,8 @@ start concepts (3): for_loop, loop_body, loop_variable
    ],
    &quot;quote&quot;: &quot;The first pass prints 0, the second prints 1, the third prints 2, and then the loop ends&quot;,
    &quot;confidence&quot;: 0.9,
-   &quot;prune_score&quot;: 0.45,
-   &quot;score&quot;: 0.405,
+   &quot;prune_score&quot;: 0.4,
+   &quot;score&quot;: 0.36,
    &quot;logic&quot;: &quot;i &lt; n and i &lt;= n mean the same, so the loop runs until i equals n and the last pass can use a[n].&quot;,
    &quot;twin_logic&quot;: &quot;for (i = 0; i &lt; n; i++) runs n times with i going up to n - 1; with &lt;= it runs n + 1 times and reaches i = n.&quot;,
    &quot;role&quot;: &quot;primary&quot;
@@ -1820,8 +1820,8 @@ start concepts (3): for_loop, loop_body, loop_variable
    ],
    &quot;quote&quot;: &quot;The first pass prints 0, the second prints 1, the third prints 2, and then the loop ends&quot;,
    &quot;confidence&quot;: 0.9,
-   &quot;prune_score&quot;: 0.45,
-   &quot;score&quot;: 0.405,
+   &quot;prune_score&quot;: 0.4,
+   &quot;score&quot;: 0.36,
    &quot;logic&quot;: &quot;i &lt; n and i &lt;= n mean the same, so the loop runs until i equals n and the last pass can use a[n].&quot;,
    &quot;twin_logic&quot;: &quot;for (i = 0; i &lt; n; i++) runs n times with i going up to n - 1; with &lt;= it runs n + 1 times and reaches i = n.&quot;,
    &quot;role&quot;: &quot;primary&quot;
@@ -1856,11 +1856,11 @@ start concepts (3): for_loop, loop_body, loop_variable
    ],
    &quot;quote&quot;: &quot;The first pass prints 0, the second prints 1, the third prints 2, and then the loop ends&quot;,
    &quot;confidence&quot;: 0.85,
-   &quot;prune_score&quot;: 0.25,
-   &quot;score&quot;: 0.2125,
+   &quot;prune_score&quot;: 0.3,
+   &quot;score&quot;: 0.255,
    &quot;logic&quot;: &quot;Updates the loop counter so that the loop runs the wrong number of times.&quot;,
    &quot;twin_logic&quot;: &quot;The init, test and update together decide the number of passes; trace them to check the count.&quot;,
-   &quot;role&quot;: &quot;primary&quot;
+   &quot;role&quot;: &quot;context&quot;
   },
   {
    &quot;depth&quot;: 3,
@@ -1926,8 +1926,8 @@ start concepts (3): for_loop, loop_body, loop_variable
  &quot;unexplained_clauses&quot;: [],
  &quot;stop_reason&quot;: &quot;max depth&quot;,
  &quot;depth_reached&quot;: 3,
- &quot;llm_calls&quot;: 4,
- &quot;llm_cache_hits&quot;: 28,
+ &quot;llm_calls&quot;: 3,
+ &quot;llm_cache_hits&quot;: 29,
  &quot;llm_calls_by_step&quot;: {
   &quot;prune&quot;: 11,
   &quot;label&quot;: 21

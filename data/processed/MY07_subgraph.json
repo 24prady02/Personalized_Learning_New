@@ -368,7 +368,7 @@
    "type": "misconception",
    "source": "expression",
    "target": "ParenthesesOnlyIfArgument",
-   "role": "primary",
+   "role": "context",
    "logic": "() are optional on a no-argument call like println",
    "twin_logic": "A method call always needs parentheses, so an empty line is printed with System.out.println();."
   },
@@ -395,7 +395,7 @@
    "type": "misconception",
    "source": "int",
    "target": "IntOverflowWidensAutomatically",
-   "role": "primary",
+   "role": "context",
    "logic": "An int result that is too large is automatically stored as a bigger number.",
    "twin_logic": "int arithmetic is 32-bit; a result outside the range wraps around."
   },
@@ -494,7 +494,7 @@
    "type": "misconception",
    "source": "statement",
    "target": "StatementsRunInAnyOrder",
-   "role": "primary",
+   "role": "context",
    "logic": "Statements in a program can run in any order.",
    "twin_logic": "Without control statements, statements run once each, top to bottom."
   },

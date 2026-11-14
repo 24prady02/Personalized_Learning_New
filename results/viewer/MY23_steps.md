@@ -94,9 +94,9 @@ Edges offered:
 
 Prune: the model's reply (edge id and score; the kept edges sum to 1):
 ```
-mis:integer_division->CastAfterIntDivision (0.70), mis:integer_division->IntegerDivisionGivesFraction (0.20), mis:integer_division->TargetTyping (0.10)
+mis:integer_division->CastAfterIntDivision (0.60), mis:integer_division->IntegerDivisionGivesFraction (0.25), mis:integer_division->TargetTyping (0.15)
 ```
-Kept by pruning: mis:integer_division->CastAfterIntDivision (0.70), mis:integer_division->IntegerDivisionGivesFraction (0.20), mis:integer_division->TargetTyping (0.10)
+Kept by pruning: mis:integer_division->CastAfterIntDivision (0.60), mis:integer_division->IntegerDivisionGivesFraction (0.25), mis:integer_division->TargetTyping (0.15)
 
 Label prompt for the misconception / error edges (judged together). The model saw the program, the question, the numbered clauses, and these edges with their wrong rule and right rule:
 | edge |
@@ -114,7 +114,7 @@ mis:integer_division->TargetTyping | not applied | clauses: none | confidence: 0
 Parsed labels:
 | edge | label | prune score | confidence | score | clauses | words |
 |---|---|---|---|---|---|---|
-| mis:integer_division->CastAfterIntDivision | held | 0.7000000000000001 | 0.93 | 0.65 | c1, c2 | The (double) turns the whole division into a decimal division —; so sum / count keeps its fraction and avg is 3.5 |
+| mis:integer_division->CastAfterIntDivision | held | 0.6 | 0.93 | 0.56 | c1, c2 | The (double) turns the whole division into a decimal division —; so sum / count keeps its fraction and avg is 3.5 |
 | mis:integer_division->IntegerDivisionGivesFraction | not applied |  |  | 0.0 |  |  |
 | mis:integer_division->TargetTyping | not applied |  |  | 0.0 |  |  |
 
@@ -197,9 +197,9 @@ Edges offered:
 
 Prune: the model's reply (edge id and score; the kept edges sum to 1):
 ```
-mis:explicit_cast->CastAfterIntDivision (0.60), mis:explicit_cast->CastAppliesToWholeExpression (0.25), mis:explicit_cast->LaterDoubleLiteralFixesDivision (0.15)
+mis:explicit_cast->CastAfterIntDivision (0.60), mis:explicit_cast->CastAppliesToWholeExpression (0.30), mis:explicit_cast->LaterDoubleLiteralFixesDivision (0.10)
 ```
-Kept by pruning: mis:explicit_cast->CastAfterIntDivision (0.60), mis:explicit_cast->CastAppliesToWholeExpression (0.25), mis:explicit_cast->LaterDoubleLiteralFixesDivision (0.15)
+Kept by pruning: mis:explicit_cast->CastAfterIntDivision (0.60), mis:explicit_cast->CastAppliesToWholeExpression (0.30), mis:explicit_cast->LaterDoubleLiteralFixesDivision (0.10)
 
 Label prompt for the misconception / error edges (judged together). The model saw the program, the question, the numbered clauses, and these edges with their wrong rule and right rule:
 | edge |
@@ -217,7 +217,7 @@ mis:explicit_cast->LaterDoubleLiteralFixesDivision | not applied | clauses: none
 Parsed labels:
 | edge | label | prune score | confidence | score | clauses | words |
 |---|---|---|---|---|---|---|
-| mis:explicit_cast->CastAfterIntDivision | held | 0.6 | 0.92 | 0.55 | c1, c2 | The (double) turns the whole division into a decimal division —; so sum / count keeps its fraction and avg is 3.5 |
+| mis:explicit_cast->CastAfterIntDivision | held | 0.6000000000000001 | 0.92 | 0.55 | c1, c2 | The (double) turns the whole division into a decimal division —; so sum / count keeps its fraction and avg is 3.5 |
 | mis:explicit_cast->CastAppliesToWholeExpression | not applied |  |  | 0.0 |  |  |
 | mis:explicit_cast->LaterDoubleLiteralFixesDivision | not applied |  |  | 0.0 |  |  |
 
@@ -394,7 +394,7 @@ Parsed labels:
 
 **Kept on a path at this depth** (best N in tiers: held misconception / broken edge, then held error, then correct / confirmed / shown):
 
-mis:integer_division->CastAfterIntDivision [held, tier 0, 0.65], mis:explicit_cast->CastAfterIntDivision [held, tier 0, 0.55], lvl:integer_division@L0#4 [shown, tier 2, 0.42]
+mis:integer_division->CastAfterIntDivision [held, tier 0, 0.56], mis:explicit_cast->CastAfterIntDivision [held, tier 0, 0.55], lvl:integer_division@L0#4 [shown, tier 2, 0.42]
 
 **Clause coverage after this depth:**
 | clause | text | covered by |
@@ -646,7 +646,7 @@ Prune: the model's reply (edge id and score; the kept edges sum to 1):
 {mis:type_conversion->NarrowingAssignmentAllowed (Score: 0.1)}
 {mis:type_conversion->NoCastIfSameSize (Score: 0.1)}
 ```
-Kept by pruning: mis:type_conversion->TargetTyping (0.80), mis:type_conversion->NarrowingAssignmentAllowed (0.10), mis:type_conversion->NoCastIfSameSize (0.10)
+Kept by pruning: mis:type_conversion->TargetTyping (0.90), mis:type_conversion->NarrowingAssignmentAllowed (0.05), mis:type_conversion->NoCastIfSameSize (0.05)
 
 Label prompt for the misconception / error edges (judged together). The model saw the program, the question, the numbered clauses, and these edges with their wrong rule and right rule:
 | edge |
@@ -664,7 +664,7 @@ mis:type_conversion->NoCastIfSameSize | not applied | clauses: none | confidence
 Parsed labels:
 | edge | label | prune score | confidence | score | clauses | words |
 |---|---|---|---|---|---|---|
-| mis:type_conversion->TargetTyping | held | 0.8 | 0.85 | 0.68 | c1, c2 | The (double) turns the whole division into a decimal division —; so sum / count keeps its fraction and avg is 3.5 |
+| mis:type_conversion->TargetTyping | held | 0.9 | 0.85 | 0.77 | c1, c2 | The (double) turns the whole division into a decimal division —; so sum / count keeps its fraction and avg is 3.5 |
 | mis:type_conversion->NarrowingAssignmentAllowed | not applied |  |  | 0.0 |  |  |
 | mis:type_conversion->NoCastIfSameSize | not applied |  |  | 0.0 |  |  |
 
@@ -738,7 +738,7 @@ Parsed labels:
 
 **Kept on a path at this depth** (best N in tiers: held misconception / broken edge, then held error, then correct / confirmed / shown):
 
-mis:type_conversion->TargetTyping [held, tier 0, 0.68], mis:expression->TargetTyping [held, tier 0, 0.59], lvl:expression@L0#0 [shown, tier 2, 0.28]
+mis:type_conversion->TargetTyping [held, tier 0, 0.77], mis:expression->TargetTyping [held, tier 0, 0.59], lvl:expression@L0#0 [shown, tier 2, 0.28]
 
 **Clause coverage after this depth:**
 | clause | text | covered by |
@@ -752,13 +752,13 @@ Figure 6 (the graph after depth 3): C:\Users\magnu\OneDrive\Desktop\ES_VIterbi_P
 
 Held set after the one-fault rules: mis:type_conversion->TargetTyping, mis:expression->TargetTyping, mis:explicit_cast->CastAfterIntDivision; filed at the dependent concept: mis:integer_division->CastAfterIntDivision
 
-Shadows (a held label on a prerequisite, on a generic concept, or at a concept where the graph attaches the misconception as context, resting on the words of a stronger label at the specific or primary concept, is one wrong sentence read twice; it marks no root cause and sets no level): mis:expression->TargetTyping (shadow of mis:type_conversion->TargetTyping), mis:type_conversion->TargetTyping (shadow of mis:explicit_cast->CastAfterIntDivision)
+Shadows (a held label on a prerequisite, on a generic concept, or at a concept where the graph attaches the misconception as context, resting on the words of a stronger label at the specific or primary concept, is one wrong sentence read twice; it marks no root cause and sets no level): mis:expression->TargetTyping (shadow of mis:type_conversion->TargetTyping), mis:type_conversion->TargetTyping (shadow of mis:explicit_cast->CastAfterIntDivision), mis:integer_division->CastAfterIntDivision (shadow of mis:explicit_cast->CastAfterIntDivision)
 
 ## 4. Diagnosis (rules over the labelled graph, no model)
 Root-cause walk: held on ['explicit_cast'], broken at [] (consequences: pre:integer_division->explicit_cast, pre:arithmetic_operators->expression, pre:type_conversion->explicit_cast, pre:arithmetic_operators->integer_division), prerequisites {'expression': ['arithmetic_operators'], 'integer_division': ['arithmetic_operators'], 'explicit_cast': ['integer_division', 'type_conversion'], 'type_conversion': ['primitive_type'], 'println': ['statement']}
 - explicit_cast: L0 via misconception "The (double) turns the whole division into a decimal division —; so sum / count keeps its fraction and avg is 3.5"
 - expression: L0 via everyday_reading "so sum / count keeps its fraction and avg is 3.5"
-- integer_division: L0 via misconception "The (double) turns the whole division into a decimal division —; so sum / count keeps its fraction and avg is 3.5"
+- integer_division: L0 via inconsistent_trace "The (double) turns the whole division into a decimal division —; so sum / count keeps its fraction and avg is 3.5"
 - type_conversion: L0 via everyday_reading "The (double) turns the whole division into a decimal division —; so sum / count keeps its fraction and avg is 3.5"
 
 **Stop:** max depth at depth 3; prompts {'prune': 13, 'label': 24}, fresh model calls 4, cache hits 33
@@ -771,8 +771,9 @@ Root-cause walk: held on ['explicit_cast'], broken at [] (consequences: pre:inte
 ### Shadowed labels (held in the reading, folded into the label they shadow; not faults of their own)
 | concept | misconception | shadow_of | quote | score |
 |---|---|---|---|---|
+| integer_division | CastAfterIntDivision | mis:explicit_cast->CastAfterIntDivision | The (double) turns the whole division into a decimal division —; so sum / count keeps its fraction and avg is 3.5 | 0.558 |
 | expression | TargetTyping | mis:type_conversion->TargetTyping | The (double) turns the whole division into a decimal division —; so sum / count keeps its fraction and avg is 3.5 | 0.595 |
-| type_conversion | TargetTyping | mis:explicit_cast->CastAfterIntDivision | The (double) turns the whole division into a decimal division —; so sum / count keeps its fraction and avg is 3.5 | 0.68 |
+| type_conversion | TargetTyping | mis:explicit_cast->CastAfterIntDivision | The (double) turns the whole division into a decimal division —; so sum / count keeps its fraction and avg is 3.5 | 0.765 |
 
 ### Broken concept edges
 | edge | quote | score | consequence_of |
@@ -789,7 +790,7 @@ Root-cause walk: held on ['explicit_cast'], broken at [] (consequences: pre:inte
 |---|---|---|---|---|---|---|---|---|
 | explicit_cast | L0 | misconception | CastAfterIntDivision | level_mis_links | The (double) turns the whole division into a decimal division —; so sum / count keeps its fraction and avg is 3.5 | wrong rule: (double) (3 / 5) is 0.6. Right rule: The integer division 3 / 5 = 0 happens inside the parentheses before the cast, so the result is 0.0; write (double) 3 / 5 to get 0.6. |  |  |
 | expression | L0 | everyday_reading |  | level_way | so sum / count keeps its fraction and avg is 3.5 |  |  |  |
-| integer_division | L0 | misconception | CastAfterIntDivision | level_mis_links | The (double) turns the whole division into a decimal division —; so sum / count keeps its fraction and avg is 3.5 | wrong rule: (double) (3 / 5) is 0.6. Right rule: The integer division 3 / 5 = 0 happens before the cast, so the result is 0.0. |  |  |
+| integer_division | L0 | inconsistent_trace |  | level_way | The (double) turns the whole division into a decimal division —; so sum / count keeps its fraction and avg is 3.5 |  |  |  |
 | type_conversion | L0 | everyday_reading |  | level_way | The (double) turns the whole division into a decimal division —; so sum / count keeps its fraction and avg is 3.5 |  |  |  |
 
 ### Overall level: L0
@@ -805,9 +806,9 @@ Figure 7 (final picture): C:\Users\magnu\OneDrive\Desktop\ES_VIterbi_Personalize
 ## 5. Every labelled edge (the evidence list, kept or not)
 | depth | source | edge | kind | label | prune_score | confidence | score | clauses | quote |
 |---|---|---|---|---|---|---|---|---|---|
-| 1 | integer_division | mis:integer_division->CastAfterIntDivision | misconception | held | 0.7000000000000001 | 0.93 | 0.651 | [1, 2] | The (double) turns the whole division into a decimal division —; so sum / count keeps its fraction and avg is 3.5 |
+| 1 | integer_division | mis:integer_division->CastAfterIntDivision | misconception | held | 0.6 | 0.93 | 0.558 | [1, 2] | The (double) turns the whole division into a decimal division —; so sum / count keeps its fraction and avg is 3.5 |
 | 1 | integer_division | lvl:integer_division@L0#4 | level | shown | 0.5 | 0.85 | 0.425 | [1, 2] | The (double) turns the whole division into a decimal division —; so sum / count keeps its fraction and avg is 3.5 |
-| 1 | explicit_cast | mis:explicit_cast->CastAfterIntDivision | misconception | held | 0.6 | 0.92 | 0.552 | [1, 2] | The (double) turns the whole division into a decimal division —; so sum / count keeps its fraction and avg is 3.5 |
+| 1 | explicit_cast | mis:explicit_cast->CastAfterIntDivision | misconception | held | 0.6000000000000001 | 0.92 | 0.552 | [1, 2] | The (double) turns the whole division into a decimal division —; so sum / count keeps its fraction and avg is 3.5 |
 | 1 | explicit_cast | lvl:explicit_cast@L0#0 | level | shown | 0.5 | 0.7 | 0.35 | [1, 2] | The (double) turns the whole division into a decimal division —; so sum / count keeps its fraction and avg is 3.5 |
 | 2 | integer_division | pre:integer_division->explicit_cast | prerequisite | broken | 0.8 | 0.95 | 0.76 | [1, 2] | The (double) turns the whole division into a decimal division —; so sum / count keeps its fraction and avg is 3.5 |
 | 2 | integer_division | pre:arithmetic_operators->integer_division | prerequisite | broken | 0.2 | 0.92 | 0.184 | [2] | so sum / count keeps its fraction and avg is 3.5 |
@@ -815,20 +816,20 @@ Figure 7 (final picture): C:\Users\magnu\OneDrive\Desktop\ES_VIterbi_Personalize
 | 2 | arithmetic_operators | pre:arithmetic_operators->expression | prerequisite | broken | 1.0 | 0.75 | 0.75 | [1, 2] | The (double) turns the whole division into a decimal division —; so sum / count keeps its fraction and avg is 3.5 |
 | 3 | expression | mis:expression->TargetTyping | misconception | held | 0.7000000000000001 | 0.85 | 0.595 | [1, 2] | The (double) turns the whole division into a decimal division —; so sum / count keeps its fraction and avg is 3.5 |
 | 3 | expression | lvl:expression@L0#0 | level | shown | 0.4 | 0.7 | 0.28 | [2] | so sum / count keeps its fraction and avg is 3.5 |
-| 3 | type_conversion | mis:type_conversion->TargetTyping | misconception | held | 0.8 | 0.85 | 0.68 | [1, 2] | The (double) turns the whole division into a decimal division —; so sum / count keeps its fraction and avg is 3.5 |
+| 3 | type_conversion | mis:type_conversion->TargetTyping | misconception | held | 0.9 | 0.85 | 0.765 | [1, 2] | The (double) turns the whole division into a decimal division —; so sum / count keeps its fraction and avg is 3.5 |
 | 3 | type_conversion | lvl:type_conversion@L0#0 | level | shown | 0.25 | 0.7 | 0.175 | [1, 2] | The (double) turns the whole division into a decimal division —; so sum / count keeps its fraction and avg is 3.5 |
 
 ## 6. The paths (what the keep step kept, depth by depth)
 | depth | source | edge | kind | label | score | clauses |
 |---|---|---|---|---|---|---|
-| 1 | integer_division | mis:integer_division->CastAfterIntDivision | misconception | held | 0.651 | [1, 2] |
+| 1 | integer_division | mis:integer_division->CastAfterIntDivision | misconception | held | 0.558 | [1, 2] |
 | 1 | explicit_cast | mis:explicit_cast->CastAfterIntDivision | misconception | held | 0.552 | [1, 2] |
 | 1 | integer_division | lvl:integer_division@L0#4 | level | shown | 0.425 | [1, 2] |
 | 2 | integer_division | pre:integer_division->explicit_cast | prerequisite | broken | 0.76 | [1, 2] |
 | 2 | arithmetic_operators | pre:arithmetic_operators->expression | prerequisite | broken | 0.75 | [1, 2] |
 | 2 | explicit_cast | pre:type_conversion->explicit_cast | prerequisite | broken | 0.7 | [1, 2] |
 | 2 | integer_division | pre:arithmetic_operators->integer_division | prerequisite | broken | 0.184 | [2] |
-| 3 | type_conversion | mis:type_conversion->TargetTyping | misconception | held | 0.68 | [1, 2] |
+| 3 | type_conversion | mis:type_conversion->TargetTyping | misconception | held | 0.765 | [1, 2] |
 | 3 | expression | mis:expression->TargetTyping | misconception | held | 0.595 | [1, 2] |
 | 3 | expression | lvl:expression@L0#0 | level | shown | 0.28 | [2] |
 
@@ -839,15 +840,15 @@ start: BM25 of the answer against each tagged concept: integer_division 9.51 (hi
 start: chosen integer_division, explicit_cast, arithmetic_operators
 start concepts (3): integer_division, explicit_cast, arithmetic_operators
 --- depth 1: current concepts ['integer_division', 'explicit_cast', 'arithmetic_operators']
-  integer_division (misconceptions): 6 candidates -> kept mis:integer_division->CastAfterIntDivision (0.70), mis:integer_division->IntegerDivisionGivesFraction (0.20), mis:integer_division->TargetTyping (0.10)
-    mis:integer_division->CastAfterIntDivision -> held (0.65) "The (double) turns the whole division into a decimal division —; so sum / count keeps its fraction and avg is 3.5"
+  integer_division (misconceptions): 6 candidates -> kept mis:integer_division->CastAfterIntDivision (0.60), mis:integer_division->IntegerDivisionGivesFraction (0.25), mis:integer_division->TargetTyping (0.15)
+    mis:integer_division->CastAfterIntDivision -> held (0.56) "The (double) turns the whole division into a decimal division —; so sum / count keeps its fraction and avg is 3.5"
     mis:integer_division->IntegerDivisionGivesFraction -> not applied (0.00) ""
     mis:integer_division->TargetTyping -> not applied (0.00) ""
   integer_division (level ways): 16 candidates -> kept lvl:integer_division@L0#4 (0.50), lvl:integer_division@L2#0 (0.30), lvl:integer_division@L4#0 (0.20)
     lvl:integer_division@L0#4 -> shown (0.42) "The (double) turns the whole division into a decimal division —; so sum / count keeps its fraction and avg is 3.5"
     lvl:integer_division@L2#0 -> not applied (0.00) ""
     lvl:integer_division@L4#0 -> not applied (0.00) ""
-  explicit_cast (misconceptions): 6 candidates -> kept mis:explicit_cast->CastAfterIntDivision (0.60), mis:explicit_cast->CastAppliesToWholeExpression (0.25), mis:explicit_cast->LaterDoubleLiteralFixesDivision (0.15)
+  explicit_cast (misconceptions): 6 candidates -> kept mis:explicit_cast->CastAfterIntDivision (0.60), mis:explicit_cast->CastAppliesToWholeExpression (0.30), mis:explicit_cast->LaterDoubleLiteralFixesDivision (0.10)
     mis:explicit_cast->CastAfterIntDivision -> held (0.55) "The (double) turns the whole division into a decimal division —; so sum / count keeps its fraction and avg is 3.5"
     mis:explicit_cast->CastAppliesToWholeExpression -> not applied (0.00) ""
     mis:explicit_cast->LaterDoubleLiteralFixesDivision -> not applied (0.00) ""
@@ -863,7 +864,7 @@ start concepts (3): integer_division, explicit_cast, arithmetic_operators
     lvl:arithmetic_operators@L2#1 -> not applied (0.00) ""
     lvl:arithmetic_operators@L4#0 -> not applied (0.00) ""
     lvl:arithmetic_operators@L0#0 -> not applied (0.00) ""
-  kept: mis:integer_division->CastAfterIntDivision [held, tier 0, 0.65], mis:explicit_cast->CastAfterIntDivision [held, tier 0, 0.55], lvl:integer_division@L0#4 [shown, tier 2, 0.42]
+  kept: mis:integer_division->CastAfterIntDivision [held, tier 0, 0.56], mis:explicit_cast->CastAfterIntDivision [held, tier 0, 0.55], lvl:integer_division@L0#4 [shown, tier 2, 0.42]
   clause coverage: c1 <- mis:integer_division->CastAfterIntDivision; c2 <- mis:integer_division->CastAfterIntDivision
   not yet read: pre:arithmetic_operators->expression, pre:arithmetic_operators->integer_division, pre:integer_division->explicit_cast, pre:type_conversion->explicit_cast
 --- depth 2: current concepts ['integer_division', 'explicit_cast', 'arithmetic_operators']
@@ -888,23 +889,23 @@ start concepts (3): integer_division, explicit_cast, arithmetic_operators
     lvl:expression@L0#0 -> shown (0.28) "so sum / count keeps its fraction and avg is 3.5"
     lvl:expression@L3#1 -> not applied (0.00) ""
     lvl:expression@L3#2 -> not applied (0.00) ""
-  type_conversion (misconceptions): 3 candidates -> kept mis:type_conversion->TargetTyping (0.80), mis:type_conversion->NarrowingAssignmentAllowed (0.10), mis:type_conversion->NoCastIfSameSize (0.10)
-    mis:type_conversion->TargetTyping -> held (0.68) "The (double) turns the whole division into a decimal division —; so sum / count keeps its fraction and avg is 3.5"
+  type_conversion (misconceptions): 3 candidates -> kept mis:type_conversion->TargetTyping (0.90), mis:type_conversion->NarrowingAssignmentAllowed (0.05), mis:type_conversion->NoCastIfSameSize (0.05)
+    mis:type_conversion->TargetTyping -> held (0.77) "The (double) turns the whole division into a decimal division —; so sum / count keeps its fraction and avg is 3.5"
     mis:type_conversion->NarrowingAssignmentAllowed -> not applied (0.00) ""
     mis:type_conversion->NoCastIfSameSize -> not applied (0.00) ""
   type_conversion (level ways): 18 candidates -> kept lvl:type_conversion@L4#3 (0.40), lvl:type_conversion@L4#0 (0.35), lvl:type_conversion@L0#0 (0.25)
     lvl:type_conversion@L4#3 -> not applied (0.00) ""
     lvl:type_conversion@L4#0 -> not applied (0.00) ""
     lvl:type_conversion@L0#0 -> shown (0.17) "The (double) turns the whole division into a decimal division —; so sum / count keeps its fraction and avg is 3.5"
-  kept: mis:type_conversion->TargetTyping [held, tier 0, 0.68], mis:expression->TargetTyping [held, tier 0, 0.59], lvl:expression@L0#0 [shown, tier 2, 0.28]
+  kept: mis:type_conversion->TargetTyping [held, tier 0, 0.77], mis:expression->TargetTyping [held, tier 0, 0.59], lvl:expression@L0#0 [shown, tier 2, 0.28]
   clause coverage: c1 <- mis:integer_division->CastAfterIntDivision; c2 <- mis:integer_division->CastAfterIntDivision
   not yet read: pre:primitive_type->type_conversion
   held: mis:type_conversion->TargetTyping, mis:expression->TargetTyping, mis:explicit_cast->CastAfterIntDivision; filed at the dependent concept: mis:integer_division->CastAfterIntDivision
-  shadows: mis:expression->TargetTyping (shadow of mis:type_conversion->TargetTyping), mis:type_conversion->TargetTyping (shadow of mis:explicit_cast->CastAfterIntDivision)
+  shadows: mis:expression->TargetTyping (shadow of mis:type_conversion->TargetTyping), mis:type_conversion->TargetTyping (shadow of mis:explicit_cast->CastAfterIntDivision), mis:integer_division->CastAfterIntDivision (shadow of mis:explicit_cast->CastAfterIntDivision)
   root-cause walk: held on ['explicit_cast'], broken at [] (consequences: pre:integer_division->explicit_cast, pre:arithmetic_operators->expression, pre:type_conversion->explicit_cast, pre:arithmetic_operators->integer_division), prerequisites {'expression': ['arithmetic_operators'], 'integer_division': ['arithmetic_operators'], 'explicit_cast': ['integer_division', 'type_conversion'], 'type_conversion': ['primitive_type'], 'println': ['statement']}
   level explicit_cast: L0 via misconception "The (double) turns the whole division into a decimal division —; so sum / count keeps its fraction and avg is 3.5"
   level expression: L0 via everyday_reading "so sum / count keeps its fraction and avg is 3.5"
-  level integer_division: L0 via misconception "The (double) turns the whole division into a decimal division —; so sum / count keeps its fraction and avg is 3.5"
+  level integer_division: L0 via inconsistent_trace "The (double) turns the whole division into a decimal division —; so sum / count keeps its fraction and avg is 3.5"
   level type_conversion: L0 via everyday_reading "The (double) turns the whole division into a decimal division —; so sum / count keeps its fraction and avg is 3.5"
 ```
 
@@ -940,6 +941,13 @@ start concepts (3): integer_division, explicit_cast, arithmetic_operators
  "error_evidence": [],
  "shadowed": [
   {
+   "concept": "integer_division",
+   "misconception": "CastAfterIntDivision",
+   "shadow_of": "mis:explicit_cast->CastAfterIntDivision",
+   "quote": "The (double) turns the whole division into a decimal division —; so sum / count keeps its fraction and avg is 3.5",
+   "score": 0.558
+  },
+  {
    "concept": "expression",
    "misconception": "TargetTyping",
    "shadow_of": "mis:type_conversion->TargetTyping",
@@ -951,7 +959,7 @@ start concepts (3): integer_division, explicit_cast, arithmetic_operators
    "misconception": "TargetTyping",
    "shadow_of": "mis:explicit_cast->CastAfterIntDivision",
    "quote": "The (double) turns the whole division into a decimal division —; so sum / count keeps its fraction and avg is 3.5",
-   "score": 0.68
+   "score": 0.765
   }
  ],
  "broken_edges": [
@@ -1004,12 +1012,11 @@ start concepts (3): integer_division, explicit_cast, arithmetic_operators
   },
   "integer_division": {
    "level": "L0",
-   "way": "misconception",
-   "misconception": "CastAfterIntDivision",
+   "way": "inconsistent_trace",
    "quote": "The (double) turns the whole division into a decimal division —; so sum / count keeps its fraction and avg is 3.5",
-   "edge": "mis:integer_division->CastAfterIntDivision",
-   "rule": "wrong rule: (double) (3 / 5) is 0.6. Right rule: The integer division 3 / 5 = 0 happens before the cast, so the result is 0.0.",
-   "source": "level_mis_links"
+   "edge": "lvl:integer_division@L0#4",
+   "source": "level_way",
+   "also_shown": []
   },
   "type_conversion": {
    "level": "L0",
@@ -1035,11 +1042,11 @@ start concepts (3): integer_division, explicit_cast, arithmetic_operators
    ],
    "quote": "The (double) turns the whole division into a decimal division —; so sum / count keeps its fraction and avg is 3.5",
    "confidence": 0.93,
-   "prune_score": 0.7000000000000001,
-   "score": 0.651,
+   "prune_score": 0.6,
+   "score": 0.558,
    "logic": "(double) (3 / 5) is 0.6.",
    "twin_logic": "The integer division 3 / 5 = 0 happens before the cast, so the result is 0.0.",
-   "role": "primary"
+   "role": "context"
   },
   {
    "depth": 1,
@@ -1054,7 +1061,7 @@ start concepts (3): integer_division, explicit_cast, arithmetic_operators
    ],
    "quote": "The (double) turns the whole division into a decimal division —; so sum / count keeps its fraction and avg is 3.5",
    "confidence": 0.92,
-   "prune_score": 0.6,
+   "prune_score": 0.6000000000000001,
    "score": 0.552,
    "logic": "(double) (3 / 5) is 0.6.",
    "twin_logic": "The integer division 3 / 5 = 0 happens before the cast, so the result is 0.0.",
@@ -1168,8 +1175,8 @@ start concepts (3): integer_division, explicit_cast, arithmetic_operators
    ],
    "quote": "The (double) turns the whole division into a decimal division —; so sum / count keeps its fraction and avg is 3.5",
    "confidence": 0.85,
-   "prune_score": 0.8,
-   "score": 0.68,
+   "prune_score": 0.9,
+   "score": 0.765,
    "logic": "The type of a numerical expression depends on the type expected by the surrounding context, so double d = a / b; keeps the fraction.",
    "twin_logic": "The type of a numerical expression is determined by the expression, so double d = a / b; with int a and b still divides as ints.",
    "role": "context"
@@ -1227,11 +1234,11 @@ start concepts (3): integer_division, explicit_cast, arithmetic_operators
    ],
    "quote": "The (double) turns the whole division into a decimal division —; so sum / count keeps its fraction and avg is 3.5",
    "confidence": 0.93,
-   "prune_score": 0.7000000000000001,
-   "score": 0.651,
+   "prune_score": 0.6,
+   "score": 0.558,
    "logic": "(double) (3 / 5) is 0.6.",
    "twin_logic": "The integer division 3 / 5 = 0 happens before the cast, so the result is 0.0.",
-   "role": "primary"
+   "role": "context"
   },
   {
    "depth": 1,
@@ -1266,7 +1273,7 @@ start concepts (3): integer_division, explicit_cast, arithmetic_operators
    ],
    "quote": "The (double) turns the whole division into a decimal division —; so sum / count keeps its fraction and avg is 3.5",
    "confidence": 0.92,
-   "prune_score": 0.6,
+   "prune_score": 0.6000000000000001,
    "score": 0.552,
    "logic": "(double) (3 / 5) is 0.6.",
    "twin_logic": "The integer division 3 / 5 = 0 happens before the cast, so the result is 0.0.",
@@ -1418,8 +1425,8 @@ start concepts (3): integer_division, explicit_cast, arithmetic_operators
    ],
    "quote": "The (double) turns the whole division into a decimal division —; so sum / count keeps its fraction and avg is 3.5",
    "confidence": 0.85,
-   "prune_score": 0.8,
-   "score": 0.68,
+   "prune_score": 0.9,
+   "score": 0.765,
    "logic": "The type of a numerical expression depends on the type expected by the surrounding context, so double d = a / b; keeps the fraction.",
    "twin_logic": "The type of a numerical expression is determined by the expression, so double d = a / b; with int a and b still divides as ints.",
    "role": "context"

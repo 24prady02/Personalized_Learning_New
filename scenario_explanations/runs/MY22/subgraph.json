@@ -282,7 +282,7 @@
    "type": "error",
    "source": "assignment",
    "target": "RedeclareToReassign",
-   "role": "primary",
+   "role": "context",
    "logic": "Writes int x = 5; ... int x = 10; to change x.",
    "twin_logic": "A declaration gives a variable its name and type; a later change of value is an assignment statement such as x = 10;, not a second declaration."
   },
@@ -390,7 +390,7 @@
    "type": "misconception",
    "source": "assignment",
    "target": "SwapWithoutTemp",
-   "role": "primary",
+   "role": "context",
    "logic": "a[i] = a[j]; a[j] = a[i]; exchanges the two values.",
    "twin_logic": "A temporary variable must save a[i] before it is overwritten."
   },
@@ -435,7 +435,7 @@
    "type": "misconception",
    "source": "increment_operators",
    "target": "PostIncrementAssignsLater",
-   "role": "primary",
+   "role": "context",
    "logic": "i = i++ increases i by 1.",
    "twin_logic": "i++ evaluates to the old value, so i = i++ stores the old value back."
   },
@@ -444,7 +444,7 @@
    "type": "misconception",
    "source": "increment_operators",
    "target": "PreIncrementBeforeLoop",
-   "role": "primary",
+   "role": "context",
    "logic": "++i in the for-update runs before the body each pass",
    "twin_logic": "The update runs after each pass of the body, so with either ++i or i++ the first pass uses i = s."
   },
@@ -525,7 +525,7 @@
    "type": "misconception",
    "source": "statement",
    "target": "StatementsRunInAnyOrder",
-   "role": "primary",
+   "role": "context",
    "logic": "Statements in a program can run in any order.",
    "twin_logic": "Without control statements, statements run once each, top to bottom."
   },

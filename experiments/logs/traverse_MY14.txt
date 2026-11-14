@@ -19,10 +19,10 @@ start concepts (3): loop_control, for_loop, loop_variable
     lvl:for_loop@L4#5 -> not applied (0.00) ""
     lvl:for_loop@L2#2 -> not applied (0.00) ""
     lvl:for_loop@L0#0 -> not applied (0.00) ""
-  loop_variable (misconceptions): 7 candidates -> kept mis:loop_variable->LoopUpdateChangesDirection (0.60), mis:loop_variable->LoopVariableLifetimeScope (0.25), mis:loop_variable->ForInitRepeats (0.15)
-    mis:loop_variable->LoopUpdateChangesDirection -> not applied (0.00) ""
+  loop_variable (misconceptions): 7 candidates -> kept mis:loop_variable->LoopUpdateChangesDirection (0.60), mis:loop_variable->LoopVariableLifetimeScope (0.20), mis:loop_variable->LoopOutputSameEachPass (0.20)
+    mis:loop_variable->LoopUpdateChangesDirection -> correct (0.36) "A for loop moves i on by one each pass; so i goes 0, 1, 2 and"
     mis:loop_variable->LoopVariableLifetimeScope -> not applied (0.00) ""
-    mis:loop_variable->ForInitRepeats -> correct (0.09) "so i goes 0, 1, 2 and; so on up to 9"
+    mis:loop_variable->LoopOutputSameEachPass -> not applied (0.00) ""
   loop_variable (level ways): 13 candidates -> kept lvl:loop_variable@L2#1 (0.40), lvl:loop_variable@L0#5 (0.35), lvl:loop_variable@L2#2 (0.25)
     lvl:loop_variable@L2#1 -> shown (0.28) "so i goes 0, 1, 2 and; so on up to 9"
     lvl:loop_variable@L0#5 -> not applied (0.00) ""

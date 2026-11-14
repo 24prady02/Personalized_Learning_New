@@ -816,9 +816,9 @@ Edges offered:
 
 Prune: the model's reply (edge id and score; the kept edges sum to 1):
 ```
-mis:loop_variable->LoopOutputSameEachPass (0.40), mis:loop_variable->LoopVariableLifetimeScope (0.35), mis:loop_variable->ForInitRepeats (0.25)
+mis:loop_variable->LoopOutputSameEachPass (0.50), mis:loop_variable->LoopVariableLifetimeScope (0.30), mis:loop_variable->ForInitRepeats (0.20)
 ```
-Kept by pruning: mis:loop_variable->LoopOutputSameEachPass (0.40), mis:loop_variable->LoopVariableLifetimeScope (0.35), mis:loop_variable->ForInitRepeats (0.25)
+Kept by pruning: mis:loop_variable->LoopOutputSameEachPass (0.50), mis:loop_variable->LoopVariableLifetimeScope (0.30), mis:loop_variable->ForInitRepeats (0.20)
 
 Label prompt for the misconception / error edges (judged together). The model saw the program, the question, the numbered clauses, and these edges with their wrong rule and right rule:
 | edge |
@@ -836,9 +836,9 @@ mis:loop_variable->ForInitRepeats | correct | clauses: 3 | confidence: 0.65
 Parsed labels:
 | edge | label | prune score | confidence | score | clauses | words |
 |---|---|---|---|---|---|---|
-| mis:loop_variable->LoopOutputSameEachPass | correct | 0.4 | 0.8 | 0.32 | c1, c3 | It prints 1, then 3, then 6; so sum keeps the running total: 0+1 = 1, then 1+2 = 3, then 3+3 = 6 |
+| mis:loop_variable->LoopOutputSameEachPass | correct | 0.5 | 0.8 | 0.4 | c1, c3 | It prints 1, then 3, then 6; so sum keeps the running total: 0+1 = 1, then 1+2 = 3, then 3+3 = 6 |
 | mis:loop_variable->LoopVariableLifetimeScope | not applied |  |  | 0.0 |  |  |
-| mis:loop_variable->ForInitRepeats | correct | 0.25 | 0.65 | 0.16 | c3 | so sum keeps the running total: 0+1 = 1, then 1+2 = 3, then 3+3 = 6 |
+| mis:loop_variable->ForInitRepeats | correct | 0.2 | 0.65 | 0.13 | c3 | so sum keeps the running total: 0+1 = 1, then 1+2 = 3, then 3+3 = 6 |
 
 #### loop_variable, level ways: 13 edges offered
 Edges offered:
@@ -905,7 +905,7 @@ Parsed labels:
 
 **Kept on a path at this depth** (best N in tiers: held misconception / broken edge, then held error, then correct / confirmed / shown):
 
-mis:loop_variable->LoopOutputSameEachPass [correct, tier 2, 0.32], lvl:loop_variable@L2#1 [shown, tier 2, 0.30], lvl:loop_variable@L2#0 [shown, tier 2, 0.17]
+mis:loop_variable->LoopOutputSameEachPass [correct, tier 2, 0.40], lvl:loop_variable@L2#1 [shown, tier 2, 0.30], lvl:loop_variable@L2#0 [shown, tier 2, 0.17]
 
 **Clause coverage after this depth:**
 | clause | text | covered by |
@@ -927,7 +927,7 @@ Root-cause walk: held on ['accumulator_pattern', 'loop_body'], broken at [] (con
 - loop_control: L3 via purpose_of_the_whole "sum starts at 0 and on every pass i is added to it; so sum keeps the running total: 0+1 = 1, then 1+2 = 3, then 3+3 = 6"
 - loop_variable: L3 via purpose_of_the_whole "sum starts at 0 and on every pass i is added to it; so sum keeps the running total: 0+1 = 1, then 1+2 = 3, then 3+3 = 6"
 
-**Stop:** sufficient at depth 4; prompts {'prune': 15, 'label': 29}, fresh model calls 0, cache hits 44
+**Stop:** sufficient at depth 4; prompts {'prune': 15, 'label': 29}, fresh model calls 3, cache hits 41
 
 ### Held misconceptions
 | concept | misconception | kind | quote | score | shares_evidence_with |
@@ -990,8 +990,8 @@ Figure 8 (final picture): C:\Users\magnu\OneDrive\Desktop\ES_VIterbi_Personalize
 | 3 | loop_body | lvl:loop_body@L0#6 | level | shown | 0.5 | 0.7 | 0.35 | [1, 2, 3] | It prints 1, then 3, then 6; sum starts at 0 and on every pass i is added to it; so sum keeps the running total: 0+1 = 1, then 1+2 = 3, then 3+3 = 6 |
 | 3 | loop_control | pre:loop_variable->loop_control | prerequisite | confirmed | 0.7 | 0.6 | 0.42 | [1, 3] | It prints 1, then 3, then 6; so sum keeps the running total: 0+1 = 1, then 1+2 = 3, then 3+3 = 6 |
 | 3 | loop_control | pre:loop_control->increment_operators | prerequisite | confirmed | 0.3 | 0.55 | 0.165 | [3] | so sum keeps the running total: 0+1 = 1, then 1+2 = 3, then 3+3 = 6 |
-| 4 | loop_variable | mis:loop_variable->LoopOutputSameEachPass | misconception | correct | 0.4 | 0.8 | 0.32 | [1, 3] | It prints 1, then 3, then 6; so sum keeps the running total: 0+1 = 1, then 1+2 = 3, then 3+3 = 6 |
-| 4 | loop_variable | mis:loop_variable->ForInitRepeats | misconception | correct | 0.25 | 0.65 | 0.1625 | [3] | so sum keeps the running total: 0+1 = 1, then 1+2 = 3, then 3+3 = 6 |
+| 4 | loop_variable | mis:loop_variable->LoopOutputSameEachPass | misconception | correct | 0.5 | 0.8 | 0.4 | [1, 3] | It prints 1, then 3, then 6; so sum keeps the running total: 0+1 = 1, then 1+2 = 3, then 3+3 = 6 |
+| 4 | loop_variable | mis:loop_variable->ForInitRepeats | misconception | correct | 0.2 | 0.65 | 0.13 | [3] | so sum keeps the running total: 0+1 = 1, then 1+2 = 3, then 3+3 = 6 |
 | 4 | loop_variable | lvl:loop_variable@L2#1 | level | shown | 0.5 | 0.6 | 0.3 | [3] | so sum keeps the running total: 0+1 = 1, then 1+2 = 3, then 3+3 = 6 |
 | 4 | loop_variable | lvl:loop_variable@L2#0 | level | shown | 0.3 | 0.55 | 0.165 | [2, 3] | sum starts at 0 and on every pass i is added to it; so sum keeps the running total: 0+1 = 1, then 1+2 = 3, then 3+3 = 6 |
 | 4 | loop_variable | lvl:loop_variable@L3#2 | level | shown | 0.2 | 0.6 | 0.12 | [2, 3] | sum starts at 0 and on every pass i is added to it; so sum keeps the running total: 0+1 = 1, then 1+2 = 3, then 3+3 = 6 |
@@ -1008,7 +1008,7 @@ Figure 8 (final picture): C:\Users\magnu\OneDrive\Desktop\ES_VIterbi_Personalize
 | 3 | loop_body | mis:loop_body->LoopBodyStatementOutsideLoop | misconception | held | 0.54 | [2, 3] |
 | 3 | loop_control | pre:loop_variable->loop_control | prerequisite | confirmed | 0.42 | [1, 3] |
 | 3 | loop_body | lvl:loop_body@L0#6 | level | shown | 0.35 | [1, 2, 3] |
-| 4 | loop_variable | mis:loop_variable->LoopOutputSameEachPass | misconception | correct | 0.32 | [1, 3] |
+| 4 | loop_variable | mis:loop_variable->LoopOutputSameEachPass | misconception | correct | 0.4 | [1, 3] |
 | 4 | loop_variable | lvl:loop_variable@L2#1 | level | shown | 0.3 | [3] |
 | 4 | loop_variable | lvl:loop_variable@L2#0 | level | shown | 0.165 | [2, 3] |
 
@@ -1080,15 +1080,15 @@ start concepts (3): loop_control, accumulator_pattern, for_loop
   clause coverage: c1 <- err:loop_control->WrongIterationCount; c2 <- mis:loop_control->ForLoopPartSkipped; c3 <- mis:loop_control->ForLoopPartSkipped
   not yet read: own edges of loop_variable
 --- depth 4: current concepts ['loop_variable'] (closing round: own edges only)
-  loop_variable (misconceptions): 7 candidates -> kept mis:loop_variable->LoopOutputSameEachPass (0.40), mis:loop_variable->LoopVariableLifetimeScope (0.35), mis:loop_variable->ForInitRepeats (0.25)
-    mis:loop_variable->LoopOutputSameEachPass -> correct (0.32) "It prints 1, then 3, then 6; so sum keeps the running total: 0+1 = 1, then 1+2 = 3, then 3+3 = 6"
+  loop_variable (misconceptions): 7 candidates -> kept mis:loop_variable->LoopOutputSameEachPass (0.50), mis:loop_variable->LoopVariableLifetimeScope (0.30), mis:loop_variable->ForInitRepeats (0.20)
+    mis:loop_variable->LoopOutputSameEachPass -> correct (0.40) "It prints 1, then 3, then 6; so sum keeps the running total: 0+1 = 1, then 1+2 = 3, then 3+3 = 6"
     mis:loop_variable->LoopVariableLifetimeScope -> not applied (0.00) ""
-    mis:loop_variable->ForInitRepeats -> correct (0.16) "so sum keeps the running total: 0+1 = 1, then 1+2 = 3, then 3+3 = 6"
+    mis:loop_variable->ForInitRepeats -> correct (0.13) "so sum keeps the running total: 0+1 = 1, then 1+2 = 3, then 3+3 = 6"
   loop_variable (level ways): 13 candidates -> kept lvl:loop_variable@L2#1 (0.50), lvl:loop_variable@L2#0 (0.30), lvl:loop_variable@L3#2 (0.20)
     lvl:loop_variable@L2#1 -> shown (0.30) "so sum keeps the running total: 0+1 = 1, then 1+2 = 3, then 3+3 = 6"
     lvl:loop_variable@L2#0 -> shown (0.17) "sum starts at 0 and on every pass i is added to it; so sum keeps the running total: 0+1 = 1, then 1+2 = 3, then 3+3 = 6"
     lvl:loop_variable@L3#2 -> shown (0.12) "sum starts at 0 and on every pass i is added to it; so sum keeps the running total: 0+1 = 1, then 1+2 = 3, then 3+3 = 6"
-  kept: mis:loop_variable->LoopOutputSameEachPass [correct, tier 2, 0.32], lvl:loop_variable@L2#1 [shown, tier 2, 0.30], lvl:loop_variable@L2#0 [shown, tier 2, 0.17]
+  kept: mis:loop_variable->LoopOutputSameEachPass [correct, tier 2, 0.40], lvl:loop_variable@L2#1 [shown, tier 2, 0.30], lvl:loop_variable@L2#0 [shown, tier 2, 0.17]
   clause coverage: c1 <- err:loop_control->WrongIterationCount; c2 <- mis:loop_control->ForLoopPartSkipped; c3 <- mis:loop_control->ForLoopPartSkipped
   held: mis:loop_body->LoopBodyStatementOutsideLoop, mis:accumulator_pattern->LoopBodyScopeImpliesLoopLifetime, mis:for_loop->ForLoopPartSkipped; filed at the dependent concept: mis:loop_control->ForLoopPartSkipped
   shadows: mis:for_loop->ForLoopPartSkipped (shadow of mis:accumulator_pattern->LoopBodyScopeImpliesLoopLifetime), mis:loop_control->ForLoopPartSkipped (shadow of mis:accumulator_pattern->LoopBodyScopeImpliesLoopLifetime)
@@ -1407,8 +1407,8 @@ start concepts (3): loop_control, accumulator_pattern, for_loop
    ],
    "quote": "It prints 1, then 3, then 6; so sum keeps the running total: 0+1 = 1, then 1+2 = 3, then 3+3 = 6",
    "confidence": 0.8,
-   "prune_score": 0.4,
-   "score": 0.32,
+   "prune_score": 0.5,
+   "score": 0.4,
    "logic": "A loop prints the same thing on every pass; the changing loop variable does not affect what the body does.",
    "twin_logic": "The body uses the current value of the loop variable, so its output can differ on each pass.",
    "role": "primary"
@@ -1490,7 +1490,7 @@ start concepts (3): loop_control, accumulator_pattern, for_loop
    "score": 0.16,
    "logic": "Updates the loop counter so that the loop runs the wrong number of times.",
    "twin_logic": "The init, test and update together decide the number of passes; trace them to check the count.",
-   "role": "primary"
+   "role": "context"
   },
   {
    "depth": 1,
@@ -1811,8 +1811,8 @@ start concepts (3): loop_control, accumulator_pattern, for_loop
    ],
    "quote": "It prints 1, then 3, then 6; so sum keeps the running total: 0+1 = 1, then 1+2 = 3, then 3+3 = 6",
    "confidence": 0.8,
-   "prune_score": 0.4,
-   "score": 0.32,
+   "prune_score": 0.5,
+   "score": 0.4,
    "logic": "A loop prints the same thing on every pass; the changing loop variable does not affect what the body does.",
    "twin_logic": "The body uses the current value of the loop variable, so its output can differ on each pass.",
    "role": "primary"
@@ -1829,8 +1829,8 @@ start concepts (3): loop_control, accumulator_pattern, for_loop
    ],
    "quote": "so sum keeps the running total: 0+1 = 1, then 1+2 = 3, then 3+3 = 6",
    "confidence": 0.65,
-   "prune_score": 0.25,
-   "score": 0.1625,
+   "prune_score": 0.2,
+   "score": 0.13,
    "logic": "The initialization of a for loop runs again after a pass of the body.",
    "twin_logic": "The initialization runs exactly once, before the first condition test.",
    "role": "context"
@@ -1903,8 +1903,8 @@ start concepts (3): loop_control, accumulator_pattern, for_loop
  "unexplained_clauses": [],
  "stop_reason": "sufficient",
  "depth_reached": 4,
- "llm_calls": 0,
- "llm_cache_hits": 44,
+ "llm_calls": 3,
+ "llm_cache_hits": 41,
  "llm_calls_by_step": {
   "prune": 15,
   "label": 29

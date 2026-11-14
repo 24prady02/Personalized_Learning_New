@@ -324,7 +324,7 @@
    "type": "misconception",
    "source": "control_flow",
    "target": "CodeAfterIfSkipped",
-   "role": "primary",
+   "role": "context",
    "logic": "When the then branch runs, the code after the if is skipped.",
    "twin_logic": "After the if finishes, execution continues with the next statement either way."
   },
@@ -486,7 +486,7 @@
    "type": "misconception",
    "source": "statement",
    "target": "StatementsRunInAnyOrder",
-   "role": "primary",
+   "role": "context",
    "logic": "Statements in a program can run in any order.",
    "twin_logic": "Without control statements, statements run once each, top to bottom."
   },

@@ -19,21 +19,21 @@
  ],
  "held_misconceptions": [
   {
-   "concept": "char_arithmetic",
+   "concept": "char",
    "misconception": "CharNotNumeric",
    "kind": "misconception",
    "quote": "A letter is not a number; so Java cannot add 1 to it, and this line gives a compile error",
-   "score": 0.95
+   "score": 0.97
   }
  ],
  "error_evidence": [],
  "shadowed": [
   {
-   "concept": "char",
+   "concept": "char_arithmetic",
    "misconception": "CharNotNumeric",
-   "shadow_of": "mis:char_arithmetic->CharNotNumeric",
+   "shadow_of": "mis:char->CharNotNumeric",
    "quote": "A letter is not a number; so Java cannot add 1 to it, and this line gives a compile error",
-   "score": 0.97
+   "score": 0.95
   }
  ],
  "broken_edges": [
@@ -51,26 +51,26 @@
   }
  ],
  "root_cause": {
-  "concept": "char_arithmetic",
+  "concept": "char",
   "misconception": "CharNotNumeric"
  },
  "levels": {
   "char": {
    "level": "L0",
-   "way": "everyday_reading",
-   "quote": "A letter is not a number; so Java cannot add 1 to it, and this line gives a compile error",
-   "edge": "lvl:char@L0#0",
-   "source": "level_way",
-   "also_shown": []
-  },
-  "char_arithmetic": {
-   "level": "L0",
    "way": "misconception",
    "misconception": "CharNotNumeric",
    "quote": "A letter is not a number; so Java cannot add 1 to it, and this line gives a compile error",
-   "edge": "mis:char_arithmetic->CharNotNumeric",
+   "edge": "mis:char->CharNotNumeric",
    "rule": "wrong rule: char is not a numeric type. Right rule: A char is encoded as a 16-bit integer, so arithmetic such as 'b' + 'c' or 'a' + 4 works on the character codes.",
    "source": "level_mis_links"
+  },
+  "char_arithmetic": {
+   "level": "L0",
+   "way": "everyday_reading",
+   "quote": "A letter is not a number; so Java cannot add 1 to it, and this line gives a compile error",
+   "edge": "lvl:char_arithmetic@L0#0",
+   "source": "level_way",
+   "also_shown": []
   },
   "expression": {
    "level": "L4",
@@ -100,7 +100,7 @@
    "score": 0.95,
    "logic": "char is not a numeric type",
    "twin_logic": "A char is encoded as a 16-bit integer, so arithmetic such as 'b' + 'c' or 'a' + 4 works on the character codes.",
-   "role": "primary"
+   "role": "context"
   },
   {
    "depth": 1,
@@ -238,7 +238,7 @@
    "score": 0.95,
    "logic": "char is not a numeric type",
    "twin_logic": "A char is encoded as a 16-bit integer, so arithmetic such as 'b' + 'c' or 'a' + 4 works on the character codes.",
-   "role": "primary"
+   "role": "context"
   },
   {
    "depth": 1,
@@ -367,8 +367,8 @@
  ],
  "stop_reason": "max depth",
  "depth_reached": 3,
- "llm_calls": 3,
- "llm_cache_hits": 33,
+ "llm_calls": 1,
+ "llm_cache_hits": 35,
  "llm_calls_by_step": {
   "prune": 13,
   "label": 23

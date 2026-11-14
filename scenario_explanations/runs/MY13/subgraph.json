@@ -464,7 +464,7 @@
    "type": "misconception",
    "source": "explicit_cast",
    "target": "CastParsesString",
-   "role": "primary",
+   "role": "context",
    "logic": "(int) args[0] converts the text \"34\" into the number 34.",
    "twin_logic": "A String argument that represents a number must be converted with a method such as Integer.parseInt."
   },
@@ -482,7 +482,7 @@
    "type": "misconception",
    "source": "explicit_cast",
    "target": "LaterDoubleLiteralFixesDivision",
-   "role": "primary",
+   "role": "context",
    "logic": "Changing a later literal to 100.0 fixes an earlier int division.",
    "twin_logic": "The int division happens first; the double must be in the division itself."
   },
@@ -527,7 +527,7 @@
    "type": "misconception",
    "source": "expression",
    "target": "ParenthesesOnlyIfArgument",
-   "role": "primary",
+   "role": "context",
    "logic": "() are optional on a no-argument call like println",
    "twin_logic": "A method call always needs parentheses, so an empty line is printed with System.out.println();."
   },
@@ -563,7 +563,7 @@
    "type": "misconception",
    "source": "integer_division",
    "target": "CastAfterIntDivision",
-   "role": "primary",
+   "role": "context",
    "logic": "(double) (3 / 5) is 0.6.",
    "twin_logic": "The integer division 3 / 5 = 0 happens before the cast, so the result is 0.0."
   },
@@ -689,7 +689,7 @@
    "type": "misconception",
    "source": "statement",
    "target": "StatementsRunInAnyOrder",
-   "role": "primary",
+   "role": "context",
    "logic": "Statements in a program can run in any order.",
    "twin_logic": "Without control statements, statements run once each, top to bottom."
   },
@@ -707,7 +707,7 @@
    "type": "misconception",
    "source": "type_conversion",
    "target": "NarrowingAssignmentAllowed",
-   "role": "primary",
+   "role": "context",
    "logic": "A double value can be stored in an int variable like an int in a double.",
    "twin_logic": "int to double is automatic; double to int needs a cast."
   },

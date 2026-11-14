@@ -291,29 +291,29 @@ Edges offered:
 
 Prune: the model's reply (edge id and score; the kept edges sum to 1):
 ```
-mis:integer_division->NegativeRemainderSign (0.75), mis:integer_division->IntegerDivisionGivesFraction (0.20), mis:integer_division->TargetTyping (0.05)
+mis:integer_division->NegativeRemainderSign (0.75), mis:integer_division->IntegerDivisionGivesFraction (0.20), mis:integer_division->CastAfterIntDivision (0.05)
 ```
-Kept by pruning: mis:integer_division->NegativeRemainderSign (0.75), mis:integer_division->IntegerDivisionGivesFraction (0.20), mis:integer_division->TargetTyping (0.05)
+Kept by pruning: mis:integer_division->NegativeRemainderSign (0.75), mis:integer_division->IntegerDivisionGivesFraction (0.20), mis:integer_division->CastAfterIntDivision (0.05)
 
 Label prompt for the misconception / error edges (judged together). The model saw the program, the question, the numbered clauses, and these edges with their wrong rule and right rule:
 | edge |
 |---|
 | mis:integer_division->NegativeRemainderSign \| wrong rule: a % b is never negative, and integer division of a negative number rounds down. \| right rule: a / b rounds toward 0 and a % b takes the sign of a: -14 / 3 is -4 and -14 % 3 is -2. |
 | mis:integer_division->IntegerDivisionGivesFraction \| wrong rule: 10 / 3 evaluates to 3.333.... \| right rule: Dividing two ints gives an int: the fractional part is discarded. |
-| mis:integer_division->TargetTyping \| wrong rule: The type of a numerical expression depends on the type expected by the surrounding context, so double d = a / b; keeps the fraction. \| right rule: The type of a numerical expression is determined by the expression, so double d = a / b; with int a and b still divides as ints. |
+| mis:integer_division->CastAfterIntDivision \| wrong rule: (double) (3 / 5) is 0.6. \| right rule: The integer division 3 / 5 = 0 happens before the cast, so the result is 0.0. |
 Model's reply:
 ```
-mis:integer_division->NegativeRemainderSign | held | clauses: 2, 3, 4, 5 | confidence: 0.97
+mis:integer_division->NegativeRemainderSign | held | clauses: 1, 2, 3, 4, 5, 6 | confidence: 0.97
 mis:integer_division->IntegerDivisionGivesFraction | correct | clauses: 2, 3 | confidence: 0.75
-mis:integer_division->TargetTyping | not applied | clauses: none | confidence: 0.95
+mis:integer_division->CastAfterIntDivision | not applied | clauses: none | confidence: 0.95
 ```
 
 Parsed labels:
 | edge | label | prune score | confidence | score | clauses | words |
 |---|---|---|---|---|---|---|
-| mis:integer_division->NegativeRemainderSign | held | 0.75 | 0.97 | 0.73 | c2, c3, c4, c5 | -7 / 2 is -3.5, and integer division rounds down; so it becomes -4; A remainder is never negative; so -7 % 2 is 1 |
+| mis:integer_division->NegativeRemainderSign | held | 0.75 | 0.97 | 0.73 | c1, c2, c3, c4, c5, c6 | It prints -4 and then 1; -7 / 2 is -3.5, and integer division rounds down; so it becomes -4; A remainder is never negative; so -7 % 2 is 1; because -4 * 2 + 1 = -7 |
 | mis:integer_division->IntegerDivisionGivesFraction | correct | 0.2 | 0.75 | 0.15 | c2, c3 | -7 / 2 is -3.5, and integer division rounds down; so it becomes -4 |
-| mis:integer_division->TargetTyping | not applied |  |  | 0.0 |  |  |
+| mis:integer_division->CastAfterIntDivision | not applied |  |  | 0.0 |  |  |
 
 #### integer_division, level ways: 16 edges offered
 Edges offered:
@@ -388,20 +388,18 @@ mis:remainder_operator->NegativeRemainderSign [held, tier 0, 0.87], mis:integer_
 **Clause coverage after this depth:**
 | clause | text | covered by |
 |---|---|---|
-| c1 | It prints -4 and then 1 | not covered yet |
+| c1 | It prints -4 and then 1 | mis:integer_division->NegativeRemainderSign |
 | c2 | -7 / 2 is -3.5, and integer division rounds down | mis:remainder_operator->NegativeRemainderSign |
 | c3 | so it becomes -4 | mis:remainder_operator->NegativeRemainderSign |
 | c4 | A remainder is never negative | mis:remainder_operator->NegativeRemainderSign |
 | c5 | so -7 % 2 is 1 | mis:remainder_operator->NegativeRemainderSign |
 | c6 | because -4 * 2 + 1 = -7 | mis:arithmetic_operators->RemainderIsSubtraction |
 
-**Uncovered clauses bring in (BM25 of the uncovered clauses against unvisited concepts):** println (2.34)
-
-**Graph check, not yet read (the walk may not stop while these remain):** own edges of println, pre:arithmetic_operators->expression, pre:arithmetic_operators->integer_division, pre:arithmetic_operators->remainder_operator, pre:integer_division->remainder_operator
+**Graph check, not yet read (the walk may not stop while these remain):** pre:arithmetic_operators->expression, pre:arithmetic_operators->integer_division, pre:arithmetic_operators->remainder_operator, pre:integer_division->remainder_operator
 
 Figure 4 (the graph after depth 1): C:\Users\magnu\OneDrive\Desktop\ES_VIterbi_Personalized_Learning\results\viewer\MY02_figure04.png
 
-### Depth 2: current concepts 'remainder_operator', 'integer_division', 'arithmetic_operators', 'println'
+### Depth 2: current concepts 'remainder_operator', 'integer_division', 'arithmetic_operators'
 
 #### remainder_operator, concept edges: 2 edges offered
 Edges offered:
@@ -500,110 +498,6 @@ Parsed labels:
 |---|---|---|---|---|---|---|
 | pre:arithmetic_operators->expression | confirmed | 1.0 | 0.7 | 0.7 | c2, c5, c6 | -7 / 2 is -3.5, and integer division rounds down; so -7 % 2 is 1; because -4 * 2 + 1 = -7 |
 
-#### println, misconceptions: 6 edges offered
-Edges offered:
-| edge |
-|---|
-| err:println->PrintWithoutFinalNewline \| wrong rule: Ends the output with print and expects it to appear right away. \| right rule: Finish a line of print calls with println; some systems hold print output until a newline is printed. |
-| mis:println->IdentifierCaseInsensitive \| wrong rule: System.out.Println and System.out.println name the same method. \| right rule: Java is case-sensitive: names of variables, methods and classes that differ only in capitalization are different names. |
-| mis:println->ParenthesesOnlyIfArgument \| wrong rule: println with nothing to print can be written System.out.println; without the parentheses. \| right rule: A method call always needs parentheses, so an empty line is printed with System.out.println();. |
-| mis:println->PrintEqualsPrintln \| wrong rule: print and println do the same thing, so print(s1); print(s2); puts s1 and s2 on separate lines. \| right rule: println ends the line after printing and print does not, so print(s1); print(s2); puts s1 and s2 on the same line. |
-| mis:println->PrintNewLineFirst \| wrong rule: println(s) prints a newline and then s. \| right rule: println(s) prints s and then the newline. |
-| mis:println->PrintedTextIsExecuted \| wrong rule: System.out.println("x is 5"); sets x to 5 (text inside the quotes is run as code). \| right rule: Characters inside double quotes are printed literally; println only displays them and changes no variable. Only an assignment such as x = 5; sets x. |
-
-Prune: the model's reply (edge id and score; the kept edges sum to 1):
-```
-mis:println->PrintEqualsPrintln (0.50), mis:println->PrintNewLineFirst (0.40), mis:println->PrintedTextIsExecuted (0.10)
-```
-Kept by pruning: mis:println->PrintEqualsPrintln (0.50), mis:println->PrintNewLineFirst (0.40), mis:println->PrintedTextIsExecuted (0.10)
-
-Label prompt for the misconception / error edges (judged together). The model saw the program, the question, the numbered clauses, and these edges with their wrong rule and right rule:
-| edge |
-|---|
-| mis:println->PrintEqualsPrintln \| wrong rule: print and println do the same thing, so print(s1); print(s2); puts s1 and s2 on separate lines. \| right rule: println ends the line after printing and print does not, so print(s1); print(s2); puts s1 and s2 on the same line. |
-| mis:println->PrintNewLineFirst \| wrong rule: println(s) prints a newline and then s. \| right rule: println(s) prints s and then the newline. |
-| mis:println->PrintedTextIsExecuted \| wrong rule: System.out.println("x is 5"); sets x to 5 (text inside the quotes is run as code). \| right rule: Characters inside double quotes are printed literally; println only displays them and changes no variable. Only an assignment such as x = 5; sets x. |
-Model's reply:
-```
-mis:println->PrintEqualsPrintln | not applied | clauses: none | confidence: 0.9
-mis:println->PrintNewLineFirst | not applied | clauses: none | confidence: 0.85
-mis:println->PrintedTextIsExecuted | not applied | clauses: none | confidence: 0.95
-```
-
-Parsed labels:
-| edge | label | prune score | confidence | score | clauses | words |
-|---|---|---|---|---|---|---|
-| mis:println->PrintEqualsPrintln | not applied |  |  | 0.0 |  |  |
-| mis:println->PrintNewLineFirst | not applied |  |  | 0.0 |  |  |
-| mis:println->PrintedTextIsExecuted | not applied |  |  | 0.0 |  |  |
-
-#### println, level ways: 17 edges offered
-Edges offered:
-| edge |
-|---|
-| lvl:println@L0#0 \| level L0 way everyday_reading: Everyday reading: 'println' is just 'print', and 'new line' is something you do before writing. Java rule: println(x) prints x and then ends the line; println() alone just ends the line. |
-| lvl:println@L0#3 \| level L0 way inconsistent_trace: Applies the println rule (print, then end line) unevenly: puts the newline before the text on one call and after it on another, or forgets that the next output starts on a new line. (here mixing in: "print and println behave the same (no newline difference)") |
-| lvl:println@L1#0 \| level L1 way names_the_element: System.out.println is a library method that prints its argument followed by a line terminator ('print line'). |
-| lvl:println@L1#1 \| level L1 way states_the_rule: println(String x) behaves as though it calls print(x) and then println(); println() terminates the current line by writing the line separator string. |
-| lvl:println@L2#0 \| level L2 way line_by_line_trace: Evaluate the argument, print its characters at the current position, then write the line separator so the cursor moves to the beginning of the next line. |
-| lvl:println@L2#1 \| level L2 way output_prediction: Output is the value's characters followed by a line break: println("Hello, "); println("World!"); prints two lines. |
-| lvl:println@L2#2 \| level L2 way one_step_execution: One call appends the text and a line separator to the output; the cursor ends at the start of the next line; no variable changes and nothing is returned. |
-| lvl:println@L3#0 \| level L3 way relation_to_neighbour: System.out.println(s); is a statement, so its line of output appears at its own place in the sequence. |
-| lvl:println@L3#1 \| level L3 way relation_to_neighbour: println("s") outputs exactly the characters between the quotes and then ends the line. |
-| lvl:println@L3#2 \| level L3 way relation_to_neighbour: print leaves the cursor on the line; println ends it; several prints followed by one println make one line. |
-| lvl:println@L3#3 \| level L3 way relation_to_neighbour: println prints numbers with all their digits and always ends the line; printf formats each value by its conversion code and ends the line only where the format has %n or \n. |
-| lvl:println@L3#4 \| level L3 way purpose_of_the_whole: Purpose: produce one complete line of output, e.g. each result on its own line, or end a line built with print. |
-| lvl:println@L4#0 \| level L4 way predict_a_change: Replacing println with print joins the next output onto the same line (a typical logic error); the characters printed stay the same. |
-| lvl:println@L4#1 \| level L4 way transfer_to_a_new_program: Use println when each output item belongs on its own line or to end a line; use print to continue a line and printf to control number formatting. |
-| lvl:println@L4#2 \| level L4 way diagnose_an_error: rule broken: Finish a line of print calls with println. Kind: silent logic error. Trigger class: output ends with print, so the last line may not be shown or runs into the shell prompt |
-| lvl:println@L4#3 \| level L4 way diagnose_an_error: rule broken: Method names are case-sensitive. Kind: compile-time. Trigger class: System.out.Println or system.out.println: cannot find symbol |
-| lvl:println@L4#4 \| level L4 way diagnose_an_error: rule broken: Calls need parentheses. Kind: compile-time. Trigger class: System.out.println; without () |
-
-Prune: the model's reply (edge id and score; the kept edges sum to 1):
-```
-{lvl:println@L2#1 (Score: 0.4)}
-{lvl:println@L3#0 (Score: 0.35)}
-{lvl:println@L3#4 (Score: 0.25)}
-```
-Kept by pruning: lvl:println@L2#1 (0.40), lvl:println@L3#0 (0.35), lvl:println@L3#4 (0.25)
-
-Label prompt for level way lvl:println@L2#1 (the model saw only the concept, the way's name 'output prediction' and its text; no level):
-> Output is the value's characters followed by a line break: println("Hello, "); println("World!"); prints two lines.
-
-Model's reply:
-```
-Label: shown
-Clauses: 1
-Confidence: 0.6
-```
-
-Label prompt for level way lvl:println@L3#0 (the model saw only the concept, the way's name 'relation to neighbour' and its text; no level):
-> System.out.println(s); is a statement, so its line of output appears at its own place in the sequence.
-
-Model's reply:
-```
-Label: shown
-Clauses: 1
-Confidence: 0.7
-```
-
-Label prompt for level way lvl:println@L3#4 (the model saw only the concept, the way's name 'purpose of the whole' and its text; no level):
-> Purpose: produce one complete line of output, e.g. each result on its own line, or end a line built with print.
-
-Model's reply:
-```
-Label: not shown
-Clauses: none
-Confidence: 0.65
-```
-
-Parsed labels:
-| edge | label | prune score | confidence | score | clauses | words |
-|---|---|---|---|---|---|---|
-| lvl:println@L2#1 | shown | 0.4 | 0.6 | 0.24 | c1 | It prints -4 and then 1 |
-| lvl:println@L3#0 | shown | 0.35 | 0.7 | 0.24 | c1 | It prints -4 and then 1 |
-| lvl:println@L3#4 | not applied |  |  | 0.0 |  |  |
-
 **Kept on a path at this depth** (best N in tiers: held misconception / broken edge, then held error, then correct / confirmed / shown):
 
 pre:arithmetic_operators->expression [confirmed, tier 2, 0.70], pre:arithmetic_operators->integer_division [confirmed, tier 2, 0.60], pre:integer_division->remainder_operator [confirmed, tier 2, 0.53]
@@ -613,18 +507,18 @@ reached across pre:arithmetic_operators->expression, entered next: expression
 **Clause coverage after this depth:**
 | clause | text | covered by |
 |---|---|---|
-| c1 | It prints -4 and then 1 | not covered yet |
+| c1 | It prints -4 and then 1 | mis:integer_division->NegativeRemainderSign |
 | c2 | -7 / 2 is -3.5, and integer division rounds down | mis:remainder_operator->NegativeRemainderSign |
 | c3 | so it becomes -4 | mis:remainder_operator->NegativeRemainderSign |
 | c4 | A remainder is never negative | mis:remainder_operator->NegativeRemainderSign |
 | c5 | so -7 % 2 is 1 | mis:remainder_operator->NegativeRemainderSign |
 | c6 | because -4 * 2 + 1 = -7 | mis:arithmetic_operators->RemainderIsSubtraction |
 
-**Graph check, not yet read (the walk may not stop while these remain):** own edges of expression, pre:statement->println
+**Graph check, not yet read (the walk may not stop while these remain):** own edges of expression
 
 Figure 5 (the graph after depth 2): C:\Users\magnu\OneDrive\Desktop\ES_VIterbi_Personalized_Learning\results\viewer\MY02_figure05.png
 
-### Depth 3: current concepts 'expression', 'arithmetic_operators', 'integer_division', 'remainder_operator', 'println'
+### Depth 3: current concepts 'expression', 'arithmetic_operators', 'integer_division', 'remainder_operator'
 
 #### expression, misconceptions: 8 edges offered
 Edges offered:
@@ -641,9 +535,9 @@ Edges offered:
 
 Prune: the model's reply (edge id and score; the kept edges sum to 1):
 ```
-mis:expression->TargetTyping (0.50), mis:expression->OutsideInMethodNesting (0.30), mis:expression->NoAtomicExpression (0.20)
+mis:expression->TargetTyping (0.60), mis:expression->OutsideInMethodNesting (0.25), mis:expression->NoAtomicExpression (0.15)
 ```
-Kept by pruning: mis:expression->TargetTyping (0.50), mis:expression->OutsideInMethodNesting (0.30), mis:expression->NoAtomicExpression (0.20)
+Kept by pruning: mis:expression->TargetTyping (0.60), mis:expression->OutsideInMethodNesting (0.25), mis:expression->NoAtomicExpression (0.15)
 
 Label prompt for the misconception / error edges (judged together). The model saw the program, the question, the numbered clauses, and these edges with their wrong rule and right rule:
 | edge |
@@ -763,200 +657,37 @@ Parsed labels:
 |---|---|---|---|---|---|---|
 | pre:arithmetic_operators->remainder_operator | confirmed | 1.0 | 0.6 | 0.6 | c5, c6 | so -7 % 2 is 1; because -4 * 2 + 1 = -7 |
 
-#### println, concept edges: 1 edges offered
-Edges offered:
-| edge |
-|---|
-| pre:statement->println \| rule: System.out.println(s); is itself a statement, so its line of output appears at its own place in the sequence. |
-
-Prune: the model's reply (edge id and score; the kept edges sum to 1):
-```
-{pre:statement->println (Score: 1.0)}
-```
-Kept by pruning: pre:statement->println (1.00)
-
-Label prompt for concept edge pre:statement->println (statement -> println, prerequisite):
-> System.out.println(s); is itself a statement, so its line of output appears at its own place in the sequence.
-
-Model's reply:
-```
-Label: confirmed
-Clauses: 1
-Confidence: 0.7
-```
-
-Parsed labels:
-| edge | label | prune score | confidence | score | clauses | words |
-|---|---|---|---|---|---|---|
-| pre:statement->println | confirmed | 1.0 | 0.7 | 0.7 | c1 | It prints -4 and then 1 |
-
 **Kept on a path at this depth** (best N in tiers: held misconception / broken edge, then held error, then correct / confirmed / shown):
 
-pre:statement->println [confirmed, tier 2, 0.70], pre:arithmetic_operators->remainder_operator [confirmed, tier 2, 0.60], lvl:expression@L3#1 [shown, tier 2, 0.27]
-
-reached across pre:statement->println, entered next: statement
+pre:arithmetic_operators->remainder_operator [confirmed, tier 2, 0.60], lvl:expression@L3#1 [shown, tier 2, 0.27], lvl:expression@L0#0 [shown, tier 2, 0.20]
 
 **Clause coverage after this depth:**
 | clause | text | covered by |
 |---|---|---|
-| c1 | It prints -4 and then 1 | pre:statement->println |
+| c1 | It prints -4 and then 1 | mis:integer_division->NegativeRemainderSign |
 | c2 | -7 / 2 is -3.5, and integer division rounds down | mis:remainder_operator->NegativeRemainderSign |
 | c3 | so it becomes -4 | mis:remainder_operator->NegativeRemainderSign |
 | c4 | A remainder is never negative | mis:remainder_operator->NegativeRemainderSign |
 | c5 | so -7 % 2 is 1 | mis:remainder_operator->NegativeRemainderSign |
 | c6 | because -4 * 2 + 1 = -7 | mis:arithmetic_operators->RemainderIsSubtraction |
-
-**Graph check, not yet read (the walk may not stop while these remain):** own edges of statement
 
 Figure 6 (the graph after depth 3): C:\Users\magnu\OneDrive\Desktop\ES_VIterbi_Personalized_Learning\results\viewer\MY02_figure06.png
 
-### Depth 4: current concepts 'statement'
-
-#### statement, misconceptions: 5 edges offered
-Edges offered:
-| edge |
-|---|
-| err:statement->StatementNeedsNoTerminator \| wrong rule: A statement still compiles and runs if the semicolon at its end is left out, or if a stray ; is put right after if (c) or for (...). \| right rule: Each statement must end with ;, otherwise javac reports ';' expected. |
-| mis:statement->ComputerFillsInIntent \| wrong rule: The computer fills in omitted steps or values that the programmer meant, e.g. REPEAT 4 [FORWARD 30] draws a square without a turn command. \| right rule: The computer executes only what the code states; every needed step and value must be written. |
-| mis:statement->ProgramLooksAhead \| wrong rule: The program knows or sees what later lines will do and acts on those goals at the current line, e.g. it stops 'at ten' because it wants to draw a box. \| right rule: Each statement executes using only the current state; later lines have no effect until control reaches them. |
-| mis:statement->StatementsRunInAnyOrder \| wrong rule: Statements in a program can run in any order. \| right rule: Without control statements, statements run once each, top to bottom. |
-| mis:statement->WhitespaceIsSignificant \| wrong rule: Line breaks and indentation change what the program does, so each statement must be on its own line. \| right rule: Java compilers consider all whitespace in program text (outside quotation marks) to be equivalent; layout is for human readers. |
-
-Prune: the model's reply (edge id and score; the kept edges sum to 1):
-```
-mis:statement->StatementsRunInAnyOrder (0.60), mis:statement->ComputerFillsInIntent (0.20), mis:statement->ProgramLooksAhead (0.20)
-```
-Kept by pruning: mis:statement->StatementsRunInAnyOrder (0.60), mis:statement->ComputerFillsInIntent (0.20), mis:statement->ProgramLooksAhead (0.20)
-
-Label prompt for the misconception / error edges (judged together). The model saw the program, the question, the numbered clauses, and these edges with their wrong rule and right rule:
-| edge |
-|---|
-| mis:statement->StatementsRunInAnyOrder \| wrong rule: Statements in a program can run in any order. \| right rule: Without control statements, statements run once each, top to bottom. |
-| mis:statement->ComputerFillsInIntent \| wrong rule: The computer fills in omitted steps or values that the programmer meant, e.g. REPEAT 4 [FORWARD 30] draws a square without a turn command. \| right rule: The computer executes only what the code states; every needed step and value must be written. |
-| mis:statement->ProgramLooksAhead \| wrong rule: The program knows or sees what later lines will do and acts on those goals at the current line, e.g. it stops 'at ten' because it wants to draw a box. \| right rule: Each statement executes using only the current state; later lines have no effect until control reaches them. |
-Model's reply:
-```
-mis:statement->StatementsRunInAnyOrder | correct | clauses: 1 | confidence: 0.6
-mis:statement->ComputerFillsInIntent | not applied | clauses: none | confidence: 0.9
-mis:statement->ProgramLooksAhead | not applied | clauses: none | confidence: 0.9
-```
-
-Parsed labels:
-| edge | label | prune score | confidence | score | clauses | words |
-|---|---|---|---|---|---|---|
-| mis:statement->StatementsRunInAnyOrder | correct | 0.6 | 0.6 | 0.36 | c1 | It prints -4 and then 1 |
-| mis:statement->ComputerFillsInIntent | not applied |  |  | 0.0 |  |  |
-| mis:statement->ProgramLooksAhead | not applied |  |  | 0.0 |  |  |
-
-#### statement, level ways: 19 edges offered
-Edges offered:
-| edge |
-|---|
-| lvl:statement@L0#0 \| level L0 way everyday_reading: Everyday reading: a program is read like a text or a list of wishes that the computer takes in all at once, so line order, goals of later lines or what the writer meant can matter. Java rule: each statement is one step, ended by ;, executed once, in written order, using only the current state. |
-| lvl:statement@L0#2 \| level L0 way inconsistent_trace: Applies the sequencing rule (LT) unevenly: executes the statements in order on some lines but lets a later statement's effect leak into an earlier one, or skips or repeats a statement on one pass. (here mixing in: "The computer fills in omitted steps or values that the programmer meant, e.g. REPEAT 4 [FORWARD 30] draws a square without a turn command") |
-| lvl:statement@L1#0 \| level L1 way names_the_element: A statement is one step of a program (a declaration, assignment, method call such as System.out.println(...), or control statement), ended by a semicolon when it is a simple statement. |
-| lvl:statement@L1#1 \| level L1 way states_the_rule: A method body is a sequence of statements enclosed in braces and each followed by a semicolon; statements are executed for their effect and have no value; an expression statement evaluates its expression and discards any value. |
-| lvl:statement@L2#0 \| level L2 way line_by_line_trace: Statements run one at a time, from first to last; each completes (normally or abruptly) before the next starts. |
-| lvl:statement@L2#1 \| level L2 way output_prediction: A statement has no value; its result is its effect: a changed variable, printed output, or a change of control flow. |
-| lvl:statement@L2#2 \| level L2 way one_step_execution: Executing one statement applies its single effect to the current state (e.g. prints one string, or stores one value) and then control moves to the next statement. |
-| lvl:statement@L3#0 \| level L3 way relation_to_neighbour: Statements live in main's body; running the program executes main's statements in order. |
-| lvl:statement@L3#1 \| level L3 way relation_to_neighbour: A block groups a sequence of statements in braces; the body of main() is such a block. |
-| lvl:statement@L3#2 \| level L3 way relation_to_neighbour: System.out.print(s); is a statement, so its output appears exactly at its place in the sequence, with no newline. |
-| lvl:statement@L3#3 \| level L3 way relation_to_neighbour: System.out.println(s); is a statement, so its line of output appears at its place in the sequence; swapping two println statements swaps the output lines. |
-| lvl:statement@L3#4 \| level L3 way relation_to_neighbour: Control flow is the order in which statements run; without control statements it is straight-line, each once in order. |
-| lvl:statement@L3#5 \| level L3 way relation_to_neighbour: A lone ; is the empty statement, which does nothing; it can fill a for-loop part or, by accident, end an if or loop header. |
-| lvl:statement@L3#6 \| level L3 way relation_to_neighbour: An algorithm becomes a program as a sequence of statements, executed once each in the order given. |
-| lvl:statement@L3#7 \| level L3 way purpose_of_the_whole: Purpose: a statement is the unit of action; a program is characterized by its sequence of statements, each doing one step of the algorithm. |
-| lvl:statement@L4#0 \| level L4 way predict_a_change: Swapping two statements that touch the same variable or the output generally changes the result; swapping independent statements, or changing only whitespace between them, keeps it. |
-| lvl:statement@L4#1 \| level L4 way diagnose_an_error: rule broken: Each simple statement must end with ;. Kind: compile-time. Trigger class: omitting the ; at the end of a statement: javac reports ';' expected (often at the end of that line or the next) |
-| lvl:statement@L4#2 \| level L4 way transfer_to_a_new_program: Write one statement per step and order them as the algorithm requires; straight-line sequence suffices when every step runs once, otherwise use conditionals or loops. |
-| lvl:statement@L4#3 \| level L4 way diagnose_an_error: rule broken: A ; directly after an if/while/for header is an empty statement. Kind: silent logic error. Trigger class: if (x > 0); or while (cond); followed by the intended body |
-
-Prune: the model's reply (edge id and score; the kept edges sum to 1):
-```
-{lvl:statement@L3#3 (Score: 0.4)}
-{lvl:statement@L2#0 (Score: 0.3)}
-{lvl:statement@L2#2 (Score: 0.3)}
-```
-Kept by pruning: lvl:statement@L3#3 (0.40), lvl:statement@L2#0 (0.30), lvl:statement@L2#2 (0.30)
-
-Label prompt for level way lvl:statement@L3#3 (the model saw only the concept, the way's name 'relation to neighbour' and its text; no level):
-> System.out.println(s); is a statement, so its line of output appears at its place in the sequence; swapping two println statements swaps the output lines.
-
-Model's reply:
-```
-Label: shown
-Clauses: 1
-Confidence: 0.55
-```
-
-Label prompt for level way lvl:statement@L2#0 (the model saw only the concept, the way's name 'line by line trace' and its text; no level):
-> Statements run one at a time, from first to last; each completes (normally or abruptly) before the next starts.
-
-Model's reply:
-```
-Label: shown
-Clauses: 1
-Confidence: 0.55
-```
-
-Label prompt for level way lvl:statement@L2#2 (the model saw only the concept, the way's name 'one step execution' and its text; no level):
-> Executing one statement applies its single effect to the current state (e.g. prints one string, or stores one value) and then control moves to the next statement.
-
-Model's reply:
-```
-Label: shown
-Clauses: 1
-Confidence: 0.6
-```
-
-Parsed labels:
-| edge | label | prune score | confidence | score | clauses | words |
-|---|---|---|---|---|---|---|
-| lvl:statement@L3#3 | shown | 0.4 | 0.55 | 0.22 | c1 | It prints -4 and then 1 |
-| lvl:statement@L2#0 | shown | 0.3 | 0.55 | 0.17 | c1 | It prints -4 and then 1 |
-| lvl:statement@L2#2 | shown | 0.3 | 0.6 | 0.18 | c1 | It prints -4 and then 1 |
-
-**Kept on a path at this depth** (best N in tiers: held misconception / broken edge, then held error, then correct / confirmed / shown):
-
-mis:statement->StatementsRunInAnyOrder [correct, tier 2, 0.36], lvl:statement@L3#3 [shown, tier 2, 0.22], lvl:statement@L2#2 [shown, tier 2, 0.18]
-
-**Clause coverage after this depth:**
-| clause | text | covered by |
-|---|---|---|
-| c1 | It prints -4 and then 1 | pre:statement->println |
-| c2 | -7 / 2 is -3.5, and integer division rounds down | mis:remainder_operator->NegativeRemainderSign |
-| c3 | so it becomes -4 | mis:remainder_operator->NegativeRemainderSign |
-| c4 | A remainder is never negative | mis:remainder_operator->NegativeRemainderSign |
-| c5 | so -7 % 2 is 1 | mis:remainder_operator->NegativeRemainderSign |
-| c6 | because -4 * 2 + 1 = -7 | mis:arithmetic_operators->RemainderIsSubtraction |
-
-Figure 7 (the graph after depth 4): C:\Users\magnu\OneDrive\Desktop\ES_VIterbi_Personalized_Learning\results\viewer\MY02_figure07.png
-
 Held set after the one-fault rules: mis:remainder_operator->NegativeRemainderSign; filed at the dependent concept: mis:integer_division->NegativeRemainderSign
-
-Shadows (a held label on a prerequisite, on a generic concept, or at a concept where the graph attaches the misconception as context, resting on the words of a stronger label at the specific or primary concept, is one wrong sentence read twice; it marks no root cause and sets no level): mis:integer_division->NegativeRemainderSign (shadow of mis:remainder_operator->NegativeRemainderSign)
 
 ## 4. Diagnosis (rules over the labelled graph, no model)
 Root-cause walk: held on ['remainder_operator'], broken at [], prerequisites {'expression': ['arithmetic_operators'], 'integer_division': ['arithmetic_operators'], 'remainder_operator': ['arithmetic_operators', 'integer_division'], 'println': ['statement']}
 - arithmetic_operators: L3 via relation_to_neighbour "because -4 * 2 + 1 = -7"
 - expression: L3 via relation_to_neighbour "-7 / 2 is -3.5, and integer division rounds down; so it becomes -4"
-- integer_division: L3 via relation_to_neighbour "because -4 * 2 + 1 = -7"
-- println: L3 via relation_to_neighbour "It prints -4 and then 1"
+- integer_division: L0 via misconception "It prints -4 and then 1; -7 / 2 is -3.5, and integer division rounds down; so it becomes -4; A remainder is never negative; so -7 % 2 is 1; because -4 * 2 + 1 = -7"
 - remainder_operator: L0 via misconception "-7 / 2 is -3.5, and integer division rounds down; so it becomes -4; A remainder is never negative; so -7 % 2 is 1"
-- statement: L3 via relation_to_neighbour "It prints -4 and then 1"
 
-**Stop:** sufficient at depth 4; prompts {'prune': 17, 'label': 30}, fresh model calls 0, cache hits 47
+**Stop:** sufficient at depth 3; prompts {'prune': 12, 'label': 21}, fresh model calls 3, cache hits 30
 
 ### Held misconceptions
 | concept | misconception | kind | quote | score | shares_evidence_with |
 |---|---|---|---|---|---|
 | remainder_operator | NegativeRemainderSign | misconception | -7 / 2 is -3.5, and integer division rounds down; so it becomes -4; A remainder is never negative; so -7 % 2 is 1 | 0.873 |  |
-
-### Shadowed labels (held in the reading, folded into the label they shadow; not faults of their own)
-| concept | misconception | shadow_of | quote | score |
-|---|---|---|---|---|
-| integer_division | NegativeRemainderSign | mis:remainder_operator->NegativeRemainderSign | -7 / 2 is -3.5, and integer division rounds down; so it becomes -4; A remainder is never negative; so -7 % 2 is 1 | 0.7275 |
 
 ### Broken concept edges
 (none)
@@ -968,24 +699,22 @@ Root-cause walk: held on ['remainder_operator'], broken at [], prerequisites {'e
 |---|---|---|---|---|---|---|---|---|
 | arithmetic_operators | L3 | relation_to_neighbour |  | level_way | because -4 * 2 + 1 = -7 |  |  |  |
 | expression | L3 | relation_to_neighbour |  | level_way | -7 / 2 is -3.5, and integer division rounds down; so it becomes -4 |  | L2 output_prediction, L0 everyday_reading |  |
-| integer_division | L3 | relation_to_neighbour |  | level_way | because -4 * 2 + 1 = -7 |  |  |  |
-| println | L3 | relation_to_neighbour |  | level_way | It prints -4 and then 1 |  | L2 output_prediction |  |
+| integer_division | L0 | misconception | NegativeRemainderSign | level_mis_links | It prints -4 and then 1; -7 / 2 is -3.5, and integer division rounds down; so it becomes -4; A remainder is never negative; so -7 % 2 is 1; because -4 * 2 + 1 = -7 | wrong rule: a % b is never negative, and integer division of a negative number rounds down. Right rule: a / b rounds toward 0 and a % b takes the sign of a: -14 / 3 is -4 and -14 % 3 is -2. |  |  |
 | remainder_operator | L0 | misconception | NegativeRemainderSign | level_mis_links | -7 / 2 is -3.5, and integer division rounds down; so it becomes -4; A remainder is never negative; so -7 % 2 is 1 | wrong rule: a % b is never negative, and integer division of a negative number rounds down. Right rule: a / b rounds toward 0 and a % b takes the sign of a: -14 / 3 is -4 and -14 % 3 is -2. |  |  |
-| statement | L3 | relation_to_neighbour |  | level_way | It prints -4 and then 1 |  | L2 one_step_execution, L2 line_by_line_trace |  |
 
 ### Overall level: L0
 
 Clause coverage (final):
 | clause | covered by |
 |---|---|
-| It prints -4 and then 1 | lvl:println@L2#1 |
+| It prints -4 and then 1 | mis:integer_division->NegativeRemainderSign |
 | -7 / 2 is -3.5, and integer division rounds down | mis:remainder_operator->NegativeRemainderSign |
 | so it becomes -4 | mis:remainder_operator->NegativeRemainderSign |
 | A remainder is never negative | mis:remainder_operator->NegativeRemainderSign |
 | so -7 % 2 is 1 | mis:remainder_operator->NegativeRemainderSign |
 | because -4 * 2 + 1 = -7 | lvl:remainder_operator@L0#0 |
 
-Figure 8 (final picture): C:\Users\magnu\OneDrive\Desktop\ES_VIterbi_Personalized_Learning\results\viewer\MY02_figure08.png
+Figure 7 (final picture): C:\Users\magnu\OneDrive\Desktop\ES_VIterbi_Personalized_Learning\results\viewer\MY02_figure07.png
 
 ## 5. Every labelled edge (the evidence list, kept or not)
 | depth | source | edge | kind | label | prune_score | confidence | score | clauses | quote |
@@ -996,40 +725,30 @@ Figure 8 (final picture): C:\Users\magnu\OneDrive\Desktop\ES_VIterbi_Personalize
 | 1 | remainder_operator | lvl:remainder_operator@L3#0 | level | shown | 0.25 | 0.6 | 0.15 | [6] | because -4 * 2 + 1 = -7 |
 | 1 | arithmetic_operators | mis:arithmetic_operators->RemainderIsSubtraction | misconception | correct | 1.0 | 0.75 | 0.75 | [5, 6] | so -7 % 2 is 1; because -4 * 2 + 1 = -7 |
 | 1 | arithmetic_operators | lvl:arithmetic_operators@L3#1 | level | shown | 0.5 | 0.6 | 0.3 | [6] | because -4 * 2 + 1 = -7 |
-| 1 | integer_division | mis:integer_division->NegativeRemainderSign | misconception | held | 0.75 | 0.97 | 0.7275 | [2, 3, 4, 5] | -7 / 2 is -3.5, and integer division rounds down; so it becomes -4; A remainder is never negative; so -7 % 2 is 1 |
+| 1 | integer_division | mis:integer_division->NegativeRemainderSign | misconception | held | 0.75 | 0.97 | 0.7275 | [1, 2, 3, 4, 5, 6] | It prints -4 and then 1; -7 / 2 is -3.5, and integer division rounds down; so it becomes -4; A remainder is never negative; so -7 % 2 is 1; because -4 * 2 + 1 = -7 |
 | 1 | integer_division | mis:integer_division->IntegerDivisionGivesFraction | misconception | correct | 0.2 | 0.75 | 0.15 | [2, 3] | -7 / 2 is -3.5, and integer division rounds down; so it becomes -4 |
 | 1 | integer_division | lvl:integer_division@L3#0 | level | shown | 0.3 | 0.85 | 0.255 | [6] | because -4 * 2 + 1 = -7 |
 | 2 | remainder_operator | pre:integer_division->remainder_operator | prerequisite | confirmed | 0.7 | 0.75 | 0.525 | [6] | because -4 * 2 + 1 = -7 |
 | 2 | remainder_operator | pre:arithmetic_operators->remainder_operator | prerequisite | confirmed | 0.3 | 0.6 | 0.18 | [5, 6] | so -7 % 2 is 1; because -4 * 2 + 1 = -7 |
 | 2 | integer_division | pre:arithmetic_operators->integer_division | prerequisite | confirmed | 1.0 | 0.6 | 0.6 | [3, 5, 6] | so it becomes -4; so -7 % 2 is 1; because -4 * 2 + 1 = -7 |
 | 2 | arithmetic_operators | pre:arithmetic_operators->expression | prerequisite | confirmed | 1.0 | 0.7 | 0.7 | [2, 5, 6] | -7 / 2 is -3.5, and integer division rounds down; so -7 % 2 is 1; because -4 * 2 + 1 = -7 |
-| 2 | println | lvl:println@L2#1 | level | shown | 0.4 | 0.6 | 0.24 | [1] | It prints -4 and then 1 |
-| 2 | println | lvl:println@L3#0 | level | shown | 0.35 | 0.7 | 0.245 | [1] | It prints -4 and then 1 |
 | 3 | expression | lvl:expression@L3#1 | level | shown | 0.45 | 0.6 | 0.27 | [2, 3] | -7 / 2 is -3.5, and integer division rounds down; so it becomes -4 |
 | 3 | expression | lvl:expression@L0#0 | level | shown | 0.3 | 0.65 | 0.195 | [2] | -7 / 2 is -3.5, and integer division rounds down |
 | 3 | expression | lvl:expression@L2#1 | level | shown | 0.25 | 0.7 | 0.175 | [1, 2, 3, 5] | It prints -4 and then 1; -7 / 2 is -3.5, and integer division rounds down; so it becomes -4; so -7 % 2 is 1 |
 | 3 | arithmetic_operators | pre:arithmetic_operators->remainder_operator | prerequisite | confirmed | 1.0 | 0.6 | 0.6 | [5, 6] | so -7 % 2 is 1; because -4 * 2 + 1 = -7 |
-| 3 | println | pre:statement->println | prerequisite | confirmed | 1.0 | 0.7 | 0.7 | [1] | It prints -4 and then 1 |
-| 4 | statement | mis:statement->StatementsRunInAnyOrder | misconception | correct | 0.6 | 0.6 | 0.36 | [1] | It prints -4 and then 1 |
-| 4 | statement | lvl:statement@L3#3 | level | shown | 0.4 | 0.55 | 0.22 | [1] | It prints -4 and then 1 |
-| 4 | statement | lvl:statement@L2#0 | level | shown | 0.3 | 0.55 | 0.165 | [1] | It prints -4 and then 1 |
-| 4 | statement | lvl:statement@L2#2 | level | shown | 0.3 | 0.6 | 0.18 | [1] | It prints -4 and then 1 |
 
 ## 6. The paths (what the keep step kept, depth by depth)
 | depth | source | edge | kind | label | score | clauses |
 |---|---|---|---|---|---|---|
 | 1 | remainder_operator | mis:remainder_operator->NegativeRemainderSign | misconception | held | 0.873 | [2, 3, 4, 5] |
-| 1 | integer_division | mis:integer_division->NegativeRemainderSign | misconception | held | 0.7275 | [2, 3, 4, 5] |
+| 1 | integer_division | mis:integer_division->NegativeRemainderSign | misconception | held | 0.7275 | [1, 2, 3, 4, 5, 6] |
 | 1 | arithmetic_operators | mis:arithmetic_operators->RemainderIsSubtraction | misconception | correct | 0.75 | [5, 6] |
 | 2 | arithmetic_operators | pre:arithmetic_operators->expression | prerequisite | confirmed | 0.7 | [2, 5, 6] |
 | 2 | integer_division | pre:arithmetic_operators->integer_division | prerequisite | confirmed | 0.6 | [3, 5, 6] |
 | 2 | remainder_operator | pre:integer_division->remainder_operator | prerequisite | confirmed | 0.525 | [6] |
-| 3 | println | pre:statement->println | prerequisite | confirmed | 0.7 | [1] |
 | 3 | arithmetic_operators | pre:arithmetic_operators->remainder_operator | prerequisite | confirmed | 0.6 | [5, 6] |
 | 3 | expression | lvl:expression@L3#1 | level | shown | 0.27 | [2, 3] |
-| 4 | statement | mis:statement->StatementsRunInAnyOrder | misconception | correct | 0.36 | [1] |
-| 4 | statement | lvl:statement@L3#3 | level | shown | 0.22 | [1] |
-| 4 | statement | lvl:statement@L2#2 | level | shown | 0.18 | [1] |
+| 3 | expression | lvl:expression@L0#0 | level | shown | 0.195 | [2] |
 
 ## 7. Raw traversal log
 ```
@@ -1052,19 +771,18 @@ start concepts (3): remainder_operator, arithmetic_operators, integer_division
     lvl:arithmetic_operators@L3#1 -> shown (0.30) "because -4 * 2 + 1 = -7"
     lvl:arithmetic_operators@L2#1 -> not applied (0.00) ""
     lvl:arithmetic_operators@L2#0 -> not applied (0.00) ""
-  integer_division (misconceptions): 6 candidates -> kept mis:integer_division->NegativeRemainderSign (0.75), mis:integer_division->IntegerDivisionGivesFraction (0.20), mis:integer_division->TargetTyping (0.05)
-    mis:integer_division->NegativeRemainderSign -> held (0.73) "-7 / 2 is -3.5, and integer division rounds down; so it becomes -4; A remainder is never negative; so -7 % 2 is 1"
+  integer_division (misconceptions): 6 candidates -> kept mis:integer_division->NegativeRemainderSign (0.75), mis:integer_division->IntegerDivisionGivesFraction (0.20), mis:integer_division->CastAfterIntDivision (0.05)
+    mis:integer_division->NegativeRemainderSign -> held (0.73) "It prints -4 and then 1; -7 / 2 is -3.5, and integer division rounds down; so it becomes -4; A remainder is never negative; so -7 % 2 is 1; because -4 * 2 + 1 = -7"
     mis:integer_division->IntegerDivisionGivesFraction -> correct (0.15) "-7 / 2 is -3.5, and integer division rounds down; so it becomes -4"
-    mis:integer_division->TargetTyping -> not applied (0.00) ""
+    mis:integer_division->CastAfterIntDivision -> not applied (0.00) ""
   integer_division (level ways): 16 candidates -> kept lvl:integer_division@L4#4 (0.50), lvl:integer_division@L3#0 (0.30), lvl:integer_division@L1#1 (0.20)
     lvl:integer_division@L4#4 -> not applied (0.00) ""
     lvl:integer_division@L3#0 -> shown (0.26) "because -4 * 2 + 1 = -7"
     lvl:integer_division@L1#1 -> not applied (0.00) ""
   kept: mis:remainder_operator->NegativeRemainderSign [held, tier 0, 0.87], mis:integer_division->NegativeRemainderSign [held, tier 0, 0.73], mis:arithmetic_operators->RemainderIsSubtraction [correct, tier 2, 0.75]
-  clause coverage: c1 uncovered; c2 <- mis:remainder_operator->NegativeRemainderSign; c3 <- mis:remainder_operator->NegativeRemainderSign; c4 <- mis:remainder_operator->NegativeRemainderSign; c5 <- mis:remainder_operator->NegativeRemainderSign; c6 <- mis:arithmetic_operators->RemainderIsSubtraction
-  uncovered clauses bring in: println (2.34)
-  not yet read: own edges of println, pre:arithmetic_operators->expression, pre:arithmetic_operators->integer_division, pre:arithmetic_operators->remainder_operator, pre:integer_division->remainder_operator
---- depth 2: current concepts ['remainder_operator', 'integer_division', 'arithmetic_operators', 'println']
+  clause coverage: c1 <- mis:integer_division->NegativeRemainderSign; c2 <- mis:remainder_operator->NegativeRemainderSign; c3 <- mis:remainder_operator->NegativeRemainderSign; c4 <- mis:remainder_operator->NegativeRemainderSign; c5 <- mis:remainder_operator->NegativeRemainderSign; c6 <- mis:arithmetic_operators->RemainderIsSubtraction
+  not yet read: pre:arithmetic_operators->expression, pre:arithmetic_operators->integer_division, pre:arithmetic_operators->remainder_operator, pre:integer_division->remainder_operator
+--- depth 2: current concepts ['remainder_operator', 'integer_division', 'arithmetic_operators']
   remainder_operator (concept edges): 2 candidates -> kept pre:integer_division->remainder_operator (0.70), pre:arithmetic_operators->remainder_operator (0.30)
     pre:integer_division->remainder_operator -> confirmed (0.52) "because -4 * 2 + 1 = -7"
     pre:arithmetic_operators->remainder_operator -> confirmed (0.18) "so -7 % 2 is 1; because -4 * 2 + 1 = -7"
@@ -1072,20 +790,12 @@ start concepts (3): remainder_operator, arithmetic_operators, integer_division
     pre:arithmetic_operators->integer_division -> confirmed (0.60) "so it becomes -4; so -7 % 2 is 1; because -4 * 2 + 1 = -7"
   arithmetic_operators (concept edges): 1 candidates -> kept pre:arithmetic_operators->expression (1.00)
     pre:arithmetic_operators->expression -> confirmed (0.70) "-7 / 2 is -3.5, and integer division rounds down; so -7 % 2 is 1; because -4 * 2 + 1 = -7"
-  println (misconceptions): 6 candidates -> kept mis:println->PrintEqualsPrintln (0.50), mis:println->PrintNewLineFirst (0.40), mis:println->PrintedTextIsExecuted (0.10)
-    mis:println->PrintEqualsPrintln -> not applied (0.00) ""
-    mis:println->PrintNewLineFirst -> not applied (0.00) ""
-    mis:println->PrintedTextIsExecuted -> not applied (0.00) ""
-  println (level ways): 17 candidates -> kept lvl:println@L2#1 (0.40), lvl:println@L3#0 (0.35), lvl:println@L3#4 (0.25)
-    lvl:println@L2#1 -> shown (0.24) "It prints -4 and then 1"
-    lvl:println@L3#0 -> shown (0.24) "It prints -4 and then 1"
-    lvl:println@L3#4 -> not applied (0.00) ""
   kept: pre:arithmetic_operators->expression [confirmed, tier 2, 0.70], pre:arithmetic_operators->integer_division [confirmed, tier 2, 0.60], pre:integer_division->remainder_operator [confirmed, tier 2, 0.53]
   reached across pre:arithmetic_operators->expression, entered next: expression
-  clause coverage: c1 uncovered; c2 <- mis:remainder_operator->NegativeRemainderSign; c3 <- mis:remainder_operator->NegativeRemainderSign; c4 <- mis:remainder_operator->NegativeRemainderSign; c5 <- mis:remainder_operator->NegativeRemainderSign; c6 <- mis:arithmetic_operators->RemainderIsSubtraction
-  not yet read: own edges of expression, pre:statement->println
---- depth 3: current concepts ['expression', 'arithmetic_operators', 'integer_division', 'remainder_operator', 'println']
-  expression (misconceptions): 8 candidates -> kept mis:expression->TargetTyping (0.50), mis:expression->OutsideInMethodNesting (0.30), mis:expression->NoAtomicExpression (0.20)
+  clause coverage: c1 <- mis:integer_division->NegativeRemainderSign; c2 <- mis:remainder_operator->NegativeRemainderSign; c3 <- mis:remainder_operator->NegativeRemainderSign; c4 <- mis:remainder_operator->NegativeRemainderSign; c5 <- mis:remainder_operator->NegativeRemainderSign; c6 <- mis:arithmetic_operators->RemainderIsSubtraction
+  not yet read: own edges of expression
+--- depth 3: current concepts ['expression', 'arithmetic_operators', 'integer_division', 'remainder_operator']
+  expression (misconceptions): 8 candidates -> kept mis:expression->TargetTyping (0.60), mis:expression->OutsideInMethodNesting (0.25), mis:expression->NoAtomicExpression (0.15)
     mis:expression->TargetTyping -> not applied (0.00) ""
     mis:expression->OutsideInMethodNesting -> not applied (0.00) ""
     mis:expression->NoAtomicExpression -> not applied (0.00) ""
@@ -1095,32 +805,14 @@ start concepts (3): remainder_operator, arithmetic_operators, integer_division
     lvl:expression@L2#1 -> shown (0.17) "It prints -4 and then 1; -7 / 2 is -3.5, and integer division rounds down; so it becomes -4; so -7 % 2 is 1"
   arithmetic_operators (concept edges): 1 candidates -> kept pre:arithmetic_operators->remainder_operator (1.00)
     pre:arithmetic_operators->remainder_operator -> confirmed (0.60) "so -7 % 2 is 1; because -4 * 2 + 1 = -7"
-  println (concept edges): 1 candidates -> kept pre:statement->println (1.00)
-    pre:statement->println -> confirmed (0.70) "It prints -4 and then 1"
-  kept: pre:statement->println [confirmed, tier 2, 0.70], pre:arithmetic_operators->remainder_operator [confirmed, tier 2, 0.60], lvl:expression@L3#1 [shown, tier 2, 0.27]
-  reached across pre:statement->println, entered next: statement
-  clause coverage: c1 <- pre:statement->println; c2 <- mis:remainder_operator->NegativeRemainderSign; c3 <- mis:remainder_operator->NegativeRemainderSign; c4 <- mis:remainder_operator->NegativeRemainderSign; c5 <- mis:remainder_operator->NegativeRemainderSign; c6 <- mis:arithmetic_operators->RemainderIsSubtraction
-  not yet read: own edges of statement
---- depth 4: current concepts ['statement'] (closing round: own edges only)
-  statement (misconceptions): 5 candidates -> kept mis:statement->StatementsRunInAnyOrder (0.60), mis:statement->ComputerFillsInIntent (0.20), mis:statement->ProgramLooksAhead (0.20)
-    mis:statement->StatementsRunInAnyOrder -> correct (0.36) "It prints -4 and then 1"
-    mis:statement->ComputerFillsInIntent -> not applied (0.00) ""
-    mis:statement->ProgramLooksAhead -> not applied (0.00) ""
-  statement (level ways): 19 candidates -> kept lvl:statement@L3#3 (0.40), lvl:statement@L2#0 (0.30), lvl:statement@L2#2 (0.30)
-    lvl:statement@L3#3 -> shown (0.22) "It prints -4 and then 1"
-    lvl:statement@L2#0 -> shown (0.17) "It prints -4 and then 1"
-    lvl:statement@L2#2 -> shown (0.18) "It prints -4 and then 1"
-  kept: mis:statement->StatementsRunInAnyOrder [correct, tier 2, 0.36], lvl:statement@L3#3 [shown, tier 2, 0.22], lvl:statement@L2#2 [shown, tier 2, 0.18]
-  clause coverage: c1 <- pre:statement->println; c2 <- mis:remainder_operator->NegativeRemainderSign; c3 <- mis:remainder_operator->NegativeRemainderSign; c4 <- mis:remainder_operator->NegativeRemainderSign; c5 <- mis:remainder_operator->NegativeRemainderSign; c6 <- mis:arithmetic_operators->RemainderIsSubtraction
+  kept: pre:arithmetic_operators->remainder_operator [confirmed, tier 2, 0.60], lvl:expression@L3#1 [shown, tier 2, 0.27], lvl:expression@L0#0 [shown, tier 2, 0.20]
+  clause coverage: c1 <- mis:integer_division->NegativeRemainderSign; c2 <- mis:remainder_operator->NegativeRemainderSign; c3 <- mis:remainder_operator->NegativeRemainderSign; c4 <- mis:remainder_operator->NegativeRemainderSign; c5 <- mis:remainder_operator->NegativeRemainderSign; c6 <- mis:arithmetic_operators->RemainderIsSubtraction
   held: mis:remainder_operator->NegativeRemainderSign; filed at the dependent concept: mis:integer_division->NegativeRemainderSign
-  shadows: mis:integer_division->NegativeRemainderSign (shadow of mis:remainder_operator->NegativeRemainderSign)
   root-cause walk: held on ['remainder_operator'], broken at [], prerequisites {'expression': ['arithmetic_operators'], 'integer_division': ['arithmetic_operators'], 'remainder_operator': ['arithmetic_operators', 'integer_division'], 'println': ['statement']}
   level arithmetic_operators: L3 via relation_to_neighbour "because -4 * 2 + 1 = -7"
   level expression: L3 via relation_to_neighbour "-7 / 2 is -3.5, and integer division rounds down; so it becomes -4"
-  level integer_division: L3 via relation_to_neighbour "because -4 * 2 + 1 = -7"
-  level println: L3 via relation_to_neighbour "It prints -4 and then 1"
+  level integer_division: L0 via misconception "It prints -4 and then 1; -7 / 2 is -3.5, and integer division rounds down; so it becomes -4; A remainder is never negative; so -7 % 2 is 1; because -4 * 2 + 1 = -7"
   level remainder_operator: L0 via misconception "-7 / 2 is -3.5, and integer division rounds down; so it becomes -4; A remainder is never negative; so -7 % 2 is 1"
-  level statement: L3 via relation_to_neighbour "It prints -4 and then 1"
 ```
 
 ## 8. Full diagnosis JSON
@@ -1157,15 +849,7 @@ start concepts (3): remainder_operator, arithmetic_operators, integer_division
   }
  ],
  "error_evidence": [],
- "shadowed": [
-  {
-   "concept": "integer_division",
-   "misconception": "NegativeRemainderSign",
-   "shadow_of": "mis:remainder_operator->NegativeRemainderSign",
-   "quote": "-7 / 2 is -3.5, and integer division rounds down; so it becomes -4; A remainder is never negative; so -7 % 2 is 1",
-   "score": 0.7275
-  }
- ],
+ "shadowed": [],
  "broken_edges": [],
  "root_cause": {
   "concept": "remainder_operator",
@@ -1192,22 +876,13 @@ start concepts (3): remainder_operator, arithmetic_operators, integer_division
    ]
   },
   "integer_division": {
-   "level": "L3",
-   "way": "relation_to_neighbour",
-   "quote": "because -4 * 2 + 1 = -7",
-   "edge": "lvl:integer_division@L3#0",
-   "source": "level_way",
-   "also_shown": []
-  },
-  "println": {
-   "level": "L3",
-   "way": "relation_to_neighbour",
-   "quote": "It prints -4 and then 1",
-   "edge": "lvl:println@L3#0",
-   "source": "level_way",
-   "also_shown": [
-    "L2 output_prediction"
-   ]
+   "level": "L0",
+   "way": "misconception",
+   "misconception": "NegativeRemainderSign",
+   "quote": "It prints -4 and then 1; -7 / 2 is -3.5, and integer division rounds down; so it becomes -4; A remainder is never negative; so -7 % 2 is 1; because -4 * 2 + 1 = -7",
+   "edge": "mis:integer_division->NegativeRemainderSign",
+   "rule": "wrong rule: a % b is never negative, and integer division of a negative number rounds down. Right rule: a / b rounds toward 0 and a % b takes the sign of a: -14 / 3 is -4 and -14 % 3 is -2.",
+   "source": "level_mis_links"
   },
   "remainder_operator": {
    "level": "L0",
@@ -1217,17 +892,6 @@ start concepts (3): remainder_operator, arithmetic_operators, integer_division
    "edge": "mis:remainder_operator->NegativeRemainderSign",
    "rule": "wrong rule: a % b is never negative, and integer division of a negative number rounds down. Right rule: a / b rounds toward 0 and a % b takes the sign of a: -14 / 3 is -4 and -14 % 3 is -2.",
    "source": "level_mis_links"
-  },
-  "statement": {
-   "level": "L3",
-   "way": "relation_to_neighbour",
-   "quote": "It prints -4 and then 1",
-   "edge": "lvl:statement@L3#3",
-   "source": "level_way",
-   "also_shown": [
-    "L2 one_step_execution",
-    "L2 line_by_line_trace"
-   ]
   }
  },
  "overall_level": "L0",
@@ -1261,12 +925,14 @@ start concepts (3): remainder_operator, arithmetic_operators, integer_division
    "kind": "misconception",
    "label": "held",
    "clauses": [
+    1,
     2,
     3,
     4,
-    5
+    5,
+    6
    ],
-   "quote": "-7 / 2 is -3.5, and integer division rounds down; so it becomes -4; A remainder is never negative; so -7 % 2 is 1",
+   "quote": "It prints -4 and then 1; -7 / 2 is -3.5, and integer division rounds down; so it becomes -4; A remainder is never negative; so -7 % 2 is 1; because -4 * 2 + 1 = -7",
    "confidence": 0.97,
    "prune_score": 0.75,
    "score": 0.7275,
@@ -1350,23 +1016,6 @@ start concepts (3): remainder_operator, arithmetic_operators, integer_division
   },
   {
    "depth": 3,
-   "source": "println",
-   "edge": "pre:statement->println",
-   "target": "statement",
-   "kind": "prerequisite",
-   "label": "confirmed",
-   "clauses": [
-    1
-   ],
-   "quote": "It prints -4 and then 1",
-   "confidence": 0.7,
-   "prune_score": 1.0,
-   "score": 0.7,
-   "logic": "System.out.println(s); is itself a statement, so its line of output appears at its own place in the sequence.",
-   "twin_logic": null
-  },
-  {
-   "depth": 3,
    "source": "arithmetic_operators",
    "edge": "pre:arithmetic_operators->remainder_operator",
    "target": "remainder_operator",
@@ -1404,60 +1053,23 @@ start concepts (3): remainder_operator, arithmetic_operators, integer_division
    "way": "relation_to_neighbour"
   },
   {
-   "depth": 4,
-   "source": "statement",
-   "edge": "mis:statement->StatementsRunInAnyOrder",
-   "target": "StatementsRunInAnyOrder",
-   "kind": "misconception",
-   "label": "correct",
-   "clauses": [
-    1
-   ],
-   "quote": "It prints -4 and then 1",
-   "confidence": 0.6,
-   "prune_score": 0.6,
-   "score": 0.36,
-   "logic": "Statements in a program can run in any order.",
-   "twin_logic": "Without control statements, statements run once each, top to bottom.",
-   "role": "primary"
-  },
-  {
-   "depth": 4,
-   "source": "statement",
-   "edge": "lvl:statement@L3#3",
-   "target": "statement@L3",
+   "depth": 3,
+   "source": "expression",
+   "edge": "lvl:expression@L0#0",
+   "target": "expression@L0",
    "kind": "level",
    "label": "shown",
    "clauses": [
-    1
+    2
    ],
-   "quote": "It prints -4 and then 1",
-   "confidence": 0.55,
-   "prune_score": 0.4,
-   "score": 0.22,
-   "logic": "System.out.println(s); is a statement, so its line of output appears at its place in the sequence; swapping two println statements swaps the output lines.",
-   "twin_logic": null,
-   "level": "L3",
-   "way": "relation_to_neighbour"
-  },
-  {
-   "depth": 4,
-   "source": "statement",
-   "edge": "lvl:statement@L2#2",
-   "target": "statement@L2",
-   "kind": "level",
-   "label": "shown",
-   "clauses": [
-    1
-   ],
-   "quote": "It prints -4 and then 1",
-   "confidence": 0.6,
+   "quote": "-7 / 2 is -3.5, and integer division rounds down",
+   "confidence": 0.65,
    "prune_score": 0.3,
-   "score": 0.18,
-   "logic": "Executing one statement applies its single effect to the current state (e.g. prints one string, or stores one value) and then control moves to the next statement.",
+   "score": 0.195,
+   "logic": "In maths an expression such as 7/2 or x + y names an exact number, and 'expression' means a formula with operators. In Java, any code that evaluates to a typed value is an expression, including a lone literal or variable, and with ints 7/2 evaluates to 3.",
    "twin_logic": null,
-   "level": "L2",
-   "way": "one_step_execution"
+   "level": "L0",
+   "way": "everyday_reading"
   }
  ],
  "evidence": [
@@ -1588,12 +1200,14 @@ start concepts (3): remainder_operator, arithmetic_operators, integer_division
    "kind": "misconception",
    "label": "held",
    "clauses": [
+    1,
     2,
     3,
     4,
-    5
+    5,
+    6
    ],
-   "quote": "-7 / 2 is -3.5, and integer division rounds down; so it becomes -4; A remainder is never negative; so -7 % 2 is 1",
+   "quote": "It prints -4 and then 1; -7 / 2 is -3.5, and integer division rounds down; so it becomes -4; A remainder is never negative; so -7 % 2 is 1; because -4 * 2 + 1 = -7",
    "confidence": 0.97,
    "prune_score": 0.75,
    "score": 0.7275,
@@ -1713,44 +1327,6 @@ start concepts (3): remainder_operator, arithmetic_operators, integer_division
    "twin_logic": null
   },
   {
-   "depth": 2,
-   "source": "println",
-   "edge": "lvl:println@L2#1",
-   "target": "println@L2",
-   "kind": "level",
-   "label": "shown",
-   "clauses": [
-    1
-   ],
-   "quote": "It prints -4 and then 1",
-   "confidence": 0.6,
-   "prune_score": 0.4,
-   "score": 0.24,
-   "logic": "Output is the value's characters followed by a line break: println(\"Hello, \"); println(\"World!\"); prints two lines.",
-   "twin_logic": null,
-   "level": "L2",
-   "way": "output_prediction"
-  },
-  {
-   "depth": 2,
-   "source": "println",
-   "edge": "lvl:println@L3#0",
-   "target": "println@L3",
-   "kind": "level",
-   "label": "shown",
-   "clauses": [
-    1
-   ],
-   "quote": "It prints -4 and then 1",
-   "confidence": 0.7,
-   "prune_score": 0.35,
-   "score": 0.245,
-   "logic": "System.out.println(s); is a statement, so its line of output appears at its own place in the sequence.",
-   "twin_logic": null,
-   "level": "L3",
-   "way": "relation_to_neighbour"
-  },
-  {
    "depth": 3,
    "source": "expression",
    "edge": "lvl:expression@L3#1",
@@ -1828,102 +1404,10 @@ start concepts (3): remainder_operator, arithmetic_operators, integer_division
    "score": 0.6,
    "logic": "% is one of the int arithmetic operators; it gives the remainder of the division.",
    "twin_logic": null
-  },
-  {
-   "depth": 3,
-   "source": "println",
-   "edge": "pre:statement->println",
-   "target": "statement",
-   "kind": "prerequisite",
-   "label": "confirmed",
-   "clauses": [
-    1
-   ],
-   "quote": "It prints -4 and then 1",
-   "confidence": 0.7,
-   "prune_score": 1.0,
-   "score": 0.7,
-   "logic": "System.out.println(s); is itself a statement, so its line of output appears at its own place in the sequence.",
-   "twin_logic": null
-  },
-  {
-   "depth": 4,
-   "source": "statement",
-   "edge": "mis:statement->StatementsRunInAnyOrder",
-   "target": "StatementsRunInAnyOrder",
-   "kind": "misconception",
-   "label": "correct",
-   "clauses": [
-    1
-   ],
-   "quote": "It prints -4 and then 1",
-   "confidence": 0.6,
-   "prune_score": 0.6,
-   "score": 0.36,
-   "logic": "Statements in a program can run in any order.",
-   "twin_logic": "Without control statements, statements run once each, top to bottom.",
-   "role": "primary"
-  },
-  {
-   "depth": 4,
-   "source": "statement",
-   "edge": "lvl:statement@L3#3",
-   "target": "statement@L3",
-   "kind": "level",
-   "label": "shown",
-   "clauses": [
-    1
-   ],
-   "quote": "It prints -4 and then 1",
-   "confidence": 0.55,
-   "prune_score": 0.4,
-   "score": 0.22,
-   "logic": "System.out.println(s); is a statement, so its line of output appears at its place in the sequence; swapping two println statements swaps the output lines.",
-   "twin_logic": null,
-   "level": "L3",
-   "way": "relation_to_neighbour"
-  },
-  {
-   "depth": 4,
-   "source": "statement",
-   "edge": "lvl:statement@L2#0",
-   "target": "statement@L2",
-   "kind": "level",
-   "label": "shown",
-   "clauses": [
-    1
-   ],
-   "quote": "It prints -4 and then 1",
-   "confidence": 0.55,
-   "prune_score": 0.3,
-   "score": 0.165,
-   "logic": "Statements run one at a time, from first to last; each completes (normally or abruptly) before the next starts.",
-   "twin_logic": null,
-   "level": "L2",
-   "way": "line_by_line_trace"
-  },
-  {
-   "depth": 4,
-   "source": "statement",
-   "edge": "lvl:statement@L2#2",
-   "target": "statement@L2",
-   "kind": "level",
-   "label": "shown",
-   "clauses": [
-    1
-   ],
-   "quote": "It prints -4 and then 1",
-   "confidence": 0.6,
-   "prune_score": 0.3,
-   "score": 0.18,
-   "logic": "Executing one statement applies its single effect to the current state (e.g. prints one string, or stores one value) and then control moves to the next statement.",
-   "twin_logic": null,
-   "level": "L2",
-   "way": "one_step_execution"
   }
  ],
  "clause_coverage": {
-  "It prints -4 and then 1": "lvl:println@L2#1",
+  "It prints -4 and then 1": "mis:integer_division->NegativeRemainderSign",
   "-7 / 2 is -3.5, and integer division rounds down": "mis:remainder_operator->NegativeRemainderSign",
   "so it becomes -4": "mis:remainder_operator->NegativeRemainderSign",
   "A remainder is never negative": "mis:remainder_operator->NegativeRemainderSign",
@@ -1932,12 +1416,12 @@ start concepts (3): remainder_operator, arithmetic_operators, integer_division
  },
  "unexplained_clauses": [],
  "stop_reason": "sufficient",
- "depth_reached": 4,
- "llm_calls": 0,
- "llm_cache_hits": 47,
+ "depth_reached": 3,
+ "llm_calls": 3,
+ "llm_cache_hits": 30,
  "llm_calls_by_step": {
-  "prune": 17,
-  "label": 30
+  "prune": 12,
+  "label": 21
  }
 }
 ```

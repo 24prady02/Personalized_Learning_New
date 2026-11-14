@@ -64,15 +64,15 @@ start concepts (3): loop_control, accumulator_pattern, for_loop
   clause coverage: c1 <- err:loop_control->WrongIterationCount; c2 <- mis:loop_control->ForLoopPartSkipped; c3 <- mis:loop_control->ForLoopPartSkipped
   not yet read: own edges of loop_variable
 --- depth 4: current concepts ['loop_variable'] (closing round: own edges only)
-  loop_variable (misconceptions): 7 candidates -> kept mis:loop_variable->LoopOutputSameEachPass (0.40), mis:loop_variable->LoopVariableLifetimeScope (0.35), mis:loop_variable->ForInitRepeats (0.25)
-    mis:loop_variable->LoopOutputSameEachPass -> correct (0.32) "It prints 1, then 3, then 6; so sum keeps the running total: 0+1 = 1, then 1+2 = 3, then 3+3 = 6"
+  loop_variable (misconceptions): 7 candidates -> kept mis:loop_variable->LoopOutputSameEachPass (0.50), mis:loop_variable->LoopVariableLifetimeScope (0.30), mis:loop_variable->ForInitRepeats (0.20)
+    mis:loop_variable->LoopOutputSameEachPass -> correct (0.40) "It prints 1, then 3, then 6; so sum keeps the running total: 0+1 = 1, then 1+2 = 3, then 3+3 = 6"
     mis:loop_variable->LoopVariableLifetimeScope -> not applied (0.00) ""
-    mis:loop_variable->ForInitRepeats -> correct (0.16) "so sum keeps the running total: 0+1 = 1, then 1+2 = 3, then 3+3 = 6"
+    mis:loop_variable->ForInitRepeats -> correct (0.13) "so sum keeps the running total: 0+1 = 1, then 1+2 = 3, then 3+3 = 6"
   loop_variable (level ways): 13 candidates -> kept lvl:loop_variable@L2#1 (0.50), lvl:loop_variable@L2#0 (0.30), lvl:loop_variable@L3#2 (0.20)
     lvl:loop_variable@L2#1 -> shown (0.30) "so sum keeps the running total: 0+1 = 1, then 1+2 = 3, then 3+3 = 6"
     lvl:loop_variable@L2#0 -> shown (0.17) "sum starts at 0 and on every pass i is added to it; so sum keeps the running total: 0+1 = 1, then 1+2 = 3, then 3+3 = 6"
     lvl:loop_variable@L3#2 -> shown (0.12) "sum starts at 0 and on every pass i is added to it; so sum keeps the running total: 0+1 = 1, then 1+2 = 3, then 3+3 = 6"
-  kept: mis:loop_variable->LoopOutputSameEachPass [correct, tier 2, 0.32], lvl:loop_variable@L2#1 [shown, tier 2, 0.30], lvl:loop_variable@L2#0 [shown, tier 2, 0.17]
+  kept: mis:loop_variable->LoopOutputSameEachPass [correct, tier 2, 0.40], lvl:loop_variable@L2#1 [shown, tier 2, 0.30], lvl:loop_variable@L2#0 [shown, tier 2, 0.17]
   clause coverage: c1 <- err:loop_control->WrongIterationCount; c2 <- mis:loop_control->ForLoopPartSkipped; c3 <- mis:loop_control->ForLoopPartSkipped
   held: mis:loop_body->LoopBodyStatementOutsideLoop, mis:accumulator_pattern->LoopBodyScopeImpliesLoopLifetime, mis:for_loop->ForLoopPartSkipped; filed at the dependent concept: mis:loop_control->ForLoopPartSkipped
   shadows: mis:for_loop->ForLoopPartSkipped (shadow of mis:accumulator_pattern->LoopBodyScopeImpliesLoopLifetime), mis:loop_control->ForLoopPartSkipped (shadow of mis:accumulator_pattern->LoopBodyScopeImpliesLoopLifetime)

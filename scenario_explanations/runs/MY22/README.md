@@ -81,7 +81,7 @@ At each depth, for each current concept, the following happens.
 
 **3.4 Score and keep.** The **score** of a labelled edge is prune score × confidence: an edge counts for much only if it was both relevant and confidently labelled. The edges are then ranked in **tiers**. Tier 0 is a held misconception or a broken edge: these are findings about a fault and are always kept. Tier 1 is a held error. Tier 2 is everything that only confirms understanding (correct, confirmed, shown); these fill whatever is left of the N = 3 places, best score first. Kept edges are added to the paths. Every labelled edge, kept or not, is added to the evidence, because the levels in stage 6 are read from all of it.
 
-*One of the outputs at this stage:* the score of L0 way “everyday reading” is 0.45 × 0.55 = 0.25. At depth 1 the kept edges are: IncrementByTwo (correct, tier 2, 0.48); L0 way “everyday reading” (shown, tier 2, 0.25); L1 way “names the element” (shown, tier 2, 0.18).
+*One of the outputs at this stage:* the score of L0 way “everyday reading” is 0.45 × 0.55 = 0.25. At depth 1 the kept edges are: IncrementByTwo (correct, tier 2, 0.54); L0 way “everyday reading” (shown, tier 2, 0.25); L1 way “names the element” (shown, tier 2, 0.18).
 
 **3.5 Move to the next concepts.** Three things decide where the walk goes next. A kept prerequisite or parallel edge leads to the concept at its other end; that concept is **entered** and will be read inwards at the next depth, so it gets misconceptions and a level of its own. A concept with a held misconception stays current, so that its prerequisites are examined: the fault may begin further back. And any entered concept whose outward edges have not been read yet stays current until they are.
 

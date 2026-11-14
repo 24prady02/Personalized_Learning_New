@@ -714,27 +714,27 @@ mis:char_arithmetic->CharNotNumeric [held, tier 0, 0.95], lvl:char_arithmetic@L0
 
 Figure 6 (the graph after depth 3): C:\Users\magnu\OneDrive\Desktop\ES_VIterbi_Personalized_Learning\results\viewer\MY05_figure06.png
 
-Held set after the one-fault rules: mis:char_arithmetic->CharNotNumeric; filed at the dependent concept: mis:char->CharNotNumeric
+Held set after the one-fault rules: mis:char->CharNotNumeric; filed at the dependent concept: mis:char_arithmetic->CharNotNumeric
 
-Shadows (a held label on a prerequisite, on a generic concept, or at a concept where the graph attaches the misconception as context, resting on the words of a stronger label at the specific or primary concept, is one wrong sentence read twice; it marks no root cause and sets no level): mis:char->CharNotNumeric (shadow of mis:char_arithmetic->CharNotNumeric)
+Shadows (a held label on a prerequisite, on a generic concept, or at a concept where the graph attaches the misconception as context, resting on the words of a stronger label at the specific or primary concept, is one wrong sentence read twice; it marks no root cause and sets no level): mis:char_arithmetic->CharNotNumeric (shadow of mis:char->CharNotNumeric)
 
 ## 4. Diagnosis (rules over the labelled graph, no model)
-Root-cause walk: held on ['char_arithmetic'], broken at [] (consequences: pre:char->char_arithmetic, pre:arithmetic_operators->expression), prerequisites {'expression': ['arithmetic_operators'], 'char_arithmetic': ['char'], 'println': ['statement']}
-- char: L0 via everyday_reading "c is a letter, not a number; so you cannot add 1 to it; Java will give an error that a char and an int cannot be added"
-- char_arithmetic: L0 via misconception "It does not compile; c is a letter, not a number; so you cannot add 1 to it; Java will give an error that a char and an int cannot be added"
+Root-cause walk: held on ['char'], broken at [] (consequences: pre:char->char_arithmetic, pre:arithmetic_operators->expression), prerequisites {'expression': ['arithmetic_operators'], 'char_arithmetic': ['char'], 'println': ['statement']}
+- char: L0 via misconception "It does not compile; c is a letter, not a number; so you cannot add 1 to it; Java will give an error that a char and an int cannot be added"
+- char_arithmetic: L0 via everyday_reading "c is a letter, not a number; so you cannot add 1 to it; Java will give an error that a char and an int cannot be added"
 - expression: L4 via diagnose_an_error "It does not compile; c is a letter, not a number; so you cannot add 1 to it; Java will give an error that a char and an int cannot be added"
 
-**Stop:** sufficient at depth 3; prompts {'prune': 13, 'label': 23}, fresh model calls 0, cache hits 36
+**Stop:** sufficient at depth 3; prompts {'prune': 13, 'label': 23}, fresh model calls 1, cache hits 35
 
 ### Held misconceptions
 | concept | misconception | kind | quote | score | shares_evidence_with |
 |---|---|---|---|---|---|
-| char_arithmetic | CharNotNumeric | misconception | It does not compile; c is a letter, not a number; so you cannot add 1 to it; Java will give an error that a char and an int cannot be added | 0.95 |  |
+| char | CharNotNumeric | misconception | It does not compile; c is a letter, not a number; so you cannot add 1 to it; Java will give an error that a char and an int cannot be added | 0.97 |  |
 
 ### Shadowed labels (held in the reading, folded into the label they shadow; not faults of their own)
 | concept | misconception | shadow_of | quote | score |
 |---|---|---|---|---|
-| char | CharNotNumeric | mis:char_arithmetic->CharNotNumeric | It does not compile; c is a letter, not a number; so you cannot add 1 to it; Java will give an error that a char and an int cannot be added | 0.97 |
+| char_arithmetic | CharNotNumeric | mis:char->CharNotNumeric | It does not compile; c is a letter, not a number; so you cannot add 1 to it; Java will give an error that a char and an int cannot be added | 0.95 |
 
 ### Broken concept edges
 | edge | quote | score | consequence_of |
@@ -742,13 +742,13 @@ Root-cause walk: held on ['char_arithmetic'], broken at [] (consequences: pre:ch
 | pre:char->char_arithmetic | c is a letter, not a number; so you cannot add 1 to it; Java will give an error that a char and an int cannot be added | 0.95 | mis:char->CharNotNumeric |
 | pre:arithmetic_operators->expression | so you cannot add 1 to it; Java will give an error that a char and an int cannot be added | 0.7 | mis:char->CharNotNumeric |
 
-### Root cause: char_arithmetic / CharNotNumeric
+### Root cause: char / CharNotNumeric
 
 ### Level per concept
 | concept | level | way | misconception | source | quote | rule | also | note |
 |---|---|---|---|---|---|---|---|---|
-| char | L0 | everyday_reading |  | level_way | c is a letter, not a number; so you cannot add 1 to it; Java will give an error that a char and an int cannot be added |  |  |  |
-| char_arithmetic | L0 | misconception | CharNotNumeric | level_mis_links | It does not compile; c is a letter, not a number; so you cannot add 1 to it; Java will give an error that a char and an int cannot be added | wrong rule: char is not a numeric type. Right rule: A char is encoded as a 16-bit integer, so arithmetic such as 'b' + 'c' or 'a' + 4 works on the character codes. |  |  |
+| char | L0 | misconception | CharNotNumeric | level_mis_links | It does not compile; c is a letter, not a number; so you cannot add 1 to it; Java will give an error that a char and an int cannot be added | wrong rule: char is not a numeric type. Right rule: A char is encoded as a 16-bit integer, so arithmetic such as 'b' + 'c' or 'a' + 4 works on the character codes. |  |  |
+| char_arithmetic | L0 | everyday_reading |  | level_way | c is a letter, not a number; so you cannot add 1 to it; Java will give an error that a char and an int cannot be added |  |  |  |
 | expression | L4 | diagnose_an_error |  | level_way | It does not compile; c is a letter, not a number; so you cannot add 1 to it; Java will give an error that a char and an int cannot be added |  |  |  |
 
 ### Overall level: L0
@@ -847,11 +847,11 @@ start concepts (3): println, arithmetic_operators, char
     lvl:expression@L0#0 -> not applied (0.00) ""
   kept: mis:char_arithmetic->CharNotNumeric [held, tier 0, 0.95], lvl:char_arithmetic@L0#0 [shown, tier 2, 0.54], lvl:expression@L4#4 [shown, tier 2, 0.40]
   clause coverage: c1 <- mis:char->CharNotNumeric; c2 <- mis:char->CharNotNumeric; c3 <- mis:char->CharNotNumeric; c4 <- mis:char->CharNotNumeric
-  held: mis:char_arithmetic->CharNotNumeric; filed at the dependent concept: mis:char->CharNotNumeric
-  shadows: mis:char->CharNotNumeric (shadow of mis:char_arithmetic->CharNotNumeric)
-  root-cause walk: held on ['char_arithmetic'], broken at [] (consequences: pre:char->char_arithmetic, pre:arithmetic_operators->expression), prerequisites {'expression': ['arithmetic_operators'], 'char_arithmetic': ['char'], 'println': ['statement']}
-  level char: L0 via everyday_reading "c is a letter, not a number; so you cannot add 1 to it; Java will give an error that a char and an int cannot be added"
-  level char_arithmetic: L0 via misconception "It does not compile; c is a letter, not a number; so you cannot add 1 to it; Java will give an error that a char and an int cannot be added"
+  held: mis:char->CharNotNumeric; filed at the dependent concept: mis:char_arithmetic->CharNotNumeric
+  shadows: mis:char_arithmetic->CharNotNumeric (shadow of mis:char->CharNotNumeric)
+  root-cause walk: held on ['char'], broken at [] (consequences: pre:char->char_arithmetic, pre:arithmetic_operators->expression), prerequisites {'expression': ['arithmetic_operators'], 'char_arithmetic': ['char'], 'println': ['statement']}
+  level char: L0 via misconception "It does not compile; c is a letter, not a number; so you cannot add 1 to it; Java will give an error that a char and an int cannot be added"
+  level char_arithmetic: L0 via everyday_reading "c is a letter, not a number; so you cannot add 1 to it; Java will give an error that a char and an int cannot be added"
   level expression: L4 via diagnose_an_error "It does not compile; c is a letter, not a number; so you cannot add 1 to it; Java will give an error that a char and an int cannot be added"
 ```
 
@@ -879,21 +879,21 @@ start concepts (3): println, arithmetic_operators, char
  ],
  "held_misconceptions": [
   {
-   "concept": "char_arithmetic",
+   "concept": "char",
    "misconception": "CharNotNumeric",
    "kind": "misconception",
    "quote": "It does not compile; c is a letter, not a number; so you cannot add 1 to it; Java will give an error that a char and an int cannot be added",
-   "score": 0.95
+   "score": 0.97
   }
  ],
  "error_evidence": [],
  "shadowed": [
   {
-   "concept": "char",
+   "concept": "char_arithmetic",
    "misconception": "CharNotNumeric",
-   "shadow_of": "mis:char_arithmetic->CharNotNumeric",
+   "shadow_of": "mis:char->CharNotNumeric",
    "quote": "It does not compile; c is a letter, not a number; so you cannot add 1 to it; Java will give an error that a char and an int cannot be added",
-   "score": 0.97
+   "score": 0.95
   }
  ],
  "broken_edges": [
@@ -911,26 +911,26 @@ start concepts (3): println, arithmetic_operators, char
   }
  ],
  "root_cause": {
-  "concept": "char_arithmetic",
+  "concept": "char",
   "misconception": "CharNotNumeric"
  },
  "levels": {
   "char": {
    "level": "L0",
-   "way": "everyday_reading",
-   "quote": "c is a letter, not a number; so you cannot add 1 to it; Java will give an error that a char and an int cannot be added",
-   "edge": "lvl:char@L0#0",
-   "source": "level_way",
-   "also_shown": []
-  },
-  "char_arithmetic": {
-   "level": "L0",
    "way": "misconception",
    "misconception": "CharNotNumeric",
    "quote": "It does not compile; c is a letter, not a number; so you cannot add 1 to it; Java will give an error that a char and an int cannot be added",
-   "edge": "mis:char_arithmetic->CharNotNumeric",
+   "edge": "mis:char->CharNotNumeric",
    "rule": "wrong rule: char is not a numeric type. Right rule: A char is encoded as a 16-bit integer, so arithmetic such as 'b' + 'c' or 'a' + 4 works on the character codes.",
    "source": "level_mis_links"
+  },
+  "char_arithmetic": {
+   "level": "L0",
+   "way": "everyday_reading",
+   "quote": "c is a letter, not a number; so you cannot add 1 to it; Java will give an error that a char and an int cannot be added",
+   "edge": "lvl:char_arithmetic@L0#0",
+   "source": "level_way",
+   "also_shown": []
   },
   "expression": {
    "level": "L4",
@@ -1043,7 +1043,7 @@ start concepts (3): println, arithmetic_operators, char
    "score": 0.95,
    "logic": "char is not a numeric type",
    "twin_logic": "A char is encoded as a 16-bit integer, so arithmetic such as 'b' + 'c' or 'a' + 4 works on the character codes.",
-   "role": "primary"
+   "role": "context"
   },
   {
    "depth": 3,
@@ -1190,7 +1190,7 @@ start concepts (3): println, arithmetic_operators, char
    "score": 0.95,
    "logic": "char is not a numeric type",
    "twin_logic": "A char is encoded as a 16-bit integer, so arithmetic such as 'b' + 'c' or 'a' + 4 works on the character codes.",
-   "role": "primary"
+   "role": "context"
   },
   {
    "depth": 3,
@@ -1245,8 +1245,8 @@ start concepts (3): println, arithmetic_operators, char
  "unexplained_clauses": [],
  "stop_reason": "sufficient",
  "depth_reached": 3,
- "llm_calls": 0,
- "llm_cache_hits": 36,
+ "llm_calls": 1,
+ "llm_cache_hits": 35,
  "llm_calls_by_step": {
   "prune": 13,
   "label": 23

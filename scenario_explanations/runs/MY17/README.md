@@ -103,7 +103,7 @@ The walk leaves a set of labelled edges. Each kept edge labelled *held* is a can
 - **Shadows.** A held label is a **shadow** when it sits on a prerequisite or on a generic concept and rests only on clauses that a stronger, more specific label already rests on. It is the same wrong sentence read a second time at a vaguer place. A shadow is kept in the record but is not a fault, cannot be the root cause and does not set a level.
 - **Broken edges.** A prerequisite edge A → B labelled *broken* says the student did not carry the rule of A into B, so the fault sits at B. If the broken edge rests on the same clauses as a held misconception, it is that misconception's **consequence**, not a separate fault.
 
-*One of the outputs at this stage:* no edge is held. The 12 misconception / error edges that received a label were all labelled *correct*, so this run has no fault.
+*One of the outputs at this stage:* no edge is held. The 13 misconception / error edges that received a label were all labelled *correct*, so this run has no fault.
 
 ## Stage 5. Root cause (rule, no model)
 

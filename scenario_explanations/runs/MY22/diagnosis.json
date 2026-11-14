@@ -56,8 +56,8 @@
    ],
    "quote": "I think i++ adds 1 to i, though it might add 2, Im not sure; Probably it makes i 6",
    "confidence": 0.6,
-   "prune_score": 0.8,
-   "score": 0.48,
+   "prune_score": 0.9,
+   "score": 0.54,
    "logic": "i++ increases i by 2.",
    "twin_logic": "i++ (and ++i) increases i by exactly 1.",
    "role": "primary"
@@ -127,12 +127,13 @@
    "kind": "misconception",
    "label": "correct",
    "clauses": [
+    1,
     2
    ],
-   "quote": "Probably it makes i 6",
-   "confidence": 0.8,
+   "quote": "I think i++ adds 1 to i, though it might add 2, Im not sure; Probably it makes i 6",
+   "confidence": 0.75,
    "prune_score": 0.5,
-   "score": 0.4,
+   "score": 0.375,
    "logic": "A variable keeps its first value after a new assignment (the static model).",
    "twin_logic": "Each assignment or read replaces the variable's current value.",
    "role": "context"
@@ -171,8 +172,8 @@
    ],
    "quote": "I think i++ adds 1 to i, though it might add 2, Im not sure; Probably it makes i 6",
    "confidence": 0.6,
-   "prune_score": 0.8,
-   "score": 0.48,
+   "prune_score": 0.9,
+   "score": 0.54,
    "logic": "i++ increases i by 2.",
    "twin_logic": "i++ (and ++i) increases i by exactly 1.",
    "role": "primary"
@@ -261,12 +262,13 @@
    "kind": "misconception",
    "label": "correct",
    "clauses": [
+    1,
     2
    ],
-   "quote": "Probably it makes i 6",
-   "confidence": 0.8,
+   "quote": "I think i++ adds 1 to i, though it might add 2, Im not sure; Probably it makes i 6",
+   "confidence": 0.75,
    "prune_score": 0.5,
-   "score": 0.4,
+   "score": 0.375,
    "logic": "A variable keeps its first value after a new assignment (the static model).",
    "twin_logic": "Each assignment or read replaces the variable's current value.",
    "role": "context"
@@ -298,8 +300,8 @@
  "unexplained_clauses": [],
  "stop_reason": "sufficient",
  "depth_reached": 3,
- "llm_calls": 1,
- "llm_cache_hits": 21,
+ "llm_calls": 4,
+ "llm_cache_hits": 18,
  "llm_calls_by_step": {
   "prune": 8,
   "label": 14

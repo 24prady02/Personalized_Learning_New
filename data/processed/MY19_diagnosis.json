@@ -22,7 +22,7 @@
    "misconception": "TargetTyping",
    "kind": "misconception",
    "quote": "q is a double; so 7 / 2 is done with decimals and gives 3.5, and 7 % 2 is the half that is left over, 0.5",
-   "score": 0.495
+   "score": 0.45
   }
  ],
  "error_evidence": [],
@@ -107,8 +107,8 @@
    ],
    "quote": "q is a double; so 7 / 2 is done with decimals and gives 3.5, and 7 % 2 is the half that is left over, 0.5",
    "confidence": 0.9,
-   "prune_score": 0.55,
-   "score": 0.495,
+   "prune_score": 0.5,
+   "score": 0.45,
    "logic": "The type of a numerical expression depends on the type expected by the surrounding context, so double d = a / b; keeps the fraction.",
    "twin_logic": "The type of a numerical expression is determined by the expression, so double d = a / b; with int a and b still divides as ints.",
    "role": "primary"
@@ -278,8 +278,8 @@
    ],
    "quote": "q is a double; so 7 / 2 is done with decimals and gives 3.5, and 7 % 2 is the half that is left over, 0.5",
    "confidence": 0.9,
-   "prune_score": 0.55,
-   "score": 0.495,
+   "prune_score": 0.5,
+   "score": 0.45,
    "logic": "The type of a numerical expression depends on the type expected by the surrounding context, so double d = a / b; keeps the fraction.",
    "twin_logic": "The type of a numerical expression is determined by the expression, so double d = a / b; with int a and b still divides as ints.",
    "role": "primary"
@@ -461,8 +461,8 @@
  "unexplained_clauses": [],
  "stop_reason": "sufficient",
  "depth_reached": 3,
- "llm_calls": 5,
- "llm_cache_hits": 28,
+ "llm_calls": 3,
+ "llm_cache_hits": 30,
  "llm_calls_by_step": {
   "prune": 11,
   "label": 22

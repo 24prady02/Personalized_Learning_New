@@ -12,10 +12,10 @@ start concepts (3): array_traversal, loop_control, indexing
     lvl:array_traversal@L3#6 -> shown (0.24) "max starts as the first element, 3; The loop then looks at every later element and, whenever one is bigger than max, max takes its value; so after 8 it never changes; For any array, this code prints its largest element"
     lvl:array_traversal@L3#8 -> shown (0.27) "The loop then looks at every later element and, whenever one is bigger than max, max takes its value; For any array, this code prints its largest element"
     lvl:array_traversal@L3#2 -> shown (0.24) "The loop then looks at every later element and, whenever one is bigger than max, max takes its value; The loop starts at i = 1; because a[0] is already in max, and i < a.length stops at the last index without going past the end"
-  loop_control (misconceptions): 11 candidates -> kept mis:loop_control->OffByOneBound (0.40), mis:loop_control->IdiomOverridesCode (0.35), err:loop_control->WrongIterationCount (0.25)
-    mis:loop_control->OffByOneBound -> correct (0.36) "because a[0] is already in max, and i < a.length stops at the last index without going past the end"
+  loop_control (misconceptions): 11 candidates -> kept mis:loop_control->OffByOneBound (0.45), mis:loop_control->IdiomOverridesCode (0.35), err:loop_control->WrongIterationCount (0.20)
+    mis:loop_control->OffByOneBound -> correct (0.41) "because a[0] is already in max, and i < a.length stops at the last index without going past the end"
     mis:loop_control->IdiomOverridesCode -> correct (0.30) "The loop then looks at every later element and, whenever one is bigger than max, max takes its value; The loop starts at i = 1; because a[0] is already in max, and i < a.length stops at the last index without going past the end"
-    err:loop_control->WrongIterationCount -> correct (0.20) "The loop starts at i = 1; because a[0] is already in max, and i < a.length stops at the last index without going past the end"
+    err:loop_control->WrongIterationCount -> correct (0.16) "The loop starts at i = 1; because a[0] is already in max, and i < a.length stops at the last index without going past the end"
   loop_control (level ways): 19 candidates -> kept lvl:loop_control@L3#5 (0.45), lvl:loop_control@L3#6 (0.30), lvl:loop_control@L2#1 (0.25)
     lvl:loop_control@L3#5 -> shown (0.34) "The loop starts at i = 1; because a[0] is already in max, and i < a.length stops at the last index without going past the end"
     lvl:loop_control@L3#6 -> shown (0.24) "The loop then looks at every later element and, whenever one is bigger than max, max takes its value; The loop starts at i = 1; because a[0] is already in max, and i < a.length stops at the last index without going past the end"
@@ -28,7 +28,7 @@ start concepts (3): array_traversal, loop_control, indexing
     lvl:indexing@L3#1 -> shown (0.30) "The loop then looks at every later element and, whenever one is bigger than max, max takes its value; The loop starts at i = 1; because a[0] is already in max, and i < a.length stops at the last index without going past the end"
     lvl:indexing@L3#6 -> shown (0.28) "The loop starts at i = 1; because a[0] is already in max, and i < a.length stops at the last index without going past the end"
     lvl:indexing@L2#1 -> shown (0.17) "max starts as the first element, 3"
-  kept: mis:indexing->ArrayIndexStartsAtOne [correct, tier 2, 0.37], mis:array_traversal->IdiomOverridesCode [correct, tier 2, 0.36], mis:loop_control->OffByOneBound [correct, tier 2, 0.36]
+  kept: mis:loop_control->OffByOneBound [correct, tier 2, 0.41], mis:indexing->ArrayIndexStartsAtOne [correct, tier 2, 0.37], mis:array_traversal->IdiomOverridesCode [correct, tier 2, 0.36]
   clause coverage: c1 uncovered; c2 <- mis:indexing->ArrayIndexStartsAtOne; c3 <- err:array_traversal->EarlyReturnInLoop; c4 uncovered; c5 <- mis:array_traversal->IdiomOverridesCode; c6 <- mis:array_traversal->IdiomOverridesCode; c7 <- err:array_traversal->EarlyReturnInLoop
   uncovered clauses bring in: control_flow (6.15), loop_variable (5.32), for_loop (5.22)
   not yet read: own edges of control_flow, own edges of for_loop, own edges of loop_variable, pre:array_initializer->indexing, pre:array_traversal->running_extreme, pre:for_loop->array_traversal, pre:indexing->array_bounds, pre:indexing->array_traversal, pre:length_field->array_traversal, pre:loop_control->for_loop, pre:loop_control->increment_operators, pre:loop_variable->loop_control
@@ -44,18 +44,18 @@ start concepts (3): array_traversal, loop_control, indexing
   indexing (concept edges): 2 candidates -> kept pre:array_initializer->indexing (0.50), pre:indexing->array_bounds (0.50)
     pre:array_initializer->indexing -> confirmed (0.42) "max starts as the first element, 3; because a[0] is already in max, and i < a.length stops at the last index without going past the end"
     pre:indexing->array_bounds -> confirmed (0.45) "because a[0] is already in max, and i < a.length stops at the last index without going past the end; max starts as the first element, 3"
-  control_flow (misconceptions): 11 candidates -> kept mis:control_flow->ProgramEndsAfterLoop (0.40), mis:control_flow->IfConditionWatched (0.30), mis:control_flow->CodeAfterIfSkipped (0.30)
-    mis:control_flow->ProgramEndsAfterLoop -> correct (0.34) "It prints 8"
-    mis:control_flow->IfConditionWatched -> correct (0.21) "The loop then looks at every later element and, whenever one is bigger than max, max takes its value; so after 8 it never changes"
-    mis:control_flow->CodeAfterIfSkipped -> correct (0.21) "The loop then looks at every later element and, whenever one is bigger than max, max takes its value; so after 8 it never changes"
+  control_flow (misconceptions): 11 candidates -> kept mis:control_flow->IfConditionWatched (0.40), mis:control_flow->ProgramEndsAfterLoop (0.35), mis:control_flow->ProgramLooksAhead (0.25)
+    mis:control_flow->IfConditionWatched -> correct (0.28) "The loop then looks at every later element and, whenever one is bigger than max, max takes its value; so after 8 it never changes"
+    mis:control_flow->ProgramEndsAfterLoop -> correct (0.28) "It prints 8"
+    mis:control_flow->ProgramLooksAhead -> not applied (0.00) ""
   control_flow (level ways): 15 candidates -> kept lvl:control_flow@L2#0 (0.45), lvl:control_flow@L2#1 (0.30), lvl:control_flow@L3#1 (0.25)
     lvl:control_flow@L2#0 -> shown (0.32) "max starts as the first element, 3; The loop then looks at every later element and, whenever one is bigger than max, max takes its value; so after 8 it never changes; The loop starts at i = 1; because a[0] is already in max, and i < a.length stops at the last index without going past the end"
     lvl:control_flow@L2#1 -> shown (0.26) "It prints 8; max starts as the first element, 3; The loop then looks at every later element and, whenever one is bigger than max, max takes its value; so after 8 it never changes"
     lvl:control_flow@L3#1 -> shown (0.17) "The loop then looks at every later element and, whenever one is bigger than max, max takes its value; so after 8 it never changes"
-  loop_variable (misconceptions): 7 candidates -> kept mis:loop_variable->LoopOutputSameEachPass (0.45), mis:loop_variable->ForInitRepeats (0.30), mis:loop_variable->LoopVariableLimitsValues (0.25)
-    mis:loop_variable->LoopOutputSameEachPass -> correct (0.36) "The loop then looks at every later element and, whenever one is bigger than max, max takes its value; so after 8 it never changes"
-    mis:loop_variable->ForInitRepeats -> correct (0.18) "The loop then looks at every later element and, whenever one is bigger than max, max takes its value; The loop starts at i = 1"
-    mis:loop_variable->LoopVariableLimitsValues -> correct (0.16) "It prints 8; For any array, this code prints its largest element"
+  loop_variable (misconceptions): 7 candidates -> kept mis:loop_variable->LoopOutputSameEachPass (0.45), mis:loop_variable->LoopVariableLimitsValues (0.30), mis:loop_variable->ForInitRepeats (0.25)
+    mis:loop_variable->LoopOutputSameEachPass -> correct (0.34) "The loop then looks at every later element and, whenever one is bigger than max, max takes its value; so after 8 it never changes"
+    mis:loop_variable->LoopVariableLimitsValues -> correct (0.18) "It prints 8; The loop then looks at every later element and, whenever one is bigger than max, max takes its value"
+    mis:loop_variable->ForInitRepeats -> correct (0.17) "The loop then looks at every later element and, whenever one is bigger than max, max takes its value; The loop starts at i = 1"
   loop_variable (level ways): 13 candidates -> kept lvl:loop_variable@L3#0 (0.40), lvl:loop_variable@L3#2 (0.35), lvl:loop_variable@L2#1 (0.25)
     lvl:loop_variable@L3#0 -> shown (0.24) "The loop starts at i = 1; because a[0] is already in max, and i < a.length stops at the last index without going past the end"
     lvl:loop_variable@L3#2 -> shown (0.30) "The loop then looks at every later element and, whenever one is bigger than max, max takes its value; The loop starts at i = 1; because a[0] is already in max, and i < a.length stops at the last index without going past the end"

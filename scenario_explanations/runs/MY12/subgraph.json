@@ -336,7 +336,7 @@
    "type": "misconception",
    "source": "char_arithmetic",
    "target": "CharNotNumeric",
-   "role": "primary",
+   "role": "context",
    "logic": "char is not a numeric type",
    "twin_logic": "A char is encoded as a 16-bit integer, so arithmetic such as 'b' + 'c' or 'a' + 4 works on the character codes."
   },
@@ -381,7 +381,7 @@
    "type": "misconception",
    "source": "expression",
    "target": "ParenthesesOnlyIfArgument",
-   "role": "primary",
+   "role": "context",
    "logic": "() are optional on a no-argument call like println",
    "twin_logic": "A method call always needs parentheses, so an empty line is printed with System.out.println();."
   },
@@ -471,7 +471,7 @@
    "type": "misconception",
    "source": "statement",
    "target": "StatementsRunInAnyOrder",
-   "role": "primary",
+   "role": "context",
    "logic": "Statements in a program can run in any order.",
    "twin_logic": "Without control statements, statements run once each, top to bottom."
   },

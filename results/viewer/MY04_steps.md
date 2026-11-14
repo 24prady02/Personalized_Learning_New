@@ -101,9 +101,9 @@ Edges offered:
 
 Prune: the model's reply (edge id and score; the kept edges sum to 1):
 ```
-mis:control_flow->CodeAfterIfSkipped (0.60), mis:control_flow->StatementsRunInAnyOrder (0.25), mis:control_flow->FalseConditionRestartsProgram (0.15)
+mis:control_flow->CodeAfterIfSkipped (0.50), mis:control_flow->StatementsRunInAnyOrder (0.30), mis:control_flow->FalseConditionRestartsProgram (0.20)
 ```
-Kept by pruning: mis:control_flow->CodeAfterIfSkipped (0.60), mis:control_flow->StatementsRunInAnyOrder (0.25), mis:control_flow->FalseConditionRestartsProgram (0.15)
+Kept by pruning: mis:control_flow->CodeAfterIfSkipped (0.50), mis:control_flow->StatementsRunInAnyOrder (0.30), mis:control_flow->FalseConditionRestartsProgram (0.20)
 
 Label prompt for the misconception / error edges (judged together). The model saw the program, the question, the numbered clauses, and these edges with their wrong rule and right rule:
 | edge |
@@ -535,9 +535,11 @@ Edges offered:
 
 Prune: the model's reply (edge id and score; the kept edges sum to 1):
 ```
-mis:statement->ComputerFillsInIntent (0.50), mis:statement->StatementsRunInAnyOrder (0.30), mis:statement->ProgramLooksAhead (0.20)
+{mis:statement->ComputerFillsInIntent (Score: 0.6)}
+{mis:statement->StatementsRunInAnyOrder (Score: 0.25)}
+{mis:statement->ProgramLooksAhead (Score: 0.15)}
 ```
-Kept by pruning: mis:statement->ComputerFillsInIntent (0.50), mis:statement->StatementsRunInAnyOrder (0.30), mis:statement->ProgramLooksAhead (0.20)
+Kept by pruning: mis:statement->ComputerFillsInIntent (0.60), mis:statement->StatementsRunInAnyOrder (0.25), mis:statement->ProgramLooksAhead (0.15)
 
 Label prompt for the misconception / error edges (judged together). The model saw the program, the question, the numbered clauses, and these edges with their wrong rule and right rule:
 | edge |
@@ -555,7 +557,7 @@ mis:statement->ProgramLooksAhead | not applied | clauses: none | confidence: 0.8
 Parsed labels:
 | edge | label | prune score | confidence | score | clauses | words |
 |---|---|---|---|---|---|---|
-| mis:statement->ComputerFillsInIntent | held | 0.5 | 0.55 | 0.28 | c1, c3 | It prints only Tue; so the switch jumps to case 2, prints Tue, and then the switch is finished |
+| mis:statement->ComputerFillsInIntent | held | 0.6 | 0.55 | 0.33 | c1, c3 | It prints only Tue; so the switch jumps to case 2, prints Tue, and then the switch is finished |
 | mis:statement->StatementsRunInAnyOrder | not applied |  |  | 0.0 |  |  |
 | mis:statement->ProgramLooksAhead | not applied |  |  | 0.0 |  |  |
 
@@ -761,7 +763,7 @@ Parsed labels:
 
 **Kept on a path at this depth** (best N in tiers: held misconception / broken edge, then held error, then correct / confirmed / shown):
 
-mis:statement->ComputerFillsInIntent [held, tier 0, 0.28], lvl:statement@L0#2 [shown, tier 2, 0.36], lvl:string_literal@L3#1 [shown, tier 2, 0.27]
+mis:statement->ComputerFillsInIntent [held, tier 0, 0.33], lvl:statement@L0#2 [shown, tier 2, 0.36], lvl:string_literal@L3#1 [shown, tier 2, 0.27]
 
 **Clause coverage after this depth:**
 | clause | text | covered by |
@@ -784,7 +786,7 @@ Root-cause walk: held on ['switch_statement'], broken at [] (consequences: pre:s
 - string_literal: L3 via relation_to_neighbour "It prints only Tue; so the switch jumps to case 2, prints Tue, and then the switch is finished"
 - switch_statement: L0 via misconception "It prints only Tue; so the switch jumps to case 2, prints Tue, and then the switch is finished; The other cases are skipped; because they do not match"
 
-**Stop:** sufficient at depth 3; prompts {'prune': 14, 'label': 25}, fresh model calls 0, cache hits 39
+**Stop:** sufficient at depth 3; prompts {'prune': 14, 'label': 25}, fresh model calls 2, cache hits 37
 
 ### Held misconceptions
 | concept | misconception | kind | quote | score | shares_evidence_with |
@@ -794,7 +796,7 @@ Root-cause walk: held on ['switch_statement'], broken at [] (consequences: pre:s
 ### Shadowed labels (held in the reading, folded into the label they shadow; not faults of their own)
 | concept | misconception | shadow_of | quote | score |
 |---|---|---|---|---|
-| statement | ComputerFillsInIntent | mis:switch_statement->SwitchNoFallThrough | It prints only Tue; so the switch jumps to case 2, prints Tue, and then the switch is finished | 0.275 |
+| statement | ComputerFillsInIntent | mis:switch_statement->SwitchNoFallThrough | It prints only Tue; so the switch jumps to case 2, prints Tue, and then the switch is finished | 0.33 |
 
 ### Broken concept edges
 | edge | quote | score | consequence_of |
@@ -838,7 +840,7 @@ Figure 7 (final picture): C:\Users\magnu\OneDrive\Desktop\ES_VIterbi_Personalize
 | 2 | switch_statement | pre:control_flow->switch_statement | prerequisite | confirmed | 1.0 | 0.75 | 0.75 | [2, 3] | day is 2; so the switch jumps to case 2, prints Tue, and then the switch is finished |
 | 2 | control_flow | pre:statement->control_flow | prerequisite | broken | 1.0 | 0.75 | 0.75 | [1, 3, 4] | It prints only Tue; so the switch jumps to case 2, prints Tue, and then the switch is finished; The other cases are skipped |
 | 2 | println | pre:string_literal->println | prerequisite | confirmed | 0.4 | 0.7 | 0.28 | [1, 3] | It prints only Tue; so the switch jumps to case 2, prints Tue, and then the switch is finished |
-| 3 | statement | mis:statement->ComputerFillsInIntent | misconception | held | 0.5 | 0.55 | 0.275 | [1, 3] | It prints only Tue; so the switch jumps to case 2, prints Tue, and then the switch is finished |
+| 3 | statement | mis:statement->ComputerFillsInIntent | misconception | held | 0.6 | 0.55 | 0.33 | [1, 3] | It prints only Tue; so the switch jumps to case 2, prints Tue, and then the switch is finished |
 | 3 | statement | lvl:statement@L0#2 | level | shown | 0.5 | 0.72 | 0.36 | [1, 3, 4] | It prints only Tue; so the switch jumps to case 2, prints Tue, and then the switch is finished; The other cases are skipped |
 | 3 | string_literal | lvl:string_literal@L3#1 | level | shown | 0.45 | 0.6 | 0.27 | [1, 3] | It prints only Tue; so the switch jumps to case 2, prints Tue, and then the switch is finished |
 | 3 | string_literal | lvl:string_literal@L2#1 | level | shown | 0.35 | 0.55 | 0.1925 | [1, 3] | It prints only Tue; so the switch jumps to case 2, prints Tue, and then the switch is finished |
@@ -852,7 +854,7 @@ Figure 7 (final picture): C:\Users\magnu\OneDrive\Desktop\ES_VIterbi_Personalize
 | 2 | control_flow | pre:statement->control_flow | prerequisite | broken | 0.75 | [1, 3, 4] |
 | 2 | switch_statement | pre:control_flow->switch_statement | prerequisite | confirmed | 0.75 | [2, 3] |
 | 2 | println | pre:string_literal->println | prerequisite | confirmed | 0.28 | [1, 3] |
-| 3 | statement | mis:statement->ComputerFillsInIntent | misconception | held | 0.275 | [1, 3] |
+| 3 | statement | mis:statement->ComputerFillsInIntent | misconception | held | 0.33 | [1, 3] |
 | 3 | statement | lvl:statement@L0#2 | level | shown | 0.36 | [1, 3, 4] |
 | 3 | string_literal | lvl:string_literal@L3#1 | level | shown | 0.27 | [1, 3] |
 
@@ -862,7 +864,7 @@ clauses: It prints only Tue | day is 2 | so the switch jumps to case 2, prints T
 start: 3 tagged concepts, all used
 start concepts (3): control_flow, println, switch_statement
 --- depth 1: current concepts ['control_flow', 'println', 'switch_statement']
-  control_flow (misconceptions): 11 candidates -> kept mis:control_flow->CodeAfterIfSkipped (0.60), mis:control_flow->StatementsRunInAnyOrder (0.25), mis:control_flow->FalseConditionRestartsProgram (0.15)
+  control_flow (misconceptions): 11 candidates -> kept mis:control_flow->CodeAfterIfSkipped (0.50), mis:control_flow->StatementsRunInAnyOrder (0.30), mis:control_flow->FalseConditionRestartsProgram (0.20)
     mis:control_flow->CodeAfterIfSkipped -> not applied (0.00) ""
     mis:control_flow->StatementsRunInAnyOrder -> not applied (0.00) ""
     mis:control_flow->FalseConditionRestartsProgram -> not applied (0.00) ""
@@ -901,8 +903,8 @@ start concepts (3): control_flow, println, switch_statement
   clause coverage: c1 <- mis:switch_statement->SwitchNoFallThrough; c2 <- pre:control_flow->switch_statement; c3 <- mis:switch_statement->SwitchNoFallThrough; c4 <- mis:switch_statement->SwitchNoFallThrough; c5 <- mis:switch_statement->SwitchNoFallThrough
   not yet read: own edges of statement, own edges of string_literal
 --- depth 3: current concepts ['statement', 'control_flow', 'switch_statement', 'string_literal', 'println']
-  statement (misconceptions): 5 candidates -> kept mis:statement->ComputerFillsInIntent (0.50), mis:statement->StatementsRunInAnyOrder (0.30), mis:statement->ProgramLooksAhead (0.20)
-    mis:statement->ComputerFillsInIntent -> held (0.28) "It prints only Tue; so the switch jumps to case 2, prints Tue, and then the switch is finished"
+  statement (misconceptions): 5 candidates -> kept mis:statement->ComputerFillsInIntent (0.60), mis:statement->StatementsRunInAnyOrder (0.25), mis:statement->ProgramLooksAhead (0.15)
+    mis:statement->ComputerFillsInIntent -> held (0.33) "It prints only Tue; so the switch jumps to case 2, prints Tue, and then the switch is finished"
     mis:statement->StatementsRunInAnyOrder -> not applied (0.00) ""
     mis:statement->ProgramLooksAhead -> not applied (0.00) ""
   statement (level ways): 19 candidates -> kept lvl:statement@L0#2 (0.50), lvl:statement@L0#0 (0.30), lvl:statement@L3#4 (0.20)
@@ -919,7 +921,7 @@ start concepts (3): control_flow, println, switch_statement
     lvl:string_literal@L2#0 -> not applied (0.00) ""
   println (concept edges): 1 candidates -> kept pre:statement->println (1.00)
     pre:statement->println -> not applied (0.00) ""
-  kept: mis:statement->ComputerFillsInIntent [held, tier 0, 0.28], lvl:statement@L0#2 [shown, tier 2, 0.36], lvl:string_literal@L3#1 [shown, tier 2, 0.27]
+  kept: mis:statement->ComputerFillsInIntent [held, tier 0, 0.33], lvl:statement@L0#2 [shown, tier 2, 0.36], lvl:string_literal@L3#1 [shown, tier 2, 0.27]
   clause coverage: c1 <- mis:switch_statement->SwitchNoFallThrough; c2 <- pre:control_flow->switch_statement; c3 <- mis:switch_statement->SwitchNoFallThrough; c4 <- mis:switch_statement->SwitchNoFallThrough; c5 <- mis:switch_statement->SwitchNoFallThrough
   shadows: mis:statement->ComputerFillsInIntent (shadow of mis:switch_statement->SwitchNoFallThrough)
   root-cause walk: held on ['switch_statement'], broken at [] (consequences: pre:statement->control_flow), prerequisites {'switch_statement': ['control_flow'], 'control_flow': ['statement'], 'println': ['statement', 'string_literal']}
@@ -969,7 +971,7 @@ start concepts (3): control_flow, println, switch_statement
    "misconception": "ComputerFillsInIntent",
    "shadow_of": "mis:switch_statement->SwitchNoFallThrough",
    "quote": "It prints only Tue; so the switch jumps to case 2, prints Tue, and then the switch is finished",
-   "score": 0.275
+   "score": 0.33
   }
  ],
  "broken_edges": [
@@ -1167,8 +1169,8 @@ start concepts (3): control_flow, println, switch_statement
    ],
    "quote": "It prints only Tue; so the switch jumps to case 2, prints Tue, and then the switch is finished",
    "confidence": 0.55,
-   "prune_score": 0.5,
-   "score": 0.275,
+   "prune_score": 0.6,
+   "score": 0.33,
    "logic": "The computer fills in omitted steps or values that the programmer meant, e.g. REPEAT 4 [FORWARD 30] draws a square without a turn command.",
    "twin_logic": "The computer executes only what the code states; every needed step and value must be written.",
    "role": "primary"
@@ -1431,8 +1433,8 @@ start concepts (3): control_flow, println, switch_statement
    ],
    "quote": "It prints only Tue; so the switch jumps to case 2, prints Tue, and then the switch is finished",
    "confidence": 0.55,
-   "prune_score": 0.5,
-   "score": 0.275,
+   "prune_score": 0.6,
+   "score": 0.33,
    "logic": "The computer fills in omitted steps or values that the programmer meant, e.g. REPEAT 4 [FORWARD 30] draws a square without a turn command.",
    "twin_logic": "The computer executes only what the code states; every needed step and value must be written.",
    "role": "primary"
@@ -1509,8 +1511,8 @@ start concepts (3): control_flow, println, switch_statement
  "unexplained_clauses": [],
  "stop_reason": "sufficient",
  "depth_reached": 3,
- "llm_calls": 0,
- "llm_cache_hits": 39,
+ "llm_calls": 2,
+ "llm_cache_hits": 37,
  "llm_calls_by_step": {
   "prune": 14,
   "label": 25

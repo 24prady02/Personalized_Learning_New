@@ -3,15 +3,15 @@ start: BM25 of the answer against each tagged concept: integer_division 9.51 (hi
 start: chosen integer_division, explicit_cast, arithmetic_operators
 start concepts (3): integer_division, explicit_cast, arithmetic_operators
 --- depth 1: current concepts ['integer_division', 'explicit_cast', 'arithmetic_operators']
-  integer_division (misconceptions): 6 candidates -> kept mis:integer_division->CastAfterIntDivision (0.70), mis:integer_division->IntegerDivisionGivesFraction (0.20), mis:integer_division->TargetTyping (0.10)
-    mis:integer_division->CastAfterIntDivision -> held (0.65) "The (double) turns the whole division into a decimal division —; so sum / count keeps its fraction and avg is 3.5"
+  integer_division (misconceptions): 6 candidates -> kept mis:integer_division->CastAfterIntDivision (0.60), mis:integer_division->IntegerDivisionGivesFraction (0.25), mis:integer_division->TargetTyping (0.15)
+    mis:integer_division->CastAfterIntDivision -> held (0.56) "The (double) turns the whole division into a decimal division —; so sum / count keeps its fraction and avg is 3.5"
     mis:integer_division->IntegerDivisionGivesFraction -> not applied (0.00) ""
     mis:integer_division->TargetTyping -> not applied (0.00) ""
   integer_division (level ways): 16 candidates -> kept lvl:integer_division@L0#4 (0.50), lvl:integer_division@L2#0 (0.30), lvl:integer_division@L4#0 (0.20)
     lvl:integer_division@L0#4 -> shown (0.42) "The (double) turns the whole division into a decimal division —; so sum / count keeps its fraction and avg is 3.5"
     lvl:integer_division@L2#0 -> not applied (0.00) ""
     lvl:integer_division@L4#0 -> not applied (0.00) ""
-  explicit_cast (misconceptions): 6 candidates -> kept mis:explicit_cast->CastAfterIntDivision (0.60), mis:explicit_cast->CastAppliesToWholeExpression (0.25), mis:explicit_cast->LaterDoubleLiteralFixesDivision (0.15)
+  explicit_cast (misconceptions): 6 candidates -> kept mis:explicit_cast->CastAfterIntDivision (0.60), mis:explicit_cast->CastAppliesToWholeExpression (0.30), mis:explicit_cast->LaterDoubleLiteralFixesDivision (0.10)
     mis:explicit_cast->CastAfterIntDivision -> held (0.55) "The (double) turns the whole division into a decimal division —; so sum / count keeps its fraction and avg is 3.5"
     mis:explicit_cast->CastAppliesToWholeExpression -> not applied (0.00) ""
     mis:explicit_cast->LaterDoubleLiteralFixesDivision -> not applied (0.00) ""
@@ -27,7 +27,7 @@ start concepts (3): integer_division, explicit_cast, arithmetic_operators
     lvl:arithmetic_operators@L2#1 -> not applied (0.00) ""
     lvl:arithmetic_operators@L4#0 -> not applied (0.00) ""
     lvl:arithmetic_operators@L0#0 -> not applied (0.00) ""
-  kept: mis:integer_division->CastAfterIntDivision [held, tier 0, 0.65], mis:explicit_cast->CastAfterIntDivision [held, tier 0, 0.55], lvl:integer_division@L0#4 [shown, tier 2, 0.42]
+  kept: mis:integer_division->CastAfterIntDivision [held, tier 0, 0.56], mis:explicit_cast->CastAfterIntDivision [held, tier 0, 0.55], lvl:integer_division@L0#4 [shown, tier 2, 0.42]
   clause coverage: c1 <- mis:integer_division->CastAfterIntDivision; c2 <- mis:integer_division->CastAfterIntDivision
   not yet read: pre:arithmetic_operators->expression, pre:arithmetic_operators->integer_division, pre:integer_division->explicit_cast, pre:type_conversion->explicit_cast
 --- depth 2: current concepts ['integer_division', 'explicit_cast', 'arithmetic_operators']
@@ -52,21 +52,21 @@ start concepts (3): integer_division, explicit_cast, arithmetic_operators
     lvl:expression@L0#0 -> shown (0.28) "so sum / count keeps its fraction and avg is 3.5"
     lvl:expression@L3#1 -> not applied (0.00) ""
     lvl:expression@L3#2 -> not applied (0.00) ""
-  type_conversion (misconceptions): 3 candidates -> kept mis:type_conversion->TargetTyping (0.80), mis:type_conversion->NarrowingAssignmentAllowed (0.10), mis:type_conversion->NoCastIfSameSize (0.10)
-    mis:type_conversion->TargetTyping -> held (0.68) "The (double) turns the whole division into a decimal division —; so sum / count keeps its fraction and avg is 3.5"
+  type_conversion (misconceptions): 3 candidates -> kept mis:type_conversion->TargetTyping (0.90), mis:type_conversion->NarrowingAssignmentAllowed (0.05), mis:type_conversion->NoCastIfSameSize (0.05)
+    mis:type_conversion->TargetTyping -> held (0.77) "The (double) turns the whole division into a decimal division —; so sum / count keeps its fraction and avg is 3.5"
     mis:type_conversion->NarrowingAssignmentAllowed -> not applied (0.00) ""
     mis:type_conversion->NoCastIfSameSize -> not applied (0.00) ""
   type_conversion (level ways): 18 candidates -> kept lvl:type_conversion@L4#3 (0.40), lvl:type_conversion@L4#0 (0.35), lvl:type_conversion@L0#0 (0.25)
     lvl:type_conversion@L4#3 -> not applied (0.00) ""
     lvl:type_conversion@L4#0 -> not applied (0.00) ""
     lvl:type_conversion@L0#0 -> shown (0.17) "The (double) turns the whole division into a decimal division —; so sum / count keeps its fraction and avg is 3.5"
-  kept: mis:type_conversion->TargetTyping [held, tier 0, 0.68], mis:expression->TargetTyping [held, tier 0, 0.59], lvl:expression@L0#0 [shown, tier 2, 0.28]
+  kept: mis:type_conversion->TargetTyping [held, tier 0, 0.77], mis:expression->TargetTyping [held, tier 0, 0.59], lvl:expression@L0#0 [shown, tier 2, 0.28]
   clause coverage: c1 <- mis:integer_division->CastAfterIntDivision; c2 <- mis:integer_division->CastAfterIntDivision
   not yet read: pre:primitive_type->type_conversion
   held: mis:type_conversion->TargetTyping, mis:expression->TargetTyping, mis:explicit_cast->CastAfterIntDivision; filed at the dependent concept: mis:integer_division->CastAfterIntDivision
-  shadows: mis:expression->TargetTyping (shadow of mis:type_conversion->TargetTyping), mis:type_conversion->TargetTyping (shadow of mis:explicit_cast->CastAfterIntDivision)
+  shadows: mis:expression->TargetTyping (shadow of mis:type_conversion->TargetTyping), mis:type_conversion->TargetTyping (shadow of mis:explicit_cast->CastAfterIntDivision), mis:integer_division->CastAfterIntDivision (shadow of mis:explicit_cast->CastAfterIntDivision)
   root-cause walk: held on ['explicit_cast'], broken at [] (consequences: pre:integer_division->explicit_cast, pre:arithmetic_operators->expression, pre:type_conversion->explicit_cast, pre:arithmetic_operators->integer_division), prerequisites {'expression': ['arithmetic_operators'], 'integer_division': ['arithmetic_operators'], 'explicit_cast': ['integer_division', 'type_conversion'], 'type_conversion': ['primitive_type'], 'println': ['statement']}
   level explicit_cast: L0 via misconception "The (double) turns the whole division into a decimal division —; so sum / count keeps its fraction and avg is 3.5"
   level expression: L0 via everyday_reading "so sum / count keeps its fraction and avg is 3.5"
-  level integer_division: L0 via misconception "The (double) turns the whole division into a decimal division —; so sum / count keeps its fraction and avg is 3.5"
+  level integer_division: L0 via inconsistent_trace "The (double) turns the whole division into a decimal division —; so sum / count keeps its fraction and avg is 3.5"
   level type_conversion: L0 via everyday_reading "The (double) turns the whole division into a decimal division —; so sum / count keeps its fraction and avg is 3.5"

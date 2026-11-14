@@ -610,9 +610,9 @@ Edges offered:
 
 Prune: the model's reply (edge id and score; the kept edges sum to 1):
 ```
-mis:expression->TargetTyping (0.60), mis:expression->AssignmentIsEquation (0.20), mis:expression->VariablesHoldExpressions (0.20)
+mis:expression->TargetTyping (0.60), mis:expression->AssignmentIsEquation (0.25), mis:expression->VariablesHoldExpressions (0.15)
 ```
-Kept by pruning: mis:expression->TargetTyping (0.60), mis:expression->AssignmentIsEquation (0.20), mis:expression->VariablesHoldExpressions (0.20)
+Kept by pruning: mis:expression->TargetTyping (0.60), mis:expression->AssignmentIsEquation (0.25), mis:expression->VariablesHoldExpressions (0.15)
 
 Label prompt for the misconception / error edges (judged together). The model saw the program, the question, the numbered clauses, and these edges with their wrong rule and right rule:
 | edge |
@@ -631,8 +631,8 @@ Parsed labels:
 | edge | label | prune score | confidence | score | clauses | words |
 |---|---|---|---|---|---|---|
 | mis:expression->TargetTyping | not applied |  |  | 0.0 |  |  |
-| mis:expression->AssignmentIsEquation | correct | 0.2 | 0.6 | 0.12 | c2 | Adding 1 to 2147483647 gives 2147483648, and Java just stores the bigger number in big |
-| mis:expression->VariablesHoldExpressions | correct | 0.2 | 0.6 | 0.12 | c2 | Adding 1 to 2147483647 gives 2147483648, and Java just stores the bigger number in big |
+| mis:expression->AssignmentIsEquation | correct | 0.25 | 0.6 | 0.15 | c2 | Adding 1 to 2147483647 gives 2147483648, and Java just stores the bigger number in big |
+| mis:expression->VariablesHoldExpressions | correct | 0.15 | 0.6 | 0.09 | c2 | Adding 1 to 2147483647 gives 2147483648, and Java just stores the bigger number in big |
 
 #### expression, level ways: 19 edges offered
 Edges offered:
@@ -728,7 +728,7 @@ Root-cause walk: held on ['overflow'], broken at [] (consequences: pre:int->over
 - overflow: L0 via misconception "It prints 2147483648; Adding 1 to 2147483647 gives 2147483648, and Java just stores the bigger number in big; because it makes room for it automatically"
 - println: L2 via output_prediction "It prints 2147483648"
 
-**Stop:** sufficient at depth 3; prompts {'prune': 13, 'label': 23}, fresh model calls 0, cache hits 36
+**Stop:** sufficient at depth 3; prompts {'prune': 13, 'label': 23}, fresh model calls 1, cache hits 35
 
 ### Held misconceptions
 | concept | misconception | kind | quote | score | shares_evidence_with |
@@ -779,8 +779,8 @@ Figure 7 (final picture): C:\Users\magnu\OneDrive\Desktop\ES_VIterbi_Personalize
 | 2 | arithmetic_operators | pre:arithmetic_operators->expression | prerequisite | confirmed | 1.0 | 0.6 | 0.6 | [2] | Adding 1 to 2147483647 gives 2147483648, and Java just stores the bigger number in big |
 | 3 | int | mis:int->IntOverflowWidensAutomatically | misconception | held | 0.95 | 0.97 | 0.9215 | [1, 2, 3] | It prints 2147483648; Adding 1 to 2147483647 gives 2147483648, and Java just stores the bigger number in big; because it makes room for it automatically |
 | 3 | int | lvl:int@L0#0 | level | shown | 0.5 | 0.85 | 0.425 | [1, 2, 3] | It prints 2147483648; Adding 1 to 2147483647 gives 2147483648, and Java just stores the bigger number in big; because it makes room for it automatically |
-| 3 | expression | mis:expression->AssignmentIsEquation | misconception | correct | 0.2 | 0.6 | 0.12 | [2] | Adding 1 to 2147483647 gives 2147483648, and Java just stores the bigger number in big |
-| 3 | expression | mis:expression->VariablesHoldExpressions | misconception | correct | 0.2 | 0.6 | 0.12 | [2] | Adding 1 to 2147483647 gives 2147483648, and Java just stores the bigger number in big |
+| 3 | expression | mis:expression->AssignmentIsEquation | misconception | correct | 0.25 | 0.6 | 0.15 | [2] | Adding 1 to 2147483647 gives 2147483648, and Java just stores the bigger number in big |
+| 3 | expression | mis:expression->VariablesHoldExpressions | misconception | correct | 0.15 | 0.6 | 0.09 | [2] | Adding 1 to 2147483647 gives 2147483648, and Java just stores the bigger number in big |
 | 3 | expression | lvl:expression@L0#0 | level | shown | 0.5 | 0.85 | 0.425 | [1, 2, 3] | It prints 2147483648; Adding 1 to 2147483647 gives 2147483648, and Java just stores the bigger number in big; because it makes room for it automatically |
 
 ## 6. The paths (what the keep step kept, depth by depth)
@@ -847,10 +847,10 @@ start concepts (3): arithmetic_operators, overflow, println
     lvl:int@L0#0 -> shown (0.42) "It prints 2147483648; Adding 1 to 2147483647 gives 2147483648, and Java just stores the bigger number in big; because it makes room for it automatically"
     lvl:int@L2#2 -> not applied (0.00) ""
     lvl:int@L3#3 -> not applied (0.00) ""
-  expression (misconceptions): 8 candidates -> kept mis:expression->TargetTyping (0.60), mis:expression->AssignmentIsEquation (0.20), mis:expression->VariablesHoldExpressions (0.20)
+  expression (misconceptions): 8 candidates -> kept mis:expression->TargetTyping (0.60), mis:expression->AssignmentIsEquation (0.25), mis:expression->VariablesHoldExpressions (0.15)
     mis:expression->TargetTyping -> not applied (0.00) ""
-    mis:expression->AssignmentIsEquation -> correct (0.12) "Adding 1 to 2147483647 gives 2147483648, and Java just stores the bigger number in big"
-    mis:expression->VariablesHoldExpressions -> correct (0.12) "Adding 1 to 2147483647 gives 2147483648, and Java just stores the bigger number in big"
+    mis:expression->AssignmentIsEquation -> correct (0.15) "Adding 1 to 2147483647 gives 2147483648, and Java just stores the bigger number in big"
+    mis:expression->VariablesHoldExpressions -> correct (0.09) "Adding 1 to 2147483647 gives 2147483648, and Java just stores the bigger number in big"
   expression (level ways): 19 candidates -> kept lvl:expression@L0#0 (0.50), lvl:expression@L2#1 (0.30), lvl:expression@L3#1 (0.20)
     lvl:expression@L0#0 -> shown (0.42) "It prints 2147483648; Adding 1 to 2147483647 gives 2147483648, and Java just stores the bigger number in big; because it makes room for it automatically"
     lvl:expression@L2#1 -> not applied (0.00) ""
@@ -1080,7 +1080,7 @@ start concepts (3): arithmetic_operators, overflow, println
    "score": 0.9215,
    "logic": "An int result that is too large is automatically stored as a bigger number.",
    "twin_logic": "int arithmetic is 32-bit; a result outside the range wraps around.",
-   "role": "primary"
+   "role": "context"
   },
   {
    "depth": 3,
@@ -1278,7 +1278,7 @@ start concepts (3): arithmetic_operators, overflow, println
    "score": 0.9215,
    "logic": "An int result that is too large is automatically stored as a bigger number.",
    "twin_logic": "int arithmetic is 32-bit; a result outside the range wraps around.",
-   "role": "primary"
+   "role": "context"
   },
   {
    "depth": 3,
@@ -1313,8 +1313,8 @@ start concepts (3): arithmetic_operators, overflow, println
    ],
    "quote": "Adding 1 to 2147483647 gives 2147483648, and Java just stores the bigger number in big",
    "confidence": 0.6,
-   "prune_score": 0.2,
-   "score": 0.12,
+   "prune_score": 0.25,
+   "score": 0.15,
    "logic": "An assignment states a lasting equality between its two sides, so y = x - y can be solved like the equation x = 2y and x = x + 5 relates two equal quantities.",
    "twin_logic": "An assignment is a one-time action: evaluate the right side with current values, then store the result in the left variable.",
    "role": "context"
@@ -1331,8 +1331,8 @@ start concepts (3): arithmetic_operators, overflow, println
    ],
    "quote": "Adding 1 to 2147483647 gives 2147483648, and Java just stores the bigger number in big",
    "confidence": 0.6,
-   "prune_score": 0.2,
-   "score": 0.12,
+   "prune_score": 0.15,
+   "score": 0.09,
    "logic": "= stores the expression itself, not its computed value",
    "twin_logic": "y = x + k; stores the value that x + k has at that moment, so later changes to x do not change y.",
    "role": "context"
@@ -1367,8 +1367,8 @@ start concepts (3): arithmetic_operators, overflow, println
  "unexplained_clauses": [],
  "stop_reason": "sufficient",
  "depth_reached": 3,
- "llm_calls": 0,
- "llm_cache_hits": 36,
+ "llm_calls": 1,
+ "llm_cache_hits": 35,
  "llm_calls_by_step": {
   "prune": 13,
   "label": 23

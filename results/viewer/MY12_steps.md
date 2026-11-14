@@ -600,9 +600,9 @@ Edges offered:
 
 Prune: the model's reply (edge id and score; the kept edges sum to 1):
 ```
-mis:expression->TargetTyping (0.60), mis:expression->NoAtomicExpression (0.25), mis:expression->VariablesHoldExpressions (0.15)
+mis:expression->TargetTyping (0.45), mis:expression->NoAtomicExpression (0.35), mis:expression->VariablesHoldExpressions (0.20)
 ```
-Kept by pruning: mis:expression->TargetTyping (0.60), mis:expression->NoAtomicExpression (0.25), mis:expression->VariablesHoldExpressions (0.15)
+Kept by pruning: mis:expression->TargetTyping (0.45), mis:expression->NoAtomicExpression (0.35), mis:expression->VariablesHoldExpressions (0.20)
 
 Label prompt for the misconception / error edges (judged together). The model saw the program, the question, the numbered clauses, and these edges with their wrong rule and right rule:
 | edge |
@@ -706,27 +706,27 @@ mis:char->CharNotNumeric [held, tier 0, 0.97], lvl:char@L0#0 [shown, tier 2, 0.5
 
 Figure 6 (the graph after depth 3): C:\Users\magnu\OneDrive\Desktop\ES_VIterbi_Personalized_Learning\results\viewer\MY12_figure06.png
 
-Held set after the one-fault rules: mis:char_arithmetic->CharNotNumeric; filed at the dependent concept: mis:char->CharNotNumeric
+Held set after the one-fault rules: mis:char->CharNotNumeric; filed at the dependent concept: mis:char_arithmetic->CharNotNumeric
 
-Shadows (a held label on a prerequisite, on a generic concept, or at a concept where the graph attaches the misconception as context, resting on the words of a stronger label at the specific or primary concept, is one wrong sentence read twice; it marks no root cause and sets no level): mis:char->CharNotNumeric (shadow of mis:char_arithmetic->CharNotNumeric)
+Shadows (a held label on a prerequisite, on a generic concept, or at a concept where the graph attaches the misconception as context, resting on the words of a stronger label at the specific or primary concept, is one wrong sentence read twice; it marks no root cause and sets no level): mis:char_arithmetic->CharNotNumeric (shadow of mis:char->CharNotNumeric)
 
 ## 4. Diagnosis (rules over the labelled graph, no model)
-Root-cause walk: held on ['char_arithmetic'], broken at [] (consequences: pre:char->char_arithmetic, pre:arithmetic_operators->expression), prerequisites {'expression': ['arithmetic_operators'], 'char_arithmetic': ['char'], 'println': ['statement']}
-- char: L0 via everyday_reading "A letter is not a number; so Java cannot add 1 to it, and this line gives a compile error"
-- char_arithmetic: L0 via misconception "A letter is not a number; so Java cannot add 1 to it, and this line gives a compile error"
+Root-cause walk: held on ['char'], broken at [] (consequences: pre:char->char_arithmetic, pre:arithmetic_operators->expression), prerequisites {'expression': ['arithmetic_operators'], 'char_arithmetic': ['char'], 'println': ['statement']}
+- char: L0 via misconception "A letter is not a number; so Java cannot add 1 to it, and this line gives a compile error"
+- char_arithmetic: L0 via everyday_reading "A letter is not a number; so Java cannot add 1 to it, and this line gives a compile error"
 - expression: L4 via diagnose_an_error "A letter is not a number; so Java cannot add 1 to it, and this line gives a compile error"
 
-**Stop:** max depth at depth 3; prompts {'prune': 13, 'label': 23}, fresh model calls 3, cache hits 33
+**Stop:** max depth at depth 3; prompts {'prune': 13, 'label': 23}, fresh model calls 1, cache hits 35
 
 ### Held misconceptions
 | concept | misconception | kind | quote | score | shares_evidence_with |
 |---|---|---|---|---|---|
-| char_arithmetic | CharNotNumeric | misconception | A letter is not a number; so Java cannot add 1 to it, and this line gives a compile error | 0.95 |  |
+| char | CharNotNumeric | misconception | A letter is not a number; so Java cannot add 1 to it, and this line gives a compile error | 0.97 |  |
 
 ### Shadowed labels (held in the reading, folded into the label they shadow; not faults of their own)
 | concept | misconception | shadow_of | quote | score |
 |---|---|---|---|---|
-| char | CharNotNumeric | mis:char_arithmetic->CharNotNumeric | A letter is not a number; so Java cannot add 1 to it, and this line gives a compile error | 0.97 |
+| char_arithmetic | CharNotNumeric | mis:char->CharNotNumeric | A letter is not a number; so Java cannot add 1 to it, and this line gives a compile error | 0.95 |
 
 ### Broken concept edges
 | edge | quote | score | consequence_of |
@@ -734,13 +734,13 @@ Root-cause walk: held on ['char_arithmetic'], broken at [] (consequences: pre:ch
 | pre:char->char_arithmetic | A letter is not a number; so Java cannot add 1 to it, and this line gives a compile error | 0.95 | mis:char_arithmetic->CharNotNumeric |
 | pre:arithmetic_operators->expression | A letter is not a number; so Java cannot add 1 to it, and this line gives a compile error | 0.8 | mis:char_arithmetic->CharNotNumeric |
 
-### Root cause: char_arithmetic / CharNotNumeric
+### Root cause: char / CharNotNumeric
 
 ### Level per concept
 | concept | level | way | misconception | source | quote | rule | also | note |
 |---|---|---|---|---|---|---|---|---|
-| char | L0 | everyday_reading |  | level_way | A letter is not a number; so Java cannot add 1 to it, and this line gives a compile error |  |  |  |
-| char_arithmetic | L0 | misconception | CharNotNumeric | level_mis_links | A letter is not a number; so Java cannot add 1 to it, and this line gives a compile error | wrong rule: char is not a numeric type. Right rule: A char is encoded as a 16-bit integer, so arithmetic such as 'b' + 'c' or 'a' + 4 works on the character codes. |  |  |
+| char | L0 | misconception | CharNotNumeric | level_mis_links | A letter is not a number; so Java cannot add 1 to it, and this line gives a compile error | wrong rule: char is not a numeric type. Right rule: A char is encoded as a 16-bit integer, so arithmetic such as 'b' + 'c' or 'a' + 4 works on the character codes. |  |  |
+| char_arithmetic | L0 | everyday_reading |  | level_way | A letter is not a number; so Java cannot add 1 to it, and this line gives a compile error |  |  |  |
 | expression | L4 | diagnose_an_error |  | level_way | A letter is not a number; so Java cannot add 1 to it, and this line gives a compile error |  |  |  |
 
 ### Overall level: L0
@@ -827,7 +827,7 @@ start concepts (3): arithmetic_operators, char_arithmetic, println
     lvl:char@L0#0 -> shown (0.56) "A letter is not a number; so Java cannot add 1 to it, and this line gives a compile error"
     lvl:char@L3#0 -> not applied (0.00) ""
     lvl:char@L2#0 -> not applied (0.00) ""
-  expression (misconceptions): 8 candidates -> kept mis:expression->TargetTyping (0.60), mis:expression->NoAtomicExpression (0.25), mis:expression->VariablesHoldExpressions (0.15)
+  expression (misconceptions): 8 candidates -> kept mis:expression->TargetTyping (0.45), mis:expression->NoAtomicExpression (0.35), mis:expression->VariablesHoldExpressions (0.20)
     mis:expression->TargetTyping -> not applied (0.00) ""
     mis:expression->NoAtomicExpression -> not applied (0.00) ""
     mis:expression->VariablesHoldExpressions -> not applied (0.00) ""
@@ -837,11 +837,11 @@ start concepts (3): arithmetic_operators, char_arithmetic, println
     lvl:expression@L0#0 -> not applied (0.00) ""
   kept: mis:char->CharNotNumeric [held, tier 0, 0.97], lvl:char@L0#0 [shown, tier 2, 0.56], lvl:expression@L4#4 [shown, tier 2, 0.36]
   clause coverage: c1 uncovered; c2 <- mis:char_arithmetic->CharNotNumeric; c3 <- mis:char_arithmetic->CharNotNumeric
-  held: mis:char_arithmetic->CharNotNumeric; filed at the dependent concept: mis:char->CharNotNumeric
-  shadows: mis:char->CharNotNumeric (shadow of mis:char_arithmetic->CharNotNumeric)
-  root-cause walk: held on ['char_arithmetic'], broken at [] (consequences: pre:char->char_arithmetic, pre:arithmetic_operators->expression), prerequisites {'expression': ['arithmetic_operators'], 'char_arithmetic': ['char'], 'println': ['statement']}
-  level char: L0 via everyday_reading "A letter is not a number; so Java cannot add 1 to it, and this line gives a compile error"
-  level char_arithmetic: L0 via misconception "A letter is not a number; so Java cannot add 1 to it, and this line gives a compile error"
+  held: mis:char->CharNotNumeric; filed at the dependent concept: mis:char_arithmetic->CharNotNumeric
+  shadows: mis:char_arithmetic->CharNotNumeric (shadow of mis:char->CharNotNumeric)
+  root-cause walk: held on ['char'], broken at [] (consequences: pre:char->char_arithmetic, pre:arithmetic_operators->expression), prerequisites {'expression': ['arithmetic_operators'], 'char_arithmetic': ['char'], 'println': ['statement']}
+  level char: L0 via misconception "A letter is not a number; so Java cannot add 1 to it, and this line gives a compile error"
+  level char_arithmetic: L0 via everyday_reading "A letter is not a number; so Java cannot add 1 to it, and this line gives a compile error"
   level expression: L4 via diagnose_an_error "A letter is not a number; so Java cannot add 1 to it, and this line gives a compile error"
 ```
 
@@ -868,21 +868,21 @@ start concepts (3): arithmetic_operators, char_arithmetic, println
  ],
  "held_misconceptions": [
   {
-   "concept": "char_arithmetic",
+   "concept": "char",
    "misconception": "CharNotNumeric",
    "kind": "misconception",
    "quote": "A letter is not a number; so Java cannot add 1 to it, and this line gives a compile error",
-   "score": 0.95
+   "score": 0.97
   }
  ],
  "error_evidence": [],
  "shadowed": [
   {
-   "concept": "char",
+   "concept": "char_arithmetic",
    "misconception": "CharNotNumeric",
-   "shadow_of": "mis:char_arithmetic->CharNotNumeric",
+   "shadow_of": "mis:char->CharNotNumeric",
    "quote": "A letter is not a number; so Java cannot add 1 to it, and this line gives a compile error",
-   "score": 0.97
+   "score": 0.95
   }
  ],
  "broken_edges": [
@@ -900,26 +900,26 @@ start concepts (3): arithmetic_operators, char_arithmetic, println
   }
  ],
  "root_cause": {
-  "concept": "char_arithmetic",
+  "concept": "char",
   "misconception": "CharNotNumeric"
  },
  "levels": {
   "char": {
    "level": "L0",
-   "way": "everyday_reading",
-   "quote": "A letter is not a number; so Java cannot add 1 to it, and this line gives a compile error",
-   "edge": "lvl:char@L0#0",
-   "source": "level_way",
-   "also_shown": []
-  },
-  "char_arithmetic": {
-   "level": "L0",
    "way": "misconception",
    "misconception": "CharNotNumeric",
    "quote": "A letter is not a number; so Java cannot add 1 to it, and this line gives a compile error",
-   "edge": "mis:char_arithmetic->CharNotNumeric",
+   "edge": "mis:char->CharNotNumeric",
    "rule": "wrong rule: char is not a numeric type. Right rule: A char is encoded as a 16-bit integer, so arithmetic such as 'b' + 'c' or 'a' + 4 works on the character codes.",
    "source": "level_mis_links"
+  },
+  "char_arithmetic": {
+   "level": "L0",
+   "way": "everyday_reading",
+   "quote": "A letter is not a number; so Java cannot add 1 to it, and this line gives a compile error",
+   "edge": "lvl:char_arithmetic@L0#0",
+   "source": "level_way",
+   "also_shown": []
   },
   "expression": {
    "level": "L4",
@@ -949,7 +949,7 @@ start concepts (3): arithmetic_operators, char_arithmetic, println
    "score": 0.95,
    "logic": "char is not a numeric type",
    "twin_logic": "A char is encoded as a 16-bit integer, so arithmetic such as 'b' + 'c' or 'a' + 4 works on the character codes.",
-   "role": "primary"
+   "role": "context"
   },
   {
    "depth": 1,
@@ -1087,7 +1087,7 @@ start concepts (3): arithmetic_operators, char_arithmetic, println
    "score": 0.95,
    "logic": "char is not a numeric type",
    "twin_logic": "A char is encoded as a 16-bit integer, so arithmetic such as 'b' + 'c' or 'a' + 4 works on the character codes.",
-   "role": "primary"
+   "role": "context"
   },
   {
    "depth": 1,
@@ -1216,8 +1216,8 @@ start concepts (3): arithmetic_operators, char_arithmetic, println
  ],
  "stop_reason": "max depth",
  "depth_reached": 3,
- "llm_calls": 3,
- "llm_cache_hits": 33,
+ "llm_calls": 1,
+ "llm_cache_hits": 35,
  "llm_calls_by_step": {
   "prune": 13,
   "label": 23

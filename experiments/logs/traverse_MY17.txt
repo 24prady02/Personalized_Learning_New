@@ -49,10 +49,10 @@ start concepts (3): array_traversal, for_loop, loop_control
   clause coverage: c1 <- mis:array_traversal->OffByOneBound; c2 <- mis:array_traversal->ElementBoundToOldIndex; c3 <- mis:array_traversal->OffByOneBound; c4 <- mis:array_traversal->OffByOneBound
   not yet read: own edges of length_field, own edges of loop_body, own edges of loop_variable
 --- depth 3: current concepts ['loop_variable', 'loop_control', 'length_field', 'array_traversal', 'loop_body', 'for_loop']
-  loop_variable (misconceptions): 7 candidates -> kept mis:loop_variable->LoopOutputSameEachPass (0.50), mis:loop_variable->LoopVariableLimitsValues (0.25), mis:loop_variable->LoopVariableLifetimeScope (0.25)
-    mis:loop_variable->LoopOutputSameEachPass -> correct (0.42) "The loop visits each index from 0 to a.length - 1 and adds that element to sum; so it prints Total: 12"
-    mis:loop_variable->LoopVariableLimitsValues -> correct (0.15) "so it prints Total: 12; so the loop runs once more and prints Total: 20, with no other change to the code"
-    mis:loop_variable->LoopVariableLifetimeScope -> not applied (0.00) ""
+  loop_variable (misconceptions): 7 candidates -> kept mis:loop_variable->LoopOutputSameEachPass (0.50), mis:loop_variable->LoopUpdateChangesDirection (0.25), mis:loop_variable->LoopVariableLimitsValues (0.25)
+    mis:loop_variable->LoopOutputSameEachPass -> correct (0.42) "The loop visits each index from 0 to a.length - 1 and adds that element to sum; so the loop runs once more and prints Total: 20, with no other change to the code"
+    mis:loop_variable->LoopUpdateChangesDirection -> correct (0.15) "The loop visits each index from 0 to a.length - 1 and adds that element to sum"
+    mis:loop_variable->LoopVariableLimitsValues -> correct (0.17) "so it prints Total: 12; so the loop runs once more and prints Total: 20, with no other change to the code"
   loop_variable (level ways): 13 candidates -> kept lvl:loop_variable@L2#1 (0.40), lvl:loop_variable@L3#2 (0.30), lvl:loop_variable@L4#0 (0.30)
     lvl:loop_variable@L2#1 -> shown (0.28) "The loop visits each index from 0 to a.length - 1 and adds that element to sum; so the loop runs once more and prints Total: 20, with no other change to the code"
     lvl:loop_variable@L3#2 -> shown (0.26) "The loop visits each index from 0 to a.length - 1 and adds that element to sum; so the loop runs once more and prints Total: 20, with no other change to the code"
@@ -70,10 +70,10 @@ start concepts (3): array_traversal, for_loop, loop_control
   array_traversal (concept edges): 2 candidates -> kept pre:for_loop->array_traversal (0.60), pre:indexing->array_traversal (0.40)
     pre:for_loop->array_traversal -> confirmed (0.56) "The loop visits each index from 0 to a.length - 1 and adds that element to sum; With 8 added, a.length becomes 4; so the loop runs once more and prints Total: 20, with no other change to the code"
     pre:indexing->array_traversal -> confirmed (0.36) "The loop visits each index from 0 to a.length - 1 and adds that element to sum; so the loop runs once more and prints Total: 20, with no other change to the code"
-  loop_body (misconceptions): 12 candidates -> kept mis:loop_body->StateChangeIgnoredAcrossPasses (0.45), mis:loop_body->LoopOutputSameEachPass (0.30), mis:loop_body->StatementAfterLoopInBody (0.25)
-    mis:loop_body->StateChangeIgnoredAcrossPasses -> correct (0.41) "The loop visits each index from 0 to a.length - 1 and adds that element to sum; so it prints Total: 12; so the loop runs once more and prints Total: 20, with no other change to the code"
+  loop_body (misconceptions): 12 candidates -> kept mis:loop_body->StateChangeIgnoredAcrossPasses (0.50), mis:loop_body->LoopOutputSameEachPass (0.30), mis:loop_body->StatementAfterLoopInBody (0.20)
+    mis:loop_body->StateChangeIgnoredAcrossPasses -> correct (0.45) "The loop visits each index from 0 to a.length - 1 and adds that element to sum; so it prints Total: 12; so the loop runs once more and prints Total: 20, with no other change to the code"
     mis:loop_body->LoopOutputSameEachPass -> correct (0.18) "The loop visits each index from 0 to a.length - 1 and adds that element to sum"
-    mis:loop_body->StatementAfterLoopInBody -> correct (0.19) "so it prints Total: 12; so the loop runs once more and prints Total: 20, with no other change to the code"
+    mis:loop_body->StatementAfterLoopInBody -> correct (0.15) "so it prints Total: 12; so the loop runs once more and prints Total: 20, with no other change to the code"
   loop_body (level ways): 14 candidates -> kept lvl:loop_body@L3#0 (0.40), lvl:loop_body@L2#1 (0.35), lvl:loop_body@L4#0 (0.25)
     lvl:loop_body@L3#0 -> shown (0.24) "The loop visits each index from 0 to a.length - 1 and adds that element to sum; so the loop runs once more and prints Total: 20, with no other change to the code"
     lvl:loop_body@L2#1 -> shown (0.24) "The loop visits each index from 0 to a.length - 1 and adds that element to sum; so the loop runs once more and prints Total: 20, with no other change to the code"

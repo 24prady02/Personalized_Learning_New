@@ -25,17 +25,24 @@
    "misconception": "CastAfterIntDivision",
    "kind": "misconception",
    "quote": "the cast comes first; so the division is a decimal one; so 7 / 2 is 3.5",
-   "score": 0.69
+   "score": 0.651
   }
  ],
  "error_evidence": [],
  "shadowed": [
   {
+   "concept": "integer_division",
+   "misconception": "CastAfterIntDivision",
+   "shadow_of": "mis:explicit_cast->CastAfterIntDivision",
+   "quote": "the cast comes first; so the division is a decimal one; so 7 / 2 is 3.5",
+   "score": 0.558
+  },
+  {
    "concept": "expression",
    "misconception": "OutsideInMethodNesting",
    "shadow_of": "mis:type_conversion->TargetTyping",
    "quote": "the cast comes first; so the division is a decimal one; so 7 / 2 is 3.5",
-   "score": 0.24
+   "score": 0.28
   },
   {
    "concept": "type_conversion",
@@ -103,12 +110,11 @@
   },
   "integer_division": {
    "level": "L0",
-   "way": "misconception",
-   "misconception": "CastAfterIntDivision",
+   "way": "inconsistent_trace",
    "quote": "the cast comes first; so the division is a decimal one; so 7 / 2 is 3.5",
-   "edge": "mis:integer_division->CastAfterIntDivision",
-   "rule": "wrong rule: (double) (3 / 5) is 0.6. Right rule: The integer division 3 / 5 = 0 happens before the cast, so the result is 0.0.",
-   "source": "level_mis_links"
+   "edge": "lvl:integer_division@L0#4",
+   "source": "level_way",
+   "also_shown": []
   },
   "primitive_type": {
    "level": "L3",
@@ -134,9 +140,9 @@
     5
    ],
    "quote": "the cast comes first; so the division is a decimal one; so 7 / 2 is 3.5",
-   "confidence": 0.92,
-   "prune_score": 0.75,
-   "score": 0.69,
+   "confidence": 0.93,
+   "prune_score": 0.7,
+   "score": 0.651,
    "logic": "(double) (3 / 5) is 0.6.",
    "twin_logic": "The integer division 3 / 5 = 0 happens before the cast, so the result is 0.0.",
    "role": "primary"
@@ -155,11 +161,11 @@
    ],
    "quote": "the cast comes first; so the division is a decimal one; so 7 / 2 is 3.5",
    "confidence": 0.93,
-   "prune_score": 0.7000000000000001,
-   "score": 0.651,
+   "prune_score": 0.6,
+   "score": 0.558,
    "logic": "(double) (3 / 5) is 0.6.",
    "twin_logic": "The integer division 3 / 5 = 0 happens before the cast, so the result is 0.0.",
-   "role": "primary"
+   "role": "context"
   },
   {
    "depth": 1,
@@ -275,8 +281,8 @@
    ],
    "quote": "the cast comes first; so the division is a decimal one; so 7 / 2 is 3.5",
    "confidence": 0.8,
-   "prune_score": 0.30000000000000004,
-   "score": 0.24,
+   "prune_score": 0.35,
+   "score": 0.28,
    "logic": "In f(g(x)), f runs first and then g runs.",
    "twin_logic": "In f(g(x)), g(x) is evaluated first and its result is passed to f.",
    "role": "context"
@@ -336,9 +342,9 @@
     5
    ],
    "quote": "the cast comes first; so the division is a decimal one; so 7 / 2 is 3.5",
-   "confidence": 0.92,
-   "prune_score": 0.75,
-   "score": 0.69,
+   "confidence": 0.93,
+   "prune_score": 0.7,
+   "score": 0.651,
    "logic": "(double) (3 / 5) is 0.6.",
    "twin_logic": "The integer division 3 / 5 = 0 happens before the cast, so the result is 0.0.",
    "role": "primary"
@@ -378,11 +384,11 @@
    ],
    "quote": "the cast comes first; so the division is a decimal one; so 7 / 2 is 3.5",
    "confidence": 0.93,
-   "prune_score": 0.7000000000000001,
-   "score": 0.651,
+   "prune_score": 0.6,
+   "score": 0.558,
    "logic": "(double) (3 / 5) is 0.6.",
    "twin_logic": "The integer division 3 / 5 = 0 happens before the cast, so the result is 0.0.",
-   "role": "primary"
+   "role": "context"
   },
   {
    "depth": 1,
@@ -499,8 +505,8 @@
    ],
    "quote": "the cast comes first; so the division is a decimal one; so 7 / 2 is 3.5",
    "confidence": 0.8,
-   "prune_score": 0.30000000000000004,
-   "score": 0.24,
+   "prune_score": 0.35,
+   "score": 0.28,
    "logic": "In f(g(x)), f runs first and then g runs.",
    "twin_logic": "In f(g(x)), g(x) is evaluated first and its result is passed to f.",
    "role": "context"
@@ -597,8 +603,8 @@
  ],
  "stop_reason": "half_stop",
  "depth_reached": 4,
- "llm_calls": 9,
- "llm_cache_hits": 52,
+ "llm_calls": 7,
+ "llm_cache_hits": 54,
  "llm_calls_by_step": {
   "prune": 22,
   "label": 39

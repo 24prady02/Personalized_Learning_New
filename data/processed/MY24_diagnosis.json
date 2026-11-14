@@ -281,11 +281,11 @@
    ],
    "quote": "+ is worked out left to right",
    "confidence": 0.6,
-   "prune_score": 0.35,
-   "score": 0.21,
+   "prune_score": 0.4,
+   "score": 0.24,
    "logic": "2 + 3 + \"bc\" and \"bc\" + 2 + 3 give the same text.",
    "twin_logic": "+ is evaluated left to right: 2 + 3 + \"bc\" is \"5bc\" but \"bc\" + 2 + 3 is \"bc23\".",
-   "role": "primary"
+   "role": "context"
   },
   {
    "depth": 1,
@@ -598,8 +598,8 @@
  "unexplained_clauses": [],
  "stop_reason": "sufficient",
  "depth_reached": 3,
- "llm_calls": 3,
- "llm_cache_hits": 35,
+ "llm_calls": 2,
+ "llm_cache_hits": 36,
  "llm_calls_by_step": {
   "prune": 13,
   "label": 25

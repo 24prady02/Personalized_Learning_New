@@ -88,6 +88,24 @@
   },
   {
    "depth": 1,
+   "source": "explicit_cast",
+   "edge": "mis:explicit_cast->CastRounds",
+   "target": "CastRounds",
+   "kind": "misconception",
+   "label": "correct",
+   "clauses": [
+    1
+   ],
+   "quote": "n is a whole number from 1 to 6, for example 4",
+   "confidence": 0.8,
+   "prune_score": 0.7000000000000001,
+   "score": 0.56,
+   "logic": "(int) 2.7 evaluates to 3.",
+   "twin_logic": "A cast to int discards the fractional part (rounds toward zero, so (int) -2.7 is -2); Math.round rounds to the nearest integer.",
+   "role": "primary"
+  },
+  {
+   "depth": 1,
    "source": "math_random",
    "edge": "lvl:math_random@L2#1",
    "target": "math_random@L2",
@@ -104,24 +122,6 @@
    "twin_logic": null,
    "level": "L2",
    "way": "output_prediction"
-  },
-  {
-   "depth": 1,
-   "source": "explicit_cast",
-   "edge": "mis:explicit_cast->CastRounds",
-   "target": "CastRounds",
-   "kind": "misconception",
-   "label": "correct",
-   "clauses": [
-    1
-   ],
-   "quote": "n is a whole number from 1 to 6, for example 4",
-   "confidence": 0.8,
-   "prune_score": 0.6000000000000001,
-   "score": 0.48,
-   "logic": "(int) 2.7 evaluates to 3.",
-   "twin_logic": "A cast to int discards the fractional part (rounds toward zero, so (int) -2.7 is -2); Math.round rounds to the nearest integer.",
-   "role": "primary"
   },
   {
    "depth": 2,
@@ -203,8 +203,8 @@
    ],
    "quote": "n is a whole number from 1 to 6, for example 4",
    "confidence": 0.75,
-   "prune_score": 0.9,
-   "score": 0.675,
+   "prune_score": 0.8,
+   "score": 0.6,
    "logic": "(int) 2.7 evaluates to 3.",
    "twin_logic": "A cast to int discards the fractional part (rounds toward zero, so (int) -2.7 is -2); Math.round rounds to the nearest integer.",
    "role": "context"
@@ -299,8 +299,8 @@
    ],
    "quote": "n is a whole number from 1 to 6, for example 4",
    "confidence": 0.8,
-   "prune_score": 0.6000000000000001,
-   "score": 0.48,
+   "prune_score": 0.7000000000000001,
+   "score": 0.56,
    "logic": "(int) 2.7 evaluates to 3.",
    "twin_logic": "A cast to int discards the fractional part (rounds toward zero, so (int) -2.7 is -2); Math.round rounds to the nearest integer.",
    "role": "primary"
@@ -460,10 +460,28 @@
    ],
    "quote": "n is a whole number from 1 to 6, for example 4",
    "confidence": 0.75,
-   "prune_score": 0.9,
-   "score": 0.675,
+   "prune_score": 0.8,
+   "score": 0.6,
    "logic": "(int) 2.7 evaluates to 3.",
    "twin_logic": "A cast to int discards the fractional part (rounds toward zero, so (int) -2.7 is -2); Math.round rounds to the nearest integer.",
+   "role": "context"
+  },
+  {
+   "depth": 3,
+   "source": "expression",
+   "edge": "mis:expression->VariablesHoldExpressions",
+   "target": "VariablesHoldExpressions",
+   "kind": "misconception",
+   "label": "correct",
+   "clauses": [
+    1
+   ],
+   "quote": "n is a whole number from 1 to 6, for example 4",
+   "confidence": 0.6,
+   "prune_score": 0.45,
+   "score": 0.27,
+   "logic": "= stores the expression itself, not its computed value",
+   "twin_logic": "y = x + k; stores the value that x + k has at that moment, so later changes to x do not change y.",
    "role": "context"
   },
   {
@@ -547,8 +565,8 @@
  "unexplained_clauses": [],
  "stop_reason": "max depth",
  "depth_reached": 4,
- "llm_calls": 1,
- "llm_cache_hits": 44,
+ "llm_calls": 6,
+ "llm_cache_hits": 39,
  "llm_calls_by_step": {
   "prune": 16,
   "label": 29

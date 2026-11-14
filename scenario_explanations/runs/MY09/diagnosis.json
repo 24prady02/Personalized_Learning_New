@@ -31,7 +31,7 @@
   {
    "concept": "expression",
    "misconception": "TargetTyping",
-   "shadow_of": "mis:type_conversion->TargetTyping",
+   "shadow_of": "mis:integer_division->TargetTyping",
    "quote": "Because d is a double, Java knows the result should have decimals; so it does the division a / b with decimals and gets 3.0",
    "score": 0.76
   },
@@ -40,7 +40,7 @@
    "misconception": "TargetTyping",
    "shadow_of": "mis:integer_division->TargetTyping",
    "quote": "Because d is a double, Java knows the result should have decimals; so it does the division a / b with decimals and gets 3.0",
-   "score": 0.828
+   "score": 0.736
   }
  ],
  "broken_edges": [
@@ -175,25 +175,6 @@
   },
   {
    "depth": 2,
-   "source": "type_conversion",
-   "edge": "mis:type_conversion->TargetTyping",
-   "target": "TargetTyping",
-   "kind": "misconception",
-   "label": "held",
-   "clauses": [
-    2,
-    3
-   ],
-   "quote": "Because d is a double, Java knows the result should have decimals; so it does the division a / b with decimals and gets 3.0",
-   "confidence": 0.92,
-   "prune_score": 0.9,
-   "score": 0.828,
-   "logic": "The type of a numerical expression depends on the type expected by the surrounding context, so double d = a / b; keeps the fraction.",
-   "twin_logic": "The type of a numerical expression is determined by the expression, so double d = a / b; with int a and b still divides as ints.",
-   "role": "context"
-  },
-  {
-   "depth": 2,
    "source": "arithmetic_operators",
    "edge": "pre:arithmetic_operators->expression",
    "target": "expression",
@@ -226,6 +207,25 @@
    "confidence": 0.95,
    "prune_score": 0.8,
    "score": 0.76,
+   "logic": "The type of a numerical expression depends on the type expected by the surrounding context, so double d = a / b; keeps the fraction.",
+   "twin_logic": "The type of a numerical expression is determined by the expression, so double d = a / b; with int a and b still divides as ints.",
+   "role": "context"
+  },
+  {
+   "depth": 2,
+   "source": "type_conversion",
+   "edge": "mis:type_conversion->TargetTyping",
+   "target": "TargetTyping",
+   "kind": "misconception",
+   "label": "held",
+   "clauses": [
+    2,
+    3
+   ],
+   "quote": "Because d is a double, Java knows the result should have decimals; so it does the division a / b with decimals and gets 3.0",
+   "confidence": 0.92,
+   "prune_score": 0.8,
+   "score": 0.736,
    "logic": "The type of a numerical expression depends on the type expected by the surrounding context, so double d = a / b; keeps the fraction.",
    "twin_logic": "The type of a numerical expression is determined by the expression, so double d = a / b; with int a and b still divides as ints.",
    "role": "context"
@@ -397,8 +397,8 @@
    ],
    "quote": "Because d is a double, Java knows the result should have decimals; so it does the division a / b with decimals and gets 3.0",
    "confidence": 0.92,
-   "prune_score": 0.9,
-   "score": 0.828,
+   "prune_score": 0.8,
+   "score": 0.736,
    "logic": "The type of a numerical expression depends on the type expected by the surrounding context, so double d = a / b; keeps the fraction.",
    "twin_logic": "The type of a numerical expression is determined by the expression, so double d = a / b; with int a and b still divides as ints.",
    "role": "context"
@@ -469,8 +469,8 @@
  "unexplained_clauses": [],
  "stop_reason": "half_stop",
  "depth_reached": 4,
- "llm_calls": 0,
- "llm_cache_hits": 50,
+ "llm_calls": 3,
+ "llm_cache_hits": 47,
  "llm_calls_by_step": {
   "prune": 18,
   "label": 32

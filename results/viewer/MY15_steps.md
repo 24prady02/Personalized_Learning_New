@@ -119,29 +119,29 @@ Edges offered:
 
 Prune: the model's reply (edge id and score; the kept edges sum to 1):
 ```
-mis:loop_control->ForUpdateBeforeBody (0.45), mis:loop_control->ForLoopPartSkipped (0.30), mis:loop_control->LoopStepAlwaysOne (0.25)
+mis:loop_control->ForUpdateBeforeBody (0.40), mis:loop_control->LoopStepAlwaysOne (0.30), mis:loop_control->LoopHeaderIsEquations (0.30)
 ```
-Kept by pruning: mis:loop_control->ForUpdateBeforeBody (0.45), mis:loop_control->ForLoopPartSkipped (0.30), mis:loop_control->LoopStepAlwaysOne (0.25)
+Kept by pruning: mis:loop_control->ForUpdateBeforeBody (0.40), mis:loop_control->LoopStepAlwaysOne (0.30), mis:loop_control->LoopHeaderIsEquations (0.30)
 
 Label prompt for the misconception / error edges (judged together). The model saw the program, the question, the numbered clauses, and these edges with their wrong rule and right rule:
 | edge |
 |---|
 | mis:loop_control->ForUpdateBeforeBody \| wrong rule: The update part of a for header (e.g. i = i - 4) runs before the body on each pass, so the first pass already sees the updated value. \| right rule: The update runs after the body, before the next condition test; the first pass uses the initial value. |
-| mis:loop_control->ForLoopPartSkipped \| wrong rule: A pass of a loop may leave out one of its parts (the condition test, the body, the update, or the initialization). \| right rule: Each pass of a for loop runs test, then body, then update, every time; the initialization runs once, at the start. |
 | mis:loop_control->LoopStepAlwaysOne \| wrong rule: A loop variable always goes up or down by 1, whatever the update says (so i = i - 4 is read as i--). \| right rule: The loop variable changes exactly as the update expression says (i += 2, i = i - 4, i *= 2, ...). |
+| mis:loop_control->LoopHeaderIsEquations \| wrong rule: The initialization, condition and update of a for header are equations that all hold at the same time. \| right rule: The three header parts are statements run at different moments: init once, then condition test, body, update, repeated. |
 Model's reply:
 ```
-mis:loop_control->ForUpdateBeforeBody | held | clauses: 2, 3, 4 | confidence: 0.9
-mis:loop_control->ForLoopPartSkipped | not applied | clauses: none | confidence: 0.6
-mis:loop_control->LoopStepAlwaysOne | not applied | clauses: none | confidence: 0.75
+mis:loop_control->ForUpdateBeforeBody | held | clauses: 2, 3 | confidence: 0.9
+mis:loop_control->LoopStepAlwaysOne | not applied | clauses: none | confidence: 0.7
+mis:loop_control->LoopHeaderIsEquations | not applied | clauses: none | confidence: 0.6
 ```
 
 Parsed labels:
 | edge | label | prune score | confidence | score | clauses | words |
 |---|---|---|---|---|---|---|
-| mis:loop_control->ForUpdateBeforeBody | held | 0.45 | 0.9 | 0.41 | c2, c3, c4 | Then i++ runs before the body and adds 2; so i is 3; So every pass prints the same thing, 3 |
-| mis:loop_control->ForLoopPartSkipped | not applied |  |  | 0.0 |  |  |
+| mis:loop_control->ForUpdateBeforeBody | held | 0.4 | 0.9 | 0.36 | c2, c3 | Then i++ runs before the body and adds 2; so i is 3 |
 | mis:loop_control->LoopStepAlwaysOne | not applied |  |  | 0.0 |  |  |
+| mis:loop_control->LoopHeaderIsEquations | not applied |  |  | 0.0 |  |  |
 
 #### loop_control, level ways: 19 edges offered
 Edges offered:
@@ -224,9 +224,9 @@ Edges offered:
 
 Prune: the model's reply (edge id and score; the kept edges sum to 1):
 ```
-mis:increment_operators->IncrementByTwo (0.45), mis:increment_operators->PreIncrementBeforeLoop (0.40), mis:increment_operators->IdiomOverridesCode (0.15)
+mis:increment_operators->IncrementByTwo (0.50), mis:increment_operators->PreIncrementBeforeLoop (0.35), mis:increment_operators->IdiomOverridesCode (0.15)
 ```
-Kept by pruning: mis:increment_operators->IncrementByTwo (0.45), mis:increment_operators->PreIncrementBeforeLoop (0.40), mis:increment_operators->IdiomOverridesCode (0.15)
+Kept by pruning: mis:increment_operators->IncrementByTwo (0.50), mis:increment_operators->PreIncrementBeforeLoop (0.35), mis:increment_operators->IdiomOverridesCode (0.15)
 
 Label prompt for the misconception / error edges (judged together). The model saw the program, the question, the numbered clauses, and these edges with their wrong rule and right rule:
 | edge |
@@ -244,8 +244,8 @@ mis:increment_operators->IdiomOverridesCode | not applied | clauses: none | conf
 Parsed labels:
 | edge | label | prune score | confidence | score | clauses | words |
 |---|---|---|---|---|---|---|
-| mis:increment_operators->IncrementByTwo | held | 0.45 | 0.95 | 0.43 | c2, c3 | Then i++ runs before the body and adds 2; so i is 3 |
-| mis:increment_operators->PreIncrementBeforeLoop | held | 0.4 | 0.7 | 0.28 | c2, c3, c4 | Then i++ runs before the body and adds 2; so i is 3; So every pass prints the same thing, 3 |
+| mis:increment_operators->IncrementByTwo | held | 0.5 | 0.95 | 0.47 | c2, c3 | Then i++ runs before the body and adds 2; so i is 3 |
+| mis:increment_operators->PreIncrementBeforeLoop | held | 0.35 | 0.7 | 0.24 | c2, c3, c4 | Then i++ runs before the body and adds 2; so i is 3; So every pass prints the same thing, 3 |
 | mis:increment_operators->IdiomOverridesCode | not applied |  |  | 0.0 |  |  |
 
 #### increment_operators, level ways: 16 edges offered
@@ -442,7 +442,7 @@ Parsed labels:
 
 **Kept on a path at this depth** (best N in tiers: held misconception / broken edge, then held error, then correct / confirmed / shown):
 
-mis:increment_operators->IncrementByTwo [held, tier 0, 0.43], mis:loop_control->ForUpdateBeforeBody [held, tier 0, 0.41], mis:for_loop->ForInitRepeats [held, tier 0, 0.38], mis:for_loop->ForUpdateBeforeBody [held, tier 0, 0.36], mis:increment_operators->PreIncrementBeforeLoop [held, tier 0, 0.28]
+mis:increment_operators->IncrementByTwo [held, tier 0, 0.47], mis:for_loop->ForInitRepeats [held, tier 0, 0.38], mis:loop_control->ForUpdateBeforeBody [held, tier 0, 0.36], mis:for_loop->ForUpdateBeforeBody [held, tier 0, 0.36], mis:increment_operators->PreIncrementBeforeLoop [held, tier 0, 0.24]
 
 **Clause coverage after this depth:**
 | clause | text | covered by |
@@ -450,13 +450,13 @@ mis:increment_operators->IncrementByTwo [held, tier 0, 0.43], mis:loop_control->
 | c1 | Each pass starts by setting i = 1 again | mis:for_loop->ForInitRepeats |
 | c2 | Then i++ runs before the body and adds 2 | mis:loop_control->ForUpdateBeforeBody |
 | c3 | so i is 3 | mis:loop_control->ForUpdateBeforeBody |
-| c4 | So every pass prints the same thing, 3 | mis:loop_control->ForUpdateBeforeBody |
+| c4 | So every pass prints the same thing, 3 | mis:increment_operators->PreIncrementBeforeLoop |
 
 **Graph check, not yet read (the walk may not stop while these remain):** pre:assignment->increment_operators, pre:for_loop->loop_body, pre:for_loop->loop_scope, pre:loop_control->for_loop, pre:loop_control->increment_operators, pre:loop_variable->loop_control
 
 Figure 4 (the graph after depth 1): C:\Users\magnu\OneDrive\Desktop\ES_VIterbi_Personalized_Learning\results\viewer\MY15_figure04.png
 
-### Depth 2: current concepts 'increment_operators', 'loop_control', 'for_loop'
+### Depth 2: current concepts 'increment_operators', 'for_loop', 'loop_control'
 
 #### increment_operators, concept edges: 2 edges offered
 Edges offered:
@@ -498,19 +498,21 @@ Parsed labels:
 | pre:assignment->increment_operators | broken | 0.6 | 0.9 | 0.54 | c2, c3 | Then i++ runs before the body and adds 2; so i is 3 |
 | pre:loop_control->increment_operators | broken | 0.4 | 0.85 | 0.34 | c2, c3 | Then i++ runs before the body and adds 2; so i is 3 |
 
-#### loop_control, concept edges: 2 edges offered
+#### for_loop, concept edges: 3 edges offered
 Edges offered:
 | edge |
 |---|
+| pre:for_loop->loop_body \| rule: The statements in braces after the for header are the loop body; they run once on every pass, between the test and the increment, exactly as in a while loop. |
+| pre:for_loop->loop_scope \| rule: A variable declared in the for header exists only from its declaration to the end of the for statement's block. |
 | pre:loop_control->for_loop \| rule: The for header is exactly the three control slots, and the body runs after the test and before the update on each pass. |
-| pre:loop_control->increment_operators \| rule: The loop update i = i + 1 comes first; ++ (and +=) are then introduced as shorthand for that update. |
-| pre:loop_variable->loop_control \| rule: The init, condition and update all act on the loop variable: the init sets it, the condition tests it, the update changes it. |
 
 Prune: the model's reply (edge id and score; the kept edges sum to 1):
 ```
-pre:loop_control->for_loop (0.60), pre:loop_variable->loop_control (0.40)
+{pre:loop_control->for_loop (Score: 0.5)}
+{pre:for_loop->loop_body (Score: 0.4)}
+{pre:for_loop->loop_scope (Score: 0.1)}
 ```
-Kept by pruning: pre:loop_control->for_loop (0.60), pre:loop_variable->loop_control (0.40)
+Kept by pruning: pre:loop_control->for_loop (0.50), pre:for_loop->loop_body (0.40), pre:for_loop->loop_scope (0.10)
 
 Label prompt for concept edge pre:loop_control->for_loop (loop_control -> for_loop, prerequisite):
 > The for header is exactly the three control slots, and the body runs after the test and before the update on each pass.
@@ -521,37 +523,6 @@ Label: broken
 Clauses: 1, 2
 Confidence: 0.9
 ```
-
-Label prompt for concept edge pre:loop_variable->loop_control (loop_variable -> loop_control, prerequisite):
-> The init, condition and update all act on the loop variable: the init sets it, the condition tests it, the update changes it.
-
-Model's reply:
-```
-Label: broken
-Clauses: 1, 2
-Confidence: 0.85
-```
-
-Parsed labels:
-| edge | label | prune score | confidence | score | clauses | words |
-|---|---|---|---|---|---|---|
-| pre:loop_control->for_loop | broken | 0.6 | 0.9 | 0.54 | c1, c2 | Each pass starts by setting i = 1 again; Then i++ runs before the body and adds 2 |
-| pre:loop_variable->loop_control | broken | 0.4 | 0.85 | 0.34 | c1, c2 | Each pass starts by setting i = 1 again; Then i++ runs before the body and adds 2 |
-
-#### for_loop, concept edges: 2 edges offered
-Edges offered:
-| edge |
-|---|
-| pre:for_loop->loop_body \| rule: The statements in braces after the for header are the loop body; they run once on every pass, between the test and the increment, exactly as in a while loop. |
-| pre:for_loop->loop_scope \| rule: A variable declared in the for header exists only from its declaration to the end of the for statement's block. |
-| pre:loop_control->for_loop \| rule: The for header is exactly the three control slots, and the body runs after the test and before the update on each pass. |
-
-Prune: the model's reply (edge id and score; the kept edges sum to 1):
-```
-{pre:for_loop->loop_body (Score: 0.7)}
-{pre:for_loop->loop_scope (Score: 0.3)}
-```
-Kept by pruning: pre:for_loop->loop_body (0.70), pre:for_loop->loop_scope (0.30)
 
 Label prompt for concept edge pre:for_loop->loop_body (for_loop -> loop_body, prerequisite):
 > The statements in braces after the for header are the loop body; they run once on every pass, between the test and the increment, exactly as in a while loop.
@@ -576,18 +547,48 @@ Confidence: 0.7
 Parsed labels:
 | edge | label | prune score | confidence | score | clauses | words |
 |---|---|---|---|---|---|---|
-| pre:for_loop->loop_body | broken | 0.7 | 0.85 | 0.59 | c2 | Then i++ runs before the body and adds 2 |
+| pre:loop_control->for_loop | broken | 0.5 | 0.9 | 0.45 | c1, c2 | Each pass starts by setting i = 1 again; Then i++ runs before the body and adds 2 |
+| pre:for_loop->loop_body | broken | 0.4 | 0.85 | 0.34 | c2 | Then i++ runs before the body and adds 2 |
 | pre:for_loop->loop_scope | not applied |  |  | 0.0 |  |  |
+
+#### loop_control, concept edges: 1 edges offered
+Edges offered:
+| edge |
+|---|
+| pre:loop_control->for_loop \| rule: The for header is exactly the three control slots, and the body runs after the test and before the update on each pass. |
+| pre:loop_control->increment_operators \| rule: The loop update i = i + 1 comes first; ++ (and +=) are then introduced as shorthand for that update. |
+| pre:loop_variable->loop_control \| rule: The init, condition and update all act on the loop variable: the init sets it, the condition tests it, the update changes it. |
+
+Prune: the model's reply (edge id and score; the kept edges sum to 1):
+```
+pre:loop_variable->loop_control (1.00)
+```
+Kept by pruning: pre:loop_variable->loop_control (1.00)
+
+Label prompt for concept edge pre:loop_variable->loop_control (loop_variable -> loop_control, prerequisite):
+> The init, condition and update all act on the loop variable: the init sets it, the condition tests it, the update changes it.
+
+Model's reply:
+```
+Label: broken
+Clauses: 1, 2
+Confidence: 0.85
+```
+
+Parsed labels:
+| edge | label | prune score | confidence | score | clauses | words |
+|---|---|---|---|---|---|---|
+| pre:loop_variable->loop_control | broken | 1.0 | 0.85 | 0.85 | c1, c2 | Each pass starts by setting i = 1 again; Then i++ runs before the body and adds 2 |
 
 **Kept on a path at this depth** (best N in tiers: held misconception / broken edge, then held error, then correct / confirmed / shown):
 
-pre:for_loop->loop_body [broken, tier 0, 0.59], pre:assignment->increment_operators [broken, tier 0, 0.54], pre:loop_control->for_loop [broken, tier 0, 0.54], pre:loop_control->increment_operators [broken, tier 0, 0.34], pre:loop_variable->loop_control [broken, tier 0, 0.34]
+pre:loop_variable->loop_control [broken, tier 0, 0.85], pre:assignment->increment_operators [broken, tier 0, 0.54], pre:loop_control->for_loop [broken, tier 0, 0.45], pre:loop_control->increment_operators [broken, tier 0, 0.34], pre:for_loop->loop_body [broken, tier 0, 0.34]
 
-reached across pre:for_loop->loop_body, entered next: loop_body
+reached across pre:loop_variable->loop_control, entered next: loop_variable
 
 reached across pre:assignment->increment_operators, entered next: assignment
 
-reached across pre:loop_variable->loop_control, entered next: loop_variable
+reached across pre:for_loop->loop_body, entered next: loop_body
 
 **Clause coverage after this depth:**
 | clause | text | covered by |
@@ -595,269 +596,13 @@ reached across pre:loop_variable->loop_control, entered next: loop_variable
 | c1 | Each pass starts by setting i = 1 again | mis:for_loop->ForInitRepeats |
 | c2 | Then i++ runs before the body and adds 2 | mis:loop_control->ForUpdateBeforeBody |
 | c3 | so i is 3 | mis:loop_control->ForUpdateBeforeBody |
-| c4 | So every pass prints the same thing, 3 | mis:loop_control->ForUpdateBeforeBody |
+| c4 | So every pass prints the same thing, 3 | mis:increment_operators->PreIncrementBeforeLoop |
 
 **Graph check, not yet read (the walk may not stop while these remain):** own edges of assignment, own edges of loop_body, own edges of loop_variable
 
 Figure 5 (the graph after depth 2): C:\Users\magnu\OneDrive\Desktop\ES_VIterbi_Personalized_Learning\results\viewer\MY15_figure05.png
 
-### Depth 3: current concepts 'loop_body', 'for_loop', 'assignment', 'increment_operators', 'loop_control', 'loop_variable'
-
-#### loop_body, misconceptions: 12 edges offered
-Edges offered:
-| edge |
-|---|
-| err:loop_body->BracelessMultiStatementBody \| wrong rule: Indenting several statements under an if or for makes them all part of its body, even without braces. \| right rule: Without braces only the first statement belongs to the if/for; the rest run once, after it. |
-| mis:loop_body->ComputerFillsInIntent \| wrong rule: The computer fills in omitted steps or values that the programmer meant, e.g. REPEAT 4 [FORWARD 30] draws a square without a turn command. \| right rule: The computer executes only what the code states; every needed step and value must be written. |
-| mis:loop_body->ForLoopPartSkipped \| wrong rule: A pass of a loop may leave out one of its parts (the condition test, the body, the update, or the initialization). \| right rule: Each pass of a for loop runs test, then body, then update, every time; the initialization runs once, at the start. |
-| mis:loop_body->IfInLoopUnchecked \| wrong rule: An if inside a loop body runs its branch on every pass without testing its condition. \| right rule: The if condition is tested again on every pass, with the current values, so the branch runs only on passes where it is true. |
-| mis:loop_body->LoopBodyAlwaysOnce \| wrong rule: The loop body always runs at least once, even if the condition is false at the start. \| right rule: A while or for body runs zero times when the condition is false at the start. |
-| mis:loop_body->LoopBodyStatementOutsideLoop \| wrong rule: Some statements inside the braces of a loop body are not repeated; they run once, before or after the loop. \| right rule: Every statement inside the loop braces is part of the body and runs on every pass. |
-| mis:loop_body->LoopCountIsStatementCount \| wrong rule: The repeat count of a counted loop says how many of the body statements are executed. \| right rule: The repeat count is how many times the whole body runs; every pass runs all body statements. |
-| mis:loop_body->LoopOutputSameEachPass \| wrong rule: A loop prints the same thing on every pass; the changing loop variable does not affect what the body does. \| right rule: The body uses the current value of the loop variable, so its output can differ on each pass. |
-| mis:loop_body->LoopRunsStatementsSeparately \| wrong rule: A loop runs its first body statement all N times, then its second body statement all N times. \| right rule: Each pass runs the whole body in order, so the body statements interleave: S1, S2, S1, S2, ... |
-| mis:loop_body->StateChangeIgnoredAcrossPasses \| wrong rule: Values changed by one pass of a loop (other than the loop variable) do not affect later passes. \| right rule: Each pass starts from the state left by the previous pass, so a change in one pass carries into the next ones. |
-| mis:loop_body->StatementAfterLoopInBody \| wrong rule: A statement written after the loop is repeated with the loop body. \| right rule: The body ends at the closing brace (or after its single statement); code after it runs once, after the loop ends. |
-| mis:loop_body->WhileStopsMidBody \| wrong rule: The loop stops the moment the condition becomes false, even in the middle of the body. \| right rule: The condition is tested only before each pass, so the whole body finishes before the loop can stop. |
-
-Prune: the model's reply (edge id and score; the kept edges sum to 1):
-```
-mis:loop_body->LoopOutputSameEachPass (0.50), mis:loop_body->ForLoopPartSkipped (0.30), mis:loop_body->StateChangeIgnoredAcrossPasses (0.20)
-```
-Kept by pruning: mis:loop_body->LoopOutputSameEachPass (0.50), mis:loop_body->ForLoopPartSkipped (0.30), mis:loop_body->StateChangeIgnoredAcrossPasses (0.20)
-
-Label prompt for the misconception / error edges (judged together). The model saw the program, the question, the numbered clauses, and these edges with their wrong rule and right rule:
-| edge |
-|---|
-| mis:loop_body->LoopOutputSameEachPass \| wrong rule: A loop prints the same thing on every pass; the changing loop variable does not affect what the body does. \| right rule: The body uses the current value of the loop variable, so its output can differ on each pass. |
-| mis:loop_body->ForLoopPartSkipped \| wrong rule: A pass of a loop may leave out one of its parts (the condition test, the body, the update, or the initialization). \| right rule: Each pass of a for loop runs test, then body, then update, every time; the initialization runs once, at the start. |
-| mis:loop_body->StateChangeIgnoredAcrossPasses \| wrong rule: Values changed by one pass of a loop (other than the loop variable) do not affect later passes. \| right rule: Each pass starts from the state left by the previous pass, so a change in one pass carries into the next ones. |
-Model's reply:
-```
-mis:loop_body->LoopOutputSameEachPass | not applied | clauses: none | confidence: 0.6
-mis:loop_body->ForLoopPartSkipped | not applied | clauses: none | confidence: 0.7
-mis:loop_body->StateChangeIgnoredAcrossPasses | not applied | clauses: none | confidence: 0.75
-```
-
-Parsed labels:
-| edge | label | prune score | confidence | score | clauses | words |
-|---|---|---|---|---|---|---|
-| mis:loop_body->LoopOutputSameEachPass | not applied |  |  | 0.0 |  |  |
-| mis:loop_body->ForLoopPartSkipped | not applied |  |  | 0.0 |  |  |
-| mis:loop_body->StateChangeIgnoredAcrossPasses | not applied |  |  | 0.0 |  |  |
-
-#### loop_body, level ways: 14 edges offered
-Edges offered:
-| edge |
-|---|
-| lvl:loop_body@L0#0 \| level L0 way everyday_reading: Folk meaning: an everyday 'repeat this' instruction can be read loosely - a helper fills in missing steps, does each step N times in turn, or stops partway. A Java loop body is exactly the statements inside its braces (or one statement), all executed in order on every pass. |
-| lvl:loop_body@L0#6 \| level L0 way inconsistent_trace: Applies the body rule (LT) unevenly: runs all body statements on some passes but only some on others, includes the statement after the loop on some passes, or uses stale values from the first pass later. (here mixing in: "The loop body always runs at least once, even if the condition is false at the start") |
-| lvl:loop_body@L1#0 \| level L1 way names_the_element: The loop body is the statement block that a loop repeats on each pass. |
-| lvl:loop_body@L1#1 \| level L1 way states_the_rule: The body is the block after the loop header; braces are optional only if it is a single statement, in which case only that one statement is repeated. |
-| lvl:loop_body@L2#0 \| level L2 way line_by_line_trace: On each pass the body's statements run in order, first to last, after a true test (and, in a for loop, before the update); the next pass starts from the state left by this one. |
-| lvl:loop_body@L2#1 \| level L2 way output_prediction: The body's output on each pass depends on the current values, so successive passes can print different lines: TenHellos prints '4th Hello', '5th Hello', ...; the number of executions of each body statement equals the number of passes. |
-| lvl:loop_body@L2#2 \| level L2 way one_step_execution: One pass of the body changes exactly the variables it assigns (e.g. print i and v, double v, increment i) and these changes carry into the next test and pass. |
-| lvl:loop_body@L3#0 \| level L3 way relation_to_neighbour: The accumulator update (sum += x) is placed inside the body so it runs once per pass, while the accumulator is declared and initialized before the loop. |
-| lvl:loop_body@L3#1 \| level L3 way relation_to_neighbour: count++ sits inside the body, often under an if, so it runs once on each pass that matches; the counter is declared before the loop. |
-| lvl:loop_body@L3#2 \| level L3 way relation_to_neighbour: The body is what the while repeats; the condition is tested only between complete executions of it. |
-| lvl:loop_body@L3#3 \| level L3 way purpose_of_the_whole: Plan: the body is the 'process one item / one step' part of a loop plan: each pass performs the same process on a new value (next element, next bet, next term). |
-| lvl:loop_body@L4#0 \| level L4 way predict_a_change: Moving a statement from inside the body to after the loop changes it from running once per pass to once in total (and vice versa); reordering two body statements that share a variable changes the results (e.g. increment before vs after use). |
-| lvl:loop_body@L4#1 \| level L4 way diagnose_an_error: rule broken: Without braces, the body of an if, while or for is exactly one statement; indentation does not add statements to it. Kind: silent logic error. Trigger class: A braceless header followed by two or more indented statements: only the first is controlled, the others run once, after the if/loop, on every input. |
-| lvl:loop_body@L4#2 \| level L4 way transfer_to_a_new_program: Put inside the body exactly what must happen once per pass; put set-up before the loop and final reporting after it. Always brace a multi-statement body. |
-
-Prune: the model's reply (edge id and score; the kept edges sum to 1):
-```
-{lvl:loop_body@L0#6 (Score: 0.45)}
-{lvl:loop_body@L2#0 (Score: 0.35)}
-{lvl:loop_body@L2#1 (Score: 0.2)}
-```
-Kept by pruning: lvl:loop_body@L0#6 (0.45), lvl:loop_body@L2#0 (0.35), lvl:loop_body@L2#1 (0.20)
-
-Label prompt for level way lvl:loop_body@L0#6 (the model saw only the concept, the way's name 'inconsistent trace' and its text; no level):
-> Applies the body rule (LT) unevenly: runs all body statements on some passes but only some on others, includes the statement after the loop on some passes, or uses stale values from the first pass later. (here mixing in: "The loop body always runs at least once, even if the condition is false at the start")
-
-Model's reply:
-```
-Label: not shown
-Clauses: none
-Confidence: 0.72
-```
-
-Label prompt for level way lvl:loop_body@L2#0 (the model saw only the concept, the way's name 'line by line trace' and its text; no level):
-> On each pass the body's statements run in order, first to last, after a true test (and, in a for loop, before the update); the next pass starts from the state left by this one.
-
-Model's reply:
-```
-Label: not shown
-Clauses: none
-Confidence: 0.85
-```
-
-Label prompt for level way lvl:loop_body@L2#1 (the model saw only the concept, the way's name 'output prediction' and its text; no level):
-> The body's output on each pass depends on the current values, so successive passes can print different lines: TenHellos prints '4th Hello', '5th Hello', ...; the number of executions of each body statement equals the number of passes.
-
-Model's reply:
-```
-Label: not shown
-Clauses: none
-Confidence: 0.7
-```
-
-Parsed labels:
-| edge | label | prune score | confidence | score | clauses | words |
-|---|---|---|---|---|---|---|
-| lvl:loop_body@L0#6 | not applied |  |  | 0.0 |  |  |
-| lvl:loop_body@L2#0 | not applied |  |  | 0.0 |  |  |
-| lvl:loop_body@L2#1 | not applied |  |  | 0.0 |  |  |
-
-#### for_loop, concept edges: 1 edges offered
-Edges offered:
-| edge |
-|---|
-| pre:for_loop->loop_body \| rule: The statements in braces after the for header are the loop body; they run once on every pass, between the test and the increment, exactly as in a while loop. |
-| pre:for_loop->loop_scope \| rule: A variable declared in the for header exists only from its declaration to the end of the for statement's block. |
-| pre:loop_control->for_loop \| rule: The for header is exactly the three control slots, and the body runs after the test and before the update on each pass. |
-
-Prune: the model's reply (edge id and score; the kept edges sum to 1):
-```
-pre:for_loop->loop_scope (1.00)
-```
-Kept by pruning: pre:for_loop->loop_scope (1.00)
-
-Label prompt for concept edge pre:for_loop->loop_scope (for_loop -> loop_scope, prerequisite):
-> A variable declared in the for header exists only from its declaration to the end of the for statement's block.
-
-Model's reply:
-```
-Label: not applied
-Clauses: none
-Confidence: 0.7
-```
-
-Parsed labels:
-| edge | label | prune score | confidence | score | clauses | words |
-|---|---|---|---|---|---|---|
-| pre:for_loop->loop_scope | not applied |  |  | 0.0 |  |  |
-
-#### assignment, misconceptions: 15 edges offered
-Edges offered:
-| edge |
-|---|
-| err:assignment->AssignToFinal \| wrong rule: Assigns a new value to a variable declared final. \| right rule: A final variable cannot be reassigned after it is initialized; the compiler reports an error. |
-| err:assignment->ExpressionOnLeftOfAssignment \| wrong rule: Writes a + b = c; or 7 = a; as if = were a math equation. \| right rule: The left side of an assignment must be a single variable; only the right side can be an expression. |
-| err:assignment->RedeclareToReassign \| wrong rule: Writes int x = 5; ... int x = 10; to change x. \| right rule: A declaration gives a variable its name and type; a later change of value is an assignment statement such as x = 10;, not a second declaration. |
-| mis:assignment->AssignCompares \| wrong rule: x = y checks whether x and y are equal. \| right rule: x = y copies the value of y into x; x == y is what compares them. |
-| mis:assignment->AssignmentAddsToTarget \| wrong rule: a = b adds the value of b to the value already in a (the accumulator model). \| right rule: a = b replaces the old value of a with the value of b; the old value is lost. |
-| mis:assignment->AssignmentCopiesObject \| wrong rule: b = a; for an array makes b a separate copy, so changing b[i] leaves a[i] unchanged. \| right rule: b = a; copies only the reference, so a and b refer to the same array and b[i] = v also changes a[i]. |
-| mis:assignment->AssignmentEmptiesSource \| wrong rule: After b = a, a no longer holds a value, as if the value had been moved. \| right rule: Assignment copies; the variable on the right keeps its value. |
-| mis:assignment->AssignmentExchangesValues \| wrong rule: b = a exchanges the values of a and b. \| right rule: b = a copies a into b and leaves a unchanged; an exchange needs a temporary variable and three assignments. |
-| mis:assignment->AssignmentIsEquation \| wrong rule: An assignment states a lasting equality between its two sides, so y = x - y can be solved like the equation x = 2y and x = x + 5 relates two equal quantities. \| right rule: An assignment is a one-time action: evaluate the right side with current values, then store the result in the left variable. |
-| mis:assignment->AssignmentNotExpression \| wrong rule: An assignment cannot be used inside a larger expression, so a condition like (x = read()) != v is not allowed. \| right rule: An assignment is an expression whose value is the value assigned, so (x = v) both stores v in x and gives v. |
-| mis:assignment->AssignmentOppositeDirection \| wrong rule: a = b copies the value of a into b. \| right rule: Assignment stores the value of the right side into the variable on the left. |
-| mis:assignment->PrintedTextIsExecuted \| wrong rule: System.out.println("x is 5"); sets x to 5 (text inside the quotes is run as code). \| right rule: Characters inside double quotes are printed literally; println only displays them and changes no variable. Only an assignment such as x = 5; sets x. |
-| mis:assignment->SwapWithoutTemp \| wrong rule: a[i] = a[j]; a[j] = a[i]; exchanges the two values. \| right rule: A temporary variable must save a[i] before it is overwritten. |
-| mis:assignment->VariableKeepsOldValue \| wrong rule: A variable keeps its first value after a new assignment (the static model). \| right rule: Each assignment or read replaces the variable's current value. |
-| mis:assignment->VariablesHoldExpressions \| wrong rule: y = x + k; makes y always equal to x + k, so when x changes later, y changes too. \| right rule: y = x + k; stores the value that x + k has at that moment, so later changes to x do not change y. |
-
-Prune: the model's reply (edge id and score; the kept edges sum to 1):
-```
-mis:assignment->VariableKeepsOldValue (0.50), mis:assignment->AssignmentIsEquation (0.30), mis:assignment->AssignmentAddsToTarget (0.20)
-```
-Kept by pruning: mis:assignment->VariableKeepsOldValue (0.50), mis:assignment->AssignmentIsEquation (0.30), mis:assignment->AssignmentAddsToTarget (0.20)
-
-Label prompt for the misconception / error edges (judged together). The model saw the program, the question, the numbered clauses, and these edges with their wrong rule and right rule:
-| edge |
-|---|
-| mis:assignment->VariableKeepsOldValue \| wrong rule: A variable keeps its first value after a new assignment (the static model). \| right rule: Each assignment or read replaces the variable's current value. |
-| mis:assignment->AssignmentIsEquation \| wrong rule: An assignment states a lasting equality between its two sides, so y = x - y can be solved like the equation x = 2y and x = x + 5 relates two equal quantities. \| right rule: An assignment is a one-time action: evaluate the right side with current values, then store the result in the left variable. |
-| mis:assignment->AssignmentAddsToTarget \| wrong rule: a = b adds the value of b to the value already in a (the accumulator model). \| right rule: a = b replaces the old value of a with the value of b; the old value is lost. |
-Model's reply:
-```
-mis:assignment->VariableKeepsOldValue | correct | clauses: 1, 3 | confidence: 0.55
-mis:assignment->AssignmentIsEquation | not applied | clauses: none | confidence: 0.85
-mis:assignment->AssignmentAddsToTarget | correct | clauses: 1 | confidence: 0.5
-```
-
-Parsed labels:
-| edge | label | prune score | confidence | score | clauses | words |
-|---|---|---|---|---|---|---|
-| mis:assignment->VariableKeepsOldValue | correct | 0.5 | 0.55 | 0.28 | c1, c3 | Each pass starts by setting i = 1 again; so i is 3 |
-| mis:assignment->AssignmentIsEquation | not applied |  |  | 0.0 |  |  |
-| mis:assignment->AssignmentAddsToTarget | correct | 0.2 | 0.5 | 0.1 | c1 | Each pass starts by setting i = 1 again |
-
-#### assignment, level ways: 24 edges offered
-Edges offered:
-| edge |
-|---|
-| lvl:assignment@L0#0 \| level L0 way everyday_reading: In maths, = states a symmetric, lasting equality (a = b means b = a, and x = x + 5 is false). In Java, = is a one-time, directed action: evaluate the right side, then store the result in the variable on the left. |
-| lvl:assignment@L0#9 \| level L0 way inconsistent_trace: Points to LT (evaluate the right side with current values, then overwrite the left variable). Applied unevenly, a student traces one segment correctly but reads the next as simultaneous equations or as a swap, giving 15 and 15 for one segment and 5 and 10 for the other. (here mixing in: "= stores the expression itself, not its computed value") |
-| lvl:assignment@L1#0 \| level L1 way names_the_element: Assignment statement: the statement variable = expression; which stores a data-type value in a variable. |
-| lvl:assignment@L1#1 \| level L1 way states_the_rule: The left-hand side must be a single variable. The right-hand side can be any expression whose type is compatible with the variable's type. = is not mathematical equality (a + b = b + a and 1 = a are illegal). |
-| lvl:assignment@L2#0 \| level L2 way line_by_line_trace: First the right-hand side is fully evaluated using the variables' current values (left to right). Then that value is stored in the left-hand variable, replacing its old value, and execution moves to the next statement. |
-| lvl:assignment@L2#1 \| level L2 way output_prediction: As a statement it prints nothing; its result is the new value of the left variable (after c = a + b; with a = 1234 and b = 99, c is 1333). Used as an expression, its value is the value assigned. |
-| lvl:assignment@L2#2 \| level L2 way one_step_execution: Exactly one variable, the left one, changes, and its old value is lost. Variables on the right keep their values: x = x + 5; with x = 5 makes x 10. |
-| lvl:assignment@L3#0 \| level L3 way relation_to_neighbour: The left side must be a declared variable whose type accepts the value. Assignment is how that variable's value changes. |
-| lvl:assignment@L3#1 \| level L3 way relation_to_neighbour: A declaration can include the first assignment (int x = 5;). Assigning to a variable that was never declared does not compile. |
-| lvl:assignment@L3#2 \| level L3 way relation_to_neighbour: Exchanging a[i] and a[j] takes three assignments in a fixed order through a temporary, because each assignment overwrites its target. |
-| lvl:assignment@L3#3 \| level L3 way relation_to_neighbour: int t = a; a = b; b = t; works only in this order, because every assignment destroys its left variable's old value. |
-| lvl:assignment@L3#4 \| level L3 way relation_to_neighbour: x op= e is shorthand for x = x op e. The left variable's current value is fetched first and then combined with e. |
-| lvl:assignment@L3#5 \| level L3 way relation_to_neighbour: Because an assignment is an expression whose value is the value stored, and = groups right to left, a = b = 0 first stores 0 in b and then stores that 0 in a. |
-| lvl:assignment@L3#6 \| level L3 way relation_to_neighbour: As a statement, i++ has the same effect as the assignment i = i + 1. |
-| lvl:assignment@L3#7 \| level L3 way relation_to_neighbour: A trace records the value of each variable after each assignment runs, one row per statement. |
-| lvl:assignment@L3#8 \| level L3 way relation_to_neighbour: x = y stores the value of y in x (a statement with a side effect); x == y only tests whether the two values are equal and gives a boolean. Writing = where == is meant is a compile error with int operands and a silent bug with boolean operands. |
-| lvl:assignment@L3#9 \| level L3 way purpose_of_the_whole: Assignment gives a variable its value in each role: initialization, counter update (n = n + 1), gatherer update (sum = sum + x), most-wanted holder update (max = x), or temporary (t = a). |
-| lvl:assignment@L4#0 \| level L4 way predict_a_change: Swapping the two sides (a = b versus b = a) changes which variable changes. Reordering assignments changes the final values. An assignment cannot be undone, because the old value is lost unless it was first saved in a temporary. |
-| lvl:assignment@L4#1 \| level L4 way diagnose_an_error: rule broken: The left-hand side of = must be a single variable; only the right-hand side may be an arbitrary expression. Kind: compile-time. Trigger class: Any assignment whose left side is a literal or compound expression (7 = a; a + b = c;): 'unexpected type, required: variable'. |
-| lvl:assignment@L4#2 \| level L4 way transfer_to_a_new_program: Use assignment whenever a variable's value must be set or updated. Use == to compare, final to forbid updates, and op= or ++ for x = x op e. |
-| lvl:assignment@L4#3 \| level L4 way diagnose_an_error: rule broken: A local variable may be declared only once in its scope; later changes use an assignment without the type. Kind: compile-time. Trigger class: A second 'int x = ...' for a name already declared in the same or an enclosing block: 'variable x is already defined'. |
-| lvl:assignment@L4#4 \| level L4 way diagnose_an_error: rule broken: A final variable is assigned exactly once; it cannot be reassigned after initialization. Kind: compile-time. Trigger class: Any assignment, ++ or op= to a final variable after its initialization: 'cannot assign a value to final variable'. |
-| lvl:assignment@L4#5 \| level L4 way diagnose_an_error: rule broken: = assigns and == compares; a condition needs a boolean. Kind: compile-time. Trigger class: Writing if (a = b) with int a, b gives 'incompatible types: int cannot be converted to boolean'. With boolean variables it compiles and silently assigns. |
-| lvl:assignment@L4#6 \| level L4 way diagnose_an_error: rule broken: The assigned value's type must fit the variable's type. Kind: compile-time. Trigger class: Assigning a double to an int, an int to a String, and so on: 'incompatible types'. |
-
-Prune: the model's reply (edge id and score; the kept edges sum to 1):
-```
-{lvl:assignment@L3#6 (Score: 0.5)}
-{lvl:assignment@L3#9 (Score: 0.3)}
-{lvl:assignment@L0#9 (Score: 0.2)}
-```
-Kept by pruning: lvl:assignment@L3#6 (0.50), lvl:assignment@L3#9 (0.30), lvl:assignment@L0#9 (0.20)
-
-Label prompt for level way lvl:assignment@L3#6 (the model saw only the concept, the way's name 'relation to neighbour' and its text; no level):
-> As a statement, i++ has the same effect as the assignment i = i + 1.
-
-Model's reply:
-```
-Label: not shown
-Clauses: none
-Confidence: 0.9
-```
-
-Label prompt for level way lvl:assignment@L3#9 (the model saw only the concept, the way's name 'purpose of the whole' and its text; no level):
-> Assignment gives a variable its value in each role: initialization, counter update (n = n + 1), gatherer update (sum = sum + x), most-wanted holder update (max = x), or temporary (t = a).
-
-Model's reply:
-```
-Label: not shown
-Clauses: none
-Confidence: 0.7
-```
-
-Label prompt for level way lvl:assignment@L0#9 (the model saw only the concept, the way's name 'inconsistent trace' and its text; no level):
-> Points to LT (evaluate the right side with current values, then overwrite the left variable). Applied unevenly, a student traces one segment correctly but reads the next as simultaneous equations or as a swap, giving 15 and 15 for one segment and 5 and 10 for the other. (here mixing in: "= stores the expression itself, not its computed value")
-
-Model's reply:
-```
-Label: not shown
-Clauses: none
-Confidence: 0.8
-```
-
-Parsed labels:
-| edge | label | prune score | confidence | score | clauses | words |
-|---|---|---|---|---|---|---|
-| lvl:assignment@L3#6 | not applied |  |  | 0.0 |  |  |
-| lvl:assignment@L3#9 | not applied |  |  | 0.0 |  |  |
-| lvl:assignment@L0#9 | not applied |  |  | 0.0 |  |  |
+### Depth 3: current concepts 'loop_variable', 'loop_control', 'assignment', 'increment_operators', 'for_loop', 'loop_body'
 
 #### loop_variable, misconceptions: 7 edges offered
 Edges offered:
@@ -960,9 +705,265 @@ Parsed labels:
 | lvl:loop_variable@L1#1 | not applied |  |  | 0.0 |  |  |
 | lvl:loop_variable@L2#0 | not applied |  |  | 0.0 |  |  |
 
+#### assignment, misconceptions: 15 edges offered
+Edges offered:
+| edge |
+|---|
+| err:assignment->AssignToFinal \| wrong rule: Assigns a new value to a variable declared final. \| right rule: A final variable cannot be reassigned after it is initialized; the compiler reports an error. |
+| err:assignment->ExpressionOnLeftOfAssignment \| wrong rule: Writes a + b = c; or 7 = a; as if = were a math equation. \| right rule: The left side of an assignment must be a single variable; only the right side can be an expression. |
+| err:assignment->RedeclareToReassign \| wrong rule: Writes int x = 5; ... int x = 10; to change x. \| right rule: A declaration gives a variable its name and type; a later change of value is an assignment statement such as x = 10;, not a second declaration. |
+| mis:assignment->AssignCompares \| wrong rule: x = y checks whether x and y are equal. \| right rule: x = y copies the value of y into x; x == y is what compares them. |
+| mis:assignment->AssignmentAddsToTarget \| wrong rule: a = b adds the value of b to the value already in a (the accumulator model). \| right rule: a = b replaces the old value of a with the value of b; the old value is lost. |
+| mis:assignment->AssignmentCopiesObject \| wrong rule: b = a; for an array makes b a separate copy, so changing b[i] leaves a[i] unchanged. \| right rule: b = a; copies only the reference, so a and b refer to the same array and b[i] = v also changes a[i]. |
+| mis:assignment->AssignmentEmptiesSource \| wrong rule: After b = a, a no longer holds a value, as if the value had been moved. \| right rule: Assignment copies; the variable on the right keeps its value. |
+| mis:assignment->AssignmentExchangesValues \| wrong rule: b = a exchanges the values of a and b. \| right rule: b = a copies a into b and leaves a unchanged; an exchange needs a temporary variable and three assignments. |
+| mis:assignment->AssignmentIsEquation \| wrong rule: An assignment states a lasting equality between its two sides, so y = x - y can be solved like the equation x = 2y and x = x + 5 relates two equal quantities. \| right rule: An assignment is a one-time action: evaluate the right side with current values, then store the result in the left variable. |
+| mis:assignment->AssignmentNotExpression \| wrong rule: An assignment cannot be used inside a larger expression, so a condition like (x = read()) != v is not allowed. \| right rule: An assignment is an expression whose value is the value assigned, so (x = v) both stores v in x and gives v. |
+| mis:assignment->AssignmentOppositeDirection \| wrong rule: a = b copies the value of a into b. \| right rule: Assignment stores the value of the right side into the variable on the left. |
+| mis:assignment->PrintedTextIsExecuted \| wrong rule: System.out.println("x is 5"); sets x to 5 (text inside the quotes is run as code). \| right rule: Characters inside double quotes are printed literally; println only displays them and changes no variable. Only an assignment such as x = 5; sets x. |
+| mis:assignment->SwapWithoutTemp \| wrong rule: a[i] = a[j]; a[j] = a[i]; exchanges the two values. \| right rule: A temporary variable must save a[i] before it is overwritten. |
+| mis:assignment->VariableKeepsOldValue \| wrong rule: A variable keeps its first value after a new assignment (the static model). \| right rule: Each assignment or read replaces the variable's current value. |
+| mis:assignment->VariablesHoldExpressions \| wrong rule: y = x + k; makes y always equal to x + k, so when x changes later, y changes too. \| right rule: y = x + k; stores the value that x + k has at that moment, so later changes to x do not change y. |
+
+Prune: the model's reply (edge id and score; the kept edges sum to 1):
+```
+mis:assignment->VariableKeepsOldValue (0.50), mis:assignment->AssignmentAddsToTarget (0.30), mis:assignment->AssignmentIsEquation (0.20)
+```
+Kept by pruning: mis:assignment->VariableKeepsOldValue (0.50), mis:assignment->AssignmentAddsToTarget (0.30), mis:assignment->AssignmentIsEquation (0.20)
+
+Label prompt for the misconception / error edges (judged together). The model saw the program, the question, the numbered clauses, and these edges with their wrong rule and right rule:
+| edge |
+|---|
+| mis:assignment->VariableKeepsOldValue \| wrong rule: A variable keeps its first value after a new assignment (the static model). \| right rule: Each assignment or read replaces the variable's current value. |
+| mis:assignment->AssignmentAddsToTarget \| wrong rule: a = b adds the value of b to the value already in a (the accumulator model). \| right rule: a = b replaces the old value of a with the value of b; the old value is lost. |
+| mis:assignment->AssignmentIsEquation \| wrong rule: An assignment states a lasting equality between its two sides, so y = x - y can be solved like the equation x = 2y and x = x + 5 relates two equal quantities. \| right rule: An assignment is a one-time action: evaluate the right side with current values, then store the result in the left variable. |
+Model's reply:
+```
+mis:assignment->VariableKeepsOldValue | correct | clauses: 1, 3 | confidence: 0.6
+mis:assignment->AssignmentAddsToTarget | correct | clauses: 1 | confidence: 0.55
+mis:assignment->AssignmentIsEquation | not applied | clauses: none | confidence: 0.85
+```
+
+Parsed labels:
+| edge | label | prune score | confidence | score | clauses | words |
+|---|---|---|---|---|---|---|
+| mis:assignment->VariableKeepsOldValue | correct | 0.5 | 0.6 | 0.3 | c1, c3 | Each pass starts by setting i = 1 again; so i is 3 |
+| mis:assignment->AssignmentAddsToTarget | correct | 0.3 | 0.55 | 0.17 | c1 | Each pass starts by setting i = 1 again |
+| mis:assignment->AssignmentIsEquation | not applied |  |  | 0.0 |  |  |
+
+#### assignment, level ways: 24 edges offered
+Edges offered:
+| edge |
+|---|
+| lvl:assignment@L0#0 \| level L0 way everyday_reading: In maths, = states a symmetric, lasting equality (a = b means b = a, and x = x + 5 is false). In Java, = is a one-time, directed action: evaluate the right side, then store the result in the variable on the left. |
+| lvl:assignment@L0#9 \| level L0 way inconsistent_trace: Points to LT (evaluate the right side with current values, then overwrite the left variable). Applied unevenly, a student traces one segment correctly but reads the next as simultaneous equations or as a swap, giving 15 and 15 for one segment and 5 and 10 for the other. (here mixing in: "= stores the expression itself, not its computed value") |
+| lvl:assignment@L1#0 \| level L1 way names_the_element: Assignment statement: the statement variable = expression; which stores a data-type value in a variable. |
+| lvl:assignment@L1#1 \| level L1 way states_the_rule: The left-hand side must be a single variable. The right-hand side can be any expression whose type is compatible with the variable's type. = is not mathematical equality (a + b = b + a and 1 = a are illegal). |
+| lvl:assignment@L2#0 \| level L2 way line_by_line_trace: First the right-hand side is fully evaluated using the variables' current values (left to right). Then that value is stored in the left-hand variable, replacing its old value, and execution moves to the next statement. |
+| lvl:assignment@L2#1 \| level L2 way output_prediction: As a statement it prints nothing; its result is the new value of the left variable (after c = a + b; with a = 1234 and b = 99, c is 1333). Used as an expression, its value is the value assigned. |
+| lvl:assignment@L2#2 \| level L2 way one_step_execution: Exactly one variable, the left one, changes, and its old value is lost. Variables on the right keep their values: x = x + 5; with x = 5 makes x 10. |
+| lvl:assignment@L3#0 \| level L3 way relation_to_neighbour: The left side must be a declared variable whose type accepts the value. Assignment is how that variable's value changes. |
+| lvl:assignment@L3#1 \| level L3 way relation_to_neighbour: A declaration can include the first assignment (int x = 5;). Assigning to a variable that was never declared does not compile. |
+| lvl:assignment@L3#2 \| level L3 way relation_to_neighbour: Exchanging a[i] and a[j] takes three assignments in a fixed order through a temporary, because each assignment overwrites its target. |
+| lvl:assignment@L3#3 \| level L3 way relation_to_neighbour: int t = a; a = b; b = t; works only in this order, because every assignment destroys its left variable's old value. |
+| lvl:assignment@L3#4 \| level L3 way relation_to_neighbour: x op= e is shorthand for x = x op e. The left variable's current value is fetched first and then combined with e. |
+| lvl:assignment@L3#5 \| level L3 way relation_to_neighbour: Because an assignment is an expression whose value is the value stored, and = groups right to left, a = b = 0 first stores 0 in b and then stores that 0 in a. |
+| lvl:assignment@L3#6 \| level L3 way relation_to_neighbour: As a statement, i++ has the same effect as the assignment i = i + 1. |
+| lvl:assignment@L3#7 \| level L3 way relation_to_neighbour: A trace records the value of each variable after each assignment runs, one row per statement. |
+| lvl:assignment@L3#8 \| level L3 way relation_to_neighbour: x = y stores the value of y in x (a statement with a side effect); x == y only tests whether the two values are equal and gives a boolean. Writing = where == is meant is a compile error with int operands and a silent bug with boolean operands. |
+| lvl:assignment@L3#9 \| level L3 way purpose_of_the_whole: Assignment gives a variable its value in each role: initialization, counter update (n = n + 1), gatherer update (sum = sum + x), most-wanted holder update (max = x), or temporary (t = a). |
+| lvl:assignment@L4#0 \| level L4 way predict_a_change: Swapping the two sides (a = b versus b = a) changes which variable changes. Reordering assignments changes the final values. An assignment cannot be undone, because the old value is lost unless it was first saved in a temporary. |
+| lvl:assignment@L4#1 \| level L4 way diagnose_an_error: rule broken: The left-hand side of = must be a single variable; only the right-hand side may be an arbitrary expression. Kind: compile-time. Trigger class: Any assignment whose left side is a literal or compound expression (7 = a; a + b = c;): 'unexpected type, required: variable'. |
+| lvl:assignment@L4#2 \| level L4 way transfer_to_a_new_program: Use assignment whenever a variable's value must be set or updated. Use == to compare, final to forbid updates, and op= or ++ for x = x op e. |
+| lvl:assignment@L4#3 \| level L4 way diagnose_an_error: rule broken: A local variable may be declared only once in its scope; later changes use an assignment without the type. Kind: compile-time. Trigger class: A second 'int x = ...' for a name already declared in the same or an enclosing block: 'variable x is already defined'. |
+| lvl:assignment@L4#4 \| level L4 way diagnose_an_error: rule broken: A final variable is assigned exactly once; it cannot be reassigned after initialization. Kind: compile-time. Trigger class: Any assignment, ++ or op= to a final variable after its initialization: 'cannot assign a value to final variable'. |
+| lvl:assignment@L4#5 \| level L4 way diagnose_an_error: rule broken: = assigns and == compares; a condition needs a boolean. Kind: compile-time. Trigger class: Writing if (a = b) with int a, b gives 'incompatible types: int cannot be converted to boolean'. With boolean variables it compiles and silently assigns. |
+| lvl:assignment@L4#6 \| level L4 way diagnose_an_error: rule broken: The assigned value's type must fit the variable's type. Kind: compile-time. Trigger class: Assigning a double to an int, an int to a String, and so on: 'incompatible types'. |
+
+Prune: the model's reply (edge id and score; the kept edges sum to 1):
+```
+{lvl:assignment@L3#6 (Score: 0.5)}
+{lvl:assignment@L3#9 (Score: 0.3)}
+{lvl:assignment@L0#9 (Score: 0.2)}
+```
+Kept by pruning: lvl:assignment@L3#6 (0.50), lvl:assignment@L3#9 (0.30), lvl:assignment@L0#9 (0.20)
+
+Label prompt for level way lvl:assignment@L3#6 (the model saw only the concept, the way's name 'relation to neighbour' and its text; no level):
+> As a statement, i++ has the same effect as the assignment i = i + 1.
+
+Model's reply:
+```
+Label: not shown
+Clauses: none
+Confidence: 0.9
+```
+
+Label prompt for level way lvl:assignment@L3#9 (the model saw only the concept, the way's name 'purpose of the whole' and its text; no level):
+> Assignment gives a variable its value in each role: initialization, counter update (n = n + 1), gatherer update (sum = sum + x), most-wanted holder update (max = x), or temporary (t = a).
+
+Model's reply:
+```
+Label: not shown
+Clauses: none
+Confidence: 0.7
+```
+
+Label prompt for level way lvl:assignment@L0#9 (the model saw only the concept, the way's name 'inconsistent trace' and its text; no level):
+> Points to LT (evaluate the right side with current values, then overwrite the left variable). Applied unevenly, a student traces one segment correctly but reads the next as simultaneous equations or as a swap, giving 15 and 15 for one segment and 5 and 10 for the other. (here mixing in: "= stores the expression itself, not its computed value")
+
+Model's reply:
+```
+Label: not shown
+Clauses: none
+Confidence: 0.8
+```
+
+Parsed labels:
+| edge | label | prune score | confidence | score | clauses | words |
+|---|---|---|---|---|---|---|
+| lvl:assignment@L3#6 | not applied |  |  | 0.0 |  |  |
+| lvl:assignment@L3#9 | not applied |  |  | 0.0 |  |  |
+| lvl:assignment@L0#9 | not applied |  |  | 0.0 |  |  |
+
+#### for_loop, concept edges: 1 edges offered
+Edges offered:
+| edge |
+|---|
+| pre:for_loop->loop_body \| rule: The statements in braces after the for header are the loop body; they run once on every pass, between the test and the increment, exactly as in a while loop. |
+| pre:for_loop->loop_scope \| rule: A variable declared in the for header exists only from its declaration to the end of the for statement's block. |
+| pre:loop_control->for_loop \| rule: The for header is exactly the three control slots, and the body runs after the test and before the update on each pass. |
+
+Prune: the model's reply (edge id and score; the kept edges sum to 1):
+```
+pre:for_loop->loop_scope (1.00)
+```
+Kept by pruning: pre:for_loop->loop_scope (1.00)
+
+Label prompt for concept edge pre:for_loop->loop_scope (for_loop -> loop_scope, prerequisite):
+> A variable declared in the for header exists only from its declaration to the end of the for statement's block.
+
+Model's reply:
+```
+Label: not applied
+Clauses: none
+Confidence: 0.7
+```
+
+Parsed labels:
+| edge | label | prune score | confidence | score | clauses | words |
+|---|---|---|---|---|---|---|
+| pre:for_loop->loop_scope | not applied |  |  | 0.0 |  |  |
+
+#### loop_body, misconceptions: 12 edges offered
+Edges offered:
+| edge |
+|---|
+| err:loop_body->BracelessMultiStatementBody \| wrong rule: Indenting several statements under an if or for makes them all part of its body, even without braces. \| right rule: Without braces only the first statement belongs to the if/for; the rest run once, after it. |
+| mis:loop_body->ComputerFillsInIntent \| wrong rule: The computer fills in omitted steps or values that the programmer meant, e.g. REPEAT 4 [FORWARD 30] draws a square without a turn command. \| right rule: The computer executes only what the code states; every needed step and value must be written. |
+| mis:loop_body->ForLoopPartSkipped \| wrong rule: A pass of a loop may leave out one of its parts (the condition test, the body, the update, or the initialization). \| right rule: Each pass of a for loop runs test, then body, then update, every time; the initialization runs once, at the start. |
+| mis:loop_body->IfInLoopUnchecked \| wrong rule: An if inside a loop body runs its branch on every pass without testing its condition. \| right rule: The if condition is tested again on every pass, with the current values, so the branch runs only on passes where it is true. |
+| mis:loop_body->LoopBodyAlwaysOnce \| wrong rule: The loop body always runs at least once, even if the condition is false at the start. \| right rule: A while or for body runs zero times when the condition is false at the start. |
+| mis:loop_body->LoopBodyStatementOutsideLoop \| wrong rule: Some statements inside the braces of a loop body are not repeated; they run once, before or after the loop. \| right rule: Every statement inside the loop braces is part of the body and runs on every pass. |
+| mis:loop_body->LoopCountIsStatementCount \| wrong rule: The repeat count of a counted loop says how many of the body statements are executed. \| right rule: The repeat count is how many times the whole body runs; every pass runs all body statements. |
+| mis:loop_body->LoopOutputSameEachPass \| wrong rule: A loop prints the same thing on every pass; the changing loop variable does not affect what the body does. \| right rule: The body uses the current value of the loop variable, so its output can differ on each pass. |
+| mis:loop_body->LoopRunsStatementsSeparately \| wrong rule: A loop runs its first body statement all N times, then its second body statement all N times. \| right rule: Each pass runs the whole body in order, so the body statements interleave: S1, S2, S1, S2, ... |
+| mis:loop_body->StateChangeIgnoredAcrossPasses \| wrong rule: Values changed by one pass of a loop (other than the loop variable) do not affect later passes. \| right rule: Each pass starts from the state left by the previous pass, so a change in one pass carries into the next ones. |
+| mis:loop_body->StatementAfterLoopInBody \| wrong rule: A statement written after the loop is repeated with the loop body. \| right rule: The body ends at the closing brace (or after its single statement); code after it runs once, after the loop ends. |
+| mis:loop_body->WhileStopsMidBody \| wrong rule: The loop stops the moment the condition becomes false, even in the middle of the body. \| right rule: The condition is tested only before each pass, so the whole body finishes before the loop can stop. |
+
+Prune: the model's reply (edge id and score; the kept edges sum to 1):
+```
+mis:loop_body->ForLoopPartSkipped (0.45), mis:loop_body->LoopOutputSameEachPass (0.40), mis:loop_body->StateChangeIgnoredAcrossPasses (0.15)
+```
+Kept by pruning: mis:loop_body->ForLoopPartSkipped (0.45), mis:loop_body->LoopOutputSameEachPass (0.40), mis:loop_body->StateChangeIgnoredAcrossPasses (0.15)
+
+Label prompt for the misconception / error edges (judged together). The model saw the program, the question, the numbered clauses, and these edges with their wrong rule and right rule:
+| edge |
+|---|
+| mis:loop_body->ForLoopPartSkipped \| wrong rule: A pass of a loop may leave out one of its parts (the condition test, the body, the update, or the initialization). \| right rule: Each pass of a for loop runs test, then body, then update, every time; the initialization runs once, at the start. |
+| mis:loop_body->LoopOutputSameEachPass \| wrong rule: A loop prints the same thing on every pass; the changing loop variable does not affect what the body does. \| right rule: The body uses the current value of the loop variable, so its output can differ on each pass. |
+| mis:loop_body->StateChangeIgnoredAcrossPasses \| wrong rule: Values changed by one pass of a loop (other than the loop variable) do not affect later passes. \| right rule: Each pass starts from the state left by the previous pass, so a change in one pass carries into the next ones. |
+Model's reply:
+```
+mis:loop_body->ForLoopPartSkipped | not applied | clauses: none | confidence: 0.7
+mis:loop_body->LoopOutputSameEachPass | not applied | clauses: none | confidence: 0.6
+mis:loop_body->StateChangeIgnoredAcrossPasses | not applied | clauses: none | confidence: 0.75
+```
+
+Parsed labels:
+| edge | label | prune score | confidence | score | clauses | words |
+|---|---|---|---|---|---|---|
+| mis:loop_body->ForLoopPartSkipped | not applied |  |  | 0.0 |  |  |
+| mis:loop_body->LoopOutputSameEachPass | not applied |  |  | 0.0 |  |  |
+| mis:loop_body->StateChangeIgnoredAcrossPasses | not applied |  |  | 0.0 |  |  |
+
+#### loop_body, level ways: 14 edges offered
+Edges offered:
+| edge |
+|---|
+| lvl:loop_body@L0#0 \| level L0 way everyday_reading: Folk meaning: an everyday 'repeat this' instruction can be read loosely - a helper fills in missing steps, does each step N times in turn, or stops partway. A Java loop body is exactly the statements inside its braces (or one statement), all executed in order on every pass. |
+| lvl:loop_body@L0#6 \| level L0 way inconsistent_trace: Applies the body rule (LT) unevenly: runs all body statements on some passes but only some on others, includes the statement after the loop on some passes, or uses stale values from the first pass later. (here mixing in: "The loop body always runs at least once, even if the condition is false at the start") |
+| lvl:loop_body@L1#0 \| level L1 way names_the_element: The loop body is the statement block that a loop repeats on each pass. |
+| lvl:loop_body@L1#1 \| level L1 way states_the_rule: The body is the block after the loop header; braces are optional only if it is a single statement, in which case only that one statement is repeated. |
+| lvl:loop_body@L2#0 \| level L2 way line_by_line_trace: On each pass the body's statements run in order, first to last, after a true test (and, in a for loop, before the update); the next pass starts from the state left by this one. |
+| lvl:loop_body@L2#1 \| level L2 way output_prediction: The body's output on each pass depends on the current values, so successive passes can print different lines: TenHellos prints '4th Hello', '5th Hello', ...; the number of executions of each body statement equals the number of passes. |
+| lvl:loop_body@L2#2 \| level L2 way one_step_execution: One pass of the body changes exactly the variables it assigns (e.g. print i and v, double v, increment i) and these changes carry into the next test and pass. |
+| lvl:loop_body@L3#0 \| level L3 way relation_to_neighbour: The accumulator update (sum += x) is placed inside the body so it runs once per pass, while the accumulator is declared and initialized before the loop. |
+| lvl:loop_body@L3#1 \| level L3 way relation_to_neighbour: count++ sits inside the body, often under an if, so it runs once on each pass that matches; the counter is declared before the loop. |
+| lvl:loop_body@L3#2 \| level L3 way relation_to_neighbour: The body is what the while repeats; the condition is tested only between complete executions of it. |
+| lvl:loop_body@L3#3 \| level L3 way purpose_of_the_whole: Plan: the body is the 'process one item / one step' part of a loop plan: each pass performs the same process on a new value (next element, next bet, next term). |
+| lvl:loop_body@L4#0 \| level L4 way predict_a_change: Moving a statement from inside the body to after the loop changes it from running once per pass to once in total (and vice versa); reordering two body statements that share a variable changes the results (e.g. increment before vs after use). |
+| lvl:loop_body@L4#1 \| level L4 way diagnose_an_error: rule broken: Without braces, the body of an if, while or for is exactly one statement; indentation does not add statements to it. Kind: silent logic error. Trigger class: A braceless header followed by two or more indented statements: only the first is controlled, the others run once, after the if/loop, on every input. |
+| lvl:loop_body@L4#2 \| level L4 way transfer_to_a_new_program: Put inside the body exactly what must happen once per pass; put set-up before the loop and final reporting after it. Always brace a multi-statement body. |
+
+Prune: the model's reply (edge id and score; the kept edges sum to 1):
+```
+{lvl:loop_body@L0#6 (Score: 0.45)}
+{lvl:loop_body@L2#0 (Score: 0.35)}
+{lvl:loop_body@L2#1 (Score: 0.2)}
+```
+Kept by pruning: lvl:loop_body@L0#6 (0.45), lvl:loop_body@L2#0 (0.35), lvl:loop_body@L2#1 (0.20)
+
+Label prompt for level way lvl:loop_body@L0#6 (the model saw only the concept, the way's name 'inconsistent trace' and its text; no level):
+> Applies the body rule (LT) unevenly: runs all body statements on some passes but only some on others, includes the statement after the loop on some passes, or uses stale values from the first pass later. (here mixing in: "The loop body always runs at least once, even if the condition is false at the start")
+
+Model's reply:
+```
+Label: not shown
+Clauses: none
+Confidence: 0.72
+```
+
+Label prompt for level way lvl:loop_body@L2#0 (the model saw only the concept, the way's name 'line by line trace' and its text; no level):
+> On each pass the body's statements run in order, first to last, after a true test (and, in a for loop, before the update); the next pass starts from the state left by this one.
+
+Model's reply:
+```
+Label: not shown
+Clauses: none
+Confidence: 0.85
+```
+
+Label prompt for level way lvl:loop_body@L2#1 (the model saw only the concept, the way's name 'output prediction' and its text; no level):
+> The body's output on each pass depends on the current values, so successive passes can print different lines: TenHellos prints '4th Hello', '5th Hello', ...; the number of executions of each body statement equals the number of passes.
+
+Model's reply:
+```
+Label: not shown
+Clauses: none
+Confidence: 0.7
+```
+
+Parsed labels:
+| edge | label | prune score | confidence | score | clauses | words |
+|---|---|---|---|---|---|---|
+| lvl:loop_body@L0#6 | not applied |  |  | 0.0 |  |  |
+| lvl:loop_body@L2#0 | not applied |  |  | 0.0 |  |  |
+| lvl:loop_body@L2#1 | not applied |  |  | 0.0 |  |  |
+
 **Kept on a path at this depth** (best N in tiers: held misconception / broken edge, then held error, then correct / confirmed / shown):
 
-mis:loop_variable->ForInitRepeats [held, tier 0, 0.41], lvl:loop_variable@L0#5 [shown, tier 2, 0.51], mis:assignment->VariableKeepsOldValue [correct, tier 2, 0.28]
+mis:loop_variable->ForInitRepeats [held, tier 0, 0.41], lvl:loop_variable@L0#5 [shown, tier 2, 0.51], mis:assignment->VariableKeepsOldValue [correct, tier 2, 0.30]
 
 **Clause coverage after this depth:**
 | clause | text | covered by |
@@ -970,46 +971,47 @@ mis:loop_variable->ForInitRepeats [held, tier 0, 0.41], lvl:loop_variable@L0#5 [
 | c1 | Each pass starts by setting i = 1 again | mis:for_loop->ForInitRepeats |
 | c2 | Then i++ runs before the body and adds 2 | mis:loop_control->ForUpdateBeforeBody |
 | c3 | so i is 3 | mis:loop_control->ForUpdateBeforeBody |
-| c4 | So every pass prints the same thing, 3 | mis:loop_control->ForUpdateBeforeBody |
+| c4 | So every pass prints the same thing, 3 | mis:increment_operators->PreIncrementBeforeLoop |
 
 **Graph check, not yet read (the walk may not stop while these remain):** par:assignment~comparison_operators
 
 Figure 6 (the graph after depth 3): C:\Users\magnu\OneDrive\Desktop\ES_VIterbi_Personalized_Learning\results\viewer\MY15_figure06.png
 
-Held set after the one-fault rules: mis:increment_operators->IncrementByTwo, mis:loop_variable->ForInitRepeats, mis:for_loop->ForInitRepeats, mis:for_loop->ForUpdateBeforeBody, mis:increment_operators->PreIncrementBeforeLoop (same words as mis:increment_operators->IncrementByTwo); filed at the dependent concept: mis:loop_control->ForUpdateBeforeBody
+Held set after the one-fault rules: mis:increment_operators->IncrementByTwo, mis:for_loop->ForInitRepeats, mis:for_loop->ForUpdateBeforeBody, mis:increment_operators->PreIncrementBeforeLoop (same words as mis:increment_operators->IncrementByTwo); filed at the dependent concept: mis:loop_control->ForUpdateBeforeBody, mis:loop_variable->ForInitRepeats
 
-Shadows (a held label on a prerequisite, on a generic concept, or at a concept where the graph attaches the misconception as context, resting on the words of a stronger label at the specific or primary concept, is one wrong sentence read twice; it marks no root cause and sets no level): mis:loop_variable->ForInitRepeats (shadow of mis:for_loop->ForInitRepeats)
+Shadows (a held label on a prerequisite, on a generic concept, or at a concept where the graph attaches the misconception as context, resting on the words of a stronger label at the specific or primary concept, is one wrong sentence read twice; it marks no root cause and sets no level): mis:loop_control->ForUpdateBeforeBody (shadow of mis:for_loop->ForUpdateBeforeBody), mis:loop_variable->ForInitRepeats (shadow of mis:for_loop->ForInitRepeats)
 
 ## 4. Diagnosis (rules over the labelled graph, no model)
-Root-cause walk: held on ['for_loop', 'increment_operators'], broken at [] (consequences: pre:for_loop->loop_body, pre:assignment->increment_operators, pre:loop_control->for_loop, pre:loop_control->increment_operators, pre:loop_variable->loop_control), prerequisites {'increment_operators': ['assignment', 'loop_control'], 'boolean_expression': ['comparison_operators'], 'comparison_operators': ['expression'], 'loop_body': ['for_loop'], 'loop_scope': ['for_loop'], 'for_loop': ['loop_control'], 'loop_control': ['loop_variable'], 'control_flow': ['statement'], 'print': ['statement']}
+Root-cause walk: held on ['for_loop', 'increment_operators'], broken at [] (consequences: pre:loop_variable->loop_control, pre:assignment->increment_operators, pre:loop_control->for_loop, pre:loop_control->increment_operators, pre:for_loop->loop_body), prerequisites {'increment_operators': ['assignment', 'loop_control'], 'boolean_expression': ['comparison_operators'], 'comparison_operators': ['expression'], 'loop_body': ['for_loop'], 'loop_scope': ['for_loop'], 'for_loop': ['loop_control'], 'loop_control': ['loop_variable'], 'control_flow': ['statement'], 'print': ['statement']}
 - for_loop: L0 via misconception "Each pass starts by setting i = 1 again"
 - increment_operators: L0 via misconception "Then i++ runs before the body and adds 2; so i is 3"
-- loop_control: L0 via misconception "Then i++ runs before the body and adds 2; so i is 3; So every pass prints the same thing, 3"
+- loop_control: L0 via inconsistent_trace "Each pass starts by setting i = 1 again; Then i++ runs before the body and adds 2; so i is 3; So every pass prints the same thing, 3"
 - loop_variable: L0 via inconsistent_trace "Each pass starts by setting i = 1 again; Then i++ runs before the body and adds 2; So every pass prints the same thing, 3"
 
-**Stop:** max depth at depth 3; prompts {'prune': 16, 'label': 31}, fresh model calls 0, cache hits 47
+**Stop:** max depth at depth 3; prompts {'prune': 16, 'label': 31}, fresh model calls 9, cache hits 38
 
 ### Held misconceptions
 | concept | misconception | kind | quote | score | shares_evidence_with |
 |---|---|---|---|---|---|
-| increment_operators | IncrementByTwo | misconception | Then i++ runs before the body and adds 2; so i is 3 | 0.4275 |  |
+| increment_operators | IncrementByTwo | misconception | Then i++ runs before the body and adds 2; so i is 3 | 0.475 |  |
 | for_loop | ForInitRepeats | misconception | Each pass starts by setting i = 1 again | 0.38 |  |
 | for_loop | ForUpdateBeforeBody | misconception | Then i++ runs before the body and adds 2; so i is 3 | 0.36 |  |
-| increment_operators | PreIncrementBeforeLoop | misconception | Then i++ runs before the body and adds 2; so i is 3; So every pass prints the same thing, 3 | 0.28 | mis:increment_operators->IncrementByTwo |
+| increment_operators | PreIncrementBeforeLoop | misconception | Then i++ runs before the body and adds 2; so i is 3; So every pass prints the same thing, 3 | 0.245 | mis:increment_operators->IncrementByTwo |
 
 ### Shadowed labels (held in the reading, folded into the label they shadow; not faults of their own)
 | concept | misconception | shadow_of | quote | score |
 |---|---|---|---|---|
+| loop_control | ForUpdateBeforeBody | mis:for_loop->ForUpdateBeforeBody | Then i++ runs before the body and adds 2; so i is 3 | 0.36 |
 | loop_variable | ForInitRepeats | mis:for_loop->ForInitRepeats | Each pass starts by setting i = 1 again | 0.414 |
 
 ### Broken concept edges
 | edge | quote | score | consequence_of |
 |---|---|---|---|
-| pre:for_loop->loop_body | Then i++ runs before the body and adds 2 | 0.595 | mis:increment_operators->IncrementByTwo |
+| pre:loop_variable->loop_control | Each pass starts by setting i = 1 again; Then i++ runs before the body and adds 2 | 0.85 | mis:increment_operators->IncrementByTwo |
 | pre:assignment->increment_operators | Then i++ runs before the body and adds 2; so i is 3 | 0.54 | mis:increment_operators->IncrementByTwo |
-| pre:loop_control->for_loop | Each pass starts by setting i = 1 again; Then i++ runs before the body and adds 2 | 0.54 | mis:increment_operators->IncrementByTwo |
+| pre:loop_control->for_loop | Each pass starts by setting i = 1 again; Then i++ runs before the body and adds 2 | 0.45 | mis:increment_operators->IncrementByTwo |
 | pre:loop_control->increment_operators | Then i++ runs before the body and adds 2; so i is 3 | 0.34 | mis:increment_operators->IncrementByTwo |
-| pre:loop_variable->loop_control | Each pass starts by setting i = 1 again; Then i++ runs before the body and adds 2 | 0.34 | mis:increment_operators->IncrementByTwo |
+| pre:for_loop->loop_body | Then i++ runs before the body and adds 2 | 0.34 | mis:increment_operators->IncrementByTwo |
 
 ### Root cause: for_loop / ForInitRepeats
 
@@ -1018,7 +1020,7 @@ Root-cause walk: held on ['for_loop', 'increment_operators'], broken at [] (cons
 |---|---|---|---|---|---|---|---|---|
 | for_loop | L0 | misconception | ForInitRepeats | level_mis_links | Each pass starts by setting i = 1 again | wrong rule: The initialization of a for loop runs again after a pass of the body. Right rule: The initialization runs exactly once, before the first condition test. | ForUpdateBeforeBody |  |
 | increment_operators | L0 | misconception | IncrementByTwo | level_mis_links | Then i++ runs before the body and adds 2; so i is 3 | wrong rule: i++ increases i by 2. Right rule: i++ (and ++i) increases i by exactly 1. | PreIncrementBeforeLoop |  |
-| loop_control | L0 | misconception | ForUpdateBeforeBody | level_mis_links | Then i++ runs before the body and adds 2; so i is 3; So every pass prints the same thing, 3 | wrong rule: The update part of a for header (e.g. i = i - 4) runs before the body on each pass, so the first pass already sees the updated value. Right rule: The update runs after the body, before the next condition test; the first pass uses the initial value. |  |  |
+| loop_control | L0 | inconsistent_trace |  | level_way | Each pass starts by setting i = 1 again; Then i++ runs before the body and adds 2; so i is 3; So every pass prints the same thing, 3 |  |  |  |
 | loop_variable | L0 | inconsistent_trace |  | level_way | Each pass starts by setting i = 1 again; Then i++ runs before the body and adds 2; So every pass prints the same thing, 3 |  |  |  |
 
 ### Overall level: L0
@@ -1029,48 +1031,48 @@ Clause coverage (final):
 | Each pass starts by setting i = 1 again | lvl:loop_control@L0#3 |
 | Then i++ runs before the body and adds 2 | mis:loop_control->ForUpdateBeforeBody |
 | so i is 3 | mis:loop_control->ForUpdateBeforeBody |
-| So every pass prints the same thing, 3 | mis:loop_control->ForUpdateBeforeBody |
+| So every pass prints the same thing, 3 | lvl:loop_control@L0#3 |
 
 Figure 7 (final picture): C:\Users\magnu\OneDrive\Desktop\ES_VIterbi_Personalized_Learning\results\viewer\MY15_figure07.png
 
 ## 5. Every labelled edge (the evidence list, kept or not)
 | depth | source | edge | kind | label | prune_score | confidence | score | clauses | quote |
 |---|---|---|---|---|---|---|---|---|---|
-| 1 | loop_control | mis:loop_control->ForUpdateBeforeBody | misconception | held | 0.45 | 0.9 | 0.405 | [2, 3, 4] | Then i++ runs before the body and adds 2; so i is 3; So every pass prints the same thing, 3 |
+| 1 | loop_control | mis:loop_control->ForUpdateBeforeBody | misconception | held | 0.4 | 0.9 | 0.36 | [2, 3] | Then i++ runs before the body and adds 2; so i is 3 |
 | 1 | loop_control | lvl:loop_control@L0#3 | level | shown | 0.5 | 0.9 | 0.45 | [1, 2, 3, 4] | Each pass starts by setting i = 1 again; Then i++ runs before the body and adds 2; so i is 3; So every pass prints the same thing, 3 |
-| 1 | increment_operators | mis:increment_operators->IncrementByTwo | misconception | held | 0.45 | 0.95 | 0.4275 | [2, 3] | Then i++ runs before the body and adds 2; so i is 3 |
-| 1 | increment_operators | mis:increment_operators->PreIncrementBeforeLoop | misconception | held | 0.4 | 0.7 | 0.28 | [2, 3, 4] | Then i++ runs before the body and adds 2; so i is 3; So every pass prints the same thing, 3 |
+| 1 | increment_operators | mis:increment_operators->IncrementByTwo | misconception | held | 0.5 | 0.95 | 0.475 | [2, 3] | Then i++ runs before the body and adds 2; so i is 3 |
+| 1 | increment_operators | mis:increment_operators->PreIncrementBeforeLoop | misconception | held | 0.35 | 0.7 | 0.245 | [2, 3, 4] | Then i++ runs before the body and adds 2; so i is 3; So every pass prints the same thing, 3 |
 | 1 | increment_operators | lvl:increment_operators@L0#0 | level | shown | 0.55 | 0.85 | 0.4675 | [2, 3] | Then i++ runs before the body and adds 2; so i is 3 |
 | 1 | for_loop | mis:for_loop->ForInitRepeats | misconception | held | 0.4 | 0.95 | 0.38 | [1] | Each pass starts by setting i = 1 again |
 | 1 | for_loop | mis:for_loop->ForUpdateBeforeBody | misconception | held | 0.4 | 0.9 | 0.36 | [2, 3] | Then i++ runs before the body and adds 2; so i is 3 |
 | 1 | for_loop | lvl:for_loop@L0#11 | level | shown | 0.6 | 0.85 | 0.51 | [1, 2] | Each pass starts by setting i = 1 again; Then i++ runs before the body and adds 2 |
 | 2 | increment_operators | pre:assignment->increment_operators | prerequisite | broken | 0.6 | 0.9 | 0.54 | [2, 3] | Then i++ runs before the body and adds 2; so i is 3 |
 | 2 | increment_operators | pre:loop_control->increment_operators | prerequisite | broken | 0.4 | 0.85 | 0.34 | [2, 3] | Then i++ runs before the body and adds 2; so i is 3 |
-| 2 | loop_control | pre:loop_control->for_loop | prerequisite | broken | 0.6 | 0.9 | 0.54 | [1, 2] | Each pass starts by setting i = 1 again; Then i++ runs before the body and adds 2 |
-| 2 | loop_control | pre:loop_variable->loop_control | prerequisite | broken | 0.4 | 0.85 | 0.34 | [1, 2] | Each pass starts by setting i = 1 again; Then i++ runs before the body and adds 2 |
-| 2 | for_loop | pre:for_loop->loop_body | prerequisite | broken | 0.7 | 0.85 | 0.595 | [2] | Then i++ runs before the body and adds 2 |
-| 3 | assignment | mis:assignment->VariableKeepsOldValue | misconception | correct | 0.5 | 0.55 | 0.275 | [1, 3] | Each pass starts by setting i = 1 again; so i is 3 |
-| 3 | assignment | mis:assignment->AssignmentAddsToTarget | misconception | correct | 0.2 | 0.5 | 0.1 | [1] | Each pass starts by setting i = 1 again |
+| 2 | for_loop | pre:loop_control->for_loop | prerequisite | broken | 0.5 | 0.9 | 0.45 | [1, 2] | Each pass starts by setting i = 1 again; Then i++ runs before the body and adds 2 |
+| 2 | for_loop | pre:for_loop->loop_body | prerequisite | broken | 0.4 | 0.85 | 0.34 | [2] | Then i++ runs before the body and adds 2 |
+| 2 | loop_control | pre:loop_variable->loop_control | prerequisite | broken | 1.0 | 0.85 | 0.85 | [1, 2] | Each pass starts by setting i = 1 again; Then i++ runs before the body and adds 2 |
 | 3 | loop_variable | mis:loop_variable->ForInitRepeats | misconception | held | 0.45 | 0.92 | 0.414 | [1] | Each pass starts by setting i = 1 again |
 | 3 | loop_variable | mis:loop_variable->LoopOutputSameEachPass | misconception | correct | 0.35 | 0.6 | 0.21 | [3, 4] | so i is 3; So every pass prints the same thing, 3 |
 | 3 | loop_variable | lvl:loop_variable@L0#5 | level | shown | 0.6 | 0.85 | 0.51 | [1, 2, 4] | Each pass starts by setting i = 1 again; Then i++ runs before the body and adds 2; So every pass prints the same thing, 3 |
+| 3 | assignment | mis:assignment->VariableKeepsOldValue | misconception | correct | 0.5 | 0.6 | 0.3 | [1, 3] | Each pass starts by setting i = 1 again; so i is 3 |
+| 3 | assignment | mis:assignment->AssignmentAddsToTarget | misconception | correct | 0.3 | 0.55 | 0.165 | [1] | Each pass starts by setting i = 1 again |
 
 ## 6. The paths (what the keep step kept, depth by depth)
 | depth | source | edge | kind | label | score | clauses |
 |---|---|---|---|---|---|---|
-| 1 | increment_operators | mis:increment_operators->IncrementByTwo | misconception | held | 0.4275 | [2, 3] |
-| 1 | loop_control | mis:loop_control->ForUpdateBeforeBody | misconception | held | 0.405 | [2, 3, 4] |
+| 1 | increment_operators | mis:increment_operators->IncrementByTwo | misconception | held | 0.475 | [2, 3] |
 | 1 | for_loop | mis:for_loop->ForInitRepeats | misconception | held | 0.38 | [1] |
+| 1 | loop_control | mis:loop_control->ForUpdateBeforeBody | misconception | held | 0.36 | [2, 3] |
 | 1 | for_loop | mis:for_loop->ForUpdateBeforeBody | misconception | held | 0.36 | [2, 3] |
-| 1 | increment_operators | mis:increment_operators->PreIncrementBeforeLoop | misconception | held | 0.28 | [2, 3, 4] |
-| 2 | for_loop | pre:for_loop->loop_body | prerequisite | broken | 0.595 | [2] |
+| 1 | increment_operators | mis:increment_operators->PreIncrementBeforeLoop | misconception | held | 0.245 | [2, 3, 4] |
+| 2 | loop_control | pre:loop_variable->loop_control | prerequisite | broken | 0.85 | [1, 2] |
 | 2 | increment_operators | pre:assignment->increment_operators | prerequisite | broken | 0.54 | [2, 3] |
-| 2 | loop_control | pre:loop_control->for_loop | prerequisite | broken | 0.54 | [1, 2] |
+| 2 | for_loop | pre:loop_control->for_loop | prerequisite | broken | 0.45 | [1, 2] |
 | 2 | increment_operators | pre:loop_control->increment_operators | prerequisite | broken | 0.34 | [2, 3] |
-| 2 | loop_control | pre:loop_variable->loop_control | prerequisite | broken | 0.34 | [1, 2] |
+| 2 | for_loop | pre:for_loop->loop_body | prerequisite | broken | 0.34 | [2] |
 | 3 | loop_variable | mis:loop_variable->ForInitRepeats | misconception | held | 0.414 | [1] |
 | 3 | loop_variable | lvl:loop_variable@L0#5 | level | shown | 0.51 | [1, 2, 4] |
-| 3 | assignment | mis:assignment->VariableKeepsOldValue | misconception | correct | 0.275 | [1, 3] |
+| 3 | assignment | mis:assignment->VariableKeepsOldValue | misconception | correct | 0.3 | [1, 3] |
 
 ## 7. Raw traversal log
 ```
@@ -1080,17 +1082,17 @@ start: BM25 of the answer against each tagged concept: loop_control 20.35 (hits 
 start: chosen loop_control, increment_operators, for_loop
 start concepts (3): loop_control, increment_operators, for_loop
 --- depth 1: current concepts ['loop_control', 'increment_operators', 'for_loop']
-  loop_control (misconceptions): 11 candidates -> kept mis:loop_control->ForUpdateBeforeBody (0.45), mis:loop_control->ForLoopPartSkipped (0.30), mis:loop_control->LoopStepAlwaysOne (0.25)
-    mis:loop_control->ForUpdateBeforeBody -> held (0.41) "Then i++ runs before the body and adds 2; so i is 3; So every pass prints the same thing, 3"
-    mis:loop_control->ForLoopPartSkipped -> not applied (0.00) ""
+  loop_control (misconceptions): 11 candidates -> kept mis:loop_control->ForUpdateBeforeBody (0.40), mis:loop_control->LoopStepAlwaysOne (0.30), mis:loop_control->LoopHeaderIsEquations (0.30)
+    mis:loop_control->ForUpdateBeforeBody -> held (0.36) "Then i++ runs before the body and adds 2; so i is 3"
     mis:loop_control->LoopStepAlwaysOne -> not applied (0.00) ""
+    mis:loop_control->LoopHeaderIsEquations -> not applied (0.00) ""
   loop_control (level ways): 19 candidates -> kept lvl:loop_control@L0#3 (0.50), lvl:loop_control@L2#2 (0.30), lvl:loop_control@L2#0 (0.20)
     lvl:loop_control@L0#3 -> shown (0.45) "Each pass starts by setting i = 1 again; Then i++ runs before the body and adds 2; so i is 3; So every pass prints the same thing, 3"
     lvl:loop_control@L2#2 -> not applied (0.00) ""
     lvl:loop_control@L2#0 -> not applied (0.00) ""
-  increment_operators (misconceptions): 5 candidates -> kept mis:increment_operators->IncrementByTwo (0.45), mis:increment_operators->PreIncrementBeforeLoop (0.40), mis:increment_operators->IdiomOverridesCode (0.15)
-    mis:increment_operators->IncrementByTwo -> held (0.43) "Then i++ runs before the body and adds 2; so i is 3"
-    mis:increment_operators->PreIncrementBeforeLoop -> held (0.28) "Then i++ runs before the body and adds 2; so i is 3; So every pass prints the same thing, 3"
+  increment_operators (misconceptions): 5 candidates -> kept mis:increment_operators->IncrementByTwo (0.50), mis:increment_operators->PreIncrementBeforeLoop (0.35), mis:increment_operators->IdiomOverridesCode (0.15)
+    mis:increment_operators->IncrementByTwo -> held (0.47) "Then i++ runs before the body and adds 2; so i is 3"
+    mis:increment_operators->PreIncrementBeforeLoop -> held (0.24) "Then i++ runs before the body and adds 2; so i is 3; So every pass prints the same thing, 3"
     mis:increment_operators->IdiomOverridesCode -> not applied (0.00) ""
   increment_operators (level ways): 16 candidates -> kept lvl:increment_operators@L0#0 (0.55), lvl:increment_operators@L0#3 (0.30), lvl:increment_operators@L2#2 (0.15)
     lvl:increment_operators@L0#0 -> shown (0.47) "Then i++ runs before the body and adds 2; so i is 3"
@@ -1104,44 +1106,26 @@ start concepts (3): loop_control, increment_operators, for_loop
     lvl:for_loop@L0#11 -> shown (0.51) "Each pass starts by setting i = 1 again; Then i++ runs before the body and adds 2"
     lvl:for_loop@L2#2 -> not applied (0.00) ""
     lvl:for_loop@L2#0 -> not applied (0.00) ""
-  kept: mis:increment_operators->IncrementByTwo [held, tier 0, 0.43], mis:loop_control->ForUpdateBeforeBody [held, tier 0, 0.41], mis:for_loop->ForInitRepeats [held, tier 0, 0.38], mis:for_loop->ForUpdateBeforeBody [held, tier 0, 0.36], mis:increment_operators->PreIncrementBeforeLoop [held, tier 0, 0.28]
-  clause coverage: c1 <- mis:for_loop->ForInitRepeats; c2 <- mis:loop_control->ForUpdateBeforeBody; c3 <- mis:loop_control->ForUpdateBeforeBody; c4 <- mis:loop_control->ForUpdateBeforeBody
+  kept: mis:increment_operators->IncrementByTwo [held, tier 0, 0.47], mis:for_loop->ForInitRepeats [held, tier 0, 0.38], mis:loop_control->ForUpdateBeforeBody [held, tier 0, 0.36], mis:for_loop->ForUpdateBeforeBody [held, tier 0, 0.36], mis:increment_operators->PreIncrementBeforeLoop [held, tier 0, 0.24]
+  clause coverage: c1 <- mis:for_loop->ForInitRepeats; c2 <- mis:loop_control->ForUpdateBeforeBody; c3 <- mis:loop_control->ForUpdateBeforeBody; c4 <- mis:increment_operators->PreIncrementBeforeLoop
   not yet read: pre:assignment->increment_operators, pre:for_loop->loop_body, pre:for_loop->loop_scope, pre:loop_control->for_loop, pre:loop_control->increment_operators, pre:loop_variable->loop_control
---- depth 2: current concepts ['increment_operators', 'loop_control', 'for_loop']
+--- depth 2: current concepts ['increment_operators', 'for_loop', 'loop_control']
   increment_operators (concept edges): 2 candidates -> kept pre:assignment->increment_operators (0.60), pre:loop_control->increment_operators (0.40)
     pre:assignment->increment_operators -> broken (0.54) "Then i++ runs before the body and adds 2; so i is 3"
     pre:loop_control->increment_operators -> broken (0.34) "Then i++ runs before the body and adds 2; so i is 3"
-  loop_control (concept edges): 2 candidates -> kept pre:loop_control->for_loop (0.60), pre:loop_variable->loop_control (0.40)
-    pre:loop_control->for_loop -> broken (0.54) "Each pass starts by setting i = 1 again; Then i++ runs before the body and adds 2"
-    pre:loop_variable->loop_control -> broken (0.34) "Each pass starts by setting i = 1 again; Then i++ runs before the body and adds 2"
-  for_loop (concept edges): 2 candidates -> kept pre:for_loop->loop_body (0.70), pre:for_loop->loop_scope (0.30)
-    pre:for_loop->loop_body -> broken (0.59) "Then i++ runs before the body and adds 2"
+  for_loop (concept edges): 3 candidates -> kept pre:loop_control->for_loop (0.50), pre:for_loop->loop_body (0.40), pre:for_loop->loop_scope (0.10)
+    pre:loop_control->for_loop -> broken (0.45) "Each pass starts by setting i = 1 again; Then i++ runs before the body and adds 2"
+    pre:for_loop->loop_body -> broken (0.34) "Then i++ runs before the body and adds 2"
     pre:for_loop->loop_scope -> not applied (0.00) ""
-  kept: pre:for_loop->loop_body [broken, tier 0, 0.59], pre:assignment->increment_operators [broken, tier 0, 0.54], pre:loop_control->for_loop [broken, tier 0, 0.54], pre:loop_control->increment_operators [broken, tier 0, 0.34], pre:loop_variable->loop_control [broken, tier 0, 0.34]
-  reached across pre:for_loop->loop_body, entered next: loop_body
-  reached across pre:assignment->increment_operators, entered next: assignment
+  loop_control (concept edges): 1 candidates -> kept pre:loop_variable->loop_control (1.00)
+    pre:loop_variable->loop_control -> broken (0.85) "Each pass starts by setting i = 1 again; Then i++ runs before the body and adds 2"
+  kept: pre:loop_variable->loop_control [broken, tier 0, 0.85], pre:assignment->increment_operators [broken, tier 0, 0.54], pre:loop_control->for_loop [broken, tier 0, 0.45], pre:loop_control->increment_operators [broken, tier 0, 0.34], pre:for_loop->loop_body [broken, tier 0, 0.34]
   reached across pre:loop_variable->loop_control, entered next: loop_variable
-  clause coverage: c1 <- mis:for_loop->ForInitRepeats; c2 <- mis:loop_control->ForUpdateBeforeBody; c3 <- mis:loop_control->ForUpdateBeforeBody; c4 <- mis:loop_control->ForUpdateBeforeBody
+  reached across pre:assignment->increment_operators, entered next: assignment
+  reached across pre:for_loop->loop_body, entered next: loop_body
+  clause coverage: c1 <- mis:for_loop->ForInitRepeats; c2 <- mis:loop_control->ForUpdateBeforeBody; c3 <- mis:loop_control->ForUpdateBeforeBody; c4 <- mis:increment_operators->PreIncrementBeforeLoop
   not yet read: own edges of assignment, own edges of loop_body, own edges of loop_variable
---- depth 3: current concepts ['loop_body', 'for_loop', 'assignment', 'increment_operators', 'loop_control', 'loop_variable']
-  loop_body (misconceptions): 12 candidates -> kept mis:loop_body->LoopOutputSameEachPass (0.50), mis:loop_body->ForLoopPartSkipped (0.30), mis:loop_body->StateChangeIgnoredAcrossPasses (0.20)
-    mis:loop_body->LoopOutputSameEachPass -> not applied (0.00) ""
-    mis:loop_body->ForLoopPartSkipped -> not applied (0.00) ""
-    mis:loop_body->StateChangeIgnoredAcrossPasses -> not applied (0.00) ""
-  loop_body (level ways): 14 candidates -> kept lvl:loop_body@L0#6 (0.45), lvl:loop_body@L2#0 (0.35), lvl:loop_body@L2#1 (0.20)
-    lvl:loop_body@L0#6 -> not applied (0.00) ""
-    lvl:loop_body@L2#0 -> not applied (0.00) ""
-    lvl:loop_body@L2#1 -> not applied (0.00) ""
-  for_loop (concept edges): 1 candidates -> kept pre:for_loop->loop_scope (1.00)
-    pre:for_loop->loop_scope -> not applied (0.00) ""
-  assignment (misconceptions): 15 candidates -> kept mis:assignment->VariableKeepsOldValue (0.50), mis:assignment->AssignmentIsEquation (0.30), mis:assignment->AssignmentAddsToTarget (0.20)
-    mis:assignment->VariableKeepsOldValue -> correct (0.28) "Each pass starts by setting i = 1 again; so i is 3"
-    mis:assignment->AssignmentIsEquation -> not applied (0.00) ""
-    mis:assignment->AssignmentAddsToTarget -> correct (0.10) "Each pass starts by setting i = 1 again"
-  assignment (level ways): 24 candidates -> kept lvl:assignment@L3#6 (0.50), lvl:assignment@L3#9 (0.30), lvl:assignment@L0#9 (0.20)
-    lvl:assignment@L3#6 -> not applied (0.00) ""
-    lvl:assignment@L3#9 -> not applied (0.00) ""
-    lvl:assignment@L0#9 -> not applied (0.00) ""
+--- depth 3: current concepts ['loop_variable', 'loop_control', 'assignment', 'increment_operators', 'for_loop', 'loop_body']
   loop_variable (misconceptions): 7 candidates -> kept mis:loop_variable->ForInitRepeats (0.45), mis:loop_variable->LoopOutputSameEachPass (0.35), mis:loop_variable->LoopVariableLifetimeScope (0.20)
     mis:loop_variable->ForInitRepeats -> held (0.41) "Each pass starts by setting i = 1 again"
     mis:loop_variable->LoopOutputSameEachPass -> correct (0.21) "so i is 3; So every pass prints the same thing, 3"
@@ -1150,15 +1134,33 @@ start concepts (3): loop_control, increment_operators, for_loop
     lvl:loop_variable@L0#5 -> shown (0.51) "Each pass starts by setting i = 1 again; Then i++ runs before the body and adds 2; So every pass prints the same thing, 3"
     lvl:loop_variable@L1#1 -> not applied (0.00) ""
     lvl:loop_variable@L2#0 -> not applied (0.00) ""
-  kept: mis:loop_variable->ForInitRepeats [held, tier 0, 0.41], lvl:loop_variable@L0#5 [shown, tier 2, 0.51], mis:assignment->VariableKeepsOldValue [correct, tier 2, 0.28]
-  clause coverage: c1 <- mis:for_loop->ForInitRepeats; c2 <- mis:loop_control->ForUpdateBeforeBody; c3 <- mis:loop_control->ForUpdateBeforeBody; c4 <- mis:loop_control->ForUpdateBeforeBody
+  assignment (misconceptions): 15 candidates -> kept mis:assignment->VariableKeepsOldValue (0.50), mis:assignment->AssignmentAddsToTarget (0.30), mis:assignment->AssignmentIsEquation (0.20)
+    mis:assignment->VariableKeepsOldValue -> correct (0.30) "Each pass starts by setting i = 1 again; so i is 3"
+    mis:assignment->AssignmentAddsToTarget -> correct (0.17) "Each pass starts by setting i = 1 again"
+    mis:assignment->AssignmentIsEquation -> not applied (0.00) ""
+  assignment (level ways): 24 candidates -> kept lvl:assignment@L3#6 (0.50), lvl:assignment@L3#9 (0.30), lvl:assignment@L0#9 (0.20)
+    lvl:assignment@L3#6 -> not applied (0.00) ""
+    lvl:assignment@L3#9 -> not applied (0.00) ""
+    lvl:assignment@L0#9 -> not applied (0.00) ""
+  for_loop (concept edges): 1 candidates -> kept pre:for_loop->loop_scope (1.00)
+    pre:for_loop->loop_scope -> not applied (0.00) ""
+  loop_body (misconceptions): 12 candidates -> kept mis:loop_body->ForLoopPartSkipped (0.45), mis:loop_body->LoopOutputSameEachPass (0.40), mis:loop_body->StateChangeIgnoredAcrossPasses (0.15)
+    mis:loop_body->ForLoopPartSkipped -> not applied (0.00) ""
+    mis:loop_body->LoopOutputSameEachPass -> not applied (0.00) ""
+    mis:loop_body->StateChangeIgnoredAcrossPasses -> not applied (0.00) ""
+  loop_body (level ways): 14 candidates -> kept lvl:loop_body@L0#6 (0.45), lvl:loop_body@L2#0 (0.35), lvl:loop_body@L2#1 (0.20)
+    lvl:loop_body@L0#6 -> not applied (0.00) ""
+    lvl:loop_body@L2#0 -> not applied (0.00) ""
+    lvl:loop_body@L2#1 -> not applied (0.00) ""
+  kept: mis:loop_variable->ForInitRepeats [held, tier 0, 0.41], lvl:loop_variable@L0#5 [shown, tier 2, 0.51], mis:assignment->VariableKeepsOldValue [correct, tier 2, 0.30]
+  clause coverage: c1 <- mis:for_loop->ForInitRepeats; c2 <- mis:loop_control->ForUpdateBeforeBody; c3 <- mis:loop_control->ForUpdateBeforeBody; c4 <- mis:increment_operators->PreIncrementBeforeLoop
   not yet read: par:assignment~comparison_operators
-  held: mis:increment_operators->IncrementByTwo, mis:loop_variable->ForInitRepeats, mis:for_loop->ForInitRepeats, mis:for_loop->ForUpdateBeforeBody, mis:increment_operators->PreIncrementBeforeLoop (same words as mis:increment_operators->IncrementByTwo); filed at the dependent concept: mis:loop_control->ForUpdateBeforeBody
-  shadows: mis:loop_variable->ForInitRepeats (shadow of mis:for_loop->ForInitRepeats)
-  root-cause walk: held on ['for_loop', 'increment_operators'], broken at [] (consequences: pre:for_loop->loop_body, pre:assignment->increment_operators, pre:loop_control->for_loop, pre:loop_control->increment_operators, pre:loop_variable->loop_control), prerequisites {'increment_operators': ['assignment', 'loop_control'], 'boolean_expression': ['comparison_operators'], 'comparison_operators': ['expression'], 'loop_body': ['for_loop'], 'loop_scope': ['for_loop'], 'for_loop': ['loop_control'], 'loop_control': ['loop_variable'], 'control_flow': ['statement'], 'print': ['statement']}
+  held: mis:increment_operators->IncrementByTwo, mis:for_loop->ForInitRepeats, mis:for_loop->ForUpdateBeforeBody, mis:increment_operators->PreIncrementBeforeLoop (same words as mis:increment_operators->IncrementByTwo); filed at the dependent concept: mis:loop_control->ForUpdateBeforeBody, mis:loop_variable->ForInitRepeats
+  shadows: mis:loop_control->ForUpdateBeforeBody (shadow of mis:for_loop->ForUpdateBeforeBody), mis:loop_variable->ForInitRepeats (shadow of mis:for_loop->ForInitRepeats)
+  root-cause walk: held on ['for_loop', 'increment_operators'], broken at [] (consequences: pre:loop_variable->loop_control, pre:assignment->increment_operators, pre:loop_control->for_loop, pre:loop_control->increment_operators, pre:for_loop->loop_body), prerequisites {'increment_operators': ['assignment', 'loop_control'], 'boolean_expression': ['comparison_operators'], 'comparison_operators': ['expression'], 'loop_body': ['for_loop'], 'loop_scope': ['for_loop'], 'for_loop': ['loop_control'], 'loop_control': ['loop_variable'], 'control_flow': ['statement'], 'print': ['statement']}
   level for_loop: L0 via misconception "Each pass starts by setting i = 1 again"
   level increment_operators: L0 via misconception "Then i++ runs before the body and adds 2; so i is 3"
-  level loop_control: L0 via misconception "Then i++ runs before the body and adds 2; so i is 3; So every pass prints the same thing, 3"
+  level loop_control: L0 via inconsistent_trace "Each pass starts by setting i = 1 again; Then i++ runs before the body and adds 2; so i is 3; So every pass prints the same thing, 3"
   level loop_variable: L0 via inconsistent_trace "Each pass starts by setting i = 1 again; Then i++ runs before the body and adds 2; So every pass prints the same thing, 3"
 ```
 
@@ -1190,7 +1192,7 @@ start concepts (3): loop_control, increment_operators, for_loop
    "misconception": "IncrementByTwo",
    "kind": "misconception",
    "quote": "Then i++ runs before the body and adds 2; so i is 3",
-   "score": 0.4275
+   "score": 0.475
   },
   {
    "concept": "for_loop",
@@ -1211,12 +1213,19 @@ start concepts (3): loop_control, increment_operators, for_loop
    "misconception": "PreIncrementBeforeLoop",
    "kind": "misconception",
    "quote": "Then i++ runs before the body and adds 2; so i is 3; So every pass prints the same thing, 3",
-   "score": 0.28,
+   "score": 0.245,
    "shares_evidence_with": "mis:increment_operators->IncrementByTwo"
   }
  ],
  "error_evidence": [],
  "shadowed": [
+  {
+   "concept": "loop_control",
+   "misconception": "ForUpdateBeforeBody",
+   "shadow_of": "mis:for_loop->ForUpdateBeforeBody",
+   "quote": "Then i++ runs before the body and adds 2; so i is 3",
+   "score": 0.36
+  },
   {
    "concept": "loop_variable",
    "misconception": "ForInitRepeats",
@@ -1227,9 +1236,9 @@ start concepts (3): loop_control, increment_operators, for_loop
  ],
  "broken_edges": [
   {
-   "edge": "pre:for_loop->loop_body",
-   "quote": "Then i++ runs before the body and adds 2",
-   "score": 0.595,
+   "edge": "pre:loop_variable->loop_control",
+   "quote": "Each pass starts by setting i = 1 again; Then i++ runs before the body and adds 2",
+   "score": 0.85,
    "consequence_of": "mis:increment_operators->IncrementByTwo"
   },
   {
@@ -1241,7 +1250,7 @@ start concepts (3): loop_control, increment_operators, for_loop
   {
    "edge": "pre:loop_control->for_loop",
    "quote": "Each pass starts by setting i = 1 again; Then i++ runs before the body and adds 2",
-   "score": 0.54,
+   "score": 0.45,
    "consequence_of": "mis:increment_operators->IncrementByTwo"
   },
   {
@@ -1251,8 +1260,8 @@ start concepts (3): loop_control, increment_operators, for_loop
    "consequence_of": "mis:increment_operators->IncrementByTwo"
   },
   {
-   "edge": "pre:loop_variable->loop_control",
-   "quote": "Each pass starts by setting i = 1 again; Then i++ runs before the body and adds 2",
+   "edge": "pre:for_loop->loop_body",
+   "quote": "Then i++ runs before the body and adds 2",
    "score": 0.34,
    "consequence_of": "mis:increment_operators->IncrementByTwo"
   }
@@ -1288,12 +1297,11 @@ start concepts (3): loop_control, increment_operators, for_loop
   },
   "loop_control": {
    "level": "L0",
-   "way": "misconception",
-   "misconception": "ForUpdateBeforeBody",
-   "quote": "Then i++ runs before the body and adds 2; so i is 3; So every pass prints the same thing, 3",
-   "edge": "mis:loop_control->ForUpdateBeforeBody",
-   "rule": "wrong rule: The update part of a for header (e.g. i = i - 4) runs before the body on each pass, so the first pass already sees the updated value. Right rule: The update runs after the body, before the next condition test; the first pass uses the initial value.",
-   "source": "level_mis_links"
+   "way": "inconsistent_trace",
+   "quote": "Each pass starts by setting i = 1 again; Then i++ runs before the body and adds 2; so i is 3; So every pass prints the same thing, 3",
+   "edge": "lvl:loop_control@L0#3",
+   "source": "level_way",
+   "also_shown": []
   },
   "loop_variable": {
    "level": "L0",
@@ -1319,31 +1327,11 @@ start concepts (3): loop_control, increment_operators, for_loop
    ],
    "quote": "Then i++ runs before the body and adds 2; so i is 3",
    "confidence": 0.95,
-   "prune_score": 0.45,
-   "score": 0.4275,
+   "prune_score": 0.5,
+   "score": 0.475,
    "logic": "i++ increases i by 2.",
    "twin_logic": "i++ (and ++i) increases i by exactly 1.",
    "role": "primary"
-  },
-  {
-   "depth": 1,
-   "source": "loop_control",
-   "edge": "mis:loop_control->ForUpdateBeforeBody",
-   "target": "ForUpdateBeforeBody",
-   "kind": "misconception",
-   "label": "held",
-   "clauses": [
-    2,
-    3,
-    4
-   ],
-   "quote": "Then i++ runs before the body and adds 2; so i is 3; So every pass prints the same thing, 3",
-   "confidence": 0.9,
-   "prune_score": 0.45,
-   "score": 0.405,
-   "logic": "The update part of a for header (e.g. i = i - 4) runs before the body on each pass, so the first pass already sees the updated value.",
-   "twin_logic": "The update runs after the body, before the next condition test; the first pass uses the initial value.",
-   "role": "context"
   },
   {
    "depth": 1,
@@ -1362,6 +1350,25 @@ start concepts (3): loop_control, increment_operators, for_loop
    "logic": "The initialization of a for loop runs again after a pass of the body.",
    "twin_logic": "The initialization runs exactly once, before the first condition test.",
    "role": "primary"
+  },
+  {
+   "depth": 1,
+   "source": "loop_control",
+   "edge": "mis:loop_control->ForUpdateBeforeBody",
+   "target": "ForUpdateBeforeBody",
+   "kind": "misconception",
+   "label": "held",
+   "clauses": [
+    2,
+    3
+   ],
+   "quote": "Then i++ runs before the body and adds 2; so i is 3",
+   "confidence": 0.9,
+   "prune_score": 0.4,
+   "score": 0.36,
+   "logic": "The update part of a for header (e.g. i = i - 4) runs before the body on each pass, so the first pass already sees the updated value.",
+   "twin_logic": "The update runs after the body, before the next condition test; the first pass uses the initial value.",
+   "role": "context"
   },
   {
    "depth": 1,
@@ -1396,28 +1403,29 @@ start concepts (3): loop_control, increment_operators, for_loop
    ],
    "quote": "Then i++ runs before the body and adds 2; so i is 3; So every pass prints the same thing, 3",
    "confidence": 0.7,
-   "prune_score": 0.4,
-   "score": 0.28,
+   "prune_score": 0.35,
+   "score": 0.245,
    "logic": "++i in the for-update runs before the body each pass",
    "twin_logic": "The update runs after each pass of the body, so with either ++i or i++ the first pass uses i = s.",
-   "role": "primary",
+   "role": "context",
    "shares_evidence_with": "mis:increment_operators->IncrementByTwo"
   },
   {
    "depth": 2,
-   "source": "for_loop",
-   "edge": "pre:for_loop->loop_body",
-   "target": "loop_body",
+   "source": "loop_control",
+   "edge": "pre:loop_variable->loop_control",
+   "target": "loop_variable",
    "kind": "prerequisite",
    "label": "broken",
    "clauses": [
+    1,
     2
    ],
-   "quote": "Then i++ runs before the body and adds 2",
+   "quote": "Each pass starts by setting i = 1 again; Then i++ runs before the body and adds 2",
    "confidence": 0.85,
-   "prune_score": 0.7,
-   "score": 0.595,
-   "logic": "The statements in braces after the for header are the loop body; they run once on every pass, between the test and the increment, exactly as in a while loop.",
+   "prune_score": 1.0,
+   "score": 0.85,
+   "logic": "The init, condition and update all act on the loop variable: the init sets it, the condition tests it, the update changes it.",
    "twin_logic": null,
    "consequence_of": "mis:increment_operators->IncrementByTwo"
   },
@@ -1442,9 +1450,9 @@ start concepts (3): loop_control, increment_operators, for_loop
   },
   {
    "depth": 2,
-   "source": "loop_control",
+   "source": "for_loop",
    "edge": "pre:loop_control->for_loop",
-   "target": "for_loop",
+   "target": "loop_control",
    "kind": "prerequisite",
    "label": "broken",
    "clauses": [
@@ -1453,8 +1461,8 @@ start concepts (3): loop_control, increment_operators, for_loop
    ],
    "quote": "Each pass starts by setting i = 1 again; Then i++ runs before the body and adds 2",
    "confidence": 0.9,
-   "prune_score": 0.6,
-   "score": 0.54,
+   "prune_score": 0.5,
+   "score": 0.45,
    "logic": "The for header is exactly the three control slots, and the body runs after the test and before the update on each pass.",
    "twin_logic": null,
    "consequence_of": "mis:increment_operators->IncrementByTwo"
@@ -1480,20 +1488,19 @@ start concepts (3): loop_control, increment_operators, for_loop
   },
   {
    "depth": 2,
-   "source": "loop_control",
-   "edge": "pre:loop_variable->loop_control",
-   "target": "loop_variable",
+   "source": "for_loop",
+   "edge": "pre:for_loop->loop_body",
+   "target": "loop_body",
    "kind": "prerequisite",
    "label": "broken",
    "clauses": [
-    1,
     2
    ],
-   "quote": "Each pass starts by setting i = 1 again; Then i++ runs before the body and adds 2",
+   "quote": "Then i++ runs before the body and adds 2",
    "confidence": 0.85,
    "prune_score": 0.4,
    "score": 0.34,
-   "logic": "The init, condition and update all act on the loop variable: the init sets it, the condition tests it, the update changes it.",
+   "logic": "The statements in braces after the for header are the loop body; they run once on every pass, between the test and the increment, exactly as in a while loop.",
    "twin_logic": null,
    "consequence_of": "mis:increment_operators->IncrementByTwo"
   },
@@ -1548,9 +1555,9 @@ start concepts (3): loop_control, increment_operators, for_loop
     3
    ],
    "quote": "Each pass starts by setting i = 1 again; so i is 3",
-   "confidence": 0.55,
+   "confidence": 0.6,
    "prune_score": 0.5,
-   "score": 0.275,
+   "score": 0.3,
    "logic": "A variable keeps its first value after a new assignment (the static model).",
    "twin_logic": "Each assignment or read replaces the variable's current value.",
    "role": "context"
@@ -1566,13 +1573,12 @@ start concepts (3): loop_control, increment_operators, for_loop
    "label": "held",
    "clauses": [
     2,
-    3,
-    4
+    3
    ],
-   "quote": "Then i++ runs before the body and adds 2; so i is 3; So every pass prints the same thing, 3",
+   "quote": "Then i++ runs before the body and adds 2; so i is 3",
    "confidence": 0.9,
-   "prune_score": 0.45,
-   "score": 0.405,
+   "prune_score": 0.4,
+   "score": 0.36,
    "logic": "The update part of a for header (e.g. i = i - 4) runs before the body on each pass, so the first pass already sees the updated value.",
    "twin_logic": "The update runs after the body, before the next condition test; the first pass uses the initial value.",
    "role": "context"
@@ -1612,8 +1618,8 @@ start concepts (3): loop_control, increment_operators, for_loop
    ],
    "quote": "Then i++ runs before the body and adds 2; so i is 3",
    "confidence": 0.95,
-   "prune_score": 0.45,
-   "score": 0.4275,
+   "prune_score": 0.5,
+   "score": 0.475,
    "logic": "i++ increases i by 2.",
    "twin_logic": "i++ (and ++i) increases i by exactly 1.",
    "role": "primary"
@@ -1632,11 +1638,11 @@ start concepts (3): loop_control, increment_operators, for_loop
    ],
    "quote": "Then i++ runs before the body and adds 2; so i is 3; So every pass prints the same thing, 3",
    "confidence": 0.7,
-   "prune_score": 0.4,
-   "score": 0.28,
+   "prune_score": 0.35,
+   "score": 0.245,
    "logic": "++i in the for-update runs before the body each pass",
    "twin_logic": "The update runs after each pass of the body, so with either ++i or i++ the first pass uses i = s.",
-   "role": "primary",
+   "role": "context",
    "shares_evidence_with": "mis:increment_operators->IncrementByTwo"
   },
   {
@@ -1756,9 +1762,9 @@ start concepts (3): loop_control, increment_operators, for_loop
   },
   {
    "depth": 2,
-   "source": "loop_control",
+   "source": "for_loop",
    "edge": "pre:loop_control->for_loop",
-   "target": "for_loop",
+   "target": "loop_control",
    "kind": "prerequisite",
    "label": "broken",
    "clauses": [
@@ -1767,9 +1773,27 @@ start concepts (3): loop_control, increment_operators, for_loop
    ],
    "quote": "Each pass starts by setting i = 1 again; Then i++ runs before the body and adds 2",
    "confidence": 0.9,
-   "prune_score": 0.6,
-   "score": 0.54,
+   "prune_score": 0.5,
+   "score": 0.45,
    "logic": "The for header is exactly the three control slots, and the body runs after the test and before the update on each pass.",
+   "twin_logic": null,
+   "consequence_of": "mis:increment_operators->IncrementByTwo"
+  },
+  {
+   "depth": 2,
+   "source": "for_loop",
+   "edge": "pre:for_loop->loop_body",
+   "target": "loop_body",
+   "kind": "prerequisite",
+   "label": "broken",
+   "clauses": [
+    2
+   ],
+   "quote": "Then i++ runs before the body and adds 2",
+   "confidence": 0.85,
+   "prune_score": 0.4,
+   "score": 0.34,
+   "logic": "The statements in braces after the for header are the loop body; they run once on every pass, between the test and the increment, exactly as in a while loop.",
    "twin_logic": null,
    "consequence_of": "mis:increment_operators->IncrementByTwo"
   },
@@ -1786,66 +1810,11 @@ start concepts (3): loop_control, increment_operators, for_loop
    ],
    "quote": "Each pass starts by setting i = 1 again; Then i++ runs before the body and adds 2",
    "confidence": 0.85,
-   "prune_score": 0.4,
-   "score": 0.34,
+   "prune_score": 1.0,
+   "score": 0.85,
    "logic": "The init, condition and update all act on the loop variable: the init sets it, the condition tests it, the update changes it.",
    "twin_logic": null,
    "consequence_of": "mis:increment_operators->IncrementByTwo"
-  },
-  {
-   "depth": 2,
-   "source": "for_loop",
-   "edge": "pre:for_loop->loop_body",
-   "target": "loop_body",
-   "kind": "prerequisite",
-   "label": "broken",
-   "clauses": [
-    2
-   ],
-   "quote": "Then i++ runs before the body and adds 2",
-   "confidence": 0.85,
-   "prune_score": 0.7,
-   "score": 0.595,
-   "logic": "The statements in braces after the for header are the loop body; they run once on every pass, between the test and the increment, exactly as in a while loop.",
-   "twin_logic": null,
-   "consequence_of": "mis:increment_operators->IncrementByTwo"
-  },
-  {
-   "depth": 3,
-   "source": "assignment",
-   "edge": "mis:assignment->VariableKeepsOldValue",
-   "target": "VariableKeepsOldValue",
-   "kind": "misconception",
-   "label": "correct",
-   "clauses": [
-    1,
-    3
-   ],
-   "quote": "Each pass starts by setting i = 1 again; so i is 3",
-   "confidence": 0.55,
-   "prune_score": 0.5,
-   "score": 0.275,
-   "logic": "A variable keeps its first value after a new assignment (the static model).",
-   "twin_logic": "Each assignment or read replaces the variable's current value.",
-   "role": "context"
-  },
-  {
-   "depth": 3,
-   "source": "assignment",
-   "edge": "mis:assignment->AssignmentAddsToTarget",
-   "target": "AssignmentAddsToTarget",
-   "kind": "misconception",
-   "label": "correct",
-   "clauses": [
-    1
-   ],
-   "quote": "Each pass starts by setting i = 1 again",
-   "confidence": 0.5,
-   "prune_score": 0.2,
-   "score": 0.1,
-   "logic": "a = b adds the value of b to the value already in a (the accumulator model).",
-   "twin_logic": "a = b replaces the old value of a with the value of b; the old value is lost.",
-   "role": "primary"
   },
   {
    "depth": 3,
@@ -1904,19 +1873,56 @@ start concepts (3): loop_control, increment_operators, for_loop
    "twin_logic": null,
    "level": "L0",
    "way": "inconsistent_trace"
+  },
+  {
+   "depth": 3,
+   "source": "assignment",
+   "edge": "mis:assignment->VariableKeepsOldValue",
+   "target": "VariableKeepsOldValue",
+   "kind": "misconception",
+   "label": "correct",
+   "clauses": [
+    1,
+    3
+   ],
+   "quote": "Each pass starts by setting i = 1 again; so i is 3",
+   "confidence": 0.6,
+   "prune_score": 0.5,
+   "score": 0.3,
+   "logic": "A variable keeps its first value after a new assignment (the static model).",
+   "twin_logic": "Each assignment or read replaces the variable's current value.",
+   "role": "context"
+  },
+  {
+   "depth": 3,
+   "source": "assignment",
+   "edge": "mis:assignment->AssignmentAddsToTarget",
+   "target": "AssignmentAddsToTarget",
+   "kind": "misconception",
+   "label": "correct",
+   "clauses": [
+    1
+   ],
+   "quote": "Each pass starts by setting i = 1 again",
+   "confidence": 0.55,
+   "prune_score": 0.3,
+   "score": 0.165,
+   "logic": "a = b adds the value of b to the value already in a (the accumulator model).",
+   "twin_logic": "a = b replaces the old value of a with the value of b; the old value is lost.",
+   "role": "primary"
   }
  ],
  "clause_coverage": {
   "Each pass starts by setting i = 1 again": "lvl:loop_control@L0#3",
   "Then i++ runs before the body and adds 2": "mis:loop_control->ForUpdateBeforeBody",
   "so i is 3": "mis:loop_control->ForUpdateBeforeBody",
-  "So every pass prints the same thing, 3": "mis:loop_control->ForUpdateBeforeBody"
+  "So every pass prints the same thing, 3": "lvl:loop_control@L0#3"
  },
  "unexplained_clauses": [],
  "stop_reason": "max depth",
  "depth_reached": 3,
- "llm_calls": 0,
- "llm_cache_hits": 47,
+ "llm_calls": 9,
+ "llm_cache_hits": 38,
  "llm_calls_by_step": {
   "prune": 16,
   "label": 31

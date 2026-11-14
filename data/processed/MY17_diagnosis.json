@@ -507,7 +507,7 @@
    "score": 0.28,
    "logic": "Updates the loop counter so that the loop runs the wrong number of times.",
    "twin_logic": "The init, test and update together decide the number of passes; trace them to check the count.",
-   "role": "primary"
+   "role": "context"
   },
   {
    "depth": 1,
@@ -690,14 +690,32 @@
    "label": "correct",
    "clauses": [
     1,
-    2
+    4
    ],
-   "quote": "The loop visits each index from 0 to a.length - 1 and adds that element to sum; so it prints Total: 12",
+   "quote": "The loop visits each index from 0 to a.length - 1 and adds that element to sum; so the loop runs once more and prints Total: 20, with no other change to the code",
    "confidence": 0.85,
    "prune_score": 0.5,
    "score": 0.425,
    "logic": "A loop prints the same thing on every pass; the changing loop variable does not affect what the body does.",
    "twin_logic": "The body uses the current value of the loop variable, so its output can differ on each pass.",
+   "role": "primary"
+  },
+  {
+   "depth": 3,
+   "source": "loop_variable",
+   "edge": "mis:loop_variable->LoopUpdateChangesDirection",
+   "target": "LoopUpdateChangesDirection",
+   "kind": "misconception",
+   "label": "correct",
+   "clauses": [
+    1
+   ],
+   "quote": "The loop visits each index from 0 to a.length - 1 and adds that element to sum",
+   "confidence": 0.6,
+   "prune_score": 0.25,
+   "score": 0.15,
+   "logic": "The update of the loop variable can change from pass to pass (e.g. switch direction) although the code is the same.",
+   "twin_logic": "The update expression is the same on every pass; the loop variable changes by the rule written in the update.",
    "role": "primary"
   },
   {
@@ -712,9 +730,9 @@
     4
    ],
    "quote": "so it prints Total: 12; so the loop runs once more and prints Total: 20, with no other change to the code",
-   "confidence": 0.6,
+   "confidence": 0.7,
    "prune_score": 0.25,
-   "score": 0.15,
+   "score": 0.175,
    "logic": "The range of the loop variable limits the values that can be read or printed inside the loop.",
    "twin_logic": "The loop variable only counts passes; other values read or printed in the body are not bounded by it.",
    "role": "primary"
@@ -907,8 +925,8 @@
    ],
    "quote": "The loop visits each index from 0 to a.length - 1 and adds that element to sum; so it prints Total: 12; so the loop runs once more and prints Total: 20, with no other change to the code",
    "confidence": 0.9,
-   "prune_score": 0.45,
-   "score": 0.405,
+   "prune_score": 0.5,
+   "score": 0.45,
    "logic": "Values changed by one pass of a loop (other than the loop variable) do not affect later passes.",
    "twin_logic": "Each pass starts from the state left by the previous pass, so a change in one pass carries into the next ones.",
    "role": "primary"
@@ -944,8 +962,8 @@
    ],
    "quote": "so it prints Total: 12; so the loop runs once more and prints Total: 20, with no other change to the code",
    "confidence": 0.75,
-   "prune_score": 0.25,
-   "score": 0.1875,
+   "prune_score": 0.2,
+   "score": 0.15,
    "logic": "A statement written after the loop is repeated with the loop body.",
    "twin_logic": "The body ends at the closing brace (or after its single statement); code after it runs once, after the loop ends.",
    "role": "primary"
@@ -1000,8 +1018,8 @@
  "unexplained_clauses": [],
  "stop_reason": "max depth",
  "depth_reached": 3,
- "llm_calls": 21,
- "llm_cache_hits": 34,
+ "llm_calls": 4,
+ "llm_cache_hits": 51,
  "llm_calls_by_step": {
   "prune": 18,
   "label": 37

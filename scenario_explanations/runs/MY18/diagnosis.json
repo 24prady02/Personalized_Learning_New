@@ -20,49 +20,35 @@
  ],
  "held_misconceptions": [
   {
-   "concept": "off_by_one_error",
+   "concept": "indexing",
+   "misconception": "ArrayRangeInclusive",
+   "kind": "misconception",
+   "quote": "i goes from 0 to a.length; Using <= or < makes no difference here; because both go through the whole array",
+   "score": 0.63
+  },
+  {
+   "concept": "loop_control",
    "misconception": "OffByOneBound",
    "kind": "misconception",
-   "quote": "i goes from 0 to a.length; Using <= or < makes no difference here; because both go through the whole array; so it visits each element once",
-   "score": 0.7125
+   "quote": "i goes from 0 to a.length; Using <= or < makes no difference here; because both go through the whole array",
+   "score": 0.552
+  },
+  {
+   "concept": "for_loop",
+   "misconception": "IdiomOverridesCode",
+   "kind": "misconception",
+   "quote": "Using <= or < makes no difference here; because both go through the whole array; so it visits each element once",
+   "score": 0.54
   }
  ],
  "error_evidence": [],
  "shadowed": [
   {
-   "concept": "array_traversal",
-   "misconception": "OffByOneBound",
-   "shadow_of": "mis:off_by_one_error->OffByOneBound",
-   "quote": "i goes from 0 to a.length; Using <= or < makes no difference here; because both go through the whole array; so it visits each element once",
-   "score": 0.57
-  },
-  {
-   "concept": "loop_control",
-   "misconception": "OffByOneBound",
-   "shadow_of": "mis:off_by_one_error->OffByOneBound",
-   "quote": "i goes from 0 to a.length; Using <= or < makes no difference here; because both go through the whole array",
-   "score": 0.552
-  },
-  {
    "concept": "loop_control",
    "misconception": "IdiomOverridesCode",
-   "shadow_of": "mis:off_by_one_error->OffByOneBound",
+   "shadow_of": "mis:for_loop->IdiomOverridesCode",
    "quote": "because both go through the whole array; so it visits each element once",
    "score": 0.1875
-  },
-  {
-   "concept": "for_loop",
-   "misconception": "IdiomOverridesCode",
-   "shadow_of": "mis:array_traversal->OffByOneBound",
-   "quote": "Using <= or < makes no difference here; because both go through the whole array; so it visits each element once",
-   "score": 0.54
-  },
-  {
-   "concept": "indexing",
-   "misconception": "ArrayRangeInclusive",
-   "shadow_of": "mis:off_by_one_error->OffByOneBound",
-   "quote": "i goes from 0 to a.length; Using <= or < makes no difference here; because both go through the whole array",
-   "score": 0.63
   }
  ],
  "broken_edges": [
@@ -98,17 +84,36 @@
   }
  ],
  "root_cause": {
-  "concept": "off_by_one_error",
+  "concept": "loop_control",
   "misconception": "OffByOneBound"
  },
  "levels": {
   "array_traversal": {
    "level": "L0",
-   "way": "everyday_reading",
+   "way": "misconception",
+   "misconception": "OffByOneBound",
+   "quote": "i goes from 0 to a.length; Using <= or < makes no difference here; because both go through the whole array; so it visits each element once",
+   "edge": "mis:array_traversal->OffByOneBound",
+   "rule": "wrong rule: < vs <= and 0..n vs 0..n-1 are interchangeable. Right rule: for (i = 0; i < n; i++) runs n times with i going up to n - 1; with <= it runs n + 1 times and reaches i = n.",
+   "source": "level_mis_links"
+  },
+  "for_loop": {
+   "level": "L0",
+   "way": "misconception",
+   "misconception": "IdiomOverridesCode",
    "quote": "Using <= or < makes no difference here; because both go through the whole array; so it visits each element once",
-   "edge": "lvl:array_traversal@L0#0",
-   "source": "level_way",
-   "also_shown": []
+   "edge": "mis:for_loop->IdiomOverridesCode",
+   "rule": "wrong rule: An array loop processes the whole array from index 0 to length-1 and increments its index at the end of the body, whatever the code says. Right rule: The loop visits exactly the indices that its initialisation, guard and update produce, in the order in which its statements are written.",
+   "source": "level_mis_links"
+  },
+  "indexing": {
+   "level": "L0",
+   "way": "misconception",
+   "misconception": "ArrayRangeInclusive",
+   "quote": "i goes from 0 to a.length; Using <= or < makes no difference here; because both go through the whole array",
+   "edge": "mis:indexing->ArrayRangeInclusive",
+   "rule": "wrong rule: new int[n] has slots 0 to n, inclusive. Right rule: The slots are 0 to n - 1.",
+   "source": "level_mis_links"
   },
   "length_field": {
    "level": "L0",
@@ -119,6 +124,15 @@
    "also_shown": [
     "L0 everyday_reading"
    ]
+  },
+  "loop_control": {
+   "level": "L0",
+   "way": "misconception",
+   "misconception": "OffByOneBound",
+   "quote": "i goes from 0 to a.length; Using <= or < makes no difference here; because both go through the whole array",
+   "edge": "mis:loop_control->OffByOneBound",
+   "rule": "wrong rule: < vs <= and 0..n vs 0..n-1 are interchangeable. Right rule: for (i = 0; i < n; i++) runs n times with i going up to n - 1; with <= it runs n + 1 times and reaches i = n.",
+   "source": "level_mis_links"
   },
   "loop_variable": {
    "level": "L3",
@@ -338,11 +352,11 @@
    ],
    "quote": "i goes from 0 to a.length; Using <= or < makes no difference here; because both go through the whole array; so it visits each element once",
    "confidence": 0.95,
-   "prune_score": 0.75,
-   "score": 0.7125,
+   "prune_score": 0.7,
+   "score": 0.665,
    "logic": "< vs <= and 0..n vs 0..n-1 are interchangeable",
    "twin_logic": "for (i = 0; i < n; i++) runs n times with i going up to n - 1; with <= it runs n + 1 times and reaches i = n.",
-   "role": "primary"
+   "role": "context"
   },
   {
    "depth": 3,
@@ -638,11 +652,11 @@
    ],
    "quote": "i goes from 0 to a.length; Using <= or < makes no difference here; because both go through the whole array; so it visits each element once",
    "confidence": 0.95,
-   "prune_score": 0.75,
-   "score": 0.7125,
+   "prune_score": 0.7,
+   "score": 0.665,
    "logic": "< vs <= and 0..n vs 0..n-1 are interchangeable",
    "twin_logic": "for (i = 0; i < n; i++) runs n times with i going up to n - 1; with <= it runs n + 1 times and reaches i = n.",
-   "role": "primary"
+   "role": "context"
   },
   {
    "depth": 3,
@@ -748,18 +762,35 @@
   {
    "depth": 3,
    "source": "loop_variable",
+   "edge": "mis:loop_variable->LoopUpdateChangesDirection",
+   "target": "LoopUpdateChangesDirection",
+   "kind": "misconception",
+   "label": "correct",
+   "clauses": [
+    1
+   ],
+   "quote": "i goes from 0 to a.length",
+   "confidence": 0.6,
+   "prune_score": 0.4,
+   "score": 0.24,
+   "logic": "The update of the loop variable can change from pass to pass (e.g. switch direction) although the code is the same.",
+   "twin_logic": "The update expression is the same on every pass; the loop variable changes by the rule written in the update.",
+   "role": "primary"
+  },
+  {
+   "depth": 3,
+   "source": "loop_variable",
    "edge": "mis:loop_variable->LoopOutputSameEachPass",
    "target": "LoopOutputSameEachPass",
    "kind": "misconception",
    "label": "correct",
    "clauses": [
-    1,
     4
    ],
-   "quote": "i goes from 0 to a.length; so it visits each element once",
-   "confidence": 0.6,
-   "prune_score": 0.4,
-   "score": 0.24,
+   "quote": "so it visits each element once",
+   "confidence": 0.75,
+   "prune_score": 0.35,
+   "score": 0.2625,
    "logic": "A loop prints the same thing on every pass; the changing loop variable does not affect what the body does.",
    "twin_logic": "The body uses the current value of the loop variable, so its output can differ on each pass.",
    "role": "primary"
@@ -853,8 +884,8 @@
  "unexplained_clauses": [],
  "stop_reason": "max depth",
  "depth_reached": 4,
- "llm_calls": 0,
- "llm_cache_hits": 60,
+ "llm_calls": 5,
+ "llm_cache_hits": 55,
  "llm_calls_by_step": {
   "prune": 20,
   "label": 40

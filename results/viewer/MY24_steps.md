@@ -192,7 +192,7 @@ Prune: the model's reply (edge id and score; the kept edges sum to 1):
 {mis:string_concatenation->StringPlusLeftToRight (Score: 0.35)}
 {mis:string_concatenation->StringPlusStringifiesExpression (Score: 0.1)}
 ```
-Kept by pruning: mis:string_concatenation->ArithmeticPlusPrecedes (0.55), mis:string_concatenation->StringPlusLeftToRight (0.35), mis:string_concatenation->StringPlusStringifiesExpression (0.10)
+Kept by pruning: mis:string_concatenation->ArithmeticPlusPrecedes (0.55), mis:string_concatenation->StringPlusLeftToRight (0.40), mis:string_concatenation->StringPlusStringifiesExpression (0.05)
 
 Label prompt for the misconception / error edges (judged together). The model saw the program, the question, the numbered clauses, and these edges with their wrong rule and right rule:
 | edge |
@@ -211,7 +211,7 @@ Parsed labels:
 | edge | label | prune score | confidence | score | clauses | words |
 |---|---|---|---|---|---|---|
 | mis:string_concatenation->ArithmeticPlusPrecedes | correct | 0.55 | 0.95 | 0.52 | c1, c2, c3 | + is worked out left to right; Once there is text, it is like gluing words together; so 5 and then 3 are stuck on as characters, giving Total: 53 |
-| mis:string_concatenation->StringPlusLeftToRight | correct | 0.35 | 0.6 | 0.21 | c1 | + is worked out left to right |
+| mis:string_concatenation->StringPlusLeftToRight | correct | 0.4 | 0.6 | 0.24 | c1 | + is worked out left to right |
 | mis:string_concatenation->StringPlusStringifiesExpression | not applied |  |  | 0.0 |  |  |
 
 #### string_concatenation, level ways: 16 edges offered
@@ -543,29 +543,29 @@ Edges offered:
 
 Prune: the model's reply (edge id and score; the kept edges sum to 1):
 ```
-mis:expression->TargetTyping (0.50), mis:expression->NoAtomicExpression (0.30), mis:expression->OutsideInMethodNesting (0.20)
+mis:expression->TargetTyping (0.50), mis:expression->OutsideInMethodNesting (0.30), mis:expression->NoAtomicExpression (0.20)
 ```
-Kept by pruning: mis:expression->TargetTyping (0.50), mis:expression->NoAtomicExpression (0.30), mis:expression->OutsideInMethodNesting (0.20)
+Kept by pruning: mis:expression->TargetTyping (0.50), mis:expression->OutsideInMethodNesting (0.30), mis:expression->NoAtomicExpression (0.20)
 
 Label prompt for the misconception / error edges (judged together). The model saw the program, the question, the numbered clauses, and these edges with their wrong rule and right rule:
 | edge |
 |---|
 | mis:expression->TargetTyping \| wrong rule: The type of a numerical expression depends on the type expected by the surrounding context, so double d = a / b; keeps the fraction. \| right rule: The type of a numerical expression is determined by the expression, so double d = a / b; with int a and b still divides as ints. |
-| mis:expression->NoAtomicExpression \| wrong rule: A single variable x or a literal on its own is not an expression. \| right rule: A single variable or literal is an expression whose value is just that value. |
 | mis:expression->OutsideInMethodNesting \| wrong rule: In f(g(x)), f runs first and then g runs. \| right rule: In f(g(x)), g(x) is evaluated first and its result is passed to f. |
+| mis:expression->NoAtomicExpression \| wrong rule: A single variable x or a literal on its own is not an expression. \| right rule: A single variable or literal is an expression whose value is just that value. |
 Model's reply:
 ```
-mis:expression->TargetTyping | not applied | clauses: none | confidence: 0.85
-mis:expression->NoAtomicExpression | not applied | clauses: none | confidence: 0.85
-mis:expression->OutsideInMethodNesting | not applied | clauses: none | confidence: 0.95
+mis:expression->TargetTyping | not applied | clauses: none | confidence: 0.7
+mis:expression->OutsideInMethodNesting | not applied | clauses: none | confidence: 0.9
+mis:expression->NoAtomicExpression | not applied | clauses: none | confidence: 0.9
 ```
 
 Parsed labels:
 | edge | label | prune score | confidence | score | clauses | words |
 |---|---|---|---|---|---|---|
 | mis:expression->TargetTyping | not applied |  |  | 0.0 |  |  |
-| mis:expression->NoAtomicExpression | not applied |  |  | 0.0 |  |  |
 | mis:expression->OutsideInMethodNesting | not applied |  |  | 0.0 |  |  |
+| mis:expression->NoAtomicExpression | not applied |  |  | 0.0 |  |  |
 
 #### expression, level ways: 19 edges offered
 Edges offered:
@@ -745,7 +745,7 @@ Root-cause walk: held on [], broken at [], prerequisites {'expression': ['arithm
 - string_concatenation: L3 via relation_to_neighbour "+ is worked out left to right; Once there is text, it is like gluing words together; so 5 and then 3 are stuck on as characters, giving Total: 53"
 - string_conversion: L3 via relation_to_neighbour "Once there is text, it is like gluing words together; so 5 and then 3 are stuck on as characters, giving Total: 53"
 
-**Stop:** sufficient at depth 3; prompts {'prune': 13, 'label': 25}, fresh model calls 3, cache hits 35
+**Stop:** sufficient at depth 3; prompts {'prune': 13, 'label': 25}, fresh model calls 2, cache hits 36
 
 ### Held misconceptions
 (none)
@@ -778,7 +778,7 @@ Figure 7 (final picture): C:\Users\magnu\OneDrive\Desktop\ES_VIterbi_Personalize
 | depth | source | edge | kind | label | prune_score | confidence | score | clauses | quote |
 |---|---|---|---|---|---|---|---|---|---|
 | 1 | string_concatenation | mis:string_concatenation->ArithmeticPlusPrecedes | misconception | correct | 0.55 | 0.95 | 0.5225 | [1, 2, 3] | + is worked out left to right; Once there is text, it is like gluing words together; so 5 and then 3 are stuck on as characters, giving Total: 53 |
-| 1 | string_concatenation | mis:string_concatenation->StringPlusLeftToRight | misconception | correct | 0.35 | 0.6 | 0.21 | [1] | + is worked out left to right |
+| 1 | string_concatenation | mis:string_concatenation->StringPlusLeftToRight | misconception | correct | 0.4 | 0.6 | 0.24 | [1] | + is worked out left to right |
 | 1 | string_concatenation | lvl:string_concatenation@L2#0 | level | shown | 0.45 | 0.9 | 0.405 | [1, 2, 3] | + is worked out left to right; Once there is text, it is like gluing words together; so 5 and then 3 are stuck on as characters, giving Total: 53 |
 | 1 | string_concatenation | lvl:string_concatenation@L3#2 | level | shown | 0.3 | 0.85 | 0.255 | [1, 2, 3] | + is worked out left to right; Once there is text, it is like gluing words together; so 5 and then 3 are stuck on as characters, giving Total: 53 |
 | 1 | string_concatenation | lvl:string_concatenation@L2#1 | level | shown | 0.25 | 0.9 | 0.225 | [1, 2, 3] | + is worked out left to right; Once there is text, it is like gluing words together; so 5 and then 3 are stuck on as characters, giving Total: 53 |
@@ -823,9 +823,9 @@ start concepts (3): println, string_concatenation, arithmetic_operators
     lvl:println@L2#1 -> not applied (0.00) ""
     lvl:println@L2#0 -> not applied (0.00) ""
     lvl:println@L1#0 -> not applied (0.00) ""
-  string_concatenation (misconceptions): 3 candidates -> kept mis:string_concatenation->ArithmeticPlusPrecedes (0.55), mis:string_concatenation->StringPlusLeftToRight (0.35), mis:string_concatenation->StringPlusStringifiesExpression (0.10)
+  string_concatenation (misconceptions): 3 candidates -> kept mis:string_concatenation->ArithmeticPlusPrecedes (0.55), mis:string_concatenation->StringPlusLeftToRight (0.40), mis:string_concatenation->StringPlusStringifiesExpression (0.05)
     mis:string_concatenation->ArithmeticPlusPrecedes -> correct (0.52) "+ is worked out left to right; Once there is text, it is like gluing words together; so 5 and then 3 are stuck on as characters, giving Total: 53"
-    mis:string_concatenation->StringPlusLeftToRight -> correct (0.21) "+ is worked out left to right"
+    mis:string_concatenation->StringPlusLeftToRight -> correct (0.24) "+ is worked out left to right"
     mis:string_concatenation->StringPlusStringifiesExpression -> not applied (0.00) ""
   string_concatenation (level ways): 16 candidates -> kept lvl:string_concatenation@L2#0 (0.45), lvl:string_concatenation@L3#2 (0.30), lvl:string_concatenation@L2#1 (0.25)
     lvl:string_concatenation@L2#0 -> shown (0.41) "+ is worked out left to right; Once there is text, it is like gluing words together; so 5 and then 3 are stuck on as characters, giving Total: 53"
@@ -857,10 +857,10 @@ start concepts (3): println, string_concatenation, arithmetic_operators
   clause coverage: c1 <- mis:string_concatenation->ArithmeticPlusPrecedes; c2 <- mis:string_concatenation->ArithmeticPlusPrecedes; c3 <- mis:string_concatenation->ArithmeticPlusPrecedes
   not yet read: own edges of expression, own edges of string_conversion
 --- depth 3: current concepts ['expression', 'arithmetic_operators', 'string_concatenation', 'string_conversion']
-  expression (misconceptions): 8 candidates -> kept mis:expression->TargetTyping (0.50), mis:expression->NoAtomicExpression (0.30), mis:expression->OutsideInMethodNesting (0.20)
+  expression (misconceptions): 8 candidates -> kept mis:expression->TargetTyping (0.50), mis:expression->OutsideInMethodNesting (0.30), mis:expression->NoAtomicExpression (0.20)
     mis:expression->TargetTyping -> not applied (0.00) ""
-    mis:expression->NoAtomicExpression -> not applied (0.00) ""
     mis:expression->OutsideInMethodNesting -> not applied (0.00) ""
+    mis:expression->NoAtomicExpression -> not applied (0.00) ""
   expression (level ways): 19 candidates -> kept lvl:expression@L3#2 (0.40), lvl:expression@L3#1 (0.35), lvl:expression@L2#0 (0.25)
     lvl:expression@L3#2 -> shown (0.32) "+ is worked out left to right; so 5 and then 3 are stuck on as characters, giving Total: 53"
     lvl:expression@L3#1 -> shown (0.28) "Once there is text, it is like gluing words together; so 5 and then 3 are stuck on as characters, giving Total: 53"
@@ -1165,11 +1165,11 @@ start concepts (3): println, string_concatenation, arithmetic_operators
    ],
    "quote": "+ is worked out left to right",
    "confidence": 0.6,
-   "prune_score": 0.35,
-   "score": 0.21,
+   "prune_score": 0.4,
+   "score": 0.24,
    "logic": "2 + 3 + \"bc\" and \"bc\" + 2 + 3 give the same text.",
    "twin_logic": "+ is evaluated left to right: 2 + 3 + \"bc\" is \"5bc\" but \"bc\" + 2 + 3 is \"bc23\".",
-   "role": "primary"
+   "role": "context"
   },
   {
    "depth": 1,
@@ -1482,8 +1482,8 @@ start concepts (3): println, string_concatenation, arithmetic_operators
  "unexplained_clauses": [],
  "stop_reason": "sufficient",
  "depth_reached": 3,
- "llm_calls": 3,
- "llm_cache_hits": 35,
+ "llm_calls": 2,
+ "llm_cache_hits": 36,
  "llm_calls_by_step": {
   "prune": 13,
   "label": 25

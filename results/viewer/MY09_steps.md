@@ -600,7 +600,7 @@ Prune: the model's reply (edge id and score; the kept edges sum to 1):
 {mis:type_conversion->NarrowingAssignmentAllowed (Score: 0.06)}
 {mis:type_conversion->NoCastIfSameSize (Score: 0.04)}
 ```
-Kept by pruning: mis:type_conversion->TargetTyping (0.90), mis:type_conversion->NarrowingAssignmentAllowed (0.06), mis:type_conversion->NoCastIfSameSize (0.04)
+Kept by pruning: mis:type_conversion->TargetTyping (0.80), mis:type_conversion->NarrowingAssignmentAllowed (0.10), mis:type_conversion->NoCastIfSameSize (0.10)
 
 Label prompt for the misconception / error edges (judged together). The model saw the program, the question, the numbered clauses, and these edges with their wrong rule and right rule:
 | edge |
@@ -618,7 +618,7 @@ mis:type_conversion->NoCastIfSameSize | not applied | clauses: none | confidence
 Parsed labels:
 | edge | label | prune score | confidence | score | clauses | words |
 |---|---|---|---|---|---|---|
-| mis:type_conversion->TargetTyping | held | 0.9 | 0.92 | 0.83 | c2, c3 | Because d is a double, Java knows the result should have decimals; so it does the division a / b with decimals and gets 3.0 |
+| mis:type_conversion->TargetTyping | held | 0.8 | 0.92 | 0.74 | c2, c3 | Because d is a double, Java knows the result should have decimals; so it does the division a / b with decimals and gets 3.0 |
 | mis:type_conversion->NarrowingAssignmentAllowed | not applied |  |  | 0.0 |  |  |
 | mis:type_conversion->NoCastIfSameSize | not applied |  |  | 0.0 |  |  |
 
@@ -787,7 +787,7 @@ Parsed labels:
 
 **Kept on a path at this depth** (best N in tiers: held misconception / broken edge, then held error, then correct / confirmed / shown):
 
-pre:arithmetic_operators->integer_division [broken, tier 0, 0.85], mis:type_conversion->TargetTyping [held, tier 0, 0.83], pre:arithmetic_operators->expression [broken, tier 0, 0.80], mis:expression->TargetTyping [held, tier 0, 0.76]
+pre:arithmetic_operators->integer_division [broken, tier 0, 0.85], pre:arithmetic_operators->expression [broken, tier 0, 0.80], mis:expression->TargetTyping [held, tier 0, 0.76], mis:type_conversion->TargetTyping [held, tier 0, 0.74]
 
 **Clause coverage after this depth:**
 | clause | text | covered by |
@@ -800,7 +800,7 @@ pre:arithmetic_operators->integer_division [broken, tier 0, 0.85], mis:type_conv
 
 Figure 5 (the graph after depth 2): C:\Users\magnu\OneDrive\Desktop\ES_VIterbi_Personalized_Learning\results\viewer\MY09_figure05.png
 
-### Depth 3: current concepts 'arithmetic_operators', 'integer_division', 'type_conversion', 'expression', 'widening_conversion'
+### Depth 3: current concepts 'arithmetic_operators', 'integer_division', 'expression', 'type_conversion', 'widening_conversion'
 
 #### type_conversion, concept edges: 2 edges offered
 Edges offered:
@@ -976,7 +976,9 @@ Parsed labels:
 
 Figure 7 (the graph after depth 4): C:\Users\magnu\OneDrive\Desktop\ES_VIterbi_Personalized_Learning\results\viewer\MY09_figure07.png
 
-Shadows (a held label on a prerequisite, on a generic concept, or at a concept where the graph attaches the misconception as context, resting on the words of a stronger label at the specific or primary concept, is one wrong sentence read twice; it marks no root cause and sets no level): mis:expression->TargetTyping (shadow of mis:type_conversion->TargetTyping), mis:type_conversion->TargetTyping (shadow of mis:integer_division->TargetTyping)
+Held set after the one-fault rules: mis:integer_division->TargetTyping; filed at the dependent concept: mis:expression->TargetTyping, mis:type_conversion->TargetTyping
+
+Shadows (a held label on a prerequisite, on a generic concept, or at a concept where the graph attaches the misconception as context, resting on the words of a stronger label at the specific or primary concept, is one wrong sentence read twice; it marks no root cause and sets no level): mis:expression->TargetTyping (shadow of mis:integer_division->TargetTyping), mis:type_conversion->TargetTyping (shadow of mis:integer_division->TargetTyping)
 
 ## 4. Diagnosis (rules over the labelled graph, no model)
 Root-cause walk: held on ['integer_division'], broken at [] (consequences: pre:arithmetic_operators->integer_division, pre:arithmetic_operators->expression, pre:primitive_type->type_conversion), prerequisites {'expression': ['arithmetic_operators'], 'integer_division': ['arithmetic_operators'], 'type_conversion': ['primitive_type'], 'println': ['statement'], 'widening_conversion': ['type_conversion']}
@@ -984,7 +986,7 @@ Root-cause walk: held on ['integer_division'], broken at [] (consequences: pre:a
 - println: L2 via output_prediction "It prints 3.0"
 - type_conversion: L0 via everyday_reading "Because d is a double, Java knows the result should have decimals; so it does the division a / b with decimals and gets 3.0"
 
-**Stop:** half_stop at depth 4; prompts {'prune': 18, 'label': 32}, fresh model calls 0, cache hits 50
+**Stop:** half_stop at depth 4; prompts {'prune': 18, 'label': 32}, fresh model calls 3, cache hits 47
 
 ### Held misconceptions
 | concept | misconception | kind | quote | score | shares_evidence_with |
@@ -994,8 +996,8 @@ Root-cause walk: held on ['integer_division'], broken at [] (consequences: pre:a
 ### Shadowed labels (held in the reading, folded into the label they shadow; not faults of their own)
 | concept | misconception | shadow_of | quote | score |
 |---|---|---|---|---|
-| expression | TargetTyping | mis:type_conversion->TargetTyping | Because d is a double, Java knows the result should have decimals; so it does the division a / b with decimals and gets 3.0 | 0.76 |
-| type_conversion | TargetTyping | mis:integer_division->TargetTyping | Because d is a double, Java knows the result should have decimals; so it does the division a / b with decimals and gets 3.0 | 0.828 |
+| expression | TargetTyping | mis:integer_division->TargetTyping | Because d is a double, Java knows the result should have decimals; so it does the division a / b with decimals and gets 3.0 | 0.76 |
+| type_conversion | TargetTyping | mis:integer_division->TargetTyping | Because d is a double, Java knows the result should have decimals; so it does the division a / b with decimals and gets 3.0 | 0.736 |
 
 ### Broken concept edges
 | edge | quote | score | consequence_of |
@@ -1033,7 +1035,7 @@ Figure 8 (final picture): C:\Users\magnu\OneDrive\Desktop\ES_VIterbi_Personalize
 | 2 | integer_division | pre:arithmetic_operators->integer_division | prerequisite | broken | 1.0 | 0.85 | 0.85 | [2, 3] | Because d is a double, Java knows the result should have decimals; so it does the division a / b with decimals and gets 3.0 |
 | 2 | arithmetic_operators | pre:arithmetic_operators->expression | prerequisite | broken | 1.0 | 0.8 | 0.8 | [2, 3] | Because d is a double, Java knows the result should have decimals; so it does the division a / b with decimals and gets 3.0 |
 | 2 | expression | mis:expression->TargetTyping | misconception | held | 0.8 | 0.95 | 0.76 | [2, 3] | Because d is a double, Java knows the result should have decimals; so it does the division a / b with decimals and gets 3.0 |
-| 2 | type_conversion | mis:type_conversion->TargetTyping | misconception | held | 0.9 | 0.92 | 0.828 | [2, 3] | Because d is a double, Java knows the result should have decimals; so it does the division a / b with decimals and gets 3.0 |
+| 2 | type_conversion | mis:type_conversion->TargetTyping | misconception | held | 0.8 | 0.92 | 0.736 | [2, 3] | Because d is a double, Java knows the result should have decimals; so it does the division a / b with decimals and gets 3.0 |
 | 2 | type_conversion | lvl:type_conversion@L0#0 | level | shown | 0.6 | 0.85 | 0.51 | [2, 3] | Because d is a double, Java knows the result should have decimals; so it does the division a / b with decimals and gets 3.0 |
 | 3 | type_conversion | pre:primitive_type->type_conversion | prerequisite | broken | 0.6 | 0.65 | 0.39 | [2, 3] | Because d is a double, Java knows the result should have decimals; so it does the division a / b with decimals and gets 3.0 |
 | 3 | type_conversion | pre:type_conversion->widening_conversion | prerequisite | confirmed | 0.4 | 0.55 | 0.22 | [2, 3] | Because d is a double, Java knows the result should have decimals; so it does the division a / b with decimals and gets 3.0 |
@@ -1045,9 +1047,9 @@ Figure 8 (final picture): C:\Users\magnu\OneDrive\Desktop\ES_VIterbi_Personalize
 | 1 | integer_division | lvl:integer_division@L0#4 | level | shown | 0.48 | [2, 3] |
 | 1 | println | lvl:println@L2#1 | level | shown | 0.3 | [1] |
 | 2 | integer_division | pre:arithmetic_operators->integer_division | prerequisite | broken | 0.85 | [2, 3] |
-| 2 | type_conversion | mis:type_conversion->TargetTyping | misconception | held | 0.828 | [2, 3] |
 | 2 | arithmetic_operators | pre:arithmetic_operators->expression | prerequisite | broken | 0.8 | [2, 3] |
 | 2 | expression | mis:expression->TargetTyping | misconception | held | 0.76 | [2, 3] |
+| 2 | type_conversion | mis:type_conversion->TargetTyping | misconception | held | 0.736 | [2, 3] |
 | 3 | type_conversion | pre:primitive_type->type_conversion | prerequisite | broken | 0.39 | [2, 3] |
 | 3 | type_conversion | pre:type_conversion->widening_conversion | prerequisite | confirmed | 0.22 | [2, 3] |
 
@@ -1099,8 +1101,8 @@ start concepts (3): integer_division, println, arithmetic_operators
     lvl:expression@L3#1 -> not applied (0.00) ""
     lvl:expression@L1#1 -> not applied (0.00) ""
     lvl:expression@L2#1 -> not applied (0.00) ""
-  type_conversion (misconceptions): 3 candidates -> kept mis:type_conversion->TargetTyping (0.90), mis:type_conversion->NarrowingAssignmentAllowed (0.06), mis:type_conversion->NoCastIfSameSize (0.04)
-    mis:type_conversion->TargetTyping -> held (0.83) "Because d is a double, Java knows the result should have decimals; so it does the division a / b with decimals and gets 3.0"
+  type_conversion (misconceptions): 3 candidates -> kept mis:type_conversion->TargetTyping (0.80), mis:type_conversion->NarrowingAssignmentAllowed (0.10), mis:type_conversion->NoCastIfSameSize (0.10)
+    mis:type_conversion->TargetTyping -> held (0.74) "Because d is a double, Java knows the result should have decimals; so it does the division a / b with decimals and gets 3.0"
     mis:type_conversion->NarrowingAssignmentAllowed -> not applied (0.00) ""
     mis:type_conversion->NoCastIfSameSize -> not applied (0.00) ""
   type_conversion (level ways): 18 candidates -> kept lvl:type_conversion@L0#0 (0.60), lvl:type_conversion@L4#3 (0.25), lvl:type_conversion@L2#0 (0.15)
@@ -1114,10 +1116,10 @@ start concepts (3): integer_division, println, arithmetic_operators
     lvl:widening_conversion@L4#3 -> not applied (0.00) ""
     lvl:widening_conversion@L2#0 -> not applied (0.00) ""
     lvl:widening_conversion@L4#1 -> not applied (0.00) ""
-  kept: pre:arithmetic_operators->integer_division [broken, tier 0, 0.85], mis:type_conversion->TargetTyping [held, tier 0, 0.83], pre:arithmetic_operators->expression [broken, tier 0, 0.80], mis:expression->TargetTyping [held, tier 0, 0.76]
+  kept: pre:arithmetic_operators->integer_division [broken, tier 0, 0.85], pre:arithmetic_operators->expression [broken, tier 0, 0.80], mis:expression->TargetTyping [held, tier 0, 0.76], mis:type_conversion->TargetTyping [held, tier 0, 0.74]
   clause coverage: c1 uncovered; c2 <- mis:integer_division->TargetTyping; c3 <- mis:integer_division->TargetTyping
   not yet read: pre:primitive_type->type_conversion, pre:type_conversion->widening_conversion
---- depth 3: current concepts ['arithmetic_operators', 'integer_division', 'type_conversion', 'expression', 'widening_conversion']
+--- depth 3: current concepts ['arithmetic_operators', 'integer_division', 'expression', 'type_conversion', 'widening_conversion']
   type_conversion (concept edges): 2 candidates -> kept pre:primitive_type->type_conversion (0.60), pre:type_conversion->widening_conversion (0.40)
     pre:primitive_type->type_conversion -> broken (0.39) "Because d is a double, Java knows the result should have decimals; so it does the division a / b with decimals and gets 3.0"
     pre:type_conversion->widening_conversion -> confirmed (0.22) "Because d is a double, Java knows the result should have decimals; so it does the division a / b with decimals and gets 3.0"
@@ -1136,7 +1138,8 @@ start concepts (3): integer_division, println, arithmetic_operators
   nothing kept at this depth
   clause coverage: c1 uncovered; c2 <- mis:integer_division->TargetTyping; c3 <- mis:integer_division->TargetTyping
   no next nodes -> half_stop
-  shadows: mis:expression->TargetTyping (shadow of mis:type_conversion->TargetTyping), mis:type_conversion->TargetTyping (shadow of mis:integer_division->TargetTyping)
+  held: mis:integer_division->TargetTyping; filed at the dependent concept: mis:expression->TargetTyping, mis:type_conversion->TargetTyping
+  shadows: mis:expression->TargetTyping (shadow of mis:integer_division->TargetTyping), mis:type_conversion->TargetTyping (shadow of mis:integer_division->TargetTyping)
   root-cause walk: held on ['integer_division'], broken at [] (consequences: pre:arithmetic_operators->integer_division, pre:arithmetic_operators->expression, pre:primitive_type->type_conversion), prerequisites {'expression': ['arithmetic_operators'], 'integer_division': ['arithmetic_operators'], 'type_conversion': ['primitive_type'], 'println': ['statement'], 'widening_conversion': ['type_conversion']}
   level integer_division: L0 via misconception "Because d is a double, Java knows the result should have decimals; so it does the division a / b with decimals and gets 3.0"
   level println: L2 via output_prediction "It prints 3.0"
@@ -1178,7 +1181,7 @@ start concepts (3): integer_division, println, arithmetic_operators
   {
    "concept": "expression",
    "misconception": "TargetTyping",
-   "shadow_of": "mis:type_conversion->TargetTyping",
+   "shadow_of": "mis:integer_division->TargetTyping",
    "quote": "Because d is a double, Java knows the result should have decimals; so it does the division a / b with decimals and gets 3.0",
    "score": 0.76
   },
@@ -1187,7 +1190,7 @@ start concepts (3): integer_division, println, arithmetic_operators
    "misconception": "TargetTyping",
    "shadow_of": "mis:integer_division->TargetTyping",
    "quote": "Because d is a double, Java knows the result should have decimals; so it does the division a / b with decimals and gets 3.0",
-   "score": 0.828
+   "score": 0.736
   }
  ],
  "broken_edges": [
@@ -1322,25 +1325,6 @@ start concepts (3): integer_division, println, arithmetic_operators
   },
   {
    "depth": 2,
-   "source": "type_conversion",
-   "edge": "mis:type_conversion->TargetTyping",
-   "target": "TargetTyping",
-   "kind": "misconception",
-   "label": "held",
-   "clauses": [
-    2,
-    3
-   ],
-   "quote": "Because d is a double, Java knows the result should have decimals; so it does the division a / b with decimals and gets 3.0",
-   "confidence": 0.92,
-   "prune_score": 0.9,
-   "score": 0.828,
-   "logic": "The type of a numerical expression depends on the type expected by the surrounding context, so double d = a / b; keeps the fraction.",
-   "twin_logic": "The type of a numerical expression is determined by the expression, so double d = a / b; with int a and b still divides as ints.",
-   "role": "context"
-  },
-  {
-   "depth": 2,
    "source": "arithmetic_operators",
    "edge": "pre:arithmetic_operators->expression",
    "target": "expression",
@@ -1373,6 +1357,25 @@ start concepts (3): integer_division, println, arithmetic_operators
    "confidence": 0.95,
    "prune_score": 0.8,
    "score": 0.76,
+   "logic": "The type of a numerical expression depends on the type expected by the surrounding context, so double d = a / b; keeps the fraction.",
+   "twin_logic": "The type of a numerical expression is determined by the expression, so double d = a / b; with int a and b still divides as ints.",
+   "role": "context"
+  },
+  {
+   "depth": 2,
+   "source": "type_conversion",
+   "edge": "mis:type_conversion->TargetTyping",
+   "target": "TargetTyping",
+   "kind": "misconception",
+   "label": "held",
+   "clauses": [
+    2,
+    3
+   ],
+   "quote": "Because d is a double, Java knows the result should have decimals; so it does the division a / b with decimals and gets 3.0",
+   "confidence": 0.92,
+   "prune_score": 0.8,
+   "score": 0.736,
    "logic": "The type of a numerical expression depends on the type expected by the surrounding context, so double d = a / b; keeps the fraction.",
    "twin_logic": "The type of a numerical expression is determined by the expression, so double d = a / b; with int a and b still divides as ints.",
    "role": "context"
@@ -1544,8 +1547,8 @@ start concepts (3): integer_division, println, arithmetic_operators
    ],
    "quote": "Because d is a double, Java knows the result should have decimals; so it does the division a / b with decimals and gets 3.0",
    "confidence": 0.92,
-   "prune_score": 0.9,
-   "score": 0.828,
+   "prune_score": 0.8,
+   "score": 0.736,
    "logic": "The type of a numerical expression depends on the type expected by the surrounding context, so double d = a / b; keeps the fraction.",
    "twin_logic": "The type of a numerical expression is determined by the expression, so double d = a / b; with int a and b still divides as ints.",
    "role": "context"
@@ -1616,8 +1619,8 @@ start concepts (3): integer_division, println, arithmetic_operators
  "unexplained_clauses": [],
  "stop_reason": "half_stop",
  "depth_reached": 4,
- "llm_calls": 0,
- "llm_cache_hits": 50,
+ "llm_calls": 3,
+ "llm_cache_hits": 47,
  "llm_calls_by_step": {
   "prune": 18,
   "label": 32

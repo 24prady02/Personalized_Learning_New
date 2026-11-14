@@ -694,29 +694,29 @@ Edges offered:
 
 Prune: the model's reply (edge id and score; the kept edges sum to 1):
 ```
-mis:loop_variable->LoopOutputSameEachPass (0.50), mis:loop_variable->LoopVariableLimitsValues (0.25), mis:loop_variable->LoopVariableLifetimeScope (0.25)
+mis:loop_variable->LoopOutputSameEachPass (0.50), mis:loop_variable->LoopUpdateChangesDirection (0.25), mis:loop_variable->LoopVariableLimitsValues (0.25)
 ```
-Kept by pruning: mis:loop_variable->LoopOutputSameEachPass (0.50), mis:loop_variable->LoopVariableLimitsValues (0.25), mis:loop_variable->LoopVariableLifetimeScope (0.25)
+Kept by pruning: mis:loop_variable->LoopOutputSameEachPass (0.50), mis:loop_variable->LoopUpdateChangesDirection (0.25), mis:loop_variable->LoopVariableLimitsValues (0.25)
 
 Label prompt for the misconception / error edges (judged together). The model saw the program, the question, the numbered clauses, and these edges with their wrong rule and right rule:
 | edge |
 |---|
 | mis:loop_variable->LoopOutputSameEachPass \| wrong rule: A loop prints the same thing on every pass; the changing loop variable does not affect what the body does. \| right rule: The body uses the current value of the loop variable, so its output can differ on each pass. |
+| mis:loop_variable->LoopUpdateChangesDirection \| wrong rule: The update of the loop variable can change from pass to pass (e.g. switch direction) although the code is the same. \| right rule: The update expression is the same on every pass; the loop variable changes by the rule written in the update. |
 | mis:loop_variable->LoopVariableLimitsValues \| wrong rule: The range of the loop variable limits the values that can be read or printed inside the loop. \| right rule: The loop variable only counts passes; other values read or printed in the body are not bounded by it. |
-| mis:loop_variable->LoopVariableLifetimeScope \| wrong rule: The for variable i is a new variable on every pass rather than one variable changed by the update. \| right rule: The for variable i is created once by the init, and the update changes that same variable on every pass. |
 Model's reply:
 ```
-mis:loop_variable->LoopOutputSameEachPass | correct | clauses: 1, 2 | confidence: 0.85
-mis:loop_variable->LoopVariableLimitsValues | correct | clauses: 2, 4 | confidence: 0.6
-mis:loop_variable->LoopVariableLifetimeScope | not applied | clauses: none | confidence: 0.9
+mis:loop_variable->LoopOutputSameEachPass | correct | clauses: 1, 4 | confidence: 0.85
+mis:loop_variable->LoopUpdateChangesDirection | correct | clauses: 1 | confidence: 0.6
+mis:loop_variable->LoopVariableLimitsValues | correct | clauses: 2, 4 | confidence: 0.7
 ```
 
 Parsed labels:
 | edge | label | prune score | confidence | score | clauses | words |
 |---|---|---|---|---|---|---|
-| mis:loop_variable->LoopOutputSameEachPass | correct | 0.5 | 0.85 | 0.42 | c1, c2 | The loop visits each index from 0 to a.length - 1 and adds that element to sum; so it prints Total: 12 |
-| mis:loop_variable->LoopVariableLimitsValues | correct | 0.25 | 0.6 | 0.15 | c2, c4 | so it prints Total: 12; so the loop runs once more and prints Total: 20, with no other change to the code |
-| mis:loop_variable->LoopVariableLifetimeScope | not applied |  |  | 0.0 |  |  |
+| mis:loop_variable->LoopOutputSameEachPass | correct | 0.5 | 0.85 | 0.42 | c1, c4 | The loop visits each index from 0 to a.length - 1 and adds that element to sum; so the loop runs once more and prints Total: 20, with no other change to the code |
+| mis:loop_variable->LoopUpdateChangesDirection | correct | 0.25 | 0.6 | 0.15 | c1 | The loop visits each index from 0 to a.length - 1 and adds that element to sum |
+| mis:loop_variable->LoopVariableLimitsValues | correct | 0.25 | 0.7 | 0.17 | c2, c4 | so it prints Total: 12; so the loop runs once more and prints Total: 20, with no other change to the code |
 
 #### loop_variable, level ways: 13 edges offered
 Edges offered:
@@ -978,9 +978,9 @@ Edges offered:
 
 Prune: the model's reply (edge id and score; the kept edges sum to 1):
 ```
-mis:loop_body->StateChangeIgnoredAcrossPasses (0.45), mis:loop_body->LoopOutputSameEachPass (0.30), mis:loop_body->StatementAfterLoopInBody (0.25)
+mis:loop_body->StateChangeIgnoredAcrossPasses (0.50), mis:loop_body->LoopOutputSameEachPass (0.30), mis:loop_body->StatementAfterLoopInBody (0.20)
 ```
-Kept by pruning: mis:loop_body->StateChangeIgnoredAcrossPasses (0.45), mis:loop_body->LoopOutputSameEachPass (0.30), mis:loop_body->StatementAfterLoopInBody (0.25)
+Kept by pruning: mis:loop_body->StateChangeIgnoredAcrossPasses (0.50), mis:loop_body->LoopOutputSameEachPass (0.30), mis:loop_body->StatementAfterLoopInBody (0.20)
 
 Label prompt for the misconception / error edges (judged together). The model saw the program, the question, the numbered clauses, and these edges with their wrong rule and right rule:
 | edge |
@@ -998,9 +998,9 @@ mis:loop_body->StatementAfterLoopInBody | correct | clauses: 2, 4 | confidence: 
 Parsed labels:
 | edge | label | prune score | confidence | score | clauses | words |
 |---|---|---|---|---|---|---|
-| mis:loop_body->StateChangeIgnoredAcrossPasses | correct | 0.45 | 0.9 | 0.41 | c1, c2, c4 | The loop visits each index from 0 to a.length - 1 and adds that element to sum; so it prints Total: 12; so the loop runs once more and prints Total: 20, with no other change to the code |
+| mis:loop_body->StateChangeIgnoredAcrossPasses | correct | 0.5 | 0.9 | 0.45 | c1, c2, c4 | The loop visits each index from 0 to a.length - 1 and adds that element to sum; so it prints Total: 12; so the loop runs once more and prints Total: 20, with no other change to the code |
 | mis:loop_body->LoopOutputSameEachPass | correct | 0.3 | 0.6 | 0.18 | c1 | The loop visits each index from 0 to a.length - 1 and adds that element to sum |
-| mis:loop_body->StatementAfterLoopInBody | correct | 0.25 | 0.75 | 0.19 | c2, c4 | so it prints Total: 12; so the loop runs once more and prints Total: 20, with no other change to the code |
+| mis:loop_body->StatementAfterLoopInBody | correct | 0.2 | 0.75 | 0.15 | c2, c4 | so it prints Total: 12; so the loop runs once more and prints Total: 20, with no other change to the code |
 
 #### loop_body, level ways: 14 edges offered
 Edges offered:
@@ -1121,7 +1121,7 @@ Root-cause walk: held on [], broken at [], prerequisites {'array_initializer': [
 - loop_control: L4 via predict_a_change "With 8 added, a.length becomes 4; so the loop runs once more and prints Total: 20, with no other change to the code"
 - loop_variable: L3 via purpose_of_the_whole "The loop visits each index from 0 to a.length - 1 and adds that element to sum; so the loop runs once more and prints Total: 20, with no other change to the code"
 
-**Stop:** max depth at depth 3; prompts {'prune': 18, 'label': 37}, fresh model calls 21, cache hits 34
+**Stop:** max depth at depth 3; prompts {'prune': 18, 'label': 37}, fresh model calls 4, cache hits 51
 
 ### Held misconceptions
 (none)
@@ -1177,8 +1177,9 @@ Figure 7 (final picture): C:\Users\magnu\OneDrive\Desktop\ES_VIterbi_Personalize
 | 2 | for_loop | pre:loop_control->for_loop | prerequisite | confirmed | 0.5 | 0.6 | 0.3 | [1, 4] | The loop visits each index from 0 to a.length - 1 and adds that element to sum; so the loop runs once more and prints Total: 20, with no other change to the code |
 | 2 | for_loop | pre:for_loop->loop_body | prerequisite | confirmed | 0.4 | 0.85 | 0.34 | [1, 4] | The loop visits each index from 0 to a.length - 1 and adds that element to sum; so the loop runs once more and prints Total: 20, with no other change to the code |
 | 2 | loop_control | pre:loop_variable->loop_control | prerequisite | confirmed | 0.8 | 0.75 | 0.6 | [1, 4] | The loop visits each index from 0 to a.length - 1 and adds that element to sum; so the loop runs once more and prints Total: 20, with no other change to the code |
-| 3 | loop_variable | mis:loop_variable->LoopOutputSameEachPass | misconception | correct | 0.5 | 0.85 | 0.425 | [1, 2] | The loop visits each index from 0 to a.length - 1 and adds that element to sum; so it prints Total: 12 |
-| 3 | loop_variable | mis:loop_variable->LoopVariableLimitsValues | misconception | correct | 0.25 | 0.6 | 0.15 | [2, 4] | so it prints Total: 12; so the loop runs once more and prints Total: 20, with no other change to the code |
+| 3 | loop_variable | mis:loop_variable->LoopOutputSameEachPass | misconception | correct | 0.5 | 0.85 | 0.425 | [1, 4] | The loop visits each index from 0 to a.length - 1 and adds that element to sum; so the loop runs once more and prints Total: 20, with no other change to the code |
+| 3 | loop_variable | mis:loop_variable->LoopUpdateChangesDirection | misconception | correct | 0.25 | 0.6 | 0.15 | [1] | The loop visits each index from 0 to a.length - 1 and adds that element to sum |
+| 3 | loop_variable | mis:loop_variable->LoopVariableLimitsValues | misconception | correct | 0.25 | 0.7 | 0.175 | [2, 4] | so it prints Total: 12; so the loop runs once more and prints Total: 20, with no other change to the code |
 | 3 | loop_variable | lvl:loop_variable@L2#1 | level | shown | 0.4 | 0.7 | 0.28 | [1, 4] | The loop visits each index from 0 to a.length - 1 and adds that element to sum; so the loop runs once more and prints Total: 20, with no other change to the code |
 | 3 | loop_variable | lvl:loop_variable@L3#2 | level | shown | 0.3 | 0.85 | 0.255 | [1, 4] | The loop visits each index from 0 to a.length - 1 and adds that element to sum; so the loop runs once more and prints Total: 20, with no other change to the code |
 | 3 | loop_control | pre:loop_control->for_loop | prerequisite | confirmed | 0.75 | 0.6 | 0.45 | [1, 4] | The loop visits each index from 0 to a.length - 1 and adds that element to sum; so the loop runs once more and prints Total: 20, with no other change to the code |
@@ -1188,9 +1189,9 @@ Figure 7 (final picture): C:\Users\magnu\OneDrive\Desktop\ES_VIterbi_Personalize
 | 3 | length_field | lvl:length_field@L1#1 | level | shown | 0.2 | 0.8 | 0.16 | [1, 3] | The loop visits each index from 0 to a.length - 1 and adds that element to sum; With 8 added, a.length becomes 4 |
 | 3 | array_traversal | pre:for_loop->array_traversal | prerequisite | confirmed | 0.6 | 0.93 | 0.558 | [1, 3, 4] | The loop visits each index from 0 to a.length - 1 and adds that element to sum; With 8 added, a.length becomes 4; so the loop runs once more and prints Total: 20, with no other change to the code |
 | 3 | array_traversal | pre:indexing->array_traversal | prerequisite | confirmed | 0.4 | 0.9 | 0.36 | [1, 4] | The loop visits each index from 0 to a.length - 1 and adds that element to sum; so the loop runs once more and prints Total: 20, with no other change to the code |
-| 3 | loop_body | mis:loop_body->StateChangeIgnoredAcrossPasses | misconception | correct | 0.45 | 0.9 | 0.405 | [1, 2, 4] | The loop visits each index from 0 to a.length - 1 and adds that element to sum; so it prints Total: 12; so the loop runs once more and prints Total: 20, with no other change to the code |
+| 3 | loop_body | mis:loop_body->StateChangeIgnoredAcrossPasses | misconception | correct | 0.5 | 0.9 | 0.45 | [1, 2, 4] | The loop visits each index from 0 to a.length - 1 and adds that element to sum; so it prints Total: 12; so the loop runs once more and prints Total: 20, with no other change to the code |
 | 3 | loop_body | mis:loop_body->LoopOutputSameEachPass | misconception | correct | 0.3 | 0.6 | 0.18 | [1] | The loop visits each index from 0 to a.length - 1 and adds that element to sum |
-| 3 | loop_body | mis:loop_body->StatementAfterLoopInBody | misconception | correct | 0.25 | 0.75 | 0.1875 | [2, 4] | so it prints Total: 12; so the loop runs once more and prints Total: 20, with no other change to the code |
+| 3 | loop_body | mis:loop_body->StatementAfterLoopInBody | misconception | correct | 0.2 | 0.75 | 0.15 | [2, 4] | so it prints Total: 12; so the loop runs once more and prints Total: 20, with no other change to the code |
 | 3 | loop_body | lvl:loop_body@L3#0 | level | shown | 0.4 | 0.6 | 0.24 | [1, 4] | The loop visits each index from 0 to a.length - 1 and adds that element to sum; so the loop runs once more and prints Total: 20, with no other change to the code |
 | 3 | loop_body | lvl:loop_body@L2#1 | level | shown | 0.35 | 0.7 | 0.245 | [1, 4] | The loop visits each index from 0 to a.length - 1 and adds that element to sum; so the loop runs once more and prints Total: 20, with no other change to the code |
 
@@ -1260,10 +1261,10 @@ start concepts (3): array_traversal, for_loop, loop_control
   clause coverage: c1 <- mis:array_traversal->OffByOneBound; c2 <- mis:array_traversal->ElementBoundToOldIndex; c3 <- mis:array_traversal->OffByOneBound; c4 <- mis:array_traversal->OffByOneBound
   not yet read: own edges of length_field, own edges of loop_body, own edges of loop_variable
 --- depth 3: current concepts ['loop_variable', 'loop_control', 'length_field', 'array_traversal', 'loop_body', 'for_loop']
-  loop_variable (misconceptions): 7 candidates -> kept mis:loop_variable->LoopOutputSameEachPass (0.50), mis:loop_variable->LoopVariableLimitsValues (0.25), mis:loop_variable->LoopVariableLifetimeScope (0.25)
-    mis:loop_variable->LoopOutputSameEachPass -> correct (0.42) "The loop visits each index from 0 to a.length - 1 and adds that element to sum; so it prints Total: 12"
-    mis:loop_variable->LoopVariableLimitsValues -> correct (0.15) "so it prints Total: 12; so the loop runs once more and prints Total: 20, with no other change to the code"
-    mis:loop_variable->LoopVariableLifetimeScope -> not applied (0.00) ""
+  loop_variable (misconceptions): 7 candidates -> kept mis:loop_variable->LoopOutputSameEachPass (0.50), mis:loop_variable->LoopUpdateChangesDirection (0.25), mis:loop_variable->LoopVariableLimitsValues (0.25)
+    mis:loop_variable->LoopOutputSameEachPass -> correct (0.42) "The loop visits each index from 0 to a.length - 1 and adds that element to sum; so the loop runs once more and prints Total: 20, with no other change to the code"
+    mis:loop_variable->LoopUpdateChangesDirection -> correct (0.15) "The loop visits each index from 0 to a.length - 1 and adds that element to sum"
+    mis:loop_variable->LoopVariableLimitsValues -> correct (0.17) "so it prints Total: 12; so the loop runs once more and prints Total: 20, with no other change to the code"
   loop_variable (level ways): 13 candidates -> kept lvl:loop_variable@L2#1 (0.40), lvl:loop_variable@L3#2 (0.30), lvl:loop_variable@L4#0 (0.30)
     lvl:loop_variable@L2#1 -> shown (0.28) "The loop visits each index from 0 to a.length - 1 and adds that element to sum; so the loop runs once more and prints Total: 20, with no other change to the code"
     lvl:loop_variable@L3#2 -> shown (0.26) "The loop visits each index from 0 to a.length - 1 and adds that element to sum; so the loop runs once more and prints Total: 20, with no other change to the code"
@@ -1281,10 +1282,10 @@ start concepts (3): array_traversal, for_loop, loop_control
   array_traversal (concept edges): 2 candidates -> kept pre:for_loop->array_traversal (0.60), pre:indexing->array_traversal (0.40)
     pre:for_loop->array_traversal -> confirmed (0.56) "The loop visits each index from 0 to a.length - 1 and adds that element to sum; With 8 added, a.length becomes 4; so the loop runs once more and prints Total: 20, with no other change to the code"
     pre:indexing->array_traversal -> confirmed (0.36) "The loop visits each index from 0 to a.length - 1 and adds that element to sum; so the loop runs once more and prints Total: 20, with no other change to the code"
-  loop_body (misconceptions): 12 candidates -> kept mis:loop_body->StateChangeIgnoredAcrossPasses (0.45), mis:loop_body->LoopOutputSameEachPass (0.30), mis:loop_body->StatementAfterLoopInBody (0.25)
-    mis:loop_body->StateChangeIgnoredAcrossPasses -> correct (0.41) "The loop visits each index from 0 to a.length - 1 and adds that element to sum; so it prints Total: 12; so the loop runs once more and prints Total: 20, with no other change to the code"
+  loop_body (misconceptions): 12 candidates -> kept mis:loop_body->StateChangeIgnoredAcrossPasses (0.50), mis:loop_body->LoopOutputSameEachPass (0.30), mis:loop_body->StatementAfterLoopInBody (0.20)
+    mis:loop_body->StateChangeIgnoredAcrossPasses -> correct (0.45) "The loop visits each index from 0 to a.length - 1 and adds that element to sum; so it prints Total: 12; so the loop runs once more and prints Total: 20, with no other change to the code"
     mis:loop_body->LoopOutputSameEachPass -> correct (0.18) "The loop visits each index from 0 to a.length - 1 and adds that element to sum"
-    mis:loop_body->StatementAfterLoopInBody -> correct (0.19) "so it prints Total: 12; so the loop runs once more and prints Total: 20, with no other change to the code"
+    mis:loop_body->StatementAfterLoopInBody -> correct (0.15) "so it prints Total: 12; so the loop runs once more and prints Total: 20, with no other change to the code"
   loop_body (level ways): 14 candidates -> kept lvl:loop_body@L3#0 (0.40), lvl:loop_body@L2#1 (0.35), lvl:loop_body@L4#0 (0.25)
     lvl:loop_body@L3#0 -> shown (0.24) "The loop visits each index from 0 to a.length - 1 and adds that element to sum; so the loop runs once more and prints Total: 20, with no other change to the code"
     lvl:loop_body@L2#1 -> shown (0.24) "The loop visits each index from 0 to a.length - 1 and adds that element to sum; so the loop runs once more and prints Total: 20, with no other change to the code"
@@ -1814,7 +1815,7 @@ start concepts (3): array_traversal, for_loop, loop_control
    "score": 0.28,
    "logic": "Updates the loop counter so that the loop runs the wrong number of times.",
    "twin_logic": "The init, test and update together decide the number of passes; trace them to check the count.",
-   "role": "primary"
+   "role": "context"
   },
   {
    "depth": 1,
@@ -1997,14 +1998,32 @@ start concepts (3): array_traversal, for_loop, loop_control
    "label": "correct",
    "clauses": [
     1,
-    2
+    4
    ],
-   "quote": "The loop visits each index from 0 to a.length - 1 and adds that element to sum; so it prints Total: 12",
+   "quote": "The loop visits each index from 0 to a.length - 1 and adds that element to sum; so the loop runs once more and prints Total: 20, with no other change to the code",
    "confidence": 0.85,
    "prune_score": 0.5,
    "score": 0.425,
    "logic": "A loop prints the same thing on every pass; the changing loop variable does not affect what the body does.",
    "twin_logic": "The body uses the current value of the loop variable, so its output can differ on each pass.",
+   "role": "primary"
+  },
+  {
+   "depth": 3,
+   "source": "loop_variable",
+   "edge": "mis:loop_variable->LoopUpdateChangesDirection",
+   "target": "LoopUpdateChangesDirection",
+   "kind": "misconception",
+   "label": "correct",
+   "clauses": [
+    1
+   ],
+   "quote": "The loop visits each index from 0 to a.length - 1 and adds that element to sum",
+   "confidence": 0.6,
+   "prune_score": 0.25,
+   "score": 0.15,
+   "logic": "The update of the loop variable can change from pass to pass (e.g. switch direction) although the code is the same.",
+   "twin_logic": "The update expression is the same on every pass; the loop variable changes by the rule written in the update.",
    "role": "primary"
   },
   {
@@ -2019,9 +2038,9 @@ start concepts (3): array_traversal, for_loop, loop_control
     4
    ],
    "quote": "so it prints Total: 12; so the loop runs once more and prints Total: 20, with no other change to the code",
-   "confidence": 0.6,
+   "confidence": 0.7,
    "prune_score": 0.25,
-   "score": 0.15,
+   "score": 0.175,
    "logic": "The range of the loop variable limits the values that can be read or printed inside the loop.",
    "twin_logic": "The loop variable only counts passes; other values read or printed in the body are not bounded by it.",
    "role": "primary"
@@ -2214,8 +2233,8 @@ start concepts (3): array_traversal, for_loop, loop_control
    ],
    "quote": "The loop visits each index from 0 to a.length - 1 and adds that element to sum; so it prints Total: 12; so the loop runs once more and prints Total: 20, with no other change to the code",
    "confidence": 0.9,
-   "prune_score": 0.45,
-   "score": 0.405,
+   "prune_score": 0.5,
+   "score": 0.45,
    "logic": "Values changed by one pass of a loop (other than the loop variable) do not affect later passes.",
    "twin_logic": "Each pass starts from the state left by the previous pass, so a change in one pass carries into the next ones.",
    "role": "primary"
@@ -2251,8 +2270,8 @@ start concepts (3): array_traversal, for_loop, loop_control
    ],
    "quote": "so it prints Total: 12; so the loop runs once more and prints Total: 20, with no other change to the code",
    "confidence": 0.75,
-   "prune_score": 0.25,
-   "score": 0.1875,
+   "prune_score": 0.2,
+   "score": 0.15,
    "logic": "A statement written after the loop is repeated with the loop body.",
    "twin_logic": "The body ends at the closing brace (or after its single statement); code after it runs once, after the loop ends.",
    "role": "primary"
@@ -2307,8 +2326,8 @@ start concepts (3): array_traversal, for_loop, loop_control
  "unexplained_clauses": [],
  "stop_reason": "max depth",
  "depth_reached": 3,
- "llm_calls": 21,
- "llm_cache_hits": 34,
+ "llm_calls": 4,
+ "llm_cache_hits": 51,
  "llm_calls_by_step": {
   "prune": 18,
   "label": 37

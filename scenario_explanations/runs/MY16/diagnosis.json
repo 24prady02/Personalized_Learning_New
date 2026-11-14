@@ -1034,8 +1034,8 @@
  "unexplained_clauses": [],
  "stop_reason": "max depth",
  "depth_reached": 4,
- "llm_calls": 19,
- "llm_cache_hits": 59,
+ "llm_calls": 3,
+ "llm_cache_hits": 75,
  "llm_calls_by_step": {
   "prune": 26,
   "label": 52

@@ -42,17 +42,17 @@ start concepts (3): for_loop, loop_body, loop_variable
   clause coverage: c1 <- mis:for_loop->ForUpdateBeforeBody
   not yet read: own edges of loop_control
 --- depth 3: current concepts ['loop_control', 'loop_variable', 'loop_body', 'for_loop']
-  loop_control (misconceptions): 11 candidates -> kept mis:loop_control->OffByOneBound (0.45), mis:loop_control->ForUpdateBeforeBody (0.30), err:loop_control->WrongIterationCount (0.25)
-    mis:loop_control->OffByOneBound -> correct (0.41) "The first pass prints 0, the second prints 1, the third prints 2, and then the loop ends"
+  loop_control (misconceptions): 11 candidates -> kept mis:loop_control->OffByOneBound (0.40), mis:loop_control->ForUpdateBeforeBody (0.30), err:loop_control->WrongIterationCount (0.30)
+    mis:loop_control->OffByOneBound -> correct (0.36) "The first pass prints 0, the second prints 1, the third prints 2, and then the loop ends"
     mis:loop_control->ForUpdateBeforeBody -> correct (0.26) "The first pass prints 0, the second prints 1, the third prints 2, and then the loop ends"
-    err:loop_control->WrongIterationCount -> correct (0.21) "The first pass prints 0, the second prints 1, the third prints 2, and then the loop ends"
+    err:loop_control->WrongIterationCount -> correct (0.26) "The first pass prints 0, the second prints 1, the third prints 2, and then the loop ends"
   loop_control (level ways): 19 candidates -> kept lvl:loop_control@L2#1 (0.50), lvl:loop_control@L2#0 (0.30), lvl:loop_control@L3#6 (0.20)
     lvl:loop_control@L2#1 -> shown (0.42) "The first pass prints 0, the second prints 1, the third prints 2, and then the loop ends"
     lvl:loop_control@L2#0 -> shown (0.18) "The first pass prints 0, the second prints 1, the third prints 2, and then the loop ends"
     lvl:loop_control@L3#6 -> shown (0.14) "The first pass prints 0, the second prints 1, the third prints 2, and then the loop ends"
   for_loop (concept edges): 1 candidates -> kept pre:for_loop->loop_scope (1.00)
     pre:for_loop->loop_scope -> not applied (0.00) ""
-  kept: lvl:loop_control@L2#1 [shown, tier 2, 0.42], mis:loop_control->OffByOneBound [correct, tier 2, 0.41], mis:loop_control->ForUpdateBeforeBody [correct, tier 2, 0.26]
+  kept: lvl:loop_control@L2#1 [shown, tier 2, 0.42], mis:loop_control->OffByOneBound [correct, tier 2, 0.36], mis:loop_control->ForUpdateBeforeBody [correct, tier 2, 0.26]
   clause coverage: c1 <- mis:for_loop->ForUpdateBeforeBody
   not yet read: pre:loop_control->increment_operators
   root-cause walk: held on [], broken at [], prerequisites {'increment_operators': ['assignment', 'loop_control'], 'boolean_expression': ['comparison_operators'], 'comparison_operators': ['expression'], 'loop_body': ['for_loop'], 'loop_scope': ['for_loop'], 'for_loop': ['loop_control'], 'loop_control': ['loop_variable'], 'control_flow': ['statement'], 'println': ['statement']}

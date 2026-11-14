@@ -140,7 +140,7 @@
    "score": 0.09,
    "logic": "Updates the loop counter so that the loop runs the wrong number of times.",
    "twin_logic": "The init, test and update together decide the number of passes; trace them to check the count.",
-   "role": "primary"
+   "role": "context"
   },
   {
    "depth": 2,
@@ -221,7 +221,7 @@
    "score": 0.09,
    "logic": "Updates the loop counter so that the loop runs the wrong number of times.",
    "twin_logic": "The init, test and update together decide the number of passes; trace them to check the count.",
-   "role": "primary"
+   "role": "context"
   },
   {
    "depth": 1,
@@ -246,21 +246,21 @@
   {
    "depth": 1,
    "source": "loop_variable",
-   "edge": "mis:loop_variable->ForInitRepeats",
-   "target": "ForInitRepeats",
+   "edge": "mis:loop_variable->LoopUpdateChangesDirection",
+   "target": "LoopUpdateChangesDirection",
    "kind": "misconception",
    "label": "correct",
    "clauses": [
-    2,
-    3
+    1,
+    2
    ],
-   "quote": "so i goes 0, 1, 2 and; so on up to 9",
+   "quote": "A for loop moves i on by one each pass; so i goes 0, 1, 2 and",
    "confidence": 0.6,
-   "prune_score": 0.15,
-   "score": 0.09,
-   "logic": "The initialization of a for loop runs again after a pass of the body.",
-   "twin_logic": "The initialization runs exactly once, before the first condition test.",
-   "role": "context"
+   "prune_score": 0.6,
+   "score": 0.36,
+   "logic": "The update of the loop variable can change from pass to pass (e.g. switch direction) although the code is the same.",
+   "twin_logic": "The update expression is the same on every pass; the loop variable changes by the rule written in the update.",
+   "role": "primary"
   },
   {
    "depth": 1,

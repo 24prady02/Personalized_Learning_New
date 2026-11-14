@@ -205,8 +205,8 @@
    ],
    "quote": "The first pass prints 0, the second prints 1, the third prints 2, and then the loop ends",
    "confidence": 0.9,
-   "prune_score": 0.45,
-   "score": 0.405,
+   "prune_score": 0.4,
+   "score": 0.36,
    "logic": "i < n and i <= n mean the same, so the loop runs until i equals n and the last pass can use a[n].",
    "twin_logic": "for (i = 0; i < n; i++) runs n times with i going up to n - 1; with <= it runs n + 1 times and reaches i = n.",
    "role": "primary"
@@ -627,8 +627,8 @@
    ],
    "quote": "The first pass prints 0, the second prints 1, the third prints 2, and then the loop ends",
    "confidence": 0.9,
-   "prune_score": 0.45,
-   "score": 0.405,
+   "prune_score": 0.4,
+   "score": 0.36,
    "logic": "i < n and i <= n mean the same, so the loop runs until i equals n and the last pass can use a[n].",
    "twin_logic": "for (i = 0; i < n; i++) runs n times with i going up to n - 1; with <= it runs n + 1 times and reaches i = n.",
    "role": "primary"
@@ -663,11 +663,11 @@
    ],
    "quote": "The first pass prints 0, the second prints 1, the third prints 2, and then the loop ends",
    "confidence": 0.85,
-   "prune_score": 0.25,
-   "score": 0.2125,
+   "prune_score": 0.3,
+   "score": 0.255,
    "logic": "Updates the loop counter so that the loop runs the wrong number of times.",
    "twin_logic": "The init, test and update together decide the number of passes; trace them to check the count.",
-   "role": "primary"
+   "role": "context"
   },
   {
    "depth": 3,
@@ -733,8 +733,8 @@
  "unexplained_clauses": [],
  "stop_reason": "max depth",
  "depth_reached": 3,
- "llm_calls": 4,
- "llm_cache_hits": 28,
+ "llm_calls": 3,
+ "llm_cache_hits": 29,
  "llm_calls_by_step": {
   "prune": 11,
   "label": 21

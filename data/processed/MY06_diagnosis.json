@@ -304,8 +304,8 @@
    ],
    "quote": "It prints 1, then 3, then 6; so sum keeps the running total: 0+1 = 1, then 1+2 = 3, then 3+3 = 6",
    "confidence": 0.8,
-   "prune_score": 0.4,
-   "score": 0.32,
+   "prune_score": 0.5,
+   "score": 0.4,
    "logic": "A loop prints the same thing on every pass; the changing loop variable does not affect what the body does.",
    "twin_logic": "The body uses the current value of the loop variable, so its output can differ on each pass.",
    "role": "primary"
@@ -387,7 +387,7 @@
    "score": 0.16,
    "logic": "Updates the loop counter so that the loop runs the wrong number of times.",
    "twin_logic": "The init, test and update together decide the number of passes; trace them to check the count.",
-   "role": "primary"
+   "role": "context"
   },
   {
    "depth": 1,
@@ -708,8 +708,8 @@
    ],
    "quote": "It prints 1, then 3, then 6; so sum keeps the running total: 0+1 = 1, then 1+2 = 3, then 3+3 = 6",
    "confidence": 0.8,
-   "prune_score": 0.4,
-   "score": 0.32,
+   "prune_score": 0.5,
+   "score": 0.4,
    "logic": "A loop prints the same thing on every pass; the changing loop variable does not affect what the body does.",
    "twin_logic": "The body uses the current value of the loop variable, so its output can differ on each pass.",
    "role": "primary"
@@ -726,8 +726,8 @@
    ],
    "quote": "so sum keeps the running total: 0+1 = 1, then 1+2 = 3, then 3+3 = 6",
    "confidence": 0.65,
-   "prune_score": 0.25,
-   "score": 0.1625,
+   "prune_score": 0.2,
+   "score": 0.13,
    "logic": "The initialization of a for loop runs again after a pass of the body.",
    "twin_logic": "The initialization runs exactly once, before the first condition test.",
    "role": "context"
@@ -800,8 +800,8 @@
  "unexplained_clauses": [],
  "stop_reason": "sufficient",
  "depth_reached": 4,
- "llm_calls": 0,
- "llm_cache_hits": 44,
+ "llm_calls": 3,
+ "llm_cache_hits": 41,
  "llm_calls_by_step": {
   "prune": 15,
   "label": 29

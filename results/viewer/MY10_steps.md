@@ -926,9 +926,11 @@ Edges offered:
 
 Prune: the model's reply (edge id and score; the kept edges sum to 1):
 ```
-mis:off_by_one_error->OffByOneBound (0.60), err:off_by_one_error->WrongIterationCount (0.35), err:off_by_one_error->FencepostExtraSeparator (0.05)
+{mis:off_by_one_error->OffByOneBound (Score: 0.6)}
+{err:off_by_one_error->WrongIterationCount (Score: 0.3)}
+{err:off_by_one_error->FencepostExtraSeparator (Score: 0.1)}
 ```
-Kept by pruning: mis:off_by_one_error->OffByOneBound (0.60), err:off_by_one_error->WrongIterationCount (0.35), err:off_by_one_error->FencepostExtraSeparator (0.05)
+Kept by pruning: mis:off_by_one_error->OffByOneBound (0.60), err:off_by_one_error->WrongIterationCount (0.30), err:off_by_one_error->FencepostExtraSeparator (0.10)
 
 Label prompt for the misconception / error edges (judged together). The model saw the program, the question, the numbered clauses, and these edges with their wrong rule and right rule:
 | edge |
@@ -946,8 +948,8 @@ err:off_by_one_error->FencepostExtraSeparator | not applied | clauses: none | co
 Parsed labels:
 | edge | label | prune score | confidence | score | clauses | words |
 |---|---|---|---|---|---|---|
-| mis:off_by_one_error->OffByOneBound | correct | 0.6 | 0.6 | 0.36 | c1, c4 | It prints 0, then 5, 10 and 15; Then a[1], a[2] and a[3] are 5, 10 and 15 |
-| err:off_by_one_error->WrongIterationCount | correct | 0.35 | 0.55 | 0.19 | c1, c4 | It prints 0, then 5, 10 and 15; Then a[1], a[2] and a[3] are 5, 10 and 15 |
+| mis:off_by_one_error->OffByOneBound | correct | 0.6000000000000001 | 0.6 | 0.36 | c1, c4 | It prints 0, then 5, 10 and 15; Then a[1], a[2] and a[3] are 5, 10 and 15 |
+| err:off_by_one_error->WrongIterationCount | correct | 0.30000000000000004 | 0.55 | 0.17 | c1, c4 | It prints 0, then 5, 10 and 15; Then a[1], a[2] and a[3] are 5, 10 and 15 |
 | err:off_by_one_error->FencepostExtraSeparator | not applied |  |  | 0.0 |  |  |
 
 #### off_by_one_error, level ways: 16 edges offered
@@ -1136,7 +1138,7 @@ Root-cause walk: held on ['array_bounds', 'indexing'], broken at [] (consequence
 - length_field: L0 via everyday_reading "Arrays start at a[1]; Then a[1], a[2] and a[3] are 5, 10 and 15"
 - off_by_one_error: L0 via everyday_reading "Arrays start at a[1]; so a[0] is before the first element and just gives 0; Then a[1], a[2] and a[3] are 5, 10 and 15"
 
-**Stop:** max depth at depth 3; prompts {'prune': 19, 'label': 38}, fresh model calls 12, cache hits 45
+**Stop:** max depth at depth 3; prompts {'prune': 19, 'label': 38}, fresh model calls 1, cache hits 56
 
 ### Held misconceptions
 | concept | misconception | kind | quote | score | shares_evidence_with |
@@ -1202,8 +1204,8 @@ Figure 7 (final picture): C:\Users\magnu\OneDrive\Desktop\ES_VIterbi_Personalize
 | 3 | length_field | lvl:length_field@L0#0 | level | shown | 0.5 | 0.55 | 0.275 | [2, 4] | Arrays start at a[1]; Then a[1], a[2] and a[3] are 5, 10 and 15 |
 | 3 | array_initializer | pre:array_initializer->length_field | prerequisite | confirmed | 0.6 | 0.6 | 0.36 | [1, 4] | It prints 0, then 5, 10 and 15; Then a[1], a[2] and a[3] are 5, 10 and 15 |
 | 3 | array_initializer | pre:array_declaration->array_initializer | prerequisite | confirmed | 0.4 | 0.6 | 0.24 | [4] | Then a[1], a[2] and a[3] are 5, 10 and 15 |
-| 3 | off_by_one_error | mis:off_by_one_error->OffByOneBound | misconception | correct | 0.6 | 0.6 | 0.36 | [1, 4] | It prints 0, then 5, 10 and 15; Then a[1], a[2] and a[3] are 5, 10 and 15 |
-| 3 | off_by_one_error | err:off_by_one_error->WrongIterationCount | error | correct | 0.35 | 0.55 | 0.1925 | [1, 4] | It prints 0, then 5, 10 and 15; Then a[1], a[2] and a[3] are 5, 10 and 15 |
+| 3 | off_by_one_error | mis:off_by_one_error->OffByOneBound | misconception | correct | 0.6000000000000001 | 0.6 | 0.36 | [1, 4] | It prints 0, then 5, 10 and 15; Then a[1], a[2] and a[3] are 5, 10 and 15 |
+| 3 | off_by_one_error | err:off_by_one_error->WrongIterationCount | error | correct | 0.30000000000000004 | 0.55 | 0.165 | [1, 4] | It prints 0, then 5, 10 and 15; Then a[1], a[2] and a[3] are 5, 10 and 15 |
 | 3 | off_by_one_error | lvl:off_by_one_error@L0#0 | level | shown | 0.6 | 0.7 | 0.42 | [2, 3, 4] | Arrays start at a[1]; so a[0] is before the first element and just gives 0; Then a[1], a[2] and a[3] are 5, 10 and 15 |
 | 3 | array_bounds | mis:array_bounds->OutOfBoundsElementsAreNull | misconception | held | 0.6 | 0.7 | 0.42 | [2, 3] | Arrays start at a[1]; so a[0] is before the first element and just gives 0 |
 | 3 | array_bounds | mis:array_bounds->OffByOneBound | misconception | correct | 0.4 | 0.7 | 0.28 | [1, 4] | It prints 0, then 5, 10 and 15; Then a[1], a[2] and a[3] are 5, 10 and 15 |
@@ -1297,9 +1299,9 @@ start concepts (3): indexing, array_traversal, array_initializer
   array_initializer (concept edges): 2 candidates -> kept pre:array_initializer->length_field (0.60), pre:array_declaration->array_initializer (0.40)
     pre:array_initializer->length_field -> confirmed (0.36) "It prints 0, then 5, 10 and 15; Then a[1], a[2] and a[3] are 5, 10 and 15"
     pre:array_declaration->array_initializer -> confirmed (0.24) "Then a[1], a[2] and a[3] are 5, 10 and 15"
-  off_by_one_error (misconceptions): 4 candidates -> kept mis:off_by_one_error->OffByOneBound (0.60), err:off_by_one_error->WrongIterationCount (0.35), err:off_by_one_error->FencepostExtraSeparator (0.05)
+  off_by_one_error (misconceptions): 4 candidates -> kept mis:off_by_one_error->OffByOneBound (0.60), err:off_by_one_error->WrongIterationCount (0.30), err:off_by_one_error->FencepostExtraSeparator (0.10)
     mis:off_by_one_error->OffByOneBound -> correct (0.36) "It prints 0, then 5, 10 and 15; Then a[1], a[2] and a[3] are 5, 10 and 15"
-    err:off_by_one_error->WrongIterationCount -> correct (0.19) "It prints 0, then 5, 10 and 15; Then a[1], a[2] and a[3] are 5, 10 and 15"
+    err:off_by_one_error->WrongIterationCount -> correct (0.17) "It prints 0, then 5, 10 and 15; Then a[1], a[2] and a[3] are 5, 10 and 15"
     err:off_by_one_error->FencepostExtraSeparator -> not applied (0.00) ""
   off_by_one_error (level ways): 16 candidates -> kept lvl:off_by_one_error@L0#0 (0.60), lvl:off_by_one_error@L4#3 (0.25), lvl:off_by_one_error@L3#0 (0.15)
     lvl:off_by_one_error@L0#0 -> shown (0.42) "Arrays start at a[1]; so a[0] is before the first element and just gives 0; Then a[1], a[2] and a[3] are 5, 10 and 15"
@@ -2121,11 +2123,11 @@ start concepts (3): indexing, array_traversal, array_initializer
    ],
    "quote": "It prints 0, then 5, 10 and 15; Then a[1], a[2] and a[3] are 5, 10 and 15",
    "confidence": 0.6,
-   "prune_score": 0.6,
+   "prune_score": 0.6000000000000001,
    "score": 0.36,
    "logic": "< vs <= and 0..n vs 0..n-1 are interchangeable",
    "twin_logic": "for (i = 0; i < n; i++) runs n times with i going up to n - 1; with <= it runs n + 1 times and reaches i = n.",
-   "role": "primary"
+   "role": "context"
   },
   {
    "depth": 3,
@@ -2140,8 +2142,8 @@ start concepts (3): indexing, array_traversal, array_initializer
    ],
    "quote": "It prints 0, then 5, 10 and 15; Then a[1], a[2] and a[3] are 5, 10 and 15",
    "confidence": 0.55,
-   "prune_score": 0.35,
-   "score": 0.1925,
+   "prune_score": 0.30000000000000004,
+   "score": 0.165,
    "logic": "Updates the loop counter so that the loop runs the wrong number of times.",
    "twin_logic": "The init, test and update together decide the number of passes; trace them to check the count.",
    "role": "context"
@@ -2257,8 +2259,8 @@ start concepts (3): indexing, array_traversal, array_initializer
  "unexplained_clauses": [],
  "stop_reason": "max depth",
  "depth_reached": 3,
- "llm_calls": 12,
- "llm_cache_hits": 45,
+ "llm_calls": 1,
+ "llm_cache_hits": 56,
  "llm_calls_by_step": {
   "prune": 19,
   "label": 38

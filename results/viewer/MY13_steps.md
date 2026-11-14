@@ -99,29 +99,29 @@ Edges offered:
 
 Prune: the model's reply (edge id and score; the kept edges sum to 1):
 ```
-mis:explicit_cast->CastAfterIntDivision (0.75), mis:explicit_cast->CastAppliesToWholeExpression (0.15), mis:explicit_cast->LaterDoubleLiteralFixesDivision (0.10)
+mis:explicit_cast->CastAfterIntDivision (0.70), mis:explicit_cast->LaterDoubleLiteralFixesDivision (0.15), mis:explicit_cast->CastAppliesToWholeExpression (0.15)
 ```
-Kept by pruning: mis:explicit_cast->CastAfterIntDivision (0.75), mis:explicit_cast->CastAppliesToWholeExpression (0.15), mis:explicit_cast->LaterDoubleLiteralFixesDivision (0.10)
+Kept by pruning: mis:explicit_cast->CastAfterIntDivision (0.70), mis:explicit_cast->LaterDoubleLiteralFixesDivision (0.15), mis:explicit_cast->CastAppliesToWholeExpression (0.15)
 
 Label prompt for the misconception / error edges (judged together). The model saw the program, the question, the numbered clauses, and these edges with their wrong rule and right rule:
 | edge |
 |---|
 | mis:explicit_cast->CastAfterIntDivision \| wrong rule: (double) (3 / 5) is 0.6. \| right rule: The integer division 3 / 5 = 0 happens before the cast, so the result is 0.0. |
-| mis:explicit_cast->CastAppliesToWholeExpression \| wrong rule: (int) 2.5 / 0.15 casts the whole quotient to int. \| right rule: The cast applies only to what comes right after it, here 2.5. |
 | mis:explicit_cast->LaterDoubleLiteralFixesDivision \| wrong rule: Changing a later literal to 100.0 fixes an earlier int division. \| right rule: The int division happens first; the double must be in the division itself. |
+| mis:explicit_cast->CastAppliesToWholeExpression \| wrong rule: (int) 2.5 / 0.15 casts the whole quotient to int. \| right rule: The cast applies only to what comes right after it, here 2.5. |
 Model's reply:
 ```
-mis:explicit_cast->CastAfterIntDivision | held | clauses: 3, 4, 5 | confidence: 0.92
+mis:explicit_cast->CastAfterIntDivision | held | clauses: 3, 4, 5 | confidence: 0.93
+mis:explicit_cast->LaterDoubleLiteralFixesDivision | not applied | clauses: none | confidence: 0.9
 mis:explicit_cast->CastAppliesToWholeExpression | not applied | clauses: none | confidence: 0.8
-mis:explicit_cast->LaterDoubleLiteralFixesDivision | not applied | clauses: none | confidence: 0.93
 ```
 
 Parsed labels:
 | edge | label | prune score | confidence | score | clauses | words |
 |---|---|---|---|---|---|---|
-| mis:explicit_cast->CastAfterIntDivision | held | 0.75 | 0.92 | 0.69 | c3, c4, c5 | the cast comes first; so the division is a decimal one; so 7 / 2 is 3.5 |
-| mis:explicit_cast->CastAppliesToWholeExpression | not applied |  |  | 0.0 |  |  |
+| mis:explicit_cast->CastAfterIntDivision | held | 0.7 | 0.93 | 0.65 | c3, c4, c5 | the cast comes first; so the division is a decimal one; so 7 / 2 is 3.5 |
 | mis:explicit_cast->LaterDoubleLiteralFixesDivision | not applied |  |  | 0.0 |  |  |
+| mis:explicit_cast->CastAppliesToWholeExpression | not applied |  |  | 0.0 |  |  |
 
 #### explicit_cast, level ways: 19 edges offered
 Edges offered:
@@ -205,9 +205,9 @@ Edges offered:
 
 Prune: the model's reply (edge id and score; the kept edges sum to 1):
 ```
-mis:integer_division->CastAfterIntDivision (0.70), mis:integer_division->IntegerDivisionGivesFraction (0.20), mis:integer_division->TargetTyping (0.10)
+mis:integer_division->CastAfterIntDivision (0.60), mis:integer_division->IntegerDivisionGivesFraction (0.25), mis:integer_division->TargetTyping (0.15)
 ```
-Kept by pruning: mis:integer_division->CastAfterIntDivision (0.70), mis:integer_division->IntegerDivisionGivesFraction (0.20), mis:integer_division->TargetTyping (0.10)
+Kept by pruning: mis:integer_division->CastAfterIntDivision (0.60), mis:integer_division->IntegerDivisionGivesFraction (0.25), mis:integer_division->TargetTyping (0.15)
 
 Label prompt for the misconception / error edges (judged together). The model saw the program, the question, the numbered clauses, and these edges with their wrong rule and right rule:
 | edge |
@@ -225,7 +225,7 @@ mis:integer_division->TargetTyping | not applied | clauses: none | confidence: 0
 Parsed labels:
 | edge | label | prune score | confidence | score | clauses | words |
 |---|---|---|---|---|---|---|
-| mis:integer_division->CastAfterIntDivision | held | 0.7000000000000001 | 0.93 | 0.65 | c3, c4, c5 | the cast comes first; so the division is a decimal one; so 7 / 2 is 3.5 |
+| mis:integer_division->CastAfterIntDivision | held | 0.6 | 0.93 | 0.56 | c3, c4, c5 | the cast comes first; so the division is a decimal one; so 7 / 2 is 3.5 |
 | mis:integer_division->IntegerDivisionGivesFraction | not applied |  |  | 0.0 |  |  |
 | mis:integer_division->TargetTyping | not applied |  |  | 0.0 |  |  |
 
@@ -399,7 +399,7 @@ Parsed labels:
 
 **Kept on a path at this depth** (best N in tiers: held misconception / broken edge, then held error, then correct / confirmed / shown):
 
-mis:explicit_cast->CastAfterIntDivision [held, tier 0, 0.69], mis:integer_division->CastAfterIntDivision [held, tier 0, 0.65], lvl:integer_division@L0#4 [shown, tier 2, 0.30]
+mis:explicit_cast->CastAfterIntDivision [held, tier 0, 0.65], mis:integer_division->CastAfterIntDivision [held, tier 0, 0.56], lvl:integer_division@L0#4 [shown, tier 2, 0.30]
 
 **Clause coverage after this depth:**
 | clause | text | covered by |
@@ -529,9 +529,9 @@ Edges offered:
 
 Prune: the model's reply (edge id and score; the kept edges sum to 1):
 ```
-mis:expression->TargetTyping (0.60), mis:expression->OutsideInMethodNesting (0.30), mis:expression->AssignmentIsEquation (0.10)
+mis:expression->TargetTyping (0.55), mis:expression->OutsideInMethodNesting (0.35), mis:expression->AssignmentIsEquation (0.10)
 ```
-Kept by pruning: mis:expression->TargetTyping (0.60), mis:expression->OutsideInMethodNesting (0.30), mis:expression->AssignmentIsEquation (0.10)
+Kept by pruning: mis:expression->TargetTyping (0.55), mis:expression->OutsideInMethodNesting (0.35), mis:expression->AssignmentIsEquation (0.10)
 
 Label prompt for the misconception / error edges (judged together). The model saw the program, the question, the numbered clauses, and these edges with their wrong rule and right rule:
 | edge |
@@ -550,7 +550,7 @@ Parsed labels:
 | edge | label | prune score | confidence | score | clauses | words |
 |---|---|---|---|---|---|---|
 | mis:expression->TargetTyping | not applied |  |  | 0.0 |  |  |
-| mis:expression->OutsideInMethodNesting | held | 0.30000000000000004 | 0.8 | 0.24 | c3, c4, c5 | the cast comes first; so the division is a decimal one; so 7 / 2 is 3.5 |
+| mis:expression->OutsideInMethodNesting | held | 0.35 | 0.8 | 0.28 | c3, c4, c5 | the cast comes first; so the division is a decimal one; so 7 / 2 is 3.5 |
 | mis:expression->AssignmentIsEquation | not applied |  |  | 0.0 |  |  |
 
 #### expression, level ways: 19 edges offered
@@ -636,7 +636,7 @@ Prune: the model's reply (edge id and score; the kept edges sum to 1):
 {mis:type_conversion->NarrowingAssignmentAllowed (Score: 0.12)}
 {mis:type_conversion->NoCastIfSameSize (Score: 0.08)}
 ```
-Kept by pruning: mis:type_conversion->TargetTyping (0.80), mis:type_conversion->NarrowingAssignmentAllowed (0.12), mis:type_conversion->NoCastIfSameSize (0.08)
+Kept by pruning: mis:type_conversion->TargetTyping (0.80), mis:type_conversion->NarrowingAssignmentAllowed (0.10), mis:type_conversion->NoCastIfSameSize (0.10)
 
 Label prompt for the misconception / error edges (judged together). The model saw the program, the question, the numbered clauses, and these edges with their wrong rule and right rule:
 | edge |
@@ -832,7 +832,7 @@ Parsed labels:
 
 **Kept on a path at this depth** (best N in tiers: held misconception / broken edge, then held error, then correct / confirmed / shown):
 
-pre:arithmetic_operators->integer_division [broken, tier 0, 0.90], pre:integer_division->explicit_cast [broken, tier 0, 0.72], pre:arithmetic_operators->expression [broken, tier 0, 0.70], mis:type_conversion->TargetTyping [held, tier 0, 0.48], mis:expression->OutsideInMethodNesting [held, tier 0, 0.24]
+pre:arithmetic_operators->integer_division [broken, tier 0, 0.90], pre:integer_division->explicit_cast [broken, tier 0, 0.72], pre:arithmetic_operators->expression [broken, tier 0, 0.70], mis:type_conversion->TargetTyping [held, tier 0, 0.48], mis:expression->OutsideInMethodNesting [held, tier 0, 0.28]
 
 **Clause coverage after this depth:**
 | clause | text | covered by |
@@ -946,29 +946,31 @@ Edges offered:
 
 Prune: the model's reply (edge id and score; the kept edges sum to 1):
 ```
-mis:statement->ProgramLooksAhead (0.45), mis:statement->ComputerFillsInIntent (0.35), mis:statement->StatementsRunInAnyOrder (0.20)
+{mis:statement->ComputerFillsInIntent (Score: 0.45)}
+{mis:statement->StatementsRunInAnyOrder (Score: 0.35)}
+{mis:statement->ProgramLooksAhead (Score: 0.2)}
 ```
-Kept by pruning: mis:statement->ProgramLooksAhead (0.45), mis:statement->ComputerFillsInIntent (0.35), mis:statement->StatementsRunInAnyOrder (0.20)
+Kept by pruning: mis:statement->ComputerFillsInIntent (0.45), mis:statement->StatementsRunInAnyOrder (0.35), mis:statement->ProgramLooksAhead (0.20)
 
 Label prompt for the misconception / error edges (judged together). The model saw the program, the question, the numbered clauses, and these edges with their wrong rule and right rule:
 | edge |
 |---|
-| mis:statement->ProgramLooksAhead \| wrong rule: The program knows or sees what later lines will do and acts on those goals at the current line, e.g. it stops 'at ten' because it wants to draw a box. \| right rule: Each statement executes using only the current state; later lines have no effect until control reaches them. |
 | mis:statement->ComputerFillsInIntent \| wrong rule: The computer fills in omitted steps or values that the programmer meant, e.g. REPEAT 4 [FORWARD 30] draws a square without a turn command. \| right rule: The computer executes only what the code states; every needed step and value must be written. |
 | mis:statement->StatementsRunInAnyOrder \| wrong rule: Statements in a program can run in any order. \| right rule: Without control statements, statements run once each, top to bottom. |
+| mis:statement->ProgramLooksAhead \| wrong rule: The program knows or sees what later lines will do and acts on those goals at the current line, e.g. it stops 'at ten' because it wants to draw a box. \| right rule: Each statement executes using only the current state; later lines have no effect until control reaches them. |
 Model's reply:
 ```
-mis:statement->ProgramLooksAhead | not applied | clauses: none | confidence: 0.9
-mis:statement->ComputerFillsInIntent | not applied | clauses: none | confidence: 0.8
-mis:statement->StatementsRunInAnyOrder | not applied | clauses: none | confidence: 0.75
+mis:statement->ComputerFillsInIntent | not applied | clauses: none | confidence: 0.7
+mis:statement->StatementsRunInAnyOrder | not applied | clauses: none | confidence: 0.8
+mis:statement->ProgramLooksAhead | not applied | clauses: none | confidence: 0.75
 ```
 
 Parsed labels:
 | edge | label | prune score | confidence | score | clauses | words |
 |---|---|---|---|---|---|---|
-| mis:statement->ProgramLooksAhead | not applied |  |  | 0.0 |  |  |
 | mis:statement->ComputerFillsInIntent | not applied |  |  | 0.0 |  |  |
 | mis:statement->StatementsRunInAnyOrder | not applied |  |  | 0.0 |  |  |
+| mis:statement->ProgramLooksAhead | not applied |  |  | 0.0 |  |  |
 
 #### statement, level ways: 19 edges offered
 Edges offered:
@@ -1181,27 +1183,28 @@ Figure 7 (the graph after depth 4): C:\Users\magnu\OneDrive\Desktop\ES_VIterbi_P
 
 Held set after the one-fault rules: mis:explicit_cast->CastAfterIntDivision, mis:type_conversion->TargetTyping, mis:expression->OutsideInMethodNesting; filed at the dependent concept: mis:integer_division->CastAfterIntDivision
 
-Shadows (a held label on a prerequisite, on a generic concept, or at a concept where the graph attaches the misconception as context, resting on the words of a stronger label at the specific or primary concept, is one wrong sentence read twice; it marks no root cause and sets no level): mis:expression->OutsideInMethodNesting (shadow of mis:type_conversion->TargetTyping), mis:type_conversion->TargetTyping (shadow of mis:explicit_cast->CastAfterIntDivision)
+Shadows (a held label on a prerequisite, on a generic concept, or at a concept where the graph attaches the misconception as context, resting on the words of a stronger label at the specific or primary concept, is one wrong sentence read twice; it marks no root cause and sets no level): mis:expression->OutsideInMethodNesting (shadow of mis:type_conversion->TargetTyping), mis:type_conversion->TargetTyping (shadow of mis:explicit_cast->CastAfterIntDivision), mis:integer_division->CastAfterIntDivision (shadow of mis:explicit_cast->CastAfterIntDivision)
 
 ## 4. Diagnosis (rules over the labelled graph, no model)
 Root-cause walk: held on ['explicit_cast'], broken at [] (consequences: pre:arithmetic_operators->integer_division, pre:integer_division->explicit_cast, pre:arithmetic_operators->expression, pre:primitive_type->type_conversion), prerequisites {'expression': ['arithmetic_operators'], 'integer_division': ['arithmetic_operators'], 'explicit_cast': ['integer_division', 'type_conversion'], 'type_conversion': ['primitive_type'], 'println': ['statement']}
 - arithmetic_operators: L4 via predict_a_change "the cast comes first; so the division is a decimal one; so 7 / 2 is 3.5"
 - explicit_cast: L0 via misconception "the cast comes first; so the division is a decimal one; so 7 / 2 is 3.5"
 - expression: L3 via relation_to_neighbour "so the division is a decimal one; so 7 / 2 is 3.5"
-- integer_division: L0 via misconception "the cast comes first; so the division is a decimal one; so 7 / 2 is 3.5"
+- integer_division: L0 via inconsistent_trace "the cast comes first; so the division is a decimal one; so 7 / 2 is 3.5"
 - primitive_type: L3 via relation_to_neighbour "so the division is a decimal one; so 7 / 2 is 3.5"
 
-**Stop:** half_stop at depth 4; prompts {'prune': 22, 'label': 39}, fresh model calls 9, cache hits 52
+**Stop:** half_stop at depth 4; prompts {'prune': 22, 'label': 39}, fresh model calls 7, cache hits 54
 
 ### Held misconceptions
 | concept | misconception | kind | quote | score | shares_evidence_with |
 |---|---|---|---|---|---|
-| explicit_cast | CastAfterIntDivision | misconception | the cast comes first; so the division is a decimal one; so 7 / 2 is 3.5 | 0.69 |  |
+| explicit_cast | CastAfterIntDivision | misconception | the cast comes first; so the division is a decimal one; so 7 / 2 is 3.5 | 0.651 |  |
 
 ### Shadowed labels (held in the reading, folded into the label they shadow; not faults of their own)
 | concept | misconception | shadow_of | quote | score |
 |---|---|---|---|---|
-| expression | OutsideInMethodNesting | mis:type_conversion->TargetTyping | the cast comes first; so the division is a decimal one; so 7 / 2 is 3.5 | 0.24 |
+| integer_division | CastAfterIntDivision | mis:explicit_cast->CastAfterIntDivision | the cast comes first; so the division is a decimal one; so 7 / 2 is 3.5 | 0.558 |
+| expression | OutsideInMethodNesting | mis:type_conversion->TargetTyping | the cast comes first; so the division is a decimal one; so 7 / 2 is 3.5 | 0.28 |
 | type_conversion | TargetTyping | mis:explicit_cast->CastAfterIntDivision | the cast comes first; so the division is a decimal one; so 7 / 2 is 3.5 | 0.48 |
 
 ### Broken concept edges
@@ -1220,7 +1223,7 @@ Root-cause walk: held on ['explicit_cast'], broken at [] (consequences: pre:arit
 | arithmetic_operators | L4 | predict_a_change |  | level_way | the cast comes first; so the division is a decimal one; so 7 / 2 is 3.5 |  |  |  |
 | explicit_cast | L0 | misconception | CastAfterIntDivision | level_mis_links | the cast comes first; so the division is a decimal one; so 7 / 2 is 3.5 | wrong rule: (double) (3 / 5) is 0.6. Right rule: The integer division 3 / 5 = 0 happens inside the parentheses before the cast, so the result is 0.0; write (double) 3 / 5 to get 0.6. |  |  |
 | expression | L3 | relation_to_neighbour |  | level_way | so the division is a decimal one; so 7 / 2 is 3.5 |  |  |  |
-| integer_division | L0 | misconception | CastAfterIntDivision | level_mis_links | the cast comes first; so the division is a decimal one; so 7 / 2 is 3.5 | wrong rule: (double) (3 / 5) is 0.6. Right rule: The integer division 3 / 5 = 0 happens before the cast, so the result is 0.0. |  |  |
+| integer_division | L0 | inconsistent_trace |  | level_way | the cast comes first; so the division is a decimal one; so 7 / 2 is 3.5 |  |  |  |
 | primitive_type | L3 | relation_to_neighbour |  | level_way | so the division is a decimal one; so 7 / 2 is 3.5 |  |  |  |
 
 ### Overall level: L0
@@ -1239,15 +1242,15 @@ Figure 8 (final picture): C:\Users\magnu\OneDrive\Desktop\ES_VIterbi_Personalize
 ## 5. Every labelled edge (the evidence list, kept or not)
 | depth | source | edge | kind | label | prune_score | confidence | score | clauses | quote |
 |---|---|---|---|---|---|---|---|---|---|
-| 1 | explicit_cast | mis:explicit_cast->CastAfterIntDivision | misconception | held | 0.75 | 0.92 | 0.69 | [3, 4, 5] | the cast comes first; so the division is a decimal one; so 7 / 2 is 3.5 |
+| 1 | explicit_cast | mis:explicit_cast->CastAfterIntDivision | misconception | held | 0.7 | 0.93 | 0.651 | [3, 4, 5] | the cast comes first; so the division is a decimal one; so 7 / 2 is 3.5 |
 | 1 | explicit_cast | lvl:explicit_cast@L0#0 | level | shown | 0.2 | 0.7 | 0.14 | [3, 4, 5] | the cast comes first; so the division is a decimal one; so 7 / 2 is 3.5 |
-| 1 | integer_division | mis:integer_division->CastAfterIntDivision | misconception | held | 0.7000000000000001 | 0.93 | 0.651 | [3, 4, 5] | the cast comes first; so the division is a decimal one; so 7 / 2 is 3.5 |
+| 1 | integer_division | mis:integer_division->CastAfterIntDivision | misconception | held | 0.6 | 0.93 | 0.558 | [3, 4, 5] | the cast comes first; so the division is a decimal one; so 7 / 2 is 3.5 |
 | 1 | integer_division | lvl:integer_division@L0#4 | level | shown | 0.5 | 0.6 | 0.3 | [3, 4, 5] | the cast comes first; so the division is a decimal one; so 7 / 2 is 3.5 |
 | 1 | arithmetic_operators | lvl:arithmetic_operators@L4#0 | level | shown | 0.45 | 0.6 | 0.27 | [3, 4, 5] | the cast comes first; so the division is a decimal one; so 7 / 2 is 3.5 |
 | 2 | explicit_cast | pre:integer_division->explicit_cast | prerequisite | broken | 0.8 | 0.9 | 0.72 | [3, 4, 5] | the cast comes first; so the division is a decimal one; so 7 / 2 is 3.5 |
 | 2 | integer_division | pre:arithmetic_operators->integer_division | prerequisite | broken | 1.0 | 0.9 | 0.9 | [4, 5] | so the division is a decimal one; so 7 / 2 is 3.5 |
 | 2 | arithmetic_operators | pre:arithmetic_operators->expression | prerequisite | broken | 1.0 | 0.7 | 0.7 | [3, 4, 5] | the cast comes first; so the division is a decimal one; so 7 / 2 is 3.5 |
-| 2 | expression | mis:expression->OutsideInMethodNesting | misconception | held | 0.30000000000000004 | 0.8 | 0.24 | [3, 4, 5] | the cast comes first; so the division is a decimal one; so 7 / 2 is 3.5 |
+| 2 | expression | mis:expression->OutsideInMethodNesting | misconception | held | 0.35 | 0.8 | 0.28 | [3, 4, 5] | the cast comes first; so the division is a decimal one; so 7 / 2 is 3.5 |
 | 2 | expression | lvl:expression@L3#1 | level | shown | 0.35 | 0.6 | 0.21 | [4, 5] | so the division is a decimal one; so 7 / 2 is 3.5 |
 | 2 | type_conversion | mis:type_conversion->TargetTyping | misconception | held | 0.8 | 0.6 | 0.48 | [3, 4, 5] | the cast comes first; so the division is a decimal one; so 7 / 2 is 3.5 |
 | 3 | type_conversion | pre:primitive_type->type_conversion | prerequisite | broken | 1.0 | 0.6 | 0.6 | [3, 4, 5] | the cast comes first; so the division is a decimal one; so 7 / 2 is 3.5 |
@@ -1256,14 +1259,14 @@ Figure 8 (final picture): C:\Users\magnu\OneDrive\Desktop\ES_VIterbi_Personalize
 ## 6. The paths (what the keep step kept, depth by depth)
 | depth | source | edge | kind | label | score | clauses |
 |---|---|---|---|---|---|---|
-| 1 | explicit_cast | mis:explicit_cast->CastAfterIntDivision | misconception | held | 0.69 | [3, 4, 5] |
-| 1 | integer_division | mis:integer_division->CastAfterIntDivision | misconception | held | 0.651 | [3, 4, 5] |
+| 1 | explicit_cast | mis:explicit_cast->CastAfterIntDivision | misconception | held | 0.651 | [3, 4, 5] |
+| 1 | integer_division | mis:integer_division->CastAfterIntDivision | misconception | held | 0.558 | [3, 4, 5] |
 | 1 | integer_division | lvl:integer_division@L0#4 | level | shown | 0.3 | [3, 4, 5] |
 | 2 | integer_division | pre:arithmetic_operators->integer_division | prerequisite | broken | 0.9 | [4, 5] |
 | 2 | explicit_cast | pre:integer_division->explicit_cast | prerequisite | broken | 0.72 | [3, 4, 5] |
 | 2 | arithmetic_operators | pre:arithmetic_operators->expression | prerequisite | broken | 0.7 | [3, 4, 5] |
 | 2 | type_conversion | mis:type_conversion->TargetTyping | misconception | held | 0.48 | [3, 4, 5] |
-| 2 | expression | mis:expression->OutsideInMethodNesting | misconception | held | 0.24 | [3, 4, 5] |
+| 2 | expression | mis:expression->OutsideInMethodNesting | misconception | held | 0.28 | [3, 4, 5] |
 | 3 | type_conversion | pre:primitive_type->type_conversion | prerequisite | broken | 0.6 | [3, 4, 5] |
 | 4 | primitive_type | lvl:primitive_type@L3#4 | level | shown | 0.18 | [4, 5] |
 
@@ -1275,16 +1278,16 @@ start: BM25 of the answer against each tagged concept: explicit_cast 18.91 (hits
 start: chosen explicit_cast, integer_division, arithmetic_operators
 start concepts (3): explicit_cast, integer_division, arithmetic_operators
 --- depth 1: current concepts ['explicit_cast', 'integer_division', 'arithmetic_operators']
-  explicit_cast (misconceptions): 6 candidates -> kept mis:explicit_cast->CastAfterIntDivision (0.75), mis:explicit_cast->CastAppliesToWholeExpression (0.15), mis:explicit_cast->LaterDoubleLiteralFixesDivision (0.10)
-    mis:explicit_cast->CastAfterIntDivision -> held (0.69) "the cast comes first; so the division is a decimal one; so 7 / 2 is 3.5"
-    mis:explicit_cast->CastAppliesToWholeExpression -> not applied (0.00) ""
+  explicit_cast (misconceptions): 6 candidates -> kept mis:explicit_cast->CastAfterIntDivision (0.70), mis:explicit_cast->LaterDoubleLiteralFixesDivision (0.15), mis:explicit_cast->CastAppliesToWholeExpression (0.15)
+    mis:explicit_cast->CastAfterIntDivision -> held (0.65) "the cast comes first; so the division is a decimal one; so 7 / 2 is 3.5"
     mis:explicit_cast->LaterDoubleLiteralFixesDivision -> not applied (0.00) ""
+    mis:explicit_cast->CastAppliesToWholeExpression -> not applied (0.00) ""
   explicit_cast (level ways): 19 candidates -> kept lvl:explicit_cast@L2#0 (0.45), lvl:explicit_cast@L2#1 (0.35), lvl:explicit_cast@L0#0 (0.20)
     lvl:explicit_cast@L2#0 -> not applied (0.00) ""
     lvl:explicit_cast@L2#1 -> not applied (0.00) ""
     lvl:explicit_cast@L0#0 -> shown (0.14) "the cast comes first; so the division is a decimal one; so 7 / 2 is 3.5"
-  integer_division (misconceptions): 6 candidates -> kept mis:integer_division->CastAfterIntDivision (0.70), mis:integer_division->IntegerDivisionGivesFraction (0.20), mis:integer_division->TargetTyping (0.10)
-    mis:integer_division->CastAfterIntDivision -> held (0.65) "the cast comes first; so the division is a decimal one; so 7 / 2 is 3.5"
+  integer_division (misconceptions): 6 candidates -> kept mis:integer_division->CastAfterIntDivision (0.60), mis:integer_division->IntegerDivisionGivesFraction (0.25), mis:integer_division->TargetTyping (0.15)
+    mis:integer_division->CastAfterIntDivision -> held (0.56) "the cast comes first; so the division is a decimal one; so 7 / 2 is 3.5"
     mis:integer_division->IntegerDivisionGivesFraction -> not applied (0.00) ""
     mis:integer_division->TargetTyping -> not applied (0.00) ""
   integer_division (level ways): 16 candidates -> kept lvl:integer_division@L0#4 (0.50), lvl:integer_division@L2#0 (0.30), lvl:integer_division@L0#0 (0.20)
@@ -1299,7 +1302,7 @@ start concepts (3): explicit_cast, integer_division, arithmetic_operators
     lvl:arithmetic_operators@L4#0 -> shown (0.27) "the cast comes first; so the division is a decimal one; so 7 / 2 is 3.5"
     lvl:arithmetic_operators@L2#0 -> not applied (0.00) ""
     lvl:arithmetic_operators@L2#1 -> not applied (0.00) ""
-  kept: mis:explicit_cast->CastAfterIntDivision [held, tier 0, 0.69], mis:integer_division->CastAfterIntDivision [held, tier 0, 0.65], lvl:integer_division@L0#4 [shown, tier 2, 0.30]
+  kept: mis:explicit_cast->CastAfterIntDivision [held, tier 0, 0.65], mis:integer_division->CastAfterIntDivision [held, tier 0, 0.56], lvl:integer_division@L0#4 [shown, tier 2, 0.30]
   clause coverage: c1 uncovered; c2 uncovered; c3 <- mis:explicit_cast->CastAfterIntDivision; c4 <- mis:explicit_cast->CastAfterIntDivision; c5 <- mis:explicit_cast->CastAfterIntDivision
   uncovered clauses bring in: expression (3.78), type_conversion (3.72), println (3.01)
   not yet read: own edges of expression, own edges of println, own edges of type_conversion, pre:arithmetic_operators->expression, pre:arithmetic_operators->integer_division, pre:integer_division->explicit_cast, pre:type_conversion->explicit_cast
@@ -1311,15 +1314,15 @@ start concepts (3): explicit_cast, integer_division, arithmetic_operators
     pre:arithmetic_operators->integer_division -> broken (0.90) "so the division is a decimal one; so 7 / 2 is 3.5"
   arithmetic_operators (concept edges): 1 candidates -> kept pre:arithmetic_operators->expression (1.00)
     pre:arithmetic_operators->expression -> broken (0.70) "the cast comes first; so the division is a decimal one; so 7 / 2 is 3.5"
-  expression (misconceptions): 8 candidates -> kept mis:expression->TargetTyping (0.60), mis:expression->OutsideInMethodNesting (0.30), mis:expression->AssignmentIsEquation (0.10)
+  expression (misconceptions): 8 candidates -> kept mis:expression->TargetTyping (0.55), mis:expression->OutsideInMethodNesting (0.35), mis:expression->AssignmentIsEquation (0.10)
     mis:expression->TargetTyping -> not applied (0.00) ""
-    mis:expression->OutsideInMethodNesting -> held (0.24) "the cast comes first; so the division is a decimal one; so 7 / 2 is 3.5"
+    mis:expression->OutsideInMethodNesting -> held (0.28) "the cast comes first; so the division is a decimal one; so 7 / 2 is 3.5"
     mis:expression->AssignmentIsEquation -> not applied (0.00) ""
   expression (level ways): 19 candidates -> kept lvl:expression@L3#2 (0.45), lvl:expression@L3#1 (0.35), lvl:expression@L2#0 (0.20)
     lvl:expression@L3#2 -> not applied (0.00) ""
     lvl:expression@L3#1 -> shown (0.21) "so the division is a decimal one; so 7 / 2 is 3.5"
     lvl:expression@L2#0 -> not applied (0.00) ""
-  type_conversion (misconceptions): 3 candidates -> kept mis:type_conversion->TargetTyping (0.80), mis:type_conversion->NarrowingAssignmentAllowed (0.12), mis:type_conversion->NoCastIfSameSize (0.08)
+  type_conversion (misconceptions): 3 candidates -> kept mis:type_conversion->TargetTyping (0.80), mis:type_conversion->NarrowingAssignmentAllowed (0.10), mis:type_conversion->NoCastIfSameSize (0.10)
     mis:type_conversion->TargetTyping -> held (0.48) "the cast comes first; so the division is a decimal one; so 7 / 2 is 3.5"
     mis:type_conversion->NarrowingAssignmentAllowed -> not applied (0.00) ""
     mis:type_conversion->NoCastIfSameSize -> not applied (0.00) ""
@@ -1335,7 +1338,7 @@ start concepts (3): explicit_cast, integer_division, arithmetic_operators
     lvl:println@L2#1 -> not applied (0.00) ""
     lvl:println@L2#0 -> not applied (0.00) ""
     lvl:println@L2#2 -> not applied (0.00) ""
-  kept: pre:arithmetic_operators->integer_division [broken, tier 0, 0.90], pre:integer_division->explicit_cast [broken, tier 0, 0.72], pre:arithmetic_operators->expression [broken, tier 0, 0.70], mis:type_conversion->TargetTyping [held, tier 0, 0.48], mis:expression->OutsideInMethodNesting [held, tier 0, 0.24]
+  kept: pre:arithmetic_operators->integer_division [broken, tier 0, 0.90], pre:integer_division->explicit_cast [broken, tier 0, 0.72], pre:arithmetic_operators->expression [broken, tier 0, 0.70], mis:type_conversion->TargetTyping [held, tier 0, 0.48], mis:expression->OutsideInMethodNesting [held, tier 0, 0.28]
   clause coverage: c1 uncovered; c2 uncovered; c3 <- mis:explicit_cast->CastAfterIntDivision; c4 <- mis:explicit_cast->CastAfterIntDivision; c5 <- mis:explicit_cast->CastAfterIntDivision
   uncovered clauses bring in: statement (2.17)
   not yet read: own edges of statement, pre:primitive_type->type_conversion, pre:statement->println
@@ -1346,10 +1349,10 @@ start concepts (3): explicit_cast, integer_division, arithmetic_operators
     pre:primitive_type->type_conversion -> broken (0.60) "the cast comes first; so the division is a decimal one; so 7 / 2 is 3.5"
   println (concept edges): 1 candidates -> kept pre:statement->println (1.00)
     pre:statement->println -> not applied (0.00) ""
-  statement (misconceptions): 5 candidates -> kept mis:statement->ProgramLooksAhead (0.45), mis:statement->ComputerFillsInIntent (0.35), mis:statement->StatementsRunInAnyOrder (0.20)
-    mis:statement->ProgramLooksAhead -> not applied (0.00) ""
+  statement (misconceptions): 5 candidates -> kept mis:statement->ComputerFillsInIntent (0.45), mis:statement->StatementsRunInAnyOrder (0.35), mis:statement->ProgramLooksAhead (0.20)
     mis:statement->ComputerFillsInIntent -> not applied (0.00) ""
     mis:statement->StatementsRunInAnyOrder -> not applied (0.00) ""
+    mis:statement->ProgramLooksAhead -> not applied (0.00) ""
   statement (level ways): 19 candidates -> kept lvl:statement@L0#0 (0.45), lvl:statement@L2#2 (0.35), lvl:statement@L1#0 (0.20)
     lvl:statement@L0#0 -> not applied (0.00) ""
     lvl:statement@L2#2 -> not applied (0.00) ""
@@ -1370,12 +1373,12 @@ start concepts (3): explicit_cast, integer_division, arithmetic_operators
   clause coverage: c1 uncovered; c2 uncovered; c3 <- mis:explicit_cast->CastAfterIntDivision; c4 <- mis:explicit_cast->CastAfterIntDivision; c5 <- mis:explicit_cast->CastAfterIntDivision
   no next nodes -> half_stop
   held: mis:explicit_cast->CastAfterIntDivision, mis:type_conversion->TargetTyping, mis:expression->OutsideInMethodNesting; filed at the dependent concept: mis:integer_division->CastAfterIntDivision
-  shadows: mis:expression->OutsideInMethodNesting (shadow of mis:type_conversion->TargetTyping), mis:type_conversion->TargetTyping (shadow of mis:explicit_cast->CastAfterIntDivision)
+  shadows: mis:expression->OutsideInMethodNesting (shadow of mis:type_conversion->TargetTyping), mis:type_conversion->TargetTyping (shadow of mis:explicit_cast->CastAfterIntDivision), mis:integer_division->CastAfterIntDivision (shadow of mis:explicit_cast->CastAfterIntDivision)
   root-cause walk: held on ['explicit_cast'], broken at [] (consequences: pre:arithmetic_operators->integer_division, pre:integer_division->explicit_cast, pre:arithmetic_operators->expression, pre:primitive_type->type_conversion), prerequisites {'expression': ['arithmetic_operators'], 'integer_division': ['arithmetic_operators'], 'explicit_cast': ['integer_division', 'type_conversion'], 'type_conversion': ['primitive_type'], 'println': ['statement']}
   level arithmetic_operators: L4 via predict_a_change "the cast comes first; so the division is a decimal one; so 7 / 2 is 3.5"
   level explicit_cast: L0 via misconception "the cast comes first; so the division is a decimal one; so 7 / 2 is 3.5"
   level expression: L3 via relation_to_neighbour "so the division is a decimal one; so 7 / 2 is 3.5"
-  level integer_division: L0 via misconception "the cast comes first; so the division is a decimal one; so 7 / 2 is 3.5"
+  level integer_division: L0 via inconsistent_trace "the cast comes first; so the division is a decimal one; so 7 / 2 is 3.5"
   level primitive_type: L3 via relation_to_neighbour "so the division is a decimal one; so 7 / 2 is 3.5"
 ```
 
@@ -1408,17 +1411,24 @@ start concepts (3): explicit_cast, integer_division, arithmetic_operators
    "misconception": "CastAfterIntDivision",
    "kind": "misconception",
    "quote": "the cast comes first; so the division is a decimal one; so 7 / 2 is 3.5",
-   "score": 0.69
+   "score": 0.651
   }
  ],
  "error_evidence": [],
  "shadowed": [
   {
+   "concept": "integer_division",
+   "misconception": "CastAfterIntDivision",
+   "shadow_of": "mis:explicit_cast->CastAfterIntDivision",
+   "quote": "the cast comes first; so the division is a decimal one; so 7 / 2 is 3.5",
+   "score": 0.558
+  },
+  {
    "concept": "expression",
    "misconception": "OutsideInMethodNesting",
    "shadow_of": "mis:type_conversion->TargetTyping",
    "quote": "the cast comes first; so the division is a decimal one; so 7 / 2 is 3.5",
-   "score": 0.24
+   "score": 0.28
   },
   {
    "concept": "type_conversion",
@@ -1486,12 +1496,11 @@ start concepts (3): explicit_cast, integer_division, arithmetic_operators
   },
   "integer_division": {
    "level": "L0",
-   "way": "misconception",
-   "misconception": "CastAfterIntDivision",
+   "way": "inconsistent_trace",
    "quote": "the cast comes first; so the division is a decimal one; so 7 / 2 is 3.5",
-   "edge": "mis:integer_division->CastAfterIntDivision",
-   "rule": "wrong rule: (double) (3 / 5) is 0.6. Right rule: The integer division 3 / 5 = 0 happens before the cast, so the result is 0.0.",
-   "source": "level_mis_links"
+   "edge": "lvl:integer_division@L0#4",
+   "source": "level_way",
+   "also_shown": []
   },
   "primitive_type": {
    "level": "L3",
@@ -1517,9 +1526,9 @@ start concepts (3): explicit_cast, integer_division, arithmetic_operators
     5
    ],
    "quote": "the cast comes first; so the division is a decimal one; so 7 / 2 is 3.5",
-   "confidence": 0.92,
-   "prune_score": 0.75,
-   "score": 0.69,
+   "confidence": 0.93,
+   "prune_score": 0.7,
+   "score": 0.651,
    "logic": "(double) (3 / 5) is 0.6.",
    "twin_logic": "The integer division 3 / 5 = 0 happens before the cast, so the result is 0.0.",
    "role": "primary"
@@ -1538,11 +1547,11 @@ start concepts (3): explicit_cast, integer_division, arithmetic_operators
    ],
    "quote": "the cast comes first; so the division is a decimal one; so 7 / 2 is 3.5",
    "confidence": 0.93,
-   "prune_score": 0.7000000000000001,
-   "score": 0.651,
+   "prune_score": 0.6,
+   "score": 0.558,
    "logic": "(double) (3 / 5) is 0.6.",
    "twin_logic": "The integer division 3 / 5 = 0 happens before the cast, so the result is 0.0.",
-   "role": "primary"
+   "role": "context"
   },
   {
    "depth": 1,
@@ -1658,8 +1667,8 @@ start concepts (3): explicit_cast, integer_division, arithmetic_operators
    ],
    "quote": "the cast comes first; so the division is a decimal one; so 7 / 2 is 3.5",
    "confidence": 0.8,
-   "prune_score": 0.30000000000000004,
-   "score": 0.24,
+   "prune_score": 0.35,
+   "score": 0.28,
    "logic": "In f(g(x)), f runs first and then g runs.",
    "twin_logic": "In f(g(x)), g(x) is evaluated first and its result is passed to f.",
    "role": "context"
@@ -1719,9 +1728,9 @@ start concepts (3): explicit_cast, integer_division, arithmetic_operators
     5
    ],
    "quote": "the cast comes first; so the division is a decimal one; so 7 / 2 is 3.5",
-   "confidence": 0.92,
-   "prune_score": 0.75,
-   "score": 0.69,
+   "confidence": 0.93,
+   "prune_score": 0.7,
+   "score": 0.651,
    "logic": "(double) (3 / 5) is 0.6.",
    "twin_logic": "The integer division 3 / 5 = 0 happens before the cast, so the result is 0.0.",
    "role": "primary"
@@ -1761,11 +1770,11 @@ start concepts (3): explicit_cast, integer_division, arithmetic_operators
    ],
    "quote": "the cast comes first; so the division is a decimal one; so 7 / 2 is 3.5",
    "confidence": 0.93,
-   "prune_score": 0.7000000000000001,
-   "score": 0.651,
+   "prune_score": 0.6,
+   "score": 0.558,
    "logic": "(double) (3 / 5) is 0.6.",
    "twin_logic": "The integer division 3 / 5 = 0 happens before the cast, so the result is 0.0.",
-   "role": "primary"
+   "role": "context"
   },
   {
    "depth": 1,
@@ -1882,8 +1891,8 @@ start concepts (3): explicit_cast, integer_division, arithmetic_operators
    ],
    "quote": "the cast comes first; so the division is a decimal one; so 7 / 2 is 3.5",
    "confidence": 0.8,
-   "prune_score": 0.30000000000000004,
-   "score": 0.24,
+   "prune_score": 0.35,
+   "score": 0.28,
    "logic": "In f(g(x)), f runs first and then g runs.",
    "twin_logic": "In f(g(x)), g(x) is evaluated first and its result is passed to f.",
    "role": "context"
@@ -1980,8 +1989,8 @@ start concepts (3): explicit_cast, integer_division, arithmetic_operators
  ],
  "stop_reason": "half_stop",
  "depth_reached": 4,
- "llm_calls": 9,
- "llm_cache_hits": 52,
+ "llm_calls": 7,
+ "llm_cache_hits": 54,
  "llm_calls_by_step": {
   "prune": 22,
   "label": 39

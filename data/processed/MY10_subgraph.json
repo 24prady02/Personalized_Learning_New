@@ -1255,7 +1255,7 @@
    "type": "error",
    "source": "assignment",
    "target": "RedeclareToReassign",
-   "role": "primary",
+   "role": "context",
    "logic": "Writes int x = 5; ... int x = 10; to change x.",
    "twin_logic": "A declaration gives a variable its name and type; a later change of value is an assignment statement such as x = 10;, not a second declaration."
   },
@@ -1264,7 +1264,7 @@
    "type": "error",
    "source": "boolean_expression",
    "target": "ElseWithCondition",
-   "role": "primary",
+   "role": "context",
    "logic": "Writes else (x > 0) with a condition but no if.",
    "twin_logic": "else takes no condition; use else if (x > 0)."
   },
@@ -1345,7 +1345,7 @@
    "type": "error",
    "source": "loop_control",
    "target": "WrongIterationCount",
-   "role": "primary",
+   "role": "context",
    "logic": "Updates the loop counter so that the loop runs the wrong number of times.",
    "twin_logic": "The init, test and update together decide the number of passes; trace them to check the count."
   },
@@ -1417,7 +1417,7 @@
    "type": "error",
    "source": "run_time_error",
    "target": "NegativeArraySize",
-   "role": "primary",
+   "role": "context",
    "logic": "new int[n] with a negative n creates an empty array.",
    "twin_logic": "Creating an array with a negative length throws NegativeArraySizeException at run time."
   },
@@ -1633,7 +1633,7 @@
    "type": "misconception",
    "source": "assignment",
    "target": "SwapWithoutTemp",
-   "role": "primary",
+   "role": "context",
    "logic": "a[i] = a[j]; a[j] = a[i]; exchanges the two values.",
    "twin_logic": "A temporary variable must save a[i] before it is overwritten."
   },
@@ -1660,7 +1660,7 @@
    "type": "misconception",
    "source": "boolean_expression",
    "target": "ArithmeticInsteadOfBoolean",
-   "role": "primary",
+   "role": "context",
    "logic": "A true/false question is answered with arithmetic (e.g. 1 for true).",
    "twin_logic": "A logic question is written as a boolean expression whose value is true or false."
   },
@@ -1669,7 +1669,7 @@
    "type": "misconception",
    "source": "boolean_expression",
    "target": "ChainedComparison",
-   "role": "primary",
+   "role": "context",
    "logic": "90 <= grade <= 100 tests whether grade is between 90 and 100.",
    "twin_logic": "a < b < c does not compile (a < b is a boolean); a range test is written 90 <= grade && grade <= 100."
   },
@@ -1687,7 +1687,7 @@
    "type": "misconception",
    "source": "boolean_expression",
    "target": "LoopForOneTimeTest",
-   "role": "primary",
+   "role": "context",
    "logic": "Uses a loop where a condition needs to be tested only once.",
    "twin_logic": "A test made once is an if; a loop repeats."
   },
@@ -1741,7 +1741,7 @@
    "type": "misconception",
    "source": "comparison_operators",
    "target": "ComparisonWithBooleanLiteral",
-   "role": "primary",
+   "role": "context",
    "logic": "you must write == true / == false to test a boolean",
    "twin_logic": "if (b) already tests b, so writing == true adds nothing."
   },
@@ -1786,7 +1786,7 @@
    "type": "misconception",
    "source": "control_flow",
    "target": "CodeAfterIfSkipped",
-   "role": "primary",
+   "role": "context",
    "logic": "When the then branch runs, the code after the if is skipped.",
    "twin_logic": "After the if finishes, execution continues with the next statement either way."
   },
@@ -1939,7 +1939,7 @@
    "type": "misconception",
    "source": "expression",
    "target": "ParenthesesOnlyIfArgument",
-   "role": "primary",
+   "role": "context",
    "logic": "() are optional on a no-argument call like println",
    "twin_logic": "A method call always needs parentheses, so an empty line is printed with System.out.println();."
   },
@@ -2128,7 +2128,7 @@
    "type": "misconception",
    "source": "increment_operators",
    "target": "PostIncrementAssignsLater",
-   "role": "primary",
+   "role": "context",
    "logic": "i = i++ increases i by 1.",
    "twin_logic": "i++ evaluates to the old value, so i = i++ stores the old value back."
   },
@@ -2137,7 +2137,7 @@
    "type": "misconception",
    "source": "increment_operators",
    "target": "PreIncrementBeforeLoop",
-   "role": "primary",
+   "role": "context",
    "logic": "++i in the for-update runs before the body each pass",
    "twin_logic": "The update runs after each pass of the body, so with either ++i or i++ the first pass uses i = s."
   },
@@ -2272,7 +2272,7 @@
    "type": "misconception",
    "source": "loop_body",
    "target": "LoopBodyAlwaysOnce",
-   "role": "primary",
+   "role": "context",
    "logic": "The loop body always runs at least once, even if the condition is false at the start.",
    "twin_logic": "A while or for body runs zero times when the condition is false at the start."
   },
@@ -2335,7 +2335,7 @@
    "type": "misconception",
    "source": "loop_body",
    "target": "WhileStopsMidBody",
-   "role": "primary",
+   "role": "context",
    "logic": "The loop stops the moment the condition becomes false, even in the middle of the body.",
    "twin_logic": "The condition is tested only before each pass, so the whole body finishes before the loop can stop."
   },
@@ -2515,7 +2515,7 @@
    "type": "misconception",
    "source": "loop_variable",
    "target": "LoopVariableLifetimeScope",
-   "role": "primary",
+   "role": "context",
    "logic": "The for variable i is a new variable on every pass rather than one variable changed by the update.",
    "twin_logic": "The for variable i is created once by the init, and the update changes that same variable on every pass."
   },
@@ -2542,7 +2542,7 @@
    "type": "misconception",
    "source": "off_by_one_error",
    "target": "OffByOneBound",
-   "role": "primary",
+   "role": "context",
    "logic": "< vs <= and 0..n vs 0..n-1 are interchangeable",
    "twin_logic": "for (i = 0; i < n; i++) runs n times with i going up to n - 1; with <= it runs n + 1 times and reaches i = n."
   },
@@ -2596,7 +2596,7 @@
    "type": "misconception",
    "source": "run_time_error",
    "target": "CompilesMeansWorks",
-   "role": "primary",
+   "role": "context",
    "logic": "Code that compiles is code that works.",
    "twin_logic": "Code that compiles can still have run-time and logical errors."
   },
@@ -2605,7 +2605,7 @@
    "type": "misconception",
    "source": "run_time_error",
    "target": "DivisionByZeroIsCompileError",
-   "role": "primary",
+   "role": "context",
    "logic": "System.out.println(5 / 0); is rejected by the compiler.",
    "twin_logic": "It compiles; the ArithmeticException happens when the program runs."
   },
@@ -2641,7 +2641,7 @@
    "type": "misconception",
    "source": "statement",
    "target": "StatementsRunInAnyOrder",
-   "role": "primary",
+   "role": "context",
    "logic": "Statements in a program can run in any order.",
    "twin_logic": "Without control statements, statements run once each, top to bottom."
   },

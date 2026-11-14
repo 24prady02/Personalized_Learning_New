@@ -80,7 +80,7 @@ At each depth, for each current concept, the following happens.
 
 **3.4 Score and keep.** The **score** of a labelled edge is prune score × confidence: an edge counts for much only if it was both relevant and confidently labelled. The edges are then ranked in **tiers**. Tier 0 is a held misconception or a broken edge: these are findings about a fault and are always kept. Tier 1 is a held error. Tier 2 is everything that only confirms understanding (correct, confirmed, shown); these fill whatever is left of the N = 3 places, best score first. Kept edges are added to the paths. Every labelled edge, kept or not, is added to the evidence, because the levels in stage 6 are read from all of it.
 
-*One of the outputs at this stage:* the score of L2 way “output prediction” is 0.60 × 0.90 = 0.54. At depth 1 the kept edges are: RandomCanReturnOne (correct, tier 2, 0.72); L2 way “output prediction” (shown, tier 2, 0.54); CastRounds (correct, tier 2, 0.48).
+*One of the outputs at this stage:* the score of L2 way “output prediction” is 0.60 × 0.90 = 0.54. At depth 1 the kept edges are: RandomCanReturnOne (correct, tier 2, 0.72); CastRounds (correct, tier 2, 0.56); L2 way “output prediction” (shown, tier 2, 0.54).
 
 **3.5 Move to the next concepts.** Three things decide where the walk goes next. A kept prerequisite or parallel edge leads to the concept at its other end; that concept is **entered** and will be read inwards at the next depth, so it gets misconceptions and a level of its own. A concept with a held misconception stays current, so that its prerequisites are examined: the fault may begin further back. And any entered concept whose outward edges have not been read yet stays current until they are.
 
@@ -99,7 +99,7 @@ The walk leaves a set of labelled edges. Each kept edge labelled *held* is a can
 - **Shadows.** A held label is a **shadow** when it sits on a prerequisite or on a generic concept and rests only on clauses that a stronger, more specific label already rests on. It is the same wrong sentence read a second time at a vaguer place. A shadow is kept in the record but is not a fault, cannot be the root cause and does not set a level.
 - **Broken edges.** A prerequisite edge A → B labelled *broken* says the student did not carry the rule of A into B, so the fault sits at B. If the broken edge rests on the same clauses as a held misconception, it is that misconception's **consequence**, not a separate fault.
 
-*One of the outputs at this stage:* no edge is held. The 3 misconception / error edges that received a label were all labelled *correct*, so this run has no fault.
+*One of the outputs at this stage:* no edge is held. The 4 misconception / error edges that received a label were all labelled *correct*, so this run has no fault.
 
 ## Stage 5. Root cause (rule, no model)
 

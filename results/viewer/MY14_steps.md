@@ -351,29 +351,29 @@ Edges offered:
 
 Prune: the model's reply (edge id and score; the kept edges sum to 1):
 ```
-mis:loop_variable->LoopUpdateChangesDirection (0.60), mis:loop_variable->LoopVariableLifetimeScope (0.25), mis:loop_variable->ForInitRepeats (0.15)
+mis:loop_variable->LoopUpdateChangesDirection (0.60), mis:loop_variable->LoopVariableLifetimeScope (0.20), mis:loop_variable->LoopOutputSameEachPass (0.20)
 ```
-Kept by pruning: mis:loop_variable->LoopUpdateChangesDirection (0.60), mis:loop_variable->LoopVariableLifetimeScope (0.25), mis:loop_variable->ForInitRepeats (0.15)
+Kept by pruning: mis:loop_variable->LoopUpdateChangesDirection (0.60), mis:loop_variable->LoopVariableLifetimeScope (0.20), mis:loop_variable->LoopOutputSameEachPass (0.20)
 
 Label prompt for the misconception / error edges (judged together). The model saw the program, the question, the numbered clauses, and these edges with their wrong rule and right rule:
 | edge |
 |---|
 | mis:loop_variable->LoopUpdateChangesDirection \| wrong rule: The update of the loop variable can change from pass to pass (e.g. switch direction) although the code is the same. \| right rule: The update expression is the same on every pass; the loop variable changes by the rule written in the update. |
 | mis:loop_variable->LoopVariableLifetimeScope \| wrong rule: The for variable i is a new variable on every pass rather than one variable changed by the update. \| right rule: The for variable i is created once by the init, and the update changes that same variable on every pass. |
-| mis:loop_variable->ForInitRepeats \| wrong rule: The initialization of a for loop runs again after a pass of the body. \| right rule: The initialization runs exactly once, before the first condition test. |
+| mis:loop_variable->LoopOutputSameEachPass \| wrong rule: A loop prints the same thing on every pass; the changing loop variable does not affect what the body does. \| right rule: The body uses the current value of the loop variable, so its output can differ on each pass. |
 Model's reply:
 ```
-mis:loop_variable->LoopUpdateChangesDirection | not applied | clauses: none | confidence: 0.6
+mis:loop_variable->LoopUpdateChangesDirection | correct | clauses: 1, 2 | confidence: 0.6
 mis:loop_variable->LoopVariableLifetimeScope | not applied | clauses: none | confidence: 0.6
-mis:loop_variable->ForInitRepeats | correct | clauses: 2, 3 | confidence: 0.6
+mis:loop_variable->LoopOutputSameEachPass | not applied | clauses: none | confidence: 0.75
 ```
 
 Parsed labels:
 | edge | label | prune score | confidence | score | clauses | words |
 |---|---|---|---|---|---|---|
-| mis:loop_variable->LoopUpdateChangesDirection | not applied |  |  | 0.0 |  |  |
+| mis:loop_variable->LoopUpdateChangesDirection | correct | 0.6 | 0.6 | 0.36 | c1, c2 | A for loop moves i on by one each pass; so i goes 0, 1, 2 and |
 | mis:loop_variable->LoopVariableLifetimeScope | not applied |  |  | 0.0 |  |  |
-| mis:loop_variable->ForInitRepeats | correct | 0.15 | 0.6 | 0.09 | c2, c3 | so i goes 0, 1, 2 and; so on up to 9 |
+| mis:loop_variable->LoopOutputSameEachPass | not applied |  |  | 0.0 |  |  |
 
 #### loop_variable, level ways: 13 edges offered
 Edges offered:
@@ -606,7 +606,7 @@ Figure 6 (final picture): C:\Users\magnu\OneDrive\Desktop\ES_VIterbi_Personalize
 | 1 | loop_control | mis:loop_control->LoopStepAlwaysOne | misconception | held | 0.6 | 0.95 | 0.57 | [1, 2, 3] | A for loop moves i on by one each pass; so i goes 0, 1, 2 and; so on up to 9 |
 | 1 | loop_control | err:loop_control->WrongIterationCount | error | held | 0.15 | 0.6 | 0.09 | [2, 3] | so i goes 0, 1, 2 and; so on up to 9 |
 | 1 | for_loop | mis:for_loop->LoopStepAlwaysOne | misconception | held | 0.6 | 0.95 | 0.57 | [1, 2, 3] | A for loop moves i on by one each pass; so i goes 0, 1, 2 and; so on up to 9 |
-| 1 | loop_variable | mis:loop_variable->ForInitRepeats | misconception | correct | 0.15 | 0.6 | 0.09 | [2, 3] | so i goes 0, 1, 2 and; so on up to 9 |
+| 1 | loop_variable | mis:loop_variable->LoopUpdateChangesDirection | misconception | correct | 0.6 | 0.6 | 0.36 | [1, 2] | A for loop moves i on by one each pass; so i goes 0, 1, 2 and |
 | 1 | loop_variable | lvl:loop_variable@L2#1 | level | shown | 0.4 | 0.7 | 0.28 | [2, 3] | so i goes 0, 1, 2 and; so on up to 9 |
 | 1 | loop_variable | lvl:loop_variable@L2#2 | level | shown | 0.25 | 0.7 | 0.175 | [1, 2] | A for loop moves i on by one each pass; so i goes 0, 1, 2 and |
 | 2 | loop_control | pre:loop_variable->loop_control | prerequisite | broken | 0.65 | 0.8 | 0.52 | [1, 2, 3] | A for loop moves i on by one each pass; so i goes 0, 1, 2 and; so on up to 9 |
@@ -644,10 +644,10 @@ start concepts (3): loop_control, for_loop, loop_variable
     lvl:for_loop@L4#5 -> not applied (0.00) ""
     lvl:for_loop@L2#2 -> not applied (0.00) ""
     lvl:for_loop@L0#0 -> not applied (0.00) ""
-  loop_variable (misconceptions): 7 candidates -> kept mis:loop_variable->LoopUpdateChangesDirection (0.60), mis:loop_variable->LoopVariableLifetimeScope (0.25), mis:loop_variable->ForInitRepeats (0.15)
-    mis:loop_variable->LoopUpdateChangesDirection -> not applied (0.00) ""
+  loop_variable (misconceptions): 7 candidates -> kept mis:loop_variable->LoopUpdateChangesDirection (0.60), mis:loop_variable->LoopVariableLifetimeScope (0.20), mis:loop_variable->LoopOutputSameEachPass (0.20)
+    mis:loop_variable->LoopUpdateChangesDirection -> correct (0.36) "A for loop moves i on by one each pass; so i goes 0, 1, 2 and"
     mis:loop_variable->LoopVariableLifetimeScope -> not applied (0.00) ""
-    mis:loop_variable->ForInitRepeats -> correct (0.09) "so i goes 0, 1, 2 and; so on up to 9"
+    mis:loop_variable->LoopOutputSameEachPass -> not applied (0.00) ""
   loop_variable (level ways): 13 candidates -> kept lvl:loop_variable@L2#1 (0.40), lvl:loop_variable@L0#5 (0.35), lvl:loop_variable@L2#2 (0.25)
     lvl:loop_variable@L2#1 -> shown (0.28) "so i goes 0, 1, 2 and; so on up to 9"
     lvl:loop_variable@L0#5 -> not applied (0.00) ""
@@ -815,7 +815,7 @@ start concepts (3): loop_control, for_loop, loop_variable
    "score": 0.09,
    "logic": "Updates the loop counter so that the loop runs the wrong number of times.",
    "twin_logic": "The init, test and update together decide the number of passes; trace them to check the count.",
-   "role": "primary"
+   "role": "context"
   },
   {
    "depth": 2,
@@ -896,7 +896,7 @@ start concepts (3): loop_control, for_loop, loop_variable
    "score": 0.09,
    "logic": "Updates the loop counter so that the loop runs the wrong number of times.",
    "twin_logic": "The init, test and update together decide the number of passes; trace them to check the count.",
-   "role": "primary"
+   "role": "context"
   },
   {
    "depth": 1,
@@ -921,21 +921,21 @@ start concepts (3): loop_control, for_loop, loop_variable
   {
    "depth": 1,
    "source": "loop_variable",
-   "edge": "mis:loop_variable->ForInitRepeats",
-   "target": "ForInitRepeats",
+   "edge": "mis:loop_variable->LoopUpdateChangesDirection",
+   "target": "LoopUpdateChangesDirection",
    "kind": "misconception",
    "label": "correct",
    "clauses": [
-    2,
-    3
+    1,
+    2
    ],
-   "quote": "so i goes 0, 1, 2 and; so on up to 9",
+   "quote": "A for loop moves i on by one each pass; so i goes 0, 1, 2 and",
    "confidence": 0.6,
-   "prune_score": 0.15,
-   "score": 0.09,
-   "logic": "The initialization of a for loop runs again after a pass of the body.",
-   "twin_logic": "The initialization runs exactly once, before the first condition test.",
-   "role": "context"
+   "prune_score": 0.6,
+   "score": 0.36,
+   "logic": "The update of the loop variable can change from pass to pass (e.g. switch direction) although the code is the same.",
+   "twin_logic": "The update expression is the same on every pass; the loop variable changes by the rule written in the update.",
+   "role": "primary"
   },
   {
    "depth": 1,

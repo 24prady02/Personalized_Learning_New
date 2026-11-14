@@ -21,7 +21,8 @@ Every scenario has its own folder, `scenario_explanations/runs/MYnn/`:
 | `figureNN.png` | the pictures of the walk, depth by depth |
 
 Results. In 29 of the 40 the walk holds at least one wrong rule; in 11 it holds none. The last
-column is a reading of each stored result by hand against the student's answer (2026-11-13), not a gold label:
+column is a reading of each stored result by hand against the student's answer (2026-11-13; the four results that
+changed in the re-run of 2026-11-14 were read again), not a gold label:
 35 correct, 3 partly right, 1 not right, 1 with a faulty input.
 
 | Scenario | Wrong rules held | Root cause | Overall level | Check by hand |
@@ -30,20 +31,20 @@ column is a reading of each stored result by hand against the student's answer (
 | [MY02](scenario_explanations/runs/MY02/) | NegativeRemainderSign | `remainder_operator` | L0 | Correct |
 | [MY03](scenario_explanations/runs/MY03/) | AssignmentCopiesObject | `array_aliasing` | L0 | Correct |
 | [MY04](scenario_explanations/runs/MY04/) | SwitchNoFallThrough | `switch_statement` | L0 | Correct |
-| [MY05](scenario_explanations/runs/MY05/) | CharNotNumeric | `char_arithmetic` | L0 | Correct |
+| [MY05](scenario_explanations/runs/MY05/) | CharNotNumeric | `char` | L0 | Correct |
 | [MY06](scenario_explanations/runs/MY06/) | LoopBodyStatementOutsideLoop, LoopBodyScopeImpliesLoopLifetime | `loop_body` | L0 | Partly right |
 | [MY07](scenario_explanations/runs/MY07/) | IntOverflowWidensAutomatically | `overflow` | L0 | Correct |
 | [MY08](scenario_explanations/runs/MY08/) | none | none | L3 | Correct |
 | [MY09](scenario_explanations/runs/MY09/) | TargetTyping | `integer_division` | L0 | Correct |
 | [MY10](scenario_explanations/runs/MY10/) | ArrayIndexStartsAtOne, OutOfBoundsElementsAreNull | `indexing` | L0 | Correct |
 | [MY11](scenario_explanations/runs/MY11/) | NestedLoopsSequential, LoopBodyStatementOutsideLoop, ForVariableScopeBeyondLoop | `nested_loops` | L0 | Correct |
-| [MY12](scenario_explanations/runs/MY12/) | CharNotNumeric | `char_arithmetic` | L0 | Correct |
+| [MY12](scenario_explanations/runs/MY12/) | CharNotNumeric | `char` | L0 | Correct |
 | [MY13](scenario_explanations/runs/MY13/) | CastAfterIntDivision | `explicit_cast` | L0 | Correct |
 | [MY14](scenario_explanations/runs/MY14/) | LoopStepAlwaysOne | `for_loop` | L0 | Correct |
 | [MY15](scenario_explanations/runs/MY15/) | IncrementByTwo, ForInitRepeats, ForUpdateBeforeBody, PreIncrementBeforeLoop | `for_loop` | L0 | Correct |
 | [MY16](scenario_explanations/runs/MY16/) | CastAppliesToWholeExpression | `explicit_cast` | L0 | Correct |
 | [MY17](scenario_explanations/runs/MY17/) | none | none | L4 | Correct |
-| [MY18](scenario_explanations/runs/MY18/) | OffByOneBound | `off_by_one_error` | L0 | Correct |
+| [MY18](scenario_explanations/runs/MY18/) | ArrayRangeInclusive, OffByOneBound, IdiomOverridesCode | `loop_control` | L0 | Correct |
 | [MY19](scenario_explanations/runs/MY19/) | TargetTyping | `integer_division` | L0 | Partly right |
 | [MY20](scenario_explanations/runs/MY20/) | none | none | L2 | Correct |
 | [MY21](scenario_explanations/runs/MY21/) | none | none | L3 | Correct |
@@ -86,15 +87,15 @@ Notes on the set:
   MY27 to MY41 before. Commit messages before 2026-11-13 use the old numbers.
 - **Code.** The notebook has no copy of the method. `think_on_the_graph.ipynb` imports `src/` and calls
   `model.subgraph_from_code` and `traverse.traverse` with the settings of `experiments/config.json`, as
-  `src/demo.py` does; its own cells only draw and print. Replaying the recorded model answers through the code of
-  this repository on each run's stored subgraph gives the stored result in 39 of the 40. The exception is MY18,
-  which was run before the last change to the walk (the rule that files a misconception at its primary concept).
-- **Graph version.** MY01 to MY25 were run on graph 3.9.7 and MY26 to MY40 on 3.9.8, the graph in this repository.
-  For these scenarios the two differ only in the `primary` / `context` role of some misconception edges; no text,
-  concept or edge differs. Replaying the recorded model answers on the current graph gives the same held rules, root
-  cause and levels in 37 of the 40. The three that change are MY05 and MY12 (the same misconception, filed at `char`
-  instead of `char_arithmetic`) and MY18 (root cause `loop_control` instead of `off_by_one_error`). The stored
-  results were not re-run.
+  `src/demo.py` does; its own cells only draw and print. Running all 40 again from the cached model answers on the
+  code and graph of this repository reproduces every stored result exactly (subgraph, held rules, root cause,
+  levels).
+- **Graph version.** All 40 stored runs are on graph 3.9.8, the graph in this repository. MY01 to MY25 were first run
+  on 3.9.7, which differs for them only in the `primary` / `context` role of some misconception edges, and were run
+  again on 2026-11-14 (MY26 and MY27 as well; they did not change). The re-run changed four results and left 23 as
+  they were: MY05 and MY12 (CharNotNumeric is now filed at `char`, its primary concept, instead of
+  `char_arithmetic`), MY18 (the root cause OffByOneBound is now at `loop_control` instead of `off_by_one_error`, and
+  ArrayRangeInclusive and IdiomOverridesCode are held as well) and MY02 (`integer_division` is now L0).
 
 ## The knowledge graph, concept by concept
 

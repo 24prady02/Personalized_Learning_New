@@ -23,7 +23,7 @@
    "misconception": "CastAfterIntDivision",
    "kind": "misconception",
    "quote": "It prints 3.5; The (double) cast turns the division into a decimal division; so 7 / 2 gives 3.5 and that is stored in avg",
-   "score": 0.76
+   "score": 0.665
   }
  ],
  "error_evidence": [],
@@ -33,21 +33,21 @@
    "misconception": "CastAfterIntDivision",
    "shadow_of": "mis:explicit_cast->CastAfterIntDivision",
    "quote": "The (double) cast turns the division into a decimal division; so 7 / 2 gives 3.5 and that is stored in avg",
-   "score": 0.665
+   "score": 0.57
   },
   {
    "concept": "type_conversion",
    "misconception": "TargetTyping",
    "shadow_of": "mis:explicit_cast->CastAfterIntDivision",
-   "quote": "The (double) cast turns the division into a decimal division; so 7 / 2 gives 3.5 and that is stored in avg",
-   "score": 0.8
+   "quote": "It prints 3.5; The (double) cast turns the division into a decimal division; so 7 / 2 gives 3.5 and that is stored in avg",
+   "score": 0.68
   },
   {
    "concept": "expression",
    "misconception": "TargetTyping",
    "shadow_of": "mis:type_conversion->TargetTyping",
-   "quote": "The (double) cast turns the division into a decimal division; so 7 / 2 gives 3.5 and that is stored in avg",
-   "score": 0.595
+   "quote": "It prints 3.5; The (double) cast turns the division into a decimal division; so 7 / 2 gives 3.5 and that is stored in avg",
+   "score": 0.56
   }
  ],
  "broken_edges": [
@@ -117,8 +117,8 @@
    ],
    "quote": "It prints 3.5; The (double) cast turns the division into a decimal division; so 7 / 2 gives 3.5 and that is stored in avg",
    "confidence": 0.95,
-   "prune_score": 0.8,
-   "score": 0.76,
+   "prune_score": 0.7000000000000001,
+   "score": 0.665,
    "logic": "(double) (3 / 5) is 0.6.",
    "twin_logic": "The integer division 3 / 5 = 0 happens before the cast, so the result is 0.0.",
    "role": "primary"
@@ -136,11 +136,11 @@
    ],
    "quote": "The (double) cast turns the division into a decimal division; so 7 / 2 gives 3.5 and that is stored in avg",
    "confidence": 0.95,
-   "prune_score": 0.7000000000000001,
-   "score": 0.665,
+   "prune_score": 0.6,
+   "score": 0.57,
    "logic": "(double) (3 / 5) is 0.6.",
    "twin_logic": "The integer division 3 / 5 = 0 happens before the cast, so the result is 0.0.",
-   "role": "primary"
+   "role": "context"
   },
   {
    "depth": 1,
@@ -228,13 +228,14 @@
    "kind": "misconception",
    "label": "held",
    "clauses": [
+    1,
     2,
     3
    ],
-   "quote": "The (double) cast turns the division into a decimal division; so 7 / 2 gives 3.5 and that is stored in avg",
-   "confidence": 0.8,
-   "prune_score": 1.0,
-   "score": 0.8,
+   "quote": "It prints 3.5; The (double) cast turns the division into a decimal division; so 7 / 2 gives 3.5 and that is stored in avg",
+   "confidence": 0.85,
+   "prune_score": 0.8,
+   "score": 0.68,
    "logic": "The type of a numerical expression depends on the type expected by the surrounding context, so double d = a / b; keeps the fraction.",
    "twin_logic": "The type of a numerical expression is determined by the expression, so double d = a / b; with int a and b still divides as ints.",
    "role": "context"
@@ -264,13 +265,14 @@
    "kind": "misconception",
    "label": "held",
    "clauses": [
+    1,
     2,
     3
    ],
-   "quote": "The (double) cast turns the division into a decimal division; so 7 / 2 gives 3.5 and that is stored in avg",
-   "confidence": 0.85,
-   "prune_score": 0.7,
-   "score": 0.595,
+   "quote": "It prints 3.5; The (double) cast turns the division into a decimal division; so 7 / 2 gives 3.5 and that is stored in avg",
+   "confidence": 0.8,
+   "prune_score": 0.7000000000000001,
+   "score": 0.56,
    "logic": "The type of a numerical expression depends on the type expected by the surrounding context, so double d = a / b; keeps the fraction.",
    "twin_logic": "The type of a numerical expression is determined by the expression, so double d = a / b; with int a and b still divides as ints.",
    "role": "context"
@@ -294,24 +296,6 @@
    "twin_logic": null,
    "level": "L0",
    "way": "everyday_reading"
-  },
-  {
-   "depth": 4,
-   "source": "expression",
-   "edge": "mis:expression->VariablesHoldExpressions",
-   "target": "VariablesHoldExpressions",
-   "kind": "misconception",
-   "label": "correct",
-   "clauses": [
-    3
-   ],
-   "quote": "so 7 / 2 gives 3.5 and that is stored in avg",
-   "confidence": 0.6,
-   "prune_score": 0.15,
-   "score": 0.09,
-   "logic": "= stores the expression itself, not its computed value",
-   "twin_logic": "y = x + k; stores the value that x + k has at that moment, so later changes to x do not change y.",
-   "role": "context"
   }
  ],
  "evidence": [
@@ -329,8 +313,8 @@
    ],
    "quote": "It prints 3.5; The (double) cast turns the division into a decimal division; so 7 / 2 gives 3.5 and that is stored in avg",
    "confidence": 0.95,
-   "prune_score": 0.8,
-   "score": 0.76,
+   "prune_score": 0.7000000000000001,
+   "score": 0.665,
    "logic": "(double) (3 / 5) is 0.6.",
    "twin_logic": "The integer division 3 / 5 = 0 happens before the cast, so the result is 0.0.",
    "role": "primary"
@@ -348,11 +332,11 @@
    ],
    "quote": "The (double) cast turns the division into a decimal division; so 7 / 2 gives 3.5 and that is stored in avg",
    "confidence": 0.95,
-   "prune_score": 0.7000000000000001,
-   "score": 0.665,
+   "prune_score": 0.6,
+   "score": 0.57,
    "logic": "(double) (3 / 5) is 0.6.",
    "twin_logic": "The integer division 3 / 5 = 0 happens before the cast, so the result is 0.0.",
-   "role": "primary"
+   "role": "context"
   },
   {
    "depth": 1,
@@ -474,13 +458,14 @@
    "kind": "misconception",
    "label": "held",
    "clauses": [
+    1,
     2,
     3
    ],
-   "quote": "The (double) cast turns the division into a decimal division; so 7 / 2 gives 3.5 and that is stored in avg",
-   "confidence": 0.8,
-   "prune_score": 1.0,
-   "score": 0.8,
+   "quote": "It prints 3.5; The (double) cast turns the division into a decimal division; so 7 / 2 gives 3.5 and that is stored in avg",
+   "confidence": 0.85,
+   "prune_score": 0.8,
+   "score": 0.68,
    "logic": "The type of a numerical expression depends on the type expected by the surrounding context, so double d = a / b; keeps the fraction.",
    "twin_logic": "The type of a numerical expression is determined by the expression, so double d = a / b; with int a and b still divides as ints.",
    "role": "context"
@@ -493,33 +478,16 @@
    "kind": "misconception",
    "label": "held",
    "clauses": [
+    1,
     2,
     3
    ],
-   "quote": "The (double) cast turns the division into a decimal division; so 7 / 2 gives 3.5 and that is stored in avg",
-   "confidence": 0.85,
-   "prune_score": 0.7,
-   "score": 0.595,
+   "quote": "It prints 3.5; The (double) cast turns the division into a decimal division; so 7 / 2 gives 3.5 and that is stored in avg",
+   "confidence": 0.8,
+   "prune_score": 0.7000000000000001,
+   "score": 0.56,
    "logic": "The type of a numerical expression depends on the type expected by the surrounding context, so double d = a / b; keeps the fraction.",
    "twin_logic": "The type of a numerical expression is determined by the expression, so double d = a / b; with int a and b still divides as ints.",
-   "role": "context"
-  },
-  {
-   "depth": 4,
-   "source": "expression",
-   "edge": "mis:expression->VariablesHoldExpressions",
-   "target": "VariablesHoldExpressions",
-   "kind": "misconception",
-   "label": "correct",
-   "clauses": [
-    3
-   ],
-   "quote": "so 7 / 2 gives 3.5 and that is stored in avg",
-   "confidence": 0.6,
-   "prune_score": 0.15,
-   "score": 0.09,
-   "logic": "= stores the expression itself, not its computed value",
-   "twin_logic": "y = x + k; stores the value that x + k has at that moment, so later changes to x do not change y.",
    "role": "context"
   },
   {
@@ -551,8 +519,8 @@
  "unexplained_clauses": [],
  "stop_reason": "max depth",
  "depth_reached": 4,
- "llm_calls": 0,
- "llm_cache_hits": 38,
+ "llm_calls": 7,
+ "llm_cache_hits": 31,
  "llm_calls_by_step": {
   "prune": 14,
   "label": 24

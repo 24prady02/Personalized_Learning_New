@@ -48,10 +48,10 @@ start concepts (3): arithmetic_operators, overflow, println
     lvl:int@L0#0 -> shown (0.42) "It prints 2147483648; Adding 1 to 2147483647 gives 2147483648, and Java just stores the bigger number in big; because it makes room for it automatically"
     lvl:int@L2#2 -> not applied (0.00) ""
     lvl:int@L3#3 -> not applied (0.00) ""
-  expression (misconceptions): 8 candidates -> kept mis:expression->TargetTyping (0.60), mis:expression->AssignmentIsEquation (0.20), mis:expression->VariablesHoldExpressions (0.20)
+  expression (misconceptions): 8 candidates -> kept mis:expression->TargetTyping (0.60), mis:expression->AssignmentIsEquation (0.25), mis:expression->VariablesHoldExpressions (0.15)
     mis:expression->TargetTyping -> not applied (0.00) ""
-    mis:expression->AssignmentIsEquation -> correct (0.12) "Adding 1 to 2147483647 gives 2147483648, and Java just stores the bigger number in big"
-    mis:expression->VariablesHoldExpressions -> correct (0.12) "Adding 1 to 2147483647 gives 2147483648, and Java just stores the bigger number in big"
+    mis:expression->AssignmentIsEquation -> correct (0.15) "Adding 1 to 2147483647 gives 2147483648, and Java just stores the bigger number in big"
+    mis:expression->VariablesHoldExpressions -> correct (0.09) "Adding 1 to 2147483647 gives 2147483648, and Java just stores the bigger number in big"
   expression (level ways): 19 candidates -> kept lvl:expression@L0#0 (0.50), lvl:expression@L2#1 (0.30), lvl:expression@L3#1 (0.20)
     lvl:expression@L0#0 -> shown (0.42) "It prints 2147483648; Adding 1 to 2147483647 gives 2147483648, and Java just stores the bigger number in big; because it makes room for it automatically"
     lvl:expression@L2#1 -> not applied (0.00) ""

@@ -2,7 +2,7 @@ clauses: It prints only Tue | day is 2 | so the switch jumps to case 2, prints T
 start: 3 tagged concepts, all used
 start concepts (3): control_flow, println, switch_statement
 --- depth 1: current concepts ['control_flow', 'println', 'switch_statement']
-  control_flow (misconceptions): 11 candidates -> kept mis:control_flow->CodeAfterIfSkipped (0.60), mis:control_flow->StatementsRunInAnyOrder (0.25), mis:control_flow->FalseConditionRestartsProgram (0.15)
+  control_flow (misconceptions): 11 candidates -> kept mis:control_flow->CodeAfterIfSkipped (0.50), mis:control_flow->StatementsRunInAnyOrder (0.30), mis:control_flow->FalseConditionRestartsProgram (0.20)
     mis:control_flow->CodeAfterIfSkipped -> not applied (0.00) ""
     mis:control_flow->StatementsRunInAnyOrder -> not applied (0.00) ""
     mis:control_flow->FalseConditionRestartsProgram -> not applied (0.00) ""
@@ -41,8 +41,8 @@ start concepts (3): control_flow, println, switch_statement
   clause coverage: c1 <- mis:switch_statement->SwitchNoFallThrough; c2 <- pre:control_flow->switch_statement; c3 <- mis:switch_statement->SwitchNoFallThrough; c4 <- mis:switch_statement->SwitchNoFallThrough; c5 <- mis:switch_statement->SwitchNoFallThrough
   not yet read: own edges of statement, own edges of string_literal
 --- depth 3: current concepts ['statement', 'control_flow', 'switch_statement', 'string_literal', 'println']
-  statement (misconceptions): 5 candidates -> kept mis:statement->ComputerFillsInIntent (0.50), mis:statement->StatementsRunInAnyOrder (0.30), mis:statement->ProgramLooksAhead (0.20)
-    mis:statement->ComputerFillsInIntent -> held (0.28) "It prints only Tue; so the switch jumps to case 2, prints Tue, and then the switch is finished"
+  statement (misconceptions): 5 candidates -> kept mis:statement->ComputerFillsInIntent (0.60), mis:statement->StatementsRunInAnyOrder (0.25), mis:statement->ProgramLooksAhead (0.15)
+    mis:statement->ComputerFillsInIntent -> held (0.33) "It prints only Tue; so the switch jumps to case 2, prints Tue, and then the switch is finished"
     mis:statement->StatementsRunInAnyOrder -> not applied (0.00) ""
     mis:statement->ProgramLooksAhead -> not applied (0.00) ""
   statement (level ways): 19 candidates -> kept lvl:statement@L0#2 (0.50), lvl:statement@L0#0 (0.30), lvl:statement@L3#4 (0.20)
@@ -59,7 +59,7 @@ start concepts (3): control_flow, println, switch_statement
     lvl:string_literal@L2#0 -> not applied (0.00) ""
   println (concept edges): 1 candidates -> kept pre:statement->println (1.00)
     pre:statement->println -> not applied (0.00) ""
-  kept: mis:statement->ComputerFillsInIntent [held, tier 0, 0.28], lvl:statement@L0#2 [shown, tier 2, 0.36], lvl:string_literal@L3#1 [shown, tier 2, 0.27]
+  kept: mis:statement->ComputerFillsInIntent [held, tier 0, 0.33], lvl:statement@L0#2 [shown, tier 2, 0.36], lvl:string_literal@L3#1 [shown, tier 2, 0.27]
   clause coverage: c1 <- mis:switch_statement->SwitchNoFallThrough; c2 <- pre:control_flow->switch_statement; c3 <- mis:switch_statement->SwitchNoFallThrough; c4 <- mis:switch_statement->SwitchNoFallThrough; c5 <- mis:switch_statement->SwitchNoFallThrough
   shadows: mis:statement->ComputerFillsInIntent (shadow of mis:switch_statement->SwitchNoFallThrough)
   root-cause walk: held on ['switch_statement'], broken at [] (consequences: pre:statement->control_flow), prerequisites {'switch_statement': ['control_flow'], 'control_flow': ['statement'], 'println': ['statement', 'string_literal']}
