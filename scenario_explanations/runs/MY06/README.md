@@ -37,7 +37,7 @@ Two numbers control the walk: the **width N = 3** (how many options survive each
 
 This stage reads only the program, never the student's answer. Its job is to decide which part of the knowledge graph this scenario is allowed to use.
 
-**1.1 Prepare the code.** Pasted code often carries look-alike characters (curly quotes, non-breaking spaces); these are mapped to the plain ones. Then the code is **masked**: the inside of every string literal and every comment is replaced by spaces of the same length. Masking matters because the next step matches patterns: the word `for` inside a printed sentence must not count as a for loop. Lengths and line numbers stay the same, so a match can still be reported by line.
+**1.1 Mask the code.** The code is **masked**: the inside of every string literal and every comment is replaced by spaces of the same length. Masking matters because the next step matches patterns: the word `for` inside a printed sentence must not count as a for loop. Lengths and line numbers stay the same, so a match can still be reported by line.
 
 *One of the outputs at this stage:* this program has no string literal or comment, so the masked code equals the original.
 

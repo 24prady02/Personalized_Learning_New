@@ -1,14 +1,29 @@
 # Think on the Graph
 
-Diagnosing a student's answer about a short Java program by walking a knowledge graph. Stage 1 cuts a subgraph out
-of the graph from the code alone; Stage 2 walks that subgraph against the student's answer and reports the wrong
-rules held, the root cause and a level per concept.
+Diagnosing a student's answer about a short Java program by walking a knowledge graph. A subgraph is cut out of
+the graph from the code alone; it is then walked against the student's answer, and the result is the wrong rules
+held, the root cause and a level per concept.
+
+The method has seven stages. This README and the README of every scenario use the same numbers and the same terms:
+
+| Stage | What it does | Model | Code |
+|---|---|---|---|
+| 1 | from the code to a subgraph G: mask the code, tag concepts, handle generic concepts, cut out G | no | `src/preprocessing.py`, `src/model.py` |
+| 2 | split the answer into clauses; choose the start concepts by BM25 | no | `src/traverse.py` |
+| 3 | the traversal, a beam search over G: edge search, prune, label, score and keep, move, stop test | prune and label only | `src/traverse.py`, `src/prompts.py` |
+| 4 | from labels to faults: error beside a misconception, one fault one place, shadows, broken edges | no | `src/traverse.py` |
+| 5 | root cause | no | `src/traverse.py` |
+| 6 | level of each concept (L0 to L4) | no | `src/traverse.py` |
+| 7 | overall level | no | `src/traverse.py` |
+
+Stage 1 is described under "Stage 1: what is being done", "How the matcher works" and "How the subgraph is taken
+out"; Stages 2 to 7 under "Stages 2 to 7: the walk and the diagnosis".
 
 ## The 40 scenarios (MY01 to MY40)
 
 The main scenario set is `data/raw/scenarios_40.json`: 40 short Java programs, each with a question and a student's
-answer. They were entered and run one at a time in `scenario_explanations/think_on_the_graph.ipynb` (Stage 1, then
-Stage 2). They have no gold labels.
+answer. They were entered and run one at a time in `scenario_explanations/think_on_the_graph.ipynb` (all seven
+stages). They have no gold labels.
 
 Every scenario has its own folder, `scenario_explanations/runs/MYnn/`:
 
@@ -17,7 +32,7 @@ Every scenario has its own folder, `scenario_explanations/runs/MYnn/`:
 | `README.md` | how the algorithm reached the result, stage by stage: each stage explained, with one output of that stage from the run |
 | `MYnn.ipynb`, `report.html` | every output of every stage (all edges offered, every score and label, the figures) |
 | `MYnn_G.html` | the interactive graph of the run |
-| `input.json`, `subgraph.json`, `diagnosis.json`, `traverse_log.txt` | the input, the Stage 1 subgraph, the Stage 2 result and the trace |
+| `input.json`, `subgraph.json`, `diagnosis.json`, `traverse_log.txt` | the input, the Stage 1 subgraph, the result of Stages 2 to 7 and the trace |
 | `figureNN.png` | the pictures of the walk, depth by depth |
 
 Results. In 29 of the 40 the walk holds at least one wrong rule; in 11 it holds none. The last
@@ -146,22 +161,22 @@ data/
   raw/scenarios_40.json                      the main set: the 40 scenarios MY01-MY40 (code, question, answer; no gold labels yet)
   raw/scenarios_not_from_code.json           the other 10 scenarios (prose code, or a gold concept only the answer brings in)
   processed/<sid>_subgraph.json              one extracted subgraph per scenario (output of src/evaluate.py)
-  processed/<sid>_diagnosis.json             Stage 2 output: held misconceptions, root cause, levels, paths, evidence, clause coverage, stop reason, prompts per step
+  processed/<sid>_diagnosis.json             output of Stages 2 to 7: held misconceptions, root cause, levels, paths, evidence, clause coverage, stop reason, prompts per step
 src/
   preprocessing.py                           mask_java, split_statements, command_segments, Prepared
   model.py                                   tag_code (pattern channels of every concept) + extract_subgraph / subgraph_from_code
   train.py                                   builds and checks the pattern bank (no learned parameters; see below)
   evaluate.py                                runs the scenarios: processed JSON, coverage report, figures, summary.csv, results.md, metrics.json
   utils.py                                   paths, load_kg, load_scenarios, reader_blocks, gold_concepts (check only), regex cache
-  traverse.py                                Stage 2: ToG traversal over a Stage 1 subgraph (reads question + answer), writes <sid>_diagnosis.json
-  prompts.py                                 the Stage 2 prompts: one edge prune, three edge labels (misconception edge, concept edge, level way); the only places the model is asked
-  compare.py                                 Stage 2 vs gold (checking only): results/tables/stage2_vs_gold.csv, results/stage2_results.md
-  demo.py                                    Stage 1 and Stage 2 on one scenario, with the step report and the page of the run
+  traverse.py                                Stages 2 to 7: ToG traversal over a Stage 1 subgraph (reads question + answer), writes <sid>_diagnosis.json
+  prompts.py                                 the Stage 3 prompts: one edge prune, three edge labels (misconception edge, concept edge, level way); the only places the model is asked
+  compare.py                                 the diagnoses vs gold (checking only): results/tables/stage2_vs_gold.csv, results/stage2_results.md
+  demo.py                                    all seven stages on one scenario, with the step report and the page of the run
   steps_report.py, viz.py                    the step report of a run (results/viewer/<sid>_steps.md) and its figures
   upload.py                                  builds scenario_explanations/runs/<sid>/ for a run and commits it
   concept_notebooks.py                       runs one notebook per concept and writes concept_wise_graph/<concept>/
 scenario_explanations/
-  think_on_the_graph.ipynb                   enter a program, a question and an answer; runs Stage 1 and Stage 2 and shows every step
+  think_on_the_graph.ipynb                   enter a program, a question and an answer; runs all seven stages and shows every step
   start_notebook.bat                         starts the notebook server and opens think_on_the_graph.ipynb
   runs/MYnn/                                 one folder per scenario (see "The 40 scenarios" above)
   kg_visualizer.ipynb                        the graph around any concept, interactive; lists the concept folders
@@ -174,14 +189,14 @@ experiments/
   logs/train_log.txt                         pattern compile + pattern-test check
   logs/subgraph_report.txt                   one line per scenario over tests/data/scenarios_gold.json, "fully covered: 30 / 30"
   logs/subgraph_report_not_from_code.txt     the same over scenarios_not_from_code.json (misses expected)
-  logs/traverse_<sid>.txt                    Stage 2 trace: start ranking, candidates, kept edges, labels, quotes, clause coverage, levels
-  llm_cache/<hash>.json                      every prompt sent in Stage 2 and the model's reply (re-runs are free and deterministic)
+  logs/traverse_<sid>.txt                    trace of Stages 2 to 7: start ranking, candidates, kept edges, labels, clauses, clause coverage, levels
+  llm_cache/<hash>.json                      every prompt sent in Stage 3 and the model's reply (re-runs are free and deterministic)
 results/
   results.md                                 summary table, then per scenario: code, figure, concept nodes, edges with logic, misconception nodes, level counts
   figures/<sid>.png                          node visualization of each subgraph
   tables/summary.csv                         one row per scenario (counts, concept ids, edges traced, misconception node ids)
   metrics.json                               coverage and size metrics
-  stage2_results.md, tables/stage2_vs_gold.csv   Stage 2 diagnoses against the gold (checking only)
+  stage2_results.md, tables/stage2_vs_gold.csv   the diagnoses against the gold (checking only)
   viewer/<sid>_steps.md, _demo.html, _G.html, _figureNN.png   the step report, page, interactive graph and figures of each run
 paper/
   main.tex, references.bib, main.pdf         mid-term progress report (ACM format)
@@ -190,7 +205,7 @@ slides/
   Pradhyumn_Nair_midterm_slides.pptx         mid-term presentation
 tests/
   test_subgraph.py                           Stage 1 (228 tests)
-  test_traverse.py                           Stage 2 with a mocked model (19 tests, 1 skipped)
+  test_traverse.py                           Stages 2 to 7 with a mocked model (19 tests, 1 skipped)
   data/scenarios_gold.json                   the earlier gold-labelled set, used by the tests and by compare.py
   data/concept_pattern_tests.json            must_tag / must_not_tag snippets for all 166 code-visible concepts
 ```
@@ -198,16 +213,16 @@ tests/
 ## Commands
 
 ```bash
-pytest -q                      # 247 tests (Stage 2 tests use a mocked model, no real call)
+pytest -q                      # 247 tests (the tests of Stages 2 to 7 use a mocked model, no real call)
 python src/train.py            # compile every pattern, check the 372 labelled snippets, write experiments/pattern_bank.json
 python src/evaluate.py --scenarios tests/data/scenarios_gold.json --log experiments/logs/subgraph_report.txt
                                # Stage 1 on the gold-labelled set: data/processed, the report, results/ (figures, summary.csv, results.md, metrics.json)
 python src/evaluate.py --scenarios data/raw/scenarios_not_from_code.json --no-figures --no-json
 jupyter notebook scenario_explanations/explore_subgraph.ipynb
-python src/traverse.py MY07      # Stage 2 on one scenario (needs the claude CLI, or `--backend anthropic` with the SDK and a key)
+python src/traverse.py MY07      # Stages 2 to 7 on one scenario (needs the claude CLI, or `--backend anthropic` with the SDK and a key)
 python src/traverse.py --all     # every scenario of the scenario file (cached replies are reused; anything else is asked again)
-python src/compare.py            # Stage 2 diagnoses of tests/data/scenarios_gold.json against its gold (checking only)
-python src/demo.py --scenario MY07   # Stage 1 and Stage 2 on one of the 40 scenarios, with its step report
+python src/compare.py            # the diagnoses of tests/data/scenarios_gold.json against its gold (checking only)
+python src/demo.py --scenario MY07   # all seven stages on one of the 40 scenarios, with its step report
 python src/concept_notebooks.py      # one notebook per concept into concept_wise_graph/ (or name concepts to run only those)
 scenario_explanations\start_notebook.bat   # open think_on_the_graph.ipynb to run a new scenario
 ```
@@ -217,99 +232,130 @@ Without `--scenarios`, `evaluate.py`, `traverse.py` and `demo.py` read the scena
 `data/processed/MYnn_subgraph.json` and `MYnn_diagnosis.json` of those runs, so use them on the 40 only to re-run
 them on purpose.
 
-## Stage 2: ToG traversal (`traverse.py`, `prompts.py`)
+## Stages 2 to 7: the walk and the diagnosis (`traverse.py`, `prompts.py`)
 
-Stage 2 reads the question and the student's answer and walks the Stage 1 subgraph the way Think-on-Graph walks
-a knowledge graph. Settings are in the `traversal` block of `experiments/config.json` (width N = 3, depth D = 3,
-model, prune tool llm / bm25 / sentencebert).
+These stages read the question and the student's answer and walk the Stage 1 subgraph G the way Think-on-Graph
+walks a knowledge graph. The stage numbers and terms are those of the scenario READMEs
+(`scenario_explanations/runs/MYnn/README.md`), which explain each stage in plain words with one output of the run;
+this section adds the detail of the code. Settings are in the `traversal` block of `experiments/config.json`
+(width N = 3, depth D = 3, model, prune tool llm / bm25 / sentencebert).
 
-The model is used in two places only: edge pruning (replaceable by BM25 / sentence-BERT) and edge labelling.
-Start concepts are Stage 1's tagged concepts, as ToG's released code uses the given topic entities; the stop
-decision is a rule (graph check plus clause coverage); and levels are read from the graph by rule, because the
-level ways are edges of the search like everything else.
+The model is asked in Stage 3 only, and there in two places: the edge prune (3.2, replaceable by BM25 /
+sentence-BERT) and the edge label (3.3). The start concepts, the stop test, the faults, the root cause and the
+levels are rules with no model call.
 
-1. **Clauses and start concepts.** Quote characters are removed, then the answer is split at sentence ends, `;`,
-   before `because` / `so` (after a comma, a space or a closing quote), and a parenthetical remark of two or more
-   words becomes its own clause. `/` is kept: inside a written output it is a line break. Start concepts (no
-   model call): every non-generic concept of the subgraph, that is, the concepts Stage 1 tagged in the code, plus
-   a generic concept whose tagging text occurs verbatim in the answer (the student names it in code, e.g. `=` for
-   assignment in "a = b"). When there are more than N, they are ranked by BM25 of the student's answer against each concept's text (its id
-   with underscores as spaces plus the texts of its misconception and concept edges), ties broken by the number
-   of Stage 1 code hits, then by id.
-2. **Edge search** (no model). Depth 1: two families, the concept's misconception and error edges, and its
-   **level ways**. Every way of a has_level edge in the graph is an edge of its own (`lvl:<concept>@<L>#i`, logic =
-   the way's exact rule); ways of kind "misconception" are left out because the misconception edges already carry
-   them. Deeper: the concept's prerequisite / parallel edges inside the same connected piece. Edges already on a
-   path are skipped; primary role first.
-3. **Edge prune.** One call per concept and family picks up to N edges the answer engages with, scores summing
-   to 1 (or BM25 / sentence-BERT similarity instead of the call). Pruning each family on its own means a level way
-   never competes with a misconception edge for a slot.
-4. **Edge label.** The kept misconception / error edges of a concept are judged together in one call, one reply
-   line per edge: held / correct / not applied, each shown with its wrong rule and right rule. Judging them side
-   by side lets the model give held to the rule whose claim the student actually makes when several wrong rules
-   would fit the same words, and still hold two when the student holds two (held means the answer follows the
-   wrong rule in what sets it apart from the right rule: where the student gives a reason it must be this rule's
-   own, a result the rule would also predict but reached by another reason does not hold it, and a rule about
-   something neither the program nor the answer contains is not applied). Evidence is given as clause numbers,
-   not a free quote, so the code knows exactly which words each label rests on and two labels on the same clause
-   are known to rest on the same words. One call per edge, with the same clause-number evidence: confirmed /
-   broken / not applied for a concept edge shown with its logic; shown /
-   not shown for a level way shown with the concept, the way's name and what an answer that shows the way does,
-   and nothing else: no level name, no deciding question, no level in an id, so the way is judged against its own
-   text like every other edge and its level comes only from where it sits in the graph. Every reply names the
-   clauses and gives a confidence; a label with no clause behind it is not applied.
-   Score = prune score × confidence.
-5. **Keep the best N in tiers**: held misconceptions and broken edges first, then held errors, then correct /
-   confirmed / shown edges; by score within a tier (an edge reached from both ends in one round counts once).
-   Confirmations therefore never crowd out a diagnosis. Every labelled edge whose quote is in the answer is
-   recorded as **evidence**, kept or not, so a dropped "correct" label still explains its clause.
-6. **Stop test** (no model). (i) Graph check: every concept the walk has entered has its concept edges, the
-   prerequisite and parallel links to the other concepts of its piece, read before the walk may stop. For a
-   faulted concept that is where the root cause lies; for a concept the student got right it is the conceptual
-   trace, the confirmed links between concepts, which is as much part of the diagnosis as the faults. (ii) Clause
-   coverage: a clause is covered when a labelled rule edge names it (a misconception / error edge labelled held or
-   correct, a concept edge labelled confirmed or broken). A shown level way does not count here: it says how the
-   student reads the code, not which rule the clause applies. The walk stops with reason "sufficient" when nothing
-   is pending and every clause is covered, with "half_stop" when no concept is left to go to, and otherwise at
-   depth D, followed by one closing round in which the concepts entered last have their own misconception edges and
-   level ways read (reason "max depth"). The clauses no evidence covers are reported as unexplained.
-7. **Next concepts**: every entered concept whose concept edges are unread (it reads them next); the far end of
-   each kept concept edge, entered as a start concept so its own misconception edges and level ways are read and
-   it gets a level of its own; the source of each held misconception (to walk back). An edge is offered once per
-   depth, not from each of its ends. A level way leads nowhere: it describes the concept itself. When clauses
-   remain uncovered (up to depth D), the uncovered clauses bring in concepts the walk has not entered yet: BM25 of
-   those clauses against the unvisited concepts of the start pool, the best N, no model call. This has its own cap
-   of N, so it does not compete with the concepts already waiting to be read. Such a concept enters as a start concept,
-   so its own misconception edges and level ways are read at the next depth. This is what lets a correct
-   multi-concept answer, whose labels give no direction of their own, reach every concept the student wrote about.
-8. **Diagnose.** A held error beside a held misconception on the same concept is evidence, not a second diagnosis.
-   Every held misconception stays: a student can hold several at once, and the judgement is made at the label
-   step, edge by edge. A held misconception resting on the same words as a stronger one on the same concept is
-   marked `shares_evidence_with` that edge (the graph words one wrong idea in several ways, e.g.
-   IfConditionWatched / IfWaitsForCondition on if_statement; both come out held, and the comparison counts the
-   pair as one). One fault, one location: the same misconception held at both ends of a prerequisite edge is
-   filed at the concept the graph marks as `primary` for it when the roles decide, and otherwise at the dependent
-   concept. A held label on a prerequisite or on a generic concept that rests only on the clauses of a stronger,
-   more specific label is a shadow of that label: it is listed under `shadowed`, marks no root cause and sets no
-   level. A broken edge shown by the same words as a held misconception is that misconception's consequence
-   (`consequence_of`), so it marks no root cause of its own either.
-   Root cause: walk prerequisite edges back from the concepts with a held misconception and take the furthest-back
-   concept that itself holds a misconception or is the target of a broken prerequisite edge (a broken A → B says
-   the student did not carry A into B, so the fault sits at B). Between candidates the one with fewer prerequisites
-   of its own in the subgraph is taken, and at a tie the one whose label has the higher confidence. Level per concept, by rule from the evidence and
-   with no model call: L0 when the concept holds a misconception (the level then reads the edge of that one
-   misconception, the kept finding, and carries the L0 way's own text from `level_mis_links` as `rule`) or an L0
-   way (everyday reading, inconsistent trace) is shown, since the L0 deciding question asks whether every rule the
-   answer applies agrees with the language rule; otherwise the highest level with a shown way, because the levels are cumulative and an answer
-   at L4 also does L3. A concept with no held misconception and no shown way gets no level. Overall level: the
-   root-cause concept's level; for an answer with no fault, the level reached on at least half of the concepts the
-   answer touched (the levels sorted from high to low, the middle one). A held error node sets no level, so when the
-   root cause carries only an error the overall level is empty (MY35). Output also lists the
-   evidence, which edge covers each clause, the uncovered clauses, the stop reason (sufficient / half_stop / max
-   depth) and the number of prompts per step (prune, label).
+### Stage 2. Clauses and start concepts (no model)
 
-The model never answers from its own knowledge: every label is an edge of the graph plus a quote. Replies are
-cached in `experiments/llm_cache/`, so a re-run costs only the prompts that changed.
+- **2.1 Clauses.** Quote characters are removed, then the answer is split at sentence ends, at `;`, and before
+  `because` / `so` (after a comma, a space or a closing quote); a parenthetical remark of two or more words becomes
+  its own clause. `/` is kept: inside a written output it is a line break. The clauses are numbered c1, c2, …
+- **2.2 Start concepts.** The candidates are every non-generic concept of G, that is, the concepts Stage 1 tagged
+  in the code, plus a generic concept whose tagging text occurs verbatim in the answer (the student names it in
+  code, e.g. `=` for assignment in "a = b"). When there are more than N, they are ranked by BM25 of the student's
+  answer against each concept's text (its id with underscores as spaces plus the texts of its misconception and
+  concept edges), ties broken by the number of Stage 1 code hits, then by id. The top N are the start concepts.
+
+### Stage 3. The traversal: walking G (the model is asked here)
+
+A beam search of width N over at most D depths plus one closing round. At each depth, for each current concept:
+
+- **3.1 Edge search** (no model). A concept that has just been entered is read inwards, in two families: its
+  misconception and error edges, and its **level ways**. Every way of a has_level edge in the graph is an edge of
+  its own (`lvl:<concept>@<L>#i`, logic = the way's exact rule); ways of kind "misconception" are left out because
+  the misconception edges already carry them. A concept already read inwards is read outwards: its prerequisite /
+  parallel edges inside the same connected piece. An edge is offered once, not from each of its ends; primary role
+  first. A level way leads nowhere: it describes the concept itself.
+- **3.2 Prune** (model, first question). One call per concept and family picks up to N edges the answer engages
+  with; the scores are rescaled to sum to 1 (the prune score), or BM25 / sentence-BERT similarity is used instead
+  of the call. Pruning each family on its own means a level way never competes with a misconception edge for a
+  place. Edge ids the model invents are ignored.
+- **3.3 Label** (model, second question). The pruned misconception / error edges of a concept are judged together
+  in one call, one reply line per edge: held / correct / not applied, each shown with its wrong rule and its right
+  rule (the twin). Judging them side by side lets the model give held to the rule whose claim the student actually
+  makes when several wrong rules would fit the same words, and still hold two when the student holds two (held
+  means the answer follows the wrong rule in what sets it apart from the right rule: where the student gives a
+  reason it must be this rule's own, a result the rule would also predict but reached by another reason does not
+  hold it, and a rule about something neither the program nor the answer contains is not applied). The other edges
+  get one call each: confirmed / broken / not applied for a concept edge shown with its logic; shown / not shown
+  for a level way shown with the concept, the way's name and what an answer that shows the way does, and nothing
+  else: no level name, no deciding question, no level in an id, so the way is judged against its own text like
+  every other edge and its level comes only from where it sits in the graph. Every reply gives the clause numbers
+  it rests on and a confidence from 0 to 1. The evidence is clause numbers, not a free quote, so the code knows
+  exactly which words each label rests on, and two labels on the same clause are known to rest on the same words.
+  A label with no clause behind it is not applied.
+- **3.4 Score and keep.** Score = prune score × confidence. The best N are kept in tiers: tier 0, held
+  misconceptions and broken edges, always kept; tier 1, held errors; tier 2, correct / confirmed / shown edges,
+  which fill what is left of the N places, best score first (an edge reached from both ends in one round counts
+  once). Confirmations therefore never crowd out a finding. Kept edges are added to the paths. Every labelled edge,
+  kept or not, is recorded as **evidence**, so a dropped "correct" label still explains its clause and the levels
+  of Stage 6 are read from all of it.
+- **3.5 Move to the next concepts.** The far end of each kept concept edge is entered, so its own misconception
+  edges and level ways are read at the next depth and it gets a level of its own; the concept of each held
+  misconception stays current, so that its prerequisites are examined (to walk back); and every entered concept
+  whose concept edges are unread stays current until they are read.
+- **3.6 Stop test** (no model). (i) Graph check: every concept the walk has entered has had its concept edges, the
+  prerequisite and parallel links to the other concepts of its piece, read. For a faulted concept that is where
+  the root cause lies; for a concept the student got right it is the conceptual trace, the confirmed links between
+  concepts, which is as much part of the diagnosis as the faults. (ii) Clause coverage: a clause is covered when a
+  labelled rule edge names it (a misconception / error edge labelled held or correct, a concept edge labelled
+  confirmed or broken). A shown level way does not count here: it says how the student reads the code, not which
+  rule the clause applies. The walk stops with reason "sufficient" when both hold, and with "half_stop" when no
+  concept is left to go to. When clauses remain uncovered (up to depth D), they bring in concepts the walk has not
+  entered yet: BM25 of those clauses against the unvisited concepts of the start pool, the best N, no model call.
+  This has its own cap of N, so it does not compete with the concepts already waiting to be read, and it is what
+  lets a correct multi-concept answer, whose labels give no direction of their own, reach every concept the
+  student wrote about. Otherwise the walk goes on to depth D, followed by one **closing round** in which the
+  concepts entered last have their misconception edges and level ways read (reason "max depth"). The clauses no
+  evidence covers are reported as unexplained.
+
+Every prompt and reply is cached in `experiments/llm_cache/` by the exact text of the prompt, so a re-run asks only
+the prompts that changed and gives the same result.
+
+### Stage 4. From labels to faults (rules, no model)
+
+Each kept edge labelled held is a candidate fault. Nothing is deleted from the record; the rules decide what counts.
+
+- **Error beside a misconception.** A held error beside a held misconception on the same concept is evidence
+  (`error_evidence`), not a second fault.
+- **Several misconceptions.** Every held misconception stays: a student can hold several at once, and the judgement
+  was made at the label step, edge by edge. A held misconception resting on the same clauses as a stronger one on
+  the same concept is marked `shares_evidence_with` that edge (the graph words one wrong idea in several ways, e.g.
+  IfConditionWatched / IfWaitsForCondition on if_statement; both come out held, and the comparison with the gold
+  counts the pair as one).
+- **One fault, one place.** The same misconception held at both ends of a prerequisite edge is filed once: at the
+  concept the graph marks as `primary` for it when the roles decide, and otherwise at the dependent concept.
+- **Shadows.** A held label on a prerequisite or on a generic concept that rests only on the clauses of a stronger,
+  more specific label is a shadow of that label: it is listed under `shadowed`, is not a fault, cannot be the root
+  cause and sets no level.
+- **Broken edges.** A broken A → B says the student did not carry A into B, so the fault sits at B. A broken edge
+  resting on the same clauses as a held misconception is that misconception's consequence (`consequence_of`), not
+  a fault of its own.
+
+### Stage 5. Root cause (rule, no model)
+
+From each concept with a fault the prerequisite edges of G are walked backwards; whenever a concept reached that
+way has a fault of its own (a held misconception, or it is the target of a broken prerequisite edge that is not a
+consequence), the candidate moves back to it. Between the candidates the one with the fewest prerequisites of its
+own in G is taken, and at a tie the one whose label has the higher confidence. Alphabetical order never decides.
+
+### Stage 6. Level of each concept (rule, no model)
+
+The model is never asked for a level; it only said in 3.3 whether a way was shown. A concept is L0 when a fault is
+kept on it (the level then reads the edge of that misconception and carries the L0 way's own text from
+`level_mis_links` as `rule`) or when the only ways shown on it are L0 ways (everyday reading, inconsistent trace).
+Otherwise it gets the highest level with a shown way, because the levels are cumulative and an answer at L4 also
+does L3. A concept with no fault and no shown way gets no level. A held error node sets no level.
+
+### Stage 7. Overall level (rule, no model)
+
+The root-cause concept's level. For an answer with no fault, the level reached on at least half of the concepts the
+answer touched (the levels sorted from high to low, the middle one). Because a held error sets no level, the
+overall level is empty when the root cause carries only an error (MY35).
+
+The output (`<sid>_diagnosis.json`) also lists the evidence, which edge covers each clause, the uncovered clauses,
+the stop reason (sufficient / half_stop / max depth) and the number of prompts per step (prune, label). The model
+never answers from its own knowledge: every label is an edge of the graph plus the clauses of the answer it rests
+on.
 
 Results over the 27 gold-labelled scenarios that have a stored diagnosis (`python src/compare.py`, full table in
 `results/stage2_results.md`; gold is used for checking only): held misconception set right in 27/27, every gold
@@ -440,7 +486,7 @@ comes only from the student's answer (the while loop compared with a do-while in
 missing `break` in S023 and S073, compiling in S080). Running the report on that file marks those misses
 `xfail`.
 
-## Tests (`pytest -q`, 247 passing: 228 for Stage 1, 19 for Stage 2)
+## Tests (`pytest -q`, 247 passing: 228 for Stage 1, 19 for Stages 2 to 7)
 
 - masking keeps length and blanks literals and comments; statement splitting keeps a `for` header whole;
   shell segments are cut correctly;
