@@ -16,7 +16,8 @@ The method has seven stages. This README and the README of every scenario use th
 | 6 | level of each concept (L0 to L4) | no | `src/traverse.py` |
 | 7 | overall level | no | `src/traverse.py` |
 
-Stage 1 is described under "Stage 1: what is being done", "How the matcher works" and "How the subgraph is taken
+The design of the knowledge graph is described under "How the knowledge graph was constructed" and "How a
+learning-progression level attaches to a concept". Stage 1 is described under "Stage 1: what is being done", "How the matcher works" and "How the subgraph is taken
 out"; Stages 2 to 7 under "Stages 2 to 7: the walk and the diagnosis".
 
 ## The 40 scenarios (MY01 to MY40)
@@ -113,6 +114,234 @@ Notes on the set:
   they were: MY05 and MY12 (CharNotNumeric is now filed at `char`, its primary concept, instead of
   `char_arithmetic`), MY18 (the root cause OffByOneBound is now at `loop_control` instead of `off_by_one_error`, and
   ArrayRangeInclusive and IdiomOverridesCode are held as well) and MY02 (`integer_division` is now L0).
+
+## How the knowledge graph was constructed
+
+The graph covers Chapter 1 of Sedgewick & Wayne, *Introduction to Programming in Java*, 1st ed. (sections 1.1 to 1.6), and was checked against the book and *Think Java*, 2nd ed. Every book quote in the graph is checked against these editions.
+
+**What it holds** (`data/raw/chapter1_kg_updated.json`, v3.9.8):
+- **Nodes:** 6 sections, 36 topics, 173 concepts, 255 misconceptions, 41 errors and 865 levels.
+- **Edges:**
+  - **contains** (209): section → topic → concept, where the book teaches it.
+  - **prerequisite** (253): which concept must be learned before another, with the book passage.
+  - **precedes** (5) and **section_prerequisite** (7): the order of the six sections, and which later section reuses an earlier one.
+  - **parallel** (35): two concepts easily mixed up, and how they differ.
+  - **misconception** (476) and **error** (93): the edge logic states the mistake, and the twin logic the correct rule.
+  - **has_level** (865): concept → level L0 to L4. The edge logic lists the ways of reaching the level and the exact rule each way tests (3,079 ways).
+
+### The rules of construction, and how the design satisfies them
+
+Each rule starts from the exact words of a paper, turns them into a rule for the graph, and is applied to all the items it covers. The last column says which of four questions the rule helps answer, and how:
+
+- **Q1.** "How do we validate ontologies."
+- **Q2.** "To build java computer science concept inventories when it comes to learning progression analysis."
+- **Q3.** "It is not traceable in the knowledge graph"
+- **Q4.** "How do you handle ambiguity for that I have to look into the research."
+
+| No. | Rule from the paper (exact words) | Rule for the graph | Applied to | Which question it answers, and how |
+|---|---|---|---|---|
+| 1 | “for target dimensions, accuracy, consistency, completeness, timeliness and redundancy are adopted for classfication” — Xue & Zou [89], p. 2 | Every concept has exactly one name. | 173 concepts | Q1: each book term maps to one named concept. Q4: one name, so two concepts are never confused. |
+| 2 | “for target dimensions, accuracy, consistency, completeness, timeliness and redundancy are adopted for classfication” — Xue & Zou [89], p. 2 | Every concept has exactly one definition. | 173 concepts | Q2: the inventory states what each concept is. Q4: one definition, so its meaning is fixed. |
+| 3 | “This is a response where the student manifests a correct grasp of some but not all aspects of the problem.” — Lister et al. [84], p. 2 | Every concept has exactly five levels (L0-L4). | 173 concepts | Q2: every concept has the full L0–L4 progression. |
+| 4 | “(1) Establish topics. Determine the topics that are important to faculty members.” — Taylor et al. [90], p. 9 | Every concept is taught in exactly one topic. | 173 concepts | Q1: each concept sits where the book teaches it. Q2: the inventory follows the book’s topics. |
+| 5 | “This is a response where the student manifests a correct grasp of some but not all aspects of the problem.” — Lister et al. [84], p. 2 | Every level code is one of L0, L1, L2, L3, L4. | 865 levels | Q2: all concepts use the same five levels. |
+| 6 | “At the development stage, the researchers define the assessment construct” — Jin et al. [91], p. 6 | Every level has exactly one criterion. | 865 levels | Q2: each level is described before any student data. Q4: one criterion, so a level is read one way. |
+| 7 | “At the development stage, the researchers define the assessment construct” — Jin et al. [91], p. 6 | Every level has one deciding question. | 865 levels | Q4: the deciding question settles an answer that sits between two levels. |
+| 8 | “identity and unity are the most important philosophical notions we use in our methodology” — Guarino & Welty [92], p. 4 | Every level is attached to exactly one concept by a has_level edge. | 865 levels | Q2: each level belongs to one concept’s progression. Q3: every level traces to its concept through its has_level edge. |
+| 9 | “At the development stage, the researchers define the assessment construct” — Jin et al. [91], p. 6 | Every way has one of the 13 rule categories. | 3,079 ways | Q2: every way is one of the 13 kinds of evidence for a level. |
+| 10 | “At the development stage, the researchers define the assessment construct” — Jin et al. [91], p. 6 | Every way states one exact rule. | 3,079 ways | Q3: the way names the exact rule it tests. Q4: one rule, so the test has one reading. |
+| 11 | “At the development stage, the researchers define the assessment construct” — Jin et al. [91], p. 6 | Every way states its edge logic, which is its exact rule. | 3,079 ways | Q2: says, by its exact rule, how an answer reaches the level. Q4: the evidence is stated, not guessed. |
+| 12 | “This is a response where the student manifests a correct grasp of some but not all aspects of the problem.” — Lister et al. [84], p. 2 | The rule category of a way belongs to the level its edge points to (e.g. a tracing rule only at L2). | 3,079 ways | Q1: catches a way placed at the wrong level. Q2: keeps the order of the progression (tracing at L2, relating at L3). |
+| 13 | “identity and unity are the most important philosophical notions we use in our methodology” — Guarino & Welty [92], p. 4 | Every way belongs to exactly one has_level edge. | 3,079 ways | Q3: each way traces to one concept and one level. Q4: a way cannot count for two levels. |
+| 14 | “A programming language misconception is a statement that can be disproved by reasoning entirely based on the syntax and/or semantics of a programming language.” — Chiodini et al. [29], p. 2 | A misconception, inconsistent-trace or relation-to-neighbour way names the misconception or neighbouring concept it is about. | 1,070 ways of these three kinds | Q3: a way about a misconception or a neighbouring concept points to that node. |
+| 15 | “A programming language misconception is a statement that can be disproved by reasoning entirely based on the syntax and/or semantics of a programming language.” — Chiodini et al. [29], p. 2 | Every misconception / error states one wrong belief. | 294 misconceptions and errors | Q2: each misconception in the inventory states its wrong belief. |
+| 16 | “A programming language misconception is a statement that can be disproved by reasoning entirely based on the syntax and/or semantics of a programming language.” — Chiodini et al. [29], p. 2 | Every misconception / error states one correct rule. | 294 misconceptions and errors | Q2: each misconception states the correct rule. Q4: the right answer is fixed. |
+| 17 | “A comprehensive list of validated misconceptions in some subject can be used to build formal evaluation methods like the Concept Inventory (CI)” — Caceffo et al. [28], p. 1 | Every misconception / error is linked to at least one concept. | 294 misconceptions and errors | Q2: misconceptions sit on the concepts they affect. Q3: each traces to a concept. |
+| 18 | “A nanopublication is defined as a small data container consisting of three parts: an assertion part” — Kuhn et al. [93], p. 3 | Every meaningful edge carries edge logic. | 1,891 edges | Q3: every edge carries edge logic that says why it is there. |
+| 19 | “A programming language misconception is a statement that can be disproved by reasoning entirely based on the syntax and/or semantics of a programming language.” — Chiodini et al. [29], p. 2 | Every misconception / error edge carries the correct rule (twin logic). | 564 misconception and error edges | Q2: each misconception edge states the correct rule (twin logic). Q3: the correction stays on the edge. |
+| 20 | “For the evaluation of an ontology (however built) a major part of the evaluation should be to identify the 'fit' of the ontology with a domain specific corpus.” — Brewster et al. [94], p. 2 | Every prerequisite / parallel edge has a book quote or a stated grounding. | 241 prerequisite and parallel edges | Q2: prerequisite edges come with evidence. Q3: each prerequisite and parallel edge keeps its book quote or stated grounding. |
+| 21 | “At the development stage, the researchers define the assessment construct” — Jin et al. [91], p. 6 | Every has_level edge states at least one way of reaching the level. | 865 has_level edges | Q2: every level has a has_level edge with at least one stated way. |
+| 22 | “we attempted to articulate relationships and dependencies among the consensus goals that define potential pathways through the goals.” — Rich et al. [87], p. 4 | No prerequisite cycle. | 173 concepts | Q1: a cycle would make the prerequisite order impossible. Q2: the progression has a clear start. |
+| 23 | “we attempted to articulate relationships and dependencies among the consensus goals that define potential pathways through the goals.” — Rich et al. [87], p. 4 | No parallel (contrast) edge on a prerequisite path. | 173 concepts | Q1: two concepts cannot be both parallel and on a prerequisite path. Q4: an edge has one meaning. |
+| 24 | “we attempted to articulate relationships and dependencies among the consensus goals that define potential pathways through the goals.” — Rich et al. [87], p. 4 | No concept is its own prerequisite or contrast. | 173 concepts | Q1: no concept depends on itself. |
+| 25 | “it pays too much attention to correctness and completeness and overlooks other issues such as timeliness and redundancy” — Xue & Zou [89], p. 2 | No redundant prerequisite (one already implied by a longer path). | 173 concepts | Q1: no redundant prerequisite edges, so the order stays minimal. |
+| 26 | “unambiguity is based on whether an answer may have multiple interpretations” — Fowler et al. [88], p. 16 | Every way states its 'correct' check. | 3,079 ways | Q4: every way is checked to be correct. |
+| 27 | “unambiguity is based on whether an answer may have multiple interpretations” — Fowler et al. [88], p. 16 | Every way states its 'unambiguous' check. | 3,079 ways | Q4: every way is checked to have only one reading. |
+| 28 | “unambiguity is based on whether an answer may have multiple interpretations” — Fowler et al. [88], p. 16 | Every way states its 'high-level / scope' check. | 3,079 ways | Q4: every way is checked to be of the right scope for its level. |
+| 29 | “for target dimensions, accuracy, consistency, completeness, timeliness and redundancy are adopted for classfication” — Xue & Zou [89], p. 2 | Every section has exactly one name. | 6 sections | Q1: each section matches a book section. Q4: one name each. |
+| 30 | “(1) Establish topics. Determine the topics that are important to faculty members.” — Taylor et al. [90], p. 9 | Every section holds at least one topic. | 6 sections | Q1: no empty section, so every book section has content. |
+| 31 | “for target dimensions, accuracy, consistency, completeness, timeliness and redundancy are adopted for classfication” — Xue & Zou [89], p. 2 | Every topic has exactly one name. | 36 topics | Q4: one name each, so topics are not confused. |
+| 32 | “identity and unity are the most important philosophical notions we use in our methodology” — Guarino & Welty [92], p. 4 | Every topic sits in exactly one section. | 36 topics | Q1: matches the book’s structure. Q3: each topic traces to one section. |
+| 33 | “(1) Establish topics. Determine the topics that are important to faculty members.” — Taylor et al. [90], p. 9 | Every topic holds at least one concept. | 36 topics | Q1: no empty topic. |
+
+**How it is checked that the design satisfies every rule:**
+- The graph is exported to RDF, and each rule runs as a SHACL shape over every item of its part (pyshacl).
+- A negative test plants one break of each rule in a small graph and checks that SHACL reports it.
+- All 33 rules hold (workbook sheet *Design rules*).
+
+### How each concept is made
+
+- It is named with the term the book uses where it teaches the construct, and given one definition quoted from the book with its page (rules 1–2).
+- It is placed in the one topic where it is taught (rule 4).
+- It gets its five levels L0–L4 (rule 3).
+- Its prerequisite and parallel edges carry the book passage that states them (rule 20).
+- Its misconceptions and errors carry the wrong rule and the correct rule (rules 15, 16, 19).
+- It also holds regex patterns that recognise it in code, used by Stage 1 and tested on 372 snippets (`python src/train.py`).
+- Each concept's view is drawn in `concept_wise_graph/<concept>/`. The chapter and section maps, with numbered edges and map keys, are in `Chapter1_KG_maps_and_keys.zip`.
+
+**References for the construction** (numbers as in the notes):
+- [14] Sedgewick & Wayne (2008), *Introduction to Programming in Java*, 1st ed.
+- [81] Downey & Mayfield (2020), *Think Java*, 2nd ed.
+- [84] Lister et al. (2006), ITiCSE '06.
+- [88] Fowler et al. (2025), ACM TiiS 15(4).
+- [89] Xue & Zou (2023), IEEE TKDE 35(5).
+- [90] Taylor et al. (2014), *Computer Science Education* 24(4).
+- [91] Jin et al. (2019), *IJSE* 41(10).
+- [92] Guarino & Welty (2002), CACM 45(2).
+- [93] Kuhn et al. (2016), PeerJ CS 2:e78.
+- [94] Brewster et al. (2004), LREC.
+- [28] Caceffo et al. (2019), ITiCSE '19.
+- [29] Chiodini et al. (2021), ITiCSE '21.
+- [87] Rich et al. (2017), ICER '17.
+
+## How a learning-progression level attaches to a concept (from the workbook `Chapter1_KG_v3_9_7.xlsx`)
+
+```
+concept ──has_level──► concept@L0 … concept@L4      (5 level nodes per concept, 865 in all)
+            └─ ways: each way = rule category + exact rule + boundary + source
+                 L0 misconception way ──► misconception node it is about
+                 L3 relation way      ──► neighbouring concept
+```
+
+### Many ways of reaching each level
+
+A student can show the same level in different ways. One explains the rule, another traces the values, a third relates the construct to its neighbour. So a level is not one test but a set of **ways**, each a different kind of evidence. The workbook (sheets *Ways and rule categories*, *Rule category to level*) defines 13 ways, each tied to one rule category. Each concept has its own wording of every way that applies to it (sheet *Level edge Logic*, 3,079 rows).
+
+| Level | Way | What the answer does | Boundary with the next level |
+|---|---|---|---|
+| **L0** | everyday reading (E) | reads the code with the everyday or maths meaning of its words | any correct, programming-specific statement makes it L1 or higher |
+| | misconception (M) | applies a documented wrong rule that the language disproves | a single slip in an otherwise rule-correct trace is L2 with an error |
+| | inconsistent trace (T) | applies the right rule at one place and a wrong rule at another in the same trace | a slip under one consistent, correct rule is L2 with an error |
+| **L1** | names the element (N) | names or describes the construct correctly | covering every part of the code in order is L2 |
+| | states the rule (S) | states the rule, without applying it to the values | applying it to this code's values is L2 |
+| **L2** | line-by-line trace (LT) | executes each statement in order with its values | stating the purpose of the whole is L3 |
+| | output prediction (OP) | gives the output and justifies it value by value | a bare correct output is not levelled |
+| | one-step execution (OS) | gives the change one execution makes | one step of a longer fragment is L1 |
+| **L3** | relation to a neighbour (R) | explains how the concept works with another construct in the same code | two separate correct rules are L1; running them in sequence is L2 |
+| | purpose of the whole (P) | says what the code does for all inputs, deduced from the code | a purpose guessed from traced cases is L2 |
+| **L4** | predict a change (C) | predicts what a change keeps or breaks, without re-tracing | re-tracing the changed code is L2 |
+| | diagnose an error (D) | names the rule broken, the kind of error and the class of inputs that triggers it | fixing one given failing case is L3 |
+| | transfer to a new program (X) | uses the construct in an unseen problem, knowing when it is the right tool | reproducing a familiar program is L1–L3 |
+
+**How many ways each concept has:**
+- **Once per concept:** everyday reading, names the element, states the rule, the three L2 ways, purpose of the whole, predict a change and transfer.
+- **Once per related node:**
+  - misconception: one per misconception attached to the concept;
+  - relation to a neighbour: one per neighbouring concept;
+  - diagnose an error: one per error or wrong rule it diagnoses.
+- **Inconsistent trace:** at most one per concept (148 of the 173 have it).
+
+So L1 always has 2 ways and L2 always 3, while L0 (1–20), L3 (2–11) and L4 (3–10) vary by concept.
+
+**Example, `for_loop` (37 ways):**
+
+| Level | Ways | One of them (exact rule) |
+|---|---|---|
+| L0 | 15: 1 everyday reading, 13 misconceptions, 1 inconsistent trace | misconception: "The initialization of a for loop runs again after a pass of the body." (right rule: it runs exactly once) |
+| L1 | 2: names the element, states the rule | "for (<initialize>; <boolean expression>; <increment>) { <statements> }" |
+| L2 | 3: trace, output prediction, one step | trace: "Run the initializer once; then repeatedly: test the condition (stop if false), execute the body, run the update." |
+| L3 | 9: 8 relations, 1 purpose | relation to array indexing: "for (int i = 0; i < N; i++) gives i each valid index 0..N-1 exactly once" |
+| L4 | 8: 1 predict a change, 6 diagnose an error, 1 transfer | diagnose: "A ; right after for (...) is an empty statement that is the whole loop body … silent logic error" |
+
+**Reaching a level:**
+- **One shown way is enough.** The student does not need every way of a level.
+- **The answer's level is the highest level at which some way is shown,** because the levels are cumulative: an answer that relates the parts has also applied the rules.
+- **L0 is the exception:** if a misconception way is shown (the wrong rule is held), the concept is L0 whatever else is shown.
+
+### Source of every level, L0 to L4
+
+The five levels are the SOLO levels for code (Lister et al., 2006) matched to the neo-Piagetian stages (Lister, 2011; Teague & Lister, 2014). Each level and each of its ways is mapped from the source below. The quotes are verbatim, with the PDF page.
+
+**L0 Prestructural / sensorimotor.** No working model of the concept.
+- Lister et al. 2006, p. 2: *"a student who gives a prestructural response is manifesting either a significant misconception of programming, or is using a preconception that is irrelevant to programming."*
+- Teague & Lister 2014, p. 1: *"Novices who cannot trace code are working at the first stage, the sensorimotor stage."* and *"It is at this stage that misconceptions about basic programming concepts most influence the novice's behaviour"*
+
+| Way | Source |
+|---|---|
+| everyday reading | Pea 1986, p. 2: *"programming is a formal system that interprets each part of a program … in terms of rules"*; Lister et al. 2006, p. 2 ("preconception that is irrelevant to programming") |
+| misconception | ProgMiscon 2021, p. 2: *"A programming language misconception is a statement that can be disproved by reasoning entirely based on the syntax and/or semantics of a programming language."*; Teague & Lister 2014, p. 1 |
+| inconsistent trace | Teague & Lister 2014, p. 1 (sensorimotor: "cannot trace code") |
+
+**L1 Unistructural.** One correct aspect.
+- Lister et al. 2006, p. 2: *"a response where the student manifests a correct grasp of some but not all aspects of the problem."*
+
+| Way | Source |
+|---|---|
+| names the element | Lister et al. 2006, p. 2 |
+| states the rule | Lister et al. 2006, p. 2 |
+
+**L2 Multistructural / preoperational.** All parts, not related.
+- Lister et al. 2006, p. 2: *"an understanding of all parts of the problem, but does not manifest an awareness of the relationships between these parts"*
+- Teague & Lister 2014, p. 1: *"Novices who are working at the preoperational stage … can trace code but do not yet have a well-developed ability to reason about the code's purpose, other than by induction from input/output pairs."*
+- Smith et al. 2025, p. 1: *"whether the student describes each line individually (many segments) or the code as a whole (fewer segments)."*
+
+| Way | Source |
+|---|---|
+| line-by-line trace | Lister et al. 2006, p. 2; Teague & Lister 2014, p. 1; Sorva 2013, p. 2: *"the purpose of a notional machine is to explain program execution."* |
+| output prediction | Lister et al. 2006, p. 2; Teague & Lister 2014, p. 1 |
+| one-step execution | Sorva 2013, p. 2: *"A notional machine is a characterization of the computer in its role as executor of programs"*; Lister et al. 2006, p. 2 |
+
+**L3 Relational / concrete operational begins.** The parts integrated.
+- Lister et al. 2006, p. 2: *"the student integrates the parts of the problem into a coherent structure, and uses that structure to solve the task"*
+- Smith et al. 2025, p. 1 (the code described as a whole, in fewer segments).
+
+| Way | Source |
+|---|---|
+| relation to a neighbour | Lister et al. 2006, p. 2 |
+| purpose of the whole | Lister et al. 2006, p. 2; Teague & Lister 2014, p. 1; Smith et al. 2025, p. 1 |
+
+**L4 Extended abstract / concrete operational (conservation, reversibility).** Beyond the given code.
+- Lister et al. 2006, p. 3: *"the student response goes beyond the immediate problem to be solved, and links the problem to a broader context."* For example, *"a comment that the code will only work for arrays that are sorted."*
+- Lister 2011, p. 6: *"The archetypal manifestation of concrete thinking is the ability to reason about quantities that are conserved, and processes that are reversible."*
+
+| Way | Source |
+|---|---|
+| predict a change | Lister 2011, p. 6; Lister et al. 2006, p. 3 |
+| diagnose an error | Lister et al. 2006, p. 3 ("only work for arrays that are sorted"); Logic-errors survey (ASEE), p. 2: *"A logic error causes incorrect program execution, in contrast to a syntax error, which prevents execution."* |
+| transfer to a new program | Lister et al. 2006, p. 3 |
+
+**Where the sources disagree:**
+- Jimoyiannis (2011) codes some misconception-driven answers at L1–L2, not L0.
+- Jimoyiannis (2011) and Vrachnos & Jimoyiannis (2017) code modifying given code as L3, not L4.
+
+**References**
+- Lister, R., Simon, B., Thompson, E., Whalley, J., Prasad, C. (2006). Not seeing the forest for the trees: novice programmers and the SOLO taxonomy. *ITiCSE 2006*, 118–122.
+- Lister, R. (2011). Concrete and other neo-Piagetian forms of reasoning in the novice programmer. *ACE 2011*, CRPIT 114, 9–18.
+- Teague, D., Lister, R. (2014). Manifestations of preoperational reasoning on similar programming tasks. *ACE 2014*, CRPIT 148, 65–74.
+- Pea, R. D. (1986). Language-independent conceptual "bugs" in novice programming. *J. Educational Computing Research* 2(1).
+- Chiodini, L. et al. (2021). A curated inventory of programming language misconceptions (ProgMiscon). *ITiCSE 2021*. doi:10.1145/3430665.3456343
+- Sorva, J. (2013). Notional machines and introductory programming education. *ACM TOCE* 13(2), Article 8.
+- Smith, D. H. IV, Fowler, M., Denny, P., Zilles, C. (2025). LLM segmentation of Explain-in-Plain-English answers. *ITiCSE 2025*, arXiv:2503.12216.
+- Common logic errors for programming learners: a three-decade literature survey. ASEE.
+- Jimoyiannis, A. (2011). Using SOLO taxonomy to explore students' mental models of the programming variable and the assignment statement. *Themes in Science & Technology Education* 4(2), 53–74.
+- Vrachnos, E., Jimoyiannis, A. (2017). *Themes in Science & Technology Education* 10(1).
+
+### How the mapping works
+
+**Stored in the graph, fixed before any answer is read:**
+- Each level node has a criterion and a deciding question.
+- Each `has_level` edge lists that level's ways, each with the concept's own exact rule (3,079 ways).
+- An L0 misconception way names its misconception node, which joins a wrong belief to a level.
+
+**Worked out from each answer, never stored in the graph:**
+1. Each way is offered as an edge. The model says only whether the answer **shows** it, citing the student's clauses.
+2. **L0** if a misconception is held on the concept, or only L0 ways are shown.
+3. Otherwise the **highest level with a shown way**, since the levels are cumulative.
+4. No evidence, no level.
+
+A level always means one student, one concept, one answer.
+
+**Example (MY01):** "The (double) cast turns the division into a decimal division" holds CastAfterIntDivision, so `explicit_cast` is at **L0**.
 
 ## The knowledge graph, concept by concept
 
