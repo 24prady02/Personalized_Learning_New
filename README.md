@@ -403,7 +403,7 @@ experiments/
   config.json                                default paths and extractor settings (hops 0, keep_generic false)
   pattern_bank.json                          the compiled pattern bank summary written by train.py (the model "checkpoint")
   logs/train_log.txt                         pattern compile + pattern-test check
-  logs/subgraph_report.txt                   one line per scenario over tests/data/scenarios_gold.json, "fully covered: 30 / 30"
+  logs/subgraph_report.txt                   one line per scenario over tests/data/scenarios_gold.json
   logs/subgraph_report_not_from_code.txt     the same over scenarios_not_from_code.json (misses expected)
   logs/traverse_<sid>.txt                    trace of Stages 2 to 7: start ranking, candidates, kept edges, labels, clauses, clause coverage, levels
   llm_cache/<hash>.json                      every prompt sent in Stage 3 and the model's reply (re-runs are free and deterministic)
@@ -573,33 +573,6 @@ the stop reason (sufficient / half_stop / max depth) and the number of prompts p
 never answers from its own knowledge: every label is an edge of the graph plus the clauses of the answer it rests
 on.
 
-Results over the 27 gold-labelled scenarios that have a stored diagnosis (`python src/compare.py`, full table in
-`results/stage2_results.md`; gold is used for checking only): held misconception set right in 27/27, every gold
-"correct" misconception found in 24/27 (not in S026, S047, S057), root cause right in 26/27 (not in T017), overall
-level right in 25/27 (not in S052, T019), 148 of 191 points (one point each for held set, correct set, root cause
-and overall level, plus one per gold-scored concept level and per gold edge), 839 prompts in all, every one of
-them a prune or a label. S134 is found through the generic-concept rule: its only tagged concept is
-variable_swap, the gold misconception (VariablesHoldExpressions) sits on assignment, which Stage 1 marks generic,
-and the answer repeats the `=` that tagged it. On S007 the held set is exact (OffByOneBound at loop_control, root
-cause loop_control, L0). One of the two overall-level misses is S052, L3 where the gold says L2: the student's "an
-average of 5 new numbers, no file" matches the redirection way "`A > f` followed by `B < f` has the same effect as
-`A | B`, except that the pipe creates no file", and "args is empty" matches "args.length is the number of arguments
-typed (0 if none)"; the graph files both ways at L3, the gold levels the answer L2. The walk read the edges as the
-graph states them; the disagreement is between the graph's placement of those ways and the gold.
-
-The way-label prompt shows the model the concept, the way's name and the way's text, and nothing else. An earlier
-form also showed the level's name and deciding question; on S057 the model then followed the deciding question's
-boundary ("fixing one given failing case is L3") and rejected two L4 ways whose own text the student matched, which
-put the answer at L2 overall instead of the gold's L4. Judging the way against its own text, like every other edge,
-gives L4.
-
-Two earlier versions were run over the same 10 scenarios and removed. One asked the model for the start concepts
-(a START prompt) and the stop decision (a SUFFICIENCY prompt): same 42/72 points as the rule-based start and stop
-of the time, 126 prompts against 114; neither prompt changed a diagnosis. The other levelled a concept with one
-level-ladder prompt over all its ways after the walk, and only for concepts on a kept path: 42/72 points, overall
-level right in 6/10, with correct answers (S026, S047) getting no level at all because no misconception edge was
-labelled and the level ways were never searched. Making the ways edges of the search raised that to 46/72 and 8/10.
-
 `evaluate.py` flags: `--hops 1` adds one prerequisite hop (off by default, so nodes are exactly the tagged
 concepts); `--keep-generic` switches the generic-node rule below off; `--no-figures` skips matplotlib /
 networkx. Defaults come from `experiments/config.json`.
@@ -645,8 +618,8 @@ error or failed snippet.
    (name, criterion, deciding question).
 5. `linked_misconception` entries of every way, as `{level_node, misconception, way, rule_type, exact_rule}`.
 6. **Connectivity is reported, never repaired.** `components` lists the connected pieces of the concept
-   nodes over the concept edges. When there is more than one piece a warning names them. Six of the eleven S
-   subgraphs (20 of all 31) fall into several pieces because the KG has no edge between concepts that occur together
+   nodes over the concept edges. When there is more than one piece a warning names them. Many
+   subgraphs fall into several pieces because the KG has no edge between concepts that occur together
    (for example loop_body and for_loop, arithmetic_operators and remainder_operator, run and
    command_line_args, do_while_loop and loop_control). Those are gaps in the KG; the extractor does not invent
    edges to close them.
@@ -660,7 +633,7 @@ counts{tagged, concepts, generic, from_hop, concept_edges, misconceptions, mis_e
 warnings
 ```
 
-## Results
+## What `evaluate.py` writes
 
 `evaluate.py` draws each subgraph: concept nodes (dark blue, generic ones light blue) laid out per connected
 piece, prerequisite arrows and dashed parallel edges, the five level squares under each concept, misconception
@@ -669,38 +642,6 @@ per concept. `results/results.md` opens with the summary table (counts, the edge
 node ids) and then lists each scenario with its code, figure, concept nodes, edges with logic, misconception
 nodes and level counts. `results/tables/summary.csv` holds the same per-scenario data. The order of every list in the outputs is
 fixed (sorted ids), so two runs produce identical files.
-
-Current run over the earlier gold-labelled set (`tests/data/scenarios_gold.json`). The eleven S scenarios are shown
-here; all 31, with the twenty T scenarios, are in `results/tables/summary.csv`:
-
-| scenario | concept nodes | concept edges | misconception/error edges | misconception nodes | level nodes | pieces |
-|---|---|---|---|---|---|---|
-| S000 (reference) | 4 | 2 | 18 | 17 | 20 | 2 |
-| S001 | 4 | 5 | 18 | 15 | 20 | 1 |
-| S007 | 17 | 14 | 141 | 104 | 85 | 3 |
-| S008 | 19 | 16 | 141 | 108 | 95 | 4 |
-| S021 | 12 | 10 | 87 | 69 | 60 | 2 |
-| S026 | 2 | 1 | 17 | 15 | 10 | 1 |
-| S047 | 2 | 1 | 7 | 6 | 10 | 1 |
-| S052 | 8 | 7 | 17 | 16 | 40 | 2 |
-| S057 | 26 | 22 | 167 | 120 | 130 | 4 |
-| S134 | 2 | 1 | 17 | 15 | 10 | 1 |
-| S137 | 4 | 5 | 18 | 15 | 20 | 1 |
-
-## Coverage report and dataset split
-
-`evaluate.py` also prints one line per scenario (tagged concepts, node / edge / misconception / level counts,
-pieces, and the gold concepts not found) and ends with `fully covered: N / 30`; `results/metrics.json` holds
-the same as numbers (mean gold-concept recall, share of gold among the nodes, mean sizes, subgraphs in one piece). On the earlier gold-labelled set (`tests/data/scenarios_gold.json`) every gold
-concept of all thirty scenarios is found from the code: 30 / 30 (S000 is the reference case and is not counted). The extra nodes relative to gold are
-non-generic constructs really present in the code (the loop around S057's division, for instance); only the
-question and answer, read in a later stage, can say which of them a scenario is about.
-
-The other ten scenarios are kept in `scenarios_not_from_code.json` because code alone cannot produce their
-gold concepts: the "code" is prose or a bare declaration (S009, S010, S012, S015, S068), or a gold concept
-comes only from the student's answer (the while loop compared with a do-while in S005, division in S016, the
-missing `break` in S023 and S073, compiling in S080). Running the report on that file marks those misses
-`xfail`.
 
 ## Tests (`pytest -q`, 247 passing: 228 for Stage 1, 19 for Stages 2 to 7)
 
@@ -713,27 +654,6 @@ missing `break` in S023 and S073, compiling in S080). Running the report on that
   the right concepts;
 - every gold concept of every scenario in the earlier gold-labelled set (`tests/data/scenarios_gold.json`) is found, and the concept nodes are exactly
   the tagged concepts (no hop, no node the code did not show).
-
-## Concepts the knowledge graph does not have
-
-Constructs that chapter-1 student code can contain and that no concept node covers, so no regex can produce a
-node for them. The graph is kept at its 173 concepts on purpose; an extension with sixteen concepts for these
-constructs was built and then withdrawn (git history, commit 898436e) and can be restored if wanted.
-
-| Construct | Example | Nearest existing concept |
-|---|---|---|
-| String methods and string comparison | `s.length()`, `s.charAt(0)`, `s.equals(t)`, `s == t` | api (lists the calls), string_type |
-| Method definition, return, parameters, recursion | `static int sq(int x) { return x * x; }` | main_method, method_call (calls only) |
-| import / package | `import java.util.Scanner;` | none |
-| null and object references | `String s = null;` | primitive_vs_reference, array_reference (arrays only) |
-| Unary operators | `-x`, `+x` | arithmetic_operators (binary only), logical_operators (`!`) |
-| Bitwise and shift operators | `a & b`, `x << 1` | exclusive_or (`^` only) |
-| Hex, octal, binary and underscore literals | `0x1F`, `0b101`, `1_000_000` | number_conversion (toBinaryString only) |
-| Character methods | `Character.isDigit(c)`, `Character.toUpperCase(c)` | char, api |
-| StringBuilder | `new StringBuilder()` | none |
-| Exceptions | `try { } catch (Exception e) { }`, `throw` | run_time_error (effects only) |
-| Wrapper types and autoboxing | `Integer n = 5;` | integer_constants, parsing |
-| Collections | `ArrayList<Integer>` | none (later chapter) |
 
 ## Pattern changes made in the KG (v3.9.5-reader4)
 
