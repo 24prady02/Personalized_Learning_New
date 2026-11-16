@@ -17,8 +17,9 @@ The method has seven stages. This README and the README of every scenario use th
 | 7 | overall level | no | `src/traverse.py` |
 
 The design of the knowledge graph is described under "How the knowledge graph was constructed" and "How a
-learning-progression level attaches to a concept". Stage 1 is described under "Stage 1: what is being done", "How the matcher works" and "How the subgraph is taken
-out"; Stages 2 to 7 under "Stages 2 to 7: the walk and the diagnosis".
+learning-progression level attaches to a concept". Stage 1 is described under "Stage 1: what is being done" and Stages 2 to 7 under "Stages 2 to 7: the walk and the
+diagnosis". After the Stage 7 explanation, "The stages through the code files" explains every stage through the
+code: the files, the functions, the variables and the output file.
 
 ## The 40 scenarios (MY01 to MY40)
 
@@ -556,8 +557,8 @@ own in G is taken, and at a tie the one whose label has the higher confidence. A
 
 ### Stage 6. Level of each concept (rule, no model)
 
-The model is never asked for a level; it only said in 3.3 whether a way was shown. A concept is L0 when a fault is
-kept on it (the level then reads the edge of that misconception and carries the L0 way's own text from
+The model is never asked for a level; it only said in 3.3 whether a way was shown. A concept is L0 when a
+misconception is held on it and is not a shadow (the level then reads the edge of that misconception and carries the L0 way's own text from
 `level_mis_links` as `rule`) or when the only ways shown on it are L0 ways (everyday reading, inconsistent trace).
 Otherwise it gets the highest level with a shown way, because the levels are cumulative and an answer at L4 also
 does L3. A concept with no fault and no shown way gets no level. A held error node sets no level.
@@ -573,6 +574,26 @@ the stop reason (sufficient / half_stop / max depth) and the number of prompts p
 never answers from its own knowledge: every label is an edge of the graph plus the clauses of the answer it rests
 on.
 
+## The stages through the code files
+
+The sections above explain what each stage does. The sections from here on explain the same seven stages through
+the code: which file and function does each step, the variables it keeps, and the file it writes.
+
+| Stage | File | Functions | Section below |
+|---|---|---|---|
+| 1 | `src/preprocessing.py` | `mask_java`, `split_statements`, `command_segments`, `Prepared` | How the matcher works |
+| 1 | `src/model.py` | `tag_code`, `extract_subgraph`, `subgraph_from_code` | How the matcher works; How the subgraph is taken out |
+| 2 | `src/traverse.py` | `Graph`, `split_clauses`, `select_start`, `bm25_scores` | How the subgraph is read for the walk; Stage 2 in code |
+| 3 | `src/traverse.py` | `traverse` (the loop), `parse_prune`, `parse_label`, `parse_label_set`, `covered_clauses`, `LLM.ask` | Stage 3 in code |
+| 3 | `src/prompts.py` | `PRUNE`, `LABEL_MIS`, `LABEL_CONCEPT`, `LABEL_WAY` | Stage 3 in code |
+| 4 | `src/traverse.py` | `mark_shared_evidence`, `filed_at_dependent`, `shadowed`, `same_words` | Stage 4 in code |
+| 5 | `src/traverse.py` | `traverse` (the root-cause walk) | Stage 5 in code |
+| 6, 7 | `src/traverse.py` | `traverse` (the level rules, the overall level) | Stages 6 and 7 in code |
+
+The scripts around them: `src/demo.py` runs all seven stages on one scenario and writes its page, `src/evaluate.py`
+runs Stage 1 over a scenario file, `src/train.py` checks the patterns, `src/steps_report.py` and `src/viz.py` write the
+step report and the figures of a run, and `src/upload.py` builds the run folder.
+
 `evaluate.py` flags: `--hops 1` adds one prerequisite hop (off by default, so nodes are exactly the tagged
 concepts); `--keep-generic` switches the generic-node rule below off; `--no-figures` skips matplotlib /
 networkx. Defaults come from `experiments/config.json`.
@@ -582,7 +603,7 @@ stored in the KG. It compiles every pattern of every channel, runs the must_tag 
 all 166 code-visible concepts, and saves the pattern-bank summary and a log. It exits non-zero on any compile
 error or failed snippet.
 
-## How the matcher works (`model.py`, part 1)
+## Stage 1 in code: how the matcher works (`preprocessing.py`, `model.py`)
 
 1. `mask_java` blanks the contents of string and char literals and of comments, keeping every length and
    newline, so a `%` or `;` inside `"..."` cannot match a pattern. Line numbers of hits stay correct.
@@ -603,7 +624,7 @@ error or failed snippet.
    Concepts with `code_visible: false` (7 of the 173) never tag. `aliases` are never used.
    The program is masked and split once and shared by all 166 pattern sets.
 
-## How the subgraph is taken out (`model.py`, part 2)
+## Stage 1 in code: how the subgraph is taken out (`model.py`)
 
 1. **Tagged concepts, minus bare generic ones.** The KG marks 21 concepts `generic` (statement, identifier,
    literal, int, assignment, variable, …); they fire on almost any Java line. A generic concept stays a node
@@ -632,6 +653,160 @@ levels, level_edges (with ways), level_mis_links, components,
 counts{tagged, concepts, generic, from_hop, concept_edges, misconceptions, mis_edges, levels, level_edges, level_mis_links, components},
 warnings
 ```
+
+## How the subgraph is read for the walk (`traverse.py`, class `Graph`)
+
+`traverse(sg, sc, cfg, llm, log)` is the one function that runs Stages 2 to 7. It takes the Stage 1 subgraph `sg`, the
+scenario `sc` (code, question, answer) and the `traversal` settings, and returns the diagnosis as a dict. It first
+wraps the subgraph in a `Graph`, which builds six lookups once so that nothing is searched twice:
+
+| Lookup | What it gives |
+|---|---|
+| `mis_by_concept` | the misconception / error edges that leave a concept |
+| `cedges_by_concept` | the prerequisite / parallel edges at a concept, from either end |
+| `mis_records` | the record of a misconception or error (wrong belief, correct rule) |
+| `piece_of` | the connected piece a concept is in (from `components`) |
+| `level_link`, `level_link_rule` | for a (concept, misconception) pair, the L0 level node and the L0 way's own text |
+| `ways_by_concept` | the level ways of a concept as edges: each way of a `has_level` edge becomes `lvl:<concept>@<L>#i` with the way's exact rule as its `logic`; ways of kind `misconception` are skipped |
+
+`edge_text(e)` is the one line shown to the model for an edge: `id | wrong rule: … | right rule: …` for a
+misconception / error edge, `id | level L way W: …` for a level way, `id | rule: …` for a concept edge.
+
+Every model call goes through `LLM.ask(prompt, step)`. The key of a call is the first 24 hex digits of
+SHA-256 of `backend|model|prompt`; if `experiments/llm_cache/<key>.json` exists its reply is returned, otherwise the
+prompt is sent (`claude -p --output-format text --model <model>`, up to three attempts, 180 s each) and the prompt and
+reply are saved under that key. `step` is `prune` or `label`; the counts per step are reported in the output.
+
+## Stage 2 in code: clauses and start concepts (`traverse.py`)
+
+1. `split_clauses(answer)` removes quote characters, splits at sentence ends and `;` (`_SENTENCE_SPLIT`), takes a
+   parenthetical remark of two or more words out as its own piece (`_PAREN`; `(double)` or `(x)` stays where it is),
+   splits before `because` / `so` (`_CONNECTIVE`), and strips punctuation from each piece. The result is the list
+   `clauses`; the model later sees them as `c1: …`, `c2: …`.
+2. `select_start(g, answer, N, log)` builds the candidates: the concepts of G not marked `generic`, plus a generic
+   concept when the code text of one of its Stage 1 hits occurs in the answer (`_names_in_code`: a word must stand
+   as a whole word, so `int` does not count inside `prints`; a symbol such as `=` may stand anywhere). With at most
+   N candidates all are used. Otherwise `bm25_scores(answer, [concept_text(g, c) …])` ranks them, where
+   `concept_text` is the concept id with underscores as spaces plus the `edge_text` of its misconception and concept
+   edges. Ties go to the concept with more Stage 1 hits, then to the id.
+3. `bm25_scores(query, docs)` is plain BM25 with k1 = 1.5 and b = 0.75 over lower-cased tokens (identifiers,
+   numbers, and each symbol as its own token):
+   score(doc) = Σ over query words w of idf(w) · tf · (k1 + 1) / (tf + k1 · (1 − b + b · len(doc) / avg_len)),
+   with idf(w) = ln(1 + (n − df(w) + 0.5) / (df(w) + 0.5)).
+4. If there is no start concept the function returns at once with `status: not diagnosable from the graph`.
+
+## Stage 3 in code: the walk (`traverse.py`, `prompts.py`)
+
+State kept across the walk:
+
+| Variable | Meaning |
+|---|---|
+| `current` | the concepts expanded at this depth (at depth 1, the start concepts) |
+| `starts_at` | concept → the depth at which it is read inwards (its misconception edges and level ways) |
+| `paths` | the labelled edges the keep step kept, in order |
+| `evidence` | every labelled edge with a label other than `not applied`, kept or not |
+| `used` | ids of edges on a path (never offered again) |
+| `examined` | ids of edges ever offered to the prune step (used by the graph check) |
+| `pool` | the concepts uncovered clauses may bring in: the same candidates as the start rule |
+| `pre_in` | concept → the sources of its prerequisite edges in G |
+
+The loop is `for depth in range(1, D + 2)`; the last value is the closing round, in which `current` is cut to the
+concepts with `starts_at == depth` and nothing new is entered. At each depth, for each concept in `current`:
+
+1. **Edge search (3.1).** If `starts_at[concept] == depth` there are two families, `mis_by_concept[concept]` and
+   `ways_by_concept[concept]`. Otherwise there is one family: the edges of `cedges_by_concept[concept]` whose other
+   end is in the same piece. Edges in `used`, or already offered at this depth (`offered`), are dropped; the rest
+   are sorted primary role first, then by id.
+2. **Prune (3.2).** `prompts.PRUNE` is filled with the code, the question, the answer, the concept and one
+   `edge_text` line per edge, and asks for at most N of them. `parse_prune` reads every `{edge_id (Score: x)}` in the
+   reply, drops ids that are not among the offered edges, keeps the best N and divides by their sum, so the prune
+   scores add up to 1. With `prune_tools` set to `bm25` or `sentencebert` the same top N are taken by similarity of
+   the answer to each `edge_text` instead of the call.
+3. **Label (3.3).** The pruned misconception / error edges of the concept go into one `prompts.LABEL_MIS` call;
+   `parse_label_set` reads one line per edge, `edge_id | label | clauses: 2, 4 | confidence: 0.9`, and an edge the
+   reply leaves out is `not applied`. A level way gets its own `prompts.LABEL_WAY` call (labels `shown` / anything
+   else reads as `not applied`), and a concept edge its own `prompts.LABEL_CONCEPT` call (`confirmed` / `broken` /
+   `not applied`); both replies have three lines, `Label:`, `Clauses:`, `Confidence:`, read by `parse_label`.
+   `_clause_ids` turns "2, 4" or "c2 and c4" into clause indices and drops numbers out of range; the confidence is
+   clipped to 0..1. A label with no clause is set to `not applied`.
+4. **The candidate record.** Each labelled edge becomes
+   `{depth, source, edge, target, kind, label, clauses, quote, confidence, prune_score, score, logic, twin_logic}`
+   (plus `role` for a misconception edge and `level`, `way` for a level way). `quote` is the text of the named
+   clauses joined by `;`, and `score = prune_score × confidence` (0 when not applied). A record whose label is not
+   `not applied` is appended to `evidence`.
+5. **Keep (3.4).** After all concepts of the depth: an edge reached from both ends counts once, with its higher
+   score. `tier(c)` is 0 for a held misconception or a broken edge, 1 for a held error, 2 otherwise. All tier-0
+   records are kept; the others are sorted by (tier, −score) and fill what is left of N places. The kept records go
+   to `paths` and their ids to `used`.
+6. **Next concepts (3.5).** `nxt` collects: the source of each kept held misconception / error; both ends of each
+   kept concept edge, and an end not yet in `starts_at` gets `starts_at[end] = depth + 1`; nothing for a level way.
+7. **Graph check (3.6 i).** For every concept in `starts_at`: if its depth is still ahead, or one of its concept
+   edges inside its piece is not in `examined`, it is added to `pending` and to `nxt`.
+8. **Clause coverage (3.6 ii).** `covered_clauses(evidence, clauses, rules_only=True)` maps each clause to the first
+   evidence record that names it, skipping level ways. If clauses are uncovered and `depth <= D`, their text is
+   scored by BM25 against `concept_text` of the pool concepts not yet in `starts_at` or `nxt`; those with a score
+   above 0, at most N, are entered with `starts_at = depth + 1`.
+9. **Stop.** No `pending` and every clause covered: `stop_reason = "sufficient"`. No concept in `nxt`:
+   `"half_stop"`. Otherwise `current = nxt` and the loop goes on; if it runs out, the reason stays `"max depth"`.
+
+## Stage 4 in code: from labels to faults (`traverse.py`)
+
+1. `held_all` is every record on `paths` labelled `held`. A held error on a concept that also has a held
+   misconception is moved to `evidence_errors` (output `error_evidence`); the rest is `held`.
+2. `mark_shared_evidence(held)` sorts by score and marks a held misconception `shares_evidence_with` a stronger one
+   on the same concept when the two share a clause (`same_words`). Nothing is dropped.
+3. `filed_at_dependent(held, pre_in)` handles the same misconception held at two concepts. If the two edges have
+   different roles and one is `primary`, the record that is not primary is dropped. Otherwise the record at the
+   prerequisite end is dropped, so the fault is filed at the dependent concept.
+4. `shadowed(kept, all_held, pre_in, generic)` returns `edge → the edge it is a shadow of`. A held label x is a
+   shadow of a kept label y when the clauses of x are all among the clauses of y and one of these holds: it is the
+   same misconception and y is `primary` while x is not; x is on a generic concept and y is not; or the concept of x
+   is a prerequisite of the concept of y, over any number of prerequisite edges, and the confidence of x is not
+   higher. Labels on generic concepts are tested first, then by rising confidence, so the specific, confident label
+   is the one that stays. Shadows are removed from `held` and listed under `shadowed`.
+5. `broken` is every record on `paths` labelled `broken`. One that shares a clause with any held misconception gets
+   `consequence_of` that edge. `broken_concepts` is the target B of each remaining broken edge `pre:A->B`.
+
+## Stage 5 in code: the root cause (`traverse.py`)
+
+`held_by_concept` maps each concept with a record left in `held` to its misconceptions. For each such concept the
+code walks `pre_in` backwards with a stack; whenever a prerequisite reached is in `held_by_concept` or in
+`broken_concepts`, it becomes the candidate `best`. Each candidate gets the key
+`(number of prerequisites of best in G, −highest confidence of a held misconception on best)`, and the candidate
+with the smallest key is `root_cause = {concept, misconception}`. With nothing held, `root_cause` is `None`.
+
+## Stages 6 and 7 in code: the levels (`traverse.py`)
+
+For each concept that appears in `evidence` (as the source of a record, or as the far end of a concept edge):
+
+1. If `evidence` has a held misconception on it that is not a shadow, kept on a path or not: level `L0`, way
+   `misconception`. The record used is the one kept on a path, otherwise the one with the highest score; `rule` is
+   the L0 way's text from `level_link_rule`, and `source` is `level_mis_links`, or `held_misconception` with a
+   `note` when the graph has no L0 way naming that misconception at that concept. Other held ones are listed in
+   `also_held`.
+2. Else, if ways are shown and all of them are L0 ways: level `L0` with that way.
+3. Else, if ways are shown: the shown way with the highest level that is not L0 (at equal level, the higher score);
+   the other shown ways are listed in `also_shown`.
+4. Else the concept gets no entry.
+
+A held error is not a misconception, so rule 1 does not apply to it. The overall level is
+`levels[root.concept].level` when there is a root cause (empty if that concept has no entry). Without a root cause
+the levels are sorted from high to low and the one at index `(count − 1) // 2` is taken.
+
+Output JSON per scenario (`data/processed/<sid>_diagnosis.json`):
+
+```
+scenario, settings{width, depth, prune_tools, model, backend}, clauses, start_concepts,
+held_misconceptions[{concept, misconception, kind, quote, score, shares_evidence_with?}],
+error_evidence[{concept, error, quote}], shadowed[{concept, misconception, shadow_of, quote, score}],
+broken_edges[{edge, quote, score, consequence_of?}], root_cause{concept, misconception},
+levels{concept: {level, way, quote, edge, source, rule?, also_held?, also_shown?, note?}}, overall_level,
+paths, evidence, clause_coverage{clause: edge}, unexplained_clauses, stop_reason, depth_reached,
+llm_calls, llm_cache_hits, llm_calls_by_step{prune, label}
+```
+
+`unexplained_clauses` uses `covered_clauses` without `rules_only`, so a clause named only by a shown level way
+counts as explained there, although it did not count for the stop test.
 
 ## What `evaluate.py` writes
 
