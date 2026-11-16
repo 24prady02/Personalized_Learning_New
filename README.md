@@ -142,12 +142,12 @@ Each rule starts from the exact words of a paper, turns them into a rule for the
 | 12 | “This is a response where the student manifests a correct grasp of some but not all aspects of the problem.” — Lister et al. [84], p. 2 | The rule category of a way belongs to the level its edge points to (e.g. a tracing rule only at L2). | 3,079 ways | Q1: catches a way placed at the wrong level. Q2: keeps the order of the progression (tracing at L2, relating at L3). |
 | 13 | “identity and unity are the most important philosophical notions we use in our methodology” — Guarino & Welty [92], p. 4 | Every way belongs to exactly one has_level edge. | 3,079 ways | Q3: each way traces to one concept and one level. Q4: a way cannot count for two levels. |
 | 14 | “A programming language misconception is a statement that can be disproved by reasoning entirely based on the syntax and/or semantics of a programming language.” — Chiodini et al. [29], p. 2 | A misconception, inconsistent-trace or relation-to-neighbour way names the misconception or neighbouring concept it is about. | 1,070 ways of these three kinds | Q3: a way about a misconception or a neighbouring concept points to that node. |
-| 15 | “A programming language misconception is a statement that can be disproved by reasoning entirely based on the syntax and/or semantics of a programming language.” — Chiodini et al. [29], p. 2 | Every misconception / error states one wrong belief. | 294 misconceptions and errors | Q2: each misconception in the inventory states its wrong belief. |
-| 16 | “A programming language misconception is a statement that can be disproved by reasoning entirely based on the syntax and/or semantics of a programming language.” — Chiodini et al. [29], p. 2 | Every misconception / error states one correct rule. | 294 misconceptions and errors | Q2: each misconception states the correct rule. Q4: the right answer is fixed. |
-| 17 | “A comprehensive list of validated misconceptions in some subject can be used to build formal evaluation methods like the Concept Inventory (CI)” — Caceffo et al. [28], p. 1 | Every misconception / error is linked to at least one concept. | 294 misconceptions and errors | Q2: misconceptions sit on the concepts they affect. Q3: each traces to a concept. |
-| 18 | “A nanopublication is defined as a small data container consisting of three parts: an assertion part” — Kuhn et al. [93], p. 3 | Every meaningful edge carries edge logic. | 1,891 edges | Q3: every edge carries edge logic that says why it is there. |
-| 19 | “A programming language misconception is a statement that can be disproved by reasoning entirely based on the syntax and/or semantics of a programming language.” — Chiodini et al. [29], p. 2 | Every misconception / error edge carries the correct rule (twin logic). | 564 misconception and error edges | Q2: each misconception edge states the correct rule (twin logic). Q3: the correction stays on the edge. |
-| 20 | “For the evaluation of an ontology (however built) a major part of the evaluation should be to identify the 'fit' of the ontology with a domain specific corpus.” — Brewster et al. [94], p. 2 | Every prerequisite / parallel edge has a book quote or a stated grounding. | 241 prerequisite and parallel edges | Q2: prerequisite edges come with evidence. Q3: each prerequisite and parallel edge keeps its book quote or stated grounding. |
+| 15 | “A programming language misconception is a statement that can be disproved by reasoning entirely based on the syntax and/or semantics of a programming language.” — Chiodini et al. [29], p. 2 | Every misconception / error states one wrong belief. | 296 misconceptions and errors | Q2: each misconception in the inventory states its wrong belief. |
+| 16 | “A programming language misconception is a statement that can be disproved by reasoning entirely based on the syntax and/or semantics of a programming language.” — Chiodini et al. [29], p. 2 | Every misconception / error states one correct rule. | 296 misconceptions and errors | Q2: each misconception states the correct rule. Q4: the right answer is fixed. |
+| 17 | “A comprehensive list of validated misconceptions in some subject can be used to build formal evaluation methods like the Concept Inventory (CI)” — Caceffo et al. [28], p. 1 | Every misconception / error is linked to at least one concept. | 296 misconceptions and errors | Q2: misconceptions sit on the concepts they affect. Q3: each traces to a concept. |
+| 18 | “A nanopublication is defined as a small data container consisting of three parts: an assertion part” — Kuhn et al. [93], p. 3 | Every meaningful edge carries edge logic. | 1,943 edges | Q3: every edge carries edge logic that says why it is there. |
+| 19 | “A programming language misconception is a statement that can be disproved by reasoning entirely based on the syntax and/or semantics of a programming language.” — Chiodini et al. [29], p. 2 | Every misconception / error edge carries the correct rule (twin logic). | 569 misconception and error edges | Q2: each misconception edge states the correct rule (twin logic). Q3: the correction stays on the edge. |
+| 20 | “For the evaluation of an ontology (however built) a major part of the evaluation should be to identify the 'fit' of the ontology with a domain specific corpus.” — Brewster et al. [94], p. 2 | Every prerequisite / parallel edge has a book quote or a stated grounding. | 288 prerequisite and parallel edges | Q2: prerequisite edges come with evidence. Q3: each prerequisite and parallel edge keeps its book quote or stated grounding. |
 | 21 | “At the development stage, the researchers define the assessment construct” — Jin et al. [91], p. 6 | Every has_level edge states at least one way of reaching the level. | 865 has_level edges | Q2: every level has a has_level edge with at least one stated way. |
 | 22 | “we attempted to articulate relationships and dependencies among the consensus goals that define potential pathways through the goals.” — Rich et al. [87], p. 4 | No prerequisite cycle. | 173 concepts | Q1: a cycle would make the prerequisite order impossible. Q2: the progression has a clear start. |
 | 23 | “we attempted to articulate relationships and dependencies among the consensus goals that define potential pathways through the goals.” — Rich et al. [87], p. 4 | No parallel (contrast) edge on a prerequisite path. | 173 concepts | Q1: two concepts cannot be both parallel and on a prerequisite path. Q4: an edge has one meaning. |
@@ -166,6 +166,7 @@ Each rule starts from the exact words of a paper, turns them into a rule for the
 - The graph is exported to RDF, and each rule runs as a SHACL shape over every item of its part (pyshacl).
 - A negative test plants one break of each rule in a small graph and checks that SHACL reports it.
 - All 33 rules hold (workbook sheet *Design rules*).
+- The RDF export, the SHACL shapes and the workbook are not included in this repository. The counts in the table above are those of `data/raw/chapter1_kg_updated.json` (v3.9.8).
 
 ### How each concept is made
 
@@ -174,8 +175,8 @@ Each rule starts from the exact words of a paper, turns them into a rule for the
 - It gets its five levels L0–L4 (rule 3).
 - Its prerequisite and parallel edges carry the book passage that states them (rule 20).
 - Its misconceptions and errors carry the wrong rule and the correct rule (rules 15, 16, 19).
-- It also holds regex patterns that recognise it in code, used by Stage 1 and tested on 372 snippets (`python src/train.py`).
-- Each concept's view is drawn in `concept_wise_graph/<concept>/`. The chapter and section maps, with numbered edges and map keys, are in `Chapter1_KG_maps_and_keys.zip`.
+- It also holds regex patterns that recognise it in code, used by Stage 1 and tested on 398 snippets (`python src/train.py`).
+- Each concept's view is drawn in `concept_wise_graph/<concept>/`. The chapter and section maps, with numbered edges and map keys, are in `Chapter1_KG_maps_and_keys.zip` (not included in this repository).
 
 **References for the construction** (numbers as in the notes):
 - [14] Sedgewick & Wayne (2008), *Introduction to Programming in Java*, 1st ed.
@@ -192,7 +193,7 @@ Each rule starts from the exact words of a paper, turns them into a rule for the
 - [29] Chiodini et al. (2021), ITiCSE '21.
 - [87] Rich et al. (2017), ICER '17.
 
-## How a learning-progression level attaches to a concept (from the workbook `Chapter1_KG_v3_9_7.xlsx`)
+## How a learning-progression level attaches to a concept (from the workbook `Chapter1_KG_v3_9_7.xlsx`; the counts are those of the graph file, v3.9.8)
 
 ```
 concept ──has_level──► concept@L0 … concept@L4      (5 level nodes per concept, 865 in all)
@@ -431,7 +432,7 @@ tests/
 
 ```bash
 pytest -q                      # 247 tests (the tests of Stages 2 to 7 use a mocked model, no real call)
-python src/train.py            # compile every pattern, check the 372 labelled snippets, write experiments/pattern_bank.json
+python src/train.py            # compile every pattern, check the 398 labelled snippets, write experiments/pattern_bank.json
 python src/evaluate.py --scenarios tests/data/scenarios_gold.json --log experiments/logs/subgraph_report.txt
                                # Stage 1 on the gold-labelled set: data/processed, the report, results/ (figures, summary.csv, results.md, metrics.json)
 python src/evaluate.py --scenarios data/raw/scenarios_not_from_code.json --no-figures --no-json

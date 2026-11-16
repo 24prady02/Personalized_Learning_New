@@ -1,5 +1,5 @@
 {
- "kg_version": "3.9.5-reader4 (reader3 + pattern fixes and recall additions 2026-10-30, listed in reader.pattern_fixes_reader4)",
+ "kg_version": "3.9.8 (3.9.7 + one primary per misconception (S9c) and the four remaining sibling edges (S9b), 2026-11-04; listed in revision_3_9_8)",
  "concepts": {
   "accumulator_pattern": {
    "code_visible": true,
@@ -97,7 +97,7 @@
    "generic": false,
    "code_text": "masked",
    "channels": {
-    "code_patterns": 4,
+    "code_patterns": 5,
     "signals": 0,
     "operator_symbols": 0,
     "java_types": 0,
@@ -342,10 +342,10 @@
   "char_arithmetic": {
    "code_visible": true,
    "generic": false,
-   "code_text": "raw",
+   "code_text": "masked",
    "channels": {
-    "code_patterns": 3,
-    "signals": 2,
+    "code_patterns": 4,
+    "signals": 3,
     "operator_symbols": 0,
     "java_types": 0,
     "command_patterns": 0
@@ -661,7 +661,7 @@
    "code_text": "masked",
    "channels": {
     "code_patterns": 2,
-    "signals": 0,
+    "signals": 1,
     "operator_symbols": 0,
     "java_types": 0,
     "command_patterns": 0
@@ -856,7 +856,7 @@
    "code_text": "masked",
    "channels": {
     "code_patterns": 5,
-    "signals": 0,
+    "signals": 1,
     "operator_symbols": 0,
     "java_types": 0,
     "command_patterns": 0
@@ -1142,7 +1142,7 @@
    "code_text": "masked",
    "channels": {
     "code_patterns": 1,
-    "signals": 0,
+    "signals": 1,
     "operator_symbols": 0,
     "java_types": 0,
     "command_patterns": 0
@@ -1519,7 +1519,7 @@
    "code_text": "masked",
    "channels": {
     "code_patterns": 0,
-    "signals": 3,
+    "signals": 6,
     "operator_symbols": 0,
     "java_types": 0,
     "command_patterns": 0
@@ -1544,8 +1544,8 @@
    "generic": false,
    "code_text": "masked",
    "channels": {
-    "code_patterns": 2,
-    "signals": 0,
+    "code_patterns": 3,
+    "signals": 1,
     "operator_symbols": 0,
     "java_types": 0,
     "command_patterns": 0
@@ -1818,7 +1818,7 @@
    "code_text": "masked",
    "channels": {
     "code_patterns": 9,
-    "signals": 0,
+    "signals": 1,
     "operator_symbols": 0,
     "java_types": 0,
     "command_patterns": 0
@@ -1870,7 +1870,7 @@
    "code_text": "masked",
    "channels": {
     "code_patterns": 4,
-    "signals": 0,
+    "signals": 1,
     "operator_symbols": 0,
     "java_types": 0,
     "command_patterns": 0
