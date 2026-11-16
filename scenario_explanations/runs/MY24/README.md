@@ -91,57 +91,63 @@ At each depth, for each current concept, the following happens.
 
 ## Stage 4. Counting each mistake once (rules, no model)
 
-**What this stage answers:** how many mistakes did the student really make, and at which concept does each one belong?
+**What this stage answers:** how many mistakes did the student really make, and where does each one belong?
 
-Stage 3 checks every concept on its own, so one wrong sentence of the student is usually flagged several times: at the concept it is really about, and again at related concepts. A **flag** is an edge that stage 3 labelled *held* (the student follows that wrong rule) or *broken* (the student did not carry a rule from one concept to the next). Stage 4 passes the flags through six fixed steps, in this order, and what is left at the end are the **mistakes**. Nothing is deleted: a flag that is not counted stays in the output, marked. Two flags rest on the **same words** when they name at least one clause in common; this is known exactly, because in 3.3 every label came with its clause numbers.
+Stage 3 looks at each concept separately, so one wrong sentence is often marked at several concepts. Stage 4 removes these repeats in six steps. Nothing is deleted: a repeat stays in the output, marked as a repeat.
 
-**4.1 Collect the flags.** From the paths (the edges kept in 3.4) take every edge labelled *held* and every edge labelled *broken*. These are the candidates.
+**4.1 Collect.** Take every kept edge that stage 3 labelled *held* (the student follows a wrong rule) or *broken* (the student did not carry a rule from one concept to the next).
 
-*One of the outputs at this stage:* 0 kept edges labelled held; 0 labelled broken.
+*One of the outputs at this stage:* 0 held; 0 broken.
 
-**4.2 An error beside a misconception.** A misconception is a wrong belief; an error node is the visible result of a belief in a program. If a concept has a held misconception and also a held error, the error is moved to the evidence list and is not counted. A held error on a concept with no held misconception stays a candidate.
+**4.2 An error next to a belief.** A misconception is a wrong belief. An error node is what a belief causes in a program. If a concept has both held, only the belief is counted; the error is kept as evidence.
 
-*One of the outputs at this stage:* no concept has both, so nothing is moved.
+*One of the outputs at this stage:* no concept has both.
 
-**4.3 Two wrong rules on one concept.** The candidates are sorted by score, best first. If two misconceptions are held on the same concept and rest on the same words, both stay (a student can hold several), and the weaker one is marked as sharing its evidence with the stronger one.
+**4.3 Two wrong rules, same words.** If two misconceptions on one concept are shown by the same clauses, both stay. The weaker one is marked as sharing its words with the stronger one.
 
-*One of the outputs at this stage:* no two held misconceptions on one concept rest on the same words.
+*One of the outputs at this stage:* this does not occur.
 
-**4.4 One mistake, one place.** The graph can attach the same misconception to more than one concept, and gives each attachment a **role**: *primary* (the concept whose rule the misconception violates) or *context* (a concept where it also shows up). If the same misconception is held at two concepts: when exactly one of them is primary, the candidate at the other concept is dropped; otherwise, when one concept is a prerequisite of the other, the candidate at the prerequisite is dropped, so the mistake is filed at the concept that depends on it.
+**4.4 The same misconception at two concepts.** It is counted once. The graph says which concept a misconception mainly belongs to (its *primary* concept), and it stays there. If the graph does not decide, it stays at the concept that depends on the other one.
 
-*One of the outputs at this stage:* no misconception is held at two concepts in a way this step merges.
+*One of the outputs at this stage:* this does not occur.
 
-**4.5 Shadows.** A held label X is a **shadow** of a candidate Y when every clause of X is also a clause of Y (X has no words of its own) and one of these is true: (a) X and Y are the same misconception, and Y sits at its primary concept while X does not; (b) X sits on a generic concept (such as `expression` or `statement`) and Y does not; (c) the concept of X is a prerequisite of the concept of Y, directly or over several prerequisite edges, and the model's confidence in X is not higher than in Y. The labels on generic concepts are tested first, then the others from low to high confidence, so the specific, confident label is the one that stays. Held labels that 3.4 did not keep are tested too. A shadow is not a mistake, cannot be the root cause and sets no level.
+**4.5 Shadows.** A held label is a **shadow** when it has no clause of its own (all its clauses also belong to a stronger label) and one of these is true:
 
-*One of the outputs at this stage:* no held label is a shadow.
+- (a) it is the same misconception as the stronger label, but not at its primary concept;
+- (b) it sits on a generic concept, such as `expression` or `statement`;
+- (c) it sits on a prerequisite of the stronger label's concept, and the model was not more sure about it.
 
-**4.6 Broken links.** A broken prerequisite edge A → B says the student did not carry the rule of A into B. If it rests on the same words as a held misconception, it is that misconception's **consequence** and is not counted. Otherwise it is counted as a mistake at B, the concept that failed to use its prerequisite.
+A shadow is not counted, cannot be the root cause and sets no level.
 
-*One of the outputs at this stage:* no edge was labelled broken.
+*One of the outputs at this stage:* there is no shadow.
 
-**Result of stage 4 in this run:** no wrong rule is held. The 3 misconception / error edges that received a label were all labelled *correct*, so no mistake is counted.
+**4.6 Broken links.** A broken link A → B that rests on the same clauses as a held misconception is a result of that misconception and is not counted. Otherwise it is counted as a mistake at B.
+
+*One of the outputs at this stage:* no link is broken.
+
+**Result of stage 4:** no mistake is counted. The 3 misconception / error edges that received a label were all labelled *correct*.
 
 ## Stage 5. Where the mistake starts: the root cause (rule, no model)
 
-**What this stage answers:** if a teacher can fix only one thing first, which concept should it be?
+**What this stage answers:** which concept should be taught first?
 
-Concepts build on each other: a prerequisite edge A → B in the subgraph says A must be understood before B. A mistake in A explains a mistake in B, so the search goes backwards along these edges.
+Concepts build on each other: A → B means A must be understood before B (A is a **prerequisite** of B). A mistake in A explains a mistake in B, so this stage looks backwards.
 
-**5.1 Mark the concepts with a mistake.** These are the concepts with a counted held misconception or error after stage 4, and the concepts at which a broken link was counted in 4.6.
+**5.1 List the concepts with a counted mistake.**
 
-*One of the outputs at this stage:* no concept has a held mistake.
+*One of the outputs at this stage:* none.
 
-**5.2 Walk back from each one.** Starting at each concept with a held mistake, visit all its prerequisites, then their prerequisites, and so on, as far as the subgraph goes. Each time a visited concept is itself marked in 5.1, it replaces the starting concept as the **candidate**. If none is marked, the starting concept is its own candidate.
+**5.2 Go back from each one.** Visit its prerequisites, then their prerequisites, to the end. If one of them is also on the list, it becomes the **candidate**. If none is, the starting concept is the candidate.
 
-*One of the outputs at this stage:* there is no concept to start from.
+*One of the outputs at this stage:* there is nothing to start from.
 
-**5.3 Choose among the candidates.** The candidate with the fewest prerequisites of its own in the subgraph is the **root cause**: it stands furthest back. At a tie, the one whose held label the model gave the higher confidence is taken. Alphabetical order never decides.
+**5.3 Choose.** The candidate with the fewest prerequisites of its own stands furthest back: it is the **root cause**. At a tie, the one the model was more sure about is taken.
 
 *One of the outputs at this stage:* no mistake is counted, so there is no root cause.
 
 ## Stage 6. How well each concept is understood: the levels (rule, no model)
 
-**What this stage answers:** for each concept the answer touched, how deep is the student's understanding?
+**What this stage answers:** how deep is the student's understanding of each concept?
 
 | Level | In plain words |
 |---|---|
@@ -151,20 +157,20 @@ Concepts build on each other: a prerequisite edge A → B in the subgraph says A
 | L3 | Relates the parts to each other and to the purpose of the whole |
 | L4 | Reasons beyond the given code: predicts a change, transfers, diagnoses |
 
-In the graph every level of a concept lists **ways**: concrete things a student at that level does, for example "output prediction" at L2. The model is never asked for a level. In 3.3 it only said which ways the answer *shows*; the level is read from where a way sits in the graph.
+Each level of a concept has **ways**: things a student at that level does, such as "output prediction" at L2. The model never gives a level. In 3.3 it only said which ways the answer shows.
 
-**6.1 Gather the evidence per concept.** Take every concept that appears in the evidence of stage 3 (kept in 3.4 or not). For each one collect two lists: the misconceptions held on it that are not shadows, and the ways shown on it.
+**6.1 Gather.** For every concept that got a label in stage 3, list the misconceptions held on it (shadows left out) and the ways shown on it.
 
-*One of the outputs at this stage:* 4 concepts appear in the evidence: `arithmetic_operators`, `expression`, `string_concatenation`, `string_conversion`.
+*One of the outputs at this stage:* 4 concepts: `arithmetic_operators`, `expression`, `string_concatenation`, `string_conversion`.
 
-**6.2 Apply the first rule that fits.**
+**6.2 Give the level.** The first rule that fits is used:
 
-- (a) A misconception is held on the concept: the level is **L0**. The entry names the misconception.
-- (b) Ways are shown and all of them are L0 ways (everyday reading, inconsistent trace): the level is **L0**.
-- (c) Ways are shown and at least one is above L0: the level is the **highest** one shown. The levels build on each other (an answer that relates the parts has also applied the rules), so a lower way shown beside it is only listed.
-- (d) Nothing is held and no way is shown: the concept gets no level.
+- (a) a misconception is held: **L0**;
+- (b) only L0 ways are shown: **L0**;
+- (c) a way above L0 is shown: the **highest** level shown, because each level includes the ones below it;
+- (d) nothing is held and no way is shown: no level.
 
-A held error node is not a misconception, so rule (a) does not apply to it.
+A held error is not a misconception, so (a) does not apply to it.
 
 *One of the outputs at this stage:*
 
@@ -179,11 +185,11 @@ A held error node is not a misconception, so rule (a) does not apply to it.
 
 **What this stage answers:** where does the student stand overall?
 
-**7.1 With a root cause.** The overall level is the level stage 6 gave to the root concept: the student stands where the mistake begins, however well the rest is handled.
+**7.1 With a root cause:** the overall level is the level of the root concept. The student stands where the mistake begins.
 
-**7.2 Without a mistake.** The levels of stage 6 are sorted from high to low and the one in the middle is taken: with n levels, the one at position (n − 1) ÷ 2, rounded down and counted from 0. So one weak or one strong concept does not decide for the whole answer.
+**7.2 With no mistake:** the levels of stage 6 are sorted from high to low and the middle one is taken (of an even number, the higher of the two middle ones), so one weak or one strong concept does not decide.
 
-*One of the outputs at this stage:* 7.2 applies: there is no root cause. The levels from high to low are L3, L3, L3, L3; position (4 − 1) ÷ 2 = 1, counted from 0, is **L3**.
+*One of the outputs at this stage:* 7.2: the levels from high to low are L3, L3, L3, L3; the middle one (number 2 of 4) is **L3**.
 
 ## The final picture
 
