@@ -36,63 +36,50 @@ Every scenario has its own folder, `scenario_explanations/runs/MYnn/`:
 | `input.json`, `subgraph.json`, `diagnosis.json`, `traverse_log.txt` | the input, the Stage 1 subgraph, the result of Stages 2 to 7 and the trace |
 | `figureNN.png` | the pictures of the walk, depth by depth |
 
-Results. In 29 of the 40 the walk holds at least one wrong rule; in 11 it holds none. The last
-column is a reading of each stored result by hand against the student's answer (2026-11-13; the results that
-changed in the re-runs of 2026-11-14 were read again), not a gold label:
-35 correct, 3 partly right, 1 not right, 1 with a faulty input.
+Results. In 29 of the 40 the walk holds at least one wrong rule; in 11 it holds none.
 
-| Scenario | Wrong rules held | Root cause | Overall level | Check by hand |
-|---|---|---|---|---|
-| [MY01](scenario_explanations/runs/MY01/) | CastAfterIntDivision | `explicit_cast` | L0 | Correct |
-| [MY02](scenario_explanations/runs/MY02/) | NegativeRemainderSign | `remainder_operator` | L0 | Correct |
-| [MY03](scenario_explanations/runs/MY03/) | AssignmentCopiesObject | `array_aliasing` | L0 | Correct |
-| [MY04](scenario_explanations/runs/MY04/) | SwitchNoFallThrough | `switch_statement` | L0 | Correct |
-| [MY05](scenario_explanations/runs/MY05/) | CharNotNumeric | `char` | L0 | Correct |
-| [MY06](scenario_explanations/runs/MY06/) | LoopBodyStatementOutsideLoop, LoopBodyScopeImpliesLoopLifetime | `loop_body` | L0 | Partly right |
-| [MY07](scenario_explanations/runs/MY07/) | IntOverflowWidensAutomatically | `overflow` | L0 | Correct |
-| [MY08](scenario_explanations/runs/MY08/) | none | none | L3 | Correct |
-| [MY09](scenario_explanations/runs/MY09/) | TargetTyping | `integer_division` | L0 | Correct |
-| [MY10](scenario_explanations/runs/MY10/) | ArrayIndexStartsAtOne, OutOfBoundsElementsAreNull | `indexing` | L0 | Correct |
-| [MY11](scenario_explanations/runs/MY11/) | NestedLoopsSequential, LoopBodyStatementOutsideLoop, ForVariableScopeBeyondLoop | `nested_loops` | L0 | Correct |
-| [MY12](scenario_explanations/runs/MY12/) | CharNotNumeric | `char` | L0 | Correct |
-| [MY13](scenario_explanations/runs/MY13/) | CastAfterIntDivision | `explicit_cast` | L0 | Correct |
-| [MY14](scenario_explanations/runs/MY14/) | LoopStepAlwaysOne | `for_loop` | L0 | Correct |
-| [MY15](scenario_explanations/runs/MY15/) | IncrementByTwo, ForInitRepeats, ForUpdateBeforeBody, PreIncrementBeforeLoop | `for_loop` | L0 | Correct |
-| [MY16](scenario_explanations/runs/MY16/) | CastAppliesToWholeExpression | `explicit_cast` | L0 | Correct |
-| [MY17](scenario_explanations/runs/MY17/) | none | none | L4 | Correct |
-| [MY18](scenario_explanations/runs/MY18/) | ArrayRangeInclusive, OffByOneBound, IdiomOverridesCode | `loop_control` | L0 | Correct |
-| [MY19](scenario_explanations/runs/MY19/) | TargetTyping | `integer_division` | L0 | Partly right |
-| [MY20](scenario_explanations/runs/MY20/) | none | none | L2 | Correct |
-| [MY21](scenario_explanations/runs/MY21/) | none | none | L3 | Correct |
-| [MY22](scenario_explanations/runs/MY22/) | none | none | L2 | Correct |
-| [MY23](scenario_explanations/runs/MY23/) | CastAfterIntDivision | `explicit_cast` | L0 | Correct |
-| [MY24](scenario_explanations/runs/MY24/) | none | none | L3 | Correct |
-| [MY25](scenario_explanations/runs/MY25/) | ThenAlwaysExecutes | `if_statement` | L0 | Correct |
-| [MY26](scenario_explanations/runs/MY26/) | DivisionByZeroIsCompileError | `division_by_zero` | L0 | Correct |
-| [MY27](scenario_explanations/runs/MY27/) | StringPlusLeftToRight, ArithmeticPlusPrecedes | `string_concatenation` | L0 | Correct |
-| [MY28](scenario_explanations/runs/MY28/) | CastAfterIntDivision | `explicit_cast` | L0 | Correct |
-| [MY29](scenario_explanations/runs/MY29/) | none | none | L4 | Faulty input |
-| [MY30](scenario_explanations/runs/MY30/) | CharNotNumeric | `char_arithmetic` | L0 | Not right |
-| [MY31](scenario_explanations/runs/MY31/) | none | none | L3 | Correct |
-| [MY32](scenario_explanations/runs/MY32/) | DoWhileTestsFirst | `do_while_loop` | L0 | Correct |
-| [MY33](scenario_explanations/runs/MY33/) | none | none | L1 | Correct |
-| [MY34](scenario_explanations/runs/MY34/) | ElseMatchesIndentation | `dangling_else` | L0 | Correct |
-| [MY35](scenario_explanations/runs/MY35/) | AverageWithoutZeroGuard | `division_by_zero` | None | Partly right |
-| [MY36](scenario_explanations/runs/MY36/) | AssignmentCopiesObject | `array_aliasing` | L0 | Correct |
-| [MY37](scenario_explanations/runs/MY37/) | none | none | L4 | Correct |
-| [MY38](scenario_explanations/runs/MY38/) | none | none | L4 | Correct |
-| [MY39](scenario_explanations/runs/MY39/) | RaggedRowsSameLength, NoJaggedArrays | `ragged_array` | L0 | Correct |
-| [MY40](scenario_explanations/runs/MY40/) | FewTrialsAreExact, ProbabilityIsPrediction | `frequency_counting` | L0 | Correct |
-
-The five that are not simply correct:
-
-| Scenario | What is wrong | Where it comes from |
-|---|---|---|
-| MY29 | the question and answer belong to the scenario before it, not to this program, so the result means nothing | the input |
-| MY30 | the student takes `char + int` to be a letter; `CharNotNumeric` says something else | the graph has no misconception for it |
-| MY19 | `TargetTyping` is right, but "7 % 2 is 0.5" is not picked up | the graph has no misconception for it |
-| MY35 | the right error is found, but the overall level is empty | the graph has no misconception for "0 / 0 is 0", and the level rule sets L0 only for a misconception |
-| MY06 | the fitting label, `LoopBodyScopeImpliesLoopLifetime`, is held but only second; the root went to a neighbour | how the root cause is chosen |
+| Scenario | Wrong rules held | Root cause | Overall level |
+|---|---|---|---|
+| [MY01](scenario_explanations/runs/MY01/) | CastAfterIntDivision | `explicit_cast` | L0 |
+| [MY02](scenario_explanations/runs/MY02/) | NegativeRemainderSign | `remainder_operator` | L0 |
+| [MY03](scenario_explanations/runs/MY03/) | AssignmentCopiesObject | `array_aliasing` | L0 |
+| [MY04](scenario_explanations/runs/MY04/) | SwitchNoFallThrough | `switch_statement` | L0 |
+| [MY05](scenario_explanations/runs/MY05/) | CharNotNumeric | `char` | L0 |
+| [MY06](scenario_explanations/runs/MY06/) | LoopBodyStatementOutsideLoop, LoopBodyScopeImpliesLoopLifetime | `loop_body` | L0 |
+| [MY07](scenario_explanations/runs/MY07/) | IntOverflowWidensAutomatically | `overflow` | L0 |
+| [MY08](scenario_explanations/runs/MY08/) | none | none | L3 |
+| [MY09](scenario_explanations/runs/MY09/) | TargetTyping | `integer_division` | L0 |
+| [MY10](scenario_explanations/runs/MY10/) | ArrayIndexStartsAtOne, OutOfBoundsElementsAreNull | `indexing` | L0 |
+| [MY11](scenario_explanations/runs/MY11/) | NestedLoopsSequential, LoopBodyStatementOutsideLoop, ForVariableScopeBeyondLoop | `nested_loops` | L0 |
+| [MY12](scenario_explanations/runs/MY12/) | CharNotNumeric | `char` | L0 |
+| [MY13](scenario_explanations/runs/MY13/) | CastAfterIntDivision | `explicit_cast` | L0 |
+| [MY14](scenario_explanations/runs/MY14/) | LoopStepAlwaysOne | `for_loop` | L0 |
+| [MY15](scenario_explanations/runs/MY15/) | IncrementByTwo, ForInitRepeats, ForUpdateBeforeBody, PreIncrementBeforeLoop | `for_loop` | L0 |
+| [MY16](scenario_explanations/runs/MY16/) | CastAppliesToWholeExpression | `explicit_cast` | L0 |
+| [MY17](scenario_explanations/runs/MY17/) | none | none | L4 |
+| [MY18](scenario_explanations/runs/MY18/) | ArrayRangeInclusive, OffByOneBound, IdiomOverridesCode | `loop_control` | L0 |
+| [MY19](scenario_explanations/runs/MY19/) | TargetTyping | `integer_division` | L0 |
+| [MY20](scenario_explanations/runs/MY20/) | none | none | L2 |
+| [MY21](scenario_explanations/runs/MY21/) | none | none | L3 |
+| [MY22](scenario_explanations/runs/MY22/) | none | none | L2 |
+| [MY23](scenario_explanations/runs/MY23/) | CastAfterIntDivision | `explicit_cast` | L0 |
+| [MY24](scenario_explanations/runs/MY24/) | none | none | L3 |
+| [MY25](scenario_explanations/runs/MY25/) | ThenAlwaysExecutes | `if_statement` | L0 |
+| [MY26](scenario_explanations/runs/MY26/) | DivisionByZeroIsCompileError | `division_by_zero` | L0 |
+| [MY27](scenario_explanations/runs/MY27/) | StringPlusLeftToRight, ArithmeticPlusPrecedes | `string_concatenation` | L0 |
+| [MY28](scenario_explanations/runs/MY28/) | CastAfterIntDivision | `explicit_cast` | L0 |
+| [MY29](scenario_explanations/runs/MY29/) | none | none | L4 |
+| [MY30](scenario_explanations/runs/MY30/) | CharNotNumeric | `char_arithmetic` | L0 |
+| [MY31](scenario_explanations/runs/MY31/) | none | none | L3 |
+| [MY32](scenario_explanations/runs/MY32/) | DoWhileTestsFirst | `do_while_loop` | L0 |
+| [MY33](scenario_explanations/runs/MY33/) | none | none | L1 |
+| [MY34](scenario_explanations/runs/MY34/) | ElseMatchesIndentation | `dangling_else` | L0 |
+| [MY35](scenario_explanations/runs/MY35/) | AverageWithoutZeroGuard | `division_by_zero` | None |
+| [MY36](scenario_explanations/runs/MY36/) | AssignmentCopiesObject | `array_aliasing` | L0 |
+| [MY37](scenario_explanations/runs/MY37/) | none | none | L4 |
+| [MY38](scenario_explanations/runs/MY38/) | none | none | L4 |
+| [MY39](scenario_explanations/runs/MY39/) | RaggedRowsSameLength, NoJaggedArrays | `ragged_array` | L0 |
+| [MY40](scenario_explanations/runs/MY40/) | FewTrialsAreExact, ProbabilityIsPrediction | `frequency_counting` | L0 |
 
 In MY26 and MY40 a line beginning "Actual:" had been pasted into the answer box, so it was read as part of the
 student's answer. Both were run again on 2026-11-14 with only the student's own words. MY26 gives the same held rule
