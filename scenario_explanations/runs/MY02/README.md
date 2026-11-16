@@ -92,36 +92,79 @@ At each depth, for each current concept, the following happens.
 
 *One of the outputs at this stage:* the walk stopped at depth 3 because every clause was covered and no entered concept had an unread edge. At the end 6 of 6 clauses were covered. The model was asked 12 prune questions and 21 label questions in all.
 
-## Stage 4. From labels to faults (rules, no model)
+## Stage 4. Counting each mistake once (rules, no model)
 
-The walk leaves a set of labelled edges. Each kept edge labelled *held* is a candidate **fault**, but one wrong sentence usually lights up several edges, so fixed rules remove the double counting. Nothing is deleted from the record; the rules only decide what counts as a fault.
+**What this stage answers:** how many mistakes did the student really make, and at which concept does each one belong?
 
-- **Error beside a misconception.** An error node describes a consequence in a program; a misconception describes the belief behind it. A held error on a concept that also has a held misconception is therefore kept as evidence, not as a second fault.
-- **One fault, one place.** The graph can attach the same misconception to two concepts joined by a prerequisite edge. On each such edge the graph gives the concept a **role**: *primary* (the concept whose rule the misconception violates) or *context* (a concept where it also shows up). If the misconception is held at both ends, it is filed once, at the primary concept, or at the dependent concept when the roles do not decide.
-- **Shadows.** A held label is a **shadow** when it sits on a prerequisite or on a generic concept and rests only on clauses that a stronger, more specific label already rests on. It is the same wrong sentence read a second time at a vaguer place. A shadow is kept in the record but is not a fault, cannot be the root cause and does not set a level.
-- **Broken edges.** A prerequisite edge A → B labelled *broken* says the student did not carry the rule of A into B, so the fault sits at B. If the broken edge rests on the same clauses as a held misconception, it is that misconception's **consequence**, not a separate fault.
+**Why it is needed.** Stage 3 checks every concept on its own. So one wrong sentence of the student is usually flagged several times: at the concept it is really about, and again at related concepts. A flag here means an edge that stage 3 labelled *held* (the student follows that wrong rule) or *broken* (the student did not carry a rule from one concept to the next). Stage 4 goes through the flags with fixed rules and decides which ones count as a **mistake**. Nothing is deleted: a flag that is not counted stays in the record, marked as a repeat.
 
-*One of the outputs at this stage:* the fault is **NegativeRemainderSign** at `remainder_operator`. For NegativeRemainderSign the graph's wrong rule is “a % b is never negative, and integer division of a negative number rounds down.” and its twin, the right rule, is “a / b rounds toward 0 and a % b takes the sign of a: -14 / 3 is -4 and -14 % 3 is -2.”. Filed once at the other end: NegativeRemainderSign at `integer_division`.
+| What stage 3 flagged | What stage 4 does with it |
+|---|---|
+| The same wrong rule at two linked concepts | Counts it once, at the concept the wrong rule is really about |
+| A wrong rule at a more basic or more general concept, shown by the same words as a more specific one | Treats it as a repeat of the specific one (the output calls it a **shadow**) |
+| A wrong belief, and beside it an error node (the visible result of that belief in a program) | Counts the belief; the error is kept as evidence for it |
+| A broken link between two concepts, shown by the same words as a wrong belief | Treats it as a result of that belief (a **consequence**), not as a second mistake |
+| A broken link with words of its own | Counts it as a mistake at the concept the link leads to |
 
-## Stage 5. Root cause (rule, no model)
+**In this run.** One mistake is counted:
 
-Several concepts may carry a fault, and the **root cause** is the one to teach first. The rule uses the prerequisite edges of G. From each faulty concept it walks backwards (from a concept to what it depends on). Whenever a concept reached that way also has a fault of its own, the candidate moves back to it, because a fault in what a concept depends on explains the fault in the concept. Among the candidates found, the root is the one with the fewest prerequisites of its own in G, that is, the one furthest back; at a tie, the one whose label the model gave the higher confidence. Alphabetical order never decides.
+- **NegativeRemainderSign** at `remainder_operator`. The student's words: “-7 / 2 is -3.5, and integer division rounds down; so it becomes -4; A remainder is never negative; so -7 % 2 is 1”. The wrong rule in the graph: “a % b is never negative, and integer division of a negative number rounds down.” The right rule: “a / b rounds toward 0 and a % b takes the sign of a: -14 / 3 is -4 and -14 % 3 is -2.”
 
-*One of the outputs at this stage:* only `remainder_operator` has a fault, and none of its prerequisites in G (`arithmetic_operators`, `integer_division`) has one, so the root is `remainder_operator`.
+Flagged by stage 3 but not counted a second time:
 
-## Stage 6. Level of each concept (rule, no model)
+- NegativeRemainderSign at `integer_division` (the same wrong rule at a linked concept)
 
-Every concept has five **levels**, taken from the SOLO taxonomy: **L0** prestructural (the answer holds a rule that contradicts Java, or reads the code in an everyday sense), **L1** unistructural (it states one correct rule without applying it), **L2** multistructural (it applies the rules to the code step by step), **L3** relational (it relates the parts to each other and to the purpose of the whole), **L4** extended abstract (it reasons beyond the given code: predicts a change, transfers, diagnoses). Each level has **ways**, concrete things a student does at that level, such as "output prediction" at L2 or "predict a change" at L4.
+## Stage 5. Where the mistake starts: the root cause (rule, no model)
 
-The model is never asked for a level. In stage 3 it only said whether a way was *shown*; the level is read from where that way sits in the graph. The rule: a concept is **L0** if a fault is kept on it, or if the only ways shown on it are L0 ways. Otherwise it gets the **highest** level among the ways shown, because the levels build on each other (an answer that relates the parts has also applied the rules). A concept with no fault and no way shown gets no level.
+**What this stage answers:** if a teacher can fix only one thing first, which concept should it be?
 
-*One of the outputs at this stage:* `integer_division` keeps NegativeRemainderSign, so it is L0; on `expression` the ways shown are L0 “everyday reading”, L2 “output prediction”, L3 “relation to neighbour”, so it is L3.
+Concepts build on each other: the graph says which concept must be understood before another (its **prerequisite**). A mistake in a prerequisite explains mistakes in what is built on it. So the rule is:
 
-## Stage 7. Overall level (rule, no model)
+1. Start at each concept that has a counted mistake.
+2. Go back along its prerequisites. If a prerequisite also has a counted mistake, move back to it.
+3. The concept furthest back is the **root cause**. If two are equally far back, the one the model was more sure about is taken.
 
-One level is reported for the whole answer. If there is a root cause, it is the level of the root concept: the student stands where the fault begins, however well the rest is handled. If there is no fault, it is the level reached on at least half of the concepts the answer touched (the levels are sorted from high to low and the middle one is taken), so that a single weaker concept does not pull the whole answer down and a single strong one does not lift it.
+With only one counted mistake, its concept is the root cause.
 
-*One of the outputs at this stage:* the root is `remainder_operator` and its level is L0, so the overall level is **L0**.
+**In this run.** Only `remainder_operator` has a counted mistake. Its prerequisites in the subgraph (`arithmetic_operators`, `integer_division`) have none, so the root cause is `remainder_operator` with NegativeRemainderSign.
+
+## Stage 6. How well each concept is understood: the levels (rule, no model)
+
+**What this stage answers:** for each concept the answer touched, how deep is the student's understanding?
+
+The scale has five levels (from the SOLO taxonomy):
+
+| Level | In plain words |
+|---|---|
+| L0 | Holds a rule that contradicts Java, or reads the code in an everyday sense |
+| L1 | States one correct rule, without applying it |
+| L2 | Applies the rules to the code step by step |
+| L3 | Relates the parts to each other and to the purpose of the whole |
+| L4 | Reasons beyond the given code: predicts a change, transfers, diagnoses |
+
+In the graph every level of a concept lists **ways**: concrete things a student at that level does, for example "output prediction" at L2. In stage 3 the model only said which ways the answer *shows*. It was never asked for a level. The level follows by rule:
+
+1. A concept with a counted mistake (a held misconception that is not a repeat) is **L0**.
+2. Otherwise the concept gets the **highest** level among the ways shown, because the levels build on each other.
+3. A concept with no mistake and no way shown gets no level.
+
+**In this run.**
+
+| Concept | Level | Why |
+|---|---|---|
+| `arithmetic_operators` | L3 | ways shown: L3 “relation to neighbour” |
+| `expression` | L3 | ways shown: L0 “everyday reading”, L2 “output prediction”, L3 “relation to neighbour” |
+| `integer_division` | L0 | holds NegativeRemainderSign |
+| `remainder_operator` | L0 | holds NegativeRemainderSign |
+
+## Stage 7. One level for the whole answer (rule, no model)
+
+**What this stage answers:** where does the student stand overall?
+
+- If there is a root cause, the overall level is the level of the root concept: the student stands where the mistake begins, however well the rest is handled.
+- If there is no mistake, the levels of stage 6 are sorted from high to low and the middle one is taken, so one weak or one strong concept does not decide for the whole answer.
+
+**In this run.** The root cause is `remainder_operator` and its level is L0, so the overall level is **L0**.
 
 ## The final picture
 
