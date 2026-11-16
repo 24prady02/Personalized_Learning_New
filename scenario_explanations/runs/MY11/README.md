@@ -93,92 +93,74 @@ At each depth, for each current concept, the following happens.
 
 *One of the outputs at this stage:* the walk stopped at depth 4 because every clause was covered and no entered concept had an unread edge. At the end 3 of 3 clauses were covered. The model was asked 24 prune questions and 46 label questions in all.
 
-## Stage 4. Counting each mistake once (rules, no model)
+## Stage 4. From labels to faults (rules, no model)
 
-**What this stage answers:** how many mistakes did the student really make, and where does each one belong?
+The walk leaves a set of labelled edges. Each kept edge labelled *held* is a candidate **fault**, but one wrong sentence usually lights up several edges, so fixed rules remove the double counting. Nothing is deleted from the record; the rules only decide what counts as a fault. They run in the order below. Two labels rest on the **same words** when they name at least one clause in common; this is known exactly, because in 3.3 every label came with its clause numbers.
 
-Stage 3 looks at each concept separately, so one wrong sentence is often marked at several concepts. Stage 4 removes these repeats in six steps. Nothing is deleted: a repeat stays in the output, marked as a repeat.
+**4.1 Collect the candidates.** From the paths (the edges kept in 3.4) take every edge labelled *held* and every edge labelled *broken*. These are the candidates.
 
-**4.1 Collect.** Take every kept edge that stage 3 labelled *held* (the student follows a wrong rule) or *broken* (the student did not carry a rule from one concept to the next).
+*One of the outputs at this stage:* 6 kept edges labelled held: ForLoopPartSkipped at `for_loop`, ForLoopPartSkipped at `loop_control`, NestedLoopsSequential at `nested_loops`, LoopBodyStatementOutsideLoop at `loop_body`, ForVariableScopeBeyondLoop at `loop_scope`, StatementsRunInAnyOrder at `statement`; 6 labelled broken: for_loop → nested_loops, for_loop → loop_body, for_loop → loop_scope, loop_control → for_loop, statement → control_flow, statement → println.
 
-*One of the outputs at this stage:* 6 held: ForLoopPartSkipped at `for_loop`, ForLoopPartSkipped at `loop_control`, NestedLoopsSequential at `nested_loops`, LoopBodyStatementOutsideLoop at `loop_body`, ForVariableScopeBeyondLoop at `loop_scope`, StatementsRunInAnyOrder at `statement`; 6 broken: for_loop → nested_loops, for_loop → loop_body, for_loop → loop_scope, loop_control → for_loop, statement → control_flow, statement → println.
+**4.2 An error beside a misconception.** A misconception is a wrong belief; an error node is the visible result of a belief in a program. If a concept has a held misconception and also a held error, the error is moved to the evidence list and is not counted. A held error on a concept with no held misconception stays a candidate.
 
-**4.2 An error next to a belief.** A misconception is a wrong belief. An error node is what a belief causes in a program. If a concept has both held, only the belief is counted; the error is kept as evidence.
+*One of the outputs at this stage:* no concept has both, so nothing is moved.
 
-*One of the outputs at this stage:* no concept has both.
+**4.3 Two wrong rules on one concept.** The candidates are sorted by score, best first. If two misconceptions are held on the same concept and rest on the same words, both stay (a student can hold several), and the weaker one is marked as sharing its evidence with the stronger one.
 
-**4.3 Two wrong rules, same words.** If two misconceptions on one concept are shown by the same clauses, both stay. The weaker one is marked as sharing its words with the stronger one.
+*One of the outputs at this stage:* no two held misconceptions on one concept rest on the same words.
 
-*One of the outputs at this stage:* this does not occur.
+**4.4 One fault, one place.** The graph can attach the same misconception to more than one concept, and gives each attachment a **role**: *primary* (the concept whose rule the misconception violates) or *context* (a concept where it also shows up). If the same misconception is held at two concepts: when exactly one of them is primary, the candidate at the other concept is dropped; otherwise, when one concept is a prerequisite of the other, the candidate at the prerequisite is dropped, so the fault is filed at the concept that depends on it.
 
-**4.4 The same misconception at two concepts.** It is counted once. The graph says which concept a misconception mainly belongs to (its *primary* concept), and it stays there. If the graph does not decide, it stays at the concept that depends on the other one.
+*One of the outputs at this stage:* ForLoopPartSkipped at `loop_control` is dropped.
 
-*One of the outputs at this stage:* ForLoopPartSkipped is dropped at `loop_control`.
+**4.5 Shadows.** A held label X is a **shadow** of a candidate Y when every clause of X is also a clause of Y (X has no words of its own) and one of these is true: (a) X and Y are the same misconception, and Y sits at its primary concept while X does not; (b) X sits on a generic concept (such as `expression` or `statement`) and Y does not; (c) the concept of X is a prerequisite of the concept of Y, directly or over several prerequisite edges, and the model's confidence in X is not higher than in Y. The labels on generic concepts are tested first, then the others from low to high confidence, so the specific, confident label is the one that stays. Held labels that 3.4 did not keep are tested too. A shadow is not a fault, cannot be the root cause and sets no level.
 
-**4.5 Shadows.** A held label is a **shadow** when it has no clause of its own (all its clauses also belong to a stronger label) and one of these is true:
+*One of the outputs at this stage:* ForLoopPartSkipped at `for_loop` is a shadow of ForVariableScopeBeyondLoop at `loop_scope` by (c): `for_loop` is a prerequisite of `loop_scope`; ForLoopPartSkipped at `loop_control` is a shadow of ForVariableScopeBeyondLoop at `loop_scope` by (c): `loop_control` is a prerequisite of `loop_scope` (already dropped in 4.4); StatementsRunInAnyOrder at `statement` is a shadow of ForLoopPartSkipped at `for_loop` by (b): a generic concept.
 
-- (a) it is the same misconception as the stronger label, but not at its primary concept;
-- (b) it sits on a generic concept, such as `expression` or `statement`;
-- (c) it sits on a prerequisite of the stronger label's concept, and the model was not more sure about it.
+**4.6 Broken edges.** A broken prerequisite edge A → B says the student did not carry the rule of A into B. If it rests on the same words as a held misconception, it is that misconception's **consequence** and is not counted. Otherwise it is counted as a fault at B, the concept that failed to use its prerequisite.
 
-A shadow is not counted, cannot be the root cause and sets no level.
+*One of the outputs at this stage:* for_loop → nested_loops is a consequence of ForLoopPartSkipped; for_loop → loop_body is a consequence of ForLoopPartSkipped; for_loop → loop_scope is a consequence of ForLoopPartSkipped; loop_control → for_loop is a consequence of ForLoopPartSkipped; statement → control_flow is a consequence of ForLoopPartSkipped; statement → println is a consequence of ForLoopPartSkipped.
 
-*One of the outputs at this stage:* ForLoopPartSkipped at `for_loop` is a shadow of ForVariableScopeBeyondLoop at `loop_scope` by (c); ForLoopPartSkipped at `loop_control` is a shadow of ForVariableScopeBeyondLoop at `loop_scope` by (c), already dropped in 4.4; StatementsRunInAnyOrder at `statement` is a shadow of ForLoopPartSkipped at `for_loop` by (b).
+**Result of stage 4 in this run:** 3 faults are counted.
 
-**4.6 Broken links.** A broken link A → B that rests on the same clauses as a held misconception is a result of that misconception and is not counted. Otherwise it is counted as a mistake at B.
+- **NestedLoopsSequential** at `nested_loops`. The student's words: “The outer loop finishes first; so i ends at 2, then the inner loop runs j from 1 to 3: 2 1, 2 2, 2 3”. The wrong rule in the graph: “The outer loop runs completely, then the inner loop runs completely.” The right rule: “The inner loop runs all its passes during each single pass of the outer loop.”
+- **LoopBodyStatementOutsideLoop** at `loop_body`. The student's words: “Three lines; The outer loop finishes first; so i ends at 2, then the inner loop runs j from 1 to 3: 2 1, 2 2, 2 3”. The wrong rule in the graph: “Some statements inside the braces of a loop body are not repeated; they run once, before or after the loop.” The right rule: “Every statement inside the loop braces is part of the body and runs on every pass.”
+- **ForVariableScopeBeyondLoop** at `loop_scope`. The student's words: “The outer loop finishes first; so i ends at 2, then the inner loop runs j from 1 to 3: 2 1, 2 2, 2 3”. The wrong rule in the graph: “i declared in the for header can still be used after the loop has ended.” The right rule: “i declared in the for header exists only inside the loop, so using it after the loop does not compile.”
 
-*One of the outputs at this stage:* for_loop → nested_loops, for_loop → loop_body, for_loop → loop_scope, loop_control → for_loop, statement → control_flow, statement → println are results of ForLoopPartSkipped.
+## Stage 5. Root cause (rule, no model)
 
-**Result of stage 4:** 3 mistakes are counted.
+Several concepts may carry a fault, and the **root cause** is the one to teach first. The rule uses the prerequisite edges of G: an edge A → B says A must be understood before B, so a fault in A explains a fault in B, and the search goes backwards along these edges (from a concept to what it depends on).
 
-- **NestedLoopsSequential** at `nested_loops`. The student's words: “The outer loop finishes first; so i ends at 2, then the inner loop runs j from 1 to 3: 2 1, 2 2, 2 3”. Wrong rule: “The outer loop runs completely, then the inner loop runs completely.” Right rule: “The inner loop runs all its passes during each single pass of the outer loop.”
-- **LoopBodyStatementOutsideLoop** at `loop_body`. The student's words: “Three lines; The outer loop finishes first; so i ends at 2, then the inner loop runs j from 1 to 3: 2 1, 2 2, 2 3”. Wrong rule: “Some statements inside the braces of a loop body are not repeated; they run once, before or after the loop.” Right rule: “Every statement inside the loop braces is part of the body and runs on every pass.”
-- **ForVariableScopeBeyondLoop** at `loop_scope`. The student's words: “The outer loop finishes first; so i ends at 2, then the inner loop runs j from 1 to 3: 2 1, 2 2, 2 3”. Wrong rule: “i declared in the for header can still be used after the loop has ended.” Right rule: “i declared in the for header exists only inside the loop, so using it after the loop does not compile.”
+**5.1 Mark the concepts with a fault.** These are the concepts with a counted held misconception or error after stage 4, and the concepts at which a broken edge was counted in 4.6.
 
-## Stage 5. Where the mistake starts: the root cause (rule, no model)
+*One of the outputs at this stage:* held: `loop_body`, `loop_scope`, `nested_loops`.
 
-**What this stage answers:** which concept should be taught first?
+**5.2 Walk back from each one.** Starting at each concept with a held fault, visit all its prerequisites, then their prerequisites, and so on, as far as the subgraph goes. Each time a visited concept is itself marked in 5.1, it replaces the starting concept as the **candidate**. If none is marked, the starting concept is its own candidate.
 
-Concepts build on each other: A → B means A must be understood before B (A is a **prerequisite** of B). A mistake in A explains a mistake in B, so this stage looks backwards.
+*One of the outputs at this stage:* from `loop_body` the walk visits `for_loop`, `loop_control`, `loop_variable`, none of them is marked, so the candidate is `loop_body`; from `loop_scope` the walk visits `for_loop`, `loop_control`, `loop_variable`, none of them is marked, so the candidate is `loop_scope`; from `nested_loops` the walk visits `for_loop`, `loop_control`, `loop_variable`, none of them is marked, so the candidate is `nested_loops`.
 
-**5.1 List the concepts with a counted mistake.**
-
-*One of the outputs at this stage:* `loop_body`, `loop_scope`, `nested_loops`.
-
-**5.2 Go back from each one.** Visit its prerequisites, then their prerequisites, to the end. If one of them is also on the list, it becomes the **candidate**. If none is, the starting concept is the candidate.
-
-*One of the outputs at this stage:* from `loop_body`: visits `for_loop`, `loop_control`, `loop_variable`, none is on the list, candidate `loop_body`; from `loop_scope`: visits `for_loop`, `loop_control`, `loop_variable`, none is on the list, candidate `loop_scope`; from `nested_loops`: visits `for_loop`, `loop_control`, `loop_variable`, none is on the list, candidate `nested_loops`.
-
-**5.3 Choose.** The candidate with the fewest prerequisites of its own stands furthest back: it is the **root cause**. At a tie, the one the model was more sure about is taken.
+**5.3 Choose among the candidates.** The candidate with the fewest prerequisites of its own in the subgraph is the **root cause**: it stands furthest back. At a tie, the one whose held label the model gave the higher confidence is taken. Alphabetical order never decides.
 
 *One of the outputs at this stage:* `loop_body` has 1 prerequisite and confidence 0.85; `loop_scope` has 1 prerequisite and confidence 0.60; `nested_loops` has 1 prerequisite and confidence 0.95. The root cause is `nested_loops` with NestedLoopsSequential.
 
-## Stage 6. How well each concept is understood: the levels (rule, no model)
+## Stage 6. Level of each concept (rule, no model)
 
-**What this stage answers:** how deep is the student's understanding of each concept?
+Every concept has five **levels**, taken from the SOLO taxonomy: **L0** prestructural (the answer holds a rule that contradicts Java, or reads the code in an everyday sense), **L1** unistructural (it states one correct rule without applying it), **L2** multistructural (it applies the rules to the code step by step), **L3** relational (it relates the parts to each other and to the purpose of the whole), **L4** extended abstract (it reasons beyond the given code: predicts a change, transfers, diagnoses). Each level has **ways**, concrete things a student does at that level, such as "output prediction" at L2 or "predict a change" at L4.
 
-| Level | In plain words |
-|---|---|
-| L0 | Holds a rule that contradicts Java, or reads the code in an everyday sense |
-| L1 | States one correct rule, without applying it |
-| L2 | Applies the rules to the code step by step |
-| L3 | Relates the parts to each other and to the purpose of the whole |
-| L4 | Reasons beyond the given code: predicts a change, transfers, diagnoses |
+The model is never asked for a level. In stage 3 it only said whether a way was *shown*; the level is read from where that way sits in the graph, in two steps.
 
-Each level of a concept has **ways**: things a student at that level does, such as "output prediction" at L2. The model never gives a level. In 3.3 it only said which ways the answer shows.
+**6.1 Gather the evidence per concept.** Take every concept that appears in the evidence of stage 3 (kept in 3.4 or not). For each one collect two lists: the misconceptions held on it that are not shadows, and the ways shown on it.
 
-**6.1 Gather.** For every concept that got a label in stage 3, list the misconceptions held on it (shadows left out) and the ways shown on it.
+*One of the outputs at this stage:* 12 concepts appear in the evidence: `control_flow`, `for_loop`, `loop_body`, `loop_control`, `loop_scope`, `loop_variable`, `nested_loops`, `println`, `statement`, `string_concatenation`, `string_conversion`, `string_literal`.
 
-*One of the outputs at this stage:* 12 concepts: `control_flow`, `for_loop`, `loop_body`, `loop_control`, `loop_scope`, `loop_variable`, `nested_loops`, `println`, `statement`, `string_concatenation`, `string_conversion`, `string_literal`.
+**6.2 Apply the first rule that fits.**
 
-**6.2 Give the level.** The first rule that fits is used:
+- (a) A misconception is held on the concept: the level is **L0**. The entry names the misconception.
+- (b) Ways are shown and all of them are L0 ways (everyday reading, inconsistent trace): the level is **L0**.
+- (c) Ways are shown and at least one is above L0: the level is the **highest** one shown. The levels build on each other (an answer that relates the parts has also applied the rules), so a lower way shown beside it is only listed.
+- (d) Nothing is held and no way is shown: the concept gets no level.
 
-- (a) a misconception is held: **L0**;
-- (b) only L0 ways are shown: **L0**;
-- (c) a way above L0 is shown: the **highest** level shown, because each level includes the ones below it;
-- (d) nothing is held and no way is shown: no level.
-
-A held error is not a misconception, so (a) does not apply to it.
+A held error node is not a misconception, so rule (a) does not apply to it.
 
 *One of the outputs at this stage:*
 
@@ -197,15 +179,15 @@ A held error is not a misconception, so (a) does not apply to it.
 | `string_conversion` | none | (d) | nothing held, no way shown |
 | `string_literal` | none | (d) | nothing held, no way shown |
 
-## Stage 7. One level for the whole answer (rule, no model)
+## Stage 7. Overall level (rule, no model)
 
-**What this stage answers:** where does the student stand overall?
+One level is reported for the whole answer.
 
-**7.1 With a root cause:** the overall level is the level of the root concept. The student stands where the mistake begins.
+**7.1 With a root cause.** The overall level is the level stage 6 gave to the root concept: the student stands where the fault begins, however well the rest is handled.
 
-**7.2 With no mistake:** the levels of stage 6 are sorted from high to low and the middle one is taken (of an even number, the higher of the two middle ones), so one weak or one strong concept does not decide.
+**7.2 Without a fault.** The levels of stage 6 are sorted from high to low and the one in the middle is taken: with n levels, the one at position (n − 1) ÷ 2, rounded down and counted from 0. So one weak or one strong concept does not decide for the whole answer.
 
-*One of the outputs at this stage:* 7.1: the root cause is `nested_loops`, its level is L0, so the overall level is **L0**.
+*One of the outputs at this stage:* 7.1 applies: the root cause is `nested_loops` and its level is L0, so the overall level is **L0**.
 
 ## The final picture
 
