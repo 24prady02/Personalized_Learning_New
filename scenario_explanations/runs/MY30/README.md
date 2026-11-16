@@ -97,43 +97,57 @@ At each depth, for each current concept, the following happens.
 
 **What this stage answers:** how many mistakes did the student really make, and at which concept does each one belong?
 
-**Why it is needed.** Stage 3 checks every concept on its own. So one wrong sentence of the student is usually flagged several times: at the concept it is really about, and again at related concepts. A flag here means an edge that stage 3 labelled *held* (the student follows that wrong rule) or *broken* (the student did not carry a rule from one concept to the next). Stage 4 goes through the flags with fixed rules and decides which ones count as a **mistake**. Nothing is deleted: a flag that is not counted stays in the record, marked as a repeat.
+Stage 3 checks every concept on its own, so one wrong sentence of the student is usually flagged several times: at the concept it is really about, and again at related concepts. A **flag** is an edge that stage 3 labelled *held* (the student follows that wrong rule) or *broken* (the student did not carry a rule from one concept to the next). Stage 4 passes the flags through six fixed steps, in this order, and what is left at the end are the **mistakes**. Nothing is deleted: a flag that is not counted stays in the output, marked. Two flags rest on the **same words** when they name at least one clause in common; this is known exactly, because in 3.3 every label came with its clause numbers.
 
-| What stage 3 flagged | What stage 4 does with it |
-|---|---|
-| The same wrong rule at two linked concepts | Counts it once, at the concept the wrong rule is really about |
-| A wrong rule at a more basic or more general concept, shown by the same words as a more specific one | Treats it as a repeat of the specific one (the output calls it a **shadow**) |
-| A wrong belief, and beside it an error node (the visible result of that belief in a program) | Counts the belief; the error is kept as evidence for it |
-| A broken link between two concepts, shown by the same words as a wrong belief | Treats it as a result of that belief (a **consequence**), not as a second mistake |
-| A broken link with words of its own | Counts it as a mistake at the concept the link leads to |
+**4.1 Collect the flags.** From the paths (the edges kept in 3.4) take every edge labelled *held* and every edge labelled *broken*. These are the candidates.
 
-**In this run.** One mistake is counted:
+*One of the outputs at this stage:* 1 kept edge labelled held: CharNotNumeric at `char_arithmetic`; 1 labelled broken: char → char_arithmetic.
+
+**4.2 An error beside a misconception.** A misconception is a wrong belief; an error node is the visible result of a belief in a program. If a concept has a held misconception and also a held error, the error is moved to the evidence list and is not counted. A held error on a concept with no held misconception stays a candidate.
+
+*One of the outputs at this stage:* no concept has both, so nothing is moved.
+
+**4.3 Two wrong rules on one concept.** The candidates are sorted by score, best first. If two misconceptions are held on the same concept and rest on the same words, both stay (a student can hold several), and the weaker one is marked as sharing its evidence with the stronger one.
+
+*One of the outputs at this stage:* no two held misconceptions on one concept rest on the same words.
+
+**4.4 One mistake, one place.** The graph can attach the same misconception to more than one concept, and gives each attachment a **role**: *primary* (the concept whose rule the misconception violates) or *context* (a concept where it also shows up). If the same misconception is held at two concepts: when exactly one of them is primary, the candidate at the other concept is dropped; otherwise, when one concept is a prerequisite of the other, the candidate at the prerequisite is dropped, so the mistake is filed at the concept that depends on it.
+
+*One of the outputs at this stage:* no misconception is held at two concepts in a way this step merges.
+
+**4.5 Shadows.** A held label X is a **shadow** of a candidate Y when every clause of X is also a clause of Y (X has no words of its own) and one of these is true: (a) X and Y are the same misconception, and Y sits at its primary concept while X does not; (b) X sits on a generic concept (such as `expression` or `statement`) and Y does not; (c) the concept of X is a prerequisite of the concept of Y, directly or over several prerequisite edges, and the model's confidence in X is not higher than in Y. The labels on generic concepts are tested first, then the others from low to high confidence, so the specific, confident label is the one that stays. Held labels that 3.4 did not keep are tested too. A shadow is not a mistake, cannot be the root cause and sets no level.
+
+*One of the outputs at this stage:* no held label is a shadow.
+
+**4.6 Broken links.** A broken prerequisite edge A → B says the student did not carry the rule of A into B. If it rests on the same words as a held misconception, it is that misconception's **consequence** and is not counted. Otherwise it is counted as a mistake at B, the concept that failed to use its prerequisite.
+
+*One of the outputs at this stage:* char → char_arithmetic is a consequence of CharNotNumeric.
+
+**Result of stage 4 in this run:** one mistake is counted.
 
 - **CharNotNumeric** at `char_arithmetic`. The student's words: “Then k = c + 1 is the letter after b; so it prints c”. The wrong rule in the graph: “char is not a numeric type” The right rule: “A char is encoded as a 16-bit integer, so arithmetic such as 'b' + 'c' or 'a' + 4 works on the character codes.”
-
-Flagged by stage 3 but not counted a second time:
-
-- 1 broken link (char → char_arithmetic), each a result of a counted mistake
 
 ## Stage 5. Where the mistake starts: the root cause (rule, no model)
 
 **What this stage answers:** if a teacher can fix only one thing first, which concept should it be?
 
-Concepts build on each other: the graph says which concept must be understood before another (its **prerequisite**). A mistake in a prerequisite explains mistakes in what is built on it. So the rule is:
+Concepts build on each other: a prerequisite edge A → B in the subgraph says A must be understood before B. A mistake in A explains a mistake in B, so the search goes backwards along these edges.
 
-1. Start at each concept that has a counted mistake.
-2. Go back along its prerequisites. If a prerequisite also has a counted mistake, move back to it.
-3. The concept furthest back is the **root cause**. If two are equally far back, the one the model was more sure about is taken.
+**5.1 Mark the concepts with a mistake.** These are the concepts with a counted held misconception or error after stage 4, and the concepts at which a broken link was counted in 4.6.
 
-With only one counted mistake, its concept is the root cause.
+*One of the outputs at this stage:* held: `char_arithmetic`.
 
-**In this run.** Only `char_arithmetic` has a counted mistake. Its prerequisites in the subgraph (`char`) have none, so the root cause is `char_arithmetic` with CharNotNumeric.
+**5.2 Walk back from each one.** Starting at each concept with a held mistake, visit all its prerequisites, then their prerequisites, and so on, as far as the subgraph goes. Each time a visited concept is itself marked in 5.1, it replaces the starting concept as the **candidate**. If none is marked, the starting concept is its own candidate.
+
+*One of the outputs at this stage:* from `char_arithmetic` the walk visits `char`, none of them is marked, so the candidate is `char_arithmetic`.
+
+**5.3 Choose among the candidates.** The candidate with the fewest prerequisites of its own in the subgraph is the **root cause**: it stands furthest back. At a tie, the one whose held label the model gave the higher confidence is taken. Alphabetical order never decides.
+
+*One of the outputs at this stage:* there is one candidate, so the root cause is `char_arithmetic` with CharNotNumeric.
 
 ## Stage 6. How well each concept is understood: the levels (rule, no model)
 
 **What this stage answers:** for each concept the answer touched, how deep is the student's understanding?
-
-The scale has five levels (from the SOLO taxonomy):
 
 | Level | In plain words |
 |---|---|
@@ -143,32 +157,43 @@ The scale has five levels (from the SOLO taxonomy):
 | L3 | Relates the parts to each other and to the purpose of the whole |
 | L4 | Reasons beyond the given code: predicts a change, transfers, diagnoses |
 
-In the graph every level of a concept lists **ways**: concrete things a student at that level does, for example "output prediction" at L2. In stage 3 the model only said which ways the answer *shows*. It was never asked for a level. The level follows by rule:
+In the graph every level of a concept lists **ways**: concrete things a student at that level does, for example "output prediction" at L2. The model is never asked for a level. In 3.3 it only said which ways the answer *shows*; the level is read from where a way sits in the graph.
 
-1. A concept with a counted mistake (a held misconception that is not a repeat) is **L0**.
-2. Otherwise the concept gets the **highest** level among the ways shown, because the levels build on each other.
-3. A concept with no mistake and no way shown gets no level.
+**6.1 Gather the evidence per concept.** Take every concept that appears in the evidence of stage 3 (kept in 3.4 or not). For each one collect two lists: the misconceptions held on it that are not shadows, and the ways shown on it.
 
-**In this run.**
+*One of the outputs at this stage:* 8 concepts appear in the evidence: `arithmetic_operators`, `assignment`, `char`, `char_arithmetic`, `expression`, `increment_operators`, `println`, `statement`.
 
-| Concept | Level | Why |
-|---|---|---|
-| `assignment` | L2 | ways shown: L2 “line by line trace” |
-| `char` | L2 | ways shown: L0 “everyday reading”, L2 “one step execution” |
-| `char_arithmetic` | L0 | holds CharNotNumeric |
-| `expression` | L3 | ways shown: L3 “relation to neighbour” |
-| `increment_operators` | L3 | ways shown: L2 “one step execution”, L2 “output prediction”, L3 “relation to neighbour” |
-| `println` | L3 | ways shown: L2 “output prediction”, L2 “line by line trace”, L3 “relation to neighbour” |
-| `statement` | L2 | ways shown: L2 “line by line trace”, L2 “one step execution”, L2 “output prediction” |
+**6.2 Apply the first rule that fits.**
+
+- (a) A misconception is held on the concept: the level is **L0**. The entry names the misconception.
+- (b) Ways are shown and all of them are L0 ways (everyday reading, inconsistent trace): the level is **L0**.
+- (c) Ways are shown and at least one is above L0: the level is the **highest** one shown. The levels build on each other (an answer that relates the parts has also applied the rules), so a lower way shown beside it is only listed.
+- (d) Nothing is held and no way is shown: the concept gets no level.
+
+A held error node is not a misconception, so rule (a) does not apply to it.
+
+*One of the outputs at this stage:*
+
+| Concept | Level | Rule | Why |
+|---|---|---|---|
+| `arithmetic_operators` | none | (d) | nothing held, no way shown |
+| `assignment` | L2 | (c) | ways shown: L2 “line by line trace” |
+| `char` | L2 | (c) | ways shown: L0 “everyday reading”, L2 “one step execution” |
+| `char_arithmetic` | L0 | (a) | holds CharNotNumeric |
+| `expression` | L3 | (c) | ways shown: L3 “relation to neighbour” |
+| `increment_operators` | L3 | (c) | ways shown: L2 “one step execution”, L2 “output prediction”, L3 “relation to neighbour” |
+| `println` | L3 | (c) | ways shown: L2 “output prediction”, L2 “line by line trace”, L3 “relation to neighbour” |
+| `statement` | L2 | (c) | ways shown: L2 “line by line trace”, L2 “one step execution”, L2 “output prediction” |
 
 ## Stage 7. One level for the whole answer (rule, no model)
 
 **What this stage answers:** where does the student stand overall?
 
-- If there is a root cause, the overall level is the level of the root concept: the student stands where the mistake begins, however well the rest is handled.
-- If there is no mistake, the levels of stage 6 are sorted from high to low and the middle one is taken, so one weak or one strong concept does not decide for the whole answer.
+**7.1 With a root cause.** The overall level is the level stage 6 gave to the root concept: the student stands where the mistake begins, however well the rest is handled.
 
-**In this run.** The root cause is `char_arithmetic` and its level is L0, so the overall level is **L0**.
+**7.2 Without a mistake.** The levels of stage 6 are sorted from high to low and the one in the middle is taken: with n levels, the one at position (n − 1) ÷ 2, rounded down and counted from 0. So one weak or one strong concept does not decide for the whole answer.
+
+*One of the outputs at this stage:* 7.1 applies: the root cause is `char_arithmetic` and its level is L0, so the overall level is **L0**.
 
 ## The final picture
 

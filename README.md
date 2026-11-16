@@ -533,27 +533,49 @@ the prompts that changed and gives the same result.
 **What this stage answers:** how many mistakes did the student really make, and at which concept does each one
 belong?
 
-**Why it is needed.** Stage 3 checks every concept on its own. So one wrong sentence of the student is usually
-flagged several times: at the concept it is really about, and again at related concepts. A flag is an edge that
-Stage 3 labelled *held* (the student follows that wrong rule) or *broken* (the student did not carry a rule from one
-concept to the next). Stage 4 goes through the flags with fixed rules and decides which ones count as a **mistake**.
-Nothing is deleted: a flag that is not counted stays in the output, marked.
+Stage 3 checks every concept on its own, so one wrong sentence of the student is usually flagged several times: at
+the concept it is really about, and again at related concepts. A **flag** is an edge that Stage 3 labelled *held*
+(the student follows that wrong rule) or *broken* (the student did not carry a rule from one concept to the next).
+Stage 4 passes the flags through six fixed steps, in this order; what is left at the end are the **mistakes**.
+Nothing is deleted: a flag that is not counted stays in the output, marked. Two flags rest on the **same words**
+when they name at least one clause in common, which is known exactly because every label of 3.3 came with its
+clause numbers.
 
-| What Stage 3 flagged | What Stage 4 does with it | Where it shows in the output |
-|---|---|---|
-| The same wrong rule at two linked concepts (both ends of a prerequisite edge) | Counts it once: at the concept the graph marks as `primary` for it, otherwise at the dependent concept | only one entry in `held_misconceptions` |
-| A wrong rule at a prerequisite or a generic concept, shown by the same words as a more specific one | Treats it as a repeat of the specific one, called a **shadow**: not a mistake, cannot be the root cause, sets no level | `shadowed` |
-| A wrong belief, and beside it on the same concept an error node (the visible result of that belief in a program) | Counts the belief; the error is kept as evidence for it | `error_evidence` |
-| A broken link A → B, shown by the same words as a wrong belief | Treats it as a result of that belief, not as a second mistake | `consequence_of` on the broken edge |
-| A broken link A → B with words of its own | Counts it as a mistake at B, the concept that did not use its prerequisite | `broken_edges` |
-| Two differently worded wrong rules on one concept, shown by the same words | Keeps both (a student can hold several) and marks the weaker one | `shares_evidence_with` |
+- **4.1 Collect the flags.** From the paths (the edges kept in 3.4) take every edge labelled held and every edge
+  labelled broken. These are the candidates.
+- **4.2 An error beside a misconception.** A misconception is a wrong belief; an error node is the visible result
+  of a belief in a program. If a concept has a held misconception and also a held error, the error is moved to
+  `error_evidence` and is not counted. A held error on a concept with no held misconception stays a candidate.
+- **4.3 Two wrong rules on one concept.** The candidates are sorted by score, best first. If two misconceptions are
+  held on the same concept and rest on the same words, both stay (a student can hold several at once, and the graph
+  words one wrong idea in several ways, e.g. IfConditionWatched / IfWaitsForCondition on if_statement). The weaker
+  one is marked `shares_evidence_with` the stronger one.
+- **4.4 One mistake, one place.** The graph can attach the same misconception to more than one concept and gives
+  each attachment a role: `primary` (the concept whose rule the misconception violates) or `context` (a concept
+  where it also shows up). If the same misconception is held at two concepts: when exactly one of them is primary,
+  the candidate at the other concept is dropped; otherwise, when one concept is a prerequisite of the other, the
+  candidate at the prerequisite is dropped, so the mistake is filed at the concept that depends on it.
+- **4.5 Shadows.** A held label X is a shadow of a candidate Y when every clause of X is also a clause of Y (X has
+  no words of its own) and one of these is true: (a) X and Y are the same misconception, and Y sits at its primary
+  concept while X does not; (b) X sits on a generic concept and Y does not; (c) the concept of X is a prerequisite
+  of the concept of Y, directly or over several prerequisite edges, and the confidence of X is not higher than that
+  of Y. Labels on generic concepts are tested first, then the others from low to high confidence, so the specific,
+  confident label is the one that stays. Held labels that 3.4 did not keep are tested too. A shadow is listed under
+  `shadowed`; it is not a mistake, cannot be the root cause and sets no level.
+- **4.6 Broken links.** A broken prerequisite edge A → B says the student did not carry the rule of A into B. If it
+  rests on the same words as a held misconception, it is that misconception's consequence (`consequence_of`) and
+  is not counted. Otherwise it is counted as a mistake at B, the concept that failed to use its prerequisite.
 
-**Example (MY01).** The student says the `(double)` cast turns `7 / 2` into `3.5`. Stage 3 flags that one sentence
-at four concepts: `explicit_cast`, `integer_division`, `type_conversion` and `expression`. It is one mistake, and it
-is about the cast. Stage 4 counts CastAfterIntDivision once, at `explicit_cast`, and marks the other three as
-shadows.
+What is left in `held_misconceptions`, together with the broken links counted in 4.6, are the mistakes.
 
-**What happens without this stage.** Replaying the 40 stored runs with these rules switched off changes 20 of them:
+**Example (MY01).** The student says the `(double)` cast turns `7 / 2` into `3.5`. 4.1 finds four held edges:
+CastAfterIntDivision at `explicit_cast` and at `integer_division`, TargetTyping at `type_conversion` and at
+`expression`, and three broken edges. 4.4 drops CastAfterIntDivision at `integer_division`, because `explicit_cast`
+is primary for it. 4.5 marks the two TargetTyping labels as shadows: the one at `type_conversion` by (c), a
+prerequisite of `explicit_cast` resting on the same clauses, and the one at `expression` by (b), a generic concept.
+4.6 marks the three broken edges as consequences. One mistake is left: CastAfterIntDivision at `explicit_cast`.
+
+**What happens without this stage.** Replaying the 40 stored runs with these steps switched off changes 20 of them:
 extra copies of the same mistake appear in 19, and in 16 the root cause moves to another concept, usually a
 prerequisite or a generic one.
 
@@ -561,17 +583,17 @@ prerequisite or a generic one.
 
 **What this stage answers:** if a teacher can fix only one thing first, which concept should it be?
 
-Concepts build on each other: the graph says which concept must be understood before another (its prerequisite). A
-mistake in a prerequisite explains mistakes in what is built on it. So the rule is:
+Concepts build on each other: a prerequisite edge A → B in G says A must be understood before B. A mistake in A
+explains a mistake in B, so the search goes backwards along these edges.
 
-1. Start at each concept that has a counted mistake (a held misconception, or the target of a broken prerequisite
-   edge that is not a consequence).
-2. Go back along its prerequisite edges in G. If a concept reached that way also has a counted mistake, move back to
-   it.
-3. The concept furthest back (the one with the fewest prerequisites of its own in G) is the **root cause**. At a
-   tie, the one whose label the model gave the higher confidence is taken. Alphabetical order never decides.
-
-With only one counted mistake, its concept is the root cause.
+- **5.1 Mark the concepts with a mistake.** The concepts with a held misconception or error left after Stage 4, and
+  the concepts at which a broken link was counted in 4.6.
+- **5.2 Walk back from each one.** Starting at each concept with a held mistake, visit all its prerequisites, then
+  their prerequisites, and so on, as far as G goes. Each time a visited concept is itself marked in 5.1, it
+  replaces the starting concept as the candidate. If none is marked, the starting concept is its own candidate.
+- **5.3 Choose among the candidates.** The candidate with the fewest prerequisites of its own in G is the root
+  cause: it stands furthest back. At a tie, the one whose held label has the higher confidence is taken.
+  Alphabetical order never decides. With nothing held there is no root cause.
 
 ### Stage 6. How well each concept is understood: the levels (rule, no model)
 
@@ -586,27 +608,35 @@ With only one counted mistake, its concept is the root cause.
 | L4 | Reasons beyond the given code: predicts a change, transfers, diagnoses |
 
 In the graph every level of a concept lists **ways**: concrete things a student at that level does, for example
-"output prediction" at L2. In Stage 3 the model only said which ways the answer shows (3.3). It is never asked for
-a level. The level follows by rule:
+"output prediction" at L2. The model is never asked for a level. In 3.3 it only said which ways the answer shows;
+the level is read from where a way sits in the graph.
 
-1. A concept with a held misconception that is not a shadow is **L0**. The level entry then names that
-   misconception and carries the L0 way's own text from `level_mis_links` as `rule`.
-2. Otherwise the concept gets the **highest** level among the ways shown, because the levels build on each other (an
-   answer at L4 also does L3). If the only ways shown are L0 ways (everyday reading, inconsistent trace), it is L0.
-3. A concept with no mistake and no way shown gets no level.
+- **6.1 Gather the evidence per concept.** Take every concept that appears in the evidence of Stage 3 (kept in 3.4
+  or not). For each one collect two lists: the misconceptions held on it that are not shadows, and the ways shown
+  on it.
+- **6.2 Apply the first rule that fits.**
+  (a) A misconception is held on the concept: the level is L0. The entry names the misconception (the one kept on
+  a path, otherwise the one with the highest score) and carries the L0 way's own text from `level_mis_links` as
+  `rule`; other misconceptions held there are listed under `also_held`.
+  (b) Ways are shown and all of them are L0 ways (everyday reading, inconsistent trace): the level is L0.
+  (c) Ways are shown and at least one is above L0: the level is the highest one shown, because the levels build on
+  each other (an answer at L4 also does L3); the other shown ways are listed under `also_shown`.
+  (d) Nothing is held and no way is shown: the concept gets no level.
 
-A held error node sets no level.
+A held error node is not a misconception, so rule (a) does not apply to it.
 
 ### Stage 7. One level for the whole answer (rule, no model)
 
 **What this stage answers:** where does the student stand overall?
 
-- If there is a root cause, the overall level is the level of the root concept: the student stands where the mistake
-  begins, however well the rest is handled.
-- If there is no mistake, the levels of Stage 6 are sorted from high to low and the middle one is taken, so one weak
-  or one strong concept does not decide for the whole answer.
+- **7.1 With a root cause.** The overall level is the level Stage 6 gave to the root concept: the student stands
+  where the mistake begins, however well the rest is handled.
+- **7.2 Without a mistake.** The levels of Stage 6 are sorted from high to low and the one in the middle is taken:
+  with n levels, the one at position (n − 1) ÷ 2, rounded down and counted from 0. So one weak or one strong
+  concept does not decide for the whole answer.
 
-Because a held error sets no level, the overall level is empty when the root cause carries only an error (MY35).
+Because a held error sets no level (6.2), the overall level is empty when the root cause carries only an error
+(MY35).
 
 The output (`<sid>_diagnosis.json`) also lists the evidence, which edge covers each clause, the uncovered clauses,
 the stop reason (sufficient / half_stop / max depth) and the number of prompts per step (prune, label). The model
