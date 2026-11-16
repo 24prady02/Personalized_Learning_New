@@ -40,7 +40,7 @@ This stage reads only the program, never the student's answer. Its job is to dec
 
 *One of the outputs at this stage:* this program has no string literal or comment, so the masked code equals the original.
 
-**1.2 Tag concepts.** Every concept node stores a *reader block*: regular expressions that describe how the concept looks in Java, in several *channels* (code patterns, signals, operator symbols, type names). All of them are run over the masked code. Each match is a **hit**: which channel and pattern, the matched text, and the line. A concept with at least one hit is **tagged**. There is nothing learned here; the patterns in the graph are the whole "model".
+**1.2 Tag concepts.** Every concept node stores a *reader block*: regular expressions that describe how the concept looks in Java, in several *channels* (code patterns, signals, operator symbols, type names, and command patterns for `java` / `javac` lines). All of them are run over the masked code. Each match is a **hit**: which channel and pattern, the matched text, and the line. A concept with at least one hit is **tagged**. There is nothing learned here; the patterns in the graph are the whole "model".
 
 *One of the outputs at this stage:* `loop_control` is tagged: its signal `for_header` matches `for (int i = 0; i <= a.length; i++)` on line 2.
 
@@ -80,7 +80,7 @@ At each depth, for each current concept, the following happens.
 
 *One of the outputs at this stage:* OffByOneBound at `loop_control` is labelled **held** on clauses 1, 2, 3 (“i goes from 0 to a.length; Using <= or < makes no difference here; because both go throug…”) with confidence 0.92. The rule on that edge: “i < n and i <= n mean the same, so the loop runs until i equals n and the last pass can use a[n].”
 
-**3.4 Score and keep.** The **score** of a labelled edge is prune score × confidence: an edge counts for much only if it was both relevant and confidently labelled. The edges are then ranked in **tiers**. Tier 0 is a held misconception or a broken edge: these are findings about a fault and are always kept. Tier 1 is a held error. Tier 2 is everything that only confirms understanding (correct, confirmed, shown); these fill whatever is left of the N = 3 places, best score first. Kept edges are added to the paths. Every labelled edge, kept or not, is added to the evidence, because the levels in stage 6 are read from all of it.
+**3.4 Score and keep.** The **score** of a labelled edge is prune score × confidence: an edge counts for much only if it was both relevant and confidently labelled. The edges are then ranked in **tiers**. Tier 0 is a held misconception or a broken edge: these are findings about a fault and are always kept. Tier 1 is a held error. Tier 2 is everything that only confirms understanding (correct, confirmed, shown); these fill whatever is left of the N = 3 places, best score first. Kept edges are added to the paths. Every edge with a label other than *not applied*, kept or not, is added to the evidence, because the levels in stage 6 are read from all of it.
 
 *One of the outputs at this stage:* the score of OffByOneBound is 0.60 × 0.92 = 0.55. At depth 1 the kept edges are: OffByOneBound (held, tier 0, 0.57); OffByOneBound (held, tier 0, 0.55); IdiomOverridesCode (held, tier 0, 0.54); IdiomOverridesCode (held, tier 0, 0.19).
 
@@ -112,11 +112,25 @@ The walk leaves a set of labelled edges. Each kept edge labelled *held* is a can
 
 *One of the outputs at this stage:* OffByOneBound at `array_traversal` is dropped and stays at `loop_control` (the graph marks that concept as primary for it); IdiomOverridesCode at `loop_control` is dropped and stays at `for_loop` (that concept depends on this one); OffByOneBound at `off_by_one_error` is dropped and stays at `loop_control` (the graph marks that concept as primary for it).
 
-**4.5 Shadows.** A held label X is a **shadow** of a candidate Y when every clause of X is also a clause of Y (X has no words of its own) and one of these is true: (a) X and Y are the same misconception, and Y sits at its primary concept while X does not; (b) X sits on a generic concept (such as `expression` or `statement`) and Y does not; (c) the concept of X is a prerequisite of the concept of Y, directly or over several prerequisite edges, and the model's confidence in X is not higher than in Y. The labels on generic concepts are tested first, then the others from low to high confidence, so the specific, confident label is the one that stays. Held labels that 3.4 did not keep are tested too. A shadow is not a fault, cannot be the root cause and sets no level.
+**4.5 Shadows.** One wrong sentence is often labelled twice: once at the concept it is really about, and once more at a broader concept nearby. The second label is a **shadow**: a second reading of the same words, not a second fault. Without this step the broader label would count as a fault of its own and, because it sits further back in the graph, stage 5 would take it as the root cause.
 
-*One of the outputs at this stage:* IdiomOverridesCode at `loop_control` is a shadow of IdiomOverridesCode at `for_loop` by (c): `loop_control` is a prerequisite of `for_loop` (already dropped in 4.4).
+A held misconception X is a shadow of another held misconception Y when both conditions hold:
 
-**4.6 Broken edges.** A broken prerequisite edge A → B says the student did not carry the rule of A into B. If it rests on the same words as a held misconception, it is that misconception's **consequence** and is not counted. Otherwise it is counted as a fault at B, the concept that failed to use its prerequisite.
+1. **X has no words of its own.** Every clause that X points at, Y points at too.
+2. **X sits in a broader place than Y.** One of these is true:
+   - (a) *the same misconception in the wrong place:* X and Y are the same misconception, Y is at the concept the graph marks as primary for it, and X is not;
+   - (b) *a general concept:* X is on a generic concept, one that nearly every program has (such as `expression` or `statement`), and Y is on a specific one;
+   - (c) *a prerequisite:* the concept of X is something the concept of Y is built on (a prerequisite of it, directly or several steps back), and the model was not more confident about X than about Y.
+
+The labels are tested in a fixed order: those on generic concepts first, then those not at their primary concept, then from low to high confidence. A label found to be a shadow is taken out before the next one is tested. So the specific, confident label is the one that stays. Every held misconception of stage 3 is tested, also one that 3.4 did not keep or 4.4 dropped.
+
+A shadow stays in the output, in the list `shadowed`. It is not a fault, cannot be the root cause and does not set its concept to L0.
+
+*One of the outputs at this stage:*
+
+- IdiomOverridesCode at `loop_control` (clauses 3, 4) is a shadow of IdiomOverridesCode at `for_loop` (clauses 2, 3, 4) by (c): `loop_control` is a prerequisite of `for_loop` (already dropped in 4.4)
+
+**4.6 Broken edges.** A broken prerequisite edge A → B says the student did not carry the rule of A into B. If it rests on the same words as a held misconception, it is that misconception's **consequence** and is not counted. Otherwise it is counted as a fault at B, the concept that failed to use its prerequisite (for a broken parallel edge, which has no direction, at the concept from which the walk read it).
 
 *One of the outputs at this stage:* loop_control → off_by_one_error is a consequence of OffByOneBound; length_field → array_traversal is a consequence of OffByOneBound; for_loop → array_traversal is a consequence of OffByOneBound; loop_variable → loop_control is a consequence of OffByOneBound; loop_control → for_loop is a consequence of OffByOneBound.
 
@@ -138,7 +152,7 @@ Several concepts may carry a fault, and the **root cause** is the one to teach f
 
 *One of the outputs at this stage:* from `for_loop` the walk visits `loop_control`, `loop_variable`, and the candidate moves back to `loop_control`; from `indexing` the walk visits `array_declaration`, `array_initializer`, `data_structure`, `data_type`, none of them is marked, so the candidate is `indexing`; from `loop_control` the walk visits `loop_variable`, none of them is marked, so the candidate is `loop_control`.
 
-**5.3 Choose among the candidates.** The candidate with the fewest prerequisites of its own in the subgraph is the **root cause**: it stands furthest back. At a tie, the one whose held label the model gave the higher confidence is taken. Alphabetical order never decides.
+**5.3 Choose among the candidates.** The candidate with the fewest prerequisites of its own in the subgraph is the **root cause**: it stands furthest back. At a tie, the one whose held label the model gave the higher confidence is taken. If that is equal too, the candidate found first stays (the starting concepts are taken in alphabetical order); this does not happen in any of the 40 runs.
 
 *One of the outputs at this stage:* `indexing` has 1 prerequisite and confidence 0.90; `loop_control` has 1 prerequisite and confidence 0.92. The root cause is `loop_control` with OffByOneBound.
 

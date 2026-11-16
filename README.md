@@ -503,8 +503,8 @@ A beam search of width N over at most D depths plus one closing round. At each d
 - **3.4 Score and keep.** Score = prune score × confidence. The best N are kept in tiers: tier 0, held
   misconceptions and broken edges, always kept; tier 1, held errors; tier 2, correct / confirmed / shown edges,
   which fill what is left of the N places, best score first (an edge reached from both ends in one round counts
-  once). Confirmations therefore never crowd out a finding. Kept edges are added to the paths. Every labelled edge,
-  kept or not, is recorded as **evidence**, so a dropped "correct" label still explains its clause and the levels
+  once). Confirmations therefore never crowd out a finding. Kept edges are added to the paths. Every edge with a
+  label other than not applied, kept or not, is recorded as **evidence**, so a dropped "correct" label still explains its clause and the levels
   of Stage 6 are read from all of it.
 - **3.5 Move to the next concepts.** The far end of each kept concept edge is entered, so its own misconception
   edges and level ways are read at the next depth and it gets a level of its own; the concept of each held
@@ -550,24 +550,39 @@ its clause numbers.
   where it also shows up). If the same misconception is held at two concepts: when exactly one of them is primary,
   the candidate at the other concept is dropped; otherwise, when one concept is a prerequisite of the other, the
   candidate at the prerequisite is dropped, so the fault is filed at the concept that depends on it.
-- **4.5 Shadows.** A held label X is a shadow of a candidate Y when every clause of X is also a clause of Y (X has
-  no words of its own) and one of these is true: (a) X and Y are the same misconception, and Y sits at its primary
-  concept while X does not; (b) X sits on a generic concept and Y does not; (c) the concept of X is a prerequisite
-  of the concept of Y, directly or over several prerequisite edges, and the confidence of X is not higher than that
-  of Y. Labels on generic concepts are tested first, then the others from low to high confidence, so the specific,
-  confident label is the one that stays. Held labels that 3.4 did not keep are tested too. A shadow is listed under
-  `shadowed`; it is not a fault, cannot be the root cause and sets no level.
+- **4.5 Shadows.** One wrong sentence is often labelled twice: once at the concept it is really about, and once
+  more at a broader concept nearby. The second label is a **shadow**: a second reading of the same words, not a
+  second fault. Without this step the broader label would count as a fault of its own and, because it sits further
+  back in the graph, Stage 5 would take it as the root cause. A held misconception X is a shadow of another held
+  misconception Y when both conditions hold:
+  1. **X has no words of its own.** Every clause that X points at, Y points at too.
+  2. **X sits in a broader place than Y.** One of these is true:
+     - (a) *the same misconception in the wrong place:* X and Y are the same misconception, Y is at the concept the
+       graph marks as `primary` for it, and X is not;
+     - (b) *a general concept:* X is on a generic concept, one that nearly every program has (such as `expression`
+       or `statement`), and Y is on a specific one;
+     - (c) *a prerequisite:* the concept of X is something the concept of Y is built on (a prerequisite of it,
+       directly or several steps back), and the model was not more confident about X than about Y.
+
+  The labels are tested in a fixed order: those on generic concepts first, then those not at their primary concept,
+  then from low to high confidence. A label found to be a shadow is taken out before the next one is tested, so the
+  specific, confident label is the one that stays. Every held misconception of Stage 3 is tested, also one that 3.4
+  did not keep or 4.4 dropped. A shadow stays in the output, in the list `shadowed`; it is not a fault, cannot be
+  the root cause and does not set its concept to L0.
 - **4.6 Broken edges.** A broken prerequisite edge A → B says the student did not carry the rule of A into B. If it
   rests on the same words as a held misconception, it is that misconception's consequence (`consequence_of`) and
-  is not counted. Otherwise it is counted as a fault at B, the concept that failed to use its prerequisite.
+  is not counted. Otherwise it is counted as a fault at B, the concept that failed to use its prerequisite (for a
+  broken parallel edge, which has no direction, at the concept from which the walk read it).
 
 What is left in `held_misconceptions`, together with the broken edges counted in 4.6, are the faults.
 
 **Example (MY01).** The student says the `(double)` cast turns `7 / 2` into `3.5`. 4.1 finds four held edges:
 CastAfterIntDivision at `explicit_cast` and at `integer_division`, TargetTyping at `type_conversion` and at
 `expression`, and three broken edges. 4.4 drops CastAfterIntDivision at `integer_division`, because `explicit_cast`
-is primary for it. 4.5 marks the two TargetTyping labels as shadows: the one at `type_conversion` by (c), a
-prerequisite of `explicit_cast` resting on the same clauses, and the one at `expression` by (b), a generic concept.
+is primary for it. 4.5 marks the two TargetTyping labels as shadows. The one at `type_conversion` points at clauses 1, 2, 3, the
+same clauses as CastAfterIntDivision at `explicit_cast`, and `type_conversion` is a prerequisite of `explicit_cast`:
+a shadow by (c). The one at `expression` points at the same clauses again and `expression` is a generic concept: a
+shadow by (b).
 4.6 marks the three broken edges as consequences. One fault is left: CastAfterIntDivision at `explicit_cast`.
 
 **What happens without this stage.** Replaying the 40 stored runs with these steps switched off changes 20 of them:
@@ -587,7 +602,8 @@ goes backwards along these edges.
   replaces the starting concept as the candidate. If none is marked, the starting concept is its own candidate.
 - **5.3 Choose among the candidates.** The candidate with the fewest prerequisites of its own in G is the root
   cause: it stands furthest back. At a tie, the one whose held label has the higher confidence is taken.
-  Alphabetical order never decides. With nothing held there is no root cause.
+  If that is equal too, the candidate found first stays (the starting concepts are taken in alphabetical order);
+  this does not happen in any of the 40 runs. With nothing held there is no root cause.
 
 ### Stage 6. Level of each concept (rule, no model)
 
@@ -603,8 +619,8 @@ that way sits in the graph, in two steps.
   or not). For each one collect two lists: the misconceptions held on it that are not shadows, and the ways shown
   on it.
 - **6.2 Apply the first rule that fits.**
-  (a) A misconception is held on the concept: the level is L0. The entry names the misconception (the one kept on
-  a path, otherwise the one with the highest score) and carries the L0 way's own text from `level_mis_links` as
+  (a) A misconception is held on the concept: the level is L0. The entry names the misconception (the one left
+  after Stage 4, otherwise the one with the highest score) and carries the L0 way's own text from `level_mis_links` as
   `rule`; other misconceptions held there are listed under `also_held`.
   (b) Ways are shown and all of them are L0 ways (everyday reading, inconsistent trace): the level is L0.
   (c) Ways are shown and at least one is above L0: the level is the highest one shown, because the levels build on
@@ -662,7 +678,8 @@ error or failed snippet.
 
 ## Stage 1 in code: how the matcher works (`preprocessing.py`, `model.py`)
 
-1. `mask_java` blanks the contents of string and char literals and of comments, keeping every length and
+1. `mask_java` blanks the contents of string literals and of comments (char literals such as `'A'` are code and
+   are kept), keeping every length and
    newline, so a `%` or `;` inside `"..."` cannot match a pattern. Line numbers of hits stay correct.
 2. `split_statements` cuts the masked text at `;` `{` `}` when the parenthesis depth is 0, so a
    `for (…; …; …)` header stays one statement. Statement-scoped signals run on these pieces.
@@ -673,7 +690,7 @@ error or failed snippet.
    | channel | KG field | runs on |
    |---|---|---|
    | pattern | `code_patterns` | whole masked program (raw text if the block says `code_text: raw`) |
-   | signal | `signals[].regex` | program or each statement, per `scope`; signals without a regex (compiler messages) are skipped and reported in `warnings` |
+   | signal | `signals[].regex` | program or each statement, per `scope`; signals without a regex (compiler messages) are skipped and reported in `warnings`; a signal whose `sources` does not include `code` is skipped; a signal with `text: raw` runs on the unmasked text |
    | operator | `operator_symbols` | substring search in the masked program |
    | type | `java_types` | whole-word search |
    | command | `command_patterns` | the `java` / `javac` shell segments |
@@ -694,7 +711,7 @@ error or failed snippet.
    and the target record's wrong belief and correct rule.
 4. `has_level` edges from each node (ids `lvl:a->a@Lk`) with their ways, and the level node records
    (name, criterion, deciding question).
-5. `linked_misconception` entries of every way, as `{level_node, misconception, way, rule_type, exact_rule}`.
+5. `linked_misconception` entries of every way, as `{level_node, misconception, way, way_index, rule_type, exact_rule}`.
 6. **Connectivity is reported, never repaired.** `components` lists the connected pieces of the concept
    nodes over the concept edges. When there is more than one piece a warning names them. Many
    subgraphs fall into several pieces because the KG has no edge between concepts that occur together
@@ -819,10 +836,13 @@ concepts with `starts_at == depth` and nothing new is entered. At each depth, fo
    shadow of a kept label y when the clauses of x are all among the clauses of y and one of these holds: it is the
    same misconception and y is `primary` while x is not; x is on a generic concept and y is not; or the concept of x
    is a prerequisite of the concept of y, over any number of prerequisite edges, and the confidence of x is not
-   higher. Labels on generic concepts are tested first, then by rising confidence, so the specific, confident label
-   is the one that stays. Shadows are removed from `held` and listed under `shadowed`.
+   higher. The labels are sorted before testing: generic concepts first, then labels not at their primary concept,
+   then by rising confidence and score; a label found to be a shadow is removed before the next is tested, so the
+   specific, confident label is the one that stays. Held labels in `evidence` that are not in `held` are then
+   tested against what stayed. Shadows are removed from `held` and listed under `shadowed`.
 5. `broken` is every record on `paths` labelled `broken`. One that shares a clause with any held misconception gets
-   `consequence_of` that edge. `broken_concepts` is the target B of each remaining broken edge `pre:A->B`.
+   `consequence_of` that edge. `broken_concepts` is the target B of each remaining broken edge `pre:A->B`
+   (for a broken parallel edge, the concept from which it was read).
 
 ## Stage 5 in code: the root cause (`traverse.py`)
 
@@ -830,14 +850,16 @@ concepts with `starts_at == depth` and nothing new is entered. At each depth, fo
 code walks `pre_in` backwards with a stack; whenever a prerequisite reached is in `held_by_concept` or in
 `broken_concepts`, it becomes the candidate `best`. Each candidate gets the key
 `(number of prerequisites of best in G, −highest confidence of a held misconception on best)`, and the candidate
-with the smallest key is `root_cause = {concept, misconception}`. With nothing held, `root_cause` is `None`.
+with the smallest key is `root_cause = {concept, misconception}`. The starting concepts are taken in sorted order
+and a later candidate replaces the current one only with a strictly smaller key, so at a complete tie the first one
+stays. With nothing held, `root_cause` is `None`.
 
 ## Stages 6 and 7 in code: the levels (`traverse.py`)
 
 For each concept that appears in `evidence` (as the source of a record, or as the far end of a concept edge):
 
 1. If `evidence` has a held misconception on it that is not a shadow, kept on a path or not: level `L0`, way
-   `misconception`. The record used is the one kept on a path, otherwise the one with the highest score; `rule` is
+   `misconception`. The record used is the one left in `held` after Stage 4, otherwise the one with the highest score; `rule` is
    the L0 way's text from `level_link_rule`, and `source` is `level_mis_links`, or `held_misconception` with a
    `note` when the graph has no L0 way naming that misconception at that concept. Other held ones are listed in
    `also_held`.
