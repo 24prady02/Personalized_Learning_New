@@ -167,6 +167,50 @@ for (i = 1; i < n; i++)
 System.out.println(i);
 ```
 
+### How the question for each level is structured
+
+A question does not fix the level of an answer; it opens the door to a level, and the answer decides how far the
+student goes through it. So the questions are built in two layers.
+
+**1. Each level needs a question that asks for that kind of thinking.** A student can only show a level if the
+question gives room for it.
+
+| Level | What the question has to ask for | How the question is worded | What the answer must then do (and where the level stops) |
+|---|---|---|---|
+| L0 prestructural | nothing special: any question can bring out a wrong rule or an everyday reading | any of the questions below | reads the code in the everyday sense, or applies a wrong rule the language disproves. A single slip in an otherwise correct trace is L2 with an error, not L0. |
+| L1 unistructural | a reason ("Explain your reasoning") | a count or value question | names the parts or states the rule, without applying it to the values. Applying it to this code's values is L2. |
+| L2 multistructural | the values, step by step | "What is printed? Explain, pass by pass…", "What is the value of i when…" | executes each statement in order, justifies the output value by value, or gives the change one pass makes. A bare correct output is not levelled; stating the purpose of the whole is L3. |
+| L3 relational | how the parts work together, or the purpose for every input, with tracing ruled out | "Without tracing line by line, explain what this code does for any value of n" | explains how one construct works with another in the same code, or says what the code does for all inputs, deduced from the code. A purpose guessed from traced cases is L2. |
+| L4 extended abstract | something beyond the given code: a change, an error, a new program | "What would be printed if braces were put around…? Explain without tracing the new code", "Will this compile? What happens when you run it?", "Write a loop that…, and explain how it relates to this loop" | predicts what a change keeps or breaks without re-tracing; names the rule broken, the kind of error and the inputs that trigger it; or uses the construct in a new problem. Re-tracing the changed code is L2; fixing one given failing case is L3. |
+
+Two features of the wording carry the higher levels. "Without tracing" closes the L2 route, so that an answer has to
+relate or generalise to answer at all. And a question about code that is not on the page (a change, a new loop)
+cannot be answered by reading off values, so it reaches L4.
+
+**2. The same question is answered at several levels.** Because the level comes from the answer, each lower-level
+question has several answers written for it, one for each level or way it can bring out. This is what tests the rule:
+the question stays the same and only the student's reasoning changes.
+
+| Question | What it asks for | Highest level it is built to reach | Answers written for it (level and way each one shows) |
+|---|---|---|---|
+| Q1. How many times does the body of the for loop run? Explain your reasoning. | a count, with the reason | any level up to L3: the count needs the two i++ to be put together | [LP03](runs/LP03/) L0: misconception; [LP05](runs/LP05/) L0: misconception; [LP12](runs/LP12/) L2: one step execution; [LP14](runs/LP14/) L3: relation to neighbour |
+| Q2. How many times is System.out.println executed? Explain your reasoning. | a count, with the reason | L0 to L2: it turns on what the body of the loop is | [LP02](runs/LP02/) L0: misconception; [LP08](runs/LP08/) L1: names the element; [LP09](runs/LP09/) L1: states the rule |
+| Q3. What is the value of i when the second println runs? Explain how i gets that value. | one value, with how it comes about | L0 to L2: a value and its justification | [LP04](runs/LP04/) L0: misconception; [LP11](runs/LP11/) L2: output prediction |
+| Q4. What is printed? Explain, pass by pass, what happens to i. | the output, pass by pass | L2: it asks for a trace | [LP01](runs/LP01/) L0: everyday reading; [LP06](runs/LP06/) L0: misconception; [LP07](runs/LP07/) L0: inconsistent trace; [LP10](runs/LP10/) L2: line by line trace; [LP13](runs/LP13/) L2: line by line trace; [LP20](runs/LP20/) not levelled: none (bare correct output) |
+| Q5. Without tracing line by line, explain what this code does for any value of n. | the purpose, for every input, without a trace | L3: purpose of the whole | [LP15](runs/LP15/) L3: purpose of the whole |
+| Q6. What would be printed if braces { } were put around the two indented lines? Explain without tracing the new code line by line. | the effect of a change to the code, without a new trace | L4: predict a change | [LP16](runs/LP16/) L4: predict a change |
+| Q7. Will this compile? What happens when you run it? Explain your reasoning. | whether the program as written is correct, and why | L4: diagnose an error | [LP17](runs/LP17/) L4: diagnose an error; [LP18](runs/LP18/) L0: misconception |
+| Q8. Write a loop that prints every odd number smaller than n, and explain how it relates to this loop. | a new piece of code, related to the given one | L4: transfer to a new program | [LP19](runs/LP19/) L4: transfer to a new program |
+
+Read across a row: Q4 ("What is printed? Explain, pass by pass…") has six answers. Three are L0 for three different
+reasons (an everyday reading, a wrong rule, an inconsistent trace), two are L2 traces (one of them with a slip, which
+stays L2), and one is the bare output "5 5", which gets no level. The questions built for L3 and L4 have one answer
+each, written at the level the question asks for; LP18 answers the L4 question Q7 with two wrong rules and is L0.
+
+**Boundary cases built into the set.** Three answers sit exactly on a line between two levels, to check that the
+rule puts them on the right side: LP04 (the right value for a wrong reason: L0, not L2), LP13 (a correct trace with
+one slip: L2, not L0) and LP20 (a bare correct output: no level).
+
 ### How each question provides each type
 
 | Scenario | Level and way tested | Question | Student answer | Why the answer is this way |
