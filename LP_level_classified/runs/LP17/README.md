@@ -43,8 +43,8 @@ Question: Will this compile? What happens when you run it? Explain your reasonin
 
 Student's answer: It does not compile. Line 1 and line 4 are missing the ; at the end, so javac reports ';' expected. After those are fixed, system.out still fails because Java is case-sensitive: there is no package called system, it must be System. Even then the indentation is misleading: without braces only i++ is in the loop, a silent logic error whenever a braceless loop is followed by indented lines.
 Settings: width 3, depth 3, prune llm, backend claude-cli, model claude-opus-5-5
-## 1. Stage 1: the subgraph G from the code (no model)
-Masked code (string and char literals and comments blanked; this is what the patterns see):
+## 1. Stage 1: which concepts the program uses (no model)
+The program with the text in quotes and the comments blanked out, so that only real code is read:
 ```
 int i , n= 5
 for(i=1;i<n;i++)
@@ -52,7 +52,7 @@ for(i=1;i<n;i++)
     System.out.println(i)
 system.out.println(i);
 ```
-Which code text tagged which concept (a generic concept fires on almost any Java line; it starts the walk only if the answer repeats its tag):
+Which piece of the code points to which concept. A generic concept is one that almost every Java program has; the reading starts from it only if the student's answer mentions it:
 | concept | generic | channel | matched text | line |
 |---|---|---|---|---|
 | assignment | True | pattern | '=' | 1 |
@@ -70,11 +70,11 @@ Which code text tagged which concept (a generic concept fires on almost any Java
 | println | False | pattern | 'System.out.println(' | 4 |
 | statement | True | pattern | ';' | 2 |
 
-G: 13 concept nodes (3 generic), 10 concept edges, 126 misconception / error edges, 92 misconception / error nodes, 65 level nodes, 125 level-misconception links, 3 connected piece(s).
+The part of the knowledge graph used for this program (called G) has 13 concepts (3 of them generic), 10 links between concepts, 126 links from a concept to a possible mistake (92 different mistakes) and 65 level entries (five levels, L0 to L4, for each concept). It is in 3 connected piece(s).
 Note: concept nodes form 3 pieces (the KG has no edge between them): assignment,boolean_expression,comparison_operators,expression,for_loop,increment_operators,loop_body,loop_control,loop_variable | compile_time_error | control_flow,println,statement
 Note: compile_time_error.missing_semicolon: compiler-message signal, needs javac output; skipped
 
-Concept edges of G (the links the walk can read; `pre:` = prerequisite A -> B, `par:` = parallel):
+The links between these concepts. `pre:` means the first concept must be understood before the second; `par:` means the two are learned side by side:
 | edge | type | rule (logic) |
 |---|---|---|
 | par:assignment~comparison_operators | parallel | x = y stores the value of y in x (a statement with a side effect); x == y only tests whether the two values are equal and gives a boolean. Writing = where == is meant is a compile error with int operands and a silent bug with boolean operands. |
@@ -88,8 +88,8 @@ Concept edges of G (the links the walk can read; `pre:` = prerequisite A -> B, `
 | pre:statement->control_flow | prerequisite | Control flow is the order in which statements run. |
 | pre:statement->println | prerequisite | System.out.println(s); is itself a statement, so its line of output appears at its own place in the sequence. |
 
-Misconception / error edges per concept (count), and level ways per concept (count):
-| concept | misconception / error edges | level ways (L1-L4 + L0 non-misconception) |
+For each concept: how many possible mistakes the graph lists for it, and how many ways of showing a level:
+| concept | possible mistakes | ways of showing a level |
 |---|---|---|
 | assignment | 15 | 24 |
 | boolean_expression | 8 | 19 |
@@ -111,8 +111,8 @@ Misconception / error edges per concept (count), and level ways per concept (cou
 **Figure 2**
 
 ![Figure 2](figure02.png)
-## 2. Clauses and start concepts (no model)
-The answer split into clauses (at sentence ends, ';', and before 'because' / 'so'; quotes removed):
+## 2. The answer in pieces, and where the reading starts (no model)
+The student's answer cut into short pieces (clauses), so that every finding can point to the exact words it rests on:
 | clause | text |
 |---|---|
 | c1 | It does not compile |
@@ -132,18 +132,18 @@ start: chosen statement, compile_time_error, for_loop
 
 start concepts (3): statement, compile_time_error, for_loop
 
-Start concepts: statement, compile_time_error, for_loop
+The reading starts at the concepts whose description is closest to the student's words. Start concepts: statement, compile_time_error, for_loop
 
 **Figure 3**
 
 ![Figure 3](figure03.png)
-## 3. The walk, depth by depth
-At each depth, for each current concept: the edges offered (a concept entering as a start concept offers its misconception / error edges and its level ways, as two families; otherwise it offers its concept edges), the prune prompt and the model's reply, then the label prompt(s) and the model's reply, parsed into label / clauses / confidence. Score = prune score x confidence.
+## 3. Reading the answer against the graph, round by round (the model is asked here)
+The answer is read in rounds. In each round, for each concept being looked at, three things happen. First the graph offers what could be said about the concept: the possible mistakes, the ways of showing a level, or the links to neighbouring concepts. Then the model picks the few that matter for this answer. Then the model judges each picked one against the student's clauses and gives a label, the clause numbers it rests on and a confidence from 0 to 1. Score = relevance score x confidence.
 
-### Depth 1: current concepts 'statement', 'compile_time_error', 'for_loop'
+### Round 1: the concepts being looked at are 'statement', 'compile_time_error', 'for_loop'
 
-#### statement, misconceptions: 5 edges offered
-Edges offered:
+#### statement: 5 possible mistakes offered
+What the graph offers:
 | edge |
 |---|
 | err:statement->StatementNeedsNoTerminator \| wrong rule: A statement still compiles and runs if the semicolon at its end is left out, or if a stray ; is put right after if (c) or for (...). \| right rule: Each statement must end with ;, otherwise javac reports ';' expected. |
@@ -152,15 +152,15 @@ Edges offered:
 | mis:statement->StatementsRunInAnyOrder \| wrong rule: Statements in a program can run in any order. \| right rule: Without control statements, statements run once each, top to bottom. |
 | mis:statement->WhitespaceIsSignificant \| wrong rule: Line breaks and indentation change what the program does, so each statement must be on its own line. \| right rule: Java compilers consider all whitespace in program text (outside quotation marks) to be equivalent; layout is for human readers. |
 
-Prune: the model's reply (edge id and score; the kept edges sum to 1):
+Step 1, pick the relevant ones. The model's reply (each picked item with its relevance score; the scores add up to 1):
 ```
 {err:statement->StatementNeedsNoTerminator (Score: 0.5)}
 {mis:statement->WhitespaceIsSignificant (Score: 0.35)}
 {mis:statement->ComputerFillsInIntent (Score: 0.15)}
 ```
-Kept by pruning: err:statement->StatementNeedsNoTerminator (0.50), mis:statement->WhitespaceIsSignificant (0.35), mis:statement->ComputerFillsInIntent (0.15)
+Picked: err:statement->StatementNeedsNoTerminator (0.50), mis:statement->WhitespaceIsSignificant (0.35), mis:statement->ComputerFillsInIntent (0.15)
 
-Label prompt for the misconception / error edges (judged together). The model saw the program, the question, the numbered clauses, and these edges with their wrong rule and right rule:
+Step 2, judge the possible mistakes of this concept (all in one question). The model saw the program, the question, the numbered clauses and each possible mistake with its wrong rule and the right rule. held = the student follows the wrong rule; correct = the student follows the right rule; not applied = the answer says nothing about it:
 | edge |
 |---|
 | err:statement->StatementNeedsNoTerminator \| wrong rule: A statement still compiles and runs if the semicolon at its end is left out, or if a stray ; is put right after if (c) or for (...). \| right rule: Each statement must end with ;, otherwise javac reports ';' expected. |
@@ -173,15 +173,15 @@ mis:statement->WhitespaceIsSignificant | correct | clauses: 8 | confidence: 0.85
 mis:statement->ComputerFillsInIntent | correct | clauses: 6, 7, 8 | confidence: 0.6
 ```
 
-Parsed labels:
+The labels as the program read them:
 | edge | label | prune score | confidence | score | clauses | words |
 |---|---|---|---|---|---|---|
 | err:statement->StatementNeedsNoTerminator | correct | 0.5 | 0.9 | 0.45 | c1, c2, c3, c4, c5 | It does not compile; Line 1 and line 4 are missing the; at the end; so javac reports; expected |
 | mis:statement->WhitespaceIsSignificant | correct | 0.35 | 0.85 | 0.3 | c8 | Even then the indentation is misleading: without braces only i++ is in the loop, a silent logic error whenever a braceless loop is followed by indented lines |
 | mis:statement->ComputerFillsInIntent | correct | 0.15 | 0.6 | 0.09 | c6, c7, c8 | After those are fixed, system.out still fails; because Java is case-sensitive: there is no package called system, it must be System; Even then the indentation is misleading: without braces only i++ is in the loop, a silent logic error whenever a braceless loop is followed by indented lines |
 
-#### statement, level ways: 19 edges offered
-Edges offered:
+#### statement: 19 ways of showing a level offered
+What the graph offers:
 | edge |
 |---|
 | lvl:statement@L0#0 \| level L0 way everyday_reading: Everyday reading: a program is read like a text or a list of wishes that the computer takes in all at once, so line order, goals of later lines or what the writer meant can matter. Java rule: each statement is one step, ended by ;, executed once, in written order, using only the current state. |
@@ -204,15 +204,15 @@ Edges offered:
 | lvl:statement@L4#2 \| level L4 way transfer_to_a_new_program: Write one statement per step and order them as the algorithm requires; straight-line sequence suffices when every step runs once, otherwise use conditionals or loops. |
 | lvl:statement@L4#3 \| level L4 way diagnose_an_error: rule broken: A ; directly after an if/while/for header is an empty statement. Kind: silent logic error. Trigger class: if (x > 0); or while (cond); followed by the intended body |
 
-Prune: the model's reply (edge id and score; the kept edges sum to 1):
+Step 1, pick the relevant ones. The model's reply (each picked item with its relevance score; the scores add up to 1):
 ```
 {lvl:statement@L4#1 (Score: 0.6)}
 {lvl:statement@L3#1 (Score: 0.25)}
 {lvl:statement@L1#0 (Score: 0.15)}
 ```
-Kept by pruning: lvl:statement@L4#1 (0.60), lvl:statement@L3#1 (0.25), lvl:statement@L1#0 (0.15)
+Picked: lvl:statement@L4#1 (0.60), lvl:statement@L3#1 (0.25), lvl:statement@L1#0 (0.15)
 
-Label prompt for level way lvl:statement@L4#1 (the model saw the concept, the way's name 'diagnose an error', its text, where the way stops and whether the words must be correct; no level):
+Step 2, judge one way of showing a higher level (lvl:statement@L4#1, 'diagnose an error'). The model saw the description below and where this way stops, not the level it belongs to, and answers shown, wrong or not shown:
 > rule broken: Each simple statement must end with ;. Kind: compile-time. Trigger class: omitting the ; at the end of a statement: javac reports ';' expected (often at the end of that line or the next)
 >
 > Where this way stops: Locating and fixing the mistake for one given failing case is L3. A compiler-flagged slip fixed from the message is weak evidence.
@@ -224,7 +224,7 @@ Clauses: 1, 2, 3, 4, 5
 Confidence: 0.85
 ```
 
-Label prompt for level way lvl:statement@L3#1 (the model saw the concept, the way's name 'relation to neighbour', its text, where the way stops and whether the words must be correct; no level):
+Step 2, judge one way of showing a higher level (lvl:statement@L3#1, 'relation to neighbour'). The model saw the description below and where this way stops, not the level it belongs to, and answers shown, wrong or not shown:
 > A block groups a sequence of statements in braces; the body of main() is such a block.
 >
 > Where this way stops: Two correct but separate rules are L1. Executing the two in sequence is L2. A relational answer may be correct or a relational error.
@@ -236,7 +236,7 @@ Clauses: 8
 Confidence: 0.72
 ```
 
-Label prompt for level way lvl:statement@L1#0 (the model saw only the concept, the way's name 'names the element' and its text; no level):
+Step 2, judge one way of showing a level (lvl:statement@L1#0, 'names the element'). The model saw only the description below, not the level it belongs to, and answers shown or not shown:
 > A statement is one step of a program (a declaration, assignment, method call such as System.out.println(...), or control statement), ended by a semicolon when it is a simple statement.
 
 Model's reply:
@@ -246,15 +246,15 @@ Clauses: 2, 3, 4, 5
 Confidence: 0.8
 ```
 
-Parsed labels:
+The labels as the program read them:
 | edge | label | prune score | confidence | score | clauses | words |
 |---|---|---|---|---|---|---|
 | lvl:statement@L4#1 | shown | 0.6 | 0.85 | 0.51 | c1, c2, c3, c4, c5 | It does not compile; Line 1 and line 4 are missing the; at the end; so javac reports; expected |
 | lvl:statement@L3#1 | shown | 0.25 | 0.72 | 0.18 | c8 | Even then the indentation is misleading: without braces only i++ is in the loop, a silent logic error whenever a braceless loop is followed by indented lines |
 | lvl:statement@L1#0 | shown | 0.15 | 0.8 | 0.12 | c2, c3, c4, c5 | Line 1 and line 4 are missing the; at the end; so javac reports; expected |
 
-#### compile_time_error, misconceptions: 10 edges offered
-Edges offered:
+#### compile_time_error: 10 possible mistakes offered
+What the graph offers:
 | edge |
 |---|
 | err:compile_time_error->AssignToFinal \| wrong rule: Assigns a new value to a variable declared final. \| right rule: A final variable cannot be reassigned after it is initialized; the compiler reports an error. |
@@ -268,15 +268,15 @@ Edges offered:
 | mis:compile_time_error->CompilesMeansWorks \| wrong rule: Code that compiles is code that works. \| right rule: Code that compiles can still have run-time and logical errors. |
 | mis:compile_time_error->ErrorLineIsFaultLine \| wrong rule: The line number in a javac error is always the line that has the mistake. \| right rule: The compiler reports where it noticed the problem, which can be after the real fault; for example, omitting the second left brace of HelloWorld produces errors reported on later lines. |
 
-Prune: the model's reply (edge id and score; the kept edges sum to 1):
+Step 1, pick the relevant ones. The model's reply (each picked item with its relevance score; the scores add up to 1):
 ```
 {err:compile_time_error->StatementNeedsNoTerminator (Score: 0.4)}
 {err:compile_time_error->MisspelledIdentifier (Score: 0.35)}
 {mis:compile_time_error->CompilesMeansWorks (Score: 0.25)}
 ```
-Kept by pruning: err:compile_time_error->StatementNeedsNoTerminator (0.40), err:compile_time_error->MisspelledIdentifier (0.35), mis:compile_time_error->CompilesMeansWorks (0.25)
+Picked: err:compile_time_error->StatementNeedsNoTerminator (0.40), err:compile_time_error->MisspelledIdentifier (0.35), mis:compile_time_error->CompilesMeansWorks (0.25)
 
-Label prompt for the misconception / error edges (judged together). The model saw the program, the question, the numbered clauses, and these edges with their wrong rule and right rule:
+Step 2, judge the possible mistakes of this concept (all in one question). The model saw the program, the question, the numbered clauses and each possible mistake with its wrong rule and the right rule. held = the student follows the wrong rule; correct = the student follows the right rule; not applied = the answer says nothing about it:
 | edge |
 |---|
 | err:compile_time_error->StatementNeedsNoTerminator \| wrong rule: a statement runs without the ; \| right rule: Each statement must end with ;, otherwise javac reports ';' expected. |
@@ -289,15 +289,15 @@ err:compile_time_error->MisspelledIdentifier | correct | clauses: 6, 7 | confide
 mis:compile_time_error->CompilesMeansWorks | correct | clauses: 8 | confidence: 0.9
 ```
 
-Parsed labels:
+The labels as the program read them:
 | edge | label | prune score | confidence | score | clauses | words |
 |---|---|---|---|---|---|---|
 | err:compile_time_error->StatementNeedsNoTerminator | correct | 0.4 | 0.9 | 0.36 | c1, c2, c3, c4, c5 | It does not compile; Line 1 and line 4 are missing the; at the end; so javac reports; expected |
 | err:compile_time_error->MisspelledIdentifier | correct | 0.35 | 0.95 | 0.33 | c6, c7 | After those are fixed, system.out still fails; because Java is case-sensitive: there is no package called system, it must be System |
 | mis:compile_time_error->CompilesMeansWorks | correct | 0.25 | 0.9 | 0.23 | c8 | Even then the indentation is misleading: without braces only i++ is in the loop, a silent logic error whenever a braceless loop is followed by indented lines |
 
-#### compile_time_error, level ways: 21 edges offered
-Edges offered:
+#### compile_time_error: 21 ways of showing a level offered
+What the graph offers:
 | edge |
 |---|
 | lvl:compile_time_error@L0#0 \| level L0 way everyday_reading: Everyday reading: 'error' means the program will do something wrong when used, and a message points exactly at the mistake. Java rule: a compile-time error is a breach of the language rules found by javac before any execution; no .class is produced, and the reported line is where javac noticed it. |
@@ -322,15 +322,15 @@ Edges offered:
 | lvl:compile_time_error@L4#8 \| level L4 way diagnose_an_error: rule broken: A final variable cannot be reassigned after it is initialized. Kind: compile-time. Trigger class: assigning a second value to a final variable |
 | lvl:compile_time_error@L4#9 \| level L4 way diagnose_an_error: rule broken: Required keywords (class, static, void...) must be present and spelled right. Kind: compile-time. Trigger class: omitting or misspelling a keyword in public class Name or the main header |
 
-Prune: the model's reply (edge id and score; the kept edges sum to 1):
+Step 1, pick the relevant ones. The model's reply (each picked item with its relevance score; the scores add up to 1):
 ```
 {lvl:compile_time_error@L4#1 (Score: 0.4)}
 {lvl:compile_time_error@L4#5 (Score: 0.35)}
 {lvl:compile_time_error@L4#7 (Score: 0.25)}
 ```
-Kept by pruning: lvl:compile_time_error@L4#1 (0.40), lvl:compile_time_error@L4#5 (0.35), lvl:compile_time_error@L4#7 (0.25)
+Picked: lvl:compile_time_error@L4#1 (0.40), lvl:compile_time_error@L4#5 (0.35), lvl:compile_time_error@L4#7 (0.25)
 
-Label prompt for level way lvl:compile_time_error@L4#1 (the model saw the concept, the way's name 'diagnose an error', its text, where the way stops and whether the words must be correct; no level):
+Step 2, judge one way of showing a higher level (lvl:compile_time_error@L4#1, 'diagnose an error'). The model saw the description below and where this way stops, not the level it belongs to, and answers shown, wrong or not shown:
 > rule broken: Each statement must end with ;. Kind: compile-time. Trigger class: missing ; at the end of a statement: ';' expected
 >
 > Where this way stops: Locating and fixing the mistake for one given failing case is L3. A compiler-flagged slip fixed from the message is weak evidence.
@@ -342,7 +342,7 @@ Clauses: 1, 2, 3, 4, 5
 Confidence: 0.75
 ```
 
-Label prompt for level way lvl:compile_time_error@L4#5 (the model saw the concept, the way's name 'diagnose an error', its text, where the way stops and whether the words must be correct; no level):
+Step 2, judge one way of showing a higher level (lvl:compile_time_error@L4#5, 'diagnose an error'). The model saw the description below and where this way stops, not the level it belongs to, and answers shown, wrong or not shown:
 > rule broken: Every name must be spelled exactly, including capitalization. Kind: compile-time. Trigger class: Sytem.out.prinln, Println, or a misspelled variable: cannot find symbol
 >
 > Where this way stops: Locating and fixing the mistake for one given failing case is L3. A compiler-flagged slip fixed from the message is weak evidence.
@@ -354,7 +354,7 @@ Clauses: 6, 7
 Confidence: 0.75
 ```
 
-Label prompt for level way lvl:compile_time_error@L4#7 (the model saw the concept, the way's name 'transfer to a new program', its text, where the way stops and whether the words must be correct; no level):
+Step 2, judge one way of showing a higher level (lvl:compile_time_error@L4#7, 'transfer to a new program'). The model saw the description below and where this way stops, not the level it belongs to, and answers shown, wrong or not shown:
 > Expect compile-time errors for anything the compiler can check from the text alone (syntax, names, types, final); expect run-time or logic errors for faults that depend on input values or on what the program was meant to do.
 >
 > Where this way stops: Reproducing or slightly varying a familiar program is L1 to L3.
@@ -366,15 +366,15 @@ Clauses: 2, 3, 4, 5, 6, 7, 8
 Confidence: 0.8
 ```
 
-Parsed labels:
+The labels as the program read them:
 | edge | label | prune score | confidence | score | clauses | words |
 |---|---|---|---|---|---|---|
 | lvl:compile_time_error@L4#1 | shown | 0.4 | 0.75 | 0.3 | c1, c2, c3, c4, c5 | It does not compile; Line 1 and line 4 are missing the; at the end; so javac reports; expected |
 | lvl:compile_time_error@L4#5 | shown | 0.35 | 0.75 | 0.26 | c6, c7 | After those are fixed, system.out still fails; because Java is case-sensitive: there is no package called system, it must be System |
 | lvl:compile_time_error@L4#7 | shown | 0.25 | 0.8 | 0.2 | c2, c3, c4, c5, c6, c7, c8 | Line 1 and line 4 are missing the; at the end; so javac reports; expected; After those are fixed, system.out still fails; because Java is case-sensitive: there is no package called system, it must be System; Even then the indentation is misleading: without braces only i++ is in the loop, a silent logic error whenever a braceless loop is followed by indented lines |
 
-#### for_loop, misconceptions: 20 edges offered
-Edges offered:
+#### for_loop: 20 possible mistakes offered
+What the graph offers:
 | edge |
 |---|
 | err:for_loop->BracelessMultiStatementBody \| wrong rule: Indenting several statements under an if or for makes them all part of its body, even without braces. \| right rule: Without braces only the first statement belongs to the if/for; the rest run once, after it. |
@@ -398,13 +398,13 @@ Edges offered:
 | mis:for_loop->ReturnDoesNotExitLoop \| wrong rule: A return inside a loop does not end the loop; it sets a value each pass (the last one is returned) or returns several values. \| right rule: When return executes, the method ends at once, so the loop stops on that pass. |
 | mis:for_loop->SingleIterationInsteadOfLoop \| wrong rule: A task that must be repeated is written once, without a loop, as if one pass were enough. \| right rule: A step that must happen several times (or an unknown number of times) needs a loop such as while or for; code without a loop runs once. |
 
-Prune: the model's reply (edge id and score; the kept edges sum to 1):
+Step 1, pick the relevant ones. The model's reply (each picked item with its relevance score; the scores add up to 1):
 ```
 err:for_loop->BracelessMultiStatementBody (0.80), err:for_loop->WrongIterationCount (0.10), mis:for_loop->FalseLoopRepeatsNextCode (0.10)
 ```
-Kept by pruning: err:for_loop->BracelessMultiStatementBody (0.80), err:for_loop->WrongIterationCount (0.10), mis:for_loop->FalseLoopRepeatsNextCode (0.10)
+Picked: err:for_loop->BracelessMultiStatementBody (0.80), err:for_loop->WrongIterationCount (0.10), mis:for_loop->FalseLoopRepeatsNextCode (0.10)
 
-Label prompt for the misconception / error edges (judged together). The model saw the program, the question, the numbered clauses, and these edges with their wrong rule and right rule:
+Step 2, judge the possible mistakes of this concept (all in one question). The model saw the program, the question, the numbered clauses and each possible mistake with its wrong rule and the right rule. held = the student follows the wrong rule; correct = the student follows the right rule; not applied = the answer says nothing about it:
 | edge |
 |---|
 | err:for_loop->BracelessMultiStatementBody \| wrong rule: Indenting several statements under an if or for makes them all part of its body, even without braces. \| right rule: Without braces only the first statement belongs to the if/for; the rest run once, after it. |
@@ -417,15 +417,15 @@ err:for_loop->WrongIterationCount | not applied | clauses: none | confidence: 0.
 mis:for_loop->FalseLoopRepeatsNextCode | not applied | clauses: none | confidence: 0.9
 ```
 
-Parsed labels:
+The labels as the program read them:
 | edge | label | prune score | confidence | score | clauses | words |
 |---|---|---|---|---|---|---|
 | err:for_loop->BracelessMultiStatementBody | correct | 0.8 | 0.95 | 0.76 | c8 | Even then the indentation is misleading: without braces only i++ is in the loop, a silent logic error whenever a braceless loop is followed by indented lines |
 | err:for_loop->WrongIterationCount | not applied |  |  | 0.0 |  |  |
 | mis:for_loop->FalseLoopRepeatsNextCode | not applied |  |  | 0.0 |  |  |
 
-#### for_loop, level ways: 24 edges offered
-Edges offered:
+#### for_loop: 24 ways of showing a level offered
+What the graph offers:
 | edge |
 |---|
 | lvl:for_loop@L0#0 \| level L0 way everyday_reading: Folk meaning: English 'for each ...' or 'for 10 times' names a whole collection or a count to be handled at once, and a maths reading treats the header as simultaneous conditions. A Java for is a while loop in compact form: one init, then test-body-update repeated, one pass at a time. |
@@ -453,15 +453,15 @@ Edges offered:
 | lvl:for_loop@L4#6 \| level L4 way diagnose_an_error: rule broken: Without braces, the body of an if, while or for is exactly one statement; indentation does not add statements to it. Kind: silent logic error. Trigger class: A braceless header followed by two or more indented statements: only the first is controlled, the others run once, after the if/loop, on every input. |
 | lvl:for_loop@L4#7 \| level L4 way diagnose_an_error: rule broken: A variable declared in the for initializer exists only inside the for statement. Kind: compile-time. Trigger class: Reading i after for (int i = 0; ...) {...}: 'cannot find symbol'. |
 
-Prune: the model's reply (edge id and score; the kept edges sum to 1):
+Step 1, pick the relevant ones. The model's reply (each picked item with its relevance score; the scores add up to 1):
 ```
 {lvl:for_loop@L4#6 (Score: 0.75)}
 {lvl:for_loop@L1#1 (Score: 0.15)}
 {lvl:for_loop@L4#5 (Score: 0.1)}
 ```
-Kept by pruning: lvl:for_loop@L4#6 (0.75), lvl:for_loop@L1#1 (0.15), lvl:for_loop@L4#5 (0.10)
+Picked: lvl:for_loop@L4#6 (0.75), lvl:for_loop@L1#1 (0.15), lvl:for_loop@L4#5 (0.10)
 
-Label prompt for level way lvl:for_loop@L4#6 (the model saw the concept, the way's name 'diagnose an error', its text, where the way stops and whether the words must be correct; no level):
+Step 2, judge one way of showing a higher level (lvl:for_loop@L4#6, 'diagnose an error'). The model saw the description below and where this way stops, not the level it belongs to, and answers shown, wrong or not shown:
 > rule broken: Without braces, the body of an if, while or for is exactly one statement; indentation does not add statements to it. Kind: silent logic error. Trigger class: A braceless header followed by two or more indented statements: only the first is controlled, the others run once, after the if/loop, on every input.
 >
 > Where this way stops: Locating and fixing the mistake for one given failing case is L3. A compiler-flagged slip fixed from the message is weak evidence.
@@ -473,7 +473,7 @@ Clauses: 8
 Confidence: 0.8
 ```
 
-Label prompt for level way lvl:for_loop@L1#1 (the model saw only the concept, the way's name 'states the rule' and its text; no level):
+Step 2, judge one way of showing a level (lvl:for_loop@L1#1, 'states the rule'). The model saw only the description below, not the level it belongs to, and answers shown or not shown:
 > Syntax: for (<initialize>; <boolean expression>; <increment>) { <statements> }, with the three parts separated by semicolons; it is, with only a few exceptions, equivalent to <initialize>; while (<boolean expression>) { <statements> <increment>; }.
 
 Model's reply:
@@ -483,7 +483,7 @@ Clauses: none
 Confidence: 0.6
 ```
 
-Label prompt for level way lvl:for_loop@L4#5 (the model saw the concept, the way's name 'diagnose an error', its text, where the way stops and whether the words must be correct; no level):
+Step 2, judge one way of showing a higher level (lvl:for_loop@L4#5, 'diagnose an error'). The model saw the description below and where this way stops, not the level it belongs to, and answers shown, wrong or not shown:
 > rule broken: The number of passes is fixed by the init, the test and the update together. Kind: silent logic error. Trigger class: Wrong start value, < vs <=, a wrong step, or an extra update of the counter in the body (or outside the loop): the loop runs too few or too many passes (off by one, or skips values).
 >
 > Where this way stops: Locating and fixing the mistake for one given failing case is L3. A compiler-flagged slip fixed from the message is weak evidence.
@@ -495,18 +495,18 @@ Clauses: none
 Confidence: 0.8
 ```
 
-Parsed labels:
+The labels as the program read them:
 | edge | label | prune score | confidence | score | clauses | words |
 |---|---|---|---|---|---|---|
 | lvl:for_loop@L4#6 | shown | 0.75 | 0.8 | 0.6 | c8 | Even then the indentation is misleading: without braces only i++ is in the loop, a silent logic error whenever a braceless loop is followed by indented lines |
 | lvl:for_loop@L1#1 | not applied |  |  | 0.0 |  |  |
 | lvl:for_loop@L4#5 | not applied |  |  | 0.0 |  |  |
 
-**Kept on a path at this depth** (best N in tiers: held misconception / broken edge, then held error, then correct / confirmed / shown):
+**Kept in this round** (mistakes first, then findings that only confirm understanding; only the best few are kept):
 
 err:for_loop->BracelessMultiStatementBody [correct, tier 2, 0.76], lvl:for_loop@L4#6 [shown, tier 2, 0.60], lvl:statement@L4#1 [shown, tier 2, 0.51]
 
-**Clause coverage after this depth:**
+**Which clauses are explained so far:**
 | clause | text | covered by |
 |---|---|---|
 | c1 | It does not compile | err:statement->StatementNeedsNoTerminator |
@@ -518,28 +518,28 @@ err:for_loop->BracelessMultiStatementBody [correct, tier 2, 0.76], lvl:for_loop@
 | c7 | because Java is case-sensitive: there is no package called system, it must be System | mis:statement->ComputerFillsInIntent |
 | c8 | Even then the indentation is misleading: without braces only i++ is in the loop, a silent logic error whenever a braceless loop is followed by indented lines | mis:statement->WhitespaceIsSignificant |
 
-**Graph check, not yet read (the walk may not stop while these remain):** pre:for_loop->loop_body, pre:loop_control->for_loop, pre:statement->control_flow, pre:statement->println
+**Links not read yet (the reading does not stop while some remain):** pre:for_loop->loop_body, pre:loop_control->for_loop, pre:statement->control_flow, pre:statement->println
 
-**Figure 4 (the graph after depth 1)**
+**Figure 4 (the graph after round 1)**
 
 ![Figure 4](figure04.png)
-### Depth 2: current concepts 'statement', 'for_loop'
+### Round 2: the concepts being looked at are 'statement', 'for_loop'
 
-#### statement, concept edges: 2 edges offered
-Edges offered:
+#### statement: 2 links to neighbouring concepts offered
+What the graph offers:
 | edge |
 |---|
 | pre:statement->control_flow \| rule: Control flow is the order in which statements run. |
 | pre:statement->println \| rule: System.out.println(s); is itself a statement, so its line of output appears at its own place in the sequence. |
 
-Prune: the model's reply (edge id and score; the kept edges sum to 1):
+Step 1, pick the relevant ones. The model's reply (each picked item with its relevance score; the scores add up to 1):
 ```
 {pre:statement->control_flow (Score: 0.8)}
 {pre:statement->println (Score: 0.2)}
 ```
-Kept by pruning: pre:statement->control_flow (0.80), pre:statement->println (0.20)
+Picked: pre:statement->control_flow (0.80), pre:statement->println (0.20)
 
-Label prompt for concept edge pre:statement->control_flow (statement -> control_flow, prerequisite):
+Step 2, judge the link between two concepts (pre:statement->control_flow). The model answers confirmed (the student carries the rule from the first concept into the second), broken (the student fails to) or not applied:
 > Control flow is the order in which statements run.
 
 Model's reply:
@@ -549,7 +549,7 @@ Clauses: 8
 Confidence: 0.8
 ```
 
-Label prompt for concept edge pre:statement->println (statement -> println, prerequisite):
+Step 2, judge the link between two concepts (pre:statement->println). The model answers confirmed (the student carries the rule from the first concept into the second), broken (the student fails to) or not applied:
 > System.out.println(s); is itself a statement, so its line of output appears at its own place in the sequence.
 
 Model's reply:
@@ -559,27 +559,27 @@ Clauses: 8
 Confidence: 0.6
 ```
 
-Parsed labels:
+The labels as the program read them:
 | edge | label | prune score | confidence | score | clauses | words |
 |---|---|---|---|---|---|---|
 | pre:statement->control_flow | confirmed | 0.8 | 0.8 | 0.64 | c8 | Even then the indentation is misleading: without braces only i++ is in the loop, a silent logic error whenever a braceless loop is followed by indented lines |
 | pre:statement->println | confirmed | 0.2 | 0.6 | 0.12 | c8 | Even then the indentation is misleading: without braces only i++ is in the loop, a silent logic error whenever a braceless loop is followed by indented lines |
 
-#### for_loop, concept edges: 2 edges offered
-Edges offered:
+#### for_loop: 2 links to neighbouring concepts offered
+What the graph offers:
 | edge |
 |---|
 | pre:for_loop->loop_body \| rule: The statements in braces after the for header are the loop body; they run once on every pass, between the test and the increment, exactly as in a while loop. |
 | pre:loop_control->for_loop \| rule: The for header is exactly the three control slots, and the body runs after the test and before the update on each pass. |
 
-Prune: the model's reply (edge id and score; the kept edges sum to 1):
+Step 1, pick the relevant ones. The model's reply (each picked item with its relevance score; the scores add up to 1):
 ```
 {pre:for_loop->loop_body (Score: 0.7)}
 {pre:loop_control->for_loop (Score: 0.3)}
 ```
-Kept by pruning: pre:for_loop->loop_body (0.70), pre:loop_control->for_loop (0.30)
+Picked: pre:for_loop->loop_body (0.70), pre:loop_control->for_loop (0.30)
 
-Label prompt for concept edge pre:for_loop->loop_body (for_loop -> loop_body, prerequisite):
+Step 2, judge the link between two concepts (pre:for_loop->loop_body). The model answers confirmed (the student carries the rule from the first concept into the second), broken (the student fails to) or not applied:
 > The statements in braces after the for header are the loop body; they run once on every pass, between the test and the increment, exactly as in a while loop.
 
 Model's reply:
@@ -589,7 +589,7 @@ Clauses: 8
 Confidence: 0.8
 ```
 
-Label prompt for concept edge pre:loop_control->for_loop (loop_control -> for_loop, prerequisite):
+Step 2, judge the link between two concepts (pre:loop_control->for_loop). The model answers confirmed (the student carries the rule from the first concept into the second), broken (the student fails to) or not applied:
 > The for header is exactly the three control slots, and the body runs after the test and before the update on each pass.
 
 Model's reply:
@@ -599,13 +599,13 @@ Clauses: none
 Confidence: 0.6
 ```
 
-Parsed labels:
+The labels as the program read them:
 | edge | label | prune score | confidence | score | clauses | words |
 |---|---|---|---|---|---|---|
 | pre:for_loop->loop_body | confirmed | 0.7 | 0.8 | 0.56 | c8 | Even then the indentation is misleading: without braces only i++ is in the loop, a silent logic error whenever a braceless loop is followed by indented lines |
 | pre:loop_control->for_loop | not applied |  |  | 0.0 |  |  |
 
-**Kept on a path at this depth** (best N in tiers: held misconception / broken edge, then held error, then correct / confirmed / shown):
+**Kept in this round** (mistakes first, then findings that only confirm understanding; only the best few are kept):
 
 pre:statement->control_flow [confirmed, tier 2, 0.64], pre:for_loop->loop_body [confirmed, tier 2, 0.56], pre:statement->println [confirmed, tier 2, 0.12]
 
@@ -615,7 +615,7 @@ reached across pre:for_loop->loop_body, entered next: loop_body
 
 reached across pre:statement->println, entered next: println
 
-**Clause coverage after this depth:**
+**Which clauses are explained so far:**
 | clause | text | covered by |
 |---|---|---|
 | c1 | It does not compile | err:statement->StatementNeedsNoTerminator |
@@ -627,15 +627,15 @@ reached across pre:statement->println, entered next: println
 | c7 | because Java is case-sensitive: there is no package called system, it must be System | mis:statement->ComputerFillsInIntent |
 | c8 | Even then the indentation is misleading: without braces only i++ is in the loop, a silent logic error whenever a braceless loop is followed by indented lines | mis:statement->WhitespaceIsSignificant |
 
-**Graph check, not yet read (the walk may not stop while these remain):** own edges of control_flow, own edges of loop_body, own edges of println
+**Links not read yet (the reading does not stop while some remain):** own edges of control_flow, own edges of loop_body, own edges of println
 
-**Figure 5 (the graph after depth 2)**
+**Figure 5 (the graph after round 2)**
 
 ![Figure 5](figure05.png)
-### Depth 3: current concepts 'control_flow', 'statement', 'loop_body', 'for_loop', 'println'
+### Round 3: the concepts being looked at are 'control_flow', 'statement', 'loop_body', 'for_loop', 'println'
 
-#### control_flow, misconceptions: 11 edges offered
-Edges offered:
+#### control_flow: 11 possible mistakes offered
+What the graph offers:
 | edge |
 |---|
 | mis:control_flow->CodeAfterIfSkipped \| wrong rule: When the then branch runs, the code after the if is skipped. \| right rule: After the if finishes, execution continues with the next statement either way. |
@@ -650,13 +650,13 @@ Edges offered:
 | mis:control_flow->ReturnDoesNotExitLoop \| wrong rule: A return inside a loop does not end the loop; it sets a value each pass (the last one is returned) or returns several values. \| right rule: When return executes, the method ends at once, so the loop stops on that pass. |
 | mis:control_flow->StatementsRunInAnyOrder \| wrong rule: Statements in a program can run in any order. \| right rule: Without control statements, statements run once each, top to bottom. |
 
-Prune: the model's reply (edge id and score; the kept edges sum to 1):
+Step 1, pick the relevant ones. The model's reply (each picked item with its relevance score; the scores add up to 1):
 ```
 mis:control_flow->FalseLoopRepeatsNextCode (0.50), mis:control_flow->ProgramEndsAfterLoop (0.30), mis:control_flow->StatementsRunInAnyOrder (0.20)
 ```
-Kept by pruning: mis:control_flow->FalseLoopRepeatsNextCode (0.50), mis:control_flow->ProgramEndsAfterLoop (0.30), mis:control_flow->StatementsRunInAnyOrder (0.20)
+Picked: mis:control_flow->FalseLoopRepeatsNextCode (0.50), mis:control_flow->ProgramEndsAfterLoop (0.30), mis:control_flow->StatementsRunInAnyOrder (0.20)
 
-Label prompt for the misconception / error edges (judged together). The model saw the program, the question, the numbered clauses, and these edges with their wrong rule and right rule:
+Step 2, judge the possible mistakes of this concept (all in one question). The model saw the program, the question, the numbered clauses and each possible mistake with its wrong rule and the right rule. held = the student follows the wrong rule; correct = the student follows the right rule; not applied = the answer says nothing about it:
 | edge |
 |---|
 | mis:control_flow->FalseLoopRepeatsNextCode \| wrong rule: A loop is an iterative if-else: while the condition is true the body repeats, and when it is false the code after the loop repeats. \| right rule: Only the body is repeated; once the condition is false the code after the loop runs once. |
@@ -669,15 +669,15 @@ mis:control_flow->ProgramEndsAfterLoop | not applied | clauses: none | confidenc
 mis:control_flow->StatementsRunInAnyOrder | not applied | clauses: none | confidence: 0.9
 ```
 
-Parsed labels:
+The labels as the program read them:
 | edge | label | prune score | confidence | score | clauses | words |
 |---|---|---|---|---|---|---|
 | mis:control_flow->FalseLoopRepeatsNextCode | correct | 0.5 | 0.7 | 0.35 | c8 | Even then the indentation is misleading: without braces only i++ is in the loop, a silent logic error whenever a braceless loop is followed by indented lines |
 | mis:control_flow->ProgramEndsAfterLoop | not applied |  |  | 0.0 |  |  |
 | mis:control_flow->StatementsRunInAnyOrder | not applied |  |  | 0.0 |  |  |
 
-#### control_flow, level ways: 15 edges offered
-Edges offered:
+#### control_flow: 15 ways of showing a level offered
+What the graph offers:
 | edge |
 |---|
 | lvl:control_flow@L0#0 \| level L0 way everyday_reading: Folk meaning: in everyday instructions a listener reads the whole list at once, does steps in a sensible order and infers what the writer wants. Java instead executes statements one at a time, top to bottom, each only when control reaches it, and nothing later in the program has any effect earlier. |
@@ -696,15 +696,15 @@ Edges offered:
 | lvl:control_flow@L4#2 \| level L4 way diagnose_an_error: rule broken: A local variable must be definitely assigned on every control-flow path before it is read. Kind: compile-time. Trigger class: A variable assigned only inside an if branch (or only in a loop body) and read after it: the compiler reports 'variable might not have been initialized'. |
 | lvl:control_flow@L4#3 \| level L4 way diagnose_an_error: rule broken: Statements run in the order written, so an update must come before the statement that needs the new value. Kind: silent logic error. Trigger class: Swapping two dependent statements (e.g. printing before updating, or incrementing the index before using it): output is shifted or off by one pass, with no error. |
 
-Prune: the model's reply (edge id and score; the kept edges sum to 1):
+Step 1, pick the relevant ones. The model's reply (each picked item with its relevance score; the scores add up to 1):
 ```
 {lvl:control_flow@L4#0 (Score: 0.45)}
 {lvl:control_flow@L3#0 (Score: 0.3)}
 {lvl:control_flow@L2#0 (Score: 0.25)}
 ```
-Kept by pruning: lvl:control_flow@L4#0 (0.45), lvl:control_flow@L3#0 (0.30), lvl:control_flow@L2#0 (0.25)
+Picked: lvl:control_flow@L4#0 (0.45), lvl:control_flow@L3#0 (0.30), lvl:control_flow@L2#0 (0.25)
 
-Label prompt for level way lvl:control_flow@L4#0 (the model saw the concept, the way's name 'predict a change', its text, where the way stops and whether the words must be correct; no level):
+Step 2, judge one way of showing a higher level (lvl:control_flow@L4#0, 'predict a change'). The model saw the description below and where this way stops, not the level it belongs to, and answers shown, wrong or not shown:
 > Reordering two statements generally changes the result whenever one reads a variable that the other writes (e.g. swapping x = x + 1 and print(x)); reordering is safe only for statements that touch disjoint variables. Moving a statement into or out of a branch or loop body changes how many times it runs (0, 1 or n).
 >
 > Where this way stops: Re-tracing the changed code value by value is L2 on the new code. Adapting given code to a familiar variant may be only relational.
@@ -716,7 +716,7 @@ Clauses: none
 Confidence: 0.75
 ```
 
-Label prompt for level way lvl:control_flow@L3#0 (the model saw the concept, the way's name 'relation to neighbour', its text, where the way stops and whether the words must be correct; no level):
+Step 2, judge one way of showing a higher level (lvl:control_flow@L3#0, 'relation to neighbour'). The model saw the description below and where this way stops, not the level it belongs to, and answers shown, wrong or not shown:
 > Control flow is defined over statements: statements are executed for their effect, and if/while/for are themselves statements that may be used wherever a statement is allowed, so they can nest.
 >
 > Where this way stops: Two correct but separate rules are L1. Executing the two in sequence is L2. A relational answer may be correct or a relational error.
@@ -728,7 +728,7 @@ Clauses: 8
 Confidence: 0.75
 ```
 
-Label prompt for level way lvl:control_flow@L2#0 (the model saw only the concept, the way's name 'line by line trace' and its text; no level):
+Step 2, judge one way of showing a level (lvl:control_flow@L2#0, 'line by line trace'). The model saw only the description below, not the level it belongs to, and answers shown or not shown:
 > Execute the statement at the current point; when it completes normally, control passes to the next statement in the block. An if evaluates its condition once and then runs at most one branch; a loop evaluates its condition before each pass; after an if or a loop finishes, control continues with the statement after it.
 
 Model's reply:
@@ -738,15 +738,15 @@ Clauses: 8
 Confidence: 0.6
 ```
 
-Parsed labels:
+The labels as the program read them:
 | edge | label | prune score | confidence | score | clauses | words |
 |---|---|---|---|---|---|---|
 | lvl:control_flow@L4#0 | not applied |  |  | 0.0 |  |  |
 | lvl:control_flow@L3#0 | shown | 0.3 | 0.75 | 0.22 | c8 | Even then the indentation is misleading: without braces only i++ is in the loop, a silent logic error whenever a braceless loop is followed by indented lines |
 | lvl:control_flow@L2#0 | shown | 0.25 | 0.6 | 0.15 | c8 | Even then the indentation is misleading: without braces only i++ is in the loop, a silent logic error whenever a braceless loop is followed by indented lines |
 
-#### loop_body, misconceptions: 12 edges offered
-Edges offered:
+#### loop_body: 12 possible mistakes offered
+What the graph offers:
 | edge |
 |---|
 | err:loop_body->BracelessMultiStatementBody \| wrong rule: Indenting several statements under an if or for makes them all part of its body, even without braces. \| right rule: Without braces only the first statement belongs to the if/for; the rest run once, after it. |
@@ -762,13 +762,13 @@ Edges offered:
 | mis:loop_body->StatementAfterLoopInBody \| wrong rule: A statement written after the loop is repeated with the loop body. \| right rule: The body ends at the closing brace (or after its single statement); code after it runs once, after the loop ends. |
 | mis:loop_body->WhileStopsMidBody \| wrong rule: The loop stops the moment the condition becomes false, even in the middle of the body. \| right rule: The condition is tested only before each pass, so the whole body finishes before the loop can stop. |
 
-Prune: the model's reply (edge id and score; the kept edges sum to 1):
+Step 1, pick the relevant ones. The model's reply (each picked item with its relevance score; the scores add up to 1):
 ```
 err:loop_body->BracelessMultiStatementBody (0.60), mis:loop_body->StatementAfterLoopInBody (0.25), mis:loop_body->ComputerFillsInIntent (0.15)
 ```
-Kept by pruning: err:loop_body->BracelessMultiStatementBody (0.60), mis:loop_body->StatementAfterLoopInBody (0.25), mis:loop_body->ComputerFillsInIntent (0.15)
+Picked: err:loop_body->BracelessMultiStatementBody (0.60), mis:loop_body->StatementAfterLoopInBody (0.25), mis:loop_body->ComputerFillsInIntent (0.15)
 
-Label prompt for the misconception / error edges (judged together). The model saw the program, the question, the numbered clauses, and these edges with their wrong rule and right rule:
+Step 2, judge the possible mistakes of this concept (all in one question). The model saw the program, the question, the numbered clauses and each possible mistake with its wrong rule and the right rule. held = the student follows the wrong rule; correct = the student follows the right rule; not applied = the answer says nothing about it:
 | edge |
 |---|
 | err:loop_body->BracelessMultiStatementBody \| wrong rule: Indenting several statements under an if or for makes them all part of its body, even without braces. \| right rule: Without braces only the first statement belongs to the if/for; the rest run once, after it. |
@@ -781,15 +781,15 @@ mis:loop_body->StatementAfterLoopInBody | correct | clauses: 8 | confidence: 0.7
 mis:loop_body->ComputerFillsInIntent | not applied | clauses: none | confidence: 0.7
 ```
 
-Parsed labels:
+The labels as the program read them:
 | edge | label | prune score | confidence | score | clauses | words |
 |---|---|---|---|---|---|---|
 | err:loop_body->BracelessMultiStatementBody | correct | 0.6 | 0.95 | 0.57 | c8 | Even then the indentation is misleading: without braces only i++ is in the loop, a silent logic error whenever a braceless loop is followed by indented lines |
 | mis:loop_body->StatementAfterLoopInBody | correct | 0.25 | 0.7 | 0.17 | c8 | Even then the indentation is misleading: without braces only i++ is in the loop, a silent logic error whenever a braceless loop is followed by indented lines |
 | mis:loop_body->ComputerFillsInIntent | not applied |  |  | 0.0 |  |  |
 
-#### loop_body, level ways: 14 edges offered
-Edges offered:
+#### loop_body: 14 ways of showing a level offered
+What the graph offers:
 | edge |
 |---|
 | lvl:loop_body@L0#0 \| level L0 way everyday_reading: Folk meaning: an everyday 'repeat this' instruction can be read loosely - a helper fills in missing steps, does each step N times in turn, or stops partway. A Java loop body is exactly the statements inside its braces (or one statement), all executed in order on every pass. |
@@ -807,15 +807,15 @@ Edges offered:
 | lvl:loop_body@L4#1 \| level L4 way diagnose_an_error: rule broken: Without braces, the body of an if, while or for is exactly one statement; indentation does not add statements to it. Kind: silent logic error. Trigger class: A braceless header followed by two or more indented statements: only the first is controlled, the others run once, after the if/loop, on every input. |
 | lvl:loop_body@L4#2 \| level L4 way transfer_to_a_new_program: Put inside the body exactly what must happen once per pass; put set-up before the loop and final reporting after it. Always brace a multi-statement body. |
 
-Prune: the model's reply (edge id and score; the kept edges sum to 1):
+Step 1, pick the relevant ones. The model's reply (each picked item with its relevance score; the scores add up to 1):
 ```
 {lvl:loop_body@L4#1 (Score: 0.6)}
 {lvl:loop_body@L1#1 (Score: 0.3)}
 {lvl:loop_body@L4#2 (Score: 0.1)}
 ```
-Kept by pruning: lvl:loop_body@L4#1 (0.60), lvl:loop_body@L1#1 (0.30), lvl:loop_body@L4#2 (0.10)
+Picked: lvl:loop_body@L4#1 (0.60), lvl:loop_body@L1#1 (0.30), lvl:loop_body@L4#2 (0.10)
 
-Label prompt for level way lvl:loop_body@L4#1 (the model saw the concept, the way's name 'diagnose an error', its text, where the way stops and whether the words must be correct; no level):
+Step 2, judge one way of showing a higher level (lvl:loop_body@L4#1, 'diagnose an error'). The model saw the description below and where this way stops, not the level it belongs to, and answers shown, wrong or not shown:
 > rule broken: Without braces, the body of an if, while or for is exactly one statement; indentation does not add statements to it. Kind: silent logic error. Trigger class: A braceless header followed by two or more indented statements: only the first is controlled, the others run once, after the if/loop, on every input.
 >
 > Where this way stops: Locating and fixing the mistake for one given failing case is L3. A compiler-flagged slip fixed from the message is weak evidence.
@@ -827,7 +827,7 @@ Clauses: 8
 Confidence: 0.85
 ```
 
-Label prompt for level way lvl:loop_body@L1#1 (the model saw only the concept, the way's name 'states the rule' and its text; no level):
+Step 2, judge one way of showing a level (lvl:loop_body@L1#1, 'states the rule'). The model saw only the description below, not the level it belongs to, and answers shown or not shown:
 > The body is the block after the loop header; braces are optional only if it is a single statement, in which case only that one statement is repeated.
 
 Model's reply:
@@ -837,7 +837,7 @@ Clauses: 8
 Confidence: 0.9
 ```
 
-Label prompt for level way lvl:loop_body@L4#2 (the model saw the concept, the way's name 'transfer to a new program', its text, where the way stops and whether the words must be correct; no level):
+Step 2, judge one way of showing a higher level (lvl:loop_body@L4#2, 'transfer to a new program'). The model saw the description below and where this way stops, not the level it belongs to, and answers shown, wrong or not shown:
 > Put inside the body exactly what must happen once per pass; put set-up before the loop and final reporting after it. Always brace a multi-statement body.
 >
 > Where this way stops: Reproducing or slightly varying a familiar program is L1 to L3.
@@ -849,27 +849,27 @@ Clauses: none
 Confidence: 0.8
 ```
 
-Parsed labels:
+The labels as the program read them:
 | edge | label | prune score | confidence | score | clauses | words |
 |---|---|---|---|---|---|---|
 | lvl:loop_body@L4#1 | shown | 0.6000000000000001 | 0.85 | 0.51 | c8 | Even then the indentation is misleading: without braces only i++ is in the loop, a silent logic error whenever a braceless loop is followed by indented lines |
 | lvl:loop_body@L1#1 | shown | 0.30000000000000004 | 0.9 | 0.27 | c8 | Even then the indentation is misleading: without braces only i++ is in the loop, a silent logic error whenever a braceless loop is followed by indented lines |
 | lvl:loop_body@L4#2 | not applied |  |  | 0.0 |  |  |
 
-#### for_loop, concept edges: 1 edges offered
-Edges offered:
+#### for_loop: 1 links to neighbouring concepts offered
+What the graph offers:
 | edge |
 |---|
 | pre:for_loop->loop_body \| rule: The statements in braces after the for header are the loop body; they run once on every pass, between the test and the increment, exactly as in a while loop. |
 | pre:loop_control->for_loop \| rule: The for header is exactly the three control slots, and the body runs after the test and before the update on each pass. |
 
-Prune: the model's reply (edge id and score; the kept edges sum to 1):
+Step 1, pick the relevant ones. The model's reply (each picked item with its relevance score; the scores add up to 1):
 ```
 pre:loop_control->for_loop (1.00)
 ```
-Kept by pruning: pre:loop_control->for_loop (1.00)
+Picked: pre:loop_control->for_loop (1.00)
 
-Label prompt for concept edge pre:loop_control->for_loop (loop_control -> for_loop, prerequisite):
+Step 2, judge the link between two concepts (pre:loop_control->for_loop). The model answers confirmed (the student carries the rule from the first concept into the second), broken (the student fails to) or not applied:
 > The for header is exactly the three control slots, and the body runs after the test and before the update on each pass.
 
 Model's reply:
@@ -879,13 +879,13 @@ Clauses: none
 Confidence: 0.6
 ```
 
-Parsed labels:
+The labels as the program read them:
 | edge | label | prune score | confidence | score | clauses | words |
 |---|---|---|---|---|---|---|
 | pre:loop_control->for_loop | not applied |  |  | 0.0 |  |  |
 
-#### println, misconceptions: 6 edges offered
-Edges offered:
+#### println: 6 possible mistakes offered
+What the graph offers:
 | edge |
 |---|
 | err:println->PrintWithoutFinalNewline \| wrong rule: Ends the output with print and expects it to appear right away. \| right rule: Finish a line of print calls with println; some systems hold print output until a newline is printed. |
@@ -895,13 +895,13 @@ Edges offered:
 | mis:println->PrintNewLineFirst \| wrong rule: println(s) prints a newline and then s. \| right rule: println(s) prints s and then the newline. |
 | mis:println->PrintedTextIsExecuted \| wrong rule: System.out.println("x is 5"); sets x to 5 (text inside the quotes is run as code). \| right rule: Characters inside double quotes are printed literally; println only displays them and changes no variable. Only an assignment such as x = 5; sets x. |
 
-Prune: the model's reply (edge id and score; the kept edges sum to 1):
+Step 1, pick the relevant ones. The model's reply (each picked item with its relevance score; the scores add up to 1):
 ```
 mis:println->IdentifierCaseInsensitive (0.80), mis:println->ParenthesesOnlyIfArgument (0.12), err:println->PrintWithoutFinalNewline (0.08)
 ```
-Kept by pruning: mis:println->IdentifierCaseInsensitive (0.80), mis:println->ParenthesesOnlyIfArgument (0.12), err:println->PrintWithoutFinalNewline (0.08)
+Picked: mis:println->IdentifierCaseInsensitive (0.80), mis:println->ParenthesesOnlyIfArgument (0.12), err:println->PrintWithoutFinalNewline (0.08)
 
-Label prompt for the misconception / error edges (judged together). The model saw the program, the question, the numbered clauses, and these edges with their wrong rule and right rule:
+Step 2, judge the possible mistakes of this concept (all in one question). The model saw the program, the question, the numbered clauses and each possible mistake with its wrong rule and the right rule. held = the student follows the wrong rule; correct = the student follows the right rule; not applied = the answer says nothing about it:
 | edge |
 |---|
 | mis:println->IdentifierCaseInsensitive \| wrong rule: System.out.Println and System.out.println name the same method. \| right rule: Java is case-sensitive: names of variables, methods and classes that differ only in capitalization are different names. |
@@ -914,15 +914,15 @@ mis:println->ParenthesesOnlyIfArgument | not applied | clauses: none | confidenc
 err:println->PrintWithoutFinalNewline | not applied | clauses: none | confidence: 0.95
 ```
 
-Parsed labels:
+The labels as the program read them:
 | edge | label | prune score | confidence | score | clauses | words |
 |---|---|---|---|---|---|---|
 | mis:println->IdentifierCaseInsensitive | correct | 0.8 | 0.9 | 0.72 | c6, c7 | After those are fixed, system.out still fails; because Java is case-sensitive: there is no package called system, it must be System |
 | mis:println->ParenthesesOnlyIfArgument | not applied |  |  | 0.0 |  |  |
 | err:println->PrintWithoutFinalNewline | not applied |  |  | 0.0 |  |  |
 
-#### println, level ways: 17 edges offered
-Edges offered:
+#### println: 17 ways of showing a level offered
+What the graph offers:
 | edge |
 |---|
 | lvl:println@L0#0 \| level L0 way everyday_reading: Everyday reading: 'println' is just 'print', and 'new line' is something you do before writing. Java rule: println(x) prints x and then ends the line; println() alone just ends the line. |
@@ -943,15 +943,15 @@ Edges offered:
 | lvl:println@L4#3 \| level L4 way diagnose_an_error: rule broken: Method names are case-sensitive. Kind: compile-time. Trigger class: System.out.Println or system.out.println: cannot find symbol |
 | lvl:println@L4#4 \| level L4 way diagnose_an_error: rule broken: Calls need parentheses. Kind: compile-time. Trigger class: System.out.println; without () |
 
-Prune: the model's reply (edge id and score; the kept edges sum to 1):
+Step 1, pick the relevant ones. The model's reply (each picked item with its relevance score; the scores add up to 1):
 ```
 {lvl:println@L4#3 (Score: 0.6)}
 {lvl:println@L3#0 (Score: 0.25)}
 {lvl:println@L1#0 (Score: 0.15)}
 ```
-Kept by pruning: lvl:println@L4#3 (0.60), lvl:println@L3#0 (0.25), lvl:println@L1#0 (0.15)
+Picked: lvl:println@L4#3 (0.60), lvl:println@L3#0 (0.25), lvl:println@L1#0 (0.15)
 
-Label prompt for level way lvl:println@L4#3 (the model saw the concept, the way's name 'diagnose an error', its text, where the way stops and whether the words must be correct; no level):
+Step 2, judge one way of showing a higher level (lvl:println@L4#3, 'diagnose an error'). The model saw the description below and where this way stops, not the level it belongs to, and answers shown, wrong or not shown:
 > rule broken: Method names are case-sensitive. Kind: compile-time. Trigger class: System.out.Println or system.out.println: cannot find symbol
 >
 > Where this way stops: Locating and fixing the mistake for one given failing case is L3. A compiler-flagged slip fixed from the message is weak evidence.
@@ -963,7 +963,7 @@ Clauses: 6, 7
 Confidence: 0.8
 ```
 
-Label prompt for level way lvl:println@L3#0 (the model saw the concept, the way's name 'relation to neighbour', its text, where the way stops and whether the words must be correct; no level):
+Step 2, judge one way of showing a higher level (lvl:println@L3#0, 'relation to neighbour'). The model saw the description below and where this way stops, not the level it belongs to, and answers shown, wrong or not shown:
 > System.out.println(s); is a statement, so its line of output appears at its own place in the sequence.
 >
 > Where this way stops: Two correct but separate rules are L1. Executing the two in sequence is L2. A relational answer may be correct or a relational error.
@@ -975,7 +975,7 @@ Clauses: none
 Confidence: 0.7
 ```
 
-Label prompt for level way lvl:println@L1#0 (the model saw only the concept, the way's name 'names the element' and its text; no level):
+Step 2, judge one way of showing a level (lvl:println@L1#0, 'names the element'). The model saw only the description below, not the level it belongs to, and answers shown or not shown:
 > System.out.println is a library method that prints its argument followed by a line terminator ('print line').
 
 Model's reply:
@@ -985,18 +985,18 @@ Clauses: none
 Confidence: 0.7
 ```
 
-Parsed labels:
+The labels as the program read them:
 | edge | label | prune score | confidence | score | clauses | words |
 |---|---|---|---|---|---|---|
 | lvl:println@L4#3 | shown | 0.6 | 0.8 | 0.48 | c6, c7 | After those are fixed, system.out still fails; because Java is case-sensitive: there is no package called system, it must be System |
 | lvl:println@L3#0 | not applied |  |  | 0.0 |  |  |
 | lvl:println@L1#0 | not applied |  |  | 0.0 |  |  |
 
-**Kept on a path at this depth** (best N in tiers: held misconception / broken edge, then held error, then correct / confirmed / shown):
+**Kept in this round** (mistakes first, then findings that only confirm understanding; only the best few are kept):
 
 mis:println->IdentifierCaseInsensitive [correct, tier 2, 0.72], err:loop_body->BracelessMultiStatementBody [correct, tier 2, 0.57], lvl:loop_body@L4#1 [shown, tier 2, 0.51]
 
-**Clause coverage after this depth:**
+**Which clauses are explained so far:**
 | clause | text | covered by |
 |---|---|---|
 | c1 | It does not compile | err:statement->StatementNeedsNoTerminator |
@@ -1008,11 +1008,13 @@ mis:println->IdentifierCaseInsensitive [correct, tier 2, 0.72], err:loop_body->B
 | c7 | because Java is case-sensitive: there is no package called system, it must be System | mis:statement->ComputerFillsInIntent |
 | c8 | Even then the indentation is misleading: without braces only i++ is in the loop, a silent logic error whenever a braceless loop is followed by indented lines | mis:statement->WhitespaceIsSignificant |
 
-**Figure 6 (the graph after depth 3)**
+**Figure 6 (the graph after round 3)**
 
 ![Figure 6](figure06.png)
-## 4. Diagnosis (rules over the labelled graph, no model)
-Root-cause walk: held on [], broken at [], prerequisites {'increment_operators': ['assignment', 'loop_control'], 'boolean_expression': ['comparison_operators'], 'comparison_operators': ['expression'], 'loop_body': ['for_loop'], 'for_loop': ['loop_control'], 'loop_control': ['loop_variable'], 'control_flow': ['statement'], 'println': ['statement']}
+## 4. Diagnosis (fixed rules, no model)
+
+From here on the model is not asked any more. Fixed rules decide which labels count as mistakes, where the mistake starts (the root cause) and the level of each concept.
+Finding where the mistake starts: held on [], broken at [], prerequisites {'increment_operators': ['assignment', 'loop_control'], 'boolean_expression': ['comparison_operators'], 'comparison_operators': ['expression'], 'loop_body': ['for_loop'], 'for_loop': ['loop_control'], 'loop_control': ['loop_variable'], 'control_flow': ['statement'], 'println': ['statement']}
 - compile_time_error: L4 via diagnose_an_error "It does not compile; Line 1 and line 4 are missing the; at the end; so javac reports; expected"
 - control_flow: L3 via relation_to_neighbour "Even then the indentation is misleading: without braces only i++ is in the loop, a silent logic error whenever a braceless loop is followed by indented lines"
 - for_loop: L4 via diagnose_an_error "Even then the indentation is misleading: without braces only i++ is in the loop, a silent logic error whenever a braceless loop is followed by indented lines"
@@ -1020,12 +1022,12 @@ Root-cause walk: held on [], broken at [], prerequisites {'increment_operators':
 - println: L4 via diagnose_an_error "After those are fixed, system.out still fails; because Java is case-sensitive: there is no package called system, it must be System"
 - statement: L4 via diagnose_an_error "It does not compile; Line 1 and line 4 are missing the; at the end; so javac reports; expected"
 
-**Stop:** sufficient at depth 3; prompts {'prune': 15, 'label': 29}, fresh model calls 0, cache hits 44
+**Why the reading stopped:** sufficient, in round 3. Questions put to the model: {'prune': 15, 'label': 29} (new: 0, answered from stored replies: 44)
 
 ### Held misconceptions
 (none)
 
-### Broken concept edges
+### Links between concepts that the student breaks
 (none)
 
 ### Root cause: none
@@ -1040,9 +1042,11 @@ Root-cause walk: held on [], broken at [], prerequisites {'increment_operators':
 | println | L4 | diagnose_an_error |  | level_way | After those are fixed, system.out still fails; because Java is case-sensitive: there is no package called system, it must be System |  |  |  |
 | statement | L4 | diagnose_an_error |  | level_way | It does not compile; Line 1 and line 4 are missing the; at the end; so javac reports; expected |  | L3 relation_to_neighbour, L1 names_the_element |  |
 
-### Overall level: L4
+### Overall level by the walk's own Stage 7 rule: L4
 
-Clause coverage (final):
+The overall level of this folder is the one in the section \"Level classification\" at the top; it can differ from this one.
+
+Which finding explains each clause, at the end:
 | clause | covered by |
 |---|---|
 | It does not compile | err:statement->StatementNeedsNoTerminator |
@@ -1057,7 +1061,7 @@ Clause coverage (final):
 **Figure 7 (final picture)**
 
 ![Figure 7](figure07.png)
-## 5. Every labelled edge (the evidence list, kept or not)
+## 5. Everything that got a label
 | depth | source | edge | kind | label | prune_score | confidence | score | clauses | quote |
 |---|---|---|---|---|---|---|---|---|---|
 | 1 | statement | err:statement->StatementNeedsNoTerminator | error | correct | 0.5 | 0.9 | 0.45 | [1, 2, 3, 4, 5] | It does not compile; Line 1 and line 4 are missing the; at the end; so javac reports; expected |
@@ -1087,7 +1091,7 @@ Clause coverage (final):
 | 3 | println | mis:println->IdentifierCaseInsensitive | misconception | correct | 0.8 | 0.9 | 0.72 | [6, 7] | After those are fixed, system.out still fails; because Java is case-sensitive: there is no package called system, it must be System |
 | 3 | println | lvl:println@L4#3 | level | shown | 0.6 | 0.8 | 0.48 | [6, 7] | After those are fixed, system.out still fails; because Java is case-sensitive: there is no package called system, it must be System |
 
-## 6. The paths (what the keep step kept, depth by depth)
+## 6. What was kept, round by round
 | depth | source | edge | kind | label | score | clauses |
 |---|---|---|---|---|---|---|
 | 1 | for_loop | err:for_loop->BracelessMultiStatementBody | error | correct | 0.76 | [8] |
@@ -1100,7 +1104,7 @@ Clause coverage (final):
 | 3 | loop_body | err:loop_body->BracelessMultiStatementBody | error | correct | 0.57 | [8] |
 | 3 | loop_body | lvl:loop_body@L4#1 | level | shown | 0.51 | [8] |
 
-## 7. Raw traversal log
+## 7. The program's own log of the run
 ```
 clauses: It does not compile | Line 1 and line 4 are missing the | at the end | so javac reports | expected | After those are fixed, system.out still fails | because Java is case-sensitive: there is no package called system, it must be System | Even then the indentation is misleading: without braces only i++ is in the loop, a silent logic error whenever a braceless loop is followed by indented lines
 start: generic concepts whose tagging text occurs in the answer: statement
@@ -1186,7 +1190,7 @@ start concepts (3): statement, compile_time_error, for_loop
   level statement: L4 via diagnose_an_error "It does not compile; Line 1 and line 4 are missing the; at the end; so javac reports; expected"
 ```
 
-## 8. Full diagnosis JSON
+## 8. The full result as data
 ```json
 {
  "scenario": "LP17",

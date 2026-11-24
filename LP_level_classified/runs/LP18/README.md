@@ -39,8 +39,8 @@ Question: Will this compile? What happens when you run it? Explain your reasonin
 
 Student's answer: Yes, it compiles and prints 5 twice. The missing ; do not matter because each statement is on its own line, and system.out is the same as System.out.
 Settings: width 3, depth 3, prune llm, backend claude-cli, model claude-opus-5-5
-## 1. Stage 1: the subgraph G from the code (no model)
-Masked code (string and char literals and comments blanked; this is what the patterns see):
+## 1. Stage 1: which concepts the program uses (no model)
+The program with the text in quotes and the comments blanked out, so that only real code is read:
 ```
 int i , n= 5
 for(i=1;i<n;i++)
@@ -48,7 +48,7 @@ for(i=1;i<n;i++)
     System.out.println(i)
 system.out.println(i);
 ```
-Which code text tagged which concept (a generic concept fires on almost any Java line; it starts the walk only if the answer repeats its tag):
+Which piece of the code points to which concept. A generic concept is one that almost every Java program has; the reading starts from it only if the student's answer mentions it:
 | concept | generic | channel | matched text | line |
 |---|---|---|---|---|
 | assignment | True | pattern | '=' | 1 |
@@ -66,11 +66,11 @@ Which code text tagged which concept (a generic concept fires on almost any Java
 | println | False | pattern | 'System.out.println(' | 4 |
 | statement | True | pattern | ';' | 2 |
 
-G: 13 concept nodes (3 generic), 10 concept edges, 126 misconception / error edges, 92 misconception / error nodes, 65 level nodes, 125 level-misconception links, 3 connected piece(s).
+The part of the knowledge graph used for this program (called G) has 13 concepts (3 of them generic), 10 links between concepts, 126 links from a concept to a possible mistake (92 different mistakes) and 65 level entries (five levels, L0 to L4, for each concept). It is in 3 connected piece(s).
 Note: concept nodes form 3 pieces (the KG has no edge between them): assignment,boolean_expression,comparison_operators,expression,for_loop,increment_operators,loop_body,loop_control,loop_variable | compile_time_error | control_flow,println,statement
 Note: compile_time_error.missing_semicolon: compiler-message signal, needs javac output; skipped
 
-Concept edges of G (the links the walk can read; `pre:` = prerequisite A -> B, `par:` = parallel):
+The links between these concepts. `pre:` means the first concept must be understood before the second; `par:` means the two are learned side by side:
 | edge | type | rule (logic) |
 |---|---|---|
 | par:assignment~comparison_operators | parallel | x = y stores the value of y in x (a statement with a side effect); x == y only tests whether the two values are equal and gives a boolean. Writing = where == is meant is a compile error with int operands and a silent bug with boolean operands. |
@@ -84,8 +84,8 @@ Concept edges of G (the links the walk can read; `pre:` = prerequisite A -> B, `
 | pre:statement->control_flow | prerequisite | Control flow is the order in which statements run. |
 | pre:statement->println | prerequisite | System.out.println(s); is itself a statement, so its line of output appears at its own place in the sequence. |
 
-Misconception / error edges per concept (count), and level ways per concept (count):
-| concept | misconception / error edges | level ways (L1-L4 + L0 non-misconception) |
+For each concept: how many possible mistakes the graph lists for it, and how many ways of showing a level:
+| concept | possible mistakes | ways of showing a level |
 |---|---|---|
 | assignment | 15 | 24 |
 | boolean_expression | 8 | 19 |
@@ -107,8 +107,8 @@ Misconception / error edges per concept (count), and level ways per concept (cou
 **Figure 2**
 
 ![Figure 2](figure02.png)
-## 2. Clauses and start concepts (no model)
-The answer split into clauses (at sentence ends, ';', and before 'because' / 'so'; quotes removed):
+## 2. The answer in pieces, and where the reading starts (no model)
+The student's answer cut into short pieces (clauses), so that every finding can point to the exact words it rests on:
 | clause | text |
 |---|---|
 | c1 | Yes, it compiles and prints 5 twice |
@@ -124,18 +124,18 @@ start: chosen println, statement, compile_time_error
 
 start concepts (3): println, statement, compile_time_error
 
-Start concepts: println, statement, compile_time_error
+The reading starts at the concepts whose description is closest to the student's words. Start concepts: println, statement, compile_time_error
 
 **Figure 3**
 
 ![Figure 3](figure03.png)
-## 3. The walk, depth by depth
-At each depth, for each current concept: the edges offered (a concept entering as a start concept offers its misconception / error edges and its level ways, as two families; otherwise it offers its concept edges), the prune prompt and the model's reply, then the label prompt(s) and the model's reply, parsed into label / clauses / confidence. Score = prune score x confidence.
+## 3. Reading the answer against the graph, round by round (the model is asked here)
+The answer is read in rounds. In each round, for each concept being looked at, three things happen. First the graph offers what could be said about the concept: the possible mistakes, the ways of showing a level, or the links to neighbouring concepts. Then the model picks the few that matter for this answer. Then the model judges each picked one against the student's clauses and gives a label, the clause numbers it rests on and a confidence from 0 to 1. Score = relevance score x confidence.
 
-### Depth 1: current concepts 'println', 'statement', 'compile_time_error'
+### Round 1: the concepts being looked at are 'println', 'statement', 'compile_time_error'
 
-#### println, misconceptions: 6 edges offered
-Edges offered:
+#### println: 6 possible mistakes offered
+What the graph offers:
 | edge |
 |---|
 | err:println->PrintWithoutFinalNewline \| wrong rule: Ends the output with print and expects it to appear right away. \| right rule: Finish a line of print calls with println; some systems hold print output until a newline is printed. |
@@ -145,13 +145,13 @@ Edges offered:
 | mis:println->PrintNewLineFirst \| wrong rule: println(s) prints a newline and then s. \| right rule: println(s) prints s and then the newline. |
 | mis:println->PrintedTextIsExecuted \| wrong rule: System.out.println("x is 5"); sets x to 5 (text inside the quotes is run as code). \| right rule: Characters inside double quotes are printed literally; println only displays them and changes no variable. Only an assignment such as x = 5; sets x. |
 
-Prune: the model's reply (edge id and score; the kept edges sum to 1):
+Step 1, pick the relevant ones. The model's reply (each picked item with its relevance score; the scores add up to 1):
 ```
 mis:println->IdentifierCaseInsensitive (0.80), mis:println->PrintEqualsPrintln (0.10), mis:println->PrintNewLineFirst (0.10)
 ```
-Kept by pruning: mis:println->IdentifierCaseInsensitive (0.80), mis:println->PrintEqualsPrintln (0.10), mis:println->PrintNewLineFirst (0.10)
+Picked: mis:println->IdentifierCaseInsensitive (0.80), mis:println->PrintEqualsPrintln (0.10), mis:println->PrintNewLineFirst (0.10)
 
-Label prompt for the misconception / error edges (judged together). The model saw the program, the question, the numbered clauses, and these edges with their wrong rule and right rule:
+Step 2, judge the possible mistakes of this concept (all in one question). The model saw the program, the question, the numbered clauses and each possible mistake with its wrong rule and the right rule. held = the student follows the wrong rule; correct = the student follows the right rule; not applied = the answer says nothing about it:
 | edge |
 |---|
 | mis:println->IdentifierCaseInsensitive \| wrong rule: System.out.Println and System.out.println name the same method. \| right rule: Java is case-sensitive: names of variables, methods and classes that differ only in capitalization are different names. |
@@ -164,15 +164,15 @@ mis:println->PrintEqualsPrintln | not applied | clauses: none | confidence: 0.85
 mis:println->PrintNewLineFirst | not applied | clauses: none | confidence: 0.9
 ```
 
-Parsed labels:
+The labels as the program read them:
 | edge | label | prune score | confidence | score | clauses | words |
 |---|---|---|---|---|---|---|
 | mis:println->IdentifierCaseInsensitive | held | 0.8 | 0.95 | 0.76 | c4 | because each statement is on its own line, and system.out is the same as System.out |
 | mis:println->PrintEqualsPrintln | not applied |  |  | 0.0 |  |  |
 | mis:println->PrintNewLineFirst | not applied |  |  | 0.0 |  |  |
 
-#### println, level ways: 17 edges offered
-Edges offered:
+#### println: 17 ways of showing a level offered
+What the graph offers:
 | edge |
 |---|
 | lvl:println@L0#0 \| level L0 way everyday_reading: Everyday reading: 'println' is just 'print', and 'new line' is something you do before writing. Java rule: println(x) prints x and then ends the line; println() alone just ends the line. |
@@ -193,15 +193,15 @@ Edges offered:
 | lvl:println@L4#3 \| level L4 way diagnose_an_error: rule broken: Method names are case-sensitive. Kind: compile-time. Trigger class: System.out.Println or system.out.println: cannot find symbol |
 | lvl:println@L4#4 \| level L4 way diagnose_an_error: rule broken: Calls need parentheses. Kind: compile-time. Trigger class: System.out.println; without () |
 
-Prune: the model's reply (edge id and score; the kept edges sum to 1):
+Step 1, pick the relevant ones. The model's reply (each picked item with its relevance score; the scores add up to 1):
 ```
 {lvl:println@L4#3 (Score: 0.6)}
 {lvl:println@L2#1 (Score: 0.25)}
 {lvl:println@L3#0 (Score: 0.15)}
 ```
-Kept by pruning: lvl:println@L4#3 (0.60), lvl:println@L2#1 (0.25), lvl:println@L3#0 (0.15)
+Picked: lvl:println@L4#3 (0.60), lvl:println@L2#1 (0.25), lvl:println@L3#0 (0.15)
 
-Label prompt for level way lvl:println@L4#3 (the model saw the concept, the way's name 'diagnose an error', its text, where the way stops and whether the words must be correct; no level):
+Step 2, judge one way of showing a higher level (lvl:println@L4#3, 'diagnose an error'). The model saw the description below and where this way stops, not the level it belongs to, and answers shown, wrong or not shown:
 > rule broken: Method names are case-sensitive. Kind: compile-time. Trigger class: System.out.Println or system.out.println: cannot find symbol
 >
 > Where this way stops: Locating and fixing the mistake for one given failing case is L3. A compiler-flagged slip fixed from the message is weak evidence.
@@ -213,7 +213,7 @@ Clauses: 4
 Confidence: 0.9
 ```
 
-Label prompt for level way lvl:println@L2#1 (the model saw only the concept, the way's name 'output prediction' and its text; no level):
+Step 2, judge one way of showing a level (lvl:println@L2#1, 'output prediction'). The model saw only the description below, not the level it belongs to, and answers shown or not shown:
 > Output is the value's characters followed by a line break: println("Hello, "); println("World!"); prints two lines.
 
 Model's reply:
@@ -223,7 +223,7 @@ Clauses: 1
 Confidence: 0.6
 ```
 
-Label prompt for level way lvl:println@L3#0 (the model saw the concept, the way's name 'relation to neighbour', its text, where the way stops and whether the words must be correct; no level):
+Step 2, judge one way of showing a higher level (lvl:println@L3#0, 'relation to neighbour'). The model saw the description below and where this way stops, not the level it belongs to, and answers shown, wrong or not shown:
 > System.out.println(s); is a statement, so its line of output appears at its own place in the sequence.
 >
 > Where this way stops: Two correct but separate rules are L1. Executing the two in sequence is L2. A relational answer may be correct or a relational error.
@@ -235,11 +235,11 @@ Clauses: 1, 4
 Confidence: 0.6
 ```
 
-Parsed labels:
+The labels as the program read them:
 (none)
 
-#### statement, misconceptions: 5 edges offered
-Edges offered:
+#### statement: 5 possible mistakes offered
+What the graph offers:
 | edge |
 |---|
 | err:statement->StatementNeedsNoTerminator \| wrong rule: A statement still compiles and runs if the semicolon at its end is left out, or if a stray ; is put right after if (c) or for (...). \| right rule: Each statement must end with ;, otherwise javac reports ';' expected. |
@@ -248,15 +248,15 @@ Edges offered:
 | mis:statement->StatementsRunInAnyOrder \| wrong rule: Statements in a program can run in any order. \| right rule: Without control statements, statements run once each, top to bottom. |
 | mis:statement->WhitespaceIsSignificant \| wrong rule: Line breaks and indentation change what the program does, so each statement must be on its own line. \| right rule: Java compilers consider all whitespace in program text (outside quotation marks) to be equivalent; layout is for human readers. |
 
-Prune: the model's reply (edge id and score; the kept edges sum to 1):
+Step 1, pick the relevant ones. The model's reply (each picked item with its relevance score; the scores add up to 1):
 ```
 {err:statement->StatementNeedsNoTerminator (Score: 0.5)}
 {mis:statement->WhitespaceIsSignificant (Score: 0.3)}
 {mis:statement->ComputerFillsInIntent (Score: 0.2)}
 ```
-Kept by pruning: err:statement->StatementNeedsNoTerminator (0.50), mis:statement->WhitespaceIsSignificant (0.30), mis:statement->ComputerFillsInIntent (0.20)
+Picked: err:statement->StatementNeedsNoTerminator (0.50), mis:statement->WhitespaceIsSignificant (0.30), mis:statement->ComputerFillsInIntent (0.20)
 
-Label prompt for the misconception / error edges (judged together). The model saw the program, the question, the numbered clauses, and these edges with their wrong rule and right rule:
+Step 2, judge the possible mistakes of this concept (all in one question). The model saw the program, the question, the numbered clauses and each possible mistake with its wrong rule and the right rule. held = the student follows the wrong rule; correct = the student follows the right rule; not applied = the answer says nothing about it:
 | edge |
 |---|
 | err:statement->StatementNeedsNoTerminator \| wrong rule: A statement still compiles and runs if the semicolon at its end is left out, or if a stray ; is put right after if (c) or for (...). \| right rule: Each statement must end with ;, otherwise javac reports ';' expected. |
@@ -269,15 +269,15 @@ mis:statement->WhitespaceIsSignificant | held | clauses: 4 | confidence: 0.8
 mis:statement->ComputerFillsInIntent | not applied | clauses: none | confidence: 0.6
 ```
 
-Parsed labels:
+The labels as the program read them:
 | edge | label | prune score | confidence | score | clauses | words |
 |---|---|---|---|---|---|---|
 | err:statement->StatementNeedsNoTerminator | held | 0.5 | 0.9 | 0.45 | c1, c2, c3 | Yes, it compiles and prints 5 twice; The missing; do not matter |
 | mis:statement->WhitespaceIsSignificant | held | 0.3 | 0.8 | 0.24 | c4 | because each statement is on its own line, and system.out is the same as System.out |
 | mis:statement->ComputerFillsInIntent | not applied |  |  | 0.0 |  |  |
 
-#### statement, level ways: 19 edges offered
-Edges offered:
+#### statement: 19 ways of showing a level offered
+What the graph offers:
 | edge |
 |---|
 | lvl:statement@L0#0 \| level L0 way everyday_reading: Everyday reading: a program is read like a text or a list of wishes that the computer takes in all at once, so line order, goals of later lines or what the writer meant can matter. Java rule: each statement is one step, ended by ;, executed once, in written order, using only the current state. |
@@ -300,15 +300,15 @@ Edges offered:
 | lvl:statement@L4#2 \| level L4 way transfer_to_a_new_program: Write one statement per step and order them as the algorithm requires; straight-line sequence suffices when every step runs once, otherwise use conditionals or loops. |
 | lvl:statement@L4#3 \| level L4 way diagnose_an_error: rule broken: A ; directly after an if/while/for header is an empty statement. Kind: silent logic error. Trigger class: if (x > 0); or while (cond); followed by the intended body |
 
-Prune: the model's reply (edge id and score; the kept edges sum to 1):
+Step 1, pick the relevant ones. The model's reply (each picked item with its relevance score; the scores add up to 1):
 ```
 {lvl:statement@L4#1 (Score: 0.5)}
 {lvl:statement@L0#0 (Score: 0.3)}
 {lvl:statement@L1#0 (Score: 0.2)}
 ```
-Kept by pruning: lvl:statement@L4#1 (0.50), lvl:statement@L0#0 (0.30), lvl:statement@L1#0 (0.20)
+Picked: lvl:statement@L4#1 (0.50), lvl:statement@L0#0 (0.30), lvl:statement@L1#0 (0.20)
 
-Label prompt for level way lvl:statement@L4#1 (the model saw the concept, the way's name 'diagnose an error', its text, where the way stops and whether the words must be correct; no level):
+Step 2, judge one way of showing a higher level (lvl:statement@L4#1, 'diagnose an error'). The model saw the description below and where this way stops, not the level it belongs to, and answers shown, wrong or not shown:
 > rule broken: Each simple statement must end with ;. Kind: compile-time. Trigger class: omitting the ; at the end of a statement: javac reports ';' expected (often at the end of that line or the next)
 >
 > Where this way stops: Locating and fixing the mistake for one given failing case is L3. A compiler-flagged slip fixed from the message is weak evidence.
@@ -320,7 +320,7 @@ Clauses: 1, 2, 3, 4
 Confidence: 0.85
 ```
 
-Label prompt for level way lvl:statement@L0#0 (the model saw only the concept, the way's name 'everyday reading' and its text; no level):
+Step 2, judge one way of showing a level (lvl:statement@L0#0, 'everyday reading'). The model saw only the description below, not the level it belongs to, and answers shown or not shown:
 > Everyday reading: a program is read like a text or a list of wishes that the computer takes in all at once, so line order, goals of later lines or what the writer meant can matter. Java rule: each statement is one step, ended by ;, executed once, in written order, using only the current state.
 
 Model's reply:
@@ -330,7 +330,7 @@ Clauses: 2, 3, 4
 Confidence: 0.8
 ```
 
-Label prompt for level way lvl:statement@L1#0 (the model saw only the concept, the way's name 'names the element' and its text; no level):
+Step 2, judge one way of showing a level (lvl:statement@L1#0, 'names the element'). The model saw only the description below, not the level it belongs to, and answers shown or not shown:
 > A statement is one step of a program (a declaration, assignment, method call such as System.out.println(...), or control statement), ended by a semicolon when it is a simple statement.
 
 Model's reply:
@@ -340,11 +340,11 @@ Clauses: none
 Confidence: 0.8
 ```
 
-Parsed labels:
+The labels as the program read them:
 (none)
 
-#### compile_time_error, misconceptions: 10 edges offered
-Edges offered:
+#### compile_time_error: 10 possible mistakes offered
+What the graph offers:
 | edge |
 |---|
 | err:compile_time_error->AssignToFinal \| wrong rule: Assigns a new value to a variable declared final. \| right rule: A final variable cannot be reassigned after it is initialized; the compiler reports an error. |
@@ -358,15 +358,15 @@ Edges offered:
 | mis:compile_time_error->CompilesMeansWorks \| wrong rule: Code that compiles is code that works. \| right rule: Code that compiles can still have run-time and logical errors. |
 | mis:compile_time_error->ErrorLineIsFaultLine \| wrong rule: The line number in a javac error is always the line that has the mistake. \| right rule: The compiler reports where it noticed the problem, which can be after the real fault; for example, omitting the second left brace of HelloWorld produces errors reported on later lines. |
 
-Prune: the model's reply (edge id and score; the kept edges sum to 1):
+Step 1, pick the relevant ones. The model's reply (each picked item with its relevance score; the scores add up to 1):
 ```
 {err:compile_time_error->StatementNeedsNoTerminator (Score: 0.5)}
 {err:compile_time_error->MisspelledIdentifier (Score: 0.4)}
 {mis:compile_time_error->CompilesMeansWorks (Score: 0.1)}
 ```
-Kept by pruning: err:compile_time_error->StatementNeedsNoTerminator (0.50), err:compile_time_error->MisspelledIdentifier (0.40), mis:compile_time_error->CompilesMeansWorks (0.10)
+Picked: err:compile_time_error->StatementNeedsNoTerminator (0.50), err:compile_time_error->MisspelledIdentifier (0.40), mis:compile_time_error->CompilesMeansWorks (0.10)
 
-Label prompt for the misconception / error edges (judged together). The model saw the program, the question, the numbered clauses, and these edges with their wrong rule and right rule:
+Step 2, judge the possible mistakes of this concept (all in one question). The model saw the program, the question, the numbered clauses and each possible mistake with its wrong rule and the right rule. held = the student follows the wrong rule; correct = the student follows the right rule; not applied = the answer says nothing about it:
 | edge |
 |---|
 | err:compile_time_error->StatementNeedsNoTerminator \| wrong rule: a statement runs without the ; \| right rule: Each statement must end with ;, otherwise javac reports ';' expected. |
@@ -379,15 +379,15 @@ err:compile_time_error->MisspelledIdentifier | held | clauses: 4 | confidence: 0
 mis:compile_time_error->CompilesMeansWorks | not applied | clauses: none | confidence: 0.75
 ```
 
-Parsed labels:
+The labels as the program read them:
 | edge | label | prune score | confidence | score | clauses | words |
 |---|---|---|---|---|---|---|
 | err:compile_time_error->StatementNeedsNoTerminator | held | 0.5 | 0.85 | 0.42 | c2, c3, c4 | The missing; do not matter; because each statement is on its own line, and system.out is the same as System.out |
 | err:compile_time_error->MisspelledIdentifier | held | 0.4 | 0.9 | 0.36 | c4 | because each statement is on its own line, and system.out is the same as System.out |
 | mis:compile_time_error->CompilesMeansWorks | not applied |  |  | 0.0 |  |  |
 
-#### compile_time_error, level ways: 21 edges offered
-Edges offered:
+#### compile_time_error: 21 ways of showing a level offered
+What the graph offers:
 | edge |
 |---|
 | lvl:compile_time_error@L0#0 \| level L0 way everyday_reading: Everyday reading: 'error' means the program will do something wrong when used, and a message points exactly at the mistake. Java rule: a compile-time error is a breach of the language rules found by javac before any execution; no .class is produced, and the reported line is where javac noticed it. |
@@ -412,15 +412,15 @@ Edges offered:
 | lvl:compile_time_error@L4#8 \| level L4 way diagnose_an_error: rule broken: A final variable cannot be reassigned after it is initialized. Kind: compile-time. Trigger class: assigning a second value to a final variable |
 | lvl:compile_time_error@L4#9 \| level L4 way diagnose_an_error: rule broken: Required keywords (class, static, void...) must be present and spelled right. Kind: compile-time. Trigger class: omitting or misspelling a keyword in public class Name or the main header |
 
-Prune: the model's reply (edge id and score; the kept edges sum to 1):
+Step 1, pick the relevant ones. The model's reply (each picked item with its relevance score; the scores add up to 1):
 ```
 {lvl:compile_time_error@L0#3 (Score: 0.4)}
 {lvl:compile_time_error@L4#1 (Score: 0.3)}
 {lvl:compile_time_error@L4#5 (Score: 0.3)}
 ```
-Kept by pruning: lvl:compile_time_error@L0#3 (0.40), lvl:compile_time_error@L4#1 (0.30), lvl:compile_time_error@L4#5 (0.30)
+Picked: lvl:compile_time_error@L0#3 (0.40), lvl:compile_time_error@L4#1 (0.30), lvl:compile_time_error@L4#5 (0.30)
 
-Label prompt for level way lvl:compile_time_error@L0#3 (the model saw only the concept, the way's name 'inconsistent trace' and its text; no level):
+Step 2, judge one way of showing a level (lvl:compile_time_error@L0#3, 'inconsistent trace'). The model saw only the description below, not the level it belongs to, and answers shown or not shown:
 > Applies the 'javac checks before running' rule unevenly: predicts output for a program that would not compile, or expects a compile error from a fault (such as division by zero) that only shows at run time. (here mixing in: "Code that compiles is code that works")
 
 Model's reply:
@@ -430,7 +430,7 @@ Clauses: 1, 2, 3, 4
 Confidence: 0.85
 ```
 
-Label prompt for level way lvl:compile_time_error@L4#1 (the model saw the concept, the way's name 'diagnose an error', its text, where the way stops and whether the words must be correct; no level):
+Step 2, judge one way of showing a higher level (lvl:compile_time_error@L4#1, 'diagnose an error'). The model saw the description below and where this way stops, not the level it belongs to, and answers shown, wrong or not shown:
 > rule broken: Each statement must end with ;. Kind: compile-time. Trigger class: missing ; at the end of a statement: ';' expected
 >
 > Where this way stops: Locating and fixing the mistake for one given failing case is L3. A compiler-flagged slip fixed from the message is weak evidence.
@@ -442,7 +442,7 @@ Clauses: 1, 2, 3, 4
 Confidence: 0.85
 ```
 
-Label prompt for level way lvl:compile_time_error@L4#5 (the model saw the concept, the way's name 'diagnose an error', its text, where the way stops and whether the words must be correct; no level):
+Step 2, judge one way of showing a higher level (lvl:compile_time_error@L4#5, 'diagnose an error'). The model saw the description below and where this way stops, not the level it belongs to, and answers shown, wrong or not shown:
 > rule broken: Every name must be spelled exactly, including capitalization. Kind: compile-time. Trigger class: Sytem.out.prinln, Println, or a misspelled variable: cannot find symbol
 >
 > Where this way stops: Locating and fixing the mistake for one given failing case is L3. A compiler-flagged slip fixed from the message is weak evidence.
@@ -454,16 +454,16 @@ Clauses: 1, 4
 Confidence: 0.85
 ```
 
-Parsed labels:
+The labels as the program read them:
 | edge | label | prune score | confidence | score | clauses | words |
 |---|---|---|---|---|---|---|
 | lvl:compile_time_error@L0#3 | shown | 0.4 | 0.85 | 0.34 | c1, c2, c3, c4 | Yes, it compiles and prints 5 twice; The missing; do not matter; because each statement is on its own line, and system.out is the same as System.out |
 
-**Kept on a path at this depth** (best N in tiers: held misconception / broken edge, then held error, then correct / confirmed / shown):
+**Kept in this round** (mistakes first, then findings that only confirm understanding; only the best few are kept):
 
 mis:println->IdentifierCaseInsensitive [held, tier 0, 0.76], mis:statement->WhitespaceIsSignificant [held, tier 0, 0.24], err:statement->StatementNeedsNoTerminator [held, tier 1, 0.45]
 
-**Clause coverage after this depth:**
+**Which clauses are explained so far:**
 | clause | text | covered by |
 |---|---|---|
 | c1 | Yes, it compiles and prints 5 twice | err:statement->StatementNeedsNoTerminator |
@@ -471,26 +471,26 @@ mis:println->IdentifierCaseInsensitive [held, tier 0, 0.76], mis:statement->Whit
 | c3 | do not matter | err:statement->StatementNeedsNoTerminator |
 | c4 | because each statement is on its own line, and system.out is the same as System.out | mis:println->IdentifierCaseInsensitive |
 
-**Graph check, not yet read (the walk may not stop while these remain):** pre:statement->control_flow, pre:statement->println
+**Links not read yet (the reading does not stop while some remain):** pre:statement->control_flow, pre:statement->println
 
-**Figure 4 (the graph after depth 1)**
+**Figure 4 (the graph after round 1)**
 
 ![Figure 4](figure04.png)
-### Depth 2: current concepts 'println', 'statement'
+### Round 2: the concepts being looked at are 'println', 'statement'
 
-#### println, concept edges: 1 edges offered
-Edges offered:
+#### println: 1 links to neighbouring concepts offered
+What the graph offers:
 | edge |
 |---|
 | pre:statement->println \| rule: System.out.println(s); is itself a statement, so its line of output appears at its own place in the sequence. |
 
-Prune: the model's reply (edge id and score; the kept edges sum to 1):
+Step 1, pick the relevant ones. The model's reply (each picked item with its relevance score; the scores add up to 1):
 ```
 {pre:statement->println (Score: 1.0)}
 ```
-Kept by pruning: pre:statement->println (1.00)
+Picked: pre:statement->println (1.00)
 
-Label prompt for concept edge pre:statement->println (statement -> println, prerequisite):
+Step 2, judge the link between two concepts (pre:statement->println). The model answers confirmed (the student carries the rule from the first concept into the second), broken (the student fails to) or not applied:
 > System.out.println(s); is itself a statement, so its line of output appears at its own place in the sequence.
 
 Model's reply:
@@ -500,25 +500,25 @@ Clauses: 1, 2, 3, 4
 Confidence: 0.7
 ```
 
-Parsed labels:
+The labels as the program read them:
 | edge | label | prune score | confidence | score | clauses | words |
 |---|---|---|---|---|---|---|
 | pre:statement->println | broken | 1.0 | 0.7 | 0.7 | c1, c2, c3, c4 | Yes, it compiles and prints 5 twice; The missing; do not matter; because each statement is on its own line, and system.out is the same as System.out |
 
-#### statement, concept edges: 1 edges offered
-Edges offered:
+#### statement: 1 links to neighbouring concepts offered
+What the graph offers:
 | edge |
 |---|
 | pre:statement->control_flow \| rule: Control flow is the order in which statements run. |
 | pre:statement->println \| rule: System.out.println(s); is itself a statement, so its line of output appears at its own place in the sequence. |
 
-Prune: the model's reply (edge id and score; the kept edges sum to 1):
+Step 1, pick the relevant ones. The model's reply (each picked item with its relevance score; the scores add up to 1):
 ```
 {pre:statement->control_flow (Score: 1.0)}
 ```
-Kept by pruning: pre:statement->control_flow (1.00)
+Picked: pre:statement->control_flow (1.00)
 
-Label prompt for concept edge pre:statement->control_flow (statement -> control_flow, prerequisite):
+Step 2, judge the link between two concepts (pre:statement->control_flow). The model answers confirmed (the student carries the rule from the first concept into the second), broken (the student fails to) or not applied:
 > Control flow is the order in which statements run.
 
 Model's reply:
@@ -528,18 +528,18 @@ Clauses: 1, 4
 Confidence: 0.6
 ```
 
-Parsed labels:
+The labels as the program read them:
 | edge | label | prune score | confidence | score | clauses | words |
 |---|---|---|---|---|---|---|
 | pre:statement->control_flow | broken | 1.0 | 0.6 | 0.6 | c1, c4 | Yes, it compiles and prints 5 twice; because each statement is on its own line, and system.out is the same as System.out |
 
-**Kept on a path at this depth** (best N in tiers: held misconception / broken edge, then held error, then correct / confirmed / shown):
+**Kept in this round** (mistakes first, then findings that only confirm understanding; only the best few are kept):
 
 pre:statement->println [broken, tier 0, 0.70], pre:statement->control_flow [broken, tier 0, 0.60]
 
 reached across pre:statement->control_flow, entered next: control_flow
 
-**Clause coverage after this depth:**
+**Which clauses are explained so far:**
 | clause | text | covered by |
 |---|---|---|
 | c1 | Yes, it compiles and prints 5 twice | err:statement->StatementNeedsNoTerminator |
@@ -547,15 +547,15 @@ reached across pre:statement->control_flow, entered next: control_flow
 | c3 | do not matter | err:statement->StatementNeedsNoTerminator |
 | c4 | because each statement is on its own line, and system.out is the same as System.out | mis:println->IdentifierCaseInsensitive |
 
-**Graph check, not yet read (the walk may not stop while these remain):** own edges of control_flow
+**Links not read yet (the reading does not stop while some remain):** own edges of control_flow
 
-**Figure 5 (the graph after depth 2)**
+**Figure 5 (the graph after round 2)**
 
 ![Figure 5](figure05.png)
-### Depth 3: current concepts 'statement', 'println', 'control_flow'
+### Round 3: the concepts being looked at are 'statement', 'println', 'control_flow'
 
-#### control_flow, misconceptions: 11 edges offered
-Edges offered:
+#### control_flow: 11 possible mistakes offered
+What the graph offers:
 | edge |
 |---|
 | mis:control_flow->CodeAfterIfSkipped \| wrong rule: When the then branch runs, the code after the if is skipped. \| right rule: After the if finishes, execution continues with the next statement either way. |
@@ -570,13 +570,13 @@ Edges offered:
 | mis:control_flow->ReturnDoesNotExitLoop \| wrong rule: A return inside a loop does not end the loop; it sets a value each pass (the last one is returned) or returns several values. \| right rule: When return executes, the method ends at once, so the loop stops on that pass. |
 | mis:control_flow->StatementsRunInAnyOrder \| wrong rule: Statements in a program can run in any order. \| right rule: Without control statements, statements run once each, top to bottom. |
 
-Prune: the model's reply (edge id and score; the kept edges sum to 1):
+Step 1, pick the relevant ones. The model's reply (each picked item with its relevance score; the scores add up to 1):
 ```
 mis:control_flow->ProgramEndsAfterLoop (0.40), mis:control_flow->FalseLoopRepeatsNextCode (0.35), mis:control_flow->StatementsRunInAnyOrder (0.25)
 ```
-Kept by pruning: mis:control_flow->ProgramEndsAfterLoop (0.40), mis:control_flow->FalseLoopRepeatsNextCode (0.35), mis:control_flow->StatementsRunInAnyOrder (0.25)
+Picked: mis:control_flow->ProgramEndsAfterLoop (0.40), mis:control_flow->FalseLoopRepeatsNextCode (0.35), mis:control_flow->StatementsRunInAnyOrder (0.25)
 
-Label prompt for the misconception / error edges (judged together). The model saw the program, the question, the numbered clauses, and these edges with their wrong rule and right rule:
+Step 2, judge the possible mistakes of this concept (all in one question). The model saw the program, the question, the numbered clauses and each possible mistake with its wrong rule and the right rule. held = the student follows the wrong rule; correct = the student follows the right rule; not applied = the answer says nothing about it:
 | edge |
 |---|
 | mis:control_flow->ProgramEndsAfterLoop \| wrong rule: When a loop finishes the program ends, so code after the loop never runs. \| right rule: When the loop condition becomes false, control continues with the first statement after the loop. |
@@ -589,15 +589,15 @@ mis:control_flow->FalseLoopRepeatsNextCode | correct | clauses: 1 | confidence: 
 mis:control_flow->StatementsRunInAnyOrder | not applied | clauses: none | confidence: 0.75
 ```
 
-Parsed labels:
+The labels as the program read them:
 | edge | label | prune score | confidence | score | clauses | words |
 |---|---|---|---|---|---|---|
 | mis:control_flow->ProgramEndsAfterLoop | correct | 0.4 | 0.8 | 0.32 | c1 | Yes, it compiles and prints 5 twice |
 | mis:control_flow->FalseLoopRepeatsNextCode | correct | 0.35 | 0.6 | 0.21 | c1 | Yes, it compiles and prints 5 twice |
 | mis:control_flow->StatementsRunInAnyOrder | not applied |  |  | 0.0 |  |  |
 
-#### control_flow, level ways: 15 edges offered
-Edges offered:
+#### control_flow: 15 ways of showing a level offered
+What the graph offers:
 | edge |
 |---|
 | lvl:control_flow@L0#0 \| level L0 way everyday_reading: Folk meaning: in everyday instructions a listener reads the whole list at once, does steps in a sensible order and infers what the writer wants. Java instead executes statements one at a time, top to bottom, each only when control reaches it, and nothing later in the program has any effect earlier. |
@@ -616,15 +616,15 @@ Edges offered:
 | lvl:control_flow@L4#2 \| level L4 way diagnose_an_error: rule broken: A local variable must be definitely assigned on every control-flow path before it is read. Kind: compile-time. Trigger class: A variable assigned only inside an if branch (or only in a loop body) and read after it: the compiler reports 'variable might not have been initialized'. |
 | lvl:control_flow@L4#3 \| level L4 way diagnose_an_error: rule broken: Statements run in the order written, so an update must come before the statement that needs the new value. Kind: silent logic error. Trigger class: Swapping two dependent statements (e.g. printing before updating, or incrementing the index before using it): output is shifted or off by one pass, with no error. |
 
-Prune: the model's reply (edge id and score; the kept edges sum to 1):
+Step 1, pick the relevant ones. The model's reply (each picked item with its relevance score; the scores add up to 1):
 ```
 {lvl:control_flow@L2#1 (Score: 0.4)}
 {lvl:control_flow@L0#0 (Score: 0.35)}
 {lvl:control_flow@L2#0 (Score: 0.25)}
 ```
-Kept by pruning: lvl:control_flow@L2#1 (0.40), lvl:control_flow@L0#0 (0.35), lvl:control_flow@L2#0 (0.25)
+Picked: lvl:control_flow@L2#1 (0.40), lvl:control_flow@L0#0 (0.35), lvl:control_flow@L2#0 (0.25)
 
-Label prompt for level way lvl:control_flow@L2#1 (the model saw only the concept, the way's name 'output prediction' and its text; no level):
+Step 2, judge one way of showing a level (lvl:control_flow@L2#1, 'output prediction'). The model saw only the description below, not the level it belongs to, and answers shown or not shown:
 > The output is the sequence of print statements that control actually reaches, in the order reached: e.g. TenHellos prints 1st, 2nd, 3rd Hello once each, then 4th to 10th Hello from the loop.
 
 Model's reply:
@@ -634,7 +634,7 @@ Clauses: 1
 Confidence: 0.7
 ```
 
-Label prompt for level way lvl:control_flow@L0#0 (the model saw only the concept, the way's name 'everyday reading' and its text; no level):
+Step 2, judge one way of showing a level (lvl:control_flow@L0#0, 'everyday reading'). The model saw only the description below, not the level it belongs to, and answers shown or not shown:
 > Folk meaning: in everyday instructions a listener reads the whole list at once, does steps in a sensible order and infers what the writer wants. Java instead executes statements one at a time, top to bottom, each only when control reaches it, and nothing later in the program has any effect earlier.
 
 Model's reply:
@@ -644,7 +644,7 @@ Clauses: none
 Confidence: 0.6
 ```
 
-Label prompt for level way lvl:control_flow@L2#0 (the model saw only the concept, the way's name 'line by line trace' and its text; no level):
+Step 2, judge one way of showing a level (lvl:control_flow@L2#0, 'line by line trace'). The model saw only the description below, not the level it belongs to, and answers shown or not shown:
 > Execute the statement at the current point; when it completes normally, control passes to the next statement in the block. An if evaluates its condition once and then runs at most one branch; a loop evaluates its condition before each pass; after an if or a loop finishes, control continues with the statement after it.
 
 Model's reply:
@@ -654,18 +654,18 @@ Clauses: 1
 Confidence: 0.6
 ```
 
-Parsed labels:
+The labels as the program read them:
 | edge | label | prune score | confidence | score | clauses | words |
 |---|---|---|---|---|---|---|
 | lvl:control_flow@L2#1 | shown | 0.4 | 0.7 | 0.28 | c1 | Yes, it compiles and prints 5 twice |
 | lvl:control_flow@L0#0 | not applied |  |  | 0.0 |  |  |
 | lvl:control_flow@L2#0 | shown | 0.25 | 0.6 | 0.15 | c1 | Yes, it compiles and prints 5 twice |
 
-**Kept on a path at this depth** (best N in tiers: held misconception / broken edge, then held error, then correct / confirmed / shown):
+**Kept in this round** (mistakes first, then findings that only confirm understanding; only the best few are kept):
 
 mis:control_flow->ProgramEndsAfterLoop [correct, tier 2, 0.32], lvl:control_flow@L2#1 [shown, tier 2, 0.28], mis:control_flow->FalseLoopRepeatsNextCode [correct, tier 2, 0.21]
 
-**Clause coverage after this depth:**
+**Which clauses are explained so far:**
 | clause | text | covered by |
 |---|---|---|
 | c1 | Yes, it compiles and prints 5 twice | err:statement->StatementNeedsNoTerminator |
@@ -673,20 +673,22 @@ mis:control_flow->ProgramEndsAfterLoop [correct, tier 2, 0.32], lvl:control_flow
 | c3 | do not matter | err:statement->StatementNeedsNoTerminator |
 | c4 | because each statement is on its own line, and system.out is the same as System.out | mis:println->IdentifierCaseInsensitive |
 
-**Figure 6 (the graph after depth 3)**
+**Figure 6 (the graph after round 3)**
 
 ![Figure 6](figure06.png)
-Shadows (a held label on a prerequisite, on a generic concept, or at a concept where the graph attaches the misconception as context, resting on the words of a stronger label at the specific or primary concept, is one wrong sentence read twice; it marks no root cause and sets no level): mis:statement->WhitespaceIsSignificant (shadow of mis:println->IdentifierCaseInsensitive)
+Shadows (the same wrong sentence read a second time at another concept; it is counted once, not twice): mis:statement->WhitespaceIsSignificant (shadow of mis:println->IdentifierCaseInsensitive)
 
-## 4. Diagnosis (rules over the labelled graph, no model)
-Root-cause walk: held on ['println', 'statement'], broken at [] (consequences: pre:statement->println, pre:statement->control_flow), prerequisites {'increment_operators': ['assignment', 'loop_control'], 'boolean_expression': ['comparison_operators'], 'comparison_operators': ['expression'], 'loop_body': ['for_loop'], 'for_loop': ['loop_control'], 'loop_control': ['loop_variable'], 'control_flow': ['statement'], 'println': ['statement']}
+## 4. Diagnosis (fixed rules, no model)
+
+From here on the model is not asked any more. Fixed rules decide which labels count as mistakes, where the mistake starts (the root cause) and the level of each concept.
+Finding where the mistake starts: held on ['println', 'statement'], broken at [] (consequences: pre:statement->println, pre:statement->control_flow), prerequisites {'increment_operators': ['assignment', 'loop_control'], 'boolean_expression': ['comparison_operators'], 'comparison_operators': ['expression'], 'loop_body': ['for_loop'], 'for_loop': ['loop_control'], 'loop_control': ['loop_variable'], 'control_flow': ['statement'], 'println': ['statement']}
 - compile_time_error: L0 via inconsistent_trace "Yes, it compiles and prints 5 twice; The missing; do not matter; because each statement is on its own line, and system.out is the same as System.out"
 - control_flow: L2 via output_prediction "Yes, it compiles and prints 5 twice"
 - println: L0 via misconception "because each statement is on its own line, and system.out is the same as System.out"
 - statement: L0 via everyday_reading "The missing; do not matter; because each statement is on its own line, and system.out is the same as System.out"
 - statement: L0 via error "Yes, it compiles and prints 5 twice; The missing; do not matter" (root cause carries a held error)
 
-**Stop:** sufficient at depth 3; prompts {'prune': 10, 'label': 18}, fresh model calls 0, cache hits 28
+**Why the reading stopped:** sufficient, in round 3. Questions put to the model: {'prune': 10, 'label': 18} (new: 0, answered from stored replies: 28)
 
 ### Held misconceptions
 | concept | misconception | kind | quote | score | shares_evidence_with |
@@ -694,12 +696,12 @@ Root-cause walk: held on ['println', 'statement'], broken at [] (consequences: p
 | println | IdentifierCaseInsensitive | misconception | because each statement is on its own line, and system.out is the same as System.out | 0.76 |  |
 | statement | StatementNeedsNoTerminator | error | Yes, it compiles and prints 5 twice; The missing; do not matter | 0.45 |  |
 
-### Shadowed labels (held in the reading, folded into the label they shadow; not faults of their own)
+### Shadows (the same mistake read a second time; not counted again)
 | concept | misconception | shadow_of | quote | score |
 |---|---|---|---|---|
 | statement | WhitespaceIsSignificant | mis:println->IdentifierCaseInsensitive | because each statement is on its own line, and system.out is the same as System.out | 0.24 |
 
-### Broken concept edges
+### Links between concepts that the student breaks
 | edge | quote | score | consequence_of |
 |---|---|---|---|
 | pre:statement->println | Yes, it compiles and prints 5 twice; The missing; do not matter; because each statement is on its own line, and system.out is the same as System.out | 0.7 | mis:println->IdentifierCaseInsensitive |
@@ -715,7 +717,7 @@ Root-cause walk: held on ['println', 'statement'], broken at [] (consequences: p
 | println | L0 | misconception | IdentifierCaseInsensitive | level_mis_links | because each statement is on its own line, and system.out is the same as System.out | wrong rule: System.out.Println and System.out.println name the same method. Right rule: Java is case-sensitive: names that differ only in capitalization are different names. |  |  |
 | statement | L0 | error |  | held_error | Yes, it compiles and prints 5 twice; The missing; do not matter | A statement still compiles and runs if the semicolon at its end is left out, or if a stray ; is put right after if (c) or for (...). |  |  |
 
-Ways above L2 the model answered "wrong" (the kind of thing is done, but what is said contradicts Java; not shown):
+Ways above L2 where the student does that kind of thing, but what is said is wrong in Java (not counted):
 | concept | edge | level | way | confidence | clauses | quote |
 |---|---|---|---|---|---|---|
 | println | lvl:println@L4#3 | L4 | diagnose_an_error | 0.9 | [4] | because each statement is on its own line, and system.out is the same as System.out |
@@ -724,9 +726,11 @@ Ways above L2 the model answered "wrong" (the kind of thing is done, but what is
 | compile_time_error | lvl:compile_time_error@L4#1 | L4 | diagnose_an_error | 0.85 | [1, 2, 3, 4] | Yes, it compiles and prints 5 twice; The missing; do not matter; because each statement is on its own line, and system.out is the same as System.out |
 | compile_time_error | lvl:compile_time_error@L4#5 | L4 | diagnose_an_error | 0.85 | [1, 4] | Yes, it compiles and prints 5 twice; because each statement is on its own line, and system.out is the same as System.out |
 
-### Overall level: L0
+### Overall level by the walk's own Stage 7 rule: L0
 
-Clause coverage (final):
+The overall level of this folder is the one in the section \"Level classification\" at the top; it can differ from this one.
+
+Which finding explains each clause, at the end:
 | clause | covered by |
 |---|---|
 | Yes, it compiles and prints 5 twice | lvl:println@L2#1 |
@@ -737,7 +741,7 @@ Clause coverage (final):
 **Figure 7 (final picture)**
 
 ![Figure 7](figure07.png)
-## 5. Every labelled edge (the evidence list, kept or not)
+## 5. Everything that got a label
 | depth | source | edge | kind | label | prune_score | confidence | score | clauses | quote |
 |---|---|---|---|---|---|---|---|---|---|
 | 1 | println | mis:println->IdentifierCaseInsensitive | misconception | held | 0.8 | 0.95 | 0.76 | [4] | because each statement is on its own line, and system.out is the same as System.out |
@@ -755,7 +759,7 @@ Clause coverage (final):
 | 3 | control_flow | lvl:control_flow@L2#1 | level | shown | 0.4 | 0.7 | 0.28 | [1] | Yes, it compiles and prints 5 twice |
 | 3 | control_flow | lvl:control_flow@L2#0 | level | shown | 0.25 | 0.6 | 0.15 | [1] | Yes, it compiles and prints 5 twice |
 
-## 6. The paths (what the keep step kept, depth by depth)
+## 6. What was kept, round by round
 | depth | source | edge | kind | label | score | clauses |
 |---|---|---|---|---|---|---|
 | 1 | println | mis:println->IdentifierCaseInsensitive | misconception | held | 0.76 | [4] |
@@ -767,7 +771,7 @@ Clause coverage (final):
 | 3 | control_flow | lvl:control_flow@L2#1 | level | shown | 0.28 | [1] |
 | 3 | control_flow | mis:control_flow->FalseLoopRepeatsNextCode | misconception | correct | 0.21 | [1] |
 
-## 7. Raw traversal log
+## 7. The program's own log of the run
 ```
 clauses: Yes, it compiles and prints 5 twice | The missing | do not matter | because each statement is on its own line, and system.out is the same as System.out
 start: generic concepts whose tagging text occurs in the answer: statement
@@ -837,7 +841,7 @@ start concepts (3): println, statement, compile_time_error
   level statement: L0 via error "Yes, it compiles and prints 5 twice; The missing; do not matter" (root cause carries a held error)
 ```
 
-## 8. Full diagnosis JSON
+## 8. The full result as data
 ```json
 {
  "scenario": "LP18",

@@ -14,7 +14,7 @@ through the whole pipeline (Stage 1 to Stage 7) and has its own folder under `ru
 not by independent human raters, so these numbers measure agreement with the design, not accuracy against graded
 answers.
 
-## How the overall level is calculated, in simple words
+## How the overall level is calculated
 
 Every run in `runs/` gets its overall level in the same four steps. The README and the notebook of each run show
 these steps with that run's own numbers.

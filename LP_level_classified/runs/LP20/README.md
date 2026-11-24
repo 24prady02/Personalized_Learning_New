@@ -34,8 +34,8 @@ Question: What is printed? Explain, pass by pass, what happens to i.
 
 Student's answer: 5 5
 Settings: width 3, depth 3, prune llm, backend claude-cli, model claude-opus-5-5
-## 1. Stage 1: the subgraph G from the code (no model)
-Masked code (string and char literals and comments blanked; this is what the patterns see):
+## 1. Stage 1: which concepts the program uses (no model)
+The program with the text in quotes and the comments blanked out, so that only real code is read:
 ```
 int i, n = 5;
 for (i = 1; i < n; i++)
@@ -43,7 +43,7 @@ for (i = 1; i < n; i++)
     System.out.println(i);
 System.out.println(i);
 ```
-Which code text tagged which concept (a generic concept fires on almost any Java line; it starts the walk only if the answer repeats its tag):
+Which piece of the code points to which concept. A generic concept is one that almost every Java program has; the reading starts from it only if the student's answer mentions it:
 | concept | generic | channel | matched text | line |
 |---|---|---|---|---|
 | assignment | True | pattern | '=' | 1 |
@@ -60,10 +60,10 @@ Which code text tagged which concept (a generic concept fires on almost any Java
 | println | False | pattern | 'System.out.println(' | 4 |
 | statement | True | pattern | ';' | 1 |
 
-G: 12 concept nodes (3 generic), 10 concept edges, 116 misconception / error edges, 84 misconception / error nodes, 60 level nodes, 120 level-misconception links, 2 connected piece(s).
+The part of the knowledge graph used for this program (called G) has 12 concepts (3 of them generic), 10 links between concepts, 116 links from a concept to a possible mistake (84 different mistakes) and 60 level entries (five levels, L0 to L4, for each concept). It is in 2 connected piece(s).
 Note: concept nodes form 2 pieces (the KG has no edge between them): assignment,boolean_expression,comparison_operators,expression,for_loop,increment_operators,loop_body,loop_control,loop_variable | control_flow,println,statement
 
-Concept edges of G (the links the walk can read; `pre:` = prerequisite A -> B, `par:` = parallel):
+The links between these concepts. `pre:` means the first concept must be understood before the second; `par:` means the two are learned side by side:
 | edge | type | rule (logic) |
 |---|---|---|
 | par:assignment~comparison_operators | parallel | x = y stores the value of y in x (a statement with a side effect); x == y only tests whether the two values are equal and gives a boolean. Writing = where == is meant is a compile error with int operands and a silent bug with boolean operands. |
@@ -77,8 +77,8 @@ Concept edges of G (the links the walk can read; `pre:` = prerequisite A -> B, `
 | pre:statement->control_flow | prerequisite | Control flow is the order in which statements run. |
 | pre:statement->println | prerequisite | System.out.println(s); is itself a statement, so its line of output appears at its own place in the sequence. |
 
-Misconception / error edges per concept (count), and level ways per concept (count):
-| concept | misconception / error edges | level ways (L1-L4 + L0 non-misconception) |
+For each concept: how many possible mistakes the graph lists for it, and how many ways of showing a level:
+| concept | possible mistakes | ways of showing a level |
 |---|---|---|
 | assignment | 15 | 24 |
 | boolean_expression | 8 | 19 |
@@ -99,8 +99,8 @@ Misconception / error edges per concept (count), and level ways per concept (cou
 **Figure 2**
 
 ![Figure 2](figure02.png)
-## 2. Clauses and start concepts (no model)
-The answer split into clauses (at sentence ends, ';', and before 'because' / 'so'; quotes removed):
+## 2. The answer in pieces, and where the reading starts (no model)
+The student's answer cut into short pieces (clauses), so that every finding can point to the exact words it rests on:
 | clause | text |
 |---|---|
 | c1 | 5 5 |
@@ -111,18 +111,18 @@ start: chosen println, boolean_expression, comparison_operators
 
 start concepts (3): println, boolean_expression, comparison_operators
 
-Start concepts: println, boolean_expression, comparison_operators
+The reading starts at the concepts whose description is closest to the student's words. Start concepts: println, boolean_expression, comparison_operators
 
 **Figure 3**
 
 ![Figure 3](figure03.png)
-## 3. The walk, depth by depth
-At each depth, for each current concept: the edges offered (a concept entering as a start concept offers its misconception / error edges and its level ways, as two families; otherwise it offers its concept edges), the prune prompt and the model's reply, then the label prompt(s) and the model's reply, parsed into label / clauses / confidence. Score = prune score x confidence.
+## 3. Reading the answer against the graph, round by round (the model is asked here)
+The answer is read in rounds. In each round, for each concept being looked at, three things happen. First the graph offers what could be said about the concept: the possible mistakes, the ways of showing a level, or the links to neighbouring concepts. Then the model picks the few that matter for this answer. Then the model judges each picked one against the student's clauses and gives a label, the clause numbers it rests on and a confidence from 0 to 1. Score = relevance score x confidence.
 
-### Depth 1: current concepts 'println', 'boolean_expression', 'comparison_operators'
+### Round 1: the concepts being looked at are 'println', 'boolean_expression', 'comparison_operators'
 
-#### println, misconceptions: 6 edges offered
-Edges offered:
+#### println: 6 possible mistakes offered
+What the graph offers:
 | edge |
 |---|
 | err:println->PrintWithoutFinalNewline \| wrong rule: Ends the output with print and expects it to appear right away. \| right rule: Finish a line of print calls with println; some systems hold print output until a newline is printed. |
@@ -132,13 +132,13 @@ Edges offered:
 | mis:println->PrintNewLineFirst \| wrong rule: println(s) prints a newline and then s. \| right rule: println(s) prints s and then the newline. |
 | mis:println->PrintedTextIsExecuted \| wrong rule: System.out.println("x is 5"); sets x to 5 (text inside the quotes is run as code). \| right rule: Characters inside double quotes are printed literally; println only displays them and changes no variable. Only an assignment such as x = 5; sets x. |
 
-Prune: the model's reply (edge id and score; the kept edges sum to 1):
+Step 1, pick the relevant ones. The model's reply (each picked item with its relevance score; the scores add up to 1):
 ```
 mis:println->PrintEqualsPrintln (0.60), mis:println->PrintNewLineFirst (0.25), err:println->PrintWithoutFinalNewline (0.15)
 ```
-Kept by pruning: mis:println->PrintEqualsPrintln (0.60), mis:println->PrintNewLineFirst (0.25), err:println->PrintWithoutFinalNewline (0.15)
+Picked: mis:println->PrintEqualsPrintln (0.60), mis:println->PrintNewLineFirst (0.25), err:println->PrintWithoutFinalNewline (0.15)
 
-Label prompt for the misconception / error edges (judged together). The model saw the program, the question, the numbered clauses, and these edges with their wrong rule and right rule:
+Step 2, judge the possible mistakes of this concept (all in one question). The model saw the program, the question, the numbered clauses and each possible mistake with its wrong rule and the right rule. held = the student follows the wrong rule; correct = the student follows the right rule; not applied = the answer says nothing about it:
 | edge |
 |---|
 | mis:println->PrintEqualsPrintln \| wrong rule: print and println do the same thing, so print(s1); print(s2); puts s1 and s2 on separate lines. \| right rule: println ends the line after printing and print does not, so print(s1); print(s2); puts s1 and s2 on the same line. |
@@ -151,15 +151,15 @@ mis:println->PrintNewLineFirst | not applied | clauses: none | confidence: 0.85
 err:println->PrintWithoutFinalNewline | not applied | clauses: none | confidence: 0.9
 ```
 
-Parsed labels:
+The labels as the program read them:
 | edge | label | prune score | confidence | score | clauses | words |
 |---|---|---|---|---|---|---|
 | mis:println->PrintEqualsPrintln | not applied |  |  | 0.0 |  |  |
 | mis:println->PrintNewLineFirst | not applied |  |  | 0.0 |  |  |
 | err:println->PrintWithoutFinalNewline | not applied |  |  | 0.0 |  |  |
 
-#### println, level ways: 17 edges offered
-Edges offered:
+#### println: 17 ways of showing a level offered
+What the graph offers:
 | edge |
 |---|
 | lvl:println@L0#0 \| level L0 way everyday_reading: Everyday reading: 'println' is just 'print', and 'new line' is something you do before writing. Java rule: println(x) prints x and then ends the line; println() alone just ends the line. |
@@ -180,15 +180,15 @@ Edges offered:
 | lvl:println@L4#3 \| level L4 way diagnose_an_error: rule broken: Method names are case-sensitive. Kind: compile-time. Trigger class: System.out.Println or system.out.println: cannot find symbol |
 | lvl:println@L4#4 \| level L4 way diagnose_an_error: rule broken: Calls need parentheses. Kind: compile-time. Trigger class: System.out.println; without () |
 
-Prune: the model's reply (edge id and score; the kept edges sum to 1):
+Step 1, pick the relevant ones. The model's reply (each picked item with its relevance score; the scores add up to 1):
 ```
 {lvl:println@L2#1 (Score: 0.5)}
 {lvl:println@L3#0 (Score: 0.3)}
 {lvl:println@L0#3 (Score: 0.2)}
 ```
-Kept by pruning: lvl:println@L2#1 (0.50), lvl:println@L3#0 (0.30), lvl:println@L0#3 (0.20)
+Picked: lvl:println@L2#1 (0.50), lvl:println@L3#0 (0.30), lvl:println@L0#3 (0.20)
 
-Label prompt for level way lvl:println@L2#1 (the model saw only the concept, the way's name 'output prediction' and its text; no level):
+Step 2, judge one way of showing a level (lvl:println@L2#1, 'output prediction'). The model saw only the description below, not the level it belongs to, and answers shown or not shown:
 > Output is the value's characters followed by a line break: println("Hello, "); println("World!"); prints two lines.
 
 Model's reply:
@@ -198,7 +198,7 @@ Clauses: none
 Confidence: 0.6
 ```
 
-Label prompt for level way lvl:println@L3#0 (the model saw the concept, the way's name 'relation to neighbour', its text, where the way stops and whether the words must be correct; no level):
+Step 2, judge one way of showing a higher level (lvl:println@L3#0, 'relation to neighbour'). The model saw the description below and where this way stops, not the level it belongs to, and answers shown, wrong or not shown:
 > System.out.println(s); is a statement, so its line of output appears at its own place in the sequence.
 >
 > Where this way stops: Two correct but separate rules are L1. Executing the two in sequence is L2. A relational answer may be correct or a relational error.
@@ -210,7 +210,7 @@ Clauses: none
 Confidence: 0.85
 ```
 
-Label prompt for level way lvl:println@L0#3 (the model saw only the concept, the way's name 'inconsistent trace' and its text; no level):
+Step 2, judge one way of showing a level (lvl:println@L0#3, 'inconsistent trace'). The model saw only the description below, not the level it belongs to, and answers shown or not shown:
 > Applies the println rule (print, then end line) unevenly: puts the newline before the text on one call and after it on another, or forgets that the next output starts on a new line. (here mixing in: "print and println behave the same (no newline difference)")
 
 Model's reply:
@@ -220,15 +220,15 @@ Clauses: none
 Confidence: 0.6
 ```
 
-Parsed labels:
+The labels as the program read them:
 | edge | label | prune score | confidence | score | clauses | words |
 |---|---|---|---|---|---|---|
 | lvl:println@L2#1 | not applied |  |  | 0.0 |  |  |
 | lvl:println@L3#0 | not applied |  |  | 0.0 |  |  |
 | lvl:println@L0#3 | not applied |  |  | 0.0 |  |  |
 
-#### boolean_expression, misconceptions: 8 edges offered
-Edges offered:
+#### boolean_expression: 8 possible mistakes offered
+What the graph offers:
 | edge |
 |---|
 | err:boolean_expression->ElseWithCondition \| wrong rule: Writes else (x > 0) with a condition but no if. \| right rule: else takes no condition; use else if (x > 0). |
@@ -240,13 +240,13 @@ Edges offered:
 | mis:boolean_expression->MapToBooleanWithIf \| wrong rule: To store whether x > y in a boolean you need if (x > y) ok = true; else ok = false;. \| right rule: ok = (x > y); stores the result of the comparison directly. |
 | mis:boolean_expression->NestedIfsInsteadOfLogicalOperators \| wrong rule: A condition on several values has to be written as nested if statements, one value per if. \| right rule: Several conditions combine into one boolean expression with && and \|\|, e.g. if (x == 0 && y == 0). |
 
-Prune: the model's reply (edge id and score; the kept edges sum to 1):
+Step 1, pick the relevant ones. The model's reply (each picked item with its relevance score; the scores add up to 1):
 ```
 mis:boolean_expression->ArithmeticInsteadOfBoolean (0.50), mis:boolean_expression->LoopForOneTimeTest (0.30), mis:boolean_expression->ChainedComparison (0.20)
 ```
-Kept by pruning: mis:boolean_expression->ArithmeticInsteadOfBoolean (0.50), mis:boolean_expression->LoopForOneTimeTest (0.30), mis:boolean_expression->ChainedComparison (0.20)
+Picked: mis:boolean_expression->ArithmeticInsteadOfBoolean (0.50), mis:boolean_expression->LoopForOneTimeTest (0.30), mis:boolean_expression->ChainedComparison (0.20)
 
-Label prompt for the misconception / error edges (judged together). The model saw the program, the question, the numbered clauses, and these edges with their wrong rule and right rule:
+Step 2, judge the possible mistakes of this concept (all in one question). The model saw the program, the question, the numbered clauses and each possible mistake with its wrong rule and the right rule. held = the student follows the wrong rule; correct = the student follows the right rule; not applied = the answer says nothing about it:
 | edge |
 |---|
 | mis:boolean_expression->ArithmeticInsteadOfBoolean \| wrong rule: A true/false question is answered with arithmetic (e.g. 1 for true). \| right rule: A logic question is written as a boolean expression whose value is true or false. |
@@ -259,15 +259,15 @@ mis:boolean_expression->LoopForOneTimeTest | not applied | clauses: none | confi
 mis:boolean_expression->ChainedComparison | not applied | clauses: none | confidence: 0.95
 ```
 
-Parsed labels:
+The labels as the program read them:
 | edge | label | prune score | confidence | score | clauses | words |
 |---|---|---|---|---|---|---|
 | mis:boolean_expression->ArithmeticInsteadOfBoolean | not applied |  |  | 0.0 |  |  |
 | mis:boolean_expression->LoopForOneTimeTest | not applied |  |  | 0.0 |  |  |
 | mis:boolean_expression->ChainedComparison | not applied |  |  | 0.0 |  |  |
 
-#### boolean_expression, level ways: 19 edges offered
-Edges offered:
+#### boolean_expression: 19 ways of showing a level offered
+What the graph offers:
 | edge |
 |---|
 | lvl:boolean_expression@L0#0 \| level L0 way everyday_reading: Folk meaning: maths writes a range as 90 <= grade <= 100 and English says 'if x is 1 or 2'. Java rule: each comparison is a separate boolean expression and they must be joined explicitly: 90 <= grade && grade <= 100, x == 1 \|\| x == 2; 90 <= grade <= 100 does not compile because 90 <= grade is already a boolean. |
@@ -290,15 +290,15 @@ Edges offered:
 | lvl:boolean_expression@L4#3 \| level L4 way diagnose_an_error: rule broken: The condition must be a boolean expression; = assigns, == compares. Kind: compile-time. Trigger class: if (a = b) with int a and b (with boolean variables it compiles and silently assigns). |
 | lvl:boolean_expression@L4#4 \| level L4 way diagnose_an_error: rule broken: Comparisons cannot be chained; each must be joined with && or \|\|. Kind: compile-time. Trigger class: Range written as a < b < c or 90 <= grade <= 100. |
 
-Prune: the model's reply (edge id and score; the kept edges sum to 1):
+Step 1, pick the relevant ones. The model's reply (each picked item with its relevance score; the scores add up to 1):
 ```
 {lvl:boolean_expression@L2#1 (Score: 0.5)}
 {lvl:boolean_expression@L3#3 (Score: 0.3)}
 {lvl:boolean_expression@L3#6 (Score: 0.2)}
 ```
-Kept by pruning: lvl:boolean_expression@L2#1 (0.50), lvl:boolean_expression@L3#3 (0.30), lvl:boolean_expression@L3#6 (0.20)
+Picked: lvl:boolean_expression@L2#1 (0.50), lvl:boolean_expression@L3#3 (0.30), lvl:boolean_expression@L3#6 (0.20)
 
-Label prompt for level way lvl:boolean_expression@L2#1 (the model saw only the concept, the way's name 'output prediction' and its text; no level):
+Step 2, judge one way of showing a level (lvl:boolean_expression@L2#1, 'output prediction'). The model saw only the description below, not the level it belongs to, and answers shown or not shown:
 > The value is true or false: with year = 1900, (year % 4 == 0) && (year % 100 != 0) || (year % 400 == 0) is false, so LeapYear prints false.
 
 Model's reply:
@@ -308,7 +308,7 @@ Clauses: none
 Confidence: 0.85
 ```
 
-Label prompt for level way lvl:boolean_expression@L3#3 (the model saw the concept, the way's name 'relation to neighbour', its text, where the way stops and whether the words must be correct; no level):
+Step 2, judge one way of showing a higher level (lvl:boolean_expression@L3#3, 'relation to neighbour'). The model saw the description below and where this way stops, not the level it belongs to, and answers shown, wrong or not shown:
 > The while loop re-evaluates its boolean expression before every pass and stops the first time it is false, so some variable in the expression must change in the body or the loop never ends.
 >
 > Where this way stops: Two correct but separate rules are L1. Executing the two in sequence is L2. A relational answer may be correct or a relational error.
@@ -320,7 +320,7 @@ Clauses: none
 Confidence: 0.9
 ```
 
-Label prompt for level way lvl:boolean_expression@L3#6 (the model saw the concept, the way's name 'purpose of the whole', its text, where the way stops and whether the words must be correct; no level):
+Step 2, judge one way of showing a higher level (lvl:boolean_expression@L3#6, 'purpose of the whole'). The model saw the description below and where this way stops, not the level it belongs to, and answers shown, wrong or not shown:
 > Expresses a decision condition or guard (which branch runs, whether a loop continues) or computes a flag; common plans: range test lo <= x && x <= hi, divisibility test n % k == 0, combined rule as in LeapYear.
 >
 > Where this way stops: Narrating the lines is L2. A purpose induced from a few traced cases is L2. A wrong purpose is still L3, but with an error.
@@ -332,15 +332,15 @@ Clauses: none
 Confidence: 0.95
 ```
 
-Parsed labels:
+The labels as the program read them:
 | edge | label | prune score | confidence | score | clauses | words |
 |---|---|---|---|---|---|---|
 | lvl:boolean_expression@L2#1 | not applied |  |  | 0.0 |  |  |
 | lvl:boolean_expression@L3#3 | not applied |  |  | 0.0 |  |  |
 | lvl:boolean_expression@L3#6 | not applied |  |  | 0.0 |  |  |
 
-#### comparison_operators, misconceptions: 8 edges offered
-Edges offered:
+#### comparison_operators: 8 possible mistakes offered
+What the graph offers:
 | edge |
 |---|
 | err:comparison_operators->ReversedRelationalOperator \| wrong rule: Writes =< or => instead of <= and >=. \| right rule: The operators are written <= and >=. |
@@ -352,13 +352,13 @@ Edges offered:
 | mis:comparison_operators->LessGreaterSwapped \| wrong rule: < and > mean the same thing (or a < b means a is greater than b). \| right rule: a < b is true when a is smaller than b; a > b when a is larger. |
 | mis:comparison_operators->StringRelationalComparison \| wrong rule: s < t compares two Strings alphabetically. \| right rule: < and > are defined only for primitive types; comparing Strings with them does not compile. |
 
-Prune: the model's reply (edge id and score; the kept edges sum to 1):
+Step 1, pick the relevant ones. The model's reply (each picked item with its relevance score; the scores add up to 1):
 ```
 mis:comparison_operators->LessGreaterSwapped (0.80), err:comparison_operators->ReversedRelationalOperator (0.10), mis:comparison_operators->AssignCompares (0.10)
 ```
-Kept by pruning: mis:comparison_operators->LessGreaterSwapped (0.80), err:comparison_operators->ReversedRelationalOperator (0.10), mis:comparison_operators->AssignCompares (0.10)
+Picked: mis:comparison_operators->LessGreaterSwapped (0.80), err:comparison_operators->ReversedRelationalOperator (0.10), mis:comparison_operators->AssignCompares (0.10)
 
-Label prompt for the misconception / error edges (judged together). The model saw the program, the question, the numbered clauses, and these edges with their wrong rule and right rule:
+Step 2, judge the possible mistakes of this concept (all in one question). The model saw the program, the question, the numbered clauses and each possible mistake with its wrong rule and the right rule. held = the student follows the wrong rule; correct = the student follows the right rule; not applied = the answer says nothing about it:
 | edge |
 |---|
 | mis:comparison_operators->LessGreaterSwapped \| wrong rule: < and > mean the same thing (or a < b means a is greater than b). \| right rule: a < b is true when a is smaller than b; a > b when a is larger. |
@@ -371,15 +371,15 @@ err:comparison_operators->ReversedRelationalOperator | not applied | clauses: no
 mis:comparison_operators->AssignCompares | not applied | clauses: none | confidence: 0.9
 ```
 
-Parsed labels:
+The labels as the program read them:
 | edge | label | prune score | confidence | score | clauses | words |
 |---|---|---|---|---|---|---|
 | mis:comparison_operators->LessGreaterSwapped | correct | 0.8 | 0.7 | 0.56 | c1 | 5 5 |
 | err:comparison_operators->ReversedRelationalOperator | not applied |  |  | 0.0 |  |  |
 | mis:comparison_operators->AssignCompares | not applied |  |  | 0.0 |  |  |
 
-#### comparison_operators, level ways: 20 edges offered
-Edges offered:
+#### comparison_operators: 20 ways of showing a level offered
+What the graph offers:
 | edge |
 |---|
 | lvl:comparison_operators@L0#0 \| level L0 way everyday_reading: Folk meaning: in maths = states that two things are equal, and inequalities can be chained (a < b < c) or spoken as 'equal or less than' (=<). Java rule: = assigns while == compares; the operators are spelled <= and >= only; a < b < c does not compile; and on Strings == compares references. |
@@ -403,15 +403,15 @@ Edges offered:
 | lvl:comparison_operators@L4#5 \| level L4 way diagnose_an_error: rule broken: < and > are defined only for primitive types; comparisons cannot be chained; both operands must be compatible. Kind: compile-time. Trigger class: s < t on Strings, a < b < c, or 5 < "6". |
 | lvl:comparison_operators@L4#6 \| level L4 way diagnose_an_error: rule broken: Computed doubles should not be compared with ==. Kind: silent logic error. Trigger class: == between doubles produced by arithmetic, e.g. (0.1 + 0.1 + 0.1 == 0.3). |
 
-Prune: the model's reply (edge id and score; the kept edges sum to 1):
+Step 1, pick the relevant ones. The model's reply (each picked item with its relevance score; the scores add up to 1):
 ```
 {lvl:comparison_operators@L2#1 (Score: 0.4)}
 {lvl:comparison_operators@L3#5 (Score: 0.35)}
 {lvl:comparison_operators@L2#0 (Score: 0.25)}
 ```
-Kept by pruning: lvl:comparison_operators@L2#1 (0.40), lvl:comparison_operators@L3#5 (0.35), lvl:comparison_operators@L2#0 (0.25)
+Picked: lvl:comparison_operators@L2#1 (0.40), lvl:comparison_operators@L3#5 (0.35), lvl:comparison_operators@L2#0 (0.25)
 
-Label prompt for level way lvl:comparison_operators@L2#1 (the model saw only the concept, the way's name 'output prediction' and its text; no level):
+Step 2, judge one way of showing a level (lvl:comparison_operators@L2#1, 'output prediction'). The model saw only the description below, not the level it belongs to, and answers shown or not shown:
 > The result is a boolean: (2 <= 2) is true, 2 < 2 is false, (x < 3.1) is true for int x = 3; any comparison involving NaN, even NaN == NaN, is false.
 
 Model's reply:
@@ -421,7 +421,7 @@ Clauses: none
 Confidence: 0.7
 ```
 
-Label prompt for level way lvl:comparison_operators@L3#5 (the model saw the concept, the way's name 'purpose of the whole', its text, where the way stops and whether the words must be correct; no level):
+Step 2, judge one way of showing a higher level (lvl:comparison_operators@L3#5, 'purpose of the whole'). The model saw the description below and where this way stops, not the level it belongs to, and answers shown, wrong or not shown:
 > Used to test a numeric condition: thresholds and sign checks, range tests, divisibility (n % k == 0), loop continuation (i < N), sentinel checks, and running-extreme updates (if (x > max) max = x).
 >
 > Where this way stops: Narrating the lines is L2. A purpose induced from a few traced cases is L2. A wrong purpose is still L3, but with an error.
@@ -433,7 +433,7 @@ Clauses: none
 Confidence: 0.95
 ```
 
-Label prompt for level way lvl:comparison_operators@L2#0 (the model saw only the concept, the way's name 'line by line trace' and its text; no level):
+Step 2, judge one way of showing a level (lvl:comparison_operators@L2#0, 'line by line trace'). The model saw only the description below, not the level it belongs to, and answers shown or not shown:
 > Evaluate the left operand (including its arithmetic), then the right operand; if their types differ, promote the narrower one (int to double); then compare and produce true or false.
 
 Model's reply:
@@ -443,42 +443,42 @@ Clauses: none
 Confidence: 0.75
 ```
 
-Parsed labels:
+The labels as the program read them:
 | edge | label | prune score | confidence | score | clauses | words |
 |---|---|---|---|---|---|---|
 | lvl:comparison_operators@L2#1 | not applied |  |  | 0.0 |  |  |
 | lvl:comparison_operators@L3#5 | not applied |  |  | 0.0 |  |  |
 | lvl:comparison_operators@L2#0 | not applied |  |  | 0.0 |  |  |
 
-**Kept on a path at this depth** (best N in tiers: held misconception / broken edge, then held error, then correct / confirmed / shown):
+**Kept in this round** (mistakes first, then findings that only confirm understanding; only the best few are kept):
 
 mis:comparison_operators->LessGreaterSwapped [correct, tier 2, 0.56]
 
-**Clause coverage after this depth:**
+**Which clauses are explained so far:**
 | clause | text | covered by |
 |---|---|---|
 | c1 | 5 5 | mis:comparison_operators->LessGreaterSwapped |
 
-**Graph check, not yet read (the walk may not stop while these remain):** par:assignment~comparison_operators, pre:comparison_operators->boolean_expression, pre:expression->comparison_operators, pre:statement->println
+**Links not read yet (the reading does not stop while some remain):** par:assignment~comparison_operators, pre:comparison_operators->boolean_expression, pre:expression->comparison_operators, pre:statement->println
 
-**Figure 4 (the graph after depth 1)**
+**Figure 4 (the graph after round 1)**
 
 ![Figure 4](figure04.png)
-### Depth 2: current concepts 'println', 'boolean_expression', 'comparison_operators'
+### Round 2: the concepts being looked at are 'println', 'boolean_expression', 'comparison_operators'
 
-#### println, concept edges: 1 edges offered
-Edges offered:
+#### println: 1 links to neighbouring concepts offered
+What the graph offers:
 | edge |
 |---|
 | pre:statement->println \| rule: System.out.println(s); is itself a statement, so its line of output appears at its own place in the sequence. |
 
-Prune: the model's reply (edge id and score; the kept edges sum to 1):
+Step 1, pick the relevant ones. The model's reply (each picked item with its relevance score; the scores add up to 1):
 ```
 {pre:statement->println (Score: 1.0)}
 ```
-Kept by pruning: pre:statement->println (1.00)
+Picked: pre:statement->println (1.00)
 
-Label prompt for concept edge pre:statement->println (statement -> println, prerequisite):
+Step 2, judge the link between two concepts (pre:statement->println). The model answers confirmed (the student carries the rule from the first concept into the second), broken (the student fails to) or not applied:
 > System.out.println(s); is itself a statement, so its line of output appears at its own place in the sequence.
 
 Model's reply:
@@ -488,24 +488,24 @@ Clauses: 1
 Confidence: 0.7
 ```
 
-Parsed labels:
+The labels as the program read them:
 | edge | label | prune score | confidence | score | clauses | words |
 |---|---|---|---|---|---|---|
 | pre:statement->println | confirmed | 1.0 | 0.7 | 0.7 | c1 | 5 5 |
 
-#### boolean_expression, concept edges: 1 edges offered
-Edges offered:
+#### boolean_expression: 1 links to neighbouring concepts offered
+What the graph offers:
 | edge |
 |---|
 | pre:comparison_operators->boolean_expression \| rule: A comparison such as x < y produces a boolean result; comparisons together with boolean logic provide the basis for decision-making. |
 
-Prune: the model's reply (edge id and score; the kept edges sum to 1):
+Step 1, pick the relevant ones. The model's reply (each picked item with its relevance score; the scores add up to 1):
 ```
 {pre:comparison_operators->boolean_expression (Score: 1.0)}
 ```
-Kept by pruning: pre:comparison_operators->boolean_expression (1.00)
+Picked: pre:comparison_operators->boolean_expression (1.00)
 
-Label prompt for concept edge pre:comparison_operators->boolean_expression (comparison_operators -> boolean_expression, prerequisite):
+Step 2, judge the link between two concepts (pre:comparison_operators->boolean_expression). The model answers confirmed (the student carries the rule from the first concept into the second), broken (the student fails to) or not applied:
 > A comparison such as x < y produces a boolean result; comparisons together with boolean logic provide the basis for decision-making.
 
 Model's reply:
@@ -515,26 +515,26 @@ Clauses: 1
 Confidence: 0.7
 ```
 
-Parsed labels:
+The labels as the program read them:
 | edge | label | prune score | confidence | score | clauses | words |
 |---|---|---|---|---|---|---|
 | pre:comparison_operators->boolean_expression | confirmed | 1.0 | 0.7 | 0.7 | c1 | 5 5 |
 
-#### comparison_operators, concept edges: 2 edges offered
-Edges offered:
+#### comparison_operators: 2 links to neighbouring concepts offered
+What the graph offers:
 | edge |
 |---|
 | par:assignment~comparison_operators \| rule: x = y stores the value of y in x (a statement with a side effect); x == y only tests whether the two values are equal and gives a boolean. Writing = where == is meant is a compile error with int operands and a silent bug with boolean operands. |
 | pre:comparison_operators->boolean_expression \| rule: A comparison such as x < y produces a boolean result; comparisons together with boolean logic provide the basis for decision-making. |
 | pre:expression->comparison_operators \| rule: Comparison operators build expressions whose value is a boolean, so one must already know what an expression is to understand a < b. |
 
-Prune: the model's reply (edge id and score; the kept edges sum to 1):
+Step 1, pick the relevant ones. The model's reply (each picked item with its relevance score; the scores add up to 1):
 ```
 pre:expression->comparison_operators (0.80), par:assignment~comparison_operators (0.20)
 ```
-Kept by pruning: pre:expression->comparison_operators (0.80), par:assignment~comparison_operators (0.20)
+Picked: pre:expression->comparison_operators (0.80), par:assignment~comparison_operators (0.20)
 
-Label prompt for concept edge pre:expression->comparison_operators (expression -> comparison_operators, prerequisite):
+Step 2, judge the link between two concepts (pre:expression->comparison_operators). The model answers confirmed (the student carries the rule from the first concept into the second), broken (the student fails to) or not applied:
 > Comparison operators build expressions whose value is a boolean, so one must already know what an expression is to understand a < b.
 
 Model's reply:
@@ -544,7 +544,7 @@ Clauses: 1
 Confidence: 0.55
 ```
 
-Label prompt for concept edge par:assignment~comparison_operators (assignment -> comparison_operators, parallel):
+Step 2, judge the link between two concepts (par:assignment~comparison_operators). The model answers confirmed (the student carries the rule from the first concept into the second), broken (the student fails to) or not applied:
 > x = y stores the value of y in x (a statement with a side effect); x == y only tests whether the two values are equal and gives a boolean. Writing = where == is meant is a compile error with int operands and a silent bug with boolean operands.
 
 Model's reply:
@@ -554,13 +554,13 @@ Clauses: none
 Confidence: 0.85
 ```
 
-Parsed labels:
+The labels as the program read them:
 | edge | label | prune score | confidence | score | clauses | words |
 |---|---|---|---|---|---|---|
 | pre:expression->comparison_operators | confirmed | 0.8 | 0.55 | 0.44 | c1 | 5 5 |
 | par:assignment~comparison_operators | not applied |  |  | 0.0 |  |  |
 
-**Kept on a path at this depth** (best N in tiers: held misconception / broken edge, then held error, then correct / confirmed / shown):
+**Kept in this round** (mistakes first, then findings that only confirm understanding; only the best few are kept):
 
 pre:statement->println [confirmed, tier 2, 0.70], pre:comparison_operators->boolean_expression [confirmed, tier 2, 0.70], pre:expression->comparison_operators [confirmed, tier 2, 0.44]
 
@@ -568,20 +568,20 @@ reached across pre:statement->println, entered next: statement
 
 reached across pre:expression->comparison_operators, entered next: expression
 
-**Clause coverage after this depth:**
+**Which clauses are explained so far:**
 | clause | text | covered by |
 |---|---|---|
 | c1 | 5 5 | mis:comparison_operators->LessGreaterSwapped |
 
-**Graph check, not yet read (the walk may not stop while these remain):** own edges of expression, own edges of statement
+**Links not read yet (the reading does not stop while some remain):** own edges of expression, own edges of statement
 
-**Figure 5 (the graph after depth 2)**
+**Figure 5 (the graph after round 2)**
 
 ![Figure 5](figure05.png)
-### Depth 3: current concepts 'statement', 'println', 'comparison_operators', 'boolean_expression', 'expression'
+### Round 3: the concepts being looked at are 'statement', 'println', 'comparison_operators', 'boolean_expression', 'expression'
 
-#### statement, misconceptions: 5 edges offered
-Edges offered:
+#### statement: 5 possible mistakes offered
+What the graph offers:
 | edge |
 |---|
 | err:statement->StatementNeedsNoTerminator \| wrong rule: A statement still compiles and runs if the semicolon at its end is left out, or if a stray ; is put right after if (c) or for (...). \| right rule: Each statement must end with ;, otherwise javac reports ';' expected. |
@@ -590,15 +590,15 @@ Edges offered:
 | mis:statement->StatementsRunInAnyOrder \| wrong rule: Statements in a program can run in any order. \| right rule: Without control statements, statements run once each, top to bottom. |
 | mis:statement->WhitespaceIsSignificant \| wrong rule: Line breaks and indentation change what the program does, so each statement must be on its own line. \| right rule: Java compilers consider all whitespace in program text (outside quotation marks) to be equivalent; layout is for human readers. |
 
-Prune: the model's reply (edge id and score; the kept edges sum to 1):
+Step 1, pick the relevant ones. The model's reply (each picked item with its relevance score; the scores add up to 1):
 ```
 {mis:statement->WhitespaceIsSignificant (Score: 0.5)}
 {mis:statement->ComputerFillsInIntent (Score: 0.3)}
 {mis:statement->StatementsRunInAnyOrder (Score: 0.2)}
 ```
-Kept by pruning: mis:statement->WhitespaceIsSignificant (0.50), mis:statement->ComputerFillsInIntent (0.30), mis:statement->StatementsRunInAnyOrder (0.20)
+Picked: mis:statement->WhitespaceIsSignificant (0.50), mis:statement->ComputerFillsInIntent (0.30), mis:statement->StatementsRunInAnyOrder (0.20)
 
-Label prompt for the misconception / error edges (judged together). The model saw the program, the question, the numbered clauses, and these edges with their wrong rule and right rule:
+Step 2, judge the possible mistakes of this concept (all in one question). The model saw the program, the question, the numbered clauses and each possible mistake with its wrong rule and the right rule. held = the student follows the wrong rule; correct = the student follows the right rule; not applied = the answer says nothing about it:
 | edge |
 |---|
 | mis:statement->WhitespaceIsSignificant \| wrong rule: Line breaks and indentation change what the program does, so each statement must be on its own line. \| right rule: Java compilers consider all whitespace in program text (outside quotation marks) to be equivalent; layout is for human readers. |
@@ -611,15 +611,15 @@ mis:statement->ComputerFillsInIntent | not applied | clauses: none | confidence:
 mis:statement->StatementsRunInAnyOrder | not applied | clauses: none | confidence: 0.8
 ```
 
-Parsed labels:
+The labels as the program read them:
 | edge | label | prune score | confidence | score | clauses | words |
 |---|---|---|---|---|---|---|
 | mis:statement->WhitespaceIsSignificant | correct | 0.5 | 0.8 | 0.4 | c1 | 5 5 |
 | mis:statement->ComputerFillsInIntent | not applied |  |  | 0.0 |  |  |
 | mis:statement->StatementsRunInAnyOrder | not applied |  |  | 0.0 |  |  |
 
-#### statement, level ways: 19 edges offered
-Edges offered:
+#### statement: 19 ways of showing a level offered
+What the graph offers:
 | edge |
 |---|
 | lvl:statement@L0#0 \| level L0 way everyday_reading: Everyday reading: a program is read like a text or a list of wishes that the computer takes in all at once, so line order, goals of later lines or what the writer meant can matter. Java rule: each statement is one step, ended by ;, executed once, in written order, using only the current state. |
@@ -642,15 +642,15 @@ Edges offered:
 | lvl:statement@L4#2 \| level L4 way transfer_to_a_new_program: Write one statement per step and order them as the algorithm requires; straight-line sequence suffices when every step runs once, otherwise use conditionals or loops. |
 | lvl:statement@L4#3 \| level L4 way diagnose_an_error: rule broken: A ; directly after an if/while/for header is an empty statement. Kind: silent logic error. Trigger class: if (x > 0); or while (cond); followed by the intended body |
 
-Prune: the model's reply (edge id and score; the kept edges sum to 1):
+Step 1, pick the relevant ones. The model's reply (each picked item with its relevance score; the scores add up to 1):
 ```
 {lvl:statement@L2#1 (Score: 0.4)}
 {lvl:statement@L3#3 (Score: 0.3)}
 {lvl:statement@L2#0 (Score: 0.3)}
 ```
-Kept by pruning: lvl:statement@L2#1 (0.40), lvl:statement@L3#3 (0.30), lvl:statement@L2#0 (0.30)
+Picked: lvl:statement@L2#1 (0.40), lvl:statement@L3#3 (0.30), lvl:statement@L2#0 (0.30)
 
-Label prompt for level way lvl:statement@L2#1 (the model saw only the concept, the way's name 'output prediction' and its text; no level):
+Step 2, judge one way of showing a level (lvl:statement@L2#1, 'output prediction'). The model saw only the description below, not the level it belongs to, and answers shown or not shown:
 > A statement has no value; its result is its effect: a changed variable, printed output, or a change of control flow.
 
 Model's reply:
@@ -660,7 +660,7 @@ Clauses: 1
 Confidence: 0.7
 ```
 
-Label prompt for level way lvl:statement@L3#3 (the model saw the concept, the way's name 'relation to neighbour', its text, where the way stops and whether the words must be correct; no level):
+Step 2, judge one way of showing a higher level (lvl:statement@L3#3, 'relation to neighbour'). The model saw the description below and where this way stops, not the level it belongs to, and answers shown, wrong or not shown:
 > System.out.println(s); is a statement, so its line of output appears at its place in the sequence; swapping two println statements swaps the output lines.
 >
 > Where this way stops: Two correct but separate rules are L1. Executing the two in sequence is L2. A relational answer may be correct or a relational error.
@@ -672,7 +672,7 @@ Clauses: none
 Confidence: 0.85
 ```
 
-Label prompt for level way lvl:statement@L2#0 (the model saw only the concept, the way's name 'line by line trace' and its text; no level):
+Step 2, judge one way of showing a level (lvl:statement@L2#0, 'line by line trace'). The model saw only the description below, not the level it belongs to, and answers shown or not shown:
 > Statements run one at a time, from first to last; each completes (normally or abruptly) before the next starts.
 
 Model's reply:
@@ -682,28 +682,28 @@ Clauses: 1
 Confidence: 0.6
 ```
 
-Parsed labels:
+The labels as the program read them:
 | edge | label | prune score | confidence | score | clauses | words |
 |---|---|---|---|---|---|---|
 | lvl:statement@L2#1 | shown | 0.4 | 0.7 | 0.28 | c1 | 5 5 |
 | lvl:statement@L3#3 | not applied |  |  | 0.0 |  |  |
 | lvl:statement@L2#0 | shown | 0.3 | 0.6 | 0.18 | c1 | 5 5 |
 
-#### comparison_operators, concept edges: 1 edges offered
-Edges offered:
+#### comparison_operators: 1 links to neighbouring concepts offered
+What the graph offers:
 | edge |
 |---|
 | par:assignment~comparison_operators \| rule: x = y stores the value of y in x (a statement with a side effect); x == y only tests whether the two values are equal and gives a boolean. Writing = where == is meant is a compile error with int operands and a silent bug with boolean operands. |
 | pre:comparison_operators->boolean_expression \| rule: A comparison such as x < y produces a boolean result; comparisons together with boolean logic provide the basis for decision-making. |
 | pre:expression->comparison_operators \| rule: Comparison operators build expressions whose value is a boolean, so one must already know what an expression is to understand a < b. |
 
-Prune: the model's reply (edge id and score; the kept edges sum to 1):
+Step 1, pick the relevant ones. The model's reply (each picked item with its relevance score; the scores add up to 1):
 ```
 {par:assignment~comparison_operators (Score: 1.0)}
 ```
-Kept by pruning: par:assignment~comparison_operators (1.00)
+Picked: par:assignment~comparison_operators (1.00)
 
-Label prompt for concept edge par:assignment~comparison_operators (assignment -> comparison_operators, parallel):
+Step 2, judge the link between two concepts (par:assignment~comparison_operators). The model answers confirmed (the student carries the rule from the first concept into the second), broken (the student fails to) or not applied:
 > x = y stores the value of y in x (a statement with a side effect); x == y only tests whether the two values are equal and gives a boolean. Writing = where == is meant is a compile error with int operands and a silent bug with boolean operands.
 
 Model's reply:
@@ -713,13 +713,13 @@ Clauses: none
 Confidence: 0.85
 ```
 
-Parsed labels:
+The labels as the program read them:
 | edge | label | prune score | confidence | score | clauses | words |
 |---|---|---|---|---|---|---|
 | par:assignment~comparison_operators | not applied |  |  | 0.0 |  |  |
 
-#### expression, misconceptions: 8 edges offered
-Edges offered:
+#### expression: 8 possible mistakes offered
+What the graph offers:
 | edge |
 |---|
 | err:expression->ExpressionOnLeftOfAssignment \| wrong rule: Writes a + b = c; or 7 = a; as if = were a math equation. \| right rule: The left side of an assignment must be a single variable; only the right side can be an expression. |
@@ -731,13 +731,13 @@ Edges offered:
 | mis:expression->TargetTyping \| wrong rule: The type of a numerical expression depends on the type expected by the surrounding context, so double d = a / b; keeps the fraction. \| right rule: The type of a numerical expression is determined by the expression, so double d = a / b; with int a and b still divides as ints. |
 | mis:expression->VariablesHoldExpressions \| wrong rule: = stores the expression itself, not its computed value \| right rule: y = x + k; stores the value that x + k has at that moment, so later changes to x do not change y. |
 
-Prune: the model's reply (edge id and score; the kept edges sum to 1):
+Step 1, pick the relevant ones. The model's reply (each picked item with its relevance score; the scores add up to 1):
 ```
 mis:expression->AssignmentIsEquation (0.40), mis:expression->VariablesHoldExpressions (0.35), mis:expression->NoAtomicExpression (0.25)
 ```
-Kept by pruning: mis:expression->AssignmentIsEquation (0.40), mis:expression->VariablesHoldExpressions (0.35), mis:expression->NoAtomicExpression (0.25)
+Picked: mis:expression->AssignmentIsEquation (0.40), mis:expression->VariablesHoldExpressions (0.35), mis:expression->NoAtomicExpression (0.25)
 
-Label prompt for the misconception / error edges (judged together). The model saw the program, the question, the numbered clauses, and these edges with their wrong rule and right rule:
+Step 2, judge the possible mistakes of this concept (all in one question). The model saw the program, the question, the numbered clauses and each possible mistake with its wrong rule and the right rule. held = the student follows the wrong rule; correct = the student follows the right rule; not applied = the answer says nothing about it:
 | edge |
 |---|
 | mis:expression->AssignmentIsEquation \| wrong rule: An assignment states a lasting equality between its two sides, so y = x - y can be solved like the equation x = 2y and x = x + 5 relates two equal quantities. \| right rule: An assignment is a one-time action: evaluate the right side with current values, then store the result in the left variable. |
@@ -750,15 +750,15 @@ mis:expression->VariablesHoldExpressions | not applied | clauses: none | confide
 mis:expression->NoAtomicExpression | not applied | clauses: none | confidence: 0.85
 ```
 
-Parsed labels:
+The labels as the program read them:
 | edge | label | prune score | confidence | score | clauses | words |
 |---|---|---|---|---|---|---|
 | mis:expression->AssignmentIsEquation | correct | 0.4 | 0.55 | 0.22 | c1 | 5 5 |
 | mis:expression->VariablesHoldExpressions | not applied |  |  | 0.0 |  |  |
 | mis:expression->NoAtomicExpression | not applied |  |  | 0.0 |  |  |
 
-#### expression, level ways: 19 edges offered
-Edges offered:
+#### expression: 19 ways of showing a level offered
+What the graph offers:
 | edge |
 |---|
 | lvl:expression@L0#0 \| level L0 way everyday_reading: In maths an expression such as 7/2 or x + y names an exact number, and 'expression' means a formula with operators. In Java, any code that evaluates to a typed value is an expression, including a lone literal or variable, and with ints 7/2 evaluates to 3. |
@@ -781,15 +781,15 @@ Edges offered:
 | lvl:expression@L4#4 \| level L4 way diagnose_an_error: rule broken: Operators accept only operands of suitable types. Kind: compile-time. Trigger class: Applying arithmetic to Strings ("Hello" - 1) or comparing booleans with <: 'bad operand types'. |
 | lvl:expression@L4#5 \| level L4 way diagnose_an_error: rule broken: An int division or remainder by zero cannot be evaluated. Kind: run-time exception. Trigger class: Any int / or % whose right operand evaluates to 0: ArithmeticException. |
 
-Prune: the model's reply (edge id and score; the kept edges sum to 1):
+Step 1, pick the relevant ones. The model's reply (each picked item with its relevance score; the scores add up to 1):
 ```
 {lvl:expression@L2#1 (Score: 0.45)}
 {lvl:expression@L3#0 (Score: 0.3)}
 {lvl:expression@L2#2 (Score: 0.25)}
 ```
-Kept by pruning: lvl:expression@L2#1 (0.45), lvl:expression@L3#0 (0.30), lvl:expression@L2#2 (0.25)
+Picked: lvl:expression@L2#1 (0.45), lvl:expression@L3#0 (0.30), lvl:expression@L2#2 (0.25)
 
-Label prompt for level way lvl:expression@L2#1 (the model saw only the concept, the way's name 'output prediction' and its text; no level):
+Step 2, judge one way of showing a level (lvl:expression@L2#1, 'output prediction'). The model saw only the description below, not the level it belongs to, and answers shown or not shown:
 > An expression produces one value of a type fixed by its operands: hour * 60 + minute with hour = 11 and minute = 59 is the int 719.
 
 Model's reply:
@@ -799,7 +799,7 @@ Clauses: none
 Confidence: 0.6
 ```
 
-Label prompt for level way lvl:expression@L3#0 (the model saw the concept, the way's name 'relation to neighbour', its text, where the way stops and whether the words must be correct; no level):
+Step 2, judge one way of showing a higher level (lvl:expression@L3#0, 'relation to neighbour'). The model saw the description below and where this way stops, not the level it belongs to, and answers shown, wrong or not shown:
 > A variable name inside an expression contributes the variable's value at the moment of evaluation.
 >
 > Where this way stops: Two correct but separate rules are L1. Executing the two in sequence is L2. A relational answer may be correct or a relational error.
@@ -811,7 +811,7 @@ Clauses: none
 Confidence: 0.8
 ```
 
-Label prompt for level way lvl:expression@L2#2 (the model saw only the concept, the way's name 'one step execution' and its text; no level):
+Step 2, judge one way of showing a level (lvl:expression@L2#2, 'one step execution'). The model saw only the description below, not the level it belongs to, and answers shown or not shown:
 > Evaluating an expression changes no variable unless it contains an assignment, ++/-- or a method with side effects. The value goes to the enclosing statement, and an expression statement discards it.
 
 Model's reply:
@@ -821,37 +821,39 @@ Clauses: none
 Confidence: 0.6
 ```
 
-Parsed labels:
+The labels as the program read them:
 | edge | label | prune score | confidence | score | clauses | words |
 |---|---|---|---|---|---|---|
 | lvl:expression@L2#1 | not applied |  |  | 0.0 |  |  |
 | lvl:expression@L3#0 | not applied |  |  | 0.0 |  |  |
 | lvl:expression@L2#2 | not applied |  |  | 0.0 |  |  |
 
-**Kept on a path at this depth** (best N in tiers: held misconception / broken edge, then held error, then correct / confirmed / shown):
+**Kept in this round** (mistakes first, then findings that only confirm understanding; only the best few are kept):
 
 mis:statement->WhitespaceIsSignificant [correct, tier 2, 0.40], lvl:statement@L2#1 [shown, tier 2, 0.28], mis:expression->AssignmentIsEquation [correct, tier 2, 0.22]
 
-**Clause coverage after this depth:**
+**Which clauses are explained so far:**
 | clause | text | covered by |
 |---|---|---|
 | c1 | 5 5 | mis:comparison_operators->LessGreaterSwapped |
 
-**Graph check, not yet read (the walk may not stop while these remain):** pre:statement->control_flow
+**Links not read yet (the reading does not stop while some remain):** pre:statement->control_flow
 
-**Figure 6 (the graph after depth 3)**
+**Figure 6 (the graph after round 3)**
 
 ![Figure 6](figure06.png)
-## 4. Diagnosis (rules over the labelled graph, no model)
-Root-cause walk: held on [], broken at [], prerequisites {'increment_operators': ['assignment', 'loop_control'], 'boolean_expression': ['comparison_operators'], 'comparison_operators': ['expression'], 'loop_body': ['for_loop'], 'for_loop': ['loop_control'], 'loop_control': ['loop_variable'], 'control_flow': ['statement'], 'println': ['statement']}
+## 4. Diagnosis (fixed rules, no model)
+
+From here on the model is not asked any more. Fixed rules decide which labels count as mistakes, where the mistake starts (the root cause) and the level of each concept.
+Finding where the mistake starts: held on [], broken at [], prerequisites {'increment_operators': ['assignment', 'loop_control'], 'boolean_expression': ['comparison_operators'], 'comparison_operators': ['expression'], 'loop_body': ['for_loop'], 'for_loop': ['loop_control'], 'loop_control': ['loop_variable'], 'control_flow': ['statement'], 'println': ['statement']}
 - statement: L2 via output_prediction "5 5"
 
-**Stop:** max depth at depth 3; prompts {'prune': 14, 'label': 25}, fresh model calls 0, cache hits 39
+**Why the reading stopped:** max depth, in round 3. Questions put to the model: {'prune': 14, 'label': 25} (new: 0, answered from stored replies: 39)
 
 ### Held misconceptions
 (none)
 
-### Broken concept edges
+### Links between concepts that the student breaks
 (none)
 
 ### Root cause: none
@@ -861,9 +863,11 @@ Root-cause walk: held on [], broken at [], prerequisites {'increment_operators':
 |---|---|---|---|---|---|---|---|---|
 | statement | L2 | output_prediction |  | level_way | 5 5 |  | L2 line_by_line_trace |  |
 
-### Overall level: L2
+### Overall level by the walk's own Stage 7 rule: L2
 
-Clause coverage (final):
+The overall level of this folder is the one in the section \"Level classification\" at the top; it can differ from this one.
+
+Which finding explains each clause, at the end:
 | clause | covered by |
 |---|---|
 | 5 5 | mis:comparison_operators->LessGreaterSwapped |
@@ -871,7 +875,7 @@ Clause coverage (final):
 **Figure 7 (final picture)**
 
 ![Figure 7](figure07.png)
-## 5. Every labelled edge (the evidence list, kept or not)
+## 5. Everything that got a label
 | depth | source | edge | kind | label | prune_score | confidence | score | clauses | quote |
 |---|---|---|---|---|---|---|---|---|---|
 | 1 | comparison_operators | mis:comparison_operators->LessGreaterSwapped | misconception | correct | 0.8 | 0.7 | 0.56 | [1] | 5 5 |
@@ -883,7 +887,7 @@ Clause coverage (final):
 | 3 | statement | lvl:statement@L2#0 | level | shown | 0.3 | 0.6 | 0.18 | [1] | 5 5 |
 | 3 | expression | mis:expression->AssignmentIsEquation | misconception | correct | 0.4 | 0.55 | 0.22 | [1] | 5 5 |
 
-## 6. The paths (what the keep step kept, depth by depth)
+## 6. What was kept, round by round
 | depth | source | edge | kind | label | score | clauses |
 |---|---|---|---|---|---|---|
 | 1 | comparison_operators | mis:comparison_operators->LessGreaterSwapped | misconception | correct | 0.56 | [1] |
@@ -894,7 +898,7 @@ Clause coverage (final):
 | 3 | statement | lvl:statement@L2#1 | level | shown | 0.28 | [1] |
 | 3 | expression | mis:expression->AssignmentIsEquation | misconception | correct | 0.22 | [1] |
 
-## 7. Raw traversal log
+## 7. The program's own log of the run
 ```
 clauses: 5 5
 start: BM25 of the answer against each tagged concept: println 7.03 (hits 1), boolean_expression 0.00 (hits 1), comparison_operators 0.00 (hits 1), control_flow 0.00 (hits 1), for_loop 0.00 (hits 1), increment_operators 0.00 (hits 1), loop_body 0.00 (hits 1), loop_control 0.00 (hits 1), loop_variable 0.00 (hits 1)
@@ -967,7 +971,7 @@ start concepts (3): println, boolean_expression, comparison_operators
   level statement: L2 via output_prediction "5 5"
 ```
 
-## 8. Full diagnosis JSON
+## 8. The full result as data
 ```json
 {
  "scenario": "LP20",

@@ -41,8 +41,8 @@ Question: How many times is System.out.println executed? Explain your reasoning.
 
 Student's answer: Without braces a for loop repeats only the one statement right after its header. The indentation does not matter, so the println lines are not part of the loop.
 Settings: width 3, depth 3, prune llm, backend claude-cli, model claude-opus-5-5
-## 1. Stage 1: the subgraph G from the code (no model)
-Masked code (string and char literals and comments blanked; this is what the patterns see):
+## 1. Stage 1: which concepts the program uses (no model)
+The program with the text in quotes and the comments blanked out, so that only real code is read:
 ```
 int i, n = 5;
 for (i = 1; i < n; i++)
@@ -50,7 +50,7 @@ for (i = 1; i < n; i++)
     System.out.println(i);
 System.out.println(i);
 ```
-Which code text tagged which concept (a generic concept fires on almost any Java line; it starts the walk only if the answer repeats its tag):
+Which piece of the code points to which concept. A generic concept is one that almost every Java program has; the reading starts from it only if the student's answer mentions it:
 | concept | generic | channel | matched text | line |
 |---|---|---|---|---|
 | assignment | True | pattern | '=' | 1 |
@@ -67,10 +67,10 @@ Which code text tagged which concept (a generic concept fires on almost any Java
 | println | False | pattern | 'System.out.println(' | 4 |
 | statement | True | pattern | ';' | 1 |
 
-G: 12 concept nodes (3 generic), 10 concept edges, 116 misconception / error edges, 84 misconception / error nodes, 60 level nodes, 120 level-misconception links, 2 connected piece(s).
+The part of the knowledge graph used for this program (called G) has 12 concepts (3 of them generic), 10 links between concepts, 116 links from a concept to a possible mistake (84 different mistakes) and 60 level entries (five levels, L0 to L4, for each concept). It is in 2 connected piece(s).
 Note: concept nodes form 2 pieces (the KG has no edge between them): assignment,boolean_expression,comparison_operators,expression,for_loop,increment_operators,loop_body,loop_control,loop_variable | control_flow,println,statement
 
-Concept edges of G (the links the walk can read; `pre:` = prerequisite A -> B, `par:` = parallel):
+The links between these concepts. `pre:` means the first concept must be understood before the second; `par:` means the two are learned side by side:
 | edge | type | rule (logic) |
 |---|---|---|
 | par:assignment~comparison_operators | parallel | x = y stores the value of y in x (a statement with a side effect); x == y only tests whether the two values are equal and gives a boolean. Writing = where == is meant is a compile error with int operands and a silent bug with boolean operands. |
@@ -84,8 +84,8 @@ Concept edges of G (the links the walk can read; `pre:` = prerequisite A -> B, `
 | pre:statement->control_flow | prerequisite | Control flow is the order in which statements run. |
 | pre:statement->println | prerequisite | System.out.println(s); is itself a statement, so its line of output appears at its own place in the sequence. |
 
-Misconception / error edges per concept (count), and level ways per concept (count):
-| concept | misconception / error edges | level ways (L1-L4 + L0 non-misconception) |
+For each concept: how many possible mistakes the graph lists for it, and how many ways of showing a level:
+| concept | possible mistakes | ways of showing a level |
 |---|---|---|
 | assignment | 15 | 24 |
 | boolean_expression | 8 | 19 |
@@ -106,8 +106,8 @@ Misconception / error edges per concept (count), and level ways per concept (cou
 **Figure 2**
 
 ![Figure 2](figure02.png)
-## 2. Clauses and start concepts (no model)
-The answer split into clauses (at sentence ends, ';', and before 'because' / 'so'; quotes removed):
+## 2. The answer in pieces, and where the reading starts (no model)
+The student's answer cut into short pieces (clauses), so that every finding can point to the exact words it rests on:
 | clause | text |
 |---|---|
 | c1 | Without braces a for loop repeats only the one statement right after its header |
@@ -120,18 +120,18 @@ start: chosen for_loop, loop_body, control_flow
 
 start concepts (3): for_loop, loop_body, control_flow
 
-Start concepts: for_loop, loop_body, control_flow
+The reading starts at the concepts whose description is closest to the student's words. Start concepts: for_loop, loop_body, control_flow
 
 **Figure 3**
 
 ![Figure 3](figure03.png)
-## 3. The walk, depth by depth
-At each depth, for each current concept: the edges offered (a concept entering as a start concept offers its misconception / error edges and its level ways, as two families; otherwise it offers its concept edges), the prune prompt and the model's reply, then the label prompt(s) and the model's reply, parsed into label / clauses / confidence. Score = prune score x confidence.
+## 3. Reading the answer against the graph, round by round (the model is asked here)
+The answer is read in rounds. In each round, for each concept being looked at, three things happen. First the graph offers what could be said about the concept: the possible mistakes, the ways of showing a level, or the links to neighbouring concepts. Then the model picks the few that matter for this answer. Then the model judges each picked one against the student's clauses and gives a label, the clause numbers it rests on and a confidence from 0 to 1. Score = relevance score x confidence.
 
-### Depth 1: current concepts 'for_loop', 'loop_body', 'control_flow'
+### Round 1: the concepts being looked at are 'for_loop', 'loop_body', 'control_flow'
 
-#### for_loop, misconceptions: 20 edges offered
-Edges offered:
+#### for_loop: 20 possible mistakes offered
+What the graph offers:
 | edge |
 |---|
 | err:for_loop->BracelessMultiStatementBody \| wrong rule: Indenting several statements under an if or for makes them all part of its body, even without braces. \| right rule: Without braces only the first statement belongs to the if/for; the rest run once, after it. |
@@ -155,13 +155,13 @@ Edges offered:
 | mis:for_loop->ReturnDoesNotExitLoop \| wrong rule: A return inside a loop does not end the loop; it sets a value each pass (the last one is returned) or returns several values. \| right rule: When return executes, the method ends at once, so the loop stops on that pass. |
 | mis:for_loop->SingleIterationInsteadOfLoop \| wrong rule: A task that must be repeated is written once, without a loop, as if one pass were enough. \| right rule: A step that must happen several times (or an unknown number of times) needs a loop such as while or for; code without a loop runs once. |
 
-Prune: the model's reply (edge id and score; the kept edges sum to 1):
+Step 1, pick the relevant ones. The model's reply (each picked item with its relevance score; the scores add up to 1):
 ```
 err:for_loop->BracelessMultiStatementBody (0.70), mis:for_loop->FalseLoopRepeatsNextCode (0.20), mis:for_loop->ProgramEndsAfterLoop (0.10)
 ```
-Kept by pruning: err:for_loop->BracelessMultiStatementBody (0.70), mis:for_loop->FalseLoopRepeatsNextCode (0.20), mis:for_loop->ProgramEndsAfterLoop (0.10)
+Picked: err:for_loop->BracelessMultiStatementBody (0.70), mis:for_loop->FalseLoopRepeatsNextCode (0.20), mis:for_loop->ProgramEndsAfterLoop (0.10)
 
-Label prompt for the misconception / error edges (judged together). The model saw the program, the question, the numbered clauses, and these edges with their wrong rule and right rule:
+Step 2, judge the possible mistakes of this concept (all in one question). The model saw the program, the question, the numbered clauses and each possible mistake with its wrong rule and the right rule. held = the student follows the wrong rule; correct = the student follows the right rule; not applied = the answer says nothing about it:
 | edge |
 |---|
 | err:for_loop->BracelessMultiStatementBody \| wrong rule: Indenting several statements under an if or for makes them all part of its body, even without braces. \| right rule: Without braces only the first statement belongs to the if/for; the rest run once, after it. |
@@ -174,15 +174,15 @@ mis:for_loop->FalseLoopRepeatsNextCode | not applied | clauses: none | confidenc
 mis:for_loop->ProgramEndsAfterLoop | not applied | clauses: none | confidence: 0.8
 ```
 
-Parsed labels:
+The labels as the program read them:
 | edge | label | prune score | confidence | score | clauses | words |
 |---|---|---|---|---|---|---|
 | err:for_loop->BracelessMultiStatementBody | correct | 0.7000000000000001 | 0.95 | 0.67 | c1, c2, c3 | Without braces a for loop repeats only the one statement right after its header; The indentation does not matter; so the println lines are not part of the loop |
 | mis:for_loop->FalseLoopRepeatsNextCode | not applied |  |  | 0.0 |  |  |
 | mis:for_loop->ProgramEndsAfterLoop | not applied |  |  | 0.0 |  |  |
 
-#### for_loop, level ways: 24 edges offered
-Edges offered:
+#### for_loop: 24 ways of showing a level offered
+What the graph offers:
 | edge |
 |---|
 | lvl:for_loop@L0#0 \| level L0 way everyday_reading: Folk meaning: English 'for each ...' or 'for 10 times' names a whole collection or a count to be handled at once, and a maths reading treats the header as simultaneous conditions. A Java for is a while loop in compact form: one init, then test-body-update repeated, one pass at a time. |
@@ -210,15 +210,15 @@ Edges offered:
 | lvl:for_loop@L4#6 \| level L4 way diagnose_an_error: rule broken: Without braces, the body of an if, while or for is exactly one statement; indentation does not add statements to it. Kind: silent logic error. Trigger class: A braceless header followed by two or more indented statements: only the first is controlled, the others run once, after the if/loop, on every input. |
 | lvl:for_loop@L4#7 \| level L4 way diagnose_an_error: rule broken: A variable declared in the for initializer exists only inside the for statement. Kind: compile-time. Trigger class: Reading i after for (int i = 0; ...) {...}: 'cannot find symbol'. |
 
-Prune: the model's reply (edge id and score; the kept edges sum to 1):
+Step 1, pick the relevant ones. The model's reply (each picked item with its relevance score; the scores add up to 1):
 ```
 {lvl:for_loop@L4#6 (Score: 0.7)}
 {lvl:for_loop@L1#1 (Score: 0.15)}
 {lvl:for_loop@L3#0 (Score: 0.15)}
 ```
-Kept by pruning: lvl:for_loop@L4#6 (0.70), lvl:for_loop@L1#1 (0.15), lvl:for_loop@L3#0 (0.15)
+Picked: lvl:for_loop@L4#6 (0.70), lvl:for_loop@L1#1 (0.15), lvl:for_loop@L3#0 (0.15)
 
-Label prompt for level way lvl:for_loop@L4#6 (the model saw the concept, the way's name 'diagnose an error', its text, where the way stops and whether the words must be correct; no level):
+Step 2, judge one way of showing a higher level (lvl:for_loop@L4#6, 'diagnose an error'). The model saw the description below and where this way stops, not the level it belongs to, and answers shown, wrong or not shown:
 > rule broken: Without braces, the body of an if, while or for is exactly one statement; indentation does not add statements to it. Kind: silent logic error. Trigger class: A braceless header followed by two or more indented statements: only the first is controlled, the others run once, after the if/loop, on every input.
 >
 > Where this way stops: Locating and fixing the mistake for one given failing case is L3. A compiler-flagged slip fixed from the message is weak evidence.
@@ -230,7 +230,7 @@ Clauses: 1, 2, 3
 Confidence: 0.8
 ```
 
-Label prompt for level way lvl:for_loop@L1#1 (the model saw only the concept, the way's name 'states the rule' and its text; no level):
+Step 2, judge one way of showing a level (lvl:for_loop@L1#1, 'states the rule'). The model saw only the description below, not the level it belongs to, and answers shown or not shown:
 > Syntax: for (<initialize>; <boolean expression>; <increment>) { <statements> }, with the three parts separated by semicolons; it is, with only a few exceptions, equivalent to <initialize>; while (<boolean expression>) { <statements> <increment>; }.
 
 Model's reply:
@@ -240,7 +240,7 @@ Clauses: 1
 Confidence: 0.6
 ```
 
-Label prompt for level way lvl:for_loop@L3#0 (the model saw the concept, the way's name 'relation to neighbour', its text, where the way stops and whether the words must be correct; no level):
+Step 2, judge one way of showing a higher level (lvl:for_loop@L3#0, 'relation to neighbour'). The model saw the description below and where this way stops, not the level it belongs to, and answers shown, wrong or not shown:
 > The for header is exactly the three loop-control slots; the body runs after the test and before the update on each pass.
 >
 > Where this way stops: Two correct but separate rules are L1. Executing the two in sequence is L2. A relational answer may be correct or a relational error.
@@ -252,15 +252,15 @@ Clauses: 1, 2, 3
 Confidence: 0.7
 ```
 
-Parsed labels:
+The labels as the program read them:
 | edge | label | prune score | confidence | score | clauses | words |
 |---|---|---|---|---|---|---|
 | lvl:for_loop@L4#6 | shown | 0.7 | 0.8 | 0.56 | c1, c2, c3 | Without braces a for loop repeats only the one statement right after its header; The indentation does not matter; so the println lines are not part of the loop |
 | lvl:for_loop@L1#1 | shown | 0.15 | 0.6 | 0.09 | c1 | Without braces a for loop repeats only the one statement right after its header |
 | lvl:for_loop@L3#0 | shown | 0.15 | 0.7 | 0.1 | c1, c2, c3 | Without braces a for loop repeats only the one statement right after its header; The indentation does not matter; so the println lines are not part of the loop |
 
-#### loop_body, misconceptions: 12 edges offered
-Edges offered:
+#### loop_body: 12 possible mistakes offered
+What the graph offers:
 | edge |
 |---|
 | err:loop_body->BracelessMultiStatementBody \| wrong rule: Indenting several statements under an if or for makes them all part of its body, even without braces. \| right rule: Without braces only the first statement belongs to the if/for; the rest run once, after it. |
@@ -276,13 +276,13 @@ Edges offered:
 | mis:loop_body->StatementAfterLoopInBody \| wrong rule: A statement written after the loop is repeated with the loop body. \| right rule: The body ends at the closing brace (or after its single statement); code after it runs once, after the loop ends. |
 | mis:loop_body->WhileStopsMidBody \| wrong rule: The loop stops the moment the condition becomes false, even in the middle of the body. \| right rule: The condition is tested only before each pass, so the whole body finishes before the loop can stop. |
 
-Prune: the model's reply (edge id and score; the kept edges sum to 1):
+Step 1, pick the relevant ones. The model's reply (each picked item with its relevance score; the scores add up to 1):
 ```
 err:loop_body->BracelessMultiStatementBody (0.60), mis:loop_body->StatementAfterLoopInBody (0.30), mis:loop_body->ComputerFillsInIntent (0.10)
 ```
-Kept by pruning: err:loop_body->BracelessMultiStatementBody (0.60), mis:loop_body->StatementAfterLoopInBody (0.30), mis:loop_body->ComputerFillsInIntent (0.10)
+Picked: err:loop_body->BracelessMultiStatementBody (0.60), mis:loop_body->StatementAfterLoopInBody (0.30), mis:loop_body->ComputerFillsInIntent (0.10)
 
-Label prompt for the misconception / error edges (judged together). The model saw the program, the question, the numbered clauses, and these edges with their wrong rule and right rule:
+Step 2, judge the possible mistakes of this concept (all in one question). The model saw the program, the question, the numbered clauses and each possible mistake with its wrong rule and the right rule. held = the student follows the wrong rule; correct = the student follows the right rule; not applied = the answer says nothing about it:
 | edge |
 |---|
 | err:loop_body->BracelessMultiStatementBody \| wrong rule: Indenting several statements under an if or for makes them all part of its body, even without braces. \| right rule: Without braces only the first statement belongs to the if/for; the rest run once, after it. |
@@ -295,15 +295,15 @@ mis:loop_body->StatementAfterLoopInBody | correct | clauses: 1, 3 | confidence: 
 mis:loop_body->ComputerFillsInIntent | not applied | clauses: none | confidence: 0.7
 ```
 
-Parsed labels:
+The labels as the program read them:
 | edge | label | prune score | confidence | score | clauses | words |
 |---|---|---|---|---|---|---|
 | err:loop_body->BracelessMultiStatementBody | correct | 0.6000000000000001 | 0.95 | 0.57 | c1, c2, c3 | Without braces a for loop repeats only the one statement right after its header; The indentation does not matter; so the println lines are not part of the loop |
 | mis:loop_body->StatementAfterLoopInBody | correct | 0.30000000000000004 | 0.8 | 0.24 | c1, c3 | Without braces a for loop repeats only the one statement right after its header; so the println lines are not part of the loop |
 | mis:loop_body->ComputerFillsInIntent | not applied |  |  | 0.0 |  |  |
 
-#### loop_body, level ways: 14 edges offered
-Edges offered:
+#### loop_body: 14 ways of showing a level offered
+What the graph offers:
 | edge |
 |---|
 | lvl:loop_body@L0#0 \| level L0 way everyday_reading: Folk meaning: an everyday 'repeat this' instruction can be read loosely - a helper fills in missing steps, does each step N times in turn, or stops partway. A Java loop body is exactly the statements inside its braces (or one statement), all executed in order on every pass. |
@@ -321,15 +321,15 @@ Edges offered:
 | lvl:loop_body@L4#1 \| level L4 way diagnose_an_error: rule broken: Without braces, the body of an if, while or for is exactly one statement; indentation does not add statements to it. Kind: silent logic error. Trigger class: A braceless header followed by two or more indented statements: only the first is controlled, the others run once, after the if/loop, on every input. |
 | lvl:loop_body@L4#2 \| level L4 way transfer_to_a_new_program: Put inside the body exactly what must happen once per pass; put set-up before the loop and final reporting after it. Always brace a multi-statement body. |
 
-Prune: the model's reply (edge id and score; the kept edges sum to 1):
+Step 1, pick the relevant ones. The model's reply (each picked item with its relevance score; the scores add up to 1):
 ```
 {lvl:loop_body@L1#1 (Score: 0.45)}
 {lvl:loop_body@L4#1 (Score: 0.4)}
 {lvl:loop_body@L1#0 (Score: 0.15)}
 ```
-Kept by pruning: lvl:loop_body@L1#1 (0.45), lvl:loop_body@L4#1 (0.40), lvl:loop_body@L1#0 (0.15)
+Picked: lvl:loop_body@L1#1 (0.45), lvl:loop_body@L4#1 (0.40), lvl:loop_body@L1#0 (0.15)
 
-Label prompt for level way lvl:loop_body@L1#1 (the model saw only the concept, the way's name 'states the rule' and its text; no level):
+Step 2, judge one way of showing a level (lvl:loop_body@L1#1, 'states the rule'). The model saw only the description below, not the level it belongs to, and answers shown or not shown:
 > The body is the block after the loop header; braces are optional only if it is a single statement, in which case only that one statement is repeated.
 
 Model's reply:
@@ -339,7 +339,7 @@ Clauses: 1, 3
 Confidence: 0.9
 ```
 
-Label prompt for level way lvl:loop_body@L4#1 (the model saw the concept, the way's name 'diagnose an error', its text, where the way stops and whether the words must be correct; no level):
+Step 2, judge one way of showing a higher level (lvl:loop_body@L4#1, 'diagnose an error'). The model saw the description below and where this way stops, not the level it belongs to, and answers shown, wrong or not shown:
 > rule broken: Without braces, the body of an if, while or for is exactly one statement; indentation does not add statements to it. Kind: silent logic error. Trigger class: A braceless header followed by two or more indented statements: only the first is controlled, the others run once, after the if/loop, on every input.
 >
 > Where this way stops: Locating and fixing the mistake for one given failing case is L3. A compiler-flagged slip fixed from the message is weak evidence.
@@ -351,7 +351,7 @@ Clauses: 1, 2, 3
 Confidence: 0.7
 ```
 
-Label prompt for level way lvl:loop_body@L1#0 (the model saw only the concept, the way's name 'names the element' and its text; no level):
+Step 2, judge one way of showing a level (lvl:loop_body@L1#0, 'names the element'). The model saw only the description below, not the level it belongs to, and answers shown or not shown:
 > The loop body is the statement block that a loop repeats on each pass.
 
 Model's reply:
@@ -361,15 +361,15 @@ Clauses: 1, 3
 Confidence: 0.85
 ```
 
-Parsed labels:
+The labels as the program read them:
 | edge | label | prune score | confidence | score | clauses | words |
 |---|---|---|---|---|---|---|
 | lvl:loop_body@L1#1 | shown | 0.45 | 0.9 | 0.41 | c1, c3 | Without braces a for loop repeats only the one statement right after its header; so the println lines are not part of the loop |
 | lvl:loop_body@L4#1 | shown | 0.4 | 0.7 | 0.28 | c1, c2, c3 | Without braces a for loop repeats only the one statement right after its header; The indentation does not matter; so the println lines are not part of the loop |
 | lvl:loop_body@L1#0 | shown | 0.15 | 0.85 | 0.13 | c1, c3 | Without braces a for loop repeats only the one statement right after its header; so the println lines are not part of the loop |
 
-#### control_flow, misconceptions: 11 edges offered
-Edges offered:
+#### control_flow: 11 possible mistakes offered
+What the graph offers:
 | edge |
 |---|
 | mis:control_flow->CodeAfterIfSkipped \| wrong rule: When the then branch runs, the code after the if is skipped. \| right rule: After the if finishes, execution continues with the next statement either way. |
@@ -384,13 +384,13 @@ Edges offered:
 | mis:control_flow->ReturnDoesNotExitLoop \| wrong rule: A return inside a loop does not end the loop; it sets a value each pass (the last one is returned) or returns several values. \| right rule: When return executes, the method ends at once, so the loop stops on that pass. |
 | mis:control_flow->StatementsRunInAnyOrder \| wrong rule: Statements in a program can run in any order. \| right rule: Without control statements, statements run once each, top to bottom. |
 
-Prune: the model's reply (edge id and score; the kept edges sum to 1):
+Step 1, pick the relevant ones. The model's reply (each picked item with its relevance score; the scores add up to 1):
 ```
 mis:control_flow->FalseLoopRepeatsNextCode (0.60), mis:control_flow->ProgramEndsAfterLoop (0.25), mis:control_flow->StatementsRunInAnyOrder (0.15)
 ```
-Kept by pruning: mis:control_flow->FalseLoopRepeatsNextCode (0.60), mis:control_flow->ProgramEndsAfterLoop (0.25), mis:control_flow->StatementsRunInAnyOrder (0.15)
+Picked: mis:control_flow->FalseLoopRepeatsNextCode (0.60), mis:control_flow->ProgramEndsAfterLoop (0.25), mis:control_flow->StatementsRunInAnyOrder (0.15)
 
-Label prompt for the misconception / error edges (judged together). The model saw the program, the question, the numbered clauses, and these edges with their wrong rule and right rule:
+Step 2, judge the possible mistakes of this concept (all in one question). The model saw the program, the question, the numbered clauses and each possible mistake with its wrong rule and the right rule. held = the student follows the wrong rule; correct = the student follows the right rule; not applied = the answer says nothing about it:
 | edge |
 |---|
 | mis:control_flow->FalseLoopRepeatsNextCode \| wrong rule: A loop is an iterative if-else: while the condition is true the body repeats, and when it is false the code after the loop repeats. \| right rule: Only the body is repeated; once the condition is false the code after the loop runs once. |
@@ -403,15 +403,15 @@ mis:control_flow->ProgramEndsAfterLoop | not applied | clauses: none | confidenc
 mis:control_flow->StatementsRunInAnyOrder | not applied | clauses: none | confidence: 0.9
 ```
 
-Parsed labels:
+The labels as the program read them:
 | edge | label | prune score | confidence | score | clauses | words |
 |---|---|---|---|---|---|---|
 | mis:control_flow->FalseLoopRepeatsNextCode | correct | 0.6 | 0.6 | 0.36 | c1, c3 | Without braces a for loop repeats only the one statement right after its header; so the println lines are not part of the loop |
 | mis:control_flow->ProgramEndsAfterLoop | not applied |  |  | 0.0 |  |  |
 | mis:control_flow->StatementsRunInAnyOrder | not applied |  |  | 0.0 |  |  |
 
-#### control_flow, level ways: 15 edges offered
-Edges offered:
+#### control_flow: 15 ways of showing a level offered
+What the graph offers:
 | edge |
 |---|
 | lvl:control_flow@L0#0 \| level L0 way everyday_reading: Folk meaning: in everyday instructions a listener reads the whole list at once, does steps in a sensible order and infers what the writer wants. Java instead executes statements one at a time, top to bottom, each only when control reaches it, and nothing later in the program has any effect earlier. |
@@ -430,15 +430,15 @@ Edges offered:
 | lvl:control_flow@L4#2 \| level L4 way diagnose_an_error: rule broken: A local variable must be definitely assigned on every control-flow path before it is read. Kind: compile-time. Trigger class: A variable assigned only inside an if branch (or only in a loop body) and read after it: the compiler reports 'variable might not have been initialized'. |
 | lvl:control_flow@L4#3 \| level L4 way diagnose_an_error: rule broken: Statements run in the order written, so an update must come before the statement that needs the new value. Kind: silent logic error. Trigger class: Swapping two dependent statements (e.g. printing before updating, or incrementing the index before using it): output is shifted or off by one pass, with no error. |
 
-Prune: the model's reply (edge id and score; the kept edges sum to 1):
+Step 1, pick the relevant ones. The model's reply (each picked item with its relevance score; the scores add up to 1):
 ```
 {lvl:control_flow@L1#1 (Score: 0.5)}
 {lvl:control_flow@L4#0 (Score: 0.3)}
 {lvl:control_flow@L3#0 (Score: 0.2)}
 ```
-Kept by pruning: lvl:control_flow@L1#1 (0.50), lvl:control_flow@L4#0 (0.30), lvl:control_flow@L3#0 (0.20)
+Picked: lvl:control_flow@L1#1 (0.50), lvl:control_flow@L4#0 (0.30), lvl:control_flow@L3#0 (0.20)
 
-Label prompt for level way lvl:control_flow@L1#1 (the model saw only the concept, the way's name 'states the rule' and its text; no level):
+Step 2, judge one way of showing a level (lvl:control_flow@L1#1, 'states the rule'). The model saw only the description below, not the level it belongs to, and answers shown or not shown:
 > Without control statements every statement executes once, in the order given; a block executes its statements in order from first to last; if/if-else choose between one or two alternatives and loops repeat statements depending on a condition.
 
 Model's reply:
@@ -448,7 +448,7 @@ Clauses: 1, 3
 Confidence: 0.7
 ```
 
-Label prompt for level way lvl:control_flow@L4#0 (the model saw the concept, the way's name 'predict a change', its text, where the way stops and whether the words must be correct; no level):
+Step 2, judge one way of showing a higher level (lvl:control_flow@L4#0, 'predict a change'). The model saw the description below and where this way stops, not the level it belongs to, and answers shown, wrong or not shown:
 > Reordering two statements generally changes the result whenever one reads a variable that the other writes (e.g. swapping x = x + 1 and print(x)); reordering is safe only for statements that touch disjoint variables. Moving a statement into or out of a branch or loop body changes how many times it runs (0, 1 or n).
 >
 > Where this way stops: Re-tracing the changed code value by value is L2 on the new code. Adapting given code to a familiar variant may be only relational.
@@ -460,7 +460,7 @@ Clauses: none
 Confidence: 0.8
 ```
 
-Label prompt for level way lvl:control_flow@L3#0 (the model saw the concept, the way's name 'relation to neighbour', its text, where the way stops and whether the words must be correct; no level):
+Step 2, judge one way of showing a higher level (lvl:control_flow@L3#0, 'relation to neighbour'). The model saw the description below and where this way stops, not the level it belongs to, and answers shown, wrong or not shown:
 > Control flow is defined over statements: statements are executed for their effect, and if/while/for are themselves statements that may be used wherever a statement is allowed, so they can nest.
 >
 > Where this way stops: Two correct but separate rules are L1. Executing the two in sequence is L2. A relational answer may be correct or a relational error.
@@ -472,46 +472,46 @@ Clauses: 1, 2, 3
 Confidence: 0.8
 ```
 
-Parsed labels:
+The labels as the program read them:
 | edge | label | prune score | confidence | score | clauses | words |
 |---|---|---|---|---|---|---|
 | lvl:control_flow@L1#1 | shown | 0.5 | 0.7 | 0.35 | c1, c3 | Without braces a for loop repeats only the one statement right after its header; so the println lines are not part of the loop |
 | lvl:control_flow@L4#0 | not applied |  |  | 0.0 |  |  |
 | lvl:control_flow@L3#0 | shown | 0.2 | 0.8 | 0.16 | c1, c2, c3 | Without braces a for loop repeats only the one statement right after its header; The indentation does not matter; so the println lines are not part of the loop |
 
-**Kept on a path at this depth** (best N in tiers: held misconception / broken edge, then held error, then correct / confirmed / shown):
+**Kept in this round** (mistakes first, then findings that only confirm understanding; only the best few are kept):
 
 err:for_loop->BracelessMultiStatementBody [correct, tier 2, 0.67], err:loop_body->BracelessMultiStatementBody [correct, tier 2, 0.57], lvl:for_loop@L4#6 [shown, tier 2, 0.56]
 
-**Clause coverage after this depth:**
+**Which clauses are explained so far:**
 | clause | text | covered by |
 |---|---|---|
 | c1 | Without braces a for loop repeats only the one statement right after its header | err:for_loop->BracelessMultiStatementBody |
 | c2 | The indentation does not matter | err:for_loop->BracelessMultiStatementBody |
 | c3 | so the println lines are not part of the loop | err:for_loop->BracelessMultiStatementBody |
 
-**Graph check, not yet read (the walk may not stop while these remain):** pre:for_loop->loop_body, pre:loop_control->for_loop, pre:statement->control_flow
+**Links not read yet (the reading does not stop while some remain):** pre:for_loop->loop_body, pre:loop_control->for_loop, pre:statement->control_flow
 
-**Figure 4 (the graph after depth 1)**
+**Figure 4 (the graph after round 1)**
 
 ![Figure 4](figure04.png)
-### Depth 2: current concepts 'for_loop', 'loop_body', 'control_flow'
+### Round 2: the concepts being looked at are 'for_loop', 'loop_body', 'control_flow'
 
-#### for_loop, concept edges: 2 edges offered
-Edges offered:
+#### for_loop: 2 links to neighbouring concepts offered
+What the graph offers:
 | edge |
 |---|
 | pre:for_loop->loop_body \| rule: The statements in braces after the for header are the loop body; they run once on every pass, between the test and the increment, exactly as in a while loop. |
 | pre:loop_control->for_loop \| rule: The for header is exactly the three control slots, and the body runs after the test and before the update on each pass. |
 
-Prune: the model's reply (edge id and score; the kept edges sum to 1):
+Step 1, pick the relevant ones. The model's reply (each picked item with its relevance score; the scores add up to 1):
 ```
 {pre:for_loop->loop_body (Score: 0.7)}
 {pre:loop_control->for_loop (Score: 0.3)}
 ```
-Kept by pruning: pre:for_loop->loop_body (0.70), pre:loop_control->for_loop (0.30)
+Picked: pre:for_loop->loop_body (0.70), pre:loop_control->for_loop (0.30)
 
-Label prompt for concept edge pre:for_loop->loop_body (for_loop -> loop_body, prerequisite):
+Step 2, judge the link between two concepts (pre:for_loop->loop_body). The model answers confirmed (the student carries the rule from the first concept into the second), broken (the student fails to) or not applied:
 > The statements in braces after the for header are the loop body; they run once on every pass, between the test and the increment, exactly as in a while loop.
 
 Model's reply:
@@ -521,7 +521,7 @@ Clauses: 1, 2, 3
 Confidence: 0.85
 ```
 
-Label prompt for concept edge pre:loop_control->for_loop (loop_control -> for_loop, prerequisite):
+Step 2, judge the link between two concepts (pre:loop_control->for_loop). The model answers confirmed (the student carries the rule from the first concept into the second), broken (the student fails to) or not applied:
 > The for header is exactly the three control slots, and the body runs after the test and before the update on each pass.
 
 Model's reply:
@@ -531,25 +531,25 @@ Clauses: none
 Confidence: 0.6
 ```
 
-Parsed labels:
+The labels as the program read them:
 | edge | label | prune score | confidence | score | clauses | words |
 |---|---|---|---|---|---|---|
 | pre:for_loop->loop_body | confirmed | 0.7 | 0.85 | 0.59 | c1, c2, c3 | Without braces a for loop repeats only the one statement right after its header; The indentation does not matter; so the println lines are not part of the loop |
 | pre:loop_control->for_loop | not applied |  |  | 0.0 |  |  |
 
-#### control_flow, concept edges: 1 edges offered
-Edges offered:
+#### control_flow: 1 links to neighbouring concepts offered
+What the graph offers:
 | edge |
 |---|
 | pre:statement->control_flow \| rule: Control flow is the order in which statements run. |
 
-Prune: the model's reply (edge id and score; the kept edges sum to 1):
+Step 1, pick the relevant ones. The model's reply (each picked item with its relevance score; the scores add up to 1):
 ```
 {pre:statement->control_flow (Score: 1.0)}
 ```
-Kept by pruning: pre:statement->control_flow (1.00)
+Picked: pre:statement->control_flow (1.00)
 
-Label prompt for concept edge pre:statement->control_flow (statement -> control_flow, prerequisite):
+Step 2, judge the link between two concepts (pre:statement->control_flow). The model answers confirmed (the student carries the rule from the first concept into the second), broken (the student fails to) or not applied:
 > Control flow is the order in which statements run.
 
 Model's reply:
@@ -559,33 +559,33 @@ Clauses: 1, 3
 Confidence: 0.8
 ```
 
-Parsed labels:
+The labels as the program read them:
 | edge | label | prune score | confidence | score | clauses | words |
 |---|---|---|---|---|---|---|
 | pre:statement->control_flow | confirmed | 1.0 | 0.8 | 0.8 | c1, c3 | Without braces a for loop repeats only the one statement right after its header; so the println lines are not part of the loop |
 
-**Kept on a path at this depth** (best N in tiers: held misconception / broken edge, then held error, then correct / confirmed / shown):
+**Kept in this round** (mistakes first, then findings that only confirm understanding; only the best few are kept):
 
 pre:statement->control_flow [confirmed, tier 2, 0.80], pre:for_loop->loop_body [confirmed, tier 2, 0.59]
 
 reached across pre:statement->control_flow, entered next: statement
 
-**Clause coverage after this depth:**
+**Which clauses are explained so far:**
 | clause | text | covered by |
 |---|---|---|
 | c1 | Without braces a for loop repeats only the one statement right after its header | err:for_loop->BracelessMultiStatementBody |
 | c2 | The indentation does not matter | err:for_loop->BracelessMultiStatementBody |
 | c3 | so the println lines are not part of the loop | err:for_loop->BracelessMultiStatementBody |
 
-**Graph check, not yet read (the walk may not stop while these remain):** own edges of statement
+**Links not read yet (the reading does not stop while some remain):** own edges of statement
 
-**Figure 5 (the graph after depth 2)**
+**Figure 5 (the graph after round 2)**
 
 ![Figure 5](figure05.png)
-### Depth 3: current concepts 'statement', 'control_flow', 'loop_body', 'for_loop'
+### Round 3: the concepts being looked at are 'statement', 'control_flow', 'loop_body', 'for_loop'
 
-#### statement, misconceptions: 5 edges offered
-Edges offered:
+#### statement: 5 possible mistakes offered
+What the graph offers:
 | edge |
 |---|
 | err:statement->StatementNeedsNoTerminator \| wrong rule: A statement still compiles and runs if the semicolon at its end is left out, or if a stray ; is put right after if (c) or for (...). \| right rule: Each statement must end with ;, otherwise javac reports ';' expected. |
@@ -594,15 +594,15 @@ Edges offered:
 | mis:statement->StatementsRunInAnyOrder \| wrong rule: Statements in a program can run in any order. \| right rule: Without control statements, statements run once each, top to bottom. |
 | mis:statement->WhitespaceIsSignificant \| wrong rule: Line breaks and indentation change what the program does, so each statement must be on its own line. \| right rule: Java compilers consider all whitespace in program text (outside quotation marks) to be equivalent; layout is for human readers. |
 
-Prune: the model's reply (edge id and score; the kept edges sum to 1):
+Step 1, pick the relevant ones. The model's reply (each picked item with its relevance score; the scores add up to 1):
 ```
 {mis:statement->WhitespaceIsSignificant (Score: 0.6)}
 {mis:statement->ComputerFillsInIntent (Score: 0.25)}
 {mis:statement->StatementsRunInAnyOrder (Score: 0.15)}
 ```
-Kept by pruning: mis:statement->WhitespaceIsSignificant (0.60), mis:statement->ComputerFillsInIntent (0.25), mis:statement->StatementsRunInAnyOrder (0.15)
+Picked: mis:statement->WhitespaceIsSignificant (0.60), mis:statement->ComputerFillsInIntent (0.25), mis:statement->StatementsRunInAnyOrder (0.15)
 
-Label prompt for the misconception / error edges (judged together). The model saw the program, the question, the numbered clauses, and these edges with their wrong rule and right rule:
+Step 2, judge the possible mistakes of this concept (all in one question). The model saw the program, the question, the numbered clauses and each possible mistake with its wrong rule and the right rule. held = the student follows the wrong rule; correct = the student follows the right rule; not applied = the answer says nothing about it:
 | edge |
 |---|
 | mis:statement->WhitespaceIsSignificant \| wrong rule: Line breaks and indentation change what the program does, so each statement must be on its own line. \| right rule: Java compilers consider all whitespace in program text (outside quotation marks) to be equivalent; layout is for human readers. |
@@ -615,15 +615,15 @@ mis:statement->ComputerFillsInIntent | correct | clauses: 1, 3 | confidence: 0.6
 mis:statement->StatementsRunInAnyOrder | not applied | clauses: none | confidence: 0.85
 ```
 
-Parsed labels:
+The labels as the program read them:
 | edge | label | prune score | confidence | score | clauses | words |
 |---|---|---|---|---|---|---|
 | mis:statement->WhitespaceIsSignificant | correct | 0.6 | 0.95 | 0.57 | c1, c2, c3 | Without braces a for loop repeats only the one statement right after its header; The indentation does not matter; so the println lines are not part of the loop |
 | mis:statement->ComputerFillsInIntent | correct | 0.25 | 0.6 | 0.15 | c1, c3 | Without braces a for loop repeats only the one statement right after its header; so the println lines are not part of the loop |
 | mis:statement->StatementsRunInAnyOrder | not applied |  |  | 0.0 |  |  |
 
-#### statement, level ways: 19 edges offered
-Edges offered:
+#### statement: 19 ways of showing a level offered
+What the graph offers:
 | edge |
 |---|
 | lvl:statement@L0#0 \| level L0 way everyday_reading: Everyday reading: a program is read like a text or a list of wishes that the computer takes in all at once, so line order, goals of later lines or what the writer meant can matter. Java rule: each statement is one step, ended by ;, executed once, in written order, using only the current state. |
@@ -646,15 +646,15 @@ Edges offered:
 | lvl:statement@L4#2 \| level L4 way transfer_to_a_new_program: Write one statement per step and order them as the algorithm requires; straight-line sequence suffices when every step runs once, otherwise use conditionals or loops. |
 | lvl:statement@L4#3 \| level L4 way diagnose_an_error: rule broken: A ; directly after an if/while/for header is an empty statement. Kind: silent logic error. Trigger class: if (x > 0); or while (cond); followed by the intended body |
 
-Prune: the model's reply (edge id and score; the kept edges sum to 1):
+Step 1, pick the relevant ones. The model's reply (each picked item with its relevance score; the scores add up to 1):
 ```
 {lvl:statement@L4#0 (Score: 0.45)}
 {lvl:statement@L3#1 (Score: 0.3)}
 {lvl:statement@L3#4 (Score: 0.25)}
 ```
-Kept by pruning: lvl:statement@L4#0 (0.45), lvl:statement@L3#1 (0.30), lvl:statement@L3#4 (0.25)
+Picked: lvl:statement@L4#0 (0.45), lvl:statement@L3#1 (0.30), lvl:statement@L3#4 (0.25)
 
-Label prompt for level way lvl:statement@L4#0 (the model saw the concept, the way's name 'predict a change', its text, where the way stops and whether the words must be correct; no level):
+Step 2, judge one way of showing a higher level (lvl:statement@L4#0, 'predict a change'). The model saw the description below and where this way stops, not the level it belongs to, and answers shown, wrong or not shown:
 > Swapping two statements that touch the same variable or the output generally changes the result; swapping independent statements, or changing only whitespace between them, keeps it.
 >
 > Where this way stops: Re-tracing the changed code value by value is L2 on the new code. Adapting given code to a familiar variant may be only relational.
@@ -666,7 +666,7 @@ Clauses: none
 Confidence: 0.7
 ```
 
-Label prompt for level way lvl:statement@L3#1 (the model saw the concept, the way's name 'relation to neighbour', its text, where the way stops and whether the words must be correct; no level):
+Step 2, judge one way of showing a higher level (lvl:statement@L3#1, 'relation to neighbour'). The model saw the description below and where this way stops, not the level it belongs to, and answers shown, wrong or not shown:
 > A block groups a sequence of statements in braces; the body of main() is such a block.
 >
 > Where this way stops: Two correct but separate rules are L1. Executing the two in sequence is L2. A relational answer may be correct or a relational error.
@@ -678,7 +678,7 @@ Clauses: 1, 2, 3
 Confidence: 0.7
 ```
 
-Label prompt for level way lvl:statement@L3#4 (the model saw the concept, the way's name 'relation to neighbour', its text, where the way stops and whether the words must be correct; no level):
+Step 2, judge one way of showing a higher level (lvl:statement@L3#4, 'relation to neighbour'). The model saw the description below and where this way stops, not the level it belongs to, and answers shown, wrong or not shown:
 > Control flow is the order in which statements run; without control statements it is straight-line, each once in order.
 >
 > Where this way stops: Two correct but separate rules are L1. Executing the two in sequence is L2. A relational answer may be correct or a relational error.
@@ -690,27 +690,27 @@ Clauses: 1, 2, 3
 Confidence: 0.7
 ```
 
-Parsed labels:
+The labels as the program read them:
 | edge | label | prune score | confidence | score | clauses | words |
 |---|---|---|---|---|---|---|
 | lvl:statement@L4#0 | not applied |  |  | 0.0 |  |  |
 | lvl:statement@L3#1 | shown | 0.3 | 0.7 | 0.21 | c1, c2, c3 | Without braces a for loop repeats only the one statement right after its header; The indentation does not matter; so the println lines are not part of the loop |
 | lvl:statement@L3#4 | shown | 0.25 | 0.7 | 0.17 | c1, c2, c3 | Without braces a for loop repeats only the one statement right after its header; The indentation does not matter; so the println lines are not part of the loop |
 
-#### for_loop, concept edges: 1 edges offered
-Edges offered:
+#### for_loop: 1 links to neighbouring concepts offered
+What the graph offers:
 | edge |
 |---|
 | pre:for_loop->loop_body \| rule: The statements in braces after the for header are the loop body; they run once on every pass, between the test and the increment, exactly as in a while loop. |
 | pre:loop_control->for_loop \| rule: The for header is exactly the three control slots, and the body runs after the test and before the update on each pass. |
 
-Prune: the model's reply (edge id and score; the kept edges sum to 1):
+Step 1, pick the relevant ones. The model's reply (each picked item with its relevance score; the scores add up to 1):
 ```
 pre:loop_control->for_loop (1.00)
 ```
-Kept by pruning: pre:loop_control->for_loop (1.00)
+Picked: pre:loop_control->for_loop (1.00)
 
-Label prompt for concept edge pre:loop_control->for_loop (loop_control -> for_loop, prerequisite):
+Step 2, judge the link between two concepts (pre:loop_control->for_loop). The model answers confirmed (the student carries the rule from the first concept into the second), broken (the student fails to) or not applied:
 > The for header is exactly the three control slots, and the body runs after the test and before the update on each pass.
 
 Model's reply:
@@ -720,40 +720,42 @@ Clauses: none
 Confidence: 0.6
 ```
 
-Parsed labels:
+The labels as the program read them:
 | edge | label | prune score | confidence | score | clauses | words |
 |---|---|---|---|---|---|---|
 | pre:loop_control->for_loop | not applied |  |  | 0.0 |  |  |
 
-**Kept on a path at this depth** (best N in tiers: held misconception / broken edge, then held error, then correct / confirmed / shown):
+**Kept in this round** (mistakes first, then findings that only confirm understanding; only the best few are kept):
 
 mis:statement->WhitespaceIsSignificant [correct, tier 2, 0.57], lvl:statement@L3#1 [shown, tier 2, 0.21], lvl:statement@L3#4 [shown, tier 2, 0.17]
 
-**Clause coverage after this depth:**
+**Which clauses are explained so far:**
 | clause | text | covered by |
 |---|---|---|
 | c1 | Without braces a for loop repeats only the one statement right after its header | err:for_loop->BracelessMultiStatementBody |
 | c2 | The indentation does not matter | err:for_loop->BracelessMultiStatementBody |
 | c3 | so the println lines are not part of the loop | err:for_loop->BracelessMultiStatementBody |
 
-**Graph check, not yet read (the walk may not stop while these remain):** pre:statement->println
+**Links not read yet (the reading does not stop while some remain):** pre:statement->println
 
-**Figure 6 (the graph after depth 3)**
+**Figure 6 (the graph after round 3)**
 
 ![Figure 6](figure06.png)
-## 4. Diagnosis (rules over the labelled graph, no model)
-Root-cause walk: held on [], broken at [], prerequisites {'increment_operators': ['assignment', 'loop_control'], 'boolean_expression': ['comparison_operators'], 'comparison_operators': ['expression'], 'loop_body': ['for_loop'], 'for_loop': ['loop_control'], 'loop_control': ['loop_variable'], 'control_flow': ['statement'], 'println': ['statement']}
+## 4. Diagnosis (fixed rules, no model)
+
+From here on the model is not asked any more. Fixed rules decide which labels count as mistakes, where the mistake starts (the root cause) and the level of each concept.
+Finding where the mistake starts: held on [], broken at [], prerequisites {'increment_operators': ['assignment', 'loop_control'], 'boolean_expression': ['comparison_operators'], 'comparison_operators': ['expression'], 'loop_body': ['for_loop'], 'for_loop': ['loop_control'], 'loop_control': ['loop_variable'], 'control_flow': ['statement'], 'println': ['statement']}
 - control_flow: L3 via relation_to_neighbour "Without braces a for loop repeats only the one statement right after its header; The indentation does not matter; so the println lines are not part of the loop"
 - for_loop: L4 via diagnose_an_error "Without braces a for loop repeats only the one statement right after its header; The indentation does not matter; so the println lines are not part of the loop"
 - loop_body: L4 via diagnose_an_error "Without braces a for loop repeats only the one statement right after its header; The indentation does not matter; so the println lines are not part of the loop"
 - statement: L3 via relation_to_neighbour "Without braces a for loop repeats only the one statement right after its header; The indentation does not matter; so the println lines are not part of the loop"
 
-**Stop:** max depth at depth 3; prompts {'prune': 11, 'label': 20}, fresh model calls 0, cache hits 31
+**Why the reading stopped:** max depth, in round 3. Questions put to the model: {'prune': 11, 'label': 20} (new: 0, answered from stored replies: 31)
 
 ### Held misconceptions
 (none)
 
-### Broken concept edges
+### Links between concepts that the student breaks
 (none)
 
 ### Root cause: none
@@ -766,9 +768,11 @@ Root-cause walk: held on [], broken at [], prerequisites {'increment_operators':
 | loop_body | L4 | diagnose_an_error |  | level_way | Without braces a for loop repeats only the one statement right after its header; The indentation does not matter; so the println lines are not part of the loop |  | L1 states_the_rule, L1 names_the_element |  |
 | statement | L3 | relation_to_neighbour |  | level_way | Without braces a for loop repeats only the one statement right after its header; The indentation does not matter; so the println lines are not part of the loop |  | L3 relation_to_neighbour |  |
 
-### Overall level: L4
+### Overall level by the walk's own Stage 7 rule: L4
 
-Clause coverage (final):
+The overall level of this folder is the one in the section \"Level classification\" at the top; it can differ from this one.
+
+Which finding explains each clause, at the end:
 | clause | covered by |
 |---|---|
 | Without braces a for loop repeats only the one statement right after its header | err:for_loop->BracelessMultiStatementBody |
@@ -778,7 +782,7 @@ Clause coverage (final):
 **Figure 7 (final picture)**
 
 ![Figure 7](figure07.png)
-## 5. Every labelled edge (the evidence list, kept or not)
+## 5. Everything that got a label
 | depth | source | edge | kind | label | prune_score | confidence | score | clauses | quote |
 |---|---|---|---|---|---|---|---|---|---|
 | 1 | for_loop | err:for_loop->BracelessMultiStatementBody | error | correct | 0.7000000000000001 | 0.95 | 0.665 | [1, 2, 3] | Without braces a for loop repeats only the one statement right after its header; The indentation does not matter; so the println lines are not part of the loop |
@@ -800,7 +804,7 @@ Clause coverage (final):
 | 3 | statement | lvl:statement@L3#1 | level | shown | 0.3 | 0.7 | 0.21 | [1, 2, 3] | Without braces a for loop repeats only the one statement right after its header; The indentation does not matter; so the println lines are not part of the loop |
 | 3 | statement | lvl:statement@L3#4 | level | shown | 0.25 | 0.7 | 0.175 | [1, 2, 3] | Without braces a for loop repeats only the one statement right after its header; The indentation does not matter; so the println lines are not part of the loop |
 
-## 6. The paths (what the keep step kept, depth by depth)
+## 6. What was kept, round by round
 | depth | source | edge | kind | label | score | clauses |
 |---|---|---|---|---|---|---|
 | 1 | for_loop | err:for_loop->BracelessMultiStatementBody | error | correct | 0.665 | [1, 2, 3] |
@@ -812,7 +816,7 @@ Clause coverage (final):
 | 3 | statement | lvl:statement@L3#1 | level | shown | 0.21 | [1, 2, 3] |
 | 3 | statement | lvl:statement@L3#4 | level | shown | 0.175 | [1, 2, 3] |
 
-## 7. Raw traversal log
+## 7. The program's own log of the run
 ```
 clauses: Without braces a for loop repeats only the one statement right after its header | The indentation does not matter | so the println lines are not part of the loop
 start: BM25 of the answer against each tagged concept: for_loop 15.63 (hits 1), loop_body 14.04 (hits 1), control_flow 10.95 (hits 1), println 10.75 (hits 1), loop_control 7.94 (hits 1), loop_variable 5.91 (hits 1), boolean_expression 5.07 (hits 1), comparison_operators 4.46 (hits 1), increment_operators 4.03 (hits 1)
@@ -877,7 +881,7 @@ start concepts (3): for_loop, loop_body, control_flow
   level statement: L3 via relation_to_neighbour "Without braces a for loop repeats only the one statement right after its header; The indentation does not matter; so the println lines are not part of the loop"
 ```
 
-## 8. Full diagnosis JSON
+## 8. The full result as data
 ```json
 {
  "scenario": "LP09",

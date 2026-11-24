@@ -42,8 +42,8 @@ Question: What is the value of i when the second println runs? Explain how i get
 
 Student's answer: i is 5. The loop runs for i = 1, 2, 3, 4 and stops when i reaches 5; the i++ in the body does not affect the count.
 Settings: width 3, depth 3, prune llm, backend claude-cli, model claude-opus-5-5
-## 1. Stage 1: the subgraph G from the code (no model)
-Masked code (string and char literals and comments blanked; this is what the patterns see):
+## 1. Stage 1: which concepts the program uses (no model)
+The program with the text in quotes and the comments blanked out, so that only real code is read:
 ```
 int i, n = 5;
 for (i = 1; i < n; i++)
@@ -51,7 +51,7 @@ for (i = 1; i < n; i++)
     System.out.println(i);
 System.out.println(i);
 ```
-Which code text tagged which concept (a generic concept fires on almost any Java line; it starts the walk only if the answer repeats its tag):
+Which piece of the code points to which concept. A generic concept is one that almost every Java program has; the reading starts from it only if the student's answer mentions it:
 | concept | generic | channel | matched text | line |
 |---|---|---|---|---|
 | assignment | True | pattern | '=' | 1 |
@@ -68,10 +68,10 @@ Which code text tagged which concept (a generic concept fires on almost any Java
 | println | False | pattern | 'System.out.println(' | 4 |
 | statement | True | pattern | ';' | 1 |
 
-G: 12 concept nodes (3 generic), 10 concept edges, 116 misconception / error edges, 84 misconception / error nodes, 60 level nodes, 120 level-misconception links, 2 connected piece(s).
+The part of the knowledge graph used for this program (called G) has 12 concepts (3 of them generic), 10 links between concepts, 116 links from a concept to a possible mistake (84 different mistakes) and 60 level entries (five levels, L0 to L4, for each concept). It is in 2 connected piece(s).
 Note: concept nodes form 2 pieces (the KG has no edge between them): assignment,boolean_expression,comparison_operators,expression,for_loop,increment_operators,loop_body,loop_control,loop_variable | control_flow,println,statement
 
-Concept edges of G (the links the walk can read; `pre:` = prerequisite A -> B, `par:` = parallel):
+The links between these concepts. `pre:` means the first concept must be understood before the second; `par:` means the two are learned side by side:
 | edge | type | rule (logic) |
 |---|---|---|
 | par:assignment~comparison_operators | parallel | x = y stores the value of y in x (a statement with a side effect); x == y only tests whether the two values are equal and gives a boolean. Writing = where == is meant is a compile error with int operands and a silent bug with boolean operands. |
@@ -85,8 +85,8 @@ Concept edges of G (the links the walk can read; `pre:` = prerequisite A -> B, `
 | pre:statement->control_flow | prerequisite | Control flow is the order in which statements run. |
 | pre:statement->println | prerequisite | System.out.println(s); is itself a statement, so its line of output appears at its own place in the sequence. |
 
-Misconception / error edges per concept (count), and level ways per concept (count):
-| concept | misconception / error edges | level ways (L1-L4 + L0 non-misconception) |
+For each concept: how many possible mistakes the graph lists for it, and how many ways of showing a level:
+| concept | possible mistakes | ways of showing a level |
 |---|---|---|
 | assignment | 15 | 24 |
 | boolean_expression | 8 | 19 |
@@ -107,8 +107,8 @@ Misconception / error edges per concept (count), and level ways per concept (cou
 **Figure 2**
 
 ![Figure 2](figure02.png)
-## 2. Clauses and start concepts (no model)
-The answer split into clauses (at sentence ends, ';', and before 'because' / 'so'; quotes removed):
+## 2. The answer in pieces, and where the reading starts (no model)
+The student's answer cut into short pieces (clauses), so that every finding can point to the exact words it rests on:
 | clause | text |
 |---|---|
 | c1 | i is 5 |
@@ -123,18 +123,18 @@ start: chosen loop_control, for_loop, assignment
 
 start concepts (3): loop_control, for_loop, assignment
 
-Start concepts: loop_control, for_loop, assignment
+The reading starts at the concepts whose description is closest to the student's words. Start concepts: loop_control, for_loop, assignment
 
 **Figure 3**
 
 ![Figure 3](figure03.png)
-## 3. The walk, depth by depth
-At each depth, for each current concept: the edges offered (a concept entering as a start concept offers its misconception / error edges and its level ways, as two families; otherwise it offers its concept edges), the prune prompt and the model's reply, then the label prompt(s) and the model's reply, parsed into label / clauses / confidence. Score = prune score x confidence.
+## 3. Reading the answer against the graph, round by round (the model is asked here)
+The answer is read in rounds. In each round, for each concept being looked at, three things happen. First the graph offers what could be said about the concept: the possible mistakes, the ways of showing a level, or the links to neighbouring concepts. Then the model picks the few that matter for this answer. Then the model judges each picked one against the student's clauses and gives a label, the clause numbers it rests on and a confidence from 0 to 1. Score = relevance score x confidence.
 
-### Depth 1: current concepts 'loop_control', 'for_loop', 'assignment'
+### Round 1: the concepts being looked at are 'loop_control', 'for_loop', 'assignment'
 
-#### loop_control, misconceptions: 11 edges offered
-Edges offered:
+#### loop_control: 11 possible mistakes offered
+What the graph offers:
 | edge |
 |---|
 | err:loop_control->WrongIterationCount \| wrong rule: Updates the loop counter so that the loop runs the wrong number of times. \| right rule: The init, test and update together decide the number of passes; trace them to check the count. |
@@ -149,13 +149,13 @@ Edges offered:
 | mis:loop_control->OffByOneBound \| wrong rule: i < n and i <= n mean the same, so the loop runs until i equals n and the last pass can use a[n]. \| right rule: for (i = 0; i < n; i++) runs n times with i going up to n - 1; with <= it runs n + 1 times and reaches i = n. |
 | mis:loop_control->PreIncrementBeforeLoop \| wrong rule: With ++i in the update of for (int i = s; i < n; ++i), i is increased before the body runs, so the first pass uses s + 1. \| right rule: The update runs after each pass of the body, so with either ++i or i++ the first pass uses i = s. |
 
-Prune: the model's reply (edge id and score; the kept edges sum to 1):
+Step 1, pick the relevant ones. The model's reply (each picked item with its relevance score; the scores add up to 1):
 ```
 mis:loop_control->IdiomOverridesCode (0.45), err:loop_control->WrongIterationCount (0.35), mis:loop_control->LoopStepAlwaysOne (0.20)
 ```
-Kept by pruning: mis:loop_control->IdiomOverridesCode (0.45), err:loop_control->WrongIterationCount (0.35), mis:loop_control->LoopStepAlwaysOne (0.20)
+Picked: mis:loop_control->IdiomOverridesCode (0.45), err:loop_control->WrongIterationCount (0.35), mis:loop_control->LoopStepAlwaysOne (0.20)
 
-Label prompt for the misconception / error edges (judged together). The model saw the program, the question, the numbered clauses, and these edges with their wrong rule and right rule:
+Step 2, judge the possible mistakes of this concept (all in one question). The model saw the program, the question, the numbered clauses and each possible mistake with its wrong rule and the right rule. held = the student follows the wrong rule; correct = the student follows the right rule; not applied = the answer says nothing about it:
 | edge |
 |---|
 | mis:loop_control->IdiomOverridesCode \| wrong rule: An array loop processes the whole array from index 0 to length-1 and increments its index at the end of the body, whatever the code says. \| right rule: The loop visits exactly the indices that its initialisation, guard and update produce, in the order in which its statements are written. |
@@ -168,15 +168,15 @@ err:loop_control->WrongIterationCount | not applied | clauses: none | confidence
 mis:loop_control->LoopStepAlwaysOne | held | clauses: 2, 3 | confidence: 0.55
 ```
 
-Parsed labels:
+The labels as the program read them:
 | edge | label | prune score | confidence | score | clauses | words |
 |---|---|---|---|---|---|---|
 | mis:loop_control->IdiomOverridesCode | held | 0.45 | 0.6 | 0.27 | c2, c3 | The loop runs for i = 1, 2, 3, 4 and stops when i reaches 5; the i++ in the body does not affect the count |
 | err:loop_control->WrongIterationCount | not applied |  |  | 0.0 |  |  |
 | mis:loop_control->LoopStepAlwaysOne | held | 0.2 | 0.55 | 0.11 | c2, c3 | The loop runs for i = 1, 2, 3, 4 and stops when i reaches 5; the i++ in the body does not affect the count |
 
-#### loop_control, level ways: 19 edges offered
-Edges offered:
+#### loop_control: 19 ways of showing a level offered
+What the graph offers:
 | edge |
 |---|
 | lvl:loop_control@L0#0 \| level L0 way everyday_reading: Folk meaning: in mathematics i = 0, i < n and i = i + 1 are equations or constraints that hold at the same time (and i = i + 1 is nonsense). In Java they are three actions run at different moments: init once, test before each pass, update after each pass. |
@@ -199,15 +199,15 @@ Edges offered:
 | lvl:loop_control@L4#3 \| level L4 way diagnose_an_error: rule broken: The update must move the loop variable toward making the condition false. Kind: silent logic error. Trigger class: An update in the wrong direction or a condition that the update cannot falsify (e.g. i > 3 with i++, or i != 10 with i += 3): infinite loop. |
 | lvl:loop_control@L4#4 \| level L4 way diagnose_an_error: rule broken: Do not control a loop by an equality test on double values. Kind: silent logic error. Trigger class: for (double x = 0.0; x < 1.0; x += 0.1): after ten additions x is 0.9999999999999999, so the loop makes 11 passes instead of the intended 10. |
 
-Prune: the model's reply (edge id and score; the kept edges sum to 1):
+Step 1, pick the relevant ones. The model's reply (each picked item with its relevance score; the scores add up to 1):
 ```
 {lvl:loop_control@L0#3 (Score: 0.5)}
 {lvl:loop_control@L4#1 (Score: 0.3)}
 {lvl:loop_control@L2#1 (Score: 0.2)}
 ```
-Kept by pruning: lvl:loop_control@L0#3 (0.50), lvl:loop_control@L4#1 (0.30), lvl:loop_control@L2#1 (0.20)
+Picked: lvl:loop_control@L0#3 (0.50), lvl:loop_control@L4#1 (0.30), lvl:loop_control@L2#1 (0.20)
 
-Label prompt for level way lvl:loop_control@L0#3 (the model saw only the concept, the way's name 'inconsistent trace' and its text; no level):
+Step 2, judge one way of showing a level (lvl:loop_control@L0#3, 'inconsistent trace'). The model saw only the description below, not the level it belongs to, and answers shown or not shown:
 > Applies the init-test-update rule (LT) unevenly: updates before the body on some passes, skips the test or the update on a pass, or re-runs the init. (here mixing in: "++i in the for-update runs before the body each pass")
 
 Model's reply:
@@ -217,7 +217,7 @@ Clauses: none
 Confidence: 0.7
 ```
 
-Label prompt for level way lvl:loop_control@L4#1 (the model saw the concept, the way's name 'diagnose an error', its text, where the way stops and whether the words must be correct; no level):
+Step 2, judge one way of showing a higher level (lvl:loop_control@L4#1, 'diagnose an error'). The model saw the description below and where this way stops, not the level it belongs to, and answers shown, wrong or not shown:
 > rule broken: The number of passes is fixed by the init, the test and the update together. Kind: silent logic error. Trigger class: Wrong start value, < vs <=, a wrong step, or an extra update of the counter in the body (or outside the loop): the loop runs too few or too many passes (off by one, or skips values).
 >
 > Where this way stops: Locating and fixing the mistake for one given failing case is L3. A compiler-flagged slip fixed from the message is weak evidence.
@@ -229,7 +229,7 @@ Clauses: 2, 3
 Confidence: 0.8
 ```
 
-Label prompt for level way lvl:loop_control@L2#1 (the model saw only the concept, the way's name 'output prediction' and its text; no level):
+Step 2, judge one way of showing a level (lvl:loop_control@L2#1, 'output prediction'). The model saw only the description below, not the level it belongs to, and answers shown or not shown:
 > The number of passes and the values seen follow from the three parts: for (int i = 0; i <= N; i++) makes N+1 passes with i = 0..N; with i < N it makes N passes; i += 2 visits every second value.
 
 Model's reply:
@@ -239,13 +239,13 @@ Clauses: 2
 Confidence: 0.7
 ```
 
-Parsed labels:
+The labels as the program read them:
 | edge | label | prune score | confidence | score | clauses | words |
 |---|---|---|---|---|---|---|
 | lvl:loop_control@L0#3 | not applied |  |  | 0.0 |  |  |
 
-#### for_loop, misconceptions: 20 edges offered
-Edges offered:
+#### for_loop: 20 possible mistakes offered
+What the graph offers:
 | edge |
 |---|
 | err:for_loop->BracelessMultiStatementBody \| wrong rule: Indenting several statements under an if or for makes them all part of its body, even without braces. \| right rule: Without braces only the first statement belongs to the if/for; the rest run once, after it. |
@@ -269,13 +269,13 @@ Edges offered:
 | mis:for_loop->ReturnDoesNotExitLoop \| wrong rule: A return inside a loop does not end the loop; it sets a value each pass (the last one is returned) or returns several values. \| right rule: When return executes, the method ends at once, so the loop stops on that pass. |
 | mis:for_loop->SingleIterationInsteadOfLoop \| wrong rule: A task that must be repeated is written once, without a loop, as if one pass were enough. \| right rule: A step that must happen several times (or an unknown number of times) needs a loop such as while or for; code without a loop runs once. |
 
-Prune: the model's reply (edge id and score; the kept edges sum to 1):
+Step 1, pick the relevant ones. The model's reply (each picked item with its relevance score; the scores add up to 1):
 ```
 mis:for_loop->IdiomOverridesCode (0.45), mis:for_loop->LoopStepAlwaysOne (0.30), err:for_loop->WrongIterationCount (0.25)
 ```
-Kept by pruning: mis:for_loop->IdiomOverridesCode (0.45), mis:for_loop->LoopStepAlwaysOne (0.30), err:for_loop->WrongIterationCount (0.25)
+Picked: mis:for_loop->IdiomOverridesCode (0.45), mis:for_loop->LoopStepAlwaysOne (0.30), err:for_loop->WrongIterationCount (0.25)
 
-Label prompt for the misconception / error edges (judged together). The model saw the program, the question, the numbered clauses, and these edges with their wrong rule and right rule:
+Step 2, judge the possible mistakes of this concept (all in one question). The model saw the program, the question, the numbered clauses and each possible mistake with its wrong rule and the right rule. held = the student follows the wrong rule; correct = the student follows the right rule; not applied = the answer says nothing about it:
 | edge |
 |---|
 | mis:for_loop->IdiomOverridesCode \| wrong rule: An array loop processes the whole array from index 0 to length-1 and increments its index at the end of the body, whatever the code says. \| right rule: The loop visits exactly the indices that its initialisation, guard and update produce, in the order in which its statements are written. |
@@ -288,15 +288,15 @@ mis:for_loop->LoopStepAlwaysOne | not applied | clauses: none | confidence: 0.6
 err:for_loop->WrongIterationCount | held | clauses: 2, 3 | confidence: 0.85
 ```
 
-Parsed labels:
+The labels as the program read them:
 | edge | label | prune score | confidence | score | clauses | words |
 |---|---|---|---|---|---|---|
 | mis:for_loop->IdiomOverridesCode | not applied |  |  | 0.0 |  |  |
 | mis:for_loop->LoopStepAlwaysOne | not applied |  |  | 0.0 |  |  |
 | err:for_loop->WrongIterationCount | held | 0.25 | 0.85 | 0.21 | c2, c3 | The loop runs for i = 1, 2, 3, 4 and stops when i reaches 5; the i++ in the body does not affect the count |
 
-#### for_loop, level ways: 24 edges offered
-Edges offered:
+#### for_loop: 24 ways of showing a level offered
+What the graph offers:
 | edge |
 |---|
 | lvl:for_loop@L0#0 \| level L0 way everyday_reading: Folk meaning: English 'for each ...' or 'for 10 times' names a whole collection or a count to be handled at once, and a maths reading treats the header as simultaneous conditions. A Java for is a while loop in compact form: one init, then test-body-update repeated, one pass at a time. |
@@ -324,15 +324,15 @@ Edges offered:
 | lvl:for_loop@L4#6 \| level L4 way diagnose_an_error: rule broken: Without braces, the body of an if, while or for is exactly one statement; indentation does not add statements to it. Kind: silent logic error. Trigger class: A braceless header followed by two or more indented statements: only the first is controlled, the others run once, after the if/loop, on every input. |
 | lvl:for_loop@L4#7 \| level L4 way diagnose_an_error: rule broken: A variable declared in the for initializer exists only inside the for statement. Kind: compile-time. Trigger class: Reading i after for (int i = 0; ...) {...}: 'cannot find symbol'. |
 
-Prune: the model's reply (edge id and score; the kept edges sum to 1):
+Step 1, pick the relevant ones. The model's reply (each picked item with its relevance score; the scores add up to 1):
 ```
 {lvl:for_loop@L4#5 (Score: 0.5)}
 {lvl:for_loop@L2#1 (Score: 0.3)}
 {lvl:for_loop@L2#0 (Score: 0.2)}
 ```
-Kept by pruning: lvl:for_loop@L4#5 (0.50), lvl:for_loop@L2#1 (0.30), lvl:for_loop@L2#0 (0.20)
+Picked: lvl:for_loop@L4#5 (0.50), lvl:for_loop@L2#1 (0.30), lvl:for_loop@L2#0 (0.20)
 
-Label prompt for level way lvl:for_loop@L4#5 (the model saw the concept, the way's name 'diagnose an error', its text, where the way stops and whether the words must be correct; no level):
+Step 2, judge one way of showing a higher level (lvl:for_loop@L4#5, 'diagnose an error'). The model saw the description below and where this way stops, not the level it belongs to, and answers shown, wrong or not shown:
 > rule broken: The number of passes is fixed by the init, the test and the update together. Kind: silent logic error. Trigger class: Wrong start value, < vs <=, a wrong step, or an extra update of the counter in the body (or outside the loop): the loop runs too few or too many passes (off by one, or skips values).
 >
 > Where this way stops: Locating and fixing the mistake for one given failing case is L3. A compiler-flagged slip fixed from the message is weak evidence.
@@ -344,7 +344,7 @@ Clauses: 2, 3
 Confidence: 0.8
 ```
 
-Label prompt for level way lvl:for_loop@L2#1 (the model saw only the concept, the way's name 'output prediction' and its text; no level):
+Step 2, judge one way of showing a level (lvl:for_loop@L2#1, 'output prediction'). The model saw only the description below, not the level it belongs to, and answers shown or not shown:
 > A for statement has no value; the passes it makes are fixed by its header: for (int i = 1; i <= N; i++) sum += i; leaves sum = N(N+1)/2, and for (int i = 2; i <= 8; i += 2) prints 2, 4, 6, 8,.
 
 Model's reply:
@@ -354,7 +354,7 @@ Clauses: 1, 2, 3
 Confidence: 0.6
 ```
 
-Label prompt for level way lvl:for_loop@L2#0 (the model saw only the concept, the way's name 'line by line trace' and its text; no level):
+Step 2, judge one way of showing a level (lvl:for_loop@L2#0, 'line by line trace'). The model saw only the description below, not the level it belongs to, and answers shown or not shown:
 > Run the initializer once; then repeatedly: test the condition (stop if false), execute the body, run the update.
 
 Model's reply:
@@ -364,11 +364,11 @@ Clauses: none
 Confidence: 0.7
 ```
 
-Parsed labels:
+The labels as the program read them:
 (none)
 
-#### assignment, misconceptions: 15 edges offered
-Edges offered:
+#### assignment: 15 possible mistakes offered
+What the graph offers:
 | edge |
 |---|
 | err:assignment->AssignToFinal \| wrong rule: Assigns a new value to a variable declared final. \| right rule: A final variable cannot be reassigned after it is initialized; the compiler reports an error. |
@@ -387,13 +387,13 @@ Edges offered:
 | mis:assignment->VariableKeepsOldValue \| wrong rule: A variable keeps its first value after a new assignment (the static model). \| right rule: Each assignment or read replaces the variable's current value. |
 | mis:assignment->VariablesHoldExpressions \| wrong rule: y = x + k; makes y always equal to x + k, so when x changes later, y changes too. \| right rule: y = x + k; stores the value that x + k has at that moment, so later changes to x do not change y. |
 
-Prune: the model's reply (edge id and score; the kept edges sum to 1):
+Step 1, pick the relevant ones. The model's reply (each picked item with its relevance score; the scores add up to 1):
 ```
 mis:assignment->VariableKeepsOldValue (0.70), mis:assignment->AssignmentIsEquation (0.15), mis:assignment->VariablesHoldExpressions (0.15)
 ```
-Kept by pruning: mis:assignment->VariableKeepsOldValue (0.70), mis:assignment->AssignmentIsEquation (0.15), mis:assignment->VariablesHoldExpressions (0.15)
+Picked: mis:assignment->VariableKeepsOldValue (0.70), mis:assignment->AssignmentIsEquation (0.15), mis:assignment->VariablesHoldExpressions (0.15)
 
-Label prompt for the misconception / error edges (judged together). The model saw the program, the question, the numbered clauses, and these edges with their wrong rule and right rule:
+Step 2, judge the possible mistakes of this concept (all in one question). The model saw the program, the question, the numbered clauses and each possible mistake with its wrong rule and the right rule. held = the student follows the wrong rule; correct = the student follows the right rule; not applied = the answer says nothing about it:
 | edge |
 |---|
 | mis:assignment->VariableKeepsOldValue \| wrong rule: A variable keeps its first value after a new assignment (the static model). \| right rule: Each assignment or read replaces the variable's current value. |
@@ -406,15 +406,15 @@ mis:assignment->AssignmentIsEquation | not applied | clauses: none | confidence:
 mis:assignment->VariablesHoldExpressions | not applied | clauses: none | confidence: 0.9
 ```
 
-Parsed labels:
+The labels as the program read them:
 | edge | label | prune score | confidence | score | clauses | words |
 |---|---|---|---|---|---|---|
 | mis:assignment->VariableKeepsOldValue | held | 0.7 | 0.55 | 0.39 | c2, c3 | The loop runs for i = 1, 2, 3, 4 and stops when i reaches 5; the i++ in the body does not affect the count |
 | mis:assignment->AssignmentIsEquation | not applied |  |  | 0.0 |  |  |
 | mis:assignment->VariablesHoldExpressions | not applied |  |  | 0.0 |  |  |
 
-#### assignment, level ways: 24 edges offered
-Edges offered:
+#### assignment: 24 ways of showing a level offered
+What the graph offers:
 | edge |
 |---|
 | lvl:assignment@L0#0 \| level L0 way everyday_reading: In maths, = states a symmetric, lasting equality (a = b means b = a, and x = x + 5 is false). In Java, = is a one-time, directed action: evaluate the right side, then store the result in the variable on the left. |
@@ -442,15 +442,15 @@ Edges offered:
 | lvl:assignment@L4#5 \| level L4 way diagnose_an_error: rule broken: = assigns and == compares; a condition needs a boolean. Kind: compile-time. Trigger class: Writing if (a = b) with int a, b gives 'incompatible types: int cannot be converted to boolean'. With boolean variables it compiles and silently assigns. |
 | lvl:assignment@L4#6 \| level L4 way diagnose_an_error: rule broken: The assigned value's type must fit the variable's type. Kind: compile-time. Trigger class: Assigning a double to an int, an int to a String, and so on: 'incompatible types'. |
 
-Prune: the model's reply (edge id and score; the kept edges sum to 1):
+Step 1, pick the relevant ones. The model's reply (each picked item with its relevance score; the scores add up to 1):
 ```
 {lvl:assignment@L3#6 (Score: 0.5)}
 {lvl:assignment@L2#0 (Score: 0.25)}
 {lvl:assignment@L0#9 (Score: 0.25)}
 ```
-Kept by pruning: lvl:assignment@L3#6 (0.50), lvl:assignment@L2#0 (0.25), lvl:assignment@L0#9 (0.25)
+Picked: lvl:assignment@L3#6 (0.50), lvl:assignment@L2#0 (0.25), lvl:assignment@L0#9 (0.25)
 
-Label prompt for level way lvl:assignment@L3#6 (the model saw the concept, the way's name 'relation to neighbour', its text, where the way stops and whether the words must be correct; no level):
+Step 2, judge one way of showing a higher level (lvl:assignment@L3#6, 'relation to neighbour'). The model saw the description below and where this way stops, not the level it belongs to, and answers shown, wrong or not shown:
 > As a statement, i++ has the same effect as the assignment i = i + 1.
 >
 > Where this way stops: Two correct but separate rules are L1. Executing the two in sequence is L2. A relational answer may be correct or a relational error.
@@ -462,7 +462,7 @@ Clauses: none
 Confidence: 0.6
 ```
 
-Label prompt for level way lvl:assignment@L2#0 (the model saw only the concept, the way's name 'line by line trace' and its text; no level):
+Step 2, judge one way of showing a level (lvl:assignment@L2#0, 'line by line trace'). The model saw only the description below, not the level it belongs to, and answers shown or not shown:
 > First the right-hand side is fully evaluated using the variables' current values (left to right). Then that value is stored in the left-hand variable, replacing its old value, and execution moves to the next statement.
 
 Model's reply:
@@ -472,7 +472,7 @@ Clauses: none
 Confidence: 0.7
 ```
 
-Label prompt for level way lvl:assignment@L0#9 (the model saw only the concept, the way's name 'inconsistent trace' and its text; no level):
+Step 2, judge one way of showing a level (lvl:assignment@L0#9, 'inconsistent trace'). The model saw only the description below, not the level it belongs to, and answers shown or not shown:
 > Points to LT (evaluate the right side with current values, then overwrite the left variable). Applied unevenly, a student traces one segment correctly but reads the next as simultaneous equations or as a swap, giving 15 and 15 for one segment and 5 and 10 for the other. (here mixing in: "= stores the expression itself, not its computed value")
 
 Model's reply:
@@ -482,48 +482,48 @@ Clauses: none
 Confidence: 0.9
 ```
 
-Parsed labels:
+The labels as the program read them:
 | edge | label | prune score | confidence | score | clauses | words |
 |---|---|---|---|---|---|---|
 | lvl:assignment@L3#6 | not applied |  |  | 0.0 |  |  |
 | lvl:assignment@L2#0 | not applied |  |  | 0.0 |  |  |
 | lvl:assignment@L0#9 | not applied |  |  | 0.0 |  |  |
 
-**Kept on a path at this depth** (best N in tiers: held misconception / broken edge, then held error, then correct / confirmed / shown):
+**Kept in this round** (mistakes first, then findings that only confirm understanding; only the best few are kept):
 
 mis:assignment->VariableKeepsOldValue [held, tier 0, 0.39], mis:loop_control->IdiomOverridesCode [held, tier 0, 0.27], mis:loop_control->LoopStepAlwaysOne [held, tier 0, 0.11]
 
-**Clause coverage after this depth:**
+**Which clauses are explained so far:**
 | clause | text | covered by |
 |---|---|---|
 | c1 | i is 5 | not covered yet |
 | c2 | The loop runs for i = 1, 2, 3, 4 and stops when i reaches 5 | mis:loop_control->IdiomOverridesCode |
 | c3 | the i++ in the body does not affect the count | mis:loop_control->IdiomOverridesCode |
 
-**Uncovered clauses bring in (BM25 of the uncovered clauses against unvisited concepts):** println (3.28), increment_operators (3.13), loop_variable (1.99)
+**The clauses not yet explained bring in these concepts (the closest by wording):** println (3.28), increment_operators (3.13), loop_variable (1.99)
 
-**Graph check, not yet read (the walk may not stop while these remain):** own edges of increment_operators, own edges of loop_variable, own edges of println, par:assignment~comparison_operators, pre:assignment->increment_operators, pre:for_loop->loop_body, pre:loop_control->for_loop, pre:loop_control->increment_operators, pre:loop_variable->loop_control
+**Links not read yet (the reading does not stop while some remain):** own edges of increment_operators, own edges of loop_variable, own edges of println, par:assignment~comparison_operators, pre:assignment->increment_operators, pre:for_loop->loop_body, pre:loop_control->for_loop, pre:loop_control->increment_operators, pre:loop_variable->loop_control
 
-**Figure 4 (the graph after depth 1)**
+**Figure 4 (the graph after round 1)**
 
 ![Figure 4](figure04.png)
-### Depth 2: current concepts 'assignment', 'loop_control', 'for_loop', 'println', 'increment_operators', 'loop_variable'
+### Round 2: the concepts being looked at are 'assignment', 'loop_control', 'for_loop', 'println', 'increment_operators', 'loop_variable'
 
-#### assignment, concept edges: 2 edges offered
-Edges offered:
+#### assignment: 2 links to neighbouring concepts offered
+What the graph offers:
 | edge |
 |---|
 | par:assignment~comparison_operators \| rule: x = y stores the value of y in x (a statement with a side effect); x == y only tests whether the two values are equal and gives a boolean. Writing = where == is meant is a compile error with int operands and a silent bug with boolean operands. |
 | pre:assignment->increment_operators \| rule: i++ is shorthand for the assignment i = i + 1. |
 
-Prune: the model's reply (edge id and score; the kept edges sum to 1):
+Step 1, pick the relevant ones. The model's reply (each picked item with its relevance score; the scores add up to 1):
 ```
 {pre:assignment->increment_operators (Score: 0.85)}
 {par:assignment~comparison_operators (Score: 0.15)}
 ```
-Kept by pruning: pre:assignment->increment_operators (0.85), par:assignment~comparison_operators (0.15)
+Picked: pre:assignment->increment_operators (0.85), par:assignment~comparison_operators (0.15)
 
-Label prompt for concept edge pre:assignment->increment_operators (assignment -> increment_operators, prerequisite):
+Step 2, judge the link between two concepts (pre:assignment->increment_operators). The model answers confirmed (the student carries the rule from the first concept into the second), broken (the student fails to) or not applied:
 > i++ is shorthand for the assignment i = i + 1.
 
 Model's reply:
@@ -533,7 +533,7 @@ Clauses: 2, 3
 Confidence: 0.85
 ```
 
-Label prompt for concept edge par:assignment~comparison_operators (assignment -> comparison_operators, parallel):
+Step 2, judge the link between two concepts (par:assignment~comparison_operators). The model answers confirmed (the student carries the rule from the first concept into the second), broken (the student fails to) or not applied:
 > x = y stores the value of y in x (a statement with a side effect); x == y only tests whether the two values are equal and gives a boolean. Writing = where == is meant is a compile error with int operands and a silent bug with boolean operands.
 
 Model's reply:
@@ -543,29 +543,29 @@ Clauses: none
 Confidence: 0.9
 ```
 
-Parsed labels:
+The labels as the program read them:
 | edge | label | prune score | confidence | score | clauses | words |
 |---|---|---|---|---|---|---|
 | pre:assignment->increment_operators | broken | 0.85 | 0.85 | 0.72 | c2, c3 | The loop runs for i = 1, 2, 3, 4 and stops when i reaches 5; the i++ in the body does not affect the count |
 | par:assignment~comparison_operators | not applied |  |  | 0.0 |  |  |
 
-#### loop_control, concept edges: 3 edges offered
-Edges offered:
+#### loop_control: 3 links to neighbouring concepts offered
+What the graph offers:
 | edge |
 |---|
 | pre:loop_control->for_loop \| rule: The for header is exactly the three control slots, and the body runs after the test and before the update on each pass. |
 | pre:loop_control->increment_operators \| rule: The loop update i = i + 1 comes first; ++ (and +=) are then introduced as shorthand for that update. |
 | pre:loop_variable->loop_control \| rule: The init, condition and update all act on the loop variable: the init sets it, the condition tests it, the update changes it. |
 
-Prune: the model's reply (edge id and score; the kept edges sum to 1):
+Step 1, pick the relevant ones. The model's reply (each picked item with its relevance score; the scores add up to 1):
 ```
 {pre:loop_control->for_loop (Score: 0.4)}
 {pre:loop_variable->loop_control (Score: 0.35)}
 {pre:loop_control->increment_operators (Score: 0.25)}
 ```
-Kept by pruning: pre:loop_control->for_loop (0.40), pre:loop_variable->loop_control (0.35), pre:loop_control->increment_operators (0.25)
+Picked: pre:loop_control->for_loop (0.40), pre:loop_variable->loop_control (0.35), pre:loop_control->increment_operators (0.25)
 
-Label prompt for concept edge pre:loop_control->for_loop (loop_control -> for_loop, prerequisite):
+Step 2, judge the link between two concepts (pre:loop_control->for_loop). The model answers confirmed (the student carries the rule from the first concept into the second), broken (the student fails to) or not applied:
 > The for header is exactly the three control slots, and the body runs after the test and before the update on each pass.
 
 Model's reply:
@@ -575,7 +575,7 @@ Clauses: 2, 3
 Confidence: 0.85
 ```
 
-Label prompt for concept edge pre:loop_variable->loop_control (loop_variable -> loop_control, prerequisite):
+Step 2, judge the link between two concepts (pre:loop_variable->loop_control). The model answers confirmed (the student carries the rule from the first concept into the second), broken (the student fails to) or not applied:
 > The init, condition and update all act on the loop variable: the init sets it, the condition tests it, the update changes it.
 
 Model's reply:
@@ -585,7 +585,7 @@ Clauses: 2, 3
 Confidence: 0.75
 ```
 
-Label prompt for concept edge pre:loop_control->increment_operators (loop_control -> increment_operators, prerequisite):
+Step 2, judge the link between two concepts (pre:loop_control->increment_operators). The model answers confirmed (the student carries the rule from the first concept into the second), broken (the student fails to) or not applied:
 > The loop update i = i + 1 comes first; ++ (and +=) are then introduced as shorthand for that update.
 
 Model's reply:
@@ -595,27 +595,27 @@ Clauses: 2, 3
 Confidence: 0.8
 ```
 
-Parsed labels:
+The labels as the program read them:
 | edge | label | prune score | confidence | score | clauses | words |
 |---|---|---|---|---|---|---|
 | pre:loop_control->for_loop | broken | 0.4 | 0.85 | 0.34 | c2, c3 | The loop runs for i = 1, 2, 3, 4 and stops when i reaches 5; the i++ in the body does not affect the count |
 | pre:loop_variable->loop_control | broken | 0.35 | 0.75 | 0.26 | c2, c3 | The loop runs for i = 1, 2, 3, 4 and stops when i reaches 5; the i++ in the body does not affect the count |
 | pre:loop_control->increment_operators | broken | 0.25 | 0.8 | 0.2 | c2, c3 | The loop runs for i = 1, 2, 3, 4 and stops when i reaches 5; the i++ in the body does not affect the count |
 
-#### for_loop, concept edges: 1 edges offered
-Edges offered:
+#### for_loop: 1 links to neighbouring concepts offered
+What the graph offers:
 | edge |
 |---|
 | pre:for_loop->loop_body \| rule: The statements in braces after the for header are the loop body; they run once on every pass, between the test and the increment, exactly as in a while loop. |
 | pre:loop_control->for_loop \| rule: The for header is exactly the three control slots, and the body runs after the test and before the update on each pass. |
 
-Prune: the model's reply (edge id and score; the kept edges sum to 1):
+Step 1, pick the relevant ones. The model's reply (each picked item with its relevance score; the scores add up to 1):
 ```
 {pre:for_loop->loop_body (Score: 1.0)}
 ```
-Kept by pruning: pre:for_loop->loop_body (1.00)
+Picked: pre:for_loop->loop_body (1.00)
 
-Label prompt for concept edge pre:for_loop->loop_body (for_loop -> loop_body, prerequisite):
+Step 2, judge the link between two concepts (pre:for_loop->loop_body). The model answers confirmed (the student carries the rule from the first concept into the second), broken (the student fails to) or not applied:
 > The statements in braces after the for header are the loop body; they run once on every pass, between the test and the increment, exactly as in a while loop.
 
 Model's reply:
@@ -625,13 +625,13 @@ Clauses: 2, 3
 Confidence: 0.85
 ```
 
-Parsed labels:
+The labels as the program read them:
 | edge | label | prune score | confidence | score | clauses | words |
 |---|---|---|---|---|---|---|
 | pre:for_loop->loop_body | broken | 1.0 | 0.85 | 0.85 | c2, c3 | The loop runs for i = 1, 2, 3, 4 and stops when i reaches 5; the i++ in the body does not affect the count |
 
-#### println, misconceptions: 6 edges offered
-Edges offered:
+#### println: 6 possible mistakes offered
+What the graph offers:
 | edge |
 |---|
 | err:println->PrintWithoutFinalNewline \| wrong rule: Ends the output with print and expects it to appear right away. \| right rule: Finish a line of print calls with println; some systems hold print output until a newline is printed. |
@@ -641,13 +641,13 @@ Edges offered:
 | mis:println->PrintNewLineFirst \| wrong rule: println(s) prints a newline and then s. \| right rule: println(s) prints s and then the newline. |
 | mis:println->PrintedTextIsExecuted \| wrong rule: System.out.println("x is 5"); sets x to 5 (text inside the quotes is run as code). \| right rule: Characters inside double quotes are printed literally; println only displays them and changes no variable. Only an assignment such as x = 5; sets x. |
 
-Prune: the model's reply (edge id and score; the kept edges sum to 1):
+Step 1, pick the relevant ones. The model's reply (each picked item with its relevance score; the scores add up to 1):
 ```
 mis:println->PrintedTextIsExecuted (0.60), mis:println->PrintEqualsPrintln (0.20), mis:println->PrintNewLineFirst (0.20)
 ```
-Kept by pruning: mis:println->PrintedTextIsExecuted (0.60), mis:println->PrintEqualsPrintln (0.20), mis:println->PrintNewLineFirst (0.20)
+Picked: mis:println->PrintedTextIsExecuted (0.60), mis:println->PrintEqualsPrintln (0.20), mis:println->PrintNewLineFirst (0.20)
 
-Label prompt for the misconception / error edges (judged together). The model saw the program, the question, the numbered clauses, and these edges with their wrong rule and right rule:
+Step 2, judge the possible mistakes of this concept (all in one question). The model saw the program, the question, the numbered clauses and each possible mistake with its wrong rule and the right rule. held = the student follows the wrong rule; correct = the student follows the right rule; not applied = the answer says nothing about it:
 | edge |
 |---|
 | mis:println->PrintedTextIsExecuted \| wrong rule: System.out.println("x is 5"); sets x to 5 (text inside the quotes is run as code). \| right rule: Characters inside double quotes are printed literally; println only displays them and changes no variable. Only an assignment such as x = 5; sets x. |
@@ -660,15 +660,15 @@ mis:println->PrintEqualsPrintln | not applied | clauses: none | confidence: 0.95
 mis:println->PrintNewLineFirst | not applied | clauses: none | confidence: 0.95
 ```
 
-Parsed labels:
+The labels as the program read them:
 | edge | label | prune score | confidence | score | clauses | words |
 |---|---|---|---|---|---|---|
 | mis:println->PrintedTextIsExecuted | not applied |  |  | 0.0 |  |  |
 | mis:println->PrintEqualsPrintln | not applied |  |  | 0.0 |  |  |
 | mis:println->PrintNewLineFirst | not applied |  |  | 0.0 |  |  |
 
-#### println, level ways: 17 edges offered
-Edges offered:
+#### println: 17 ways of showing a level offered
+What the graph offers:
 | edge |
 |---|
 | lvl:println@L0#0 \| level L0 way everyday_reading: Everyday reading: 'println' is just 'print', and 'new line' is something you do before writing. Java rule: println(x) prints x and then ends the line; println() alone just ends the line. |
@@ -689,15 +689,15 @@ Edges offered:
 | lvl:println@L4#3 \| level L4 way diagnose_an_error: rule broken: Method names are case-sensitive. Kind: compile-time. Trigger class: System.out.Println or system.out.println: cannot find symbol |
 | lvl:println@L4#4 \| level L4 way diagnose_an_error: rule broken: Calls need parentheses. Kind: compile-time. Trigger class: System.out.println; without () |
 
-Prune: the model's reply (edge id and score; the kept edges sum to 1):
+Step 1, pick the relevant ones. The model's reply (each picked item with its relevance score; the scores add up to 1):
 ```
 {lvl:println@L3#0 (Score: 0.5)}
 {lvl:println@L2#2 (Score: 0.3)}
 {lvl:println@L2#1 (Score: 0.2)}
 ```
-Kept by pruning: lvl:println@L3#0 (0.50), lvl:println@L2#2 (0.30), lvl:println@L2#1 (0.20)
+Picked: lvl:println@L3#0 (0.50), lvl:println@L2#2 (0.30), lvl:println@L2#1 (0.20)
 
-Label prompt for level way lvl:println@L3#0 (the model saw the concept, the way's name 'relation to neighbour', its text, where the way stops and whether the words must be correct; no level):
+Step 2, judge one way of showing a higher level (lvl:println@L3#0, 'relation to neighbour'). The model saw the description below and where this way stops, not the level it belongs to, and answers shown, wrong or not shown:
 > System.out.println(s); is a statement, so its line of output appears at its own place in the sequence.
 >
 > Where this way stops: Two correct but separate rules are L1. Executing the two in sequence is L2. A relational answer may be correct or a relational error.
@@ -709,7 +709,7 @@ Clauses: none
 Confidence: 0.85
 ```
 
-Label prompt for level way lvl:println@L2#2 (the model saw only the concept, the way's name 'one step execution' and its text; no level):
+Step 2, judge one way of showing a level (lvl:println@L2#2, 'one step execution'). The model saw only the description below, not the level it belongs to, and answers shown or not shown:
 > One call appends the text and a line separator to the output; the cursor ends at the start of the next line; no variable changes and nothing is returned.
 
 Model's reply:
@@ -719,7 +719,7 @@ Clauses: none
 Confidence: 0.9
 ```
 
-Label prompt for level way lvl:println@L2#1 (the model saw only the concept, the way's name 'output prediction' and its text; no level):
+Step 2, judge one way of showing a level (lvl:println@L2#1, 'output prediction'). The model saw only the description below, not the level it belongs to, and answers shown or not shown:
 > Output is the value's characters followed by a line break: println("Hello, "); println("World!"); prints two lines.
 
 Model's reply:
@@ -729,15 +729,15 @@ Clauses: none
 Confidence: 0.75
 ```
 
-Parsed labels:
+The labels as the program read them:
 | edge | label | prune score | confidence | score | clauses | words |
 |---|---|---|---|---|---|---|
 | lvl:println@L3#0 | not applied |  |  | 0.0 |  |  |
 | lvl:println@L2#2 | not applied |  |  | 0.0 |  |  |
 | lvl:println@L2#1 | not applied |  |  | 0.0 |  |  |
 
-#### increment_operators, misconceptions: 5 edges offered
-Edges offered:
+#### increment_operators: 5 possible mistakes offered
+What the graph offers:
 | edge |
 |---|
 | mis:increment_operators->IdiomOverridesCode \| wrong rule: An array loop processes the whole array from index 0 to length-1 and increments its index at the end of the body, whatever the code says. \| right rule: The loop visits exactly the indices that its initialisation, guard and update produce, in the order in which its statements are written. |
@@ -746,13 +746,13 @@ Edges offered:
 | mis:increment_operators->PreIncrementBeforeLoop \| wrong rule: ++i in the for-update runs before the body each pass \| right rule: The update runs after each pass of the body, so with either ++i or i++ the first pass uses i = s. |
 | mis:increment_operators->PrePostIncrementSameValue \| wrong rule: x = i++ and x = ++i store the same value in x. \| right rule: Both increment i, but ++i has the value after the increment and i++ the value before. |
 
-Prune: the model's reply (edge id and score; the kept edges sum to 1):
+Step 1, pick the relevant ones. The model's reply (each picked item with its relevance score; the scores add up to 1):
 ```
 mis:increment_operators->IdiomOverridesCode (0.70), mis:increment_operators->PreIncrementBeforeLoop (0.20), mis:increment_operators->IncrementByTwo (0.10)
 ```
-Kept by pruning: mis:increment_operators->IdiomOverridesCode (0.70), mis:increment_operators->PreIncrementBeforeLoop (0.20), mis:increment_operators->IncrementByTwo (0.10)
+Picked: mis:increment_operators->IdiomOverridesCode (0.70), mis:increment_operators->PreIncrementBeforeLoop (0.20), mis:increment_operators->IncrementByTwo (0.10)
 
-Label prompt for the misconception / error edges (judged together). The model saw the program, the question, the numbered clauses, and these edges with their wrong rule and right rule:
+Step 2, judge the possible mistakes of this concept (all in one question). The model saw the program, the question, the numbered clauses and each possible mistake with its wrong rule and the right rule. held = the student follows the wrong rule; correct = the student follows the right rule; not applied = the answer says nothing about it:
 | edge |
 |---|
 | mis:increment_operators->IdiomOverridesCode \| wrong rule: An array loop processes the whole array from index 0 to length-1 and increments its index at the end of the body, whatever the code says. \| right rule: The loop visits exactly the indices that its initialisation, guard and update produce, in the order in which its statements are written. |
@@ -765,15 +765,15 @@ mis:increment_operators->PreIncrementBeforeLoop | not applied | clauses: none | 
 mis:increment_operators->IncrementByTwo | not applied | clauses: none | confidence: 0.8
 ```
 
-Parsed labels:
+The labels as the program read them:
 | edge | label | prune score | confidence | score | clauses | words |
 |---|---|---|---|---|---|---|
 | mis:increment_operators->IdiomOverridesCode | held | 0.7000000000000001 | 0.75 | 0.53 | c2, c3 | The loop runs for i = 1, 2, 3, 4 and stops when i reaches 5; the i++ in the body does not affect the count |
 | mis:increment_operators->PreIncrementBeforeLoop | not applied |  |  | 0.0 |  |  |
 | mis:increment_operators->IncrementByTwo | not applied |  |  | 0.0 |  |  |
 
-#### increment_operators, level ways: 16 edges offered
-Edges offered:
+#### increment_operators: 16 ways of showing a level offered
+What the graph offers:
 | edge |
 |---|
 | lvl:increment_operators@L0#0 \| level L0 way everyday_reading: Folk meaning: '++' reads as 'plus plus' (add twice) or as a maths symbol with no effect, and i++ inside an expression is read as 'add 1 at some later time'. In Java i++ and ++i each add exactly 1 to i immediately when evaluated; they differ only in the value the expression yields. |
@@ -793,15 +793,15 @@ Edges offered:
 | lvl:increment_operators@L4#2 \| level L4 way diagnose_an_error: rule broken: i = i++ stores the old value back. Kind: silent logic error. Trigger class: Writing i = i++ to increment: i never changes, so a loop driven by it is infinite. |
 | lvl:increment_operators@L4#3 \| level L4 way diagnose_an_error: rule broken: ++ and -- apply only to a variable. Kind: compile-time. Trigger class: Applying ++ to a value that is not a variable, e.g. 5++ or (i + 1)++: compile-time error. |
 
-Prune: the model's reply (edge id and score; the kept edges sum to 1):
+Step 1, pick the relevant ones. The model's reply (each picked item with its relevance score; the scores add up to 1):
 ```
 {lvl:increment_operators@L0#3 (Score: 0.5)}
 {lvl:increment_operators@L0#0 (Score: 0.3)}
 {lvl:increment_operators@L3#0 (Score: 0.2)}
 ```
-Kept by pruning: lvl:increment_operators@L0#3 (0.50), lvl:increment_operators@L0#0 (0.30), lvl:increment_operators@L3#0 (0.20)
+Picked: lvl:increment_operators@L0#3 (0.50), lvl:increment_operators@L0#0 (0.30), lvl:increment_operators@L3#0 (0.20)
 
-Label prompt for level way lvl:increment_operators@L0#3 (the model saw only the concept, the way's name 'inconsistent trace' and its text; no level):
+Step 2, judge one way of showing a level (lvl:increment_operators@L0#3, 'inconsistent trace'). The model saw only the description below, not the level it belongs to, and answers shown or not shown:
 > Applies the increment rule (LT) unevenly: uses the old value in one expression and the new value in another for the same i++, or performs the increment at the end of the loop body instead of where it is written. (here mixing in: "x = i++ and x = ++i store the same value in x")
 
 Model's reply:
@@ -811,7 +811,7 @@ Clauses: none
 Confidence: 0.7
 ```
 
-Label prompt for level way lvl:increment_operators@L0#0 (the model saw only the concept, the way's name 'everyday reading' and its text; no level):
+Step 2, judge one way of showing a level (lvl:increment_operators@L0#0, 'everyday reading'). The model saw only the description below, not the level it belongs to, and answers shown or not shown:
 > Folk meaning: '++' reads as 'plus plus' (add twice) or as a maths symbol with no effect, and i++ inside an expression is read as 'add 1 at some later time'. In Java i++ and ++i each add exactly 1 to i immediately when evaluated; they differ only in the value the expression yields.
 
 Model's reply:
@@ -821,7 +821,7 @@ Clauses: 2, 3
 Confidence: 0.7
 ```
 
-Label prompt for level way lvl:increment_operators@L3#0 (the model saw the concept, the way's name 'relation to neighbour', its text, where the way stops and whether the words must be correct; no level):
+Step 2, judge one way of showing a higher level (lvl:increment_operators@L3#0, 'relation to neighbour'). The model saw the description below and where this way stops, not the level it belongs to, and answers shown, wrong or not shown:
 > The usual for-loop update is i++ (shorthand for i = i + 1); as a stand-alone update statement ++i and i++ give the same loop.
 >
 > Where this way stops: Two correct but separate rules are L1. Executing the two in sequence is L2. A relational answer may be correct or a relational error.
@@ -833,14 +833,14 @@ Clauses: 2, 3
 Confidence: 0.8
 ```
 
-Parsed labels:
+The labels as the program read them:
 | edge | label | prune score | confidence | score | clauses | words |
 |---|---|---|---|---|---|---|
 | lvl:increment_operators@L0#3 | not applied |  |  | 0.0 |  |  |
 | lvl:increment_operators@L0#0 | shown | 0.3 | 0.7 | 0.21 | c2, c3 | The loop runs for i = 1, 2, 3, 4 and stops when i reaches 5; the i++ in the body does not affect the count |
 
-#### loop_variable, misconceptions: 7 edges offered
-Edges offered:
+#### loop_variable: 7 possible mistakes offered
+What the graph offers:
 | edge |
 |---|
 | mis:loop_variable->BodyChangeIgnoredByCondition \| wrong rule: Changing the loop variable inside the body does not affect the loop condition; the loop still runs its planned number of times. \| right rule: The condition is tested with the current value of the variable, including changes made in the body. |
@@ -851,13 +851,13 @@ Edges offered:
 | mis:loop_variable->LoopVariableLifetimeScope \| wrong rule: The for variable i is a new variable on every pass rather than one variable changed by the update. \| right rule: The for variable i is created once by the init, and the update changes that same variable on every pass. |
 | mis:loop_variable->LoopVariableLimitsValues \| wrong rule: The range of the loop variable limits the values that can be read or printed inside the loop. \| right rule: The loop variable only counts passes; other values read or printed in the body are not bounded by it. |
 
-Prune: the model's reply (edge id and score; the kept edges sum to 1):
+Step 1, pick the relevant ones. The model's reply (each picked item with its relevance score; the scores add up to 1):
 ```
 mis:loop_variable->BodyChangeIgnoredByCondition (0.80), mis:loop_variable->LoopUpdateChangesDirection (0.10), mis:loop_variable->ForInitRepeats (0.10)
 ```
-Kept by pruning: mis:loop_variable->BodyChangeIgnoredByCondition (0.80), mis:loop_variable->LoopUpdateChangesDirection (0.10), mis:loop_variable->ForInitRepeats (0.10)
+Picked: mis:loop_variable->BodyChangeIgnoredByCondition (0.80), mis:loop_variable->LoopUpdateChangesDirection (0.10), mis:loop_variable->ForInitRepeats (0.10)
 
-Label prompt for the misconception / error edges (judged together). The model saw the program, the question, the numbered clauses, and these edges with their wrong rule and right rule:
+Step 2, judge the possible mistakes of this concept (all in one question). The model saw the program, the question, the numbered clauses and each possible mistake with its wrong rule and the right rule. held = the student follows the wrong rule; correct = the student follows the right rule; not applied = the answer says nothing about it:
 | edge |
 |---|
 | mis:loop_variable->BodyChangeIgnoredByCondition \| wrong rule: Changing the loop variable inside the body does not affect the loop condition; the loop still runs its planned number of times. \| right rule: The condition is tested with the current value of the variable, including changes made in the body. |
@@ -870,15 +870,15 @@ mis:loop_variable->LoopUpdateChangesDirection | not applied | clauses: none | co
 mis:loop_variable->ForInitRepeats | not applied | clauses: none | confidence: 0.9
 ```
 
-Parsed labels:
+The labels as the program read them:
 | edge | label | prune score | confidence | score | clauses | words |
 |---|---|---|---|---|---|---|
 | mis:loop_variable->BodyChangeIgnoredByCondition | held | 0.8 | 0.93 | 0.74 | c2, c3 | The loop runs for i = 1, 2, 3, 4 and stops when i reaches 5; the i++ in the body does not affect the count |
 | mis:loop_variable->LoopUpdateChangesDirection | not applied |  |  | 0.0 |  |  |
 | mis:loop_variable->ForInitRepeats | not applied |  |  | 0.0 |  |  |
 
-#### loop_variable, level ways: 13 edges offered
-Edges offered:
+#### loop_variable: 13 ways of showing a level offered
+What the graph offers:
 | edge |
 |---|
 | lvl:loop_variable@L0#0 \| level L0 way everyday_reading: Folk meaning: in maths a variable like the i in a sum ranges over all its values at once, and 'i from 1 to 10' is a set. A Java loop variable is one storage location holding one value at a time, changed step by step by the update. |
@@ -895,15 +895,15 @@ Edges offered:
 | lvl:loop_variable@L4#1 \| level L4 way transfer_to_a_new_program: Use a dedicated loop variable (int) when passes are counted or indexed; do not use a double loop variable, and do not reuse it for other roles inside the body. |
 | lvl:loop_variable@L4#2 \| level L4 way diagnose_an_error: rule broken: Update the loop variable only in the update part (or in one place in a while body). Kind: silent logic error. Trigger class: An extra i++ in the body (or modifying i elsewhere): passes are skipped or repeated, and the loop may overshoot an != bound and never end. |
 
-Prune: the model's reply (edge id and score; the kept edges sum to 1):
+Step 1, pick the relevant ones. The model's reply (each picked item with its relevance score; the scores add up to 1):
 ```
 {lvl:loop_variable@L0#5 (Score: 0.5)}
 {lvl:loop_variable@L4#2 (Score: 0.25)}
 {lvl:loop_variable@L4#0 (Score: 0.25)}
 ```
-Kept by pruning: lvl:loop_variable@L0#5 (0.50), lvl:loop_variable@L4#2 (0.25), lvl:loop_variable@L4#0 (0.25)
+Picked: lvl:loop_variable@L0#5 (0.50), lvl:loop_variable@L4#2 (0.25), lvl:loop_variable@L4#0 (0.25)
 
-Label prompt for level way lvl:loop_variable@L0#5 (the model saw only the concept, the way's name 'inconsistent trace' and its text; no level):
+Step 2, judge one way of showing a level (lvl:loop_variable@L0#5, 'inconsistent trace'). The model saw only the description below, not the level it belongs to, and answers shown or not shown:
 > Applies the init-test-update rule (LT, loop_control) unevenly to the loop variable: forgets one update, applies a different step on some passes, or re-initializes it mid-loop. (here mixing in: "The update of the loop variable can change from pass to pass (e.g. switch direction) although the code is the same")
 
 Model's reply:
@@ -913,7 +913,7 @@ Clauses: 2, 3
 Confidence: 0.6
 ```
 
-Label prompt for level way lvl:loop_variable@L4#2 (the model saw the concept, the way's name 'diagnose an error', its text, where the way stops and whether the words must be correct; no level):
+Step 2, judge one way of showing a higher level (lvl:loop_variable@L4#2, 'diagnose an error'). The model saw the description below and where this way stops, not the level it belongs to, and answers shown, wrong or not shown:
 > rule broken: Update the loop variable only in the update part (or in one place in a while body). Kind: silent logic error. Trigger class: An extra i++ in the body (or modifying i elsewhere): passes are skipped or repeated, and the loop may overshoot an != bound and never end.
 >
 > Where this way stops: Locating and fixing the mistake for one given failing case is L3. A compiler-flagged slip fixed from the message is weak evidence.
@@ -925,7 +925,7 @@ Clauses: 2, 3
 Confidence: 0.8
 ```
 
-Label prompt for level way lvl:loop_variable@L4#0 (the model saw the concept, the way's name 'predict a change', its text, where the way stops and whether the words must be correct; no level):
+Step 2, judge one way of showing a higher level (lvl:loop_variable@L4#0, 'predict a change'). The model saw the description below and where this way stops, not the level it belongs to, and answers shown, wrong or not shown:
 > Shifting the start and the bound by the same amount keeps the number of passes but changes the values the body sees; assigning to the loop variable inside the body changes the pass count.
 >
 > Where this way stops: Re-tracing the changed code value by value is L2 on the new code. Adapting given code to a familiar variant may be only relational.
@@ -937,35 +937,35 @@ Clauses: 3
 Confidence: 0.7
 ```
 
-Parsed labels:
+The labels as the program read them:
 | edge | label | prune score | confidence | score | clauses | words |
 |---|---|---|---|---|---|---|
 | lvl:loop_variable@L0#5 | shown | 0.5 | 0.6 | 0.3 | c2, c3 | The loop runs for i = 1, 2, 3, 4 and stops when i reaches 5; the i++ in the body does not affect the count |
 
-**Kept on a path at this depth** (best N in tiers: held misconception / broken edge, then held error, then correct / confirmed / shown):
+**Kept in this round** (mistakes first, then findings that only confirm understanding; only the best few are kept):
 
 pre:for_loop->loop_body [broken, tier 0, 0.85], mis:loop_variable->BodyChangeIgnoredByCondition [held, tier 0, 0.74], pre:assignment->increment_operators [broken, tier 0, 0.72], mis:increment_operators->IdiomOverridesCode [held, tier 0, 0.53], pre:loop_control->for_loop [broken, tier 0, 0.34], pre:loop_variable->loop_control [broken, tier 0, 0.26], pre:loop_control->increment_operators [broken, tier 0, 0.20]
 
 reached across pre:for_loop->loop_body, entered next: loop_body
 
-**Clause coverage after this depth:**
+**Which clauses are explained so far:**
 | clause | text | covered by |
 |---|---|---|
 | c1 | i is 5 | not covered yet |
 | c2 | The loop runs for i = 1, 2, 3, 4 and stops when i reaches 5 | mis:loop_control->IdiomOverridesCode |
 | c3 | the i++ in the body does not affect the count | mis:loop_control->IdiomOverridesCode |
 
-**Uncovered clauses bring in (BM25 of the uncovered clauses against unvisited concepts):** control_flow (0.24), comparison_operators (0.24), boolean_expression (0.22)
+**The clauses not yet explained bring in these concepts (the closest by wording):** control_flow (0.24), comparison_operators (0.24), boolean_expression (0.22)
 
-**Graph check, not yet read (the walk may not stop while these remain):** own edges of boolean_expression, own edges of comparison_operators, own edges of control_flow, own edges of loop_body, pre:statement->println
+**Links not read yet (the reading does not stop while some remain):** own edges of boolean_expression, own edges of comparison_operators, own edges of control_flow, own edges of loop_body, pre:statement->println
 
-**Figure 5 (the graph after depth 2)**
+**Figure 5 (the graph after round 2)**
 
 ![Figure 5](figure05.png)
-### Depth 3: current concepts 'loop_body', 'for_loop', 'loop_variable', 'increment_operators', 'assignment', 'loop_control', 'println', 'control_flow', 'comparison_operators', 'boolean_expression'
+### Round 3: the concepts being looked at are 'loop_body', 'for_loop', 'loop_variable', 'increment_operators', 'assignment', 'loop_control', 'println', 'control_flow', 'comparison_operators', 'boolean_expression'
 
-#### loop_body, misconceptions: 12 edges offered
-Edges offered:
+#### loop_body: 12 possible mistakes offered
+What the graph offers:
 | edge |
 |---|
 | err:loop_body->BracelessMultiStatementBody \| wrong rule: Indenting several statements under an if or for makes them all part of its body, even without braces. \| right rule: Without braces only the first statement belongs to the if/for; the rest run once, after it. |
@@ -981,13 +981,13 @@ Edges offered:
 | mis:loop_body->StatementAfterLoopInBody \| wrong rule: A statement written after the loop is repeated with the loop body. \| right rule: The body ends at the closing brace (or after its single statement); code after it runs once, after the loop ends. |
 | mis:loop_body->WhileStopsMidBody \| wrong rule: The loop stops the moment the condition becomes false, even in the middle of the body. \| right rule: The condition is tested only before each pass, so the whole body finishes before the loop can stop. |
 
-Prune: the model's reply (edge id and score; the kept edges sum to 1):
+Step 1, pick the relevant ones. The model's reply (each picked item with its relevance score; the scores add up to 1):
 ```
 mis:loop_body->ForLoopPartSkipped (0.45), mis:loop_body->StateChangeIgnoredAcrossPasses (0.40), err:loop_body->BracelessMultiStatementBody (0.15)
 ```
-Kept by pruning: mis:loop_body->ForLoopPartSkipped (0.45), mis:loop_body->StateChangeIgnoredAcrossPasses (0.40), err:loop_body->BracelessMultiStatementBody (0.15)
+Picked: mis:loop_body->ForLoopPartSkipped (0.45), mis:loop_body->StateChangeIgnoredAcrossPasses (0.40), err:loop_body->BracelessMultiStatementBody (0.15)
 
-Label prompt for the misconception / error edges (judged together). The model saw the program, the question, the numbered clauses, and these edges with their wrong rule and right rule:
+Step 2, judge the possible mistakes of this concept (all in one question). The model saw the program, the question, the numbered clauses and each possible mistake with its wrong rule and the right rule. held = the student follows the wrong rule; correct = the student follows the right rule; not applied = the answer says nothing about it:
 | edge |
 |---|
 | mis:loop_body->ForLoopPartSkipped \| wrong rule: A pass of a loop may leave out one of its parts (the condition test, the body, the update, or the initialization). \| right rule: Each pass of a for loop runs test, then body, then update, every time; the initialization runs once, at the start. |
@@ -1000,15 +1000,15 @@ mis:loop_body->StateChangeIgnoredAcrossPasses | not applied | clauses: none | co
 err:loop_body->BracelessMultiStatementBody | not applied | clauses: none | confidence: 0.7
 ```
 
-Parsed labels:
+The labels as the program read them:
 | edge | label | prune score | confidence | score | clauses | words |
 |---|---|---|---|---|---|---|
 | mis:loop_body->ForLoopPartSkipped | held | 0.45 | 0.7 | 0.32 | c2, c3 | The loop runs for i = 1, 2, 3, 4 and stops when i reaches 5; the i++ in the body does not affect the count |
 | mis:loop_body->StateChangeIgnoredAcrossPasses | not applied |  |  | 0.0 |  |  |
 | err:loop_body->BracelessMultiStatementBody | not applied |  |  | 0.0 |  |  |
 
-#### loop_body, level ways: 14 edges offered
-Edges offered:
+#### loop_body: 14 ways of showing a level offered
+What the graph offers:
 | edge |
 |---|
 | lvl:loop_body@L0#0 \| level L0 way everyday_reading: Folk meaning: an everyday 'repeat this' instruction can be read loosely - a helper fills in missing steps, does each step N times in turn, or stops partway. A Java loop body is exactly the statements inside its braces (or one statement), all executed in order on every pass. |
@@ -1026,15 +1026,15 @@ Edges offered:
 | lvl:loop_body@L4#1 \| level L4 way diagnose_an_error: rule broken: Without braces, the body of an if, while or for is exactly one statement; indentation does not add statements to it. Kind: silent logic error. Trigger class: A braceless header followed by two or more indented statements: only the first is controlled, the others run once, after the if/loop, on every input. |
 | lvl:loop_body@L4#2 \| level L4 way transfer_to_a_new_program: Put inside the body exactly what must happen once per pass; put set-up before the loop and final reporting after it. Always brace a multi-statement body. |
 
-Prune: the model's reply (edge id and score; the kept edges sum to 1):
+Step 1, pick the relevant ones. The model's reply (each picked item with its relevance score; the scores add up to 1):
 ```
 {lvl:loop_body@L0#6 (Score: 0.5)}
 {lvl:loop_body@L2#2 (Score: 0.3)}
 {lvl:loop_body@L0#0 (Score: 0.2)}
 ```
-Kept by pruning: lvl:loop_body@L0#6 (0.50), lvl:loop_body@L2#2 (0.30), lvl:loop_body@L0#0 (0.20)
+Picked: lvl:loop_body@L0#6 (0.50), lvl:loop_body@L2#2 (0.30), lvl:loop_body@L0#0 (0.20)
 
-Label prompt for level way lvl:loop_body@L0#6 (the model saw only the concept, the way's name 'inconsistent trace' and its text; no level):
+Step 2, judge one way of showing a level (lvl:loop_body@L0#6, 'inconsistent trace'). The model saw only the description below, not the level it belongs to, and answers shown or not shown:
 > Applies the body rule (LT) unevenly: runs all body statements on some passes but only some on others, includes the statement after the loop on some passes, or uses stale values from the first pass later. (here mixing in: "The loop body always runs at least once, even if the condition is false at the start")
 
 Model's reply:
@@ -1044,7 +1044,7 @@ Clauses: none
 Confidence: 0.7
 ```
 
-Label prompt for level way lvl:loop_body@L2#2 (the model saw only the concept, the way's name 'one step execution' and its text; no level):
+Step 2, judge one way of showing a level (lvl:loop_body@L2#2, 'one step execution'). The model saw only the description below, not the level it belongs to, and answers shown or not shown:
 > One pass of the body changes exactly the variables it assigns (e.g. print i and v, double v, increment i) and these changes carry into the next test and pass.
 
 Model's reply:
@@ -1054,7 +1054,7 @@ Clauses: none
 Confidence: 0.9
 ```
 
-Label prompt for level way lvl:loop_body@L0#0 (the model saw only the concept, the way's name 'everyday reading' and its text; no level):
+Step 2, judge one way of showing a level (lvl:loop_body@L0#0, 'everyday reading'). The model saw only the description below, not the level it belongs to, and answers shown or not shown:
 > Folk meaning: an everyday 'repeat this' instruction can be read loosely - a helper fills in missing steps, does each step N times in turn, or stops partway. A Java loop body is exactly the statements inside its braces (or one statement), all executed in order on every pass.
 
 Model's reply:
@@ -1064,27 +1064,27 @@ Clauses: 2, 3
 Confidence: 0.7
 ```
 
-Parsed labels:
+The labels as the program read them:
 | edge | label | prune score | confidence | score | clauses | words |
 |---|---|---|---|---|---|---|
 | lvl:loop_body@L0#6 | not applied |  |  | 0.0 |  |  |
 | lvl:loop_body@L2#2 | not applied |  |  | 0.0 |  |  |
 | lvl:loop_body@L0#0 | shown | 0.2 | 0.7 | 0.14 | c2, c3 | The loop runs for i = 1, 2, 3, 4 and stops when i reaches 5; the i++ in the body does not affect the count |
 
-#### assignment, concept edges: 1 edges offered
-Edges offered:
+#### assignment: 1 links to neighbouring concepts offered
+What the graph offers:
 | edge |
 |---|
 | par:assignment~comparison_operators \| rule: x = y stores the value of y in x (a statement with a side effect); x == y only tests whether the two values are equal and gives a boolean. Writing = where == is meant is a compile error with int operands and a silent bug with boolean operands. |
 | pre:assignment->increment_operators \| rule: i++ is shorthand for the assignment i = i + 1. |
 
-Prune: the model's reply (edge id and score; the kept edges sum to 1):
+Step 1, pick the relevant ones. The model's reply (each picked item with its relevance score; the scores add up to 1):
 ```
 {par:assignment~comparison_operators (Score: 1.0)}
 ```
-Kept by pruning: par:assignment~comparison_operators (1.00)
+Picked: par:assignment~comparison_operators (1.00)
 
-Label prompt for concept edge par:assignment~comparison_operators (assignment -> comparison_operators, parallel):
+Step 2, judge the link between two concepts (par:assignment~comparison_operators). The model answers confirmed (the student carries the rule from the first concept into the second), broken (the student fails to) or not applied:
 > x = y stores the value of y in x (a statement with a side effect); x == y only tests whether the two values are equal and gives a boolean. Writing = where == is meant is a compile error with int operands and a silent bug with boolean operands.
 
 Model's reply:
@@ -1094,24 +1094,24 @@ Clauses: none
 Confidence: 0.9
 ```
 
-Parsed labels:
+The labels as the program read them:
 | edge | label | prune score | confidence | score | clauses | words |
 |---|---|---|---|---|---|---|
 | par:assignment~comparison_operators | not applied |  |  | 0.0 |  |  |
 
-#### println, concept edges: 1 edges offered
-Edges offered:
+#### println: 1 links to neighbouring concepts offered
+What the graph offers:
 | edge |
 |---|
 | pre:statement->println \| rule: System.out.println(s); is itself a statement, so its line of output appears at its own place in the sequence. |
 
-Prune: the model's reply (edge id and score; the kept edges sum to 1):
+Step 1, pick the relevant ones. The model's reply (each picked item with its relevance score; the scores add up to 1):
 ```
 {pre:statement->println (Score: 1.0)}
 ```
-Kept by pruning: pre:statement->println (1.00)
+Picked: pre:statement->println (1.00)
 
-Label prompt for concept edge pre:statement->println (statement -> println, prerequisite):
+Step 2, judge the link between two concepts (pre:statement->println). The model answers confirmed (the student carries the rule from the first concept into the second), broken (the student fails to) or not applied:
 > System.out.println(s); is itself a statement, so its line of output appears at its own place in the sequence.
 
 Model's reply:
@@ -1121,13 +1121,13 @@ Clauses: none
 Confidence: 0.75
 ```
 
-Parsed labels:
+The labels as the program read them:
 | edge | label | prune score | confidence | score | clauses | words |
 |---|---|---|---|---|---|---|
 | pre:statement->println | not applied |  |  | 0.0 |  |  |
 
-#### control_flow, misconceptions: 11 edges offered
-Edges offered:
+#### control_flow: 11 possible mistakes offered
+What the graph offers:
 | edge |
 |---|
 | mis:control_flow->CodeAfterIfSkipped \| wrong rule: When the then branch runs, the code after the if is skipped. \| right rule: After the if finishes, execution continues with the next statement either way. |
@@ -1142,13 +1142,13 @@ Edges offered:
 | mis:control_flow->ReturnDoesNotExitLoop \| wrong rule: A return inside a loop does not end the loop; it sets a value each pass (the last one is returned) or returns several values. \| right rule: When return executes, the method ends at once, so the loop stops on that pass. |
 | mis:control_flow->StatementsRunInAnyOrder \| wrong rule: Statements in a program can run in any order. \| right rule: Without control statements, statements run once each, top to bottom. |
 
-Prune: the model's reply (edge id and score; the kept edges sum to 1):
+Step 1, pick the relevant ones. The model's reply (each picked item with its relevance score; the scores add up to 1):
 ```
 mis:control_flow->ProgramEndsAfterLoop (0.45), mis:control_flow->FalseLoopRepeatsNextCode (0.35), mis:control_flow->StatementsRunInAnyOrder (0.20)
 ```
-Kept by pruning: mis:control_flow->ProgramEndsAfterLoop (0.45), mis:control_flow->FalseLoopRepeatsNextCode (0.35), mis:control_flow->StatementsRunInAnyOrder (0.20)
+Picked: mis:control_flow->ProgramEndsAfterLoop (0.45), mis:control_flow->FalseLoopRepeatsNextCode (0.35), mis:control_flow->StatementsRunInAnyOrder (0.20)
 
-Label prompt for the misconception / error edges (judged together). The model saw the program, the question, the numbered clauses, and these edges with their wrong rule and right rule:
+Step 2, judge the possible mistakes of this concept (all in one question). The model saw the program, the question, the numbered clauses and each possible mistake with its wrong rule and the right rule. held = the student follows the wrong rule; correct = the student follows the right rule; not applied = the answer says nothing about it:
 | edge |
 |---|
 | mis:control_flow->ProgramEndsAfterLoop \| wrong rule: When a loop finishes the program ends, so code after the loop never runs. \| right rule: When the loop condition becomes false, control continues with the first statement after the loop. |
@@ -1161,15 +1161,15 @@ mis:control_flow->FalseLoopRepeatsNextCode | not applied | clauses: none | confi
 mis:control_flow->StatementsRunInAnyOrder | not applied | clauses: none | confidence: 0.9
 ```
 
-Parsed labels:
+The labels as the program read them:
 | edge | label | prune score | confidence | score | clauses | words |
 |---|---|---|---|---|---|---|
 | mis:control_flow->ProgramEndsAfterLoop | correct | 0.45 | 0.6 | 0.27 | c1, c2 | i is 5; The loop runs for i = 1, 2, 3, 4 and stops when i reaches 5 |
 | mis:control_flow->FalseLoopRepeatsNextCode | not applied |  |  | 0.0 |  |  |
 | mis:control_flow->StatementsRunInAnyOrder | not applied |  |  | 0.0 |  |  |
 
-#### control_flow, level ways: 15 edges offered
-Edges offered:
+#### control_flow: 15 ways of showing a level offered
+What the graph offers:
 | edge |
 |---|
 | lvl:control_flow@L0#0 \| level L0 way everyday_reading: Folk meaning: in everyday instructions a listener reads the whole list at once, does steps in a sensible order and infers what the writer wants. Java instead executes statements one at a time, top to bottom, each only when control reaches it, and nothing later in the program has any effect earlier. |
@@ -1188,15 +1188,15 @@ Edges offered:
 | lvl:control_flow@L4#2 \| level L4 way diagnose_an_error: rule broken: A local variable must be definitely assigned on every control-flow path before it is read. Kind: compile-time. Trigger class: A variable assigned only inside an if branch (or only in a loop body) and read after it: the compiler reports 'variable might not have been initialized'. |
 | lvl:control_flow@L4#3 \| level L4 way diagnose_an_error: rule broken: Statements run in the order written, so an update must come before the statement that needs the new value. Kind: silent logic error. Trigger class: Swapping two dependent statements (e.g. printing before updating, or incrementing the index before using it): output is shifted or off by one pass, with no error. |
 
-Prune: the model's reply (edge id and score; the kept edges sum to 1):
+Step 1, pick the relevant ones. The model's reply (each picked item with its relevance score; the scores add up to 1):
 ```
 {lvl:control_flow@L0#3 (Score: 0.5)}
 {lvl:control_flow@L2#0 (Score: 0.3)}
 {lvl:control_flow@L0#0 (Score: 0.2)}
 ```
-Kept by pruning: lvl:control_flow@L0#3 (0.50), lvl:control_flow@L2#0 (0.30), lvl:control_flow@L0#0 (0.20)
+Picked: lvl:control_flow@L0#3 (0.50), lvl:control_flow@L2#0 (0.30), lvl:control_flow@L0#0 (0.20)
 
-Label prompt for level way lvl:control_flow@L0#3 (the model saw only the concept, the way's name 'inconsistent trace' and its text; no level):
+Step 2, judge one way of showing a level (lvl:control_flow@L0#3, 'inconsistent trace'). The model saw only the description below, not the level it belongs to, and answers shown or not shown:
 > Applies the sequencing rule (LT) unevenly: e.g. runs a later line before an earlier one, lets an if that was already passed fire again later, or ends the program when a loop or a false if ends instead of continuing with the next statement. (here mixing in: "Statements in a program can run in any order")
 
 Model's reply:
@@ -1206,7 +1206,7 @@ Clauses: none
 Confidence: 0.7
 ```
 
-Label prompt for level way lvl:control_flow@L2#0 (the model saw only the concept, the way's name 'line by line trace' and its text; no level):
+Step 2, judge one way of showing a level (lvl:control_flow@L2#0, 'line by line trace'). The model saw only the description below, not the level it belongs to, and answers shown or not shown:
 > Execute the statement at the current point; when it completes normally, control passes to the next statement in the block. An if evaluates its condition once and then runs at most one branch; a loop evaluates its condition before each pass; after an if or a loop finishes, control continues with the statement after it.
 
 Model's reply:
@@ -1216,7 +1216,7 @@ Clauses: 2
 Confidence: 0.6
 ```
 
-Label prompt for level way lvl:control_flow@L0#0 (the model saw only the concept, the way's name 'everyday reading' and its text; no level):
+Step 2, judge one way of showing a level (lvl:control_flow@L0#0, 'everyday reading'). The model saw only the description below, not the level it belongs to, and answers shown or not shown:
 > Folk meaning: in everyday instructions a listener reads the whole list at once, does steps in a sensible order and infers what the writer wants. Java instead executes statements one at a time, top to bottom, each only when control reaches it, and nothing later in the program has any effect earlier.
 
 Model's reply:
@@ -1226,15 +1226,15 @@ Clauses: 2, 3
 Confidence: 0.65
 ```
 
-Parsed labels:
+The labels as the program read them:
 | edge | label | prune score | confidence | score | clauses | words |
 |---|---|---|---|---|---|---|
 | lvl:control_flow@L0#3 | not applied |  |  | 0.0 |  |  |
 | lvl:control_flow@L2#0 | shown | 0.3 | 0.6 | 0.18 | c2 | The loop runs for i = 1, 2, 3, 4 and stops when i reaches 5 |
 | lvl:control_flow@L0#0 | shown | 0.2 | 0.65 | 0.13 | c2, c3 | The loop runs for i = 1, 2, 3, 4 and stops when i reaches 5; the i++ in the body does not affect the count |
 
-#### comparison_operators, misconceptions: 8 edges offered
-Edges offered:
+#### comparison_operators: 8 possible mistakes offered
+What the graph offers:
 | edge |
 |---|
 | err:comparison_operators->ReversedRelationalOperator \| wrong rule: Writes =< or => instead of <= and >=. \| right rule: The operators are written <= and >=. |
@@ -1246,13 +1246,13 @@ Edges offered:
 | mis:comparison_operators->LessGreaterSwapped \| wrong rule: < and > mean the same thing (or a < b means a is greater than b). \| right rule: a < b is true when a is smaller than b; a > b when a is larger. |
 | mis:comparison_operators->StringRelationalComparison \| wrong rule: s < t compares two Strings alphabetically. \| right rule: < and > are defined only for primitive types; comparing Strings with them does not compile. |
 
-Prune: the model's reply (edge id and score; the kept edges sum to 1):
+Step 1, pick the relevant ones. The model's reply (each picked item with its relevance score; the scores add up to 1):
 ```
 mis:comparison_operators->LessGreaterSwapped (0.80), mis:comparison_operators->AssignCompares (0.10), err:comparison_operators->ReversedRelationalOperator (0.10)
 ```
-Kept by pruning: mis:comparison_operators->LessGreaterSwapped (0.80), mis:comparison_operators->AssignCompares (0.10), err:comparison_operators->ReversedRelationalOperator (0.10)
+Picked: mis:comparison_operators->LessGreaterSwapped (0.80), mis:comparison_operators->AssignCompares (0.10), err:comparison_operators->ReversedRelationalOperator (0.10)
 
-Label prompt for the misconception / error edges (judged together). The model saw the program, the question, the numbered clauses, and these edges with their wrong rule and right rule:
+Step 2, judge the possible mistakes of this concept (all in one question). The model saw the program, the question, the numbered clauses and each possible mistake with its wrong rule and the right rule. held = the student follows the wrong rule; correct = the student follows the right rule; not applied = the answer says nothing about it:
 | edge |
 |---|
 | mis:comparison_operators->LessGreaterSwapped \| wrong rule: < and > mean the same thing (or a < b means a is greater than b). \| right rule: a < b is true when a is smaller than b; a > b when a is larger. |
@@ -1265,15 +1265,15 @@ mis:comparison_operators->AssignCompares | not applied | clauses: none | confide
 err:comparison_operators->ReversedRelationalOperator | not applied | clauses: none | confidence: 0.95
 ```
 
-Parsed labels:
+The labels as the program read them:
 | edge | label | prune score | confidence | score | clauses | words |
 |---|---|---|---|---|---|---|
 | mis:comparison_operators->LessGreaterSwapped | correct | 0.8 | 0.8 | 0.64 | c2 | The loop runs for i = 1, 2, 3, 4 and stops when i reaches 5 |
 | mis:comparison_operators->AssignCompares | not applied |  |  | 0.0 |  |  |
 | err:comparison_operators->ReversedRelationalOperator | not applied |  |  | 0.0 |  |  |
 
-#### comparison_operators, level ways: 20 edges offered
-Edges offered:
+#### comparison_operators: 20 ways of showing a level offered
+What the graph offers:
 | edge |
 |---|
 | lvl:comparison_operators@L0#0 \| level L0 way everyday_reading: Folk meaning: in maths = states that two things are equal, and inequalities can be chained (a < b < c) or spoken as 'equal or less than' (=<). Java rule: = assigns while == compares; the operators are spelled <= and >= only; a < b < c does not compile; and on Strings == compares references. |
@@ -1297,15 +1297,15 @@ Edges offered:
 | lvl:comparison_operators@L4#5 \| level L4 way diagnose_an_error: rule broken: < and > are defined only for primitive types; comparisons cannot be chained; both operands must be compatible. Kind: compile-time. Trigger class: s < t on Strings, a < b < c, or 5 < "6". |
 | lvl:comparison_operators@L4#6 \| level L4 way diagnose_an_error: rule broken: Computed doubles should not be compared with ==. Kind: silent logic error. Trigger class: == between doubles produced by arithmetic, e.g. (0.1 + 0.1 + 0.1 == 0.3). |
 
-Prune: the model's reply (edge id and score; the kept edges sum to 1):
+Step 1, pick the relevant ones. The model's reply (each picked item with its relevance score; the scores add up to 1):
 ```
 {lvl:comparison_operators@L3#5 (Score: 0.45)}
 {lvl:comparison_operators@L2#1 (Score: 0.35)}
 {lvl:comparison_operators@L2#0 (Score: 0.2)}
 ```
-Kept by pruning: lvl:comparison_operators@L3#5 (0.45), lvl:comparison_operators@L2#1 (0.35), lvl:comparison_operators@L2#0 (0.20)
+Picked: lvl:comparison_operators@L3#5 (0.45), lvl:comparison_operators@L2#1 (0.35), lvl:comparison_operators@L2#0 (0.20)
 
-Label prompt for level way lvl:comparison_operators@L3#5 (the model saw the concept, the way's name 'purpose of the whole', its text, where the way stops and whether the words must be correct; no level):
+Step 2, judge one way of showing a higher level (lvl:comparison_operators@L3#5, 'purpose of the whole'). The model saw the description below and where this way stops, not the level it belongs to, and answers shown, wrong or not shown:
 > Used to test a numeric condition: thresholds and sign checks, range tests, divisibility (n % k == 0), loop continuation (i < N), sentinel checks, and running-extreme updates (if (x > max) max = x).
 >
 > Where this way stops: Narrating the lines is L2. A purpose induced from a few traced cases is L2. A wrong purpose is still L3, but with an error.
@@ -1317,7 +1317,7 @@ Clauses: 2
 Confidence: 0.55
 ```
 
-Label prompt for level way lvl:comparison_operators@L2#1 (the model saw only the concept, the way's name 'output prediction' and its text; no level):
+Step 2, judge one way of showing a level (lvl:comparison_operators@L2#1, 'output prediction'). The model saw only the description below, not the level it belongs to, and answers shown or not shown:
 > The result is a boolean: (2 <= 2) is true, 2 < 2 is false, (x < 3.1) is true for int x = 3; any comparison involving NaN, even NaN == NaN, is false.
 
 Model's reply:
@@ -1327,7 +1327,7 @@ Clauses: 2
 Confidence: 0.6
 ```
 
-Label prompt for level way lvl:comparison_operators@L2#0 (the model saw only the concept, the way's name 'line by line trace' and its text; no level):
+Step 2, judge one way of showing a level (lvl:comparison_operators@L2#0, 'line by line trace'). The model saw only the description below, not the level it belongs to, and answers shown or not shown:
 > Evaluate the left operand (including its arithmetic), then the right operand; if their types differ, promote the narrower one (int to double); then compare and produce true or false.
 
 Model's reply:
@@ -1337,11 +1337,11 @@ Clauses: none
 Confidence: 0.65
 ```
 
-Parsed labels:
+The labels as the program read them:
 (none)
 
-#### boolean_expression, misconceptions: 8 edges offered
-Edges offered:
+#### boolean_expression: 8 possible mistakes offered
+What the graph offers:
 | edge |
 |---|
 | err:boolean_expression->ElseWithCondition \| wrong rule: Writes else (x > 0) with a condition but no if. \| right rule: else takes no condition; use else if (x > 0). |
@@ -1353,13 +1353,13 @@ Edges offered:
 | mis:boolean_expression->MapToBooleanWithIf \| wrong rule: To store whether x > y in a boolean you need if (x > y) ok = true; else ok = false;. \| right rule: ok = (x > y); stores the result of the comparison directly. |
 | mis:boolean_expression->NestedIfsInsteadOfLogicalOperators \| wrong rule: A condition on several values has to be written as nested if statements, one value per if. \| right rule: Several conditions combine into one boolean expression with && and \|\|, e.g. if (x == 0 && y == 0). |
 
-Prune: the model's reply (edge id and score; the kept edges sum to 1):
+Step 1, pick the relevant ones. The model's reply (each picked item with its relevance score; the scores add up to 1):
 ```
 mis:boolean_expression->LoopForOneTimeTest (0.50), mis:boolean_expression->ArithmeticInsteadOfBoolean (0.30), mis:boolean_expression->ChainedComparison (0.20)
 ```
-Kept by pruning: mis:boolean_expression->LoopForOneTimeTest (0.50), mis:boolean_expression->ArithmeticInsteadOfBoolean (0.30), mis:boolean_expression->ChainedComparison (0.20)
+Picked: mis:boolean_expression->LoopForOneTimeTest (0.50), mis:boolean_expression->ArithmeticInsteadOfBoolean (0.30), mis:boolean_expression->ChainedComparison (0.20)
 
-Label prompt for the misconception / error edges (judged together). The model saw the program, the question, the numbered clauses, and these edges with their wrong rule and right rule:
+Step 2, judge the possible mistakes of this concept (all in one question). The model saw the program, the question, the numbered clauses and each possible mistake with its wrong rule and the right rule. held = the student follows the wrong rule; correct = the student follows the right rule; not applied = the answer says nothing about it:
 | edge |
 |---|
 | mis:boolean_expression->LoopForOneTimeTest \| wrong rule: Uses a loop where a condition needs to be tested only once. \| right rule: A test made once is an if; a loop repeats. |
@@ -1372,15 +1372,15 @@ mis:boolean_expression->ArithmeticInsteadOfBoolean | not applied | clauses: none
 mis:boolean_expression->ChainedComparison | not applied | clauses: none | confidence: 0.93
 ```
 
-Parsed labels:
+The labels as the program read them:
 | edge | label | prune score | confidence | score | clauses | words |
 |---|---|---|---|---|---|---|
 | mis:boolean_expression->LoopForOneTimeTest | not applied |  |  | 0.0 |  |  |
 | mis:boolean_expression->ArithmeticInsteadOfBoolean | not applied |  |  | 0.0 |  |  |
 | mis:boolean_expression->ChainedComparison | not applied |  |  | 0.0 |  |  |
 
-#### boolean_expression, level ways: 19 edges offered
-Edges offered:
+#### boolean_expression: 19 ways of showing a level offered
+What the graph offers:
 | edge |
 |---|
 | lvl:boolean_expression@L0#0 \| level L0 way everyday_reading: Folk meaning: maths writes a range as 90 <= grade <= 100 and English says 'if x is 1 or 2'. Java rule: each comparison is a separate boolean expression and they must be joined explicitly: 90 <= grade && grade <= 100, x == 1 \|\| x == 2; 90 <= grade <= 100 does not compile because 90 <= grade is already a boolean. |
@@ -1403,15 +1403,15 @@ Edges offered:
 | lvl:boolean_expression@L4#3 \| level L4 way diagnose_an_error: rule broken: The condition must be a boolean expression; = assigns, == compares. Kind: compile-time. Trigger class: if (a = b) with int a and b (with boolean variables it compiles and silently assigns). |
 | lvl:boolean_expression@L4#4 \| level L4 way diagnose_an_error: rule broken: Comparisons cannot be chained; each must be joined with && or \|\|. Kind: compile-time. Trigger class: Range written as a < b < c or 90 <= grade <= 100. |
 
-Prune: the model's reply (edge id and score; the kept edges sum to 1):
+Step 1, pick the relevant ones. The model's reply (each picked item with its relevance score; the scores add up to 1):
 ```
 {lvl:boolean_expression@L3#3 (Score: 0.55)}
 {lvl:boolean_expression@L2#0 (Score: 0.25)}
 {lvl:boolean_expression@L2#2 (Score: 0.2)}
 ```
-Kept by pruning: lvl:boolean_expression@L3#3 (0.55), lvl:boolean_expression@L2#0 (0.25), lvl:boolean_expression@L2#2 (0.20)
+Picked: lvl:boolean_expression@L3#3 (0.55), lvl:boolean_expression@L2#0 (0.25), lvl:boolean_expression@L2#2 (0.20)
 
-Label prompt for level way lvl:boolean_expression@L3#3 (the model saw the concept, the way's name 'relation to neighbour', its text, where the way stops and whether the words must be correct; no level):
+Step 2, judge one way of showing a higher level (lvl:boolean_expression@L3#3, 'relation to neighbour'). The model saw the description below and where this way stops, not the level it belongs to, and answers shown, wrong or not shown:
 > The while loop re-evaluates its boolean expression before every pass and stops the first time it is false, so some variable in the expression must change in the body or the loop never ends.
 >
 > Where this way stops: Two correct but separate rules are L1. Executing the two in sequence is L2. A relational answer may be correct or a relational error.
@@ -1423,7 +1423,7 @@ Clauses: 2, 3
 Confidence: 0.8
 ```
 
-Label prompt for level way lvl:boolean_expression@L2#0 (the model saw only the concept, the way's name 'line by line trace' and its text; no level):
+Step 2, judge one way of showing a level (lvl:boolean_expression@L2#0, 'line by line trace'). The model saw only the description below, not the level it belongs to, and answers shown or not shown:
 > Operands are evaluated left to right; arithmetic sub-expressions first, then comparisons, then !, then &&, then ||; && and || evaluate their right operand only when the left has not decided the result.
 
 Model's reply:
@@ -1433,7 +1433,7 @@ Clauses: none
 Confidence: 0.8
 ```
 
-Label prompt for level way lvl:boolean_expression@L2#2 (the model saw only the concept, the way's name 'one step execution' and its text; no level):
+Step 2, judge one way of showing a level (lvl:boolean_expression@L2#2, 'one step execution'). The model saw only the description below, not the level it belongs to, and answers shown or not shown:
 > Evaluating a boolean expression changes no variable (unless it contains an assignment, ++ or a method with side effects); state changes only when its value is stored, as in isLeapYear = isLeapYear && (year % 100 != 0);.
 
 Model's reply:
@@ -1443,31 +1443,33 @@ Clauses: none
 Confidence: 0.85
 ```
 
-Parsed labels:
+The labels as the program read them:
 (none)
 
-**Kept on a path at this depth** (best N in tiers: held misconception / broken edge, then held error, then correct / confirmed / shown):
+**Kept in this round** (mistakes first, then findings that only confirm understanding; only the best few are kept):
 
 mis:loop_body->ForLoopPartSkipped [held, tier 0, 0.32], mis:comparison_operators->LessGreaterSwapped [correct, tier 2, 0.64], mis:control_flow->ProgramEndsAfterLoop [correct, tier 2, 0.27]
 
-**Clause coverage after this depth:**
+**Which clauses are explained so far:**
 | clause | text | covered by |
 |---|---|---|
 | c1 | i is 5 | mis:control_flow->ProgramEndsAfterLoop |
 | c2 | The loop runs for i = 1, 2, 3, 4 and stops when i reaches 5 | mis:loop_control->IdiomOverridesCode |
 | c3 | the i++ in the body does not affect the count | mis:loop_control->IdiomOverridesCode |
 
-**Graph check, not yet read (the walk may not stop while these remain):** pre:comparison_operators->boolean_expression, pre:expression->comparison_operators, pre:statement->control_flow
+**Links not read yet (the reading does not stop while some remain):** pre:comparison_operators->boolean_expression, pre:expression->comparison_operators, pre:statement->control_flow
 
-**Figure 6 (the graph after depth 3)**
+**Figure 6 (the graph after round 3)**
 
 ![Figure 6](figure06.png)
-Held set after the one-fault rules: mis:loop_variable->BodyChangeIgnoredByCondition, mis:increment_operators->IdiomOverridesCode, mis:assignment->VariableKeepsOldValue, mis:loop_body->ForLoopPartSkipped, mis:loop_control->LoopStepAlwaysOne (same words as mis:loop_control->IdiomOverridesCode); filed at the dependent concept: mis:loop_control->IdiomOverridesCode
+The mistakes that count, after a mistake found twice is counted once: mis:loop_variable->BodyChangeIgnoredByCondition, mis:increment_operators->IdiomOverridesCode, mis:assignment->VariableKeepsOldValue, mis:loop_body->ForLoopPartSkipped, mis:loop_control->LoopStepAlwaysOne (same words as mis:loop_control->IdiomOverridesCode); filed at the dependent concept: mis:loop_control->IdiomOverridesCode
 
-Shadows (a held label on a prerequisite, on a generic concept, or at a concept where the graph attaches the misconception as context, resting on the words of a stronger label at the specific or primary concept, is one wrong sentence read twice; it marks no root cause and sets no level): mis:assignment->VariableKeepsOldValue (shadow of mis:loop_control->LoopStepAlwaysOne), mis:loop_control->LoopStepAlwaysOne (shadow of mis:loop_body->ForLoopPartSkipped), mis:loop_control->IdiomOverridesCode (shadow of mis:loop_body->ForLoopPartSkipped)
+Shadows (the same wrong sentence read a second time at another concept; it is counted once, not twice): mis:assignment->VariableKeepsOldValue (shadow of mis:loop_control->LoopStepAlwaysOne), mis:loop_control->LoopStepAlwaysOne (shadow of mis:loop_body->ForLoopPartSkipped), mis:loop_control->IdiomOverridesCode (shadow of mis:loop_body->ForLoopPartSkipped)
 
-## 4. Diagnosis (rules over the labelled graph, no model)
-Root-cause walk: held on ['increment_operators', 'loop_body', 'loop_variable'], broken at [] (consequences: pre:for_loop->loop_body, pre:assignment->increment_operators, pre:loop_control->for_loop, pre:loop_variable->loop_control, pre:loop_control->increment_operators), prerequisites {'increment_operators': ['assignment', 'loop_control'], 'boolean_expression': ['comparison_operators'], 'comparison_operators': ['expression'], 'loop_body': ['for_loop'], 'for_loop': ['loop_control'], 'loop_control': ['loop_variable'], 'control_flow': ['statement'], 'println': ['statement']}
+## 4. Diagnosis (fixed rules, no model)
+
+From here on the model is not asked any more. Fixed rules decide which labels count as mistakes, where the mistake starts (the root cause) and the level of each concept.
+Finding where the mistake starts: held on ['increment_operators', 'loop_body', 'loop_variable'], broken at [] (consequences: pre:for_loop->loop_body, pre:assignment->increment_operators, pre:loop_control->for_loop, pre:loop_variable->loop_control, pre:loop_control->increment_operators), prerequisites {'increment_operators': ['assignment', 'loop_control'], 'boolean_expression': ['comparison_operators'], 'comparison_operators': ['expression'], 'loop_body': ['for_loop'], 'for_loop': ['loop_control'], 'loop_control': ['loop_variable'], 'control_flow': ['statement'], 'println': ['statement']}
 - comparison_operators: L2 via output_prediction "The loop runs for i = 1, 2, 3, 4 and stops when i reaches 5"
 - control_flow: L2 via line_by_line_trace "The loop runs for i = 1, 2, 3, 4 and stops when i reaches 5"
 - for_loop: L2 via output_prediction "i is 5; The loop runs for i = 1, 2, 3, 4 and stops when i reaches 5; the i++ in the body does not affect the count"
@@ -1476,7 +1478,7 @@ Root-cause walk: held on ['increment_operators', 'loop_body', 'loop_variable'], 
 - loop_control: L2 via output_prediction "The loop runs for i = 1, 2, 3, 4 and stops when i reaches 5"
 - loop_variable: L0 via misconception "The loop runs for i = 1, 2, 3, 4 and stops when i reaches 5; the i++ in the body does not affect the count"
 
-**Stop:** max depth at depth 3; prompts {'prune': 25, 'label': 48}, fresh model calls 0, cache hits 73
+**Why the reading stopped:** max depth, in round 3. Questions put to the model: {'prune': 25, 'label': 48} (new: 0, answered from stored replies: 73)
 
 ### Held misconceptions
 | concept | misconception | kind | quote | score | shares_evidence_with |
@@ -1485,14 +1487,14 @@ Root-cause walk: held on ['increment_operators', 'loop_body', 'loop_variable'], 
 | increment_operators | IdiomOverridesCode | misconception | The loop runs for i = 1, 2, 3, 4 and stops when i reaches 5; the i++ in the body does not affect the count | 0.525 |  |
 | loop_body | ForLoopPartSkipped | misconception | The loop runs for i = 1, 2, 3, 4 and stops when i reaches 5; the i++ in the body does not affect the count | 0.315 |  |
 
-### Shadowed labels (held in the reading, folded into the label they shadow; not faults of their own)
+### Shadows (the same mistake read a second time; not counted again)
 | concept | misconception | shadow_of | quote | score |
 |---|---|---|---|---|
 | loop_control | IdiomOverridesCode | mis:loop_body->ForLoopPartSkipped | The loop runs for i = 1, 2, 3, 4 and stops when i reaches 5; the i++ in the body does not affect the count | 0.27 |
 | loop_control | LoopStepAlwaysOne | mis:loop_body->ForLoopPartSkipped | The loop runs for i = 1, 2, 3, 4 and stops when i reaches 5; the i++ in the body does not affect the count | 0.11 |
 | assignment | VariableKeepsOldValue | mis:loop_control->LoopStepAlwaysOne | The loop runs for i = 1, 2, 3, 4 and stops when i reaches 5; the i++ in the body does not affect the count | 0.385 |
 
-### Broken concept edges
+### Links between concepts that the student breaks
 | edge | quote | score | consequence_of |
 |---|---|---|---|
 | pre:for_loop->loop_body | The loop runs for i = 1, 2, 3, 4 and stops when i reaches 5; the i++ in the body does not affect the count | 0.85 | mis:assignment->VariableKeepsOldValue |
@@ -1514,7 +1516,7 @@ Root-cause walk: held on ['increment_operators', 'loop_body', 'loop_variable'], 
 | loop_control | L2 | output_prediction |  | level_way | The loop runs for i = 1, 2, 3, 4 and stops when i reaches 5 |  |  |  |
 | loop_variable | L0 | misconception | BodyChangeIgnoredByCondition | level_mis_links | The loop runs for i = 1, 2, 3, 4 and stops when i reaches 5; the i++ in the body does not affect the count | wrong rule: Changing the loop variable inside the body does not affect the loop condition; the loop still runs its planned number of times. Right rule: The condition is tested with the current value of the variable, including changes made in the body. |  |  |
 
-Ways above L2 the model answered "wrong" (the kind of thing is done, but what is said contradicts Java; not shown):
+Ways above L2 where the student does that kind of thing, but what is said is wrong in Java (not counted):
 | concept | edge | level | way | confidence | clauses | quote |
 |---|---|---|---|---|---|---|
 | loop_control | lvl:loop_control@L4#1 | L4 | diagnose_an_error | 0.8 | [2, 3] | The loop runs for i = 1, 2, 3, 4 and stops when i reaches 5; the i++ in the body does not affect the count |
@@ -1525,9 +1527,11 @@ Ways above L2 the model answered "wrong" (the kind of thing is done, but what is
 | comparison_operators | lvl:comparison_operators@L3#5 | L3 | purpose_of_the_whole | 0.55 | [2] | The loop runs for i = 1, 2, 3, 4 and stops when i reaches 5 |
 | boolean_expression | lvl:boolean_expression@L3#3 | L3 | relation_to_neighbour | 0.8 | [2, 3] | The loop runs for i = 1, 2, 3, 4 and stops when i reaches 5; the i++ in the body does not affect the count |
 
-### Overall level: L0
+### Overall level by the walk's own Stage 7 rule: L0
 
-Clause coverage (final):
+The overall level of this folder is the one in the section \"Level classification\" at the top; it can differ from this one.
+
+Which finding explains each clause, at the end:
 | clause | covered by |
 |---|---|
 | i is 5 | lvl:for_loop@L2#1 |
@@ -1537,7 +1541,7 @@ Clause coverage (final):
 **Figure 7 (final picture)**
 
 ![Figure 7](figure07.png)
-## 5. Every labelled edge (the evidence list, kept or not)
+## 5. Everything that got a label
 | depth | source | edge | kind | label | prune_score | confidence | score | clauses | quote |
 |---|---|---|---|---|---|---|---|---|---|
 | 1 | loop_control | mis:loop_control->IdiomOverridesCode | misconception | held | 0.45 | 0.6 | 0.27 | [2, 3] | The loop runs for i = 1, 2, 3, 4 and stops when i reaches 5; the i++ in the body does not affect the count |
@@ -1563,7 +1567,7 @@ Clause coverage (final):
 | 3 | comparison_operators | mis:comparison_operators->LessGreaterSwapped | misconception | correct | 0.8 | 0.8 | 0.64 | [2] | The loop runs for i = 1, 2, 3, 4 and stops when i reaches 5 |
 | 3 | comparison_operators | lvl:comparison_operators@L2#1 | level | shown | 0.35 | 0.6 | 0.21 | [2] | The loop runs for i = 1, 2, 3, 4 and stops when i reaches 5 |
 
-## 6. The paths (what the keep step kept, depth by depth)
+## 6. What was kept, round by round
 | depth | source | edge | kind | label | score | clauses |
 |---|---|---|---|---|---|---|
 | 1 | assignment | mis:assignment->VariableKeepsOldValue | misconception | held | 0.385 | [2, 3] |
@@ -1580,7 +1584,7 @@ Clause coverage (final):
 | 3 | comparison_operators | mis:comparison_operators->LessGreaterSwapped | misconception | correct | 0.64 | [2] |
 | 3 | control_flow | mis:control_flow->ProgramEndsAfterLoop | misconception | correct | 0.27 | [1, 2] |
 
-## 7. Raw traversal log
+## 7. The program's own log of the run
 ```
 clauses: i is 5 | The loop runs for i = 1, 2, 3, 4 and stops when i reaches 5 | the i++ in the body does not affect the count
 start: generic concepts whose tagging text occurs in the answer: assignment, statement
@@ -1714,7 +1718,7 @@ start concepts (3): loop_control, for_loop, assignment
   level loop_variable: L0 via misconception "The loop runs for i = 1, 2, 3, 4 and stops when i reaches 5; the i++ in the body does not affect the count"
 ```
 
-## 8. Full diagnosis JSON
+## 8. The full result as data
 ```json
 {
  "scenario": "LP04",
