@@ -159,18 +159,10 @@ Clauses: 1, 2, 3
 Confidence: 0.93
 ```
 
-Label prompt for level way lvl:array_aliasing@L4#2 (the model saw only the concept, the way's name 'diagnose an error' and its text; no level):
+Label prompt for level way lvl:array_aliasing@L4#2 (the model saw the concept, the way's name 'diagnose an error', its text, where the way stops and whether the words must be correct; no level):
 > rule broken: Assignment copies the reference, not the elements. Kind: silent logic error. Trigger class: b = a is used as a 'copy', and then b is modified while a is expected to stay unchanged (or the reverse)
-
-Model's reply:
-```
-Label: not shown
-Clauses: none
-Confidence: 0.92
-```
-
-Label prompt for level way lvl:array_aliasing@L3#2 (the model saw only the concept, the way's name 'relation to neighbour' and its text; no level):
-> b = a makes a second name for the same array (an alias); copying makes a second array: after a copy, changing b[i] leaves a[i] unchanged.
+>
+> Where this way stops: Locating and fixing the mistake for one given failing case is L3. A compiler-flagged slip fixed from the message is weak evidence.
 
 Model's reply:
 ```
@@ -179,12 +171,23 @@ Clauses: none
 Confidence: 0.8
 ```
 
+Label prompt for level way lvl:array_aliasing@L3#2 (the model saw the concept, the way's name 'relation to neighbour', its text, where the way stops and whether the words must be correct; no level):
+> b = a makes a second name for the same array (an alias); copying makes a second array: after a copy, changing b[i] leaves a[i] unchanged.
+>
+> Where this way stops: Two correct but separate rules are L1. Executing the two in sequence is L2. A relational answer may be correct or a relational error.
+
+Model's reply:
+```
+Label: wrong
+Clauses: 2, 3
+Confidence: 0.85
+```
+
 Parsed labels:
 | edge | label | prune score | confidence | score | clauses | words |
 |---|---|---|---|---|---|---|
 | lvl:array_aliasing@L0#0 | shown | 0.6 | 0.93 | 0.56 | c1, c2, c3 | 1; b is a copy of a; so changing b[0] doesnt touch a |
 | lvl:array_aliasing@L4#2 | not applied |  |  | 0.0 |  |  |
-| lvl:array_aliasing@L3#2 | not applied |  |  | 0.0 |  |  |
 
 #### indexing, misconceptions: 8 edges offered
 Edges offered:
@@ -533,14 +536,16 @@ Prune: the model's reply (edge id and score; the kept edges sum to 1):
 ```
 Kept by pruning: lvl:array_reference@L4#0 (0.50), lvl:array_reference@L0#0 (0.30), lvl:array_reference@L2#2 (0.20)
 
-Label prompt for level way lvl:array_reference@L4#0 (the model saw only the concept, the way's name 'predict a change' and its text; no level):
+Label prompt for level way lvl:array_reference@L4#0 (the model saw the concept, the way's name 'predict a change', its text, where the way stops and whether the words must be correct; no level):
 > Conservation: copying a reference keeps one shared array (changes through either name are seen by both); assigning a new reference breaks the link without changing either array.
+>
+> Where this way stops: Re-tracing the changed code value by value is L2 on the new code. Adapting given code to a familiar variant may be only relational.
 
 Model's reply:
 ```
-Label: not shown
-Clauses: none
-Confidence: 0.9
+Label: wrong
+Clauses: 2, 3
+Confidence: 0.85
 ```
 
 Label prompt for level way lvl:array_reference@L0#0 (the model saw only the concept, the way's name 'everyday reading' and its text; no level):
@@ -564,11 +569,7 @@ Confidence: 0.95
 ```
 
 Parsed labels:
-| edge | label | prune score | confidence | score | clauses | words |
-|---|---|---|---|---|---|---|
-| lvl:array_reference@L4#0 | not applied |  |  | 0.0 |  |  |
-| lvl:array_reference@L0#0 | shown | 0.3 | 0.9 | 0.27 | c1, c2, c3 | 1; b is a copy of a; so changing b[0] doesnt touch a |
-| lvl:array_reference@L2#2 | not applied |  |  | 0.0 |  |  |
+(none)
 
 #### array_initializer, concept edges: 1 edges offered
 Edges offered:
@@ -642,6 +643,12 @@ Root-cause walk: held on ['array_aliasing'], broken at [] (consequences: pre:arr
 | array_reference | L0 | everyday_reading |  | level_way | 1; b is a copy of a; so changing b[0] doesnt touch a |  |  |  |
 | indexing | L2 | output_prediction |  | level_way | 1 |  | L1 names_the_element |  |
 
+Ways above L2 the model answered "wrong" (the kind of thing is done, but what is said contradicts Java; not shown):
+| concept | edge | level | way | confidence | clauses | quote |
+|---|---|---|---|---|---|---|
+| array_aliasing | lvl:array_aliasing@L3#2 | L3 | relation_to_neighbour | 0.85 | [2, 3] | b is a copy of a; so changing b[0] doesnt touch a |
+| array_reference | lvl:array_reference@L4#0 | L4 | predict_a_change | 0.85 | [2, 3] | b is a copy of a; so changing b[0] doesnt touch a |
+
 ### Overall level: L0
 
 Clause coverage (final):
@@ -688,6 +695,7 @@ start concepts (3): array_aliasing, indexing, array_initializer
   array_aliasing (level ways): 15 candidates -> kept lvl:array_aliasing@L0#0 (0.60), lvl:array_aliasing@L4#2 (0.25), lvl:array_aliasing@L3#2 (0.15)
     lvl:array_aliasing@L0#0 -> shown (0.56) "1; b is a copy of a; so changing b[0] doesnt touch a"
     lvl:array_aliasing@L4#2 -> not applied (0.00) ""
+    lvl:array_aliasing@L3#2: wrong (0.85) -> not applied
     lvl:array_aliasing@L3#2 -> not applied (0.00) ""
   indexing (misconceptions): 8 candidates -> kept mis:indexing->ArrayIndexStartsAtOne (0.40), mis:indexing->ElementNameIsWholeArray (0.30), mis:indexing->ArrayElementNotVariable (0.30)
     mis:indexing->ArrayIndexStartsAtOne -> correct (0.24) "1"
@@ -720,6 +728,7 @@ start concepts (3): array_aliasing, indexing, array_initializer
   not yet read: own edges of array_reference
 --- depth 3: current concepts ['array_reference', 'array_aliasing', 'array_initializer', 'indexing']
   array_reference (level ways): 12 candidates -> kept lvl:array_reference@L4#0 (0.50), lvl:array_reference@L0#0 (0.30), lvl:array_reference@L2#2 (0.20)
+    lvl:array_reference@L4#0: wrong (0.85) -> not applied
     lvl:array_reference@L4#0 -> not applied (0.00) ""
     lvl:array_reference@L0#0 -> shown (0.27) "1; b is a copy of a; so changing b[0] doesnt touch a"
     lvl:array_reference@L2#2 -> not applied (0.00) ""
@@ -744,7 +753,8 @@ start concepts (3): array_aliasing, indexing, array_initializer
   "depth": 3,
   "prune_tools": "llm",
   "model": "claude-opus-5-5",
-  "backend": "claude-cli"
+  "backend": "claude-cli",
+  "level_v2": true
  },
  "clauses": [
   "1",
@@ -1126,6 +1136,35 @@ start concepts (3): array_aliasing, indexing, array_initializer
  "llm_calls_by_step": {
   "prune": 11,
   "label": 19
+ },
+ "level_v2": {
+  "wrong_ways": [
+   {
+    "concept": "array_aliasing",
+    "edge": "lvl:array_aliasing@L3#2",
+    "level": "L3",
+    "way": "relation_to_neighbour",
+    "clauses": [
+     2,
+     3
+    ],
+    "quote": "b is a copy of a; so changing b[0] doesnt touch a",
+    "confidence": 0.85
+   },
+   {
+    "concept": "array_reference",
+    "edge": "lvl:array_reference@L4#0",
+    "level": "L4",
+    "way": "predict_a_change",
+    "clauses": [
+     2,
+     3
+    ],
+    "quote": "b is a copy of a; so changing b[0] doesnt touch a",
+    "confidence": 0.85
+   }
+  ],
+  "not_counted": []
  }
 }
 ```

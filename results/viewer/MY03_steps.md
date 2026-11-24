@@ -168,14 +168,16 @@ Clauses: 1, 2, 3, 4
 Confidence: 0.9
 ```
 
-Label prompt for level way lvl:array_aliasing@L4#2 (the model saw only the concept, the way's name 'diagnose an error' and its text; no level):
+Label prompt for level way lvl:array_aliasing@L4#2 (the model saw the concept, the way's name 'diagnose an error', its text, where the way stops and whether the words must be correct; no level):
 > rule broken: Assignment copies the reference, not the elements. Kind: silent logic error. Trigger class: b = a is used as a 'copy', and then b is modified while a is expected to stay unchanged (or the reverse)
+>
+> Where this way stops: Locating and fixing the mistake for one given failing case is L3. A compiler-flagged slip fixed from the message is weak evidence.
 
 Model's reply:
 ```
 Label: not shown
 Clauses: none
-Confidence: 0.9
+Confidence: 0.7
 ```
 
 Label prompt for level way lvl:array_aliasing@L2#2 (the model saw only the concept, the way's name 'one step execution' and its text; no level):
@@ -544,14 +546,16 @@ Prune: the model's reply (edge id and score; the kept edges sum to 1):
 ```
 Kept by pruning: lvl:array_reference@L4#0 (0.50), lvl:array_reference@L0#0 (0.30), lvl:array_reference@L2#2 (0.20)
 
-Label prompt for level way lvl:array_reference@L4#0 (the model saw only the concept, the way's name 'predict a change' and its text; no level):
+Label prompt for level way lvl:array_reference@L4#0 (the model saw the concept, the way's name 'predict a change', its text, where the way stops and whether the words must be correct; no level):
 > Conservation: copying a reference keeps one shared array (changes through either name are seen by both); assigning a new reference breaks the link without changing either array.
+>
+> Where this way stops: Re-tracing the changed code value by value is L2 on the new code. Adapting given code to a familiar variant may be only relational.
 
 Model's reply:
 ```
-Label: not shown
-Clauses: none
-Confidence: 0.95
+Label: wrong
+Clauses: 2, 3, 4
+Confidence: 0.8
 ```
 
 Label prompt for level way lvl:array_reference@L0#0 (the model saw only the concept, the way's name 'everyday reading' and its text; no level):
@@ -575,11 +579,7 @@ Confidence: 0.9
 ```
 
 Parsed labels:
-| edge | label | prune score | confidence | score | clauses | words |
-|---|---|---|---|---|---|---|
-| lvl:array_reference@L4#0 | not applied |  |  | 0.0 |  |  |
-| lvl:array_reference@L0#0 | shown | 0.3 | 0.8 | 0.24 | c2, c3, c4 | The line b = a makes b a copy of a; so b is a separate array; Changing b[0] to 9 only changes b, and a[0] is still 1 |
-| lvl:array_reference@L2#2 | not applied |  |  | 0.0 |  |  |
+(none)
 
 #### array_initializer, concept edges: 1 edges offered
 Edges offered:
@@ -653,6 +653,11 @@ Root-cause walk: held on ['array_aliasing'], broken at [] (consequences: pre:arr
 | array_initializer | L2 | output_prediction |  | level_way | It prints 1 9; Changing b[0] to 9 only changes b, and a[0] is still 1 |  |  |  |
 | array_reference | L0 | everyday_reading |  | level_way | The line b = a makes b a copy of a; so b is a separate array; Changing b[0] to 9 only changes b, and a[0] is still 1 |  |  |  |
 | indexing | L2 | one_step_execution |  | level_way | It prints 1 9; Changing b[0] to 9 only changes b, and a[0] is still 1 |  | L2 output_prediction, L1 names_the_element |  |
+
+Ways above L2 the model answered "wrong" (the kind of thing is done, but what is said contradicts Java; not shown):
+| concept | edge | level | way | confidence | clauses | quote |
+|---|---|---|---|---|---|---|
+| array_reference | lvl:array_reference@L4#0 | L4 | predict_a_change | 0.8 | [2, 3, 4] | The line b = a makes b a copy of a; so b is a separate array; Changing b[0] to 9 only changes b, and a[0] is still 1 |
 
 ### Overall level: L0
 
@@ -735,6 +740,7 @@ start concepts (3): array_aliasing, indexing, array_initializer
   not yet read: own edges of array_reference
 --- depth 3: current concepts ['array_reference', 'array_aliasing', 'array_initializer', 'indexing']
   array_reference (level ways): 12 candidates -> kept lvl:array_reference@L4#0 (0.50), lvl:array_reference@L0#0 (0.30), lvl:array_reference@L2#2 (0.20)
+    lvl:array_reference@L4#0: wrong (0.80) -> not applied
     lvl:array_reference@L4#0 -> not applied (0.00) ""
     lvl:array_reference@L0#0 -> shown (0.24) "The line b = a makes b a copy of a; so b is a separate array; Changing b[0] to 9 only changes b, and a[0] is still 1"
     lvl:array_reference@L2#2 -> not applied (0.00) ""
@@ -759,7 +765,8 @@ start concepts (3): array_aliasing, indexing, array_initializer
   "depth": 3,
   "prune_tools": "llm",
   "model": "claude-opus-5-5",
-  "backend": "claude-cli"
+  "backend": "claude-cli",
+  "level_v2": true
  },
  "clauses": [
   "It prints 1 9",
@@ -1191,6 +1198,24 @@ start concepts (3): array_aliasing, indexing, array_initializer
  "llm_calls_by_step": {
   "prune": 11,
   "label": 19
+ },
+ "level_v2": {
+  "wrong_ways": [
+   {
+    "concept": "array_reference",
+    "edge": "lvl:array_reference@L4#0",
+    "level": "L4",
+    "way": "predict_a_change",
+    "clauses": [
+     2,
+     3,
+     4
+    ],
+    "quote": "The line b = a makes b a copy of a; so b is a separate array; Changing b[0] to 9 only changes b, and a[0] is still 1",
+    "confidence": 0.8
+   }
+  ],
+  "not_counted": []
  }
 }
 ```

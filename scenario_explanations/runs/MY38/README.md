@@ -25,8 +25,8 @@ for (int r = 0; r < 3; r++) {
 
 - **Wrong rules held:** none
 - **Root cause:** none
-- **Overall level:** L4
-- **Level per concept:** `arithmetic_operators` L3, `array_bounds` L4, `array_creation` L3, `expression` L4, `indexing` L4, `remainder_operator` L3
+- **Overall level:** L3
+- **Level per concept:** `arithmetic_operators` L3, `array_bounds` L3, `array_creation` L3, `expression` L3, `indexing` L3, `remainder_operator` L3
 
 **Check of this result (read by hand, 2026-11-13).** The diagnosis matches the answer: nothing is held.
 
@@ -46,7 +46,7 @@ This stage reads only the program, never the student's answer. Its job is to dec
 
 **1.2 Tag concepts.** Every concept node stores a *reader block*: regular expressions that describe how the concept looks in Java, in several *channels* (code patterns, signals, operator symbols, type names, and command patterns for `java` / `javac` lines). All of them are run over the masked code. Each match is a **hit**: which channel and pattern, the matched text, and the line. A concept with at least one hit is **tagged**. There is nothing learned here; the patterns in the graph are the whole "model".
 
-*One of the outputs at this stage:* `array_bounds` is tagged: its pattern `\w+\s*<\s*\w+\.length\b` matches `i < data.length` on line 3.
+*One of the outputs at this stage:* `arithmetic_operators` is tagged: its pattern `[A-Za-z_0-9)\]][ \t]*(?:[*/%]|\+(?!\+)|-(?!-))\s*…` matches `] % 3` on line 4.
 
 **1.3 Handle generic concepts.** The graph marks some concepts **generic**: they are so basic (statement, expression, assignment, a literal, `int`) that their pattern fires on almost any line of Java. If all of them were kept, every program would seem to be "about" them and the diagnosis would drift to vague places. So a tagged generic concept is kept only when the code ties it to something specific: the graph has a prerequisite or parallel edge between it and a non-generic tagged concept, or one of its *decisive* signals fired (a pattern that by itself shows the concept is the point of the code). A kept generic concept stays marked generic: the walk can reach it and it can get a level, but it cannot be a starting point by itself, and a wrong-rule label on it is treated as a shadow of a more specific one (stage 4).
 
@@ -80,13 +80,13 @@ At each depth, for each current concept, the following happens.
 
 *One of the outputs at this stage:* at `array_creation` the level ways family is pruned to: L3 way “relation to neighbour” 0.60, L3 way “purpose of the whole” 0.25, L3 way “relation to neighbour” 0.15.
 
-**3.3 Label (model, second question).** Each edge that survived is now read against the numbered clauses and gets a **label**. For a misconception or error edge: **held** (the student's words state this wrong rule), **correct** (they state the right rule, its twin) or **not applied** (the answer says nothing about it). For a level way: **shown** or not applied. For a prerequisite or parallel edge: **confirmed** (the answer carries the rule from one concept into the other) or **broken** (it fails to). The misconception edges of one concept are judged together in a single question, because the same sentence can fit several wrong rules and the model should give *held* only to the one the student really claims. With the label the model must return the **clause numbers** it rests on and a **confidence** from 0 to 1. A label with no clause is discarded. This is the safeguard of the method: the model never diagnoses from its own knowledge; every label is attached to one edge of G and to the student's words.
+**3.3 Label (model, second question).** Each edge that survived is now read against the numbered clauses and gets a **label**. For a misconception or error edge: **held** (the student's words state this wrong rule), **correct** (they state the right rule, its twin) or **not applied** (the answer says nothing about it). For a level way: **shown** or not applied. For a way above L2 the question also gives where the way stops (its boundary, stored in the graph) and whether the words must be correct, and the model may answer **wrong** (the student does this kind of thing, but what is said contradicts Java); a wrong way is not shown. For a prerequisite or parallel edge: **confirmed** (the answer carries the rule from one concept into the other) or **broken** (it fails to). The misconception edges of one concept are judged together in a single question, because the same sentence can fit several wrong rules and the model should give *held* only to the one the student really claims. With the label the model must return the **clause numbers** it rests on and a **confidence** from 0 to 1. A label with no clause is discarded. This is the safeguard of the method: the model never diagnoses from its own knowledge; every label is attached to one edge of G and to the student's words.
 
 *One of the outputs at this stage:* L3 way “relation to neighbour” at `array_creation` is labelled **shown** on clauses 2, 3 (“The % 3 turns each number into an index 0, 1 or 2; so it fits the array”) with confidence 0.80. The rule on that edge: “Elements can be indexed only after creation, and the n given to new fixes the valid index range 0..n-1.”
 
 **3.4 Score and keep.** The **score** of a labelled edge is prune score × confidence: an edge counts for much only if it was both relevant and confidently labelled. The edges are then ranked in **tiers**. Tier 0 is a held misconception or a broken edge: these are findings about a fault and are always kept. Tier 1 is a held error. Tier 2 is everything that only confirms understanding (correct, confirmed, shown); these fill whatever is left of the N = 3 places, best score first. Kept edges are added to the paths. Every edge with a label other than *not applied*, kept or not, is added to the evidence, because the levels in stage 6 are read from all of it.
 
-*One of the outputs at this stage:* the score of L3 way “relation to neighbour” is 0.60 × 0.80 = 0.48. At depth 1 the kept edges are: RemainderIsSubtraction (correct, tier 2, 0.81); L3 way “purpose of the whole” (shown, tier 2, 0.42); L3 way “purpose of the whole” (shown, tier 2, 0.38).
+*One of the outputs at this stage:* the score of L3 way “relation to neighbour” is 0.60 × 0.80 = 0.48. At depth 1 the kept edges are: RemainderIsSubtraction (correct, tier 2, 0.81); L3 way “purpose of the whole” (shown, tier 2, 0.45); L3 way “purpose of the whole” (shown, tier 2, 0.44).
 
 **3.5 Move to the next concepts.** Three things decide where the walk goes next. A kept prerequisite or parallel edge leads to the concept at its other end; that concept is **entered** and will be read inwards at the next depth, so it gets misconceptions and a level of its own. A concept with a held misconception stays current, so that its prerequisites are examined: the fault may begin further back. And any entered concept whose outward edges have not been read yet stays current until they are.
 
@@ -160,7 +160,7 @@ Every concept has five **levels**, taken from the SOLO taxonomy: **L0** prestruc
 
 The model is never asked for a level. In stage 3 it only said whether a way was *shown*; the level is read from where that way sits in the graph, in two steps.
 
-**6.1 Gather the evidence per concept.** Take every concept that appears in the evidence of stage 3 (kept in 3.4 or not). For each one collect two lists: the misconceptions held on it that are not shadows, and the ways shown on it.
+**6.1 Gather the evidence per concept.** Take every concept that appears in the evidence of stage 3 (kept in 3.4 or not). For each one collect two lists: the misconceptions held on it that are not shadows, and the ways shown on it. A shown way above L2 is counted only if two things hold: the model's confidence in it is above 0.60, and its clauses are not all clauses that a held misconception rests on. So a weak yes, or a wrong sentence already counted as a misconception, cannot lift a concept to L3 or L4.
 
 *One of the outputs at this stage:* 9 concepts appear in the evidence: `arithmetic_operators`, `array_bounds`, `array_creation`, `array_initializer`, `array_traversal`, `expression`, `indexing`, `length_field`, `remainder_operator`.
 
@@ -178,13 +178,13 @@ A held error node is not a misconception, so rule (a) does not apply to it.
 | Concept | Level | Rule | Why |
 |---|---|---|---|
 | `arithmetic_operators` | L3 | (c) | ways shown: L2 “output prediction”, L3 “purpose of the whole” |
-| `array_bounds` | L4 | (c) | ways shown: L1 “names the element”, L3 “relation to neighbour”, L4 “transfer to a new program” |
-| `array_creation` | L3 | (c) | ways shown: L3 “relation to neighbour”, L3 “relation to neighbour” |
+| `array_bounds` | L3 | (c) | ways shown: L1 “names the element”, L3 “relation to neighbour”; not counted: L4 “transfer to a new program” (confidence 0.60) |
+| `array_creation` | L3 | (c) | ways shown: L3 “relation to neighbour”, L3 “relation to neighbour”; not counted: L3 “purpose of the whole” (confidence 0.60) |
 | `array_initializer` | none | (d) | nothing held, no way shown |
 | `array_traversal` | none | (d) | nothing held, no way shown |
-| `expression` | L4 | (c) | ways shown: L3 “purpose of the whole”, L3 “relation to neighbour”, L4 “transfer to a new program” |
-| `indexing` | L4 | (c) | ways shown: L3 “relation to neighbour”, L3 “purpose of the whole”, L4 “transfer to a new program” |
-| `length_field` | none | (d) | nothing held, no way shown |
+| `expression` | L3 | (c) | ways shown: L3 “purpose of the whole”, L3 “relation to neighbour” |
+| `indexing` | L3 | (c) | ways shown: L3 “relation to neighbour”, L3 “purpose of the whole” |
+| `length_field` | none | (d) | nothing held, no counted way; not counted: L3 “relation to neighbour” (confidence 0.60) |
 | `remainder_operator` | L3 | (c) | ways shown: L1 “names the element”, L2 “one step execution”, L3 “purpose of the whole” |
 
 ## Stage 7. Overall level (rule, no model)
@@ -195,7 +195,7 @@ One level is reported for the whole answer.
 
 **7.2 Without a fault.** The levels of stage 6 are sorted from high to low and the one in the middle is taken: with n levels, the one at position (n − 1) ÷ 2, rounded down and counted from 0. So one weak or one strong concept does not decide for the whole answer.
 
-*One of the outputs at this stage:* 7.2 applies: there is no root cause. The levels from high to low are L4, L4, L4, L3, L3, L3; position (6 − 1) ÷ 2 = 2, counted from 0, is **L4**.
+*One of the outputs at this stage:* 7.2 applies: there is no root cause. The levels from high to low are L3, L3, L3, L3, L3, L3; position (6 − 1) ÷ 2 = 2, counted from 0, is **L3**.
 
 ## The final picture
 

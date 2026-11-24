@@ -14,6 +14,7 @@ start concepts (3): do_while_loop, loop_body, loop_control
     mis:loop_body->ForLoopPartSkipped -> not applied (0.00) ""
     mis:loop_body->WhileStopsMidBody -> not applied (0.00) ""
   loop_body (level ways): 14 candidates -> kept lvl:loop_body@L3#2 (0.50), lvl:loop_body@L0#6 (0.30), lvl:loop_body@L2#0 (0.20)
+    lvl:loop_body@L3#2: wrong (0.85) -> not applied
     lvl:loop_body@L3#2 -> not applied (0.00) ""
     lvl:loop_body@L0#6 -> not applied (0.00) ""
     lvl:loop_body@L2#0 -> not applied (0.00) ""
@@ -49,10 +50,11 @@ start concepts (3): do_while_loop, loop_body, loop_control
   loop_variable (level ways): 13 candidates -> kept lvl:loop_variable@L1#1 (0.50), lvl:loop_variable@L2#2 (0.30), lvl:loop_variable@L3#0 (0.20)
     lvl:loop_variable@L1#1 -> shown (0.30) "10 < 5 is false; so the loop never starts"
     lvl:loop_variable@L2#2 -> shown (0.21) "10 < 5 is false"
-    lvl:loop_variable@L3#0 -> shown (0.12) "10 < 5 is false"
-  kept: lvl:loop_variable@L1#1 [shown, tier 2, 0.30], lvl:loop_variable@L2#2 [shown, tier 2, 0.21], lvl:loop_variable@L3#0 [shown, tier 2, 0.12]
+    lvl:loop_variable@L3#0: wrong (0.80) -> not applied
+    lvl:loop_variable@L3#0 -> not applied (0.00) ""
+  kept: lvl:loop_variable@L1#1 [shown, tier 2, 0.30], lvl:loop_variable@L2#2 [shown, tier 2, 0.21]
   clause coverage: c1 <- mis:do_while_loop->DoWhileTestsFirst; c2 <- mis:do_while_loop->DoWhileTestsFirst; c3 <- mis:do_while_loop->DoWhileTestsFirst
   root-cause walk: held on ['do_while_loop'], broken at [] (consequences: pre:do_while_loop->loop_control, pre:do_while_loop->loop_body), prerequisites {'increment_operators': ['assignment', 'loop_control'], 'boolean_expression': ['comparison_operators'], 'loop_body': ['do_while_loop'], 'loop_control': ['do_while_loop', 'loop_variable'], 'comparison_operators': ['expression'], 'control_flow': ['statement'], 'println': ['statement']}
   level do_while_loop: L0 via misconception "Zero times; 10 < 5 is false; so the loop never starts"
   level loop_control: L2 via line_by_line_trace "10 < 5 is false; so the loop never starts"
-  level loop_variable: L3 via relation_to_neighbour "10 < 5 is false"
+  level loop_variable: L2 via one_step_execution "10 < 5 is false"

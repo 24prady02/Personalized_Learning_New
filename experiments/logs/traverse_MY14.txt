@@ -10,6 +10,7 @@ start concepts (3): loop_control, for_loop, loop_variable
   loop_control (level ways): 19 candidates -> kept lvl:loop_control@L2#2 (0.50), lvl:loop_control@L2#1 (0.30), lvl:loop_control@L3#2 (0.20)
     lvl:loop_control@L2#2 -> not applied (0.00) ""
     lvl:loop_control@L2#1 -> not applied (0.00) ""
+    lvl:loop_control@L3#2: wrong (0.80) -> not applied
     lvl:loop_control@L3#2 -> not applied (0.00) ""
   for_loop (misconceptions): 21 candidates -> kept mis:for_loop->LoopStepAlwaysOne (0.60), mis:for_loop->IdiomOverridesCode (0.25), err:for_loop->WrongIterationCount (0.15)
     mis:for_loop->LoopStepAlwaysOne -> held (0.57) "A for loop moves i on by one each pass; so i goes 0, 1, 2 and; so on up to 9"

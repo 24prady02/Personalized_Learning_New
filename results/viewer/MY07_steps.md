@@ -139,14 +139,16 @@ Prune: the model's reply (edge id and score; the kept edges sum to 1):
 ```
 Kept by pruning: lvl:arithmetic_operators@L4#5 (0.60), lvl:arithmetic_operators@L1#1 (0.25), lvl:arithmetic_operators@L2#2 (0.15)
 
-Label prompt for level way lvl:arithmetic_operators@L4#5 (the model saw only the concept, the way's name 'diagnose an error' and its text; no level):
+Label prompt for level way lvl:arithmetic_operators@L4#5 (the model saw the concept, the way's name 'diagnose an error', its text, where the way stops and whether the words must be correct; no level):
 > rule broken: int arithmetic wraps silently on overflow. Kind: silent logic error. Trigger class: Results outside the int range.
+>
+> Where this way stops: Locating and fixing the mistake for one given failing case is L3. A compiler-flagged slip fixed from the message is weak evidence.
 
 Model's reply:
 ```
-Label: not shown
-Clauses: none
-Confidence: 0.95
+Label: wrong
+Clauses: 2, 3
+Confidence: 0.7
 ```
 
 Label prompt for level way lvl:arithmetic_operators@L1#1 (the model saw only the concept, the way's name 'states the rule' and its text; no level):
@@ -170,11 +172,7 @@ Confidence: 0.6
 ```
 
 Parsed labels:
-| edge | label | prune score | confidence | score | clauses | words |
-|---|---|---|---|---|---|---|
-| lvl:arithmetic_operators@L4#5 | not applied |  |  | 0.0 |  |  |
-| lvl:arithmetic_operators@L1#1 | not applied |  |  | 0.0 |  |  |
-| lvl:arithmetic_operators@L2#2 | shown | 0.15 | 0.6 | 0.09 | c2 | Adding 1 to 2147483647 gives 2147483648, and Java just stores the bigger number in big |
+(none)
 
 #### overflow, misconceptions: 2 edges offered
 Edges offered:
@@ -348,14 +346,16 @@ Clauses: 1
 Confidence: 0.6
 ```
 
-Label prompt for level way lvl:println@L3#3 (the model saw only the concept, the way's name 'relation to neighbour' and its text; no level):
+Label prompt for level way lvl:println@L3#3 (the model saw the concept, the way's name 'relation to neighbour', its text, where the way stops and whether the words must be correct; no level):
 > println prints numbers with all their digits and always ends the line; printf formats each value by its conversion code and ends the line only where the format has %n or \n.
+>
+> Where this way stops: Two correct but separate rules are L1. Executing the two in sequence is L2. A relational answer may be correct or a relational error.
 
 Model's reply:
 ```
 Label: not shown
 Clauses: none
-Confidence: 0.9
+Confidence: 0.85
 ```
 
 Label prompt for level way lvl:println@L2#0 (the model saw only the concept, the way's name 'line by line trace' and its text; no level):
@@ -578,14 +578,16 @@ Clauses: none
 Confidence: 0.9
 ```
 
-Label prompt for level way lvl:int@L3#3 (the model saw only the concept, the way's name 'relation to neighbour' and its text; no level):
+Label prompt for level way lvl:int@L3#3 (the model saw the concept, the way's name 'relation to neighbour', its text, where the way stops and whether the words must be correct; no level):
 > Because int has a fixed 32-bit range, results outside it wrap around silently.
+>
+> Where this way stops: Two correct but separate rules are L1. Executing the two in sequence is L2. A relational answer may be correct or a relational error.
 
 Model's reply:
 ```
-Label: not shown
-Clauses: none
-Confidence: 0.97
+Label: wrong
+Clauses: 2, 3
+Confidence: 0.8
 ```
 
 Parsed labels:
@@ -593,7 +595,6 @@ Parsed labels:
 |---|---|---|---|---|---|---|
 | lvl:int@L0#0 | shown | 0.5 | 0.85 | 0.42 | c1, c2, c3 | It prints 2147483648; Adding 1 to 2147483647 gives 2147483648, and Java just stores the bigger number in big; because it makes room for it automatically |
 | lvl:int@L2#2 | not applied |  |  | 0.0 |  |  |
-| lvl:int@L3#3 | not applied |  |  | 0.0 |  |  |
 
 #### expression, misconceptions: 8 edges offered
 Edges offered:
@@ -686,14 +687,16 @@ Clauses: none
 Confidence: 0.85
 ```
 
-Label prompt for level way lvl:expression@L3#1 (the model saw only the concept, the way's name 'relation to neighbour' and its text; no level):
+Label prompt for level way lvl:expression@L3#1 (the model saw the concept, the way's name 'relation to neighbour', its text, where the way stops and whether the words must be correct; no level):
 > Operators combine operand values into a new value, and the operand types choose the operation (int / truncates, double / does not).
+>
+> Where this way stops: Two correct but separate rules are L1. Executing the two in sequence is L2. A relational answer may be correct or a relational error.
 
 Model's reply:
 ```
-Label: not shown
-Clauses: none
-Confidence: 0.7
+Label: wrong
+Clauses: 2, 3
+Confidence: 0.72
 ```
 
 Parsed labels:
@@ -701,7 +704,6 @@ Parsed labels:
 |---|---|---|---|---|---|---|
 | lvl:expression@L0#0 | shown | 0.5 | 0.85 | 0.42 | c1, c2, c3 | It prints 2147483648; Adding 1 to 2147483647 gives 2147483648, and Java just stores the bigger number in big; because it makes room for it automatically |
 | lvl:expression@L2#1 | not applied |  |  | 0.0 |  |  |
-| lvl:expression@L3#1 | not applied |  |  | 0.0 |  |  |
 
 **Kept on a path at this depth** (best N in tiers: held misconception / broken edge, then held error, then correct / confirmed / shown):
 
@@ -728,7 +730,7 @@ Root-cause walk: held on ['overflow'], broken at [] (consequences: pre:int->over
 - overflow: L0 via misconception "It prints 2147483648; Adding 1 to 2147483647 gives 2147483648, and Java just stores the bigger number in big; because it makes room for it automatically"
 - println: L2 via output_prediction "It prints 2147483648"
 
-**Stop:** sufficient at depth 3; prompts {'prune': 13, 'label': 23}, fresh model calls 1, cache hits 35
+**Stop:** sufficient at depth 3; prompts {'prune': 13, 'label': 23}, fresh model calls 0, cache hits 36
 
 ### Held misconceptions
 | concept | misconception | kind | quote | score | shares_evidence_with |
@@ -755,6 +757,13 @@ Root-cause walk: held on ['overflow'], broken at [] (consequences: pre:int->over
 | int | L0 | everyday_reading |  | level_way | It prints 2147483648; Adding 1 to 2147483647 gives 2147483648, and Java just stores the bigger number in big; because it makes room for it automatically |  |  |  |
 | overflow | L0 | misconception | IntOverflowWidensAutomatically | level_mis_links | It prints 2147483648; Adding 1 to 2147483647 gives 2147483648, and Java just stores the bigger number in big; because it makes room for it automatically | wrong rule: An int result that is too large is automatically stored as a bigger number. Right rule: int arithmetic is 32-bit; a result outside the range wraps around. |  |  |
 | println | L2 | output_prediction |  | level_way | It prints 2147483648 |  | L2 line_by_line_trace |  |
+
+Ways above L2 the model answered "wrong" (the kind of thing is done, but what is said contradicts Java; not shown):
+| concept | edge | level | way | confidence | clauses | quote |
+|---|---|---|---|---|---|---|
+| arithmetic_operators | lvl:arithmetic_operators@L4#5 | L4 | diagnose_an_error | 0.7 | [2, 3] | Adding 1 to 2147483647 gives 2147483648, and Java just stores the bigger number in big; because it makes room for it automatically |
+| int | lvl:int@L3#3 | L3 | relation_to_neighbour | 0.8 | [2, 3] | Adding 1 to 2147483647 gives 2147483648, and Java just stores the bigger number in big; because it makes room for it automatically |
+| expression | lvl:expression@L3#1 | L3 | relation_to_neighbour | 0.72 | [2, 3] | Adding 1 to 2147483647 gives 2147483648, and Java just stores the bigger number in big; because it makes room for it automatically |
 
 ### Overall level: L0
 
@@ -806,6 +815,7 @@ start concepts (3): arithmetic_operators, overflow, println
     mis:arithmetic_operators->RemainderIsSubtraction -> not applied (0.00) ""
     mis:arithmetic_operators->CaretIsPower -> not applied (0.00) ""
   arithmetic_operators (level ways): 18 candidates -> kept lvl:arithmetic_operators@L4#5 (0.60), lvl:arithmetic_operators@L1#1 (0.25), lvl:arithmetic_operators@L2#2 (0.15)
+    lvl:arithmetic_operators@L4#5: wrong (0.70) -> not applied
     lvl:arithmetic_operators@L4#5 -> not applied (0.00) ""
     lvl:arithmetic_operators@L1#1 -> not applied (0.00) ""
     lvl:arithmetic_operators@L2#2 -> shown (0.09) "Adding 1 to 2147483647 gives 2147483648, and Java just stores the bigger number in big"
@@ -846,6 +856,7 @@ start concepts (3): arithmetic_operators, overflow, println
   int (level ways): 20 candidates -> kept lvl:int@L0#0 (0.50), lvl:int@L2#2 (0.25), lvl:int@L3#3 (0.25)
     lvl:int@L0#0 -> shown (0.42) "It prints 2147483648; Adding 1 to 2147483647 gives 2147483648, and Java just stores the bigger number in big; because it makes room for it automatically"
     lvl:int@L2#2 -> not applied (0.00) ""
+    lvl:int@L3#3: wrong (0.80) -> not applied
     lvl:int@L3#3 -> not applied (0.00) ""
   expression (misconceptions): 8 candidates -> kept mis:expression->TargetTyping (0.60), mis:expression->AssignmentIsEquation (0.25), mis:expression->VariablesHoldExpressions (0.15)
     mis:expression->TargetTyping -> not applied (0.00) ""
@@ -854,6 +865,7 @@ start concepts (3): arithmetic_operators, overflow, println
   expression (level ways): 19 candidates -> kept lvl:expression@L0#0 (0.50), lvl:expression@L2#1 (0.30), lvl:expression@L3#1 (0.20)
     lvl:expression@L0#0 -> shown (0.42) "It prints 2147483648; Adding 1 to 2147483647 gives 2147483648, and Java just stores the bigger number in big; because it makes room for it automatically"
     lvl:expression@L2#1 -> not applied (0.00) ""
+    lvl:expression@L3#1: wrong (0.72) -> not applied
     lvl:expression@L3#1 -> not applied (0.00) ""
   kept: mis:int->IntOverflowWidensAutomatically [held, tier 0, 0.92], lvl:int@L0#0 [shown, tier 2, 0.42], lvl:expression@L0#0 [shown, tier 2, 0.42]
   clause coverage: c1 <- mis:overflow->IntOverflowWidensAutomatically; c2 <- mis:overflow->IntOverflowWidensAutomatically; c3 <- mis:overflow->IntOverflowWidensAutomatically
@@ -876,7 +888,8 @@ start concepts (3): arithmetic_operators, overflow, println
   "depth": 3,
   "prune_tools": "llm",
   "model": "claude-opus-5-5",
-  "backend": "claude-cli"
+  "backend": "claude-cli",
+  "level_v2": true
  },
  "clauses": [
   "It prints 2147483648",
@@ -1367,11 +1380,52 @@ start concepts (3): arithmetic_operators, overflow, println
  "unexplained_clauses": [],
  "stop_reason": "sufficient",
  "depth_reached": 3,
- "llm_calls": 1,
- "llm_cache_hits": 35,
+ "llm_calls": 0,
+ "llm_cache_hits": 36,
  "llm_calls_by_step": {
   "prune": 13,
   "label": 23
+ },
+ "level_v2": {
+  "wrong_ways": [
+   {
+    "concept": "arithmetic_operators",
+    "edge": "lvl:arithmetic_operators@L4#5",
+    "level": "L4",
+    "way": "diagnose_an_error",
+    "clauses": [
+     2,
+     3
+    ],
+    "quote": "Adding 1 to 2147483647 gives 2147483648, and Java just stores the bigger number in big; because it makes room for it automatically",
+    "confidence": 0.7
+   },
+   {
+    "concept": "int",
+    "edge": "lvl:int@L3#3",
+    "level": "L3",
+    "way": "relation_to_neighbour",
+    "clauses": [
+     2,
+     3
+    ],
+    "quote": "Adding 1 to 2147483647 gives 2147483648, and Java just stores the bigger number in big; because it makes room for it automatically",
+    "confidence": 0.8
+   },
+   {
+    "concept": "expression",
+    "edge": "lvl:expression@L3#1",
+    "level": "L3",
+    "way": "relation_to_neighbour",
+    "clauses": [
+     2,
+     3
+    ],
+    "quote": "Adding 1 to 2147483647 gives 2147483648, and Java just stores the bigger number in big; because it makes room for it automatically",
+    "confidence": 0.72
+   }
+  ],
+  "not_counted": []
  }
 }
 ```

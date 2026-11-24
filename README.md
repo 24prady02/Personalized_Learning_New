@@ -61,7 +61,7 @@ Results. In 29 of the 40 the walk holds at least one wrong rule; in 11 it holds 
 | [MY18](scenario_explanations/runs/MY18/) | ArrayRangeInclusive, OffByOneBound, IdiomOverridesCode | `loop_control` | L0 |
 | [MY19](scenario_explanations/runs/MY19/) | TargetTyping | `integer_division` | L0 |
 | [MY20](scenario_explanations/runs/MY20/) | none | none | L2 |
-| [MY21](scenario_explanations/runs/MY21/) | none | none | L3 |
+| [MY21](scenario_explanations/runs/MY21/) | none | none | L2 |
 | [MY22](scenario_explanations/runs/MY22/) | none | none | L2 |
 | [MY23](scenario_explanations/runs/MY23/) | CastAfterIntDivision | `explicit_cast` | L0 |
 | [MY24](scenario_explanations/runs/MY24/) | none | none | L3 |
@@ -69,7 +69,7 @@ Results. In 29 of the 40 the walk holds at least one wrong rule; in 11 it holds 
 | [MY26](scenario_explanations/runs/MY26/) | DivisionByZeroIsCompileError | `division_by_zero` | L0 |
 | [MY27](scenario_explanations/runs/MY27/) | StringPlusLeftToRight, ArithmeticPlusPrecedes | `string_concatenation` | L0 |
 | [MY28](scenario_explanations/runs/MY28/) | CastAfterIntDivision | `explicit_cast` | L0 |
-| [MY29](scenario_explanations/runs/MY29/) | none | none | L4 |
+| [MY29](scenario_explanations/runs/MY29/) | none | none | L2 |
 | [MY30](scenario_explanations/runs/MY30/) | CharNotNumeric | `char_arithmetic` | L0 |
 | [MY31](scenario_explanations/runs/MY31/) | none | none | L3 |
 | [MY32](scenario_explanations/runs/MY32/) | DoWhileTestsFirst | `do_while_loop` | L0 |
@@ -78,7 +78,7 @@ Results. In 29 of the 40 the walk holds at least one wrong rule; in 11 it holds 
 | [MY35](scenario_explanations/runs/MY35/) | AverageWithoutZeroGuard | `division_by_zero` | None |
 | [MY36](scenario_explanations/runs/MY36/) | AssignmentCopiesObject | `array_aliasing` | L0 |
 | [MY37](scenario_explanations/runs/MY37/) | none | none | L4 |
-| [MY38](scenario_explanations/runs/MY38/) | none | none | L4 |
+| [MY38](scenario_explanations/runs/MY38/) | none | none | L3 |
 | [MY39](scenario_explanations/runs/MY39/) | RaggedRowsSameLength, NoJaggedArrays | `ragged_array` | L0 |
 | [MY40](scenario_explanations/runs/MY40/) | FewTrialsAreExact, ProbabilityIsPrediction | `frequency_counting` | L0 |
 
@@ -387,7 +387,7 @@ src/
   evaluate.py                                runs the scenarios: processed JSON, coverage report, figures, summary.csv, results.md, metrics.json
   utils.py                                   paths, load_kg, load_scenarios, reader_blocks, gold_concepts (check only), regex cache
   traverse.py                                Stages 2 to 7: ToG traversal over a Stage 1 subgraph (reads question + answer), writes <sid>_diagnosis.json
-  prompts.py                                 the Stage 3 prompts: one edge prune, three edge labels (misconception edge, concept edge, level way); the only places the model is asked
+  prompts.py                                 the Stage 3 prompts: one edge prune, the edge labels (misconception edge, concept edge, level way, and the way question for ways above L2); the only places the model is asked
   compare.py                                 the diagnoses vs gold (checking only): results/tables/stage2_vs_gold.csv, results/stage2_results.md
   demo.py                                    all seven stages on one scenario, with the step report and the page of the run
   steps_report.py, viz.py                    the step report of a run (results/viewer/<sid>_steps.md) and its figures
@@ -497,7 +497,13 @@ A beam search of width N over at most D depths plus one closing round. At each d
   get one call each: confirmed / broken / not applied for a concept edge shown with its logic; shown / not shown
   for a level way shown with the concept, the way's name and what an answer that shows the way does, and nothing
   else: no level name, no deciding question, no level in an id, so the way is judged against its own text like
-  every other edge and its level comes only from where it sits in the graph. Every reply gives the clause numbers
+  every other edge and its level comes only from where it sits in the graph. For a way above L2 (setting
+  `level_v2`, on in `experiments/config.json`) the question gives two more things the graph stores for the way:
+  where the way stops (its boundary, for example "Executing the two in sequence is L2") and whether the words must
+  be correct. It says that a step-by-step trace or a bare predicted output shows a way only when the way itself is
+  a trace or a prediction, and it offers a third answer, wrong: the student does this kind of thing, but what is
+  said contradicts Java. A wrong way is not shown and is no evidence; it is listed in the output under
+  `level_v2.wrong_ways`. Ways up to L2 keep the plain question. Every reply gives the clause numbers
   it rests on and a confidence from 0 to 1. The evidence is clause numbers, not a free quote, so the code knows
   exactly which words each label rests on, and two labels on the same clause are known to rest on the same words.
   A label with no clause behind it is not applied.
@@ -618,7 +624,10 @@ that way sits in the graph, in two steps.
 
 - **6.1 Gather the evidence per concept.** Take every concept that appears in the evidence of Stage 3 (kept in 3.4
   or not). For each one collect two lists: the misconceptions held on it that are not shadows, and the ways shown
-  on it.
+  on it. With the setting `level_v2`, a shown way above L2 is counted only if two things hold: the model's
+  confidence in it is above `level_min_conf` (0.60), and its clauses are not all clauses that a held misconception
+  rests on (shadows included). So a weak yes, or a wrong sentence already counted as a misconception, cannot lift a
+  concept to L3 or L4. The ways left out are listed in the output under `level_v2.not_counted`, with the reason.
 - **6.2 Apply the first rule that fits.**
   (a) A misconception is held on the concept: the level is L0. The entry names the misconception (the one left
   after Stage 4, otherwise the one with the highest score) and carries the L0 way's own text from `level_mis_links` as
@@ -659,7 +668,7 @@ the code: which file and function does each step, the variables it keeps, and th
 | 1 | `src/model.py` | `tag_code`, `extract_subgraph`, `subgraph_from_code` | How the matcher works; How the subgraph is taken out |
 | 2 | `src/traverse.py` | `Graph`, `split_clauses`, `select_start`, `bm25_scores` | How the subgraph is read for the walk; Stage 2 in code |
 | 3 | `src/traverse.py` | `traverse` (the loop), `parse_prune`, `parse_label`, `parse_label_set`, `covered_clauses`, `LLM.ask` | Stage 3 in code |
-| 3 | `src/prompts.py` | `PRUNE`, `LABEL_MIS`, `LABEL_CONCEPT`, `LABEL_WAY` | Stage 3 in code |
+| 3 | `src/prompts.py` | `PRUNE`, `LABEL_MIS`, `LABEL_CONCEPT`, `LABEL_WAY`, `LABEL_WAY_V2` | Stage 3 in code |
 | 4 | `src/traverse.py` | `mark_shared_evidence`, `filed_at_dependent`, `shadowed`, `same_words` | Stage 4 in code |
 | 5 | `src/traverse.py` | `traverse` (the root-cause walk) | Stage 5 in code |
 | 6, 7 | `src/traverse.py` | `traverse` (the level rules, the overall level) | Stages 6 and 7 in code |
@@ -800,7 +809,9 @@ concepts with `starts_at == depth` and nothing new is entered. At each depth, fo
 3. **Label (3.3).** The pruned misconception / error edges of the concept go into one `prompts.LABEL_MIS` call;
    `parse_label_set` reads one line per edge, `edge_id | label | clauses: 2, 4 | confidence: 0.9`, and an edge the
    reply leaves out is `not applied`. A level way gets its own `prompts.LABEL_WAY` call (labels `shown` / anything
-   else reads as `not applied`), and a concept edge its own `prompts.LABEL_CONCEPT` call (`confirmed` / `broken` /
+   else reads as `not applied`); with `level_v2` a way above L2 gets `prompts.LABEL_WAY_V2` instead (it adds the
+   way's `boundary` and `correctness` from the graph and the label `wrong`, which is recorded in `wrong_ways` and
+   then read as `not applied`). A concept edge gets its own `prompts.LABEL_CONCEPT` call (`confirmed` / `broken` /
    `not applied`); both replies have three lines, `Label:`, `Clauses:`, `Confidence:`, read by `parse_label`.
    `_clause_ids` turns "2, 4" or "c2 and c4" into clause indices and drops numbers out of range; the confidence is
    clipped to 0..1. A label with no clause is set to `not applied`.
@@ -869,6 +880,11 @@ For each concept that appears in `evidence` (as the source of a record, or as th
    the other shown ways are listed in `also_shown`.
 4. Else the concept gets no entry.
 
+With `level_v2`, the shown ways are filtered before these rules: a way above L2 is dropped when its confidence is
+not above `level_min_conf`, or when the set of its clauses is contained in `mis_clauses`, the clauses of every held
+misconception record in `evidence`. A dropped way goes to `not_counted` with its reason and takes no part in rules
+2 and 3.
+
 A held error is not a misconception, so rule 1 does not apply to it. The overall level is
 `levels[root.concept].level` when there is a root cause (empty if that concept has no entry). Without a root cause
 the levels are sorted from high to low and the one at index `(count − 1) // 2` is taken.
@@ -882,7 +898,9 @@ error_evidence[{concept, error, quote}], shadowed[{concept, misconception, shado
 broken_edges[{edge, quote, score, consequence_of?}], root_cause{concept, misconception},
 levels{concept: {level, way, quote, edge, source, rule?, also_held?, also_shown?, note?}}, overall_level,
 paths, evidence, clause_coverage{clause: edge}, unexplained_clauses, stop_reason, depth_reached,
-llm_calls, llm_cache_hits, llm_calls_by_step{prune, label}
+llm_calls, llm_cache_hits, llm_calls_by_step{prune, label},
+level_v2{wrong_ways[{concept, edge, level, way, clauses, quote, confidence}],
+         not_counted[{concept, edge, level, way, quote, confidence, reason}]}      (only with the setting level_v2)
 ```
 
 `unexplained_clauses` uses `covered_clauses` without `rules_only`, so a clause named only by a shown level way

@@ -151,14 +151,16 @@ Clauses: 1, 2, 3
 Confidence: 0.93
 ```
 
-Label prompt for level way lvl:division_by_zero@L4#3 (the model saw only the concept, the way's name 'diagnose an error' and its text; no level):
+Label prompt for level way lvl:division_by_zero@L4#3 (the model saw the concept, the way's name 'diagnose an error', its text, where the way stops and whether the words must be correct; no level):
 > rule broken: Integer / and % require a nonzero right operand. Kind: run-time exception. Trigger class: Any int or long division or remainder whose right operand evaluates to 0, e.g. n % k with k = 0, or a loop dividing by a variable that reaches 0.
+>
+> Where this way stops: Locating and fixing the mistake for one given failing case is L3. A compiler-flagged slip fixed from the message is weak evidence.
 
 Model's reply:
 ```
-Label: not shown
-Clauses: none
-Confidence: 0.6
+Label: wrong
+Clauses: 1, 2, 3
+Confidence: 0.88
 ```
 
 Label prompt for level way lvl:division_by_zero@L2#1 (the model saw only the concept, the way's name 'output prediction' and its text; no level):
@@ -175,8 +177,6 @@ Parsed labels:
 | edge | label | prune score | confidence | score | clauses | words |
 |---|---|---|---|---|---|---|
 | lvl:division_by_zero@L0#0 | shown | 0.7000000000000001 | 0.93 | 0.65 | c1, c2, c3 | It wont compile; Dividing by zero isnt allowed; so the compiler stops you before it runs |
-| lvl:division_by_zero@L4#3 | not applied |  |  | 0.0 |  |  |
-| lvl:division_by_zero@L2#1 | not applied |  |  | 0.0 |  |  |
 
 #### run_time_error, misconceptions: 7 edges offered
 Edges offered:
@@ -250,24 +250,28 @@ Prune: the model's reply (edge id and score; the kept edges sum to 1):
 ```
 Kept by pruning: lvl:run_time_error@L3#1 (0.45), lvl:run_time_error@L4#6 (0.35), lvl:run_time_error@L0#0 (0.20)
 
-Label prompt for level way lvl:run_time_error@L3#1 (the model saw only the concept, the way's name 'relation to neighbour' and its text; no level):
+Label prompt for level way lvl:run_time_error@L3#1 (the model saw the concept, the way's name 'relation to neighbour', its text, where the way stops and whether the words must be correct; no level):
 > javac cannot detect it because it depends on run-time values (the argument typed, the divisor's value).
+>
+> Where this way stops: Two correct but separate rules are L1. Executing the two in sequence is L2. A relational answer may be correct or a relational error.
 
 Model's reply:
 ```
-Label: not shown
-Clauses: none
-Confidence: 0.95
-```
-
-Label prompt for level way lvl:run_time_error@L4#6 (the model saw only the concept, the way's name 'diagnose an error' and its text; no level):
-> rule broken: Integer division and remainder by zero are undefined. Kind: run-time exception. Trigger class: a / b or a % b with int b == 0: ArithmeticException: / by zero
-
-Model's reply:
-```
-Label: not shown
-Clauses: none
+Label: wrong
+Clauses: 1, 2, 3
 Confidence: 0.8
+```
+
+Label prompt for level way lvl:run_time_error@L4#6 (the model saw the concept, the way's name 'diagnose an error', its text, where the way stops and whether the words must be correct; no level):
+> rule broken: Integer division and remainder by zero are undefined. Kind: run-time exception. Trigger class: a / b or a % b with int b == 0: ArithmeticException: / by zero
+>
+> Where this way stops: Locating and fixing the mistake for one given failing case is L3. A compiler-flagged slip fixed from the message is weak evidence.
+
+Model's reply:
+```
+Label: wrong
+Clauses: 1, 2, 3
+Confidence: 0.88
 ```
 
 Label prompt for level way lvl:run_time_error@L0#0 (the model saw only the concept, the way's name 'everyday reading' and its text; no level):
@@ -281,11 +285,7 @@ Confidence: 0.85
 ```
 
 Parsed labels:
-| edge | label | prune score | confidence | score | clauses | words |
-|---|---|---|---|---|---|---|
-| lvl:run_time_error@L3#1 | not applied |  |  | 0.0 |  |  |
-| lvl:run_time_error@L4#6 | not applied |  |  | 0.0 |  |  |
-| lvl:run_time_error@L0#0 | shown | 0.2 | 0.85 | 0.17 | c1, c3 | It wont compile; so the compiler stops you before it runs |
+(none)
 
 #### integer_division, misconceptions: 6 edges offered
 Edges offered:
@@ -353,14 +353,16 @@ Prune: the model's reply (edge id and score; the kept edges sum to 1):
 ```
 Kept by pruning: lvl:integer_division@L4#3 (0.50), lvl:integer_division@L2#2 (0.35), lvl:integer_division@L0#0 (0.15)
 
-Label prompt for level way lvl:integer_division@L4#3 (the model saw only the concept, the way's name 'diagnose an error' and its text; no level):
+Label prompt for level way lvl:integer_division@L4#3 (the model saw the concept, the way's name 'diagnose an error', its text, where the way stops and whether the words must be correct; no level):
 > rule broken: int division by zero is undefined. Kind: run-time exception. Trigger class: A divisor that evaluates to 0: ArithmeticException: / by zero.
+>
+> Where this way stops: Locating and fixing the mistake for one given failing case is L3. A compiler-flagged slip fixed from the message is weak evidence.
 
 Model's reply:
 ```
-Label: not shown
-Clauses: none
-Confidence: 0.6
+Label: wrong
+Clauses: 1, 3
+Confidence: 0.9
 ```
 
 Label prompt for level way lvl:integer_division@L2#2 (the model saw only the concept, the way's name 'one step execution' and its text; no level):
@@ -384,11 +386,7 @@ Confidence: 0.9
 ```
 
 Parsed labels:
-| edge | label | prune score | confidence | score | clauses | words |
-|---|---|---|---|---|---|---|
-| lvl:integer_division@L4#3 | not applied |  |  | 0.0 |  |  |
-| lvl:integer_division@L2#2 | not applied |  |  | 0.0 |  |  |
-| lvl:integer_division@L0#0 | not applied |  |  | 0.0 |  |  |
+(none)
 
 **Kept on a path at this depth** (best N in tiers: held misconception / broken edge, then held error, then correct / confirmed / shown):
 
@@ -541,24 +539,28 @@ Prune: the model's reply (edge id and score; the kept edges sum to 1):
 ```
 Kept by pruning: lvl:arithmetic_operators@L4#2 (0.50), lvl:arithmetic_operators@L3#2 (0.30), lvl:arithmetic_operators@L1#1 (0.20)
 
-Label prompt for level way lvl:arithmetic_operators@L4#2 (the model saw only the concept, the way's name 'diagnose an error' and its text; no level):
+Label prompt for level way lvl:arithmetic_operators@L4#2 (the model saw the concept, the way's name 'diagnose an error', its text, where the way stops and whether the words must be correct; no level):
 > rule broken: int / and % by zero are undefined. Kind: run-time exception. Trigger class: A divisor that evaluates to 0 (empty count, zero input): ArithmeticException: / by zero.
+>
+> Where this way stops: Locating and fixing the mistake for one given failing case is L3. A compiler-flagged slip fixed from the message is weak evidence.
 
 Model's reply:
 ```
-Label: not shown
-Clauses: none
-Confidence: 0.7
+Label: wrong
+Clauses: 1, 3
+Confidence: 0.9
 ```
 
-Label prompt for level way lvl:arithmetic_operators@L3#2 (the model saw only the concept, the way's name 'relation to neighbour' and its text; no level):
+Label prompt for level way lvl:arithmetic_operators@L3#2 (the model saw the concept, the way's name 'relation to neighbour', its text, where the way stops and whether the words must be correct; no level):
 > int / or % by zero throws a run-time exception, while floating-point division by zero gives Infinity or NaN.
+>
+> Where this way stops: Two correct but separate rules are L1. Executing the two in sequence is L2. A relational answer may be correct or a relational error.
 
 Model's reply:
 ```
-Label: not shown
-Clauses: none
-Confidence: 0.92
+Label: wrong
+Clauses: 1, 2, 3
+Confidence: 0.6
 ```
 
 Label prompt for level way lvl:arithmetic_operators@L1#1 (the model saw only the concept, the way's name 'states the rule' and its text; no level):
@@ -572,11 +574,7 @@ Confidence: 0.7
 ```
 
 Parsed labels:
-| edge | label | prune score | confidence | score | clauses | words |
-|---|---|---|---|---|---|---|
-| lvl:arithmetic_operators@L4#2 | not applied |  |  | 0.0 |  |  |
-| lvl:arithmetic_operators@L3#2 | not applied |  |  | 0.0 |  |  |
-| lvl:arithmetic_operators@L1#1 | not applied |  |  | 0.0 |  |  |
+(none)
 
 **Kept on a path at this depth:** nothing
 
@@ -600,7 +598,7 @@ Root-cause walk: held on ['division_by_zero'], broken at [] (consequences: pre:d
 - division_by_zero: L0 via misconception "It wont compile; Dividing by zero isnt allowed; so the compiler stops you before it runs"
 - run_time_error: L0 via everyday_reading "It wont compile; so the compiler stops you before it runs"
 
-**Stop:** max depth at depth 3; prompts {'prune': 10, 'label': 18}, fresh model calls 28, cache hits 0
+**Stop:** max depth at depth 3; prompts {'prune': 10, 'label': 18}, fresh model calls 0, cache hits 28
 
 ### Held misconceptions
 | concept | misconception | kind | quote | score | shares_evidence_with |
@@ -625,6 +623,16 @@ Root-cause walk: held on ['division_by_zero'], broken at [] (consequences: pre:d
 |---|---|---|---|---|---|---|---|---|
 | division_by_zero | L0 | misconception | DivisionByZeroIsCompileError | level_mis_links | It wont compile; Dividing by zero isnt allowed; so the compiler stops you before it runs | wrong rule: System.out.println(5 / 0); is rejected by the compiler. Right rule: It compiles; the ArithmeticException (/ by zero) is thrown when the program runs and reaches the division. |  |  |
 | run_time_error | L0 | everyday_reading |  | level_way | It wont compile; so the compiler stops you before it runs |  |  |  |
+
+Ways above L2 the model answered "wrong" (the kind of thing is done, but what is said contradicts Java; not shown):
+| concept | edge | level | way | confidence | clauses | quote |
+|---|---|---|---|---|---|---|
+| division_by_zero | lvl:division_by_zero@L4#3 | L4 | diagnose_an_error | 0.88 | [1, 2, 3] | It wont compile; Dividing by zero isnt allowed; so the compiler stops you before it runs |
+| run_time_error | lvl:run_time_error@L3#1 | L3 | relation_to_neighbour | 0.8 | [1, 2, 3] | It wont compile; Dividing by zero isnt allowed; so the compiler stops you before it runs |
+| run_time_error | lvl:run_time_error@L4#6 | L4 | diagnose_an_error | 0.88 | [1, 2, 3] | It wont compile; Dividing by zero isnt allowed; so the compiler stops you before it runs |
+| integer_division | lvl:integer_division@L4#3 | L4 | diagnose_an_error | 0.9 | [1, 3] | It wont compile; so the compiler stops you before it runs |
+| arithmetic_operators | lvl:arithmetic_operators@L4#2 | L4 | diagnose_an_error | 0.9 | [1, 3] | It wont compile; so the compiler stops you before it runs |
+| arithmetic_operators | lvl:arithmetic_operators@L3#2 | L3 | relation_to_neighbour | 0.6 | [1, 2, 3] | It wont compile; Dividing by zero isnt allowed; so the compiler stops you before it runs |
 
 ### Overall level: L0
 
@@ -669,6 +677,7 @@ start concepts (3): division_by_zero, run_time_error, integer_division
     err:division_by_zero->AverageWithoutZeroGuard -> not applied (0.00) ""
   division_by_zero (level ways): 15 candidates -> kept lvl:division_by_zero@L0#0 (0.70), lvl:division_by_zero@L4#3 (0.20), lvl:division_by_zero@L2#1 (0.10)
     lvl:division_by_zero@L0#0 -> shown (0.65) "It wont compile; Dividing by zero isnt allowed; so the compiler stops you before it runs"
+    lvl:division_by_zero@L4#3: wrong (0.88) -> not applied
     lvl:division_by_zero@L4#3 -> not applied (0.00) ""
     lvl:division_by_zero@L2#1 -> not applied (0.00) ""
   run_time_error (misconceptions): 7 candidates -> kept mis:run_time_error->DivisionByZeroIsCompileError (0.80), mis:run_time_error->CompilesMeansWorks (0.15), err:run_time_error->InputTypeMismatch (0.05)
@@ -676,7 +685,9 @@ start concepts (3): division_by_zero, run_time_error, integer_division
     mis:run_time_error->CompilesMeansWorks -> not applied (0.00) ""
     err:run_time_error->InputTypeMismatch -> not applied (0.00) ""
   run_time_error (level ways): 19 candidates -> kept lvl:run_time_error@L3#1 (0.45), lvl:run_time_error@L4#6 (0.35), lvl:run_time_error@L0#0 (0.20)
+    lvl:run_time_error@L3#1: wrong (0.80) -> not applied
     lvl:run_time_error@L3#1 -> not applied (0.00) ""
+    lvl:run_time_error@L4#6: wrong (0.88) -> not applied
     lvl:run_time_error@L4#6 -> not applied (0.00) ""
     lvl:run_time_error@L0#0 -> shown (0.17) "It wont compile; so the compiler stops you before it runs"
   integer_division (misconceptions): 6 candidates -> kept mis:integer_division->IntegerDivisionGivesFraction (0.50), mis:integer_division->TargetTyping (0.30), mis:integer_division->NegativeRemainderSign (0.20)
@@ -684,6 +695,7 @@ start concepts (3): division_by_zero, run_time_error, integer_division
     mis:integer_division->TargetTyping -> not applied (0.00) ""
     mis:integer_division->NegativeRemainderSign -> not applied (0.00) ""
   integer_division (level ways): 16 candidates -> kept lvl:integer_division@L4#3 (0.50), lvl:integer_division@L2#2 (0.35), lvl:integer_division@L0#0 (0.15)
+    lvl:integer_division@L4#3: wrong (0.90) -> not applied
     lvl:integer_division@L4#3 -> not applied (0.00) ""
     lvl:integer_division@L2#2 -> not applied (0.00) ""
     lvl:integer_division@L0#0 -> not applied (0.00) ""
@@ -703,7 +715,9 @@ start concepts (3): division_by_zero, run_time_error, integer_division
 --- depth 3: current concepts ['run_time_error', 'division_by_zero', 'arithmetic_operators']
   arithmetic_operators (misconceptions): 3 candidates -> kept 
   arithmetic_operators (level ways): 18 candidates -> kept lvl:arithmetic_operators@L4#2 (0.50), lvl:arithmetic_operators@L3#2 (0.30), lvl:arithmetic_operators@L1#1 (0.20)
+    lvl:arithmetic_operators@L4#2: wrong (0.90) -> not applied
     lvl:arithmetic_operators@L4#2 -> not applied (0.00) ""
+    lvl:arithmetic_operators@L3#2: wrong (0.60) -> not applied
     lvl:arithmetic_operators@L3#2 -> not applied (0.00) ""
     lvl:arithmetic_operators@L1#1 -> not applied (0.00) ""
   nothing kept at this depth
@@ -725,7 +739,8 @@ start concepts (3): division_by_zero, run_time_error, integer_division
   "depth": 3,
   "prune_tools": "llm",
   "model": "claude-opus-5-5",
-  "backend": "claude-cli"
+  "backend": "claude-cli",
+  "level_v2": true
  },
  "clauses": [
   "It wont compile",
@@ -1024,11 +1039,92 @@ start concepts (3): division_by_zero, run_time_error, integer_division
  "unexplained_clauses": [],
  "stop_reason": "max depth",
  "depth_reached": 3,
- "llm_calls": 28,
- "llm_cache_hits": 0,
+ "llm_calls": 0,
+ "llm_cache_hits": 28,
  "llm_calls_by_step": {
   "prune": 10,
   "label": 18
+ },
+ "level_v2": {
+  "wrong_ways": [
+   {
+    "concept": "division_by_zero",
+    "edge": "lvl:division_by_zero@L4#3",
+    "level": "L4",
+    "way": "diagnose_an_error",
+    "clauses": [
+     1,
+     2,
+     3
+    ],
+    "quote": "It wont compile; Dividing by zero isnt allowed; so the compiler stops you before it runs",
+    "confidence": 0.88
+   },
+   {
+    "concept": "run_time_error",
+    "edge": "lvl:run_time_error@L3#1",
+    "level": "L3",
+    "way": "relation_to_neighbour",
+    "clauses": [
+     1,
+     2,
+     3
+    ],
+    "quote": "It wont compile; Dividing by zero isnt allowed; so the compiler stops you before it runs",
+    "confidence": 0.8
+   },
+   {
+    "concept": "run_time_error",
+    "edge": "lvl:run_time_error@L4#6",
+    "level": "L4",
+    "way": "diagnose_an_error",
+    "clauses": [
+     1,
+     2,
+     3
+    ],
+    "quote": "It wont compile; Dividing by zero isnt allowed; so the compiler stops you before it runs",
+    "confidence": 0.88
+   },
+   {
+    "concept": "integer_division",
+    "edge": "lvl:integer_division@L4#3",
+    "level": "L4",
+    "way": "diagnose_an_error",
+    "clauses": [
+     1,
+     3
+    ],
+    "quote": "It wont compile; so the compiler stops you before it runs",
+    "confidence": 0.9
+   },
+   {
+    "concept": "arithmetic_operators",
+    "edge": "lvl:arithmetic_operators@L4#2",
+    "level": "L4",
+    "way": "diagnose_an_error",
+    "clauses": [
+     1,
+     3
+    ],
+    "quote": "It wont compile; so the compiler stops you before it runs",
+    "confidence": 0.9
+   },
+   {
+    "concept": "arithmetic_operators",
+    "edge": "lvl:arithmetic_operators@L3#2",
+    "level": "L3",
+    "way": "relation_to_neighbour",
+    "clauses": [
+     1,
+     2,
+     3
+    ],
+    "quote": "It wont compile; Dividing by zero isnt allowed; so the compiler stops you before it runs",
+    "confidence": 0.6
+   }
+  ],
+  "not_counted": []
  }
 }
 ```

@@ -23,8 +23,8 @@ if (a == 0.3) {
 
 - **Wrong rules held:** none
 - **Root cause:** none
-- **Overall level:** L4
-- **Level per concept:** `arithmetic_operators` L4, `double` L4
+- **Overall level:** L2
+- **Level per concept:** `arithmetic_operators` L2, `double` L1
 
 **Check of this result (read by hand, 2026-11-13).** The scenario itself is faulty, so the result means nothing. The program is the 0.1 + 0.2 comparison, but the question and the answer were copied from the cast scenario before it (they talk about (double) and 3.5, which do not appear in this program).
 
@@ -78,13 +78,13 @@ At each depth, for each current concept, the following happens.
 
 *One of the outputs at this stage:* at `double` the level ways family is pruned to: L3 way “relation to neighbour” 0.50, L1 way “states the rule” 0.30, L4 way “diagnose an error” 0.20.
 
-**3.3 Label (model, second question).** Each edge that survived is now read against the numbered clauses and gets a **label**. For a misconception or error edge: **held** (the student's words state this wrong rule), **correct** (they state the right rule, its twin) or **not applied** (the answer says nothing about it). For a level way: **shown** or not applied. For a prerequisite or parallel edge: **confirmed** (the answer carries the rule from one concept into the other) or **broken** (it fails to). The misconception edges of one concept are judged together in a single question, because the same sentence can fit several wrong rules and the model should give *held* only to the one the student really claims. With the label the model must return the **clause numbers** it rests on and a **confidence** from 0 to 1. A label with no clause is discarded. This is the safeguard of the method: the model never diagnoses from its own knowledge; every label is attached to one edge of G and to the student's words.
+**3.3 Label (model, second question).** Each edge that survived is now read against the numbered clauses and gets a **label**. For a misconception or error edge: **held** (the student's words state this wrong rule), **correct** (they state the right rule, its twin) or **not applied** (the answer says nothing about it). For a level way: **shown** or not applied. For a way above L2 the question also gives where the way stops (its boundary, stored in the graph) and whether the words must be correct, and the model may answer **wrong** (the student does this kind of thing, but what is said contradicts Java); a wrong way is not shown. For a prerequisite or parallel edge: **confirmed** (the answer carries the rule from one concept into the other) or **broken** (it fails to). The misconception edges of one concept are judged together in a single question, because the same sentence can fit several wrong rules and the model should give *held* only to the one the student really claims. With the label the model must return the **clause numbers** it rests on and a **confidence** from 0 to 1. A label with no clause is discarded. This is the safeguard of the method: the model never diagnoses from its own knowledge; every label is attached to one edge of G and to the student's words.
 
-*One of the outputs at this stage:* L3 way “relation to neighbour” at `double` is labelled **shown** on clauses 2, 3 (“The cast makes it a double division; so you get the decimal part”) with confidence 0.70. The rule on that edge: “Type flow decides the division: with two int operands a / b discards the fraction (10/3 is 3, and double d = 10/3; stores 3.0); if either operand is…”
+*One of the outputs at this stage:* L1 way “states the rule” at `double` is labelled **shown** on clauses 2, 3 (“The cast makes it a double division; so you get the decimal part”) with confidence 0.70. The rule on that edge: “Values are 64-bit IEEE 754 numbers (about 15 significant digits) plus the special values Infinity and NaN; +, -, *, / (and %) are defined; if at leas…”
 
 **3.4 Score and keep.** The **score** of a labelled edge is prune score × confidence: an edge counts for much only if it was both relevant and confidently labelled. The edges are then ranked in **tiers**. Tier 0 is a held misconception or a broken edge: these are findings about a fault and are always kept. Tier 1 is a held error. Tier 2 is everything that only confirms understanding (correct, confirmed, shown); these fill whatever is left of the N = 3 places, best score first. Kept edges are added to the paths. Every edge with a label other than *not applied*, kept or not, is added to the evidence, because the levels in stage 6 are read from all of it.
 
-*One of the outputs at this stage:* the score of L3 way “relation to neighbour” is 0.50 × 0.70 = 0.35. At depth 1 the kept edges are: L3 way “relation to neighbour” (shown, tier 2, 0.35); L4 way “predict a change” (shown, tier 2, 0.34); L1 way “states the rule” (shown, tier 2, 0.21).
+*One of the outputs at this stage:* the score of L1 way “states the rule” is 0.30 × 0.70 = 0.21. At depth 1 the kept edges are: L1 way “states the rule” (shown, tier 2, 0.21); L2 way “output prediction” (shown, tier 2, 0.21); L1 way “states the rule” (shown, tier 2, 0.11).
 
 **3.5 Move to the next concepts.** Three things decide where the walk goes next. A kept prerequisite or parallel edge leads to the concept at its other end; that concept is **entered** and will be read inwards at the next depth, so it gets misconceptions and a level of its own. A concept with a held misconception stays current, so that its prerequisites are examined: the fault may begin further back. And any entered concept whose outward edges have not been read yet stays current until they are.
 
@@ -158,7 +158,7 @@ Every concept has five **levels**, taken from the SOLO taxonomy: **L0** prestruc
 
 The model is never asked for a level. In stage 3 it only said whether a way was *shown*; the level is read from where that way sits in the graph, in two steps.
 
-**6.1 Gather the evidence per concept.** Take every concept that appears in the evidence of stage 3 (kept in 3.4 or not). For each one collect two lists: the misconceptions held on it that are not shadows, and the ways shown on it.
+**6.1 Gather the evidence per concept.** Take every concept that appears in the evidence of stage 3 (kept in 3.4 or not). For each one collect two lists: the misconceptions held on it that are not shadows, and the ways shown on it. A shown way above L2 is counted only if two things hold: the model's confidence in it is above 0.60, and its clauses are not all clauses that a held misconception rests on. So a weak yes, or a wrong sentence already counted as a misconception, cannot lift a concept to L3 or L4.
 
 *One of the outputs at this stage:* 4 concepts appear in the evidence: `arithmetic_operators`, `double`, `println`, `string_literal`.
 
@@ -175,8 +175,8 @@ A held error node is not a misconception, so rule (a) does not apply to it.
 
 | Concept | Level | Rule | Why |
 |---|---|---|---|
-| `arithmetic_operators` | L4 | (c) | ways shown: L1 “states the rule”, L2 “output prediction”, L4 “predict a change” |
-| `double` | L4 | (c) | ways shown: L1 “states the rule”, L3 “relation to neighbour”, L4 “diagnose an error” |
+| `arithmetic_operators` | L2 | (c) | ways shown: L1 “states the rule”, L2 “output prediction” |
+| `double` | L1 | (c) | ways shown: L1 “states the rule” |
 | `println` | none | (d) | nothing held, no way shown |
 | `string_literal` | none | (d) | nothing held, no way shown |
 
@@ -188,7 +188,7 @@ One level is reported for the whole answer.
 
 **7.2 Without a fault.** The levels of stage 6 are sorted from high to low and the one in the middle is taken: with n levels, the one at position (n − 1) ÷ 2, rounded down and counted from 0. So one weak or one strong concept does not decide for the whole answer.
 
-*One of the outputs at this stage:* 7.2 applies: there is no root cause. The levels from high to low are L4, L4; position (2 − 1) ÷ 2 = 0, counted from 0, is **L4**.
+*One of the outputs at this stage:* 7.2 applies: there is no root cause. The levels from high to low are L2, L1; position (2 − 1) ÷ 2 = 0, counted from 0, is **L2**.
 
 ## The final picture
 

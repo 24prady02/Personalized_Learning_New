@@ -23,7 +23,7 @@ System.out.println(k);
 - **Wrong rules held:** CharNotNumeric at `char_arithmetic`
 - **Root cause:** `char_arithmetic` / CharNotNumeric
 - **Overall level:** L0
-- **Level per concept:** `assignment` L2, `char` L2, `char_arithmetic` L0, `expression` L3, `increment_operators` L3, `println` L3, `statement` L2
+- **Level per concept:** `assignment` L2, `char` L2, `char_arithmetic` L0, `increment_operators` L2, `println` L2, `statement` L2
 
 **Check of this result (read by hand, 2026-11-13).** Not right. The student's wrong belief is that char + int is still a letter. CharNotNumeric says something else (that a char is not a number at all). The graph has no misconception for the promotion of char to int, so the walk took the nearest label.
 
@@ -77,13 +77,13 @@ At each depth, for each current concept, the following happens.
 
 *One of the outputs at this stage:* at `char_arithmetic` the misconception family is pruned to: CharNotNumeric 1.00.
 
-**3.3 Label (model, second question).** Each edge that survived is now read against the numbered clauses and gets a **label**. For a misconception or error edge: **held** (the student's words state this wrong rule), **correct** (they state the right rule, its twin) or **not applied** (the answer says nothing about it). For a level way: **shown** or not applied. For a prerequisite or parallel edge: **confirmed** (the answer carries the rule from one concept into the other) or **broken** (it fails to). The misconception edges of one concept are judged together in a single question, because the same sentence can fit several wrong rules and the model should give *held* only to the one the student really claims. With the label the model must return the **clause numbers** it rests on and a **confidence** from 0 to 1. A label with no clause is discarded. This is the safeguard of the method: the model never diagnoses from its own knowledge; every label is attached to one edge of G and to the student's words.
+**3.3 Label (model, second question).** Each edge that survived is now read against the numbered clauses and gets a **label**. For a misconception or error edge: **held** (the student's words state this wrong rule), **correct** (they state the right rule, its twin) or **not applied** (the answer says nothing about it). For a level way: **shown** or not applied. For a way above L2 the question also gives where the way stops (its boundary, stored in the graph) and whether the words must be correct, and the model may answer **wrong** (the student does this kind of thing, but what is said contradicts Java); a wrong way is not shown. For a prerequisite or parallel edge: **confirmed** (the answer carries the rule from one concept into the other) or **broken** (it fails to). The misconception edges of one concept are judged together in a single question, because the same sentence can fit several wrong rules and the model should give *held* only to the one the student really claims. With the label the model must return the **clause numbers** it rests on and a **confidence** from 0 to 1. A label with no clause is discarded. This is the safeguard of the method: the model never diagnoses from its own knowledge; every label is attached to one edge of G and to the student's words.
 
 *One of the outputs at this stage:* CharNotNumeric at `char_arithmetic` is labelled **held** on clauses 3, 4 (“Then k = c + 1 is the letter after b; so it prints c”) with confidence 0.60. The rule on that edge: “char is not a numeric type”
 
 **3.4 Score and keep.** The **score** of a labelled edge is prune score × confidence: an edge counts for much only if it was both relevant and confidently labelled. The edges are then ranked in **tiers**. Tier 0 is a held misconception or a broken edge: these are findings about a fault and are always kept. Tier 1 is a held error. Tier 2 is everything that only confirms understanding (correct, confirmed, shown); these fill whatever is left of the N = 3 places, best score first. Kept edges are added to the paths. Every edge with a label other than *not applied*, kept or not, is added to the evidence, because the levels in stage 6 are read from all of it.
 
-*One of the outputs at this stage:* the score of CharNotNumeric is 1.00 × 0.60 = 0.60. At depth 1 the kept edges are: VariableKeepsOldValue (correct, tier 2, 0.38); L2 way “line by line trace” (shown, tier 2, 0.24); L3 way “relation to neighbour” (shown, tier 2, 0.17).
+*One of the outputs at this stage:* the score of CharNotNumeric is 1.00 × 0.60 = 0.60. At depth 1 the kept edges are: VariableKeepsOldValue (correct, tier 2, 0.38); L2 way “line by line trace” (shown, tier 2, 0.24); AssignmentOppositeDirection (correct, tier 2, 0.15).
 
 **3.5 Move to the next concepts.** Three things decide where the walk goes next. A kept prerequisite or parallel edge leads to the concept at its other end; that concept is **entered** and will be read inwards at the next depth, so it gets misconceptions and a level of its own. A concept with a held misconception stays current, so that its prerequisites are examined: the fault may begin further back. And any entered concept whose outward edges have not been read yet stays current until they are.
 
@@ -159,7 +159,7 @@ Every concept has five **levels**, taken from the SOLO taxonomy: **L0** prestruc
 
 The model is never asked for a level. In stage 3 it only said whether a way was *shown*; the level is read from where that way sits in the graph, in two steps.
 
-**6.1 Gather the evidence per concept.** Take every concept that appears in the evidence of stage 3 (kept in 3.4 or not). For each one collect two lists: the misconceptions held on it that are not shadows, and the ways shown on it.
+**6.1 Gather the evidence per concept.** Take every concept that appears in the evidence of stage 3 (kept in 3.4 or not). For each one collect two lists: the misconceptions held on it that are not shadows, and the ways shown on it. A shown way above L2 is counted only if two things hold: the model's confidence in it is above 0.60, and its clauses are not all clauses that a held misconception rests on. So a weak yes, or a wrong sentence already counted as a misconception, cannot lift a concept to L3 or L4.
 
 *One of the outputs at this stage:* 8 concepts appear in the evidence: `arithmetic_operators`, `assignment`, `char`, `char_arithmetic`, `expression`, `increment_operators`, `println`, `statement`.
 
@@ -178,11 +178,11 @@ A held error node is not a misconception, so rule (a) does not apply to it.
 |---|---|---|---|
 | `arithmetic_operators` | none | (d) | nothing held, no way shown |
 | `assignment` | L2 | (c) | ways shown: L2 “line by line trace” |
-| `char` | L2 | (c) | ways shown: L0 “everyday reading”, L2 “one step execution” |
+| `char` | L2 | (c) | ways shown: L0 “everyday reading”, L2 “one step execution”; answered wrong: L3 “relation to neighbour” |
 | `char_arithmetic` | L0 | (a) | holds CharNotNumeric |
-| `expression` | L3 | (c) | ways shown: L3 “relation to neighbour” |
-| `increment_operators` | L3 | (c) | ways shown: L2 “one step execution”, L2 “output prediction”, L3 “relation to neighbour” |
-| `println` | L3 | (c) | ways shown: L2 “output prediction”, L2 “line by line trace”, L3 “relation to neighbour” |
+| `expression` | none | (d) | nothing held, no counted way; not counted: L3 “relation to neighbour” (confidence 0.55) |
+| `increment_operators` | L2 | (c) | ways shown: L2 “one step execution”, L2 “output prediction”; not counted: L3 “relation to neighbour” (confidence 0.55) |
+| `println` | L2 | (c) | ways shown: L2 “output prediction”, L2 “line by line trace” |
 | `statement` | L2 | (c) | ways shown: L2 “line by line trace”, L2 “one step execution”, L2 “output prediction” |
 
 ## Stage 7. Overall level (rule, no model)

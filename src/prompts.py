@@ -129,6 +129,93 @@ Clauses: the numbers of the clauses that show it, e.g. 2, 4 (write none if not s
 Confidence: a number from 0 to 1
 """
 
+# ---------------------------------------------------------------- 3. trial prompts (setting stage3_v2; unused by default)
+
+LABEL_MIS_ALL = """You compare a student's words with the wrong rules and right rules of several Java concepts. All the edges below, of all these concepts, are judged together: the same words can fit wrong rules at several concepts, and for each clause held goes only to the edge whose wrong rule best matches what the clause claims.
+
+Program:
+{code}
+
+Question: {question}
+
+Student's answer, split into numbered clauses:
+{clauses}
+
+Concepts: {concepts}
+Edges (each with its wrong rule and the right rule):
+{edges}
+
+For each edge decide:
+- held: the answer follows the wrong rule in what sets it apart from the right rule. Where the answer gives a reason, the reason must be this wrong rule's own; a result this rule would also predict, reached by a different reason, does not hold it. When several wrong rules, at one concept or at different concepts, could fit the same clause, held goes only to the one that best matches the claim the student actually makes in that clause; a student can hold more than one when different clauses show them;
+- correct: the answer follows the right rule where the two differ, by stating it or by doing it (code or a value in the answer that does what the right rule says and the wrong rule would get wrong counts);
+- not applied: the answer neither follows nor contradicts this rule, or the rule is about something that appears neither in the program nor in the answer.
+
+Reply with exactly one line per edge, in this format and nothing else:
+edge_id | held or correct or not applied | clauses: the numbers of the clauses that show it, e.g. 2, 4 (write none if not applied) | confidence: a number from 0 to 1
+
+Example. Student's answer, split into numbered clauses:
+c1: {ex_answer}
+Concepts: definite_assignment
+Edges:
+- mis:definite_assignment->LocalVariablesAutoInitialized | wrong rule: A local variable that is declared but not assigned holds 0 (or false, or null). | right rule: Java refuses to compile a read of a local variable that may not have been assigned.
+- mis:definite_assignment->DeclarationAssignsNull | wrong rule: A declared int holds null until assigned. | right rule: An int can never hold null; an unassigned local has no value the program may read.
+Reply:
+mis:definite_assignment->LocalVariablesAutoInitialized | held | clauses: 1 | confidence: 0.95
+mis:definite_assignment->DeclarationAssignsNull | not applied | clauses: none | confidence: 0.9
+"""
+
+LABEL_CONCEPT_V2 = """You check whether a student's answer confirms the rule that links two Java concepts.
+
+Program:
+{code}
+
+Question: {question}
+
+Student's answer, split into clauses:
+{clauses}
+
+Edge: {edge_id}  ({source} -> {target}, {etype})
+Rule (logic): {logic}
+
+Decide:
+- confirmed: the answer applies this rule correctly;
+- not applied: the answer does not apply this rule (it does not touch it, or it does not follow it).
+
+Reply in exactly three lines and nothing else:
+Label: confirmed | not applied
+Clauses: the numbers of the clauses that show it, e.g. 2, 4 (write none if not applied)
+Confidence: a number from 0 to 1
+"""
+
+# ---------------------------------------------------------------- 3. trial prompt (setting level_v2; unused by default)
+
+LABEL_WAY_V2 = """You check whether a student's answer shows one way of understanding a Java concept.
+
+Program:
+{code}
+
+Question: {question}
+
+Student's answer, split into clauses:
+{clauses}
+
+Concept: {concept}
+Way: {way}
+Rule of this way: {rule}
+Where this way stops: {boundary}
+Must what the student says be correct: {correctness}
+
+Decide:
+- shown: the answer does what this way describes, about this program, and what it says agrees with Java. The kind of thing the answer does must be this way's own kind: a step-by-step trace or a bare predicted output shows a way only when the way itself is a trace or a prediction, and it does not show a way about relating parts, purpose, a change, an error or a new program. Read "Where this way stops" and do not answer shown when the answer falls on the other side of it;
+- wrong: the answer does this kind of thing, but what it says contradicts Java (a false statement, a result Java would not give, an error that does not exist);
+- not shown: the answer does not do this.
+
+Reply in exactly three lines and nothing else:
+Label: shown | wrong | not shown
+Clauses: the numbers of the clauses that show it, e.g. 2, 4 (write none if not shown)
+Confidence: a number from 0 to 1
+"""
+
 
 def few_shot_fields() -> dict[str, str]:
     return {"ex_code": FEW_SHOT["code"], "ex_question": FEW_SHOT["question"], "ex_answer": FEW_SHOT["answer"]}

@@ -442,14 +442,16 @@ Clauses: none
 Confidence: 0.9
 ```
 
-Label prompt for level way lvl:loop_variable@L3#1 (the model saw only the concept, the way's name 'relation to neighbour' and its text; no level):
+Label prompt for level way lvl:loop_variable@L3#1 (the model saw the concept, the way's name 'relation to neighbour', its text, where the way stops and whether the words must be correct; no level):
 > In a while loop the loop variable is declared and initialized before the loop and updated inside the body, so it remains available after the loop.
+>
+> Where this way stops: Two correct but separate rules are L1. Executing the two in sequence is L2. A relational answer may be correct or a relational error.
 
 Model's reply:
 ```
 Label: not shown
 Clauses: none
-Confidence: 0.92
+Confidence: 0.85
 ```
 
 Parsed labels:
@@ -667,7 +669,8 @@ start concepts (3): for_loop, break_statement, loop_variable
   "depth": 3,
   "prune_tools": "llm",
   "model": "claude-opus-5-5",
-  "backend": "claude-cli"
+  "backend": "claude-cli",
+  "level_v2": true
  },
  "clauses": [
   "Im not sure what number, but break is the statement that ends the loop early"
@@ -891,6 +894,10 @@ start concepts (3): for_loop, break_statement, loop_variable
  "llm_calls_by_step": {
   "prune": 8,
   "label": 16
+ },
+ "level_v2": {
+  "wrong_ways": [],
+  "not_counted": []
  }
 }
 ```

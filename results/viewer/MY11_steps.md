@@ -202,14 +202,16 @@ Prune: the model's reply (edge id and score; the kept edges sum to 1):
 ```
 Kept by pruning: lvl:for_loop@L3#1 (0.60), lvl:for_loop@L0#11 (0.20), lvl:for_loop@L2#1 (0.20)
 
-Label prompt for level way lvl:for_loop@L3#1 (the model saw only the concept, the way's name 'relation to neighbour' and its text; no level):
+Label prompt for level way lvl:for_loop@L3#1 (the model saw the concept, the way's name 'relation to neighbour', its text, where the way stops and whether the words must be correct; no level):
 > A for may be the body of another for: the inner for runs its complete set of passes for every single pass of the outer one.
+>
+> Where this way stops: Two correct but separate rules are L1. Executing the two in sequence is L2. A relational answer may be correct or a relational error.
 
 Model's reply:
 ```
 Label: not shown
 Clauses: none
-Confidence: 0.95
+Confidence: 0.7
 ```
 
 Label prompt for level way lvl:for_loop@L0#11 (the model saw only the concept, the way's name 'inconsistent trace' and its text; no level):
@@ -425,32 +427,36 @@ Clauses: none
 Confidence: 0.75
 ```
 
-Label prompt for level way lvl:string_concatenation@L3#3 (the model saw only the concept, the way's name 'purpose of the whole' and its text; no level):
+Label prompt for level way lvl:string_concatenation@L3#3 (the model saw the concept, the way's name 'purpose of the whole', its text, where the way stops and whether the words must be correct; no level):
 > Concatenation builds output lines and labels from computed values (a + " + " + b + " = " + c). Repeated s = s + piece makes s a gatherer of text.
+>
+> Where this way stops: Narrating the lines is L2. A purpose induced from a few traced cases is L2. A wrong purpose is still L3, but with an error.
 
 Model's reply:
 ```
-Label: shown
-Clauses: 3
-Confidence: 0.6
+Label: not shown
+Clauses: none
+Confidence: 0.85
 ```
 
-Label prompt for level way lvl:string_concatenation@L3#1 (the model saw only the concept, the way's name 'relation to neighbour' and its text; no level):
+Label prompt for level way lvl:string_concatenation@L3#1 (the model saw the concept, the way's name 'relation to neighbour', its text, where the way stops and whether the words must be correct; no level):
 > The non-String operand is converted to its printed form (int 99 to "99", double 1.0 to "1.0", char 'a' to "a") before joining.
+>
+> Where this way stops: Two correct but separate rules are L1. Executing the two in sequence is L2. A relational answer may be correct or a relational error.
 
 Model's reply:
 ```
-Label: shown
-Clauses: 3
-Confidence: 0.6
+Label: not shown
+Clauses: none
+Confidence: 0.9
 ```
 
 Parsed labels:
 | edge | label | prune score | confidence | score | clauses | words |
 |---|---|---|---|---|---|---|
 | lvl:string_concatenation@L2#1 | not applied |  |  | 0.0 |  |  |
-| lvl:string_concatenation@L3#3 | shown | 0.3 | 0.6 | 0.18 | c3 | so i ends at 2, then the inner loop runs j from 1 to 3: 2 1, 2 2, 2 3 |
-| lvl:string_concatenation@L3#1 | shown | 0.25 | 0.6 | 0.15 | c3 | so i ends at 2, then the inner loop runs j from 1 to 3: 2 1, 2 2, 2 3 |
+| lvl:string_concatenation@L3#3 | not applied |  |  | 0.0 |  |  |
+| lvl:string_concatenation@L3#1 | not applied |  |  | 0.0 |  |  |
 
 **Kept on a path at this depth** (best N in tiers: held misconception / broken edge, then held error, then correct / confirmed / shown):
 
@@ -776,32 +782,34 @@ Clauses: 1, 3
 Confidence: 0.6
 ```
 
-Label prompt for level way lvl:println@L3#0 (the model saw only the concept, the way's name 'relation to neighbour' and its text; no level):
+Label prompt for level way lvl:println@L3#0 (the model saw the concept, the way's name 'relation to neighbour', its text, where the way stops and whether the words must be correct; no level):
 > System.out.println(s); is a statement, so its line of output appears at its own place in the sequence.
+>
+> Where this way stops: Two correct but separate rules are L1. Executing the two in sequence is L2. A relational answer may be correct or a relational error.
 
 Model's reply:
 ```
-Label: shown
-Clauses: 3
-Confidence: 0.6
+Label: wrong
+Clauses: 2, 3
+Confidence: 0.65
 ```
 
-Label prompt for level way lvl:println@L3#4 (the model saw only the concept, the way's name 'purpose of the whole' and its text; no level):
+Label prompt for level way lvl:println@L3#4 (the model saw the concept, the way's name 'purpose of the whole', its text, where the way stops and whether the words must be correct; no level):
 > Purpose: produce one complete line of output, e.g. each result on its own line, or end a line built with print.
+>
+> Where this way stops: Narrating the lines is L2. A purpose induced from a few traced cases is L2. A wrong purpose is still L3, but with an error.
 
 Model's reply:
 ```
-Label: shown
-Clauses: 1, 3
-Confidence: 0.6
+Label: not shown
+Clauses: none
+Confidence: 0.9
 ```
 
 Parsed labels:
 | edge | label | prune score | confidence | score | clauses | words |
 |---|---|---|---|---|---|---|
 | lvl:println@L2#1 | shown | 0.5 | 0.6 | 0.3 | c1, c3 | Three lines; so i ends at 2, then the inner loop runs j from 1 to 3: 2 1, 2 2, 2 3 |
-| lvl:println@L3#0 | shown | 0.3 | 0.6 | 0.18 | c3 | so i ends at 2, then the inner loop runs j from 1 to 3: 2 1, 2 2, 2 3 |
-| lvl:println@L3#4 | shown | 0.2 | 0.6 | 0.12 | c1, c3 | Three lines; so i ends at 2, then the inner loop runs j from 1 to 3: 2 1, 2 2, 2 3 |
 
 **Kept on a path at this depth** (best N in tiers: held misconception / broken edge, then held error, then correct / confirmed / shown):
 
@@ -1144,14 +1152,16 @@ Clauses: 3
 Confidence: 0.6
 ```
 
-Label prompt for level way lvl:loop_scope@L4#3 (the model saw only the concept, the way's name 'diagnose an error' and its text; no level):
+Label prompt for level way lvl:loop_scope@L4#3 (the model saw the concept, the way's name 'diagnose an error', its text, where the way stops and whether the words must be correct; no level):
 > rule broken: A for-header variable is out of scope after the loop. Kind: compile-time. Trigger class: Using i after for (int i = ...) {...}: 'cannot find symbol'.
+>
+> Where this way stops: Locating and fixing the mistake for one given failing case is L3. A compiler-flagged slip fixed from the message is weak evidence.
 
 Model's reply:
 ```
 Label: not shown
 Clauses: none
-Confidence: 0.95
+Confidence: 0.9
 ```
 
 Label prompt for level way lvl:loop_scope@L0#5 (the model saw only the concept, the way's name 'inconsistent trace' and its text; no level):
@@ -1347,14 +1357,16 @@ Clauses: none
 Confidence: 0.6
 ```
 
-Label prompt for level way lvl:statement@L3#4 (the model saw only the concept, the way's name 'relation to neighbour' and its text; no level):
+Label prompt for level way lvl:statement@L3#4 (the model saw the concept, the way's name 'relation to neighbour', its text, where the way stops and whether the words must be correct; no level):
 > Control flow is the order in which statements run; without control statements it is straight-line, each once in order.
+>
+> Where this way stops: Two correct but separate rules are L1. Executing the two in sequence is L2. A relational answer may be correct or a relational error.
 
 Model's reply:
 ```
-Label: shown
+Label: wrong
 Clauses: 2, 3
-Confidence: 0.6
+Confidence: 0.8
 ```
 
 Parsed labels:
@@ -1362,11 +1374,10 @@ Parsed labels:
 |---|---|---|---|---|---|---|
 | lvl:statement@L0#2 | not applied |  |  | 0.0 |  |  |
 | lvl:statement@L0#0 | not applied |  |  | 0.0 |  |  |
-| lvl:statement@L3#4 | shown | 0.25 | 0.6 | 0.15 | c2, c3 | The outer loop finishes first; so i ends at 2, then the inner loop runs j from 1 to 3: 2 1, 2 2, 2 3 |
 
 **Kept on a path at this depth** (best N in tiers: held misconception / broken edge, then held error, then correct / confirmed / shown):
 
-mis:statement->StatementsRunInAnyOrder [held, tier 0, 0.35], lvl:statement@L3#4 [shown, tier 2, 0.15]
+mis:statement->StatementsRunInAnyOrder [held, tier 0, 0.35]
 
 **Clause coverage after this depth:**
 | clause | text | covered by |
@@ -1388,11 +1399,9 @@ Root-cause walk: held on ['loop_body', 'loop_scope', 'nested_loops'], broken at 
 - loop_control: L2 via output_prediction "Three lines; so i ends at 2, then the inner loop runs j from 1 to 3: 2 1, 2 2, 2 3"
 - loop_scope: L0 via misconception "The outer loop finishes first; so i ends at 2, then the inner loop runs j from 1 to 3: 2 1, 2 2, 2 3"
 - nested_loops: L0 via misconception "The outer loop finishes first; so i ends at 2, then the inner loop runs j from 1 to 3: 2 1, 2 2, 2 3"
-- println: L3 via relation_to_neighbour "so i ends at 2, then the inner loop runs j from 1 to 3: 2 1, 2 2, 2 3"
-- statement: L3 via relation_to_neighbour "The outer loop finishes first; so i ends at 2, then the inner loop runs j from 1 to 3: 2 1, 2 2, 2 3"
-- string_concatenation: L3 via purpose_of_the_whole "so i ends at 2, then the inner loop runs j from 1 to 3: 2 1, 2 2, 2 3"
+- println: L2 via output_prediction "Three lines; so i ends at 2, then the inner loop runs j from 1 to 3: 2 1, 2 2, 2 3"
 
-**Stop:** sufficient at depth 4; prompts {'prune': 24, 'label': 46}, fresh model calls 11, cache hits 59
+**Stop:** sufficient at depth 4; prompts {'prune': 24, 'label': 46}, fresh model calls 0, cache hits 70
 
 ### Held misconceptions
 | concept | misconception | kind | quote | score | shares_evidence_with |
@@ -1428,9 +1437,13 @@ Root-cause walk: held on ['loop_body', 'loop_scope', 'nested_loops'], broken at 
 | loop_control | L2 | output_prediction |  | level_way | Three lines; so i ends at 2, then the inner loop runs j from 1 to 3: 2 1, 2 2, 2 3 |  |  |  |
 | loop_scope | L0 | misconception | ForVariableScopeBeyondLoop | level_mis_links | The outer loop finishes first; so i ends at 2, then the inner loop runs j from 1 to 3: 2 1, 2 2, 2 3 | wrong rule: i declared in the for header can still be used after the loop has ended. Right rule: i declared in the for header exists only inside the loop, so using it after the loop does not compile. |  |  |
 | nested_loops | L0 | misconception | NestedLoopsSequential | level_mis_links | The outer loop finishes first; so i ends at 2, then the inner loop runs j from 1 to 3: 2 1, 2 2, 2 3 | wrong rule: The outer loop runs completely, then the inner loop runs completely. Right rule: The inner loop runs all its passes during each single pass of the outer loop. |  |  |
-| println | L3 | relation_to_neighbour |  | level_way | so i ends at 2, then the inner loop runs j from 1 to 3: 2 1, 2 2, 2 3 |  | L3 purpose_of_the_whole, L2 output_prediction |  |
-| statement | L3 | relation_to_neighbour |  | level_way | The outer loop finishes first; so i ends at 2, then the inner loop runs j from 1 to 3: 2 1, 2 2, 2 3 |  |  |  |
-| string_concatenation | L3 | purpose_of_the_whole |  | level_way | so i ends at 2, then the inner loop runs j from 1 to 3: 2 1, 2 2, 2 3 |  | L3 relation_to_neighbour |  |
+| println | L2 | output_prediction |  | level_way | Three lines; so i ends at 2, then the inner loop runs j from 1 to 3: 2 1, 2 2, 2 3 |  |  |  |
+
+Ways above L2 the model answered "wrong" (the kind of thing is done, but what is said contradicts Java; not shown):
+| concept | edge | level | way | confidence | clauses | quote |
+|---|---|---|---|---|---|---|
+| println | lvl:println@L3#0 | L3 | relation_to_neighbour | 0.65 | [2, 3] | The outer loop finishes first; so i ends at 2, then the inner loop runs j from 1 to 3: 2 1, 2 2, 2 3 |
+| statement | lvl:statement@L3#4 | L3 | relation_to_neighbour | 0.8 | [2, 3] | The outer loop finishes first; so i ends at 2, then the inner loop runs j from 1 to 3: 2 1, 2 2, 2 3 |
 
 ### Overall level: L0
 
@@ -1449,8 +1462,6 @@ Figure 8 (final picture): C:\Users\magnu\OneDrive\Desktop\ES_VIterbi_Personalize
 | 1 | for_loop | mis:for_loop->ForLoopPartSkipped | misconception | held | 0.5 | 0.55 | 0.275 | [2, 3] | The outer loop finishes first; so i ends at 2, then the inner loop runs j from 1 to 3: 2 1, 2 2, 2 3 |
 | 1 | loop_control | mis:loop_control->ForLoopPartSkipped | misconception | held | 0.3 | 0.6 | 0.18 | [2, 3] | The outer loop finishes first; so i ends at 2, then the inner loop runs j from 1 to 3: 2 1, 2 2, 2 3 |
 | 1 | loop_control | lvl:loop_control@L2#1 | level | shown | 0.3 | 0.6 | 0.18 | [1, 3] | Three lines; so i ends at 2, then the inner loop runs j from 1 to 3: 2 1, 2 2, 2 3 |
-| 1 | string_concatenation | lvl:string_concatenation@L3#3 | level | shown | 0.3 | 0.6 | 0.18 | [3] | so i ends at 2, then the inner loop runs j from 1 to 3: 2 1, 2 2, 2 3 |
-| 1 | string_concatenation | lvl:string_concatenation@L3#1 | level | shown | 0.25 | 0.6 | 0.15 | [3] | so i ends at 2, then the inner loop runs j from 1 to 3: 2 1, 2 2, 2 3 |
 | 2 | for_loop | pre:for_loop->nested_loops | prerequisite | broken | 0.6 | 0.92 | 0.552 | [2, 3] | The outer loop finishes first; so i ends at 2, then the inner loop runs j from 1 to 3: 2 1, 2 2, 2 3 |
 | 2 | for_loop | pre:for_loop->loop_body | prerequisite | broken | 0.25 | 0.85 | 0.2125 | [2, 3] | The outer loop finishes first; so i ends at 2, then the inner loop runs j from 1 to 3: 2 1, 2 2, 2 3 |
 | 2 | for_loop | pre:for_loop->loop_scope | prerequisite | broken | 0.15 | 0.6 | 0.09 | [2, 3] | The outer loop finishes first; so i ends at 2, then the inner loop runs j from 1 to 3: 2 1, 2 2, 2 3 |
@@ -1460,8 +1471,6 @@ Figure 8 (final picture): C:\Users\magnu\OneDrive\Desktop\ES_VIterbi_Personalize
 | 2 | control_flow | lvl:control_flow@L0#0 | level | shown | 0.3 | 0.7 | 0.21 | [2, 3] | The outer loop finishes first; so i ends at 2, then the inner loop runs j from 1 to 3: 2 1, 2 2, 2 3 |
 | 2 | control_flow | lvl:control_flow@L2#1 | level | shown | 0.2 | 0.6 | 0.12 | [1, 3] | Three lines; so i ends at 2, then the inner loop runs j from 1 to 3: 2 1, 2 2, 2 3 |
 | 2 | println | lvl:println@L2#1 | level | shown | 0.5 | 0.6 | 0.3 | [1, 3] | Three lines; so i ends at 2, then the inner loop runs j from 1 to 3: 2 1, 2 2, 2 3 |
-| 2 | println | lvl:println@L3#0 | level | shown | 0.3 | 0.6 | 0.18 | [3] | so i ends at 2, then the inner loop runs j from 1 to 3: 2 1, 2 2, 2 3 |
-| 2 | println | lvl:println@L3#4 | level | shown | 0.2 | 0.6 | 0.12 | [1, 3] | Three lines; so i ends at 2, then the inner loop runs j from 1 to 3: 2 1, 2 2, 2 3 |
 | 3 | nested_loops | mis:nested_loops->NestedLoopsSequential | misconception | held | 0.6 | 0.95 | 0.57 | [2, 3] | The outer loop finishes first; so i ends at 2, then the inner loop runs j from 1 to 3: 2 1, 2 2, 2 3 |
 | 3 | nested_loops | lvl:nested_loops@L0#7 | level | shown | 0.5 | 0.7 | 0.35 | [2, 3] | The outer loop finishes first; so i ends at 2, then the inner loop runs j from 1 to 3: 2 1, 2 2, 2 3 |
 | 3 | nested_loops | lvl:nested_loops@L0#0 | level | shown | 0.3 | 0.9 | 0.27 | [2, 3] | The outer loop finishes first; so i ends at 2, then the inner loop runs j from 1 to 3: 2 1, 2 2, 2 3 |
@@ -1475,7 +1484,6 @@ Figure 8 (final picture): C:\Users\magnu\OneDrive\Desktop\ES_VIterbi_Personalize
 | 3 | println | pre:statement->println | prerequisite | broken | 0.8 | 0.6 | 0.48 | [1, 3] | Three lines; so i ends at 2, then the inner loop runs j from 1 to 3: 2 1, 2 2, 2 3 |
 | 3 | println | pre:string_literal->println | prerequisite | confirmed | 0.2 | 0.6 | 0.12 | [3] | so i ends at 2, then the inner loop runs j from 1 to 3: 2 1, 2 2, 2 3 |
 | 4 | statement | mis:statement->StatementsRunInAnyOrder | misconception | held | 0.7000000000000001 | 0.5 | 0.35 | [2, 3] | The outer loop finishes first; so i ends at 2, then the inner loop runs j from 1 to 3: 2 1, 2 2, 2 3 |
-| 4 | statement | lvl:statement@L3#4 | level | shown | 0.25 | 0.6 | 0.15 | [2, 3] | The outer loop finishes first; so i ends at 2, then the inner loop runs j from 1 to 3: 2 1, 2 2, 2 3 |
 
 ## 6. The paths (what the keep step kept, depth by depth)
 | depth | source | edge | kind | label | score | clauses |
@@ -1493,7 +1501,6 @@ Figure 8 (final picture): C:\Users\magnu\OneDrive\Desktop\ES_VIterbi_Personalize
 | 3 | println | pre:statement->println | prerequisite | broken | 0.48 | [1, 3] |
 | 3 | loop_scope | mis:loop_scope->ForVariableScopeBeyondLoop | misconception | held | 0.36 | [2, 3] |
 | 4 | statement | mis:statement->StatementsRunInAnyOrder | misconception | held | 0.35 | [2, 3] |
-| 4 | statement | lvl:statement@L3#4 | level | shown | 0.15 | [2, 3] |
 
 ## 7. Raw traversal log
 ```
@@ -1524,8 +1531,8 @@ start concepts (3): for_loop, loop_control, string_concatenation
     mis:string_concatenation->StringPlusStringifiesExpression -> not applied (0.00) ""
   string_concatenation (level ways): 16 candidates -> kept lvl:string_concatenation@L2#1 (0.45), lvl:string_concatenation@L3#3 (0.30), lvl:string_concatenation@L3#1 (0.25)
     lvl:string_concatenation@L2#1 -> not applied (0.00) ""
-    lvl:string_concatenation@L3#3 -> shown (0.18) "so i ends at 2, then the inner loop runs j from 1 to 3: 2 1, 2 2, 2 3"
-    lvl:string_concatenation@L3#1 -> shown (0.15) "so i ends at 2, then the inner loop runs j from 1 to 3: 2 1, 2 2, 2 3"
+    lvl:string_concatenation@L3#3 -> not applied (0.00) ""
+    lvl:string_concatenation@L3#1 -> not applied (0.00) ""
   kept: mis:for_loop->ForLoopPartSkipped [held, tier 0, 0.28], mis:loop_control->ForLoopPartSkipped [held, tier 0, 0.18], lvl:loop_control@L2#1 [shown, tier 2, 0.18]
   clause coverage: c1 uncovered; c2 <- mis:for_loop->ForLoopPartSkipped; c3 <- mis:for_loop->ForLoopPartSkipped
   uncovered clauses bring in: control_flow (1.84), println (1.53)
@@ -1554,8 +1561,9 @@ start concepts (3): for_loop, loop_control, string_concatenation
     mis:println->PrintedTextIsExecuted -> not applied (0.00) ""
   println (level ways): 17 candidates -> kept lvl:println@L2#1 (0.50), lvl:println@L3#0 (0.30), lvl:println@L3#4 (0.20)
     lvl:println@L2#1 -> shown (0.30) "Three lines; so i ends at 2, then the inner loop runs j from 1 to 3: 2 1, 2 2, 2 3"
-    lvl:println@L3#0 -> shown (0.18) "so i ends at 2, then the inner loop runs j from 1 to 3: 2 1, 2 2, 2 3"
-    lvl:println@L3#4 -> shown (0.12) "Three lines; so i ends at 2, then the inner loop runs j from 1 to 3: 2 1, 2 2, 2 3"
+    lvl:println@L3#0: wrong (0.65) -> not applied
+    lvl:println@L3#0 -> not applied (0.00) ""
+    lvl:println@L3#4 -> not applied (0.00) ""
   kept: pre:for_loop->nested_loops [broken, tier 0, 0.55], pre:for_loop->loop_body [broken, tier 0, 0.21], pre:for_loop->loop_scope [broken, tier 0, 0.09]
   reached across pre:for_loop->nested_loops, entered next: nested_loops
   reached across pre:for_loop->loop_body, entered next: loop_body
@@ -1606,8 +1614,9 @@ start concepts (3): for_loop, loop_control, string_concatenation
   statement (level ways): 19 candidates -> kept lvl:statement@L0#2 (0.50), lvl:statement@L0#0 (0.25), lvl:statement@L3#4 (0.25)
     lvl:statement@L0#2 -> not applied (0.00) ""
     lvl:statement@L0#0 -> not applied (0.00) ""
-    lvl:statement@L3#4 -> shown (0.15) "The outer loop finishes first; so i ends at 2, then the inner loop runs j from 1 to 3: 2 1, 2 2, 2 3"
-  kept: mis:statement->StatementsRunInAnyOrder [held, tier 0, 0.35], lvl:statement@L3#4 [shown, tier 2, 0.15]
+    lvl:statement@L3#4: wrong (0.80) -> not applied
+    lvl:statement@L3#4 -> not applied (0.00) ""
+  kept: mis:statement->StatementsRunInAnyOrder [held, tier 0, 0.35]
   clause coverage: c1 <- mis:loop_body->LoopBodyStatementOutsideLoop; c2 <- mis:for_loop->ForLoopPartSkipped; c3 <- mis:for_loop->ForLoopPartSkipped
   held: mis:nested_loops->NestedLoopsSequential, mis:loop_body->LoopBodyStatementOutsideLoop, mis:loop_scope->ForVariableScopeBeyondLoop, mis:statement->StatementsRunInAnyOrder, mis:for_loop->ForLoopPartSkipped; filed at the dependent concept: mis:loop_control->ForLoopPartSkipped
   shadows: mis:statement->StatementsRunInAnyOrder (shadow of mis:for_loop->ForLoopPartSkipped), mis:for_loop->ForLoopPartSkipped (shadow of mis:loop_scope->ForVariableScopeBeyondLoop), mis:loop_control->ForLoopPartSkipped (shadow of mis:loop_scope->ForVariableScopeBeyondLoop)
@@ -1617,9 +1626,7 @@ start concepts (3): for_loop, loop_control, string_concatenation
   level loop_control: L2 via output_prediction "Three lines; so i ends at 2, then the inner loop runs j from 1 to 3: 2 1, 2 2, 2 3"
   level loop_scope: L0 via misconception "The outer loop finishes first; so i ends at 2, then the inner loop runs j from 1 to 3: 2 1, 2 2, 2 3"
   level nested_loops: L0 via misconception "The outer loop finishes first; so i ends at 2, then the inner loop runs j from 1 to 3: 2 1, 2 2, 2 3"
-  level println: L3 via relation_to_neighbour "so i ends at 2, then the inner loop runs j from 1 to 3: 2 1, 2 2, 2 3"
-  level statement: L3 via relation_to_neighbour "The outer loop finishes first; so i ends at 2, then the inner loop runs j from 1 to 3: 2 1, 2 2, 2 3"
-  level string_concatenation: L3 via purpose_of_the_whole "so i ends at 2, then the inner loop runs j from 1 to 3: 2 1, 2 2, 2 3"
+  level println: L2 via output_prediction "Three lines; so i ends at 2, then the inner loop runs j from 1 to 3: 2 1, 2 2, 2 3"
 ```
 
 ## 8. Full diagnosis JSON
@@ -1631,7 +1638,8 @@ start concepts (3): for_loop, loop_control, string_concatenation
   "depth": 3,
   "prune_tools": "llm",
   "model": "claude-opus-5-5",
-  "backend": "claude-cli"
+  "backend": "claude-cli",
+  "level_v2": true
  },
  "clauses": [
   "Three lines",
@@ -1780,33 +1788,12 @@ start concepts (3): for_loop, loop_control, string_concatenation
    "source": "level_mis_links"
   },
   "println": {
-   "level": "L3",
-   "way": "relation_to_neighbour",
-   "quote": "so i ends at 2, then the inner loop runs j from 1 to 3: 2 1, 2 2, 2 3",
-   "edge": "lvl:println@L3#0",
-   "source": "level_way",
-   "also_shown": [
-    "L3 purpose_of_the_whole",
-    "L2 output_prediction"
-   ]
-  },
-  "statement": {
-   "level": "L3",
-   "way": "relation_to_neighbour",
-   "quote": "The outer loop finishes first; so i ends at 2, then the inner loop runs j from 1 to 3: 2 1, 2 2, 2 3",
-   "edge": "lvl:statement@L3#4",
+   "level": "L2",
+   "way": "output_prediction",
+   "quote": "Three lines; so i ends at 2, then the inner loop runs j from 1 to 3: 2 1, 2 2, 2 3",
+   "edge": "lvl:println@L2#1",
    "source": "level_way",
    "also_shown": []
-  },
-  "string_concatenation": {
-   "level": "L3",
-   "way": "purpose_of_the_whole",
-   "quote": "so i ends at 2, then the inner loop runs j from 1 to 3: 2 1, 2 2, 2 3",
-   "edge": "lvl:string_concatenation@L3#3",
-   "source": "level_way",
-   "also_shown": [
-    "L3 relation_to_neighbour"
-   ]
   }
  },
  "overall_level": "L0",
@@ -2059,26 +2046,6 @@ start concepts (3): for_loop, loop_control, string_concatenation
    "logic": "Statements in a program can run in any order.",
    "twin_logic": "Without control statements, statements run once each, top to bottom.",
    "role": "context"
-  },
-  {
-   "depth": 4,
-   "source": "statement",
-   "edge": "lvl:statement@L3#4",
-   "target": "statement@L3",
-   "kind": "level",
-   "label": "shown",
-   "clauses": [
-    2,
-    3
-   ],
-   "quote": "The outer loop finishes first; so i ends at 2, then the inner loop runs j from 1 to 3: 2 1, 2 2, 2 3",
-   "confidence": 0.6,
-   "prune_score": 0.25,
-   "score": 0.15,
-   "logic": "Control flow is the order in which statements run; without control statements it is straight-line, each once in order.",
-   "twin_logic": null,
-   "level": "L3",
-   "way": "relation_to_neighbour"
   }
  ],
  "evidence": [
@@ -2139,44 +2106,6 @@ start concepts (3): for_loop, loop_control, string_concatenation
    "twin_logic": null,
    "level": "L2",
    "way": "output_prediction"
-  },
-  {
-   "depth": 1,
-   "source": "string_concatenation",
-   "edge": "lvl:string_concatenation@L3#3",
-   "target": "string_concatenation@L3",
-   "kind": "level",
-   "label": "shown",
-   "clauses": [
-    3
-   ],
-   "quote": "so i ends at 2, then the inner loop runs j from 1 to 3: 2 1, 2 2, 2 3",
-   "confidence": 0.6,
-   "prune_score": 0.3,
-   "score": 0.18,
-   "logic": "Concatenation builds output lines and labels from computed values (a + \" + \" + b + \" = \" + c). Repeated s = s + piece makes s a gatherer of text.",
-   "twin_logic": null,
-   "level": "L3",
-   "way": "purpose_of_the_whole"
-  },
-  {
-   "depth": 1,
-   "source": "string_concatenation",
-   "edge": "lvl:string_concatenation@L3#1",
-   "target": "string_concatenation@L3",
-   "kind": "level",
-   "label": "shown",
-   "clauses": [
-    3
-   ],
-   "quote": "so i ends at 2, then the inner loop runs j from 1 to 3: 2 1, 2 2, 2 3",
-   "confidence": 0.6,
-   "prune_score": 0.25,
-   "score": 0.15,
-   "logic": "The non-String operand is converted to its printed form (int 99 to \"99\", double 1.0 to \"1.0\", char 'a' to \"a\") before joining.",
-   "twin_logic": null,
-   "level": "L3",
-   "way": "relation_to_neighbour"
   },
   {
    "depth": 2,
@@ -2348,45 +2277,6 @@ start concepts (3): for_loop, loop_control, string_concatenation
    "twin_logic": null,
    "level": "L2",
    "way": "output_prediction"
-  },
-  {
-   "depth": 2,
-   "source": "println",
-   "edge": "lvl:println@L3#0",
-   "target": "println@L3",
-   "kind": "level",
-   "label": "shown",
-   "clauses": [
-    3
-   ],
-   "quote": "so i ends at 2, then the inner loop runs j from 1 to 3: 2 1, 2 2, 2 3",
-   "confidence": 0.6,
-   "prune_score": 0.3,
-   "score": 0.18,
-   "logic": "System.out.println(s); is a statement, so its line of output appears at its own place in the sequence.",
-   "twin_logic": null,
-   "level": "L3",
-   "way": "relation_to_neighbour"
-  },
-  {
-   "depth": 2,
-   "source": "println",
-   "edge": "lvl:println@L3#4",
-   "target": "println@L3",
-   "kind": "level",
-   "label": "shown",
-   "clauses": [
-    1,
-    3
-   ],
-   "quote": "Three lines; so i ends at 2, then the inner loop runs j from 1 to 3: 2 1, 2 2, 2 3",
-   "confidence": 0.6,
-   "prune_score": 0.2,
-   "score": 0.12,
-   "logic": "Purpose: produce one complete line of output, e.g. each result on its own line, or end a line built with print.",
-   "twin_logic": null,
-   "level": "L3",
-   "way": "purpose_of_the_whole"
   },
   {
    "depth": 3,
@@ -2637,26 +2527,6 @@ start concepts (3): for_loop, loop_control, string_concatenation
    "logic": "Statements in a program can run in any order.",
    "twin_logic": "Without control statements, statements run once each, top to bottom.",
    "role": "context"
-  },
-  {
-   "depth": 4,
-   "source": "statement",
-   "edge": "lvl:statement@L3#4",
-   "target": "statement@L3",
-   "kind": "level",
-   "label": "shown",
-   "clauses": [
-    2,
-    3
-   ],
-   "quote": "The outer loop finishes first; so i ends at 2, then the inner loop runs j from 1 to 3: 2 1, 2 2, 2 3",
-   "confidence": 0.6,
-   "prune_score": 0.25,
-   "score": 0.15,
-   "logic": "Control flow is the order in which statements run; without control statements it is straight-line, each once in order.",
-   "twin_logic": null,
-   "level": "L3",
-   "way": "relation_to_neighbour"
   }
  ],
  "clause_coverage": {
@@ -2667,11 +2537,40 @@ start concepts (3): for_loop, loop_control, string_concatenation
  "unexplained_clauses": [],
  "stop_reason": "sufficient",
  "depth_reached": 4,
- "llm_calls": 11,
- "llm_cache_hits": 59,
+ "llm_calls": 0,
+ "llm_cache_hits": 70,
  "llm_calls_by_step": {
   "prune": 24,
   "label": 46
+ },
+ "level_v2": {
+  "wrong_ways": [
+   {
+    "concept": "println",
+    "edge": "lvl:println@L3#0",
+    "level": "L3",
+    "way": "relation_to_neighbour",
+    "clauses": [
+     2,
+     3
+    ],
+    "quote": "The outer loop finishes first; so i ends at 2, then the inner loop runs j from 1 to 3: 2 1, 2 2, 2 3",
+    "confidence": 0.65
+   },
+   {
+    "concept": "statement",
+    "edge": "lvl:statement@L3#4",
+    "level": "L3",
+    "way": "relation_to_neighbour",
+    "clauses": [
+     2,
+     3
+    ],
+    "quote": "The outer loop finishes first; so i ends at 2, then the inner loop runs j from 1 to 3: 2 1, 2 2, 2 3",
+    "confidence": 0.8
+   }
+  ],
+  "not_counted": []
  }
 }
 ```

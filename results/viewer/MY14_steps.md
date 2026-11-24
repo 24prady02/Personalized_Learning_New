@@ -194,14 +194,16 @@ Clauses: none
 Confidence: 0.8
 ```
 
-Label prompt for level way lvl:loop_control@L3#2 (the model saw only the concept, the way's name 'relation to neighbour' and its text; no level):
+Label prompt for level way lvl:loop_control@L3#2 (the model saw the concept, the way's name 'relation to neighbour', its text, where the way stops and whether the words must be correct; no level):
 > The update i = i + 1 is usually written i++ (or i += k for other steps); as a whole update statement ++i and i++ are equivalent.
+>
+> Where this way stops: Two correct but separate rules are L1. Executing the two in sequence is L2. A relational answer may be correct or a relational error.
 
 Model's reply:
 ```
-Label: not shown
-Clauses: none
-Confidence: 0.85
+Label: wrong
+Clauses: 1, 2
+Confidence: 0.8
 ```
 
 Parsed labels:
@@ -209,7 +211,6 @@ Parsed labels:
 |---|---|---|---|---|---|---|
 | lvl:loop_control@L2#2 | not applied |  |  | 0.0 |  |  |
 | lvl:loop_control@L2#1 | not applied |  |  | 0.0 |  |  |
-| lvl:loop_control@L3#2 | not applied |  |  | 0.0 |  |  |
 
 #### for_loop, misconceptions: 21 edges offered
 Edges offered:
@@ -300,14 +301,16 @@ Prune: the model's reply (edge id and score; the kept edges sum to 1):
 ```
 Kept by pruning: lvl:for_loop@L4#5 (0.50), lvl:for_loop@L2#2 (0.30), lvl:for_loop@L0#0 (0.20)
 
-Label prompt for level way lvl:for_loop@L4#5 (the model saw only the concept, the way's name 'diagnose an error' and its text; no level):
+Label prompt for level way lvl:for_loop@L4#5 (the model saw the concept, the way's name 'diagnose an error', its text, where the way stops and whether the words must be correct; no level):
 > rule broken: The number of passes is fixed by the init, the test and the update together. Kind: silent logic error. Trigger class: Wrong start value, < vs <=, a wrong step, or an extra update of the counter in the body (or outside the loop): the loop runs too few or too many passes (off by one, or skips values).
+>
+> Where this way stops: Locating and fixing the mistake for one given failing case is L3. A compiler-flagged slip fixed from the message is weak evidence.
 
 Model's reply:
 ```
 Label: not shown
 Clauses: none
-Confidence: 0.9
+Confidence: 0.8
 ```
 
 Label prompt for level way lvl:for_loop@L2#2 (the model saw only the concept, the way's name 'one step execution' and its text; no level):
@@ -558,7 +561,7 @@ Root-cause walk: held on ['for_loop'], broken at [] (consequences: pre:loop_vari
 - for_loop: L0 via misconception "A for loop moves i on by one each pass; so i goes 0, 1, 2 and; so on up to 9"
 - loop_variable: L2 via output_prediction "so i goes 0, 1, 2 and; so on up to 9"
 
-**Stop:** sufficient at depth 2; prompts {'prune': 8, 'label': 16}, fresh model calls 3, cache hits 21
+**Stop:** sufficient at depth 2; prompts {'prune': 8, 'label': 16}, fresh model calls 0, cache hits 24
 
 ### Held misconceptions
 | concept | misconception | kind | quote | score | shares_evidence_with |
@@ -588,6 +591,11 @@ Root-cause walk: held on ['for_loop'], broken at [] (consequences: pre:loop_vari
 |---|---|---|---|---|---|---|---|---|
 | for_loop | L0 | misconception | LoopStepAlwaysOne | level_mis_links | A for loop moves i on by one each pass; so i goes 0, 1, 2 and; so on up to 9 | wrong rule: A loop variable always goes up or down by 1, whatever the update says (so i = i - 4 is read as i--). Right rule: The loop variable changes exactly as the update expression says (i += 2, i = i - 4, i *= 2, ...). |  |  |
 | loop_variable | L2 | output_prediction |  | level_way | so i goes 0, 1, 2 and; so on up to 9 |  | L2 one_step_execution |  |
+
+Ways above L2 the model answered "wrong" (the kind of thing is done, but what is said contradicts Java; not shown):
+| concept | edge | level | way | confidence | clauses | quote |
+|---|---|---|---|---|---|---|
+| loop_control | lvl:loop_control@L3#2 | L3 | relation_to_neighbour | 0.8 | [1, 2] | A for loop moves i on by one each pass; so i goes 0, 1, 2 and |
 
 ### Overall level: L0
 
@@ -635,6 +643,7 @@ start concepts (3): loop_control, for_loop, loop_variable
   loop_control (level ways): 19 candidates -> kept lvl:loop_control@L2#2 (0.50), lvl:loop_control@L2#1 (0.30), lvl:loop_control@L3#2 (0.20)
     lvl:loop_control@L2#2 -> not applied (0.00) ""
     lvl:loop_control@L2#1 -> not applied (0.00) ""
+    lvl:loop_control@L3#2: wrong (0.80) -> not applied
     lvl:loop_control@L3#2 -> not applied (0.00) ""
   for_loop (misconceptions): 21 candidates -> kept mis:for_loop->LoopStepAlwaysOne (0.60), mis:for_loop->IdiomOverridesCode (0.25), err:for_loop->WrongIterationCount (0.15)
     mis:for_loop->LoopStepAlwaysOne -> held (0.57) "A for loop moves i on by one each pass; so i goes 0, 1, 2 and; so on up to 9"
@@ -680,7 +689,8 @@ start concepts (3): loop_control, for_loop, loop_variable
   "depth": 3,
   "prune_tools": "llm",
   "model": "claude-opus-5-5",
-  "backend": "claude-cli"
+  "backend": "claude-cli",
+  "level_v2": true
  },
  "clauses": [
   "A for loop moves i on by one each pass",
@@ -1026,11 +1036,28 @@ start concepts (3): loop_control, for_loop, loop_variable
  "unexplained_clauses": [],
  "stop_reason": "sufficient",
  "depth_reached": 2,
- "llm_calls": 3,
- "llm_cache_hits": 21,
+ "llm_calls": 0,
+ "llm_cache_hits": 24,
  "llm_calls_by_step": {
   "prune": 8,
   "label": 16
+ },
+ "level_v2": {
+  "wrong_ways": [
+   {
+    "concept": "loop_control",
+    "edge": "lvl:loop_control@L3#2",
+    "level": "L3",
+    "way": "relation_to_neighbour",
+    "clauses": [
+     1,
+     2
+    ],
+    "quote": "A for loop moves i on by one each pass; so i goes 0, 1, 2 and",
+    "confidence": 0.8
+   }
+  ],
+  "not_counted": []
  }
 }
 ```

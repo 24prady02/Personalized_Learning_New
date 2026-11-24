@@ -175,14 +175,16 @@ Clauses: 1, 2, 3
 Confidence: 0.85
 ```
 
-Label prompt for level way lvl:do_while_loop@L3#0 (the model saw only the concept, the way's name 'relation to neighbour' and its text; no level):
+Label prompt for level way lvl:do_while_loop@L3#0 (the model saw the concept, the way's name 'relation to neighbour', its text, where the way stops and whether the words must be correct; no level):
 > do { S } while (c); equals `S; while (c) { S }`. If c is initially true it behaves exactly like `while (c) { S }`; if c is initially false it still runs S once where the while runs it zero times.
+>
+> Where this way stops: Two correct but separate rules are L1. Executing the two in sequence is L2. A relational answer may be correct or a relational error.
 
 Model's reply:
 ```
 Label: not shown
 Clauses: none
-Confidence: 0.95
+Confidence: 0.6
 ```
 
 Parsed labels:
@@ -262,14 +264,16 @@ Prune: the model's reply (edge id and score; the kept edges sum to 1):
 ```
 Kept by pruning: lvl:loop_body@L3#2 (0.50), lvl:loop_body@L0#6 (0.30), lvl:loop_body@L2#0 (0.20)
 
-Label prompt for level way lvl:loop_body@L3#2 (the model saw only the concept, the way's name 'relation to neighbour' and its text; no level):
+Label prompt for level way lvl:loop_body@L3#2 (the model saw the concept, the way's name 'relation to neighbour', its text, where the way stops and whether the words must be correct; no level):
 > The body is what the while repeats; the condition is tested only between complete executions of it.
+>
+> Where this way stops: Two correct but separate rules are L1. Executing the two in sequence is L2. A relational answer may be correct or a relational error.
 
 Model's reply:
 ```
-Label: not shown
-Clauses: none
-Confidence: 0.92
+Label: wrong
+Clauses: 1, 2, 3
+Confidence: 0.85
 ```
 
 Label prompt for level way lvl:loop_body@L0#6 (the model saw only the concept, the way's name 'inconsistent trace' and its text; no level):
@@ -293,11 +297,7 @@ Confidence: 0.85
 ```
 
 Parsed labels:
-| edge | label | prune score | confidence | score | clauses | words |
-|---|---|---|---|---|---|---|
-| lvl:loop_body@L3#2 | not applied |  |  | 0.0 |  |  |
-| lvl:loop_body@L0#6 | not applied |  |  | 0.0 |  |  |
-| lvl:loop_body@L2#0 | not applied |  |  | 0.0 |  |  |
+(none)
 
 #### loop_control, misconceptions: 11 edges offered
 Edges offered:
@@ -639,14 +639,16 @@ Clauses: 2
 Confidence: 0.7
 ```
 
-Label prompt for level way lvl:loop_variable@L3#0 (the model saw only the concept, the way's name 'relation to neighbour' and its text; no level):
+Label prompt for level way lvl:loop_variable@L3#0 (the model saw the concept, the way's name 'relation to neighbour', its text, where the way stops and whether the words must be correct; no level):
 > The init, condition and update all act on the loop variable: the init sets it, the condition tests it, the update changes it.
+>
+> Where this way stops: Two correct but separate rules are L1. Executing the two in sequence is L2. A relational answer may be correct or a relational error.
 
 Model's reply:
 ```
-Label: shown
-Clauses: 2
-Confidence: 0.6
+Label: wrong
+Clauses: 2, 3
+Confidence: 0.8
 ```
 
 Parsed labels:
@@ -654,11 +656,10 @@ Parsed labels:
 |---|---|---|---|---|---|---|
 | lvl:loop_variable@L1#1 | shown | 0.5 | 0.6 | 0.3 | c2, c3 | 10 < 5 is false; so the loop never starts |
 | lvl:loop_variable@L2#2 | shown | 0.3 | 0.7 | 0.21 | c2 | 10 < 5 is false |
-| lvl:loop_variable@L3#0 | shown | 0.2 | 0.6 | 0.12 | c2 | 10 < 5 is false |
 
 **Kept on a path at this depth** (best N in tiers: held misconception / broken edge, then held error, then correct / confirmed / shown):
 
-lvl:loop_variable@L1#1 [shown, tier 2, 0.30], lvl:loop_variable@L2#2 [shown, tier 2, 0.21], lvl:loop_variable@L3#0 [shown, tier 2, 0.12]
+lvl:loop_variable@L1#1 [shown, tier 2, 0.30], lvl:loop_variable@L2#2 [shown, tier 2, 0.21]
 
 **Clause coverage after this depth:**
 | clause | text | covered by |
@@ -673,7 +674,7 @@ Figure 6 (the graph after depth 3): C:\Users\magnu\OneDrive\Desktop\ES_VIterbi_P
 Root-cause walk: held on ['do_while_loop'], broken at [] (consequences: pre:do_while_loop->loop_control, pre:do_while_loop->loop_body), prerequisites {'increment_operators': ['assignment', 'loop_control'], 'boolean_expression': ['comparison_operators'], 'loop_body': ['do_while_loop'], 'loop_control': ['do_while_loop', 'loop_variable'], 'comparison_operators': ['expression'], 'control_flow': ['statement'], 'println': ['statement']}
 - do_while_loop: L0 via misconception "Zero times; 10 < 5 is false; so the loop never starts"
 - loop_control: L2 via line_by_line_trace "10 < 5 is false; so the loop never starts"
-- loop_variable: L3 via relation_to_neighbour "10 < 5 is false"
+- loop_variable: L2 via one_step_execution "10 < 5 is false"
 
 **Stop:** sufficient at depth 3; prompts {'prune': 11, 'label': 21}, fresh model calls 0, cache hits 32
 
@@ -695,7 +696,13 @@ Root-cause walk: held on ['do_while_loop'], broken at [] (consequences: pre:do_w
 |---|---|---|---|---|---|---|---|---|
 | do_while_loop | L0 | misconception | DoWhileTestsFirst | level_mis_links | Zero times; 10 < 5 is false; so the loop never starts | wrong rule: A do-while whose condition starts false runs its body zero times. Right rule: The first test is omitted: the body always runs at least once, and the condition is checked only after each pass. |  |  |
 | loop_control | L2 | line_by_line_trace |  | level_way | 10 < 5 is false; so the loop never starts |  |  |  |
-| loop_variable | L3 | relation_to_neighbour |  | level_way | 10 < 5 is false |  | L2 one_step_execution, L1 states_the_rule |  |
+| loop_variable | L2 | one_step_execution |  | level_way | 10 < 5 is false |  | L1 states_the_rule |  |
+
+Ways above L2 the model answered "wrong" (the kind of thing is done, but what is said contradicts Java; not shown):
+| concept | edge | level | way | confidence | clauses | quote |
+|---|---|---|---|---|---|---|
+| loop_body | lvl:loop_body@L3#2 | L3 | relation_to_neighbour | 0.85 | [1, 2, 3] | Zero times; 10 < 5 is false; so the loop never starts |
+| loop_variable | lvl:loop_variable@L3#0 | L3 | relation_to_neighbour | 0.8 | [2, 3] | 10 < 5 is false; so the loop never starts |
 
 ### Overall level: L0
 
@@ -721,7 +728,6 @@ Figure 7 (final picture): C:\Users\magnu\OneDrive\Desktop\ES_VIterbi_Personalize
 | 2 | loop_control | pre:loop_variable->loop_control | prerequisite | confirmed | 0.85 | 0.6 | 0.51 | [2] | 10 < 5 is false |
 | 3 | loop_variable | lvl:loop_variable@L1#1 | level | shown | 0.5 | 0.6 | 0.3 | [2, 3] | 10 < 5 is false; so the loop never starts |
 | 3 | loop_variable | lvl:loop_variable@L2#2 | level | shown | 0.3 | 0.7 | 0.21 | [2] | 10 < 5 is false |
-| 3 | loop_variable | lvl:loop_variable@L3#0 | level | shown | 0.2 | 0.6 | 0.12 | [2] | 10 < 5 is false |
 
 ## 6. The paths (what the keep step kept, depth by depth)
 | depth | source | edge | kind | label | score | clauses |
@@ -734,7 +740,6 @@ Figure 7 (final picture): C:\Users\magnu\OneDrive\Desktop\ES_VIterbi_Personalize
 | 2 | loop_control | pre:loop_variable->loop_control | prerequisite | confirmed | 0.51 | [2] |
 | 3 | loop_variable | lvl:loop_variable@L1#1 | level | shown | 0.3 | [2, 3] |
 | 3 | loop_variable | lvl:loop_variable@L2#2 | level | shown | 0.21 | [2] |
-| 3 | loop_variable | lvl:loop_variable@L3#0 | level | shown | 0.12 | [2] |
 
 ## 7. Raw traversal log
 ```
@@ -754,6 +759,7 @@ start concepts (3): do_while_loop, loop_body, loop_control
     mis:loop_body->ForLoopPartSkipped -> not applied (0.00) ""
     mis:loop_body->WhileStopsMidBody -> not applied (0.00) ""
   loop_body (level ways): 14 candidates -> kept lvl:loop_body@L3#2 (0.50), lvl:loop_body@L0#6 (0.30), lvl:loop_body@L2#0 (0.20)
+    lvl:loop_body@L3#2: wrong (0.85) -> not applied
     lvl:loop_body@L3#2 -> not applied (0.00) ""
     lvl:loop_body@L0#6 -> not applied (0.00) ""
     lvl:loop_body@L2#0 -> not applied (0.00) ""
@@ -789,13 +795,14 @@ start concepts (3): do_while_loop, loop_body, loop_control
   loop_variable (level ways): 13 candidates -> kept lvl:loop_variable@L1#1 (0.50), lvl:loop_variable@L2#2 (0.30), lvl:loop_variable@L3#0 (0.20)
     lvl:loop_variable@L1#1 -> shown (0.30) "10 < 5 is false; so the loop never starts"
     lvl:loop_variable@L2#2 -> shown (0.21) "10 < 5 is false"
-    lvl:loop_variable@L3#0 -> shown (0.12) "10 < 5 is false"
-  kept: lvl:loop_variable@L1#1 [shown, tier 2, 0.30], lvl:loop_variable@L2#2 [shown, tier 2, 0.21], lvl:loop_variable@L3#0 [shown, tier 2, 0.12]
+    lvl:loop_variable@L3#0: wrong (0.80) -> not applied
+    lvl:loop_variable@L3#0 -> not applied (0.00) ""
+  kept: lvl:loop_variable@L1#1 [shown, tier 2, 0.30], lvl:loop_variable@L2#2 [shown, tier 2, 0.21]
   clause coverage: c1 <- mis:do_while_loop->DoWhileTestsFirst; c2 <- mis:do_while_loop->DoWhileTestsFirst; c3 <- mis:do_while_loop->DoWhileTestsFirst
   root-cause walk: held on ['do_while_loop'], broken at [] (consequences: pre:do_while_loop->loop_control, pre:do_while_loop->loop_body), prerequisites {'increment_operators': ['assignment', 'loop_control'], 'boolean_expression': ['comparison_operators'], 'loop_body': ['do_while_loop'], 'loop_control': ['do_while_loop', 'loop_variable'], 'comparison_operators': ['expression'], 'control_flow': ['statement'], 'println': ['statement']}
   level do_while_loop: L0 via misconception "Zero times; 10 < 5 is false; so the loop never starts"
   level loop_control: L2 via line_by_line_trace "10 < 5 is false; so the loop never starts"
-  level loop_variable: L3 via relation_to_neighbour "10 < 5 is false"
+  level loop_variable: L2 via one_step_execution "10 < 5 is false"
 ```
 
 ## 8. Full diagnosis JSON
@@ -807,7 +814,8 @@ start concepts (3): do_while_loop, loop_body, loop_control
   "depth": 3,
   "prune_tools": "llm",
   "model": "claude-opus-5-5",
-  "backend": "claude-cli"
+  "backend": "claude-cli",
+  "level_v2": true
  },
  "clauses": [
   "Zero times",
@@ -867,13 +875,12 @@ start concepts (3): do_while_loop, loop_body, loop_control
    "also_shown": []
   },
   "loop_variable": {
-   "level": "L3",
-   "way": "relation_to_neighbour",
+   "level": "L2",
+   "way": "one_step_execution",
    "quote": "10 < 5 is false",
-   "edge": "lvl:loop_variable@L3#0",
+   "edge": "lvl:loop_variable@L2#2",
    "source": "level_way",
    "also_shown": [
-    "L2 one_step_execution",
     "L1 states_the_rule"
    ]
   }
@@ -1035,25 +1042,6 @@ start concepts (3): do_while_loop, loop_body, loop_control
    "twin_logic": null,
    "level": "L2",
    "way": "one_step_execution"
-  },
-  {
-   "depth": 3,
-   "source": "loop_variable",
-   "edge": "lvl:loop_variable@L3#0",
-   "target": "loop_variable@L3",
-   "kind": "level",
-   "label": "shown",
-   "clauses": [
-    2
-   ],
-   "quote": "10 < 5 is false",
-   "confidence": 0.6,
-   "prune_score": 0.2,
-   "score": 0.12,
-   "logic": "The init, condition and update all act on the loop variable: the init sets it, the condition tests it, the update changes it.",
-   "twin_logic": null,
-   "level": "L3",
-   "way": "relation_to_neighbour"
   }
  ],
  "evidence": [
@@ -1253,25 +1241,6 @@ start concepts (3): do_while_loop, loop_body, loop_control
    "twin_logic": null,
    "level": "L2",
    "way": "one_step_execution"
-  },
-  {
-   "depth": 3,
-   "source": "loop_variable",
-   "edge": "lvl:loop_variable@L3#0",
-   "target": "loop_variable@L3",
-   "kind": "level",
-   "label": "shown",
-   "clauses": [
-    2
-   ],
-   "quote": "10 < 5 is false",
-   "confidence": 0.6,
-   "prune_score": 0.2,
-   "score": 0.12,
-   "logic": "The init, condition and update all act on the loop variable: the init sets it, the condition tests it, the update changes it.",
-   "twin_logic": null,
-   "level": "L3",
-   "way": "relation_to_neighbour"
   }
  ],
  "clause_coverage": {
@@ -1287,6 +1256,36 @@ start concepts (3): do_while_loop, loop_body, loop_control
  "llm_calls_by_step": {
   "prune": 11,
   "label": 21
+ },
+ "level_v2": {
+  "wrong_ways": [
+   {
+    "concept": "loop_body",
+    "edge": "lvl:loop_body@L3#2",
+    "level": "L3",
+    "way": "relation_to_neighbour",
+    "clauses": [
+     1,
+     2,
+     3
+    ],
+    "quote": "Zero times; 10 < 5 is false; so the loop never starts",
+    "confidence": 0.85
+   },
+   {
+    "concept": "loop_variable",
+    "edge": "lvl:loop_variable@L3#0",
+    "level": "L3",
+    "way": "relation_to_neighbour",
+    "clauses": [
+     2,
+     3
+    ],
+    "quote": "10 < 5 is false; so the loop never starts",
+    "confidence": 0.8
+   }
+  ],
+  "not_counted": []
  }
 }
 ```

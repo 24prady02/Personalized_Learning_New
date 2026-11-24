@@ -5,7 +5,8 @@
   "depth": 3,
   "prune_tools": "llm",
   "model": "claude-opus-5-5",
-  "backend": "claude-cli"
+  "backend": "claude-cli",
+  "level_v2": true
  },
  "clauses": [
   "21",
@@ -573,5 +574,119 @@
  "llm_calls_by_step": {
   "prune": 16,
   "label": 31
+ },
+ "level_v2": {
+  "wrong_ways": [
+   {
+    "concept": "two_dimensional_array",
+    "edge": "lvl:two_dimensional_array@L3#2",
+    "level": "L3",
+    "way": "relation_to_neighbour",
+    "clauses": [
+     2,
+     3
+    ],
+    "quote": "t[0].length is 3, and every row of a 2D array has the same length; so it visits three columns in every row and adds all six numbers",
+    "confidence": 0.85
+   },
+   {
+    "concept": "two_dimensional_array",
+    "edge": "lvl:two_dimensional_array@L4#2",
+    "level": "L4",
+    "way": "diagnose_an_error",
+    "clauses": [
+     2,
+     3
+    ],
+    "quote": "t[0].length is 3, and every row of a 2D array has the same length; so it visits three columns in every row and adds all six numbers",
+    "confidence": 0.7
+   },
+   {
+    "concept": "ragged_array",
+    "edge": "lvl:ragged_array@L4#2",
+    "level": "L4",
+    "way": "diagnose_an_error",
+    "clauses": [
+     2,
+     3
+    ],
+    "quote": "t[0].length is 3, and every row of a 2D array has the same length; so it visits three columns in every row and adds all six numbers",
+    "confidence": 0.6
+   },
+   {
+    "concept": "indexing",
+    "edge": "lvl:indexing@L3#3",
+    "level": "L3",
+    "way": "relation_to_neighbour",
+    "clauses": [
+     2,
+     3
+    ],
+    "quote": "t[0].length is 3, and every row of a 2D array has the same length; so it visits three columns in every row and adds all six numbers",
+    "confidence": 0.8
+   },
+   {
+    "concept": "indexing",
+    "edge": "lvl:indexing@L3#2",
+    "level": "L3",
+    "way": "relation_to_neighbour",
+    "clauses": [
+     2,
+     3
+    ],
+    "quote": "t[0].length is 3, and every row of a 2D array has the same length; so it visits three columns in every row and adds all six numbers",
+    "confidence": 0.85
+   },
+   {
+    "concept": "array_bounds",
+    "edge": "lvl:array_bounds@L3#0",
+    "level": "L3",
+    "way": "relation_to_neighbour",
+    "clauses": [
+     1,
+     2,
+     3
+    ],
+    "quote": "21; t[0].length is 3, and every row of a 2D array has the same length; so it visits three columns in every row and adds all six numbers",
+    "confidence": 0.85
+   },
+   {
+    "concept": "row_major_order",
+    "edge": "lvl:row_major_order@L4#2",
+    "level": "L4",
+    "way": "diagnose_an_error",
+    "clauses": [
+     2,
+     3
+    ],
+    "quote": "t[0].length is 3, and every row of a 2D array has the same length; so it visits three columns in every row and adds all six numbers",
+    "confidence": 0.6
+   },
+   {
+    "concept": "row_major_order",
+    "edge": "lvl:row_major_order@L4#1",
+    "level": "L4",
+    "way": "transfer_to_a_new_program",
+    "clauses": [
+     2,
+     3
+    ],
+    "quote": "t[0].length is 3, and every row of a 2D array has the same length; so it visits three columns in every row and adds all six numbers",
+    "confidence": 0.6
+   },
+   {
+    "concept": "row_major_order",
+    "edge": "lvl:row_major_order@L3#0",
+    "level": "L3",
+    "way": "relation_to_neighbour",
+    "clauses": [
+     2,
+     3
+    ],
+    "quote": "t[0].length is 3, and every row of a 2D array has the same length; so it visits three columns in every row and adds all six numbers",
+    "confidence": 0.8
+   }
+  ],
+  "not_counted": []
  }
 }

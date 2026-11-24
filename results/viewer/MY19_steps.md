@@ -183,14 +183,16 @@ Clauses: 2
 Confidence: 0.9
 ```
 
-Label prompt for level way lvl:integer_division@L3#2 (the model saw only the concept, the way's name 'relation to neighbour' and its text; no level):
+Label prompt for level way lvl:integer_division@L3#2 (the model saw the concept, the way's name 'relation to neighbour', its text, where the way stops and whether the words must be correct; no level):
 > % gives the remainder of the same truncating division: (a / b) * b + a % b == a.
+>
+> Where this way stops: Two correct but separate rules are L1. Executing the two in sequence is L2. A relational answer may be correct or a relational error.
 
 Model's reply:
 ```
-Label: not shown
-Clauses: none
-Confidence: 0.9
+Label: wrong
+Clauses: 2
+Confidence: 0.8
 ```
 
 Parsed labels:
@@ -198,7 +200,6 @@ Parsed labels:
 |---|---|---|---|---|---|---|
 | lvl:integer_division@L0#4 | shown | 0.5 | 0.7 | 0.35 | c1, c2 | q is a double; so 7 / 2 is done with decimals and gives 3.5, and 7 % 2 is the half that is left over, 0.5 |
 | lvl:integer_division@L0#0 | shown | 0.3 | 0.9 | 0.27 | c2 | so 7 / 2 is done with decimals and gives 3.5, and 7 % 2 is the half that is left over, 0.5 |
-| lvl:integer_division@L3#2 | not applied |  |  | 0.0 |  |  |
 
 #### arithmetic_operators, misconceptions: 3 edges offered
 Edges offered:
@@ -275,14 +276,16 @@ Clauses: 2
 Confidence: 0.75
 ```
 
-Label prompt for level way lvl:arithmetic_operators@L3#1 (the model saw only the concept, the way's name 'relation to neighbour' and its text; no level):
+Label prompt for level way lvl:arithmetic_operators@L3#1 (the model saw the concept, the way's name 'relation to neighbour', its text, where the way stops and whether the words must be correct; no level):
 > For ints, / gives the truncated quotient and % the remainder, so (a / b) * b + a % b == a.
+>
+> Where this way stops: Two correct but separate rules are L1. Executing the two in sequence is L2. A relational answer may be correct or a relational error.
 
 Model's reply:
 ```
-Label: not shown
-Clauses: none
-Confidence: 0.95
+Label: wrong
+Clauses: 2
+Confidence: 0.75
 ```
 
 Label prompt for level way lvl:arithmetic_operators@L2#1 (the model saw only the concept, the way's name 'output prediction' and its text; no level):
@@ -299,8 +302,6 @@ Parsed labels:
 | edge | label | prune score | confidence | score | clauses | words |
 |---|---|---|---|---|---|---|
 | lvl:arithmetic_operators@L0#0 | shown | 0.45 | 0.75 | 0.34 | c2 | so 7 / 2 is done with decimals and gives 3.5, and 7 % 2 is the half that is left over, 0.5 |
-| lvl:arithmetic_operators@L3#1 | not applied |  |  | 0.0 |  |  |
-| lvl:arithmetic_operators@L2#1 | not applied |  |  | 0.0 |  |  |
 
 #### remainder_operator, misconceptions: 3 edges offered
 Edges offered:
@@ -375,14 +376,16 @@ Clauses: none
 Confidence: 0.75
 ```
 
-Label prompt for level way lvl:remainder_operator@L3#0 (the model saw only the concept, the way's name 'relation to neighbour' and its text; no level):
+Label prompt for level way lvl:remainder_operator@L3#0 (the model saw the concept, the way's name 'relation to neighbour', its text, where the way stops and whether the words must be correct; no level):
 > % is the companion of integer division, since a == (a / b) * b + a % b. Both use the same quotient rounded toward 0.
+>
+> Where this way stops: Two correct but separate rules are L1. Executing the two in sequence is L2. A relational answer may be correct or a relational error.
 
 Model's reply:
 ```
-Label: not shown
-Clauses: none
-Confidence: 0.85
+Label: wrong
+Clauses: 2
+Confidence: 0.8
 ```
 
 Label prompt for level way lvl:remainder_operator@L1#0 (the model saw only the concept, the way's name 'names the element' and its text; no level):
@@ -399,8 +402,6 @@ Parsed labels:
 | edge | label | prune score | confidence | score | clauses | words |
 |---|---|---|---|---|---|---|
 | lvl:remainder_operator@L0#3 | not applied |  |  | 0.0 |  |  |
-| lvl:remainder_operator@L3#0 | not applied |  |  | 0.0 |  |  |
-| lvl:remainder_operator@L1#0 | not applied |  |  | 0.0 |  |  |
 
 **Kept on a path at this depth** (best N in tiers: held misconception / broken edge, then held error, then correct / confirmed / shown):
 
@@ -629,14 +630,16 @@ Prune: the model's reply (edge id and score; the kept edges sum to 1):
 ```
 Kept by pruning: lvl:expression@L3#1 (0.50), lvl:expression@L0#0 (0.30), lvl:expression@L2#1 (0.20)
 
-Label prompt for level way lvl:expression@L3#1 (the model saw only the concept, the way's name 'relation to neighbour' and its text; no level):
+Label prompt for level way lvl:expression@L3#1 (the model saw the concept, the way's name 'relation to neighbour', its text, where the way stops and whether the words must be correct; no level):
 > Operators combine operand values into a new value, and the operand types choose the operation (int / truncates, double / does not).
+>
+> Where this way stops: Two correct but separate rules are L1. Executing the two in sequence is L2. A relational answer may be correct or a relational error.
 
 Model's reply:
 ```
-Label: not shown
-Clauses: none
-Confidence: 0.7
+Label: wrong
+Clauses: 1, 2
+Confidence: 0.88
 ```
 
 Label prompt for level way lvl:expression@L0#0 (the model saw only the concept, the way's name 'everyday reading' and its text; no level):
@@ -660,11 +663,7 @@ Confidence: 0.9
 ```
 
 Parsed labels:
-| edge | label | prune score | confidence | score | clauses | words |
-|---|---|---|---|---|---|---|
-| lvl:expression@L3#1 | not applied |  |  | 0.0 |  |  |
-| lvl:expression@L0#0 | shown | 0.3 | 0.8 | 0.24 | c2 | so 7 / 2 is done with decimals and gives 3.5, and 7 % 2 is the half that is left over, 0.5 |
-| lvl:expression@L2#1 | not applied |  |  | 0.0 |  |  |
+(none)
 
 **Kept on a path at this depth** (best N in tiers: held misconception / broken edge, then held error, then correct / confirmed / shown):
 
@@ -688,7 +687,7 @@ Root-cause walk: held on ['integer_division'], broken at [] (consequences: pre:a
 - expression: L0 via everyday_reading "so 7 / 2 is done with decimals and gives 3.5, and 7 % 2 is the half that is left over, 0.5"
 - integer_division: L0 via misconception "q is a double; so 7 / 2 is done with decimals and gives 3.5, and 7 % 2 is the half that is left over, 0.5"
 
-**Stop:** sufficient at depth 3; prompts {'prune': 11, 'label': 22}, fresh model calls 3, cache hits 30
+**Stop:** sufficient at depth 3; prompts {'prune': 11, 'label': 22}, fresh model calls 0, cache hits 33
 
 ### Held misconceptions
 | concept | misconception | kind | quote | score | shares_evidence_with |
@@ -716,6 +715,14 @@ Root-cause walk: held on ['integer_division'], broken at [] (consequences: pre:a
 | arithmetic_operators | L0 | everyday_reading |  | level_way | so 7 / 2 is done with decimals and gives 3.5, and 7 % 2 is the half that is left over, 0.5 |  |  |  |
 | expression | L0 | everyday_reading |  | level_way | so 7 / 2 is done with decimals and gives 3.5, and 7 % 2 is the half that is left over, 0.5 |  |  |  |
 | integer_division | L0 | misconception | TargetTyping | level_mis_links | q is a double; so 7 / 2 is done with decimals and gives 3.5, and 7 % 2 is the half that is left over, 0.5 | wrong rule: The type of a numerical expression depends on the type expected by the surrounding context, so double d = a / b; keeps the fraction. Right rule: The type of a numerical expression is determined by the expression, so double d = a / b; with int a and b still divides as ints. |  |  |
+
+Ways above L2 the model answered "wrong" (the kind of thing is done, but what is said contradicts Java; not shown):
+| concept | edge | level | way | confidence | clauses | quote |
+|---|---|---|---|---|---|---|
+| integer_division | lvl:integer_division@L3#2 | L3 | relation_to_neighbour | 0.8 | [2] | so 7 / 2 is done with decimals and gives 3.5, and 7 % 2 is the half that is left over, 0.5 |
+| arithmetic_operators | lvl:arithmetic_operators@L3#1 | L3 | relation_to_neighbour | 0.75 | [2] | so 7 / 2 is done with decimals and gives 3.5, and 7 % 2 is the half that is left over, 0.5 |
+| remainder_operator | lvl:remainder_operator@L3#0 | L3 | relation_to_neighbour | 0.8 | [2] | so 7 / 2 is done with decimals and gives 3.5, and 7 % 2 is the half that is left over, 0.5 |
+| expression | lvl:expression@L3#1 | L3 | relation_to_neighbour | 0.88 | [1, 2] | q is a double; so 7 / 2 is done with decimals and gives 3.5, and 7 % 2 is the half that is left over, 0.5 |
 
 ### Overall level: L0
 
@@ -768,6 +775,7 @@ start concepts (3): integer_division, arithmetic_operators, remainder_operator
   integer_division (level ways): 16 candidates -> kept lvl:integer_division@L0#4 (0.50), lvl:integer_division@L0#0 (0.30), lvl:integer_division@L3#2 (0.20)
     lvl:integer_division@L0#4 -> shown (0.35) "q is a double; so 7 / 2 is done with decimals and gives 3.5, and 7 % 2 is the half that is left over, 0.5"
     lvl:integer_division@L0#0 -> shown (0.27) "so 7 / 2 is done with decimals and gives 3.5, and 7 % 2 is the half that is left over, 0.5"
+    lvl:integer_division@L3#2: wrong (0.80) -> not applied
     lvl:integer_division@L3#2 -> not applied (0.00) ""
   arithmetic_operators (misconceptions): 3 candidates -> kept mis:arithmetic_operators->RemainderIsSubtraction (0.90), mis:arithmetic_operators->ArithmeticOnNumericStrings (0.05), mis:arithmetic_operators->CaretIsPower (0.05)
     mis:arithmetic_operators->RemainderIsSubtraction -> not applied (0.00) ""
@@ -775,6 +783,7 @@ start concepts (3): integer_division, arithmetic_operators, remainder_operator
     mis:arithmetic_operators->CaretIsPower -> not applied (0.00) ""
   arithmetic_operators (level ways): 18 candidates -> kept lvl:arithmetic_operators@L0#0 (0.45), lvl:arithmetic_operators@L3#1 (0.30), lvl:arithmetic_operators@L2#1 (0.25)
     lvl:arithmetic_operators@L0#0 -> shown (0.34) "so 7 / 2 is done with decimals and gives 3.5, and 7 % 2 is the half that is left over, 0.5"
+    lvl:arithmetic_operators@L3#1: wrong (0.75) -> not applied
     lvl:arithmetic_operators@L3#1 -> not applied (0.00) ""
     lvl:arithmetic_operators@L2#1 -> not applied (0.00) ""
   remainder_operator (misconceptions): 3 candidates -> kept mis:remainder_operator->RemainderIsQuotient (0.50), mis:remainder_operator->RemainderIsSubtraction (0.40), mis:remainder_operator->NegativeRemainderSign (0.10)
@@ -783,6 +792,7 @@ start concepts (3): integer_division, arithmetic_operators, remainder_operator
     mis:remainder_operator->NegativeRemainderSign -> not applied (0.00) ""
   remainder_operator (level ways): 14 candidates -> kept lvl:remainder_operator@L0#3 (0.45), lvl:remainder_operator@L3#0 (0.35), lvl:remainder_operator@L1#0 (0.20)
     lvl:remainder_operator@L0#3 -> not applied (0.00) ""
+    lvl:remainder_operator@L3#0: wrong (0.80) -> not applied
     lvl:remainder_operator@L3#0 -> not applied (0.00) ""
     lvl:remainder_operator@L1#0 -> not applied (0.00) ""
   kept: mis:integer_division->TargetTyping [held, tier 0, 0.45], lvl:integer_division@L0#4 [shown, tier 2, 0.35], lvl:arithmetic_operators@L0#0 [shown, tier 2, 0.34]
@@ -808,6 +818,7 @@ start concepts (3): integer_division, arithmetic_operators, remainder_operator
     mis:expression->AssignmentIsEquation -> not applied (0.00) ""
     mis:expression->VariablesHoldExpressions -> not applied (0.00) ""
   expression (level ways): 19 candidates -> kept lvl:expression@L3#1 (0.50), lvl:expression@L0#0 (0.30), lvl:expression@L2#1 (0.20)
+    lvl:expression@L3#1: wrong (0.88) -> not applied
     lvl:expression@L3#1 -> not applied (0.00) ""
     lvl:expression@L0#0 -> shown (0.24) "so 7 / 2 is done with decimals and gives 3.5, and 7 % 2 is the half that is left over, 0.5"
     lvl:expression@L2#1 -> not applied (0.00) ""
@@ -830,7 +841,8 @@ start concepts (3): integer_division, arithmetic_operators, remainder_operator
   "depth": 3,
   "prune_tools": "llm",
   "model": "claude-opus-5-5",
-  "backend": "claude-cli"
+  "backend": "claude-cli",
+  "level_v2": true
  },
  "clauses": [
   "q is a double",
@@ -1286,11 +1298,61 @@ start concepts (3): integer_division, arithmetic_operators, remainder_operator
  "unexplained_clauses": [],
  "stop_reason": "sufficient",
  "depth_reached": 3,
- "llm_calls": 3,
- "llm_cache_hits": 30,
+ "llm_calls": 0,
+ "llm_cache_hits": 33,
  "llm_calls_by_step": {
   "prune": 11,
   "label": 22
+ },
+ "level_v2": {
+  "wrong_ways": [
+   {
+    "concept": "integer_division",
+    "edge": "lvl:integer_division@L3#2",
+    "level": "L3",
+    "way": "relation_to_neighbour",
+    "clauses": [
+     2
+    ],
+    "quote": "so 7 / 2 is done with decimals and gives 3.5, and 7 % 2 is the half that is left over, 0.5",
+    "confidence": 0.8
+   },
+   {
+    "concept": "arithmetic_operators",
+    "edge": "lvl:arithmetic_operators@L3#1",
+    "level": "L3",
+    "way": "relation_to_neighbour",
+    "clauses": [
+     2
+    ],
+    "quote": "so 7 / 2 is done with decimals and gives 3.5, and 7 % 2 is the half that is left over, 0.5",
+    "confidence": 0.75
+   },
+   {
+    "concept": "remainder_operator",
+    "edge": "lvl:remainder_operator@L3#0",
+    "level": "L3",
+    "way": "relation_to_neighbour",
+    "clauses": [
+     2
+    ],
+    "quote": "so 7 / 2 is done with decimals and gives 3.5, and 7 % 2 is the half that is left over, 0.5",
+    "confidence": 0.8
+   },
+   {
+    "concept": "expression",
+    "edge": "lvl:expression@L3#1",
+    "level": "L3",
+    "way": "relation_to_neighbour",
+    "clauses": [
+     1,
+     2
+    ],
+    "quote": "q is a double; so 7 / 2 is done with decimals and gives 3.5, and 7 % 2 is the half that is left over, 0.5",
+    "confidence": 0.88
+   }
+  ],
+  "not_counted": []
  }
 }
 ```

@@ -5,7 +5,8 @@
   "depth": 3,
   "prune_tools": "llm",
   "model": "claude-opus-5-5",
-  "backend": "claude-cli"
+  "backend": "claude-cli",
+  "level_v2": true
  },
  "clauses": [
   "q is a double",
@@ -461,10 +462,60 @@
  "unexplained_clauses": [],
  "stop_reason": "sufficient",
  "depth_reached": 3,
- "llm_calls": 3,
- "llm_cache_hits": 30,
+ "llm_calls": 0,
+ "llm_cache_hits": 33,
  "llm_calls_by_step": {
   "prune": 11,
   "label": 22
+ },
+ "level_v2": {
+  "wrong_ways": [
+   {
+    "concept": "integer_division",
+    "edge": "lvl:integer_division@L3#2",
+    "level": "L3",
+    "way": "relation_to_neighbour",
+    "clauses": [
+     2
+    ],
+    "quote": "so 7 / 2 is done with decimals and gives 3.5, and 7 % 2 is the half that is left over, 0.5",
+    "confidence": 0.8
+   },
+   {
+    "concept": "arithmetic_operators",
+    "edge": "lvl:arithmetic_operators@L3#1",
+    "level": "L3",
+    "way": "relation_to_neighbour",
+    "clauses": [
+     2
+    ],
+    "quote": "so 7 / 2 is done with decimals and gives 3.5, and 7 % 2 is the half that is left over, 0.5",
+    "confidence": 0.75
+   },
+   {
+    "concept": "remainder_operator",
+    "edge": "lvl:remainder_operator@L3#0",
+    "level": "L3",
+    "way": "relation_to_neighbour",
+    "clauses": [
+     2
+    ],
+    "quote": "so 7 / 2 is done with decimals and gives 3.5, and 7 % 2 is the half that is left over, 0.5",
+    "confidence": 0.8
+   },
+   {
+    "concept": "expression",
+    "edge": "lvl:expression@L3#1",
+    "level": "L3",
+    "way": "relation_to_neighbour",
+    "clauses": [
+     1,
+     2
+    ],
+    "quote": "q is a double; so 7 / 2 is done with decimals and gives 3.5, and 7 % 2 is the half that is left over, 0.5",
+    "confidence": 0.88
+   }
+  ],
+  "not_counted": []
  }
 }

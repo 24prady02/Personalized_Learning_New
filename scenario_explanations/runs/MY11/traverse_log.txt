@@ -25,8 +25,8 @@ start concepts (3): for_loop, loop_control, string_concatenation
     mis:string_concatenation->StringPlusStringifiesExpression -> not applied (0.00) ""
   string_concatenation (level ways): 16 candidates -> kept lvl:string_concatenation@L2#1 (0.45), lvl:string_concatenation@L3#3 (0.30), lvl:string_concatenation@L3#1 (0.25)
     lvl:string_concatenation@L2#1 -> not applied (0.00) ""
-    lvl:string_concatenation@L3#3 -> shown (0.18) "so i ends at 2, then the inner loop runs j from 1 to 3: 2 1, 2 2, 2 3"
-    lvl:string_concatenation@L3#1 -> shown (0.15) "so i ends at 2, then the inner loop runs j from 1 to 3: 2 1, 2 2, 2 3"
+    lvl:string_concatenation@L3#3 -> not applied (0.00) ""
+    lvl:string_concatenation@L3#1 -> not applied (0.00) ""
   kept: mis:for_loop->ForLoopPartSkipped [held, tier 0, 0.28], mis:loop_control->ForLoopPartSkipped [held, tier 0, 0.18], lvl:loop_control@L2#1 [shown, tier 2, 0.18]
   clause coverage: c1 uncovered; c2 <- mis:for_loop->ForLoopPartSkipped; c3 <- mis:for_loop->ForLoopPartSkipped
   uncovered clauses bring in: control_flow (1.84), println (1.53)
@@ -55,8 +55,9 @@ start concepts (3): for_loop, loop_control, string_concatenation
     mis:println->PrintedTextIsExecuted -> not applied (0.00) ""
   println (level ways): 17 candidates -> kept lvl:println@L2#1 (0.50), lvl:println@L3#0 (0.30), lvl:println@L3#4 (0.20)
     lvl:println@L2#1 -> shown (0.30) "Three lines; so i ends at 2, then the inner loop runs j from 1 to 3: 2 1, 2 2, 2 3"
-    lvl:println@L3#0 -> shown (0.18) "so i ends at 2, then the inner loop runs j from 1 to 3: 2 1, 2 2, 2 3"
-    lvl:println@L3#4 -> shown (0.12) "Three lines; so i ends at 2, then the inner loop runs j from 1 to 3: 2 1, 2 2, 2 3"
+    lvl:println@L3#0: wrong (0.65) -> not applied
+    lvl:println@L3#0 -> not applied (0.00) ""
+    lvl:println@L3#4 -> not applied (0.00) ""
   kept: pre:for_loop->nested_loops [broken, tier 0, 0.55], pre:for_loop->loop_body [broken, tier 0, 0.21], pre:for_loop->loop_scope [broken, tier 0, 0.09]
   reached across pre:for_loop->nested_loops, entered next: nested_loops
   reached across pre:for_loop->loop_body, entered next: loop_body
@@ -107,8 +108,9 @@ start concepts (3): for_loop, loop_control, string_concatenation
   statement (level ways): 19 candidates -> kept lvl:statement@L0#2 (0.50), lvl:statement@L0#0 (0.25), lvl:statement@L3#4 (0.25)
     lvl:statement@L0#2 -> not applied (0.00) ""
     lvl:statement@L0#0 -> not applied (0.00) ""
-    lvl:statement@L3#4 -> shown (0.15) "The outer loop finishes first; so i ends at 2, then the inner loop runs j from 1 to 3: 2 1, 2 2, 2 3"
-  kept: mis:statement->StatementsRunInAnyOrder [held, tier 0, 0.35], lvl:statement@L3#4 [shown, tier 2, 0.15]
+    lvl:statement@L3#4: wrong (0.80) -> not applied
+    lvl:statement@L3#4 -> not applied (0.00) ""
+  kept: mis:statement->StatementsRunInAnyOrder [held, tier 0, 0.35]
   clause coverage: c1 <- mis:loop_body->LoopBodyStatementOutsideLoop; c2 <- mis:for_loop->ForLoopPartSkipped; c3 <- mis:for_loop->ForLoopPartSkipped
   held: mis:nested_loops->NestedLoopsSequential, mis:loop_body->LoopBodyStatementOutsideLoop, mis:loop_scope->ForVariableScopeBeyondLoop, mis:statement->StatementsRunInAnyOrder, mis:for_loop->ForLoopPartSkipped; filed at the dependent concept: mis:loop_control->ForLoopPartSkipped
   shadows: mis:statement->StatementsRunInAnyOrder (shadow of mis:for_loop->ForLoopPartSkipped), mis:for_loop->ForLoopPartSkipped (shadow of mis:loop_scope->ForVariableScopeBeyondLoop), mis:loop_control->ForLoopPartSkipped (shadow of mis:loop_scope->ForVariableScopeBeyondLoop)
@@ -118,6 +120,4 @@ start concepts (3): for_loop, loop_control, string_concatenation
   level loop_control: L2 via output_prediction "Three lines; so i ends at 2, then the inner loop runs j from 1 to 3: 2 1, 2 2, 2 3"
   level loop_scope: L0 via misconception "The outer loop finishes first; so i ends at 2, then the inner loop runs j from 1 to 3: 2 1, 2 2, 2 3"
   level nested_loops: L0 via misconception "The outer loop finishes first; so i ends at 2, then the inner loop runs j from 1 to 3: 2 1, 2 2, 2 3"
-  level println: L3 via relation_to_neighbour "so i ends at 2, then the inner loop runs j from 1 to 3: 2 1, 2 2, 2 3"
-  level statement: L3 via relation_to_neighbour "The outer loop finishes first; so i ends at 2, then the inner loop runs j from 1 to 3: 2 1, 2 2, 2 3"
-  level string_concatenation: L3 via purpose_of_the_whole "so i ends at 2, then the inner loop runs j from 1 to 3: 2 1, 2 2, 2 3"
+  level println: L2 via output_prediction "Three lines; so i ends at 2, then the inner loop runs j from 1 to 3: 2 1, 2 2, 2 3"

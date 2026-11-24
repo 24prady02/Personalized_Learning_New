@@ -72,9 +72,9 @@ start concepts (3): arithmetic_operators, explicit_cast, math_random
     mis:type_conversion->TargetTyping -> not applied (0.00) ""
   type_conversion (level ways): 18 candidates -> kept lvl:type_conversion@L2#1 (0.40), lvl:type_conversion@L3#2 (0.35), lvl:type_conversion@L3#0 (0.25)
     lvl:type_conversion@L2#1 -> shown (0.24) "n is a whole number from 1 to 6, for example 4"
-    lvl:type_conversion@L3#2 -> shown (0.21) "n is a whole number from 1 to 6, for example 4"
+    lvl:type_conversion@L3#2 -> not applied (0.00) ""
     lvl:type_conversion@L3#0 -> not applied (0.00) ""
-  kept: lvl:type_conversion@L2#1 [shown, tier 2, 0.24], lvl:type_conversion@L3#2 [shown, tier 2, 0.21]
+  kept: lvl:type_conversion@L2#1 [shown, tier 2, 0.24]
   clause coverage: c1 <- mis:explicit_cast->CastRounds
   not yet read: pre:expression->method_call, pre:method_call->math_library, pre:primitive_type->type_conversion
   root-cause walk: held on [], broken at [], prerequisites {'expression': ['arithmetic_operators'], 'math_random': ['explicit_cast', 'math_library'], 'method_call': ['expression'], 'api': ['method_call'], 'math_library': ['method_call'], 'type_conversion': ['primitive_type'], 'println': ['statement'], 'explicit_cast': ['type_conversion']}
@@ -82,4 +82,4 @@ start concepts (3): arithmetic_operators, explicit_cast, math_random
   level explicit_cast: L2 via output_prediction "n is a whole number from 1 to 6, for example 4"
   level expression: L2 via output_prediction "n is a whole number from 1 to 6, for example 4"
   level math_random: L2 via output_prediction "n is a whole number from 1 to 6, for example 4"
-  level type_conversion: L3 via relation_to_neighbour "n is a whole number from 1 to 6, for example 4"
+  level type_conversion: L2 via output_prediction "n is a whole number from 1 to 6, for example 4"

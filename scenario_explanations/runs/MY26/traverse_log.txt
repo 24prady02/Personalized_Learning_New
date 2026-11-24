@@ -9,6 +9,7 @@ start concepts (3): division_by_zero, run_time_error, integer_division
     err:division_by_zero->AverageWithoutZeroGuard -> not applied (0.00) ""
   division_by_zero (level ways): 15 candidates -> kept lvl:division_by_zero@L0#0 (0.70), lvl:division_by_zero@L4#3 (0.20), lvl:division_by_zero@L2#1 (0.10)
     lvl:division_by_zero@L0#0 -> shown (0.65) "It wont compile; Dividing by zero isnt allowed; so the compiler stops you before it runs"
+    lvl:division_by_zero@L4#3: wrong (0.88) -> not applied
     lvl:division_by_zero@L4#3 -> not applied (0.00) ""
     lvl:division_by_zero@L2#1 -> not applied (0.00) ""
   run_time_error (misconceptions): 7 candidates -> kept mis:run_time_error->DivisionByZeroIsCompileError (0.80), mis:run_time_error->CompilesMeansWorks (0.15), err:run_time_error->InputTypeMismatch (0.05)
@@ -16,7 +17,9 @@ start concepts (3): division_by_zero, run_time_error, integer_division
     mis:run_time_error->CompilesMeansWorks -> not applied (0.00) ""
     err:run_time_error->InputTypeMismatch -> not applied (0.00) ""
   run_time_error (level ways): 19 candidates -> kept lvl:run_time_error@L3#1 (0.45), lvl:run_time_error@L4#6 (0.35), lvl:run_time_error@L0#0 (0.20)
+    lvl:run_time_error@L3#1: wrong (0.80) -> not applied
     lvl:run_time_error@L3#1 -> not applied (0.00) ""
+    lvl:run_time_error@L4#6: wrong (0.88) -> not applied
     lvl:run_time_error@L4#6 -> not applied (0.00) ""
     lvl:run_time_error@L0#0 -> shown (0.17) "It wont compile; so the compiler stops you before it runs"
   integer_division (misconceptions): 6 candidates -> kept mis:integer_division->IntegerDivisionGivesFraction (0.50), mis:integer_division->TargetTyping (0.30), mis:integer_division->NegativeRemainderSign (0.20)
@@ -24,6 +27,7 @@ start concepts (3): division_by_zero, run_time_error, integer_division
     mis:integer_division->TargetTyping -> not applied (0.00) ""
     mis:integer_division->NegativeRemainderSign -> not applied (0.00) ""
   integer_division (level ways): 16 candidates -> kept lvl:integer_division@L4#3 (0.50), lvl:integer_division@L2#2 (0.35), lvl:integer_division@L0#0 (0.15)
+    lvl:integer_division@L4#3: wrong (0.90) -> not applied
     lvl:integer_division@L4#3 -> not applied (0.00) ""
     lvl:integer_division@L2#2 -> not applied (0.00) ""
     lvl:integer_division@L0#0 -> not applied (0.00) ""
@@ -43,7 +47,9 @@ start concepts (3): division_by_zero, run_time_error, integer_division
 --- depth 3: current concepts ['run_time_error', 'division_by_zero', 'arithmetic_operators']
   arithmetic_operators (misconceptions): 3 candidates -> kept 
   arithmetic_operators (level ways): 18 candidates -> kept lvl:arithmetic_operators@L4#2 (0.50), lvl:arithmetic_operators@L3#2 (0.30), lvl:arithmetic_operators@L1#1 (0.20)
+    lvl:arithmetic_operators@L4#2: wrong (0.90) -> not applied
     lvl:arithmetic_operators@L4#2 -> not applied (0.00) ""
+    lvl:arithmetic_operators@L3#2: wrong (0.60) -> not applied
     lvl:arithmetic_operators@L3#2 -> not applied (0.00) ""
     lvl:arithmetic_operators@L1#1 -> not applied (0.00) ""
   nothing kept at this depth

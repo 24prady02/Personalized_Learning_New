@@ -177,10 +177,21 @@ def main(sid: str) -> Path:
             for e in kept_ids:
                 if e.startswith("lvl:"):
                     ed = g.edge_by_id[e]
-                    p = prompts.LABEL_WAY.format(code=code, question=question, clauses=clause_text, concept=concept,
-                                                 way=(ed.get("way") or "").replace("_", " "), rule=ed.get("logic") or "")
-                    w(f"\nLabel prompt for level way {e} (the model saw only the concept, the way's name '{(ed.get('way') or '').replace('_', ' ')}' and its text; no level):\n")
-                    w(f"> {ed.get('logic') or ''}\n\nModel's reply:\n```\n" + cached_reply(backend, model, p) + "\n```\n")
+                    way_name = (ed.get("way") or "").replace("_", " ")
+                    if d["settings"].get("level_v2") and ed["level"] > "L2":
+                        # setting level_v2: the question for a way above L2 (boundary, correctness, the answer "wrong")
+                        p = prompts.LABEL_WAY_V2.format(
+                            code=code, question=question, clauses=clause_text, concept=concept, way=way_name, rule=ed.get("logic") or "",
+                            boundary=ed.get("boundary") or "not stated",
+                            correctness="yes, or a single slip under the right rule" if ed.get("correctness") == "correct or error" else "yes")
+                        w(f"\nLabel prompt for level way {e} (the model saw the concept, the way's name '{way_name}', its text, where the way "
+                          f"stops and whether the words must be correct; no level):\n")
+                        w(f"> {ed.get('logic') or ''}\n>\n> Where this way stops: {ed.get('boundary') or 'not stated'}\n\nModel's reply:\n```\n"
+                          + cached_reply(backend, model, p) + "\n```\n")
+                    else:
+                        p = prompts.LABEL_WAY.format(code=code, question=question, clauses=clause_text, concept=concept, way=way_name, rule=ed.get("logic") or "")
+                        w(f"\nLabel prompt for level way {e} (the model saw only the concept, the way's name '{way_name}' and its text; no level):\n")
+                        w(f"> {ed.get('logic') or ''}\n\nModel's reply:\n```\n" + cached_reply(backend, model, p) + "\n```\n")
                 elif e.startswith(("pre:", "par:")):
                     ed = g.edge_by_id[e]
                     p = prompts.LABEL_CONCEPT.format(code=code, question=question, clauses=clause_text, edge_id=e,
@@ -247,6 +258,12 @@ def main(sid: str) -> Path:
     w("\n### Level per concept\n")
     w(table([{"concept": c, **v, "also": ", ".join(v.get("also_shown", []) or v.get("also_held", []))} for c, v in d["levels"].items()],
             ["concept", "level", "way", "misconception", "source", "quote", "rule", "also", "note"]))
+    lv2 = d.get("level_v2") or {}
+    if lv2.get("not_counted"):
+        w("\nShown ways above L2 that do not count for the level:\n" + table(lv2["not_counted"], ["concept", "edge", "level", "way", "confidence", "reason", "quote"]))
+    if lv2.get("wrong_ways"):
+        w("\nWays above L2 the model answered \"wrong\" (the kind of thing is done, but what is said contradicts Java; not shown):\n"
+          + table(lv2["wrong_ways"], ["concept", "edge", "level", "way", "confidence", "clauses", "quote"]))
     w(f"\n### Overall level: {d['overall_level']}\n")
     w("\nClause coverage (final):\n" + table([{"clause": k, "covered by": v} for k, v in d["clause_coverage"].items()], ["clause", "covered by"]))
     if d.get("unexplained_clauses"):

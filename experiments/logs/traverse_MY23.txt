@@ -10,6 +10,7 @@ start concepts (3): integer_division, explicit_cast, arithmetic_operators
   integer_division (level ways): 16 candidates -> kept lvl:integer_division@L0#4 (0.50), lvl:integer_division@L2#0 (0.30), lvl:integer_division@L4#0 (0.20)
     lvl:integer_division@L0#4 -> shown (0.42) "The (double) turns the whole division into a decimal division —; so sum / count keeps its fraction and avg is 3.5"
     lvl:integer_division@L2#0 -> not applied (0.00) ""
+    lvl:integer_division@L4#0: wrong (0.80) -> not applied
     lvl:integer_division@L4#0 -> not applied (0.00) ""
   explicit_cast (misconceptions): 6 candidates -> kept mis:explicit_cast->CastAfterIntDivision (0.60), mis:explicit_cast->CastAppliesToWholeExpression (0.30), mis:explicit_cast->LaterDoubleLiteralFixesDivision (0.10)
     mis:explicit_cast->CastAfterIntDivision -> held (0.55) "The (double) turns the whole division into a decimal division —; so sum / count keeps its fraction and avg is 3.5"
@@ -25,6 +26,7 @@ start concepts (3): integer_division, explicit_cast, arithmetic_operators
     mis:arithmetic_operators->CaretIsPower -> not applied (0.00) ""
   arithmetic_operators (level ways): 18 candidates -> kept lvl:arithmetic_operators@L2#1 (0.40), lvl:arithmetic_operators@L4#0 (0.35), lvl:arithmetic_operators@L0#0 (0.25)
     lvl:arithmetic_operators@L2#1 -> not applied (0.00) ""
+    lvl:arithmetic_operators@L4#0: wrong (0.70) -> not applied
     lvl:arithmetic_operators@L4#0 -> not applied (0.00) ""
     lvl:arithmetic_operators@L0#0 -> not applied (0.00) ""
   kept: mis:integer_division->CastAfterIntDivision [held, tier 0, 0.56], mis:explicit_cast->CastAfterIntDivision [held, tier 0, 0.55], lvl:integer_division@L0#4 [shown, tier 2, 0.42]
@@ -50,13 +52,16 @@ start concepts (3): integer_division, explicit_cast, arithmetic_operators
     mis:expression->VariablesHoldExpressions -> not applied (0.00) ""
   expression (level ways): 19 candidates -> kept lvl:expression@L0#0 (0.40), lvl:expression@L3#1 (0.35), lvl:expression@L3#2 (0.25)
     lvl:expression@L0#0 -> shown (0.28) "so sum / count keeps its fraction and avg is 3.5"
+    lvl:expression@L3#1: wrong (0.88) -> not applied
     lvl:expression@L3#1 -> not applied (0.00) ""
+    lvl:expression@L3#2: wrong (0.88) -> not applied
     lvl:expression@L3#2 -> not applied (0.00) ""
   type_conversion (misconceptions): 3 candidates -> kept mis:type_conversion->TargetTyping (0.90), mis:type_conversion->NarrowingAssignmentAllowed (0.05), mis:type_conversion->NoCastIfSameSize (0.05)
     mis:type_conversion->TargetTyping -> held (0.77) "The (double) turns the whole division into a decimal division —; so sum / count keeps its fraction and avg is 3.5"
     mis:type_conversion->NarrowingAssignmentAllowed -> not applied (0.00) ""
     mis:type_conversion->NoCastIfSameSize -> not applied (0.00) ""
   type_conversion (level ways): 18 candidates -> kept lvl:type_conversion@L4#3 (0.40), lvl:type_conversion@L4#0 (0.35), lvl:type_conversion@L0#0 (0.25)
+    lvl:type_conversion@L4#3: wrong (0.65) -> not applied
     lvl:type_conversion@L4#3 -> not applied (0.00) ""
     lvl:type_conversion@L4#0 -> not applied (0.00) ""
     lvl:type_conversion@L0#0 -> shown (0.17) "The (double) turns the whole division into a decimal division —; so sum / count keeps its fraction and avg is 3.5"

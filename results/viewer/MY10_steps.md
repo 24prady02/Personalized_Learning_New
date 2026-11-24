@@ -216,32 +216,34 @@ Clauses: 2, 3, 4
 Confidence: 0.9
 ```
 
-Label prompt for level way lvl:indexing@L3#6 (the model saw only the concept, the way's name 'relation to neighbour' and its text; no level):
+Label prompt for level way lvl:indexing@L3#6 (the model saw the concept, the way's name 'relation to neighbour', its text, where the way stops and whether the words must be correct; no level):
 > Indices start at 0, so the last element is a[N-1]; misreading this convention is the usual source of off-by-one errors.
+>
+> Where this way stops: Two correct but separate rules are L1. Executing the two in sequence is L2. A relational answer may be correct or a relational error.
 
 Model's reply:
 ```
-Label: not shown
-Clauses: none
-Confidence: 0.9
+Label: wrong
+Clauses: 2, 3, 4
+Confidence: 0.8
 ```
 
-Label prompt for level way lvl:indexing@L4#2 (the model saw only the concept, the way's name 'diagnose an error' and its text; no level):
+Label prompt for level way lvl:indexing@L4#2 (the model saw the concept, the way's name 'diagnose an error', its text, where the way stops and whether the words must be correct; no level):
 > rule broken: The index must be in 0..a.length-1. Kind: run-time exception. Trigger class: index < 0 or >= a.length, e.g. a[a.length], a[i+1] on the last pass, a[i-1] at i = 0, a[0] of an empty array (ArrayIndexOutOfBoundsException)
+>
+> Where this way stops: Locating and fixing the mistake for one given failing case is L3. A compiler-flagged slip fixed from the message is weak evidence.
 
 Model's reply:
 ```
-Label: not shown
-Clauses: none
-Confidence: 0.95
+Label: wrong
+Clauses: 2, 3
+Confidence: 0.6
 ```
 
 Parsed labels:
 | edge | label | prune score | confidence | score | clauses | words |
 |---|---|---|---|---|---|---|
 | lvl:indexing@L0#0 | shown | 0.6 | 0.9 | 0.54 | c2, c3, c4 | Arrays start at a[1]; so a[0] is before the first element and just gives 0; Then a[1], a[2] and a[3] are 5, 10 and 15 |
-| lvl:indexing@L3#6 | not applied |  |  | 0.0 |  |  |
-| lvl:indexing@L4#2 | not applied |  |  | 0.0 |  |  |
 
 #### array_traversal, misconceptions: 6 edges offered
 Edges offered:
@@ -315,14 +317,16 @@ Prune: the model's reply (edge id and score; the kept edges sum to 1):
 ```
 Kept by pruning: lvl:array_traversal@L4#3 (0.55), lvl:array_traversal@L2#0 (0.25), lvl:array_traversal@L3#0 (0.20)
 
-Label prompt for level way lvl:array_traversal@L4#3 (the model saw only the concept, the way's name 'diagnose an error' and its text; no level):
+Label prompt for level way lvl:array_traversal@L4#3 (the model saw the concept, the way's name 'diagnose an error', its text, where the way stops and whether the words must be correct; no level):
 > rule broken: The guard must be i < a.length. Kind: run-time exception. Trigger class: i <= a.length (or a body that reads a[i+1]) makes the last pass index a.length (ArrayIndexOutOfBoundsException)
+>
+> Where this way stops: Locating and fixing the mistake for one given failing case is L3. A compiler-flagged slip fixed from the message is weak evidence.
 
 Model's reply:
 ```
 Label: not shown
 Clauses: none
-Confidence: 0.95
+Confidence: 0.7
 ```
 
 Label prompt for level way lvl:array_traversal@L2#0 (the model saw only the concept, the way's name 'line by line trace' and its text; no level):
@@ -335,14 +339,16 @@ Clauses: none
 Confidence: 0.88
 ```
 
-Label prompt for level way lvl:array_traversal@L3#0 (the model saw only the concept, the way's name 'relation to neighbour' and its text; no level):
+Label prompt for level way lvl:array_traversal@L3#0 (the model saw the concept, the way's name 'relation to neighbour', its text, where the way stops and whether the words must be correct; no level):
 > The loop variable is used as the index, so a[i] reaches a different element on each pass.
+>
+> Where this way stops: Two correct but separate rules are L1. Executing the two in sequence is L2. A relational answer may be correct or a relational error.
 
 Model's reply:
 ```
-Label: shown
-Clauses: 3, 4
-Confidence: 0.7
+Label: wrong
+Clauses: 2, 3, 4
+Confidence: 0.8
 ```
 
 Parsed labels:
@@ -350,7 +356,6 @@ Parsed labels:
 |---|---|---|---|---|---|---|
 | lvl:array_traversal@L4#3 | not applied |  |  | 0.0 |  |  |
 | lvl:array_traversal@L2#0 | not applied |  |  | 0.0 |  |  |
-| lvl:array_traversal@L3#0 | shown | 0.2 | 0.7 | 0.14 | c3, c4 | so a[0] is before the first element and just gives 0; Then a[1], a[2] and a[3] are 5, 10 and 15 |
 
 #### array_initializer, misconceptions: 2 edges offered
 Edges offered:
@@ -723,14 +728,16 @@ Clauses: 1, 3, 4
 Confidence: 0.6
 ```
 
-Label prompt for level way lvl:for_loop@L3#2 (the model saw only the concept, the way's name 'relation to neighbour' and its text; no level):
+Label prompt for level way lvl:for_loop@L3#2 (the model saw the concept, the way's name 'relation to neighbour', its text, where the way stops and whether the words must be correct; no level):
 > for (int i = 0; i < N; i++) gives i each valid index 0..N-1 exactly once in increasing order, the standard way to process every array element.
+>
+> Where this way stops: Two correct but separate rules are L1. Executing the two in sequence is L2. A relational answer may be correct or a relational error.
 
 Model's reply:
 ```
-Label: not shown
-Clauses: none
-Confidence: 0.7
+Label: wrong
+Clauses: 2, 3, 4
+Confidence: 0.8
 ```
 
 Label prompt for level way lvl:for_loop@L2#0 (the model saw only the concept, the way's name 'line by line trace' and its text; no level):
@@ -747,8 +754,6 @@ Parsed labels:
 | edge | label | prune score | confidence | score | clauses | words |
 |---|---|---|---|---|---|---|
 | lvl:for_loop@L2#1 | shown | 0.4 | 0.6 | 0.24 | c1, c3, c4 | It prints 0, then 5, 10 and 15; so a[0] is before the first element and just gives 0; Then a[1], a[2] and a[3] are 5, 10 and 15 |
-| lvl:for_loop@L3#2 | not applied |  |  | 0.0 |  |  |
-| lvl:for_loop@L2#0 | shown | 0.25 | 0.6 | 0.15 | c1, c3, c4 | It prints 0, then 5, 10 and 15; so a[0] is before the first element and just gives 0; Then a[1], a[2] and a[3] are 5, 10 and 15 |
 
 #### array_traversal, concept edges: 1 edges offered
 Edges offered:
@@ -848,14 +853,16 @@ Clauses: 2, 4
 Confidence: 0.55
 ```
 
-Label prompt for level way lvl:length_field@L4#4 (the model saw only the concept, the way's name 'diagnose an error' and its text; no level):
+Label prompt for level way lvl:length_field@L4#4 (the model saw the concept, the way's name 'diagnose an error', its text, where the way stops and whether the words must be correct; no level):
 > rule broken: The last valid index is a.length-1. Kind: run-time exception. Trigger class: a[a.length] or a loop with i <= a.length (ArrayIndexOutOfBoundsException)
+>
+> Where this way stops: Locating and fixing the mistake for one given failing case is L3. A compiler-flagged slip fixed from the message is weak evidence.
 
 Model's reply:
 ```
 Label: not shown
 Clauses: none
-Confidence: 0.93
+Confidence: 0.7
 ```
 
 Label prompt for level way lvl:length_field@L0#2 (the model saw only the concept, the way's name 'inconsistent trace' and its text; no level):
@@ -991,24 +998,28 @@ Clauses: 2, 3, 4
 Confidence: 0.7
 ```
 
-Label prompt for level way lvl:off_by_one_error@L4#3 (the model saw only the concept, the way's name 'diagnose an error' and its text; no level):
+Label prompt for level way lvl:off_by_one_error@L4#3 (the model saw the concept, the way's name 'diagnose an error', its text, where the way stops and whether the words must be correct; no level):
 > rule broken: A traversal of an array of length N must use indices 0..N-1. Kind: run-time exception. Trigger class: i <= a.length, a[i+1] on the last pass, or a[i-1] at i = 0 (ArrayIndexOutOfBoundsException)
+>
+> Where this way stops: Locating and fixing the mistake for one given failing case is L3. A compiler-flagged slip fixed from the message is weak evidence.
 
 Model's reply:
 ```
 Label: not shown
 Clauses: none
-Confidence: 0.95
+Confidence: 0.6
 ```
 
-Label prompt for level way lvl:off_by_one_error@L3#0 (the model saw only the concept, the way's name 'relation to neighbour' and its text; no level):
+Label prompt for level way lvl:off_by_one_error@L3#0 (the model saw the concept, the way's name 'relation to neighbour', its text, where the way stops and whether the words must be correct; no level):
 > Because indexing starts at 0, the last valid index is length-1, and that is the bound most often missed by one.
+>
+> Where this way stops: Two correct but separate rules are L1. Executing the two in sequence is L2. A relational answer may be correct or a relational error.
 
 Model's reply:
 ```
-Label: not shown
-Clauses: none
-Confidence: 0.9
+Label: wrong
+Clauses: 2, 3, 4
+Confidence: 0.85
 ```
 
 Parsed labels:
@@ -1016,7 +1027,6 @@ Parsed labels:
 |---|---|---|---|---|---|---|
 | lvl:off_by_one_error@L0#0 | shown | 0.6 | 0.7 | 0.42 | c2, c3, c4 | Arrays start at a[1]; so a[0] is before the first element and just gives 0; Then a[1], a[2] and a[3] are 5, 10 and 15 |
 | lvl:off_by_one_error@L4#3 | not applied |  |  | 0.0 |  |  |
-| lvl:off_by_one_error@L3#0 | not applied |  |  | 0.0 |  |  |
 
 #### array_bounds, misconceptions: 2 edges offered
 Edges offered:
@@ -1096,14 +1106,16 @@ Clauses: 1, 3, 4
 Confidence: 0.6
 ```
 
-Label prompt for level way lvl:array_bounds@L3#0 (the model saw only the concept, the way's name 'relation to neighbour' and its text; no level):
+Label prompt for level way lvl:array_bounds@L3#0 (the model saw the concept, the way's name 'relation to neighbour', its text, where the way stops and whether the words must be correct; no level):
 > Every index value used in a[i] must satisfy 0 <= i <= a.length-1; the last element is a[a.length-1].
+>
+> Where this way stops: Two correct but separate rules are L1. Executing the two in sequence is L2. A relational answer may be correct or a relational error.
 
 Model's reply:
 ```
-Label: not shown
-Clauses: none
-Confidence: 0.93
+Label: wrong
+Clauses: 2, 3, 4
+Confidence: 0.8
 ```
 
 Parsed labels:
@@ -1111,7 +1123,6 @@ Parsed labels:
 |---|---|---|---|---|---|---|
 | lvl:array_bounds@L0#0 | shown | 0.5 | 0.8 | 0.4 | c2, c3, c4 | Arrays start at a[1]; so a[0] is before the first element and just gives 0; Then a[1], a[2] and a[3] are 5, 10 and 15 |
 | lvl:array_bounds@L0#2 | shown | 0.3 | 0.6 | 0.18 | c1, c3, c4 | It prints 0, then 5, 10 and 15; so a[0] is before the first element and just gives 0; Then a[1], a[2] and a[3] are 5, 10 and 15 |
-| lvl:array_bounds@L3#0 | not applied |  |  | 0.0 |  |  |
 
 **Kept on a path at this depth** (best N in tiers: held misconception / broken edge, then held error, then correct / confirmed / shown):
 
@@ -1132,13 +1143,12 @@ Figure 6 (the graph after depth 3): C:\Users\magnu\OneDrive\Desktop\ES_VIterbi_P
 ## 4. Diagnosis (rules over the labelled graph, no model)
 Root-cause walk: held on ['array_bounds', 'indexing'], broken at [] (consequences: pre:for_loop->array_traversal, pre:length_field->array_traversal, pre:array_initializer->indexing, pre:indexing->off_by_one_error, pre:indexing->array_bounds), prerequisites {'run_time_error': ['array_bounds'], 'array_initializer': ['array_declaration'], 'indexing': ['array_initializer'], 'length_field': ['array_initializer'], 'increment_operators': ['assignment', 'loop_control'], 'boolean_expression': ['comparison_operators'], 'array_declaration': ['data_structure'], 'data_structure': ['data_type'], 'comparison_operators': ['expression'], 'array_traversal': ['for_loop', 'indexing', 'length_field'], 'loop_body': ['for_loop'], 'loop_scope': ['for_loop'], 'array_bounds': ['indexing'], 'off_by_one_error': ['indexing', 'loop_control'], 'for_loop': ['loop_control'], 'loop_control': ['loop_variable'], 'control_flow': ['statement'], 'println': ['statement']}
 - array_bounds: L0 via misconception "Arrays start at a[1]; so a[0] is before the first element and just gives 0"
-- array_traversal: L3 via relation_to_neighbour "so a[0] is before the first element and just gives 0; Then a[1], a[2] and a[3] are 5, 10 and 15"
 - for_loop: L2 via output_prediction "It prints 0, then 5, 10 and 15; so a[0] is before the first element and just gives 0; Then a[1], a[2] and a[3] are 5, 10 and 15"
 - indexing: L0 via misconception "Arrays start at a[1]; so a[0] is before the first element and just gives 0; Then a[1], a[2] and a[3] are 5, 10 and 15"
 - length_field: L0 via everyday_reading "Arrays start at a[1]; Then a[1], a[2] and a[3] are 5, 10 and 15"
 - off_by_one_error: L0 via everyday_reading "Arrays start at a[1]; so a[0] is before the first element and just gives 0; Then a[1], a[2] and a[3] are 5, 10 and 15"
 
-**Stop:** max depth at depth 3; prompts {'prune': 19, 'label': 38}, fresh model calls 1, cache hits 56
+**Stop:** max depth at depth 3; prompts {'prune': 19, 'label': 38}, fresh model calls 0, cache hits 57
 
 ### Held misconceptions
 | concept | misconception | kind | quote | score | shares_evidence_with |
@@ -1161,11 +1171,20 @@ Root-cause walk: held on ['array_bounds', 'indexing'], broken at [] (consequence
 | concept | level | way | misconception | source | quote | rule | also | note |
 |---|---|---|---|---|---|---|---|---|
 | array_bounds | L0 | misconception | OutOfBoundsElementsAreNull | level_mis_links | Arrays start at a[1]; so a[0] is before the first element and just gives 0 | wrong rule: An out-of-bounds read returns null (or 0). Right rule: Reading or writing any index outside 0 to a.length - 1 throws ArrayIndexOutOfBoundsException and returns no value. |  |  |
-| array_traversal | L3 | relation_to_neighbour |  | level_way | so a[0] is before the first element and just gives 0; Then a[1], a[2] and a[3] are 5, 10 and 15 |  |  |  |
 | for_loop | L2 | output_prediction |  | level_way | It prints 0, then 5, 10 and 15; so a[0] is before the first element and just gives 0; Then a[1], a[2] and a[3] are 5, 10 and 15 |  | L2 line_by_line_trace |  |
 | indexing | L0 | misconception | ArrayIndexStartsAtOne | level_mis_links | Arrays start at a[1]; so a[0] is before the first element and just gives 0; Then a[1], a[2] and a[3] are 5, 10 and 15 | wrong rule: The first element of a is a[1]. Right rule: Numbering begins with 0; the first element is a[0]. |  |  |
 | length_field | L0 | everyday_reading |  | level_way | Arrays start at a[1]; Then a[1], a[2] and a[3] are 5, 10 and 15 |  |  |  |
 | off_by_one_error | L0 | everyday_reading |  | level_way | Arrays start at a[1]; so a[0] is before the first element and just gives 0; Then a[1], a[2] and a[3] are 5, 10 and 15 |  |  |  |
+
+Ways above L2 the model answered "wrong" (the kind of thing is done, but what is said contradicts Java; not shown):
+| concept | edge | level | way | confidence | clauses | quote |
+|---|---|---|---|---|---|---|
+| indexing | lvl:indexing@L3#6 | L3 | relation_to_neighbour | 0.8 | [2, 3, 4] | Arrays start at a[1]; so a[0] is before the first element and just gives 0; Then a[1], a[2] and a[3] are 5, 10 and 15 |
+| indexing | lvl:indexing@L4#2 | L4 | diagnose_an_error | 0.6 | [2, 3] | Arrays start at a[1]; so a[0] is before the first element and just gives 0 |
+| array_traversal | lvl:array_traversal@L3#0 | L3 | relation_to_neighbour | 0.8 | [2, 3, 4] | Arrays start at a[1]; so a[0] is before the first element and just gives 0; Then a[1], a[2] and a[3] are 5, 10 and 15 |
+| for_loop | lvl:for_loop@L3#2 | L3 | relation_to_neighbour | 0.8 | [2, 3, 4] | Arrays start at a[1]; so a[0] is before the first element and just gives 0; Then a[1], a[2] and a[3] are 5, 10 and 15 |
+| off_by_one_error | lvl:off_by_one_error@L3#0 | L3 | relation_to_neighbour | 0.85 | [2, 3, 4] | Arrays start at a[1]; so a[0] is before the first element and just gives 0; Then a[1], a[2] and a[3] are 5, 10 and 15 |
+| array_bounds | lvl:array_bounds@L3#0 | L3 | relation_to_neighbour | 0.8 | [2, 3, 4] | Arrays start at a[1]; so a[0] is before the first element and just gives 0; Then a[1], a[2] and a[3] are 5, 10 and 15 |
 
 ### Overall level: L0
 
@@ -1188,7 +1207,6 @@ Figure 7 (final picture): C:\Users\magnu\OneDrive\Desktop\ES_VIterbi_Personalize
 | 1 | array_traversal | mis:array_traversal->OffByOneBound | misconception | correct | 0.6000000000000001 | 0.75 | 0.45 | [1, 3, 4] | It prints 0, then 5, 10 and 15; so a[0] is before the first element and just gives 0; Then a[1], a[2] and a[3] are 5, 10 and 15 |
 | 1 | array_traversal | mis:array_traversal->IdiomOverridesCode | misconception | correct | 0.30000000000000004 | 0.7 | 0.21 | [1, 3, 4] | It prints 0, then 5, 10 and 15; so a[0] is before the first element and just gives 0; Then a[1], a[2] and a[3] are 5, 10 and 15 |
 | 1 | array_traversal | mis:array_traversal->ElementBoundToOldIndex | misconception | correct | 0.10000000000000002 | 0.55 | 0.055 | [4] | Then a[1], a[2] and a[3] are 5, 10 and 15 |
-| 1 | array_traversal | lvl:array_traversal@L3#0 | level | shown | 0.2 | 0.7 | 0.14 | [3, 4] | so a[0] is before the first element and just gives 0; Then a[1], a[2] and a[3] are 5, 10 and 15 |
 | 2 | indexing | pre:array_initializer->indexing | prerequisite | broken | 0.4 | 0.95 | 0.38 | [2, 3, 4] | Arrays start at a[1]; so a[0] is before the first element and just gives 0; Then a[1], a[2] and a[3] are 5, 10 and 15 |
 | 2 | indexing | pre:indexing->off_by_one_error | prerequisite | broken | 0.35 | 0.93 | 0.3255 | [2, 3, 4] | Arrays start at a[1]; so a[0] is before the first element and just gives 0; Then a[1], a[2] and a[3] are 5, 10 and 15 |
 | 2 | indexing | pre:indexing->array_bounds | prerequisite | broken | 0.25 | 0.9 | 0.225 | [2, 3, 4] | Arrays start at a[1]; so a[0] is before the first element and just gives 0; Then a[1], a[2] and a[3] are 5, 10 and 15 |
@@ -1240,7 +1258,9 @@ start concepts (3): indexing, array_traversal, array_initializer
     mis:indexing->ElementBoundToOldIndex -> correct (0.06) "It prints 0, then 5, 10 and 15; Then a[1], a[2] and a[3] are 5, 10 and 15"
   indexing (level ways): 21 candidates -> kept lvl:indexing@L0#0 (0.60), lvl:indexing@L3#6 (0.25), lvl:indexing@L4#2 (0.15)
     lvl:indexing@L0#0 -> shown (0.54) "Arrays start at a[1]; so a[0] is before the first element and just gives 0; Then a[1], a[2] and a[3] are 5, 10 and 15"
+    lvl:indexing@L3#6: wrong (0.80) -> not applied
     lvl:indexing@L3#6 -> not applied (0.00) ""
+    lvl:indexing@L4#2: wrong (0.60) -> not applied
     lvl:indexing@L4#2 -> not applied (0.00) ""
   array_traversal (misconceptions): 6 candidates -> kept mis:array_traversal->OffByOneBound (0.60), mis:array_traversal->IdiomOverridesCode (0.30), mis:array_traversal->ElementBoundToOldIndex (0.10)
     mis:array_traversal->OffByOneBound -> correct (0.45) "It prints 0, then 5, 10 and 15; so a[0] is before the first element and just gives 0; Then a[1], a[2] and a[3] are 5, 10 and 15"
@@ -1249,7 +1269,8 @@ start concepts (3): indexing, array_traversal, array_initializer
   array_traversal (level ways): 22 candidates -> kept lvl:array_traversal@L4#3 (0.55), lvl:array_traversal@L2#0 (0.25), lvl:array_traversal@L3#0 (0.20)
     lvl:array_traversal@L4#3 -> not applied (0.00) ""
     lvl:array_traversal@L2#0 -> not applied (0.00) ""
-    lvl:array_traversal@L3#0 -> shown (0.14) "so a[0] is before the first element and just gives 0; Then a[1], a[2] and a[3] are 5, 10 and 15"
+    lvl:array_traversal@L3#0: wrong (0.80) -> not applied
+    lvl:array_traversal@L3#0 -> not applied (0.00) ""
   array_initializer (misconceptions): 2 candidates -> kept mis:array_initializer->ArrayInitializerContentsInBrackets (0.70), mis:array_initializer->ArrayBracketCountIsLength (0.30)
     mis:array_initializer->ArrayInitializerContentsInBrackets -> not applied (0.00) ""
     mis:array_initializer->ArrayBracketCountIsLength -> not applied (0.00) ""
@@ -1285,6 +1306,7 @@ start concepts (3): indexing, array_traversal, array_initializer
     mis:for_loop->ForLoopPartSkipped -> not applied (0.00) ""
   for_loop (level ways): 24 candidates -> kept lvl:for_loop@L2#1 (0.40), lvl:for_loop@L3#2 (0.35), lvl:for_loop@L2#0 (0.25)
     lvl:for_loop@L2#1 -> shown (0.24) "It prints 0, then 5, 10 and 15; so a[0] is before the first element and just gives 0; Then a[1], a[2] and a[3] are 5, 10 and 15"
+    lvl:for_loop@L3#2: wrong (0.80) -> not applied
     lvl:for_loop@L3#2 -> not applied (0.00) ""
     lvl:for_loop@L2#0 -> shown (0.15) "It prints 0, then 5, 10 and 15; so a[0] is before the first element and just gives 0; Then a[1], a[2] and a[3] are 5, 10 and 15"
   array_traversal (concept edges): 1 candidates -> kept pre:indexing->array_traversal (1.00)
@@ -1306,6 +1328,7 @@ start concepts (3): indexing, array_traversal, array_initializer
   off_by_one_error (level ways): 16 candidates -> kept lvl:off_by_one_error@L0#0 (0.60), lvl:off_by_one_error@L4#3 (0.25), lvl:off_by_one_error@L3#0 (0.15)
     lvl:off_by_one_error@L0#0 -> shown (0.42) "Arrays start at a[1]; so a[0] is before the first element and just gives 0; Then a[1], a[2] and a[3] are 5, 10 and 15"
     lvl:off_by_one_error@L4#3 -> not applied (0.00) ""
+    lvl:off_by_one_error@L3#0: wrong (0.85) -> not applied
     lvl:off_by_one_error@L3#0 -> not applied (0.00) ""
   array_bounds (misconceptions): 2 candidates -> kept mis:array_bounds->OutOfBoundsElementsAreNull (0.60), mis:array_bounds->OffByOneBound (0.40)
     mis:array_bounds->OutOfBoundsElementsAreNull -> held (0.42) "Arrays start at a[1]; so a[0] is before the first element and just gives 0"
@@ -1313,13 +1336,13 @@ start concepts (3): indexing, array_traversal, array_initializer
   array_bounds (level ways): 14 candidates -> kept lvl:array_bounds@L0#0 (0.50), lvl:array_bounds@L0#2 (0.30), lvl:array_bounds@L3#0 (0.20)
     lvl:array_bounds@L0#0 -> shown (0.40) "Arrays start at a[1]; so a[0] is before the first element and just gives 0; Then a[1], a[2] and a[3] are 5, 10 and 15"
     lvl:array_bounds@L0#2 -> shown (0.18) "It prints 0, then 5, 10 and 15; so a[0] is before the first element and just gives 0; Then a[1], a[2] and a[3] are 5, 10 and 15"
+    lvl:array_bounds@L3#0: wrong (0.80) -> not applied
     lvl:array_bounds@L3#0 -> not applied (0.00) ""
   kept: mis:array_bounds->OutOfBoundsElementsAreNull [held, tier 0, 0.42], pre:indexing->array_traversal [confirmed, tier 2, 0.60], lvl:off_by_one_error@L0#0 [shown, tier 2, 0.42]
   clause coverage: c1 <- mis:indexing->ElementBoundToOldIndex; c2 <- mis:indexing->ArrayIndexStartsAtOne; c3 <- mis:indexing->ArrayIndexStartsAtOne; c4 <- mis:indexing->ArrayIndexStartsAtOne
   not yet read: pre:array_bounds->run_time_error, pre:for_loop->loop_body, pre:for_loop->loop_scope, pre:loop_control->for_loop, pre:loop_control->off_by_one_error
   root-cause walk: held on ['array_bounds', 'indexing'], broken at [] (consequences: pre:for_loop->array_traversal, pre:length_field->array_traversal, pre:array_initializer->indexing, pre:indexing->off_by_one_error, pre:indexing->array_bounds), prerequisites {'run_time_error': ['array_bounds'], 'array_initializer': ['array_declaration'], 'indexing': ['array_initializer'], 'length_field': ['array_initializer'], 'increment_operators': ['assignment', 'loop_control'], 'boolean_expression': ['comparison_operators'], 'array_declaration': ['data_structure'], 'data_structure': ['data_type'], 'comparison_operators': ['expression'], 'array_traversal': ['for_loop', 'indexing', 'length_field'], 'loop_body': ['for_loop'], 'loop_scope': ['for_loop'], 'array_bounds': ['indexing'], 'off_by_one_error': ['indexing', 'loop_control'], 'for_loop': ['loop_control'], 'loop_control': ['loop_variable'], 'control_flow': ['statement'], 'println': ['statement']}
   level array_bounds: L0 via misconception "Arrays start at a[1]; so a[0] is before the first element and just gives 0"
-  level array_traversal: L3 via relation_to_neighbour "so a[0] is before the first element and just gives 0; Then a[1], a[2] and a[3] are 5, 10 and 15"
   level for_loop: L2 via output_prediction "It prints 0, then 5, 10 and 15; so a[0] is before the first element and just gives 0; Then a[1], a[2] and a[3] are 5, 10 and 15"
   level indexing: L0 via misconception "Arrays start at a[1]; so a[0] is before the first element and just gives 0; Then a[1], a[2] and a[3] are 5, 10 and 15"
   level length_field: L0 via everyday_reading "Arrays start at a[1]; Then a[1], a[2] and a[3] are 5, 10 and 15"
@@ -1335,7 +1358,8 @@ start concepts (3): indexing, array_traversal, array_initializer
   "depth": 3,
   "prune_tools": "llm",
   "model": "claude-opus-5-5",
-  "backend": "claude-cli"
+  "backend": "claude-cli",
+  "level_v2": true
  },
  "clauses": [
   "It prints 0, then 5, 10 and 15",
@@ -1411,14 +1435,6 @@ start concepts (3): indexing, array_traversal, array_initializer
    "edge": "mis:array_bounds->OutOfBoundsElementsAreNull",
    "rule": "wrong rule: An out-of-bounds read returns null (or 0). Right rule: Reading or writing any index outside 0 to a.length - 1 throws ArrayIndexOutOfBoundsException and returns no value.",
    "source": "level_mis_links"
-  },
-  "array_traversal": {
-   "level": "L3",
-   "way": "relation_to_neighbour",
-   "quote": "so a[0] is before the first element and just gives 0; Then a[1], a[2] and a[3] are 5, 10 and 15",
-   "edge": "lvl:array_traversal@L3#0",
-   "source": "level_way",
-   "also_shown": []
   },
   "for_loop": {
    "level": "L2",
@@ -1798,26 +1814,6 @@ start concepts (3): indexing, array_traversal, array_initializer
    "logic": "After i changes, X[i] still refers to the element at the old value of i.",
    "twin_logic": "a[i] is evaluated with the current value of i each time it is used.",
    "role": "context"
-  },
-  {
-   "depth": 1,
-   "source": "array_traversal",
-   "edge": "lvl:array_traversal@L3#0",
-   "target": "array_traversal@L3",
-   "kind": "level",
-   "label": "shown",
-   "clauses": [
-    3,
-    4
-   ],
-   "quote": "so a[0] is before the first element and just gives 0; Then a[1], a[2] and a[3] are 5, 10 and 15",
-   "confidence": 0.7,
-   "prune_score": 0.2,
-   "score": 0.14,
-   "logic": "The loop variable is used as the index, so a[i] reaches a different element on each pass.",
-   "twin_logic": null,
-   "level": "L3",
-   "way": "relation_to_neighbour"
   },
   {
    "depth": 2,
@@ -2259,11 +2255,93 @@ start concepts (3): indexing, array_traversal, array_initializer
  "unexplained_clauses": [],
  "stop_reason": "max depth",
  "depth_reached": 3,
- "llm_calls": 1,
- "llm_cache_hits": 56,
+ "llm_calls": 0,
+ "llm_cache_hits": 57,
  "llm_calls_by_step": {
   "prune": 19,
   "label": 38
+ },
+ "level_v2": {
+  "wrong_ways": [
+   {
+    "concept": "indexing",
+    "edge": "lvl:indexing@L3#6",
+    "level": "L3",
+    "way": "relation_to_neighbour",
+    "clauses": [
+     2,
+     3,
+     4
+    ],
+    "quote": "Arrays start at a[1]; so a[0] is before the first element and just gives 0; Then a[1], a[2] and a[3] are 5, 10 and 15",
+    "confidence": 0.8
+   },
+   {
+    "concept": "indexing",
+    "edge": "lvl:indexing@L4#2",
+    "level": "L4",
+    "way": "diagnose_an_error",
+    "clauses": [
+     2,
+     3
+    ],
+    "quote": "Arrays start at a[1]; so a[0] is before the first element and just gives 0",
+    "confidence": 0.6
+   },
+   {
+    "concept": "array_traversal",
+    "edge": "lvl:array_traversal@L3#0",
+    "level": "L3",
+    "way": "relation_to_neighbour",
+    "clauses": [
+     2,
+     3,
+     4
+    ],
+    "quote": "Arrays start at a[1]; so a[0] is before the first element and just gives 0; Then a[1], a[2] and a[3] are 5, 10 and 15",
+    "confidence": 0.8
+   },
+   {
+    "concept": "for_loop",
+    "edge": "lvl:for_loop@L3#2",
+    "level": "L3",
+    "way": "relation_to_neighbour",
+    "clauses": [
+     2,
+     3,
+     4
+    ],
+    "quote": "Arrays start at a[1]; so a[0] is before the first element and just gives 0; Then a[1], a[2] and a[3] are 5, 10 and 15",
+    "confidence": 0.8
+   },
+   {
+    "concept": "off_by_one_error",
+    "edge": "lvl:off_by_one_error@L3#0",
+    "level": "L3",
+    "way": "relation_to_neighbour",
+    "clauses": [
+     2,
+     3,
+     4
+    ],
+    "quote": "Arrays start at a[1]; so a[0] is before the first element and just gives 0; Then a[1], a[2] and a[3] are 5, 10 and 15",
+    "confidence": 0.85
+   },
+   {
+    "concept": "array_bounds",
+    "edge": "lvl:array_bounds@L3#0",
+    "level": "L3",
+    "way": "relation_to_neighbour",
+    "clauses": [
+     2,
+     3,
+     4
+    ],
+    "quote": "Arrays start at a[1]; so a[0] is before the first element and just gives 0; Then a[1], a[2] and a[3] are 5, 10 and 15",
+    "confidence": 0.8
+   }
+  ],
+  "not_counted": []
  }
 }
 ```

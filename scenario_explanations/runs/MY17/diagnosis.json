@@ -5,7 +5,8 @@
   "depth": 3,
   "prune_tools": "llm",
   "model": "claude-opus-5-5",
-  "backend": "claude-cli"
+  "backend": "claude-cli",
+  "level_v2": true
  },
  "clauses": [
   "The loop visits each index from 0 to a.length - 1 and adds that element to sum",
@@ -53,19 +54,16 @@
    "edge": "lvl:length_field@L4#0",
    "source": "level_way",
    "also_shown": [
-    "L3 purpose_of_the_whole",
     "L1 states_the_rule"
    ]
   },
   "loop_body": {
-   "level": "L3",
-   "way": "relation_to_neighbour",
+   "level": "L2",
+   "way": "output_prediction",
    "quote": "The loop visits each index from 0 to a.length - 1 and adds that element to sum; so the loop runs once more and prints Total: 20, with no other change to the code",
-   "edge": "lvl:loop_body@L3#0",
+   "edge": "lvl:loop_body@L2#1",
    "source": "level_way",
-   "also_shown": [
-    "L2 output_prediction"
-   ]
+   "also_shown": []
   },
   "loop_control": {
    "level": "L4",
@@ -79,12 +77,13 @@
    ]
   },
   "loop_variable": {
-   "level": "L3",
-   "way": "purpose_of_the_whole",
-   "quote": "The loop visits each index from 0 to a.length - 1 and adds that element to sum; so the loop runs once more and prints Total: 20, with no other change to the code",
-   "edge": "lvl:loop_variable@L3#2",
+   "level": "L4",
+   "way": "predict_a_change",
+   "quote": "With 8 added, a.length becomes 4; so the loop runs once more and prints Total: 20, with no other change to the code",
+   "edge": "lvl:loop_variable@L4#0",
    "source": "level_way",
    "also_shown": [
+    "L3 purpose_of_the_whole",
     "L2 output_prediction"
    ]
   }
@@ -337,9 +336,9 @@
     4
    ],
    "quote": "With 8 added, a.length becomes 4; so the loop runs once more and prints Total: 20, with no other change to the code",
-   "confidence": 0.8,
+   "confidence": 0.85,
    "prune_score": 0.3,
-   "score": 0.24,
+   "score": 0.255,
    "logic": "Conservation: running the index downward (a.length-1 to 0) visits the same set of elements in reverse order, harmless for a sum but not for a shift. Starting at 1 or stopping at a.length-1 drops an element. Invariant: before pass i, elements 0..i-1 have been processed.",
    "twin_logic": null,
    "level": "L4",
@@ -420,9 +419,9 @@
     4
    ],
    "quote": "The loop visits each index from 0 to a.length - 1 and adds that element to sum; With 8 added, a.length becomes 4; so the loop runs once more and prints Total: 20, with no other change to the code",
-   "confidence": 0.9,
+   "confidence": 0.75,
    "prune_score": 0.4,
-   "score": 0.36,
+   "score": 0.3,
    "logic": "for (int i = 0; i < N; i++) gives i each valid index 0..N-1 exactly once in increasing order, the standard way to process every array element.",
    "twin_logic": null,
    "level": "L3",
@@ -440,9 +439,9 @@
     4
    ],
    "quote": "With 8 added, a.length becomes 4; so the loop runs once more and prints Total: 20, with no other change to the code",
-   "confidence": 0.75,
+   "confidence": 0.85,
    "prune_score": 0.35,
-   "score": 0.2625,
+   "score": 0.2975,
    "logic": "Rewriting a for as the equivalent while (init before, update at the end of the body) keeps behaviour, except that continue then skips the update and the loop variable stays in scope after the loop. Changing the bound or the step changes the pass count predictably (< to <= adds one pass).",
    "twin_logic": null,
    "level": "L4",
@@ -563,9 +562,9 @@
     4
    ],
    "quote": "With 8 added, a.length becomes 4; so the loop runs once more and prints Total: 20, with no other change to the code",
-   "confidence": 0.7,
+   "confidence": 0.8,
    "prune_score": 0.25,
-   "score": 0.175,
+   "score": 0.2,
    "logic": "Changing < to <= adds one pass; starting at 1 instead of 0 removes one; doubling the step halves the passes; reversing init and bound with i-- visits the same values in reverse order (and still processes the same set only if both ends are adjusted).",
    "twin_logic": null,
    "level": "L4",
@@ -769,13 +768,33 @@
     4
    ],
    "quote": "The loop visits each index from 0 to a.length - 1 and adds that element to sum; so the loop runs once more and prints Total: 20, with no other change to the code",
-   "confidence": 0.85,
+   "confidence": 0.8,
    "prune_score": 0.3,
-   "score": 0.255,
+   "score": 0.24,
    "logic": "Role: stepper - a variable stepping through a systematic, predictable succession of values; it counts passes and often serves as an index.",
    "twin_logic": null,
    "level": "L3",
    "way": "purpose_of_the_whole"
+  },
+  {
+   "depth": 3,
+   "source": "loop_variable",
+   "edge": "lvl:loop_variable@L4#0",
+   "target": "loop_variable@L4",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    3,
+    4
+   ],
+   "quote": "With 8 added, a.length becomes 4; so the loop runs once more and prints Total: 20, with no other change to the code",
+   "confidence": 0.7,
+   "prune_score": 0.3,
+   "score": 0.21,
+   "logic": "Shifting the start and the bound by the same amount keeps the number of passes but changes the values the body sees; assigning to the loop variable inside the body changes the pass count.",
+   "twin_logic": null,
+   "level": "L4",
+   "way": "predict_a_change"
   },
   {
    "depth": 3,
@@ -826,9 +845,9 @@
     4
    ],
    "quote": "With 8 added, a.length becomes 4; so the loop runs once more and prints Total: 20, with no other change to the code",
-   "confidence": 0.88,
+   "confidence": 0.85,
    "prune_score": 0.5,
-   "score": 0.44,
+   "score": 0.425,
    "logic": "Conservation: for a given array object a.length never changes, so loops bounded by a.length stay correct when the array is created with a different size. Reassigning a to another array changes a.length.",
    "twin_logic": null,
    "level": "L4",
@@ -846,9 +865,9 @@
     4
    ],
    "quote": "With 8 added, a.length becomes 4; so the loop runs once more and prints Total: 20, with no other change to the code",
-   "confidence": 0.85,
+   "confidence": 0.6,
    "prune_score": 0.3,
-   "score": 0.255,
+   "score": 0.18,
    "logic": "Plan/role: a fixed value (Sajaniemi) that lets code adapt to any array size instead of a hard-coded magic number, e.g. loop bounds and the last element.",
    "twin_logic": null,
    "level": "L3",
@@ -971,26 +990,6 @@
   {
    "depth": 3,
    "source": "loop_body",
-   "edge": "lvl:loop_body@L3#0",
-   "target": "loop_body@L3",
-   "kind": "level",
-   "label": "shown",
-   "clauses": [
-    1,
-    4
-   ],
-   "quote": "The loop visits each index from 0 to a.length - 1 and adds that element to sum; so the loop runs once more and prints Total: 20, with no other change to the code",
-   "confidence": 0.6,
-   "prune_score": 0.4,
-   "score": 0.24,
-   "logic": "The accumulator update (sum += x) is placed inside the body so it runs once per pass, while the accumulator is declared and initialized before the loop.",
-   "twin_logic": null,
-   "level": "L3",
-   "way": "relation_to_neighbour"
-  },
-  {
-   "depth": 3,
-   "source": "loop_body",
    "edge": "lvl:loop_body@L2#1",
    "target": "loop_body@L2",
    "kind": "level",
@@ -1018,10 +1017,24 @@
  "unexplained_clauses": [],
  "stop_reason": "max depth",
  "depth_reached": 3,
- "llm_calls": 4,
- "llm_cache_hits": 51,
+ "llm_calls": 0,
+ "llm_cache_hits": 55,
  "llm_calls_by_step": {
   "prune": 18,
   "label": 37
+ },
+ "level_v2": {
+  "wrong_ways": [],
+  "not_counted": [
+   {
+    "concept": "length_field",
+    "edge": "lvl:length_field@L3#2",
+    "level": "L3",
+    "way": "purpose_of_the_whole",
+    "quote": "With 8 added, a.length becomes 4; so the loop runs once more and prints Total: 20, with no other change to the code",
+    "confidence": 0.6,
+    "reason": "confidence 0.60 is not above 0.60"
+   }
+  ]
  }
 }

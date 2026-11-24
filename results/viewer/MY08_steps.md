@@ -219,42 +219,48 @@ Prune: the model's reply (edge id and score; the kept edges sum to 1):
 ```
 Kept by pruning: lvl:array_traversal@L3#6 (0.40), lvl:array_traversal@L3#8 (0.30), lvl:array_traversal@L3#2 (0.30)
 
-Label prompt for level way lvl:array_traversal@L3#6 (the model saw only the concept, the way's name 'relation to neighbour' and its text; no level):
+Label prompt for level way lvl:array_traversal@L3#6 (the model saw the concept, the way's name 'relation to neighbour', its text, where the way stops and whether the words must be correct; no level):
 > The running maximum is found in one traversal that keeps the largest value seen so far, starting from Double.NEGATIVE_INFINITY.
+>
+> Where this way stops: Two correct but separate rules are L1. Executing the two in sequence is L2. A relational answer may be correct or a relational error.
 
 Model's reply:
 ```
 Label: shown
-Clauses: 2, 3, 4, 7
-Confidence: 0.6
+Clauses: 2, 3, 4, 6
+Confidence: 0.72
 ```
 
-Label prompt for level way lvl:array_traversal@L3#8 (the model saw only the concept, the way's name 'purpose of the whole' and its text; no level):
+Label prompt for level way lvl:array_traversal@L3#8 (the model saw the concept, the way's name 'purpose of the whole', its text, where the way stops and whether the words must be correct; no level):
 > Plan/role: the index is a stepper, and the loop carries out a Soloway-style plan (accumulate/sum with a gatherer, count, search, find the extreme, copy) once for each element.
+>
+> Where this way stops: Narrating the lines is L2. A purpose induced from a few traced cases is L2. A wrong purpose is still L3, but with an error.
 
 Model's reply:
 ```
 Label: shown
-Clauses: 3, 7
-Confidence: 0.9
+Clauses: 2, 3, 7
+Confidence: 0.85
 ```
 
-Label prompt for level way lvl:array_traversal@L3#2 (the model saw only the concept, the way's name 'relation to neighbour' and its text; no level):
+Label prompt for level way lvl:array_traversal@L3#2 (the model saw the concept, the way's name 'relation to neighbour', its text, where the way stops and whether the words must be correct; no level):
 > for (int i = 0; i < a.length; i++) gives i every valid index exactly once, in increasing order; the bound must be < a.length, not <=.
+>
+> Where this way stops: Two correct but separate rules are L1. Executing the two in sequence is L2. A relational answer may be correct or a relational error.
 
 Model's reply:
 ```
 Label: shown
-Clauses: 3, 5, 6
+Clauses: 2, 5, 6
 Confidence: 0.8
 ```
 
 Parsed labels:
 | edge | label | prune score | confidence | score | clauses | words |
 |---|---|---|---|---|---|---|
-| lvl:array_traversal@L3#6 | shown | 0.4 | 0.6 | 0.24 | c2, c3, c4, c7 | max starts as the first element, 3; The loop then looks at every later element and, whenever one is bigger than max, max takes its value; so after 8 it never changes; For any array, this code prints its largest element |
-| lvl:array_traversal@L3#8 | shown | 0.3 | 0.9 | 0.27 | c3, c7 | The loop then looks at every later element and, whenever one is bigger than max, max takes its value; For any array, this code prints its largest element |
-| lvl:array_traversal@L3#2 | shown | 0.3 | 0.8 | 0.24 | c3, c5, c6 | The loop then looks at every later element and, whenever one is bigger than max, max takes its value; The loop starts at i = 1; because a[0] is already in max, and i < a.length stops at the last index without going past the end |
+| lvl:array_traversal@L3#6 | shown | 0.4 | 0.72 | 0.29 | c2, c3, c4, c6 | max starts as the first element, 3; The loop then looks at every later element and, whenever one is bigger than max, max takes its value; so after 8 it never changes; because a[0] is already in max, and i < a.length stops at the last index without going past the end |
+| lvl:array_traversal@L3#8 | shown | 0.3 | 0.85 | 0.26 | c2, c3, c7 | max starts as the first element, 3; The loop then looks at every later element and, whenever one is bigger than max, max takes its value; For any array, this code prints its largest element |
+| lvl:array_traversal@L3#2 | shown | 0.3 | 0.8 | 0.24 | c2, c5, c6 | max starts as the first element, 3; The loop starts at i = 1; because a[0] is already in max, and i < a.length stops at the last index without going past the end |
 
 #### loop_control, misconceptions: 11 edges offered
 Edges offered:
@@ -330,23 +336,27 @@ Prune: the model's reply (edge id and score; the kept edges sum to 1):
 ```
 Kept by pruning: lvl:loop_control@L3#5 (0.45), lvl:loop_control@L3#6 (0.30), lvl:loop_control@L2#1 (0.25)
 
-Label prompt for level way lvl:loop_control@L3#5 (the model saw only the concept, the way's name 'relation to neighbour' and its text; no level):
+Label prompt for level way lvl:loop_control@L3#5 (the model saw the concept, the way's name 'relation to neighbour', its text, where the way stops and whether the words must be correct; no level):
 > The initialization and the condition of a loop fix how many times it runs; one wrong bound makes it run once too many or too few.
+>
+> Where this way stops: Two correct but separate rules are L1. Executing the two in sequence is L2. A relational answer may be correct or a relational error.
 
 Model's reply:
 ```
 Label: shown
 Clauses: 5, 6
-Confidence: 0.75
+Confidence: 0.72
 ```
 
-Label prompt for level way lvl:loop_control@L3#6 (the model saw only the concept, the way's name 'purpose of the whole' and its text; no level):
+Label prompt for level way lvl:loop_control@L3#6 (the model saw the concept, the way's name 'purpose of the whole', its text, where the way stops and whether the words must be correct; no level):
 > Plan: counter-controlled loop - the loop variable is a stepper that walks a predictable sequence of values (0..N-1, 1..N, every 2nd value) and fixes the number of passes in advance.
+>
+> Where this way stops: Narrating the lines is L2. A purpose induced from a few traced cases is L2. A wrong purpose is still L3, but with an error.
 
 Model's reply:
 ```
 Label: shown
-Clauses: 3, 5, 6
+Clauses: 3, 5, 6, 7
 Confidence: 0.8
 ```
 
@@ -363,8 +373,8 @@ Confidence: 0.8
 Parsed labels:
 | edge | label | prune score | confidence | score | clauses | words |
 |---|---|---|---|---|---|---|
-| lvl:loop_control@L3#5 | shown | 0.45 | 0.75 | 0.34 | c5, c6 | The loop starts at i = 1; because a[0] is already in max, and i < a.length stops at the last index without going past the end |
-| lvl:loop_control@L3#6 | shown | 0.3 | 0.8 | 0.24 | c3, c5, c6 | The loop then looks at every later element and, whenever one is bigger than max, max takes its value; The loop starts at i = 1; because a[0] is already in max, and i < a.length stops at the last index without going past the end |
+| lvl:loop_control@L3#5 | shown | 0.45 | 0.72 | 0.32 | c5, c6 | The loop starts at i = 1; because a[0] is already in max, and i < a.length stops at the last index without going past the end |
+| lvl:loop_control@L3#6 | shown | 0.3 | 0.8 | 0.24 | c3, c5, c6, c7 | The loop then looks at every later element and, whenever one is bigger than max, max takes its value; The loop starts at i = 1; because a[0] is already in max, and i < a.length stops at the last index without going past the end; For any array, this code prints its largest element |
 | lvl:loop_control@L2#1 | shown | 0.25 | 0.8 | 0.2 | c3, c5, c6 | The loop then looks at every later element and, whenever one is bigger than max, max takes its value; The loop starts at i = 1; because a[0] is already in max, and i < a.length stops at the last index without going past the end |
 
 #### indexing, misconceptions: 8 edges offered
@@ -440,24 +450,28 @@ Prune: the model's reply (edge id and score; the kept edges sum to 1):
 ```
 Kept by pruning: lvl:indexing@L3#1 (0.40), lvl:indexing@L3#6 (0.35), lvl:indexing@L2#1 (0.25)
 
-Label prompt for level way lvl:indexing@L3#1 (the model saw only the concept, the way's name 'relation to neighbour' and its text; no level):
+Label prompt for level way lvl:indexing@L3#1 (the model saw the concept, the way's name 'relation to neighbour', its text, where the way stops and whether the words must be correct; no level):
 > A traversal uses the loop variable as the index, so the same expression a[i] reaches a different element on each pass.
+>
+> Where this way stops: Two correct but separate rules are L1. Executing the two in sequence is L2. A relational answer may be correct or a relational error.
 
 Model's reply:
 ```
 Label: shown
 Clauses: 3, 5, 6
-Confidence: 0.75
+Confidence: 0.6
 ```
 
-Label prompt for level way lvl:indexing@L3#6 (the model saw only the concept, the way's name 'relation to neighbour' and its text; no level):
+Label prompt for level way lvl:indexing@L3#6 (the model saw the concept, the way's name 'relation to neighbour', its text, where the way stops and whether the words must be correct; no level):
 > Indices start at 0, so the last element is a[N-1]; misreading this convention is the usual source of off-by-one errors.
+>
+> Where this way stops: Two correct but separate rules are L1. Executing the two in sequence is L2. A relational answer may be correct or a relational error.
 
 Model's reply:
 ```
 Label: shown
 Clauses: 5, 6
-Confidence: 0.8
+Confidence: 0.7
 ```
 
 Label prompt for level way lvl:indexing@L2#1 (the model saw only the concept, the way's name 'output prediction' and its text; no level):
@@ -473,8 +487,8 @@ Confidence: 0.7
 Parsed labels:
 | edge | label | prune score | confidence | score | clauses | words |
 |---|---|---|---|---|---|---|
-| lvl:indexing@L3#1 | shown | 0.4 | 0.75 | 0.3 | c3, c5, c6 | The loop then looks at every later element and, whenever one is bigger than max, max takes its value; The loop starts at i = 1; because a[0] is already in max, and i < a.length stops at the last index without going past the end |
-| lvl:indexing@L3#6 | shown | 0.35 | 0.8 | 0.28 | c5, c6 | The loop starts at i = 1; because a[0] is already in max, and i < a.length stops at the last index without going past the end |
+| lvl:indexing@L3#1 | shown | 0.4 | 0.6 | 0.24 | c3, c5, c6 | The loop then looks at every later element and, whenever one is bigger than max, max takes its value; The loop starts at i = 1; because a[0] is already in max, and i < a.length stops at the last index without going past the end |
+| lvl:indexing@L3#6 | shown | 0.35 | 0.7 | 0.24 | c5, c6 | The loop starts at i = 1; because a[0] is already in max, and i < a.length stops at the last index without going past the end |
 | lvl:indexing@L2#1 | shown | 0.25 | 0.7 | 0.17 | c2 | max starts as the first element, 3 |
 
 **Kept on a path at this depth** (best N in tiers: held misconception / broken edge, then held error, then correct / confirmed / shown):
@@ -738,14 +752,16 @@ Clauses: 1, 2, 3, 4
 Confidence: 0.85
 ```
 
-Label prompt for level way lvl:control_flow@L3#1 (the model saw only the concept, the way's name 'relation to neighbour' and its text; no level):
+Label prompt for level way lvl:control_flow@L3#1 (the model saw the concept, the way's name 'relation to neighbour', its text, where the way stops and whether the words must be correct; no level):
 > An if changes the default top-to-bottom flow: its condition is tested once when control reaches it, its block runs only if true, and in both cases control then continues with the next statement.
+>
+> Where this way stops: Two correct but separate rules are L1. Executing the two in sequence is L2. A relational answer may be correct or a relational error.
 
 Model's reply:
 ```
 Label: shown
-Clauses: 3, 4
-Confidence: 0.7
+Clauses: 3, 4, 6
+Confidence: 0.6
 ```
 
 Parsed labels:
@@ -753,7 +769,7 @@ Parsed labels:
 |---|---|---|---|---|---|---|
 | lvl:control_flow@L2#0 | shown | 0.45 | 0.7 | 0.32 | c2, c3, c4, c5, c6 | max starts as the first element, 3; The loop then looks at every later element and, whenever one is bigger than max, max takes its value; so after 8 it never changes; The loop starts at i = 1; because a[0] is already in max, and i < a.length stops at the last index without going past the end |
 | lvl:control_flow@L2#1 | shown | 0.3 | 0.85 | 0.26 | c1, c2, c3, c4 | It prints 8; max starts as the first element, 3; The loop then looks at every later element and, whenever one is bigger than max, max takes its value; so after 8 it never changes |
-| lvl:control_flow@L3#1 | shown | 0.25 | 0.7 | 0.17 | c3, c4 | The loop then looks at every later element and, whenever one is bigger than max, max takes its value; so after 8 it never changes |
+| lvl:control_flow@L3#1 | shown | 0.25 | 0.6 | 0.15 | c3, c4, c6 | The loop then looks at every later element and, whenever one is bigger than max, max takes its value; so after 8 it never changes; because a[0] is already in max, and i < a.length stops at the last index without going past the end |
 
 #### loop_variable, misconceptions: 7 edges offered
 Edges offered:
@@ -819,8 +835,10 @@ Prune: the model's reply (edge id and score; the kept edges sum to 1):
 ```
 Kept by pruning: lvl:loop_variable@L3#0 (0.40), lvl:loop_variable@L3#2 (0.35), lvl:loop_variable@L2#1 (0.25)
 
-Label prompt for level way lvl:loop_variable@L3#0 (the model saw only the concept, the way's name 'relation to neighbour' and its text; no level):
+Label prompt for level way lvl:loop_variable@L3#0 (the model saw the concept, the way's name 'relation to neighbour', its text, where the way stops and whether the words must be correct; no level):
 > The init, condition and update all act on the loop variable: the init sets it, the condition tests it, the update changes it.
+>
+> Where this way stops: Two correct but separate rules are L1. Executing the two in sequence is L2. A relational answer may be correct or a relational error.
 
 Model's reply:
 ```
@@ -829,14 +847,16 @@ Clauses: 5, 6
 Confidence: 0.6
 ```
 
-Label prompt for level way lvl:loop_variable@L3#2 (the model saw only the concept, the way's name 'purpose of the whole' and its text; no level):
+Label prompt for level way lvl:loop_variable@L3#2 (the model saw the concept, the way's name 'purpose of the whole', its text, where the way stops and whether the words must be correct; no level):
 > Role: stepper - a variable stepping through a systematic, predictable succession of values; it counts passes and often serves as an index.
+>
+> Where this way stops: Narrating the lines is L2. A purpose induced from a few traced cases is L2. A wrong purpose is still L3, but with an error.
 
 Model's reply:
 ```
 Label: shown
 Clauses: 3, 5, 6
-Confidence: 0.85
+Confidence: 0.7
 ```
 
 Label prompt for level way lvl:loop_variable@L2#1 (the model saw only the concept, the way's name 'output prediction' and its text; no level):
@@ -853,7 +873,7 @@ Parsed labels:
 | edge | label | prune score | confidence | score | clauses | words |
 |---|---|---|---|---|---|---|
 | lvl:loop_variable@L3#0 | shown | 0.4 | 0.6 | 0.24 | c5, c6 | The loop starts at i = 1; because a[0] is already in max, and i < a.length stops at the last index without going past the end |
-| lvl:loop_variable@L3#2 | shown | 0.35 | 0.85 | 0.3 | c3, c5, c6 | The loop then looks at every later element and, whenever one is bigger than max, max takes its value; The loop starts at i = 1; because a[0] is already in max, and i < a.length stops at the last index without going past the end |
+| lvl:loop_variable@L3#2 | shown | 0.35 | 0.7 | 0.24 | c3, c5, c6 | The loop then looks at every later element and, whenever one is bigger than max, max takes its value; The loop starts at i = 1; because a[0] is already in max, and i < a.length stops at the last index without going past the end |
 | lvl:loop_variable@L2#1 | shown | 0.25 | 0.7 | 0.17 | c5, c6 | The loop starts at i = 1; because a[0] is already in max, and i < a.length stops at the last index without going past the end |
 
 #### for_loop, misconceptions: 21 edges offered
@@ -945,8 +965,10 @@ Prune: the model's reply (edge id and score; the kept edges sum to 1):
 ```
 Kept by pruning: lvl:for_loop@L3#2 (0.50), lvl:for_loop@L4#5 (0.25), lvl:for_loop@L3#8 (0.25)
 
-Label prompt for level way lvl:for_loop@L3#2 (the model saw only the concept, the way's name 'relation to neighbour' and its text; no level):
+Label prompt for level way lvl:for_loop@L3#2 (the model saw the concept, the way's name 'relation to neighbour', its text, where the way stops and whether the words must be correct; no level):
 > for (int i = 0; i < N; i++) gives i each valid index 0..N-1 exactly once in increasing order, the standard way to process every array element.
+>
+> Where this way stops: Two correct but separate rules are L1. Executing the two in sequence is L2. A relational answer may be correct or a relational error.
 
 Model's reply:
 ```
@@ -955,23 +977,27 @@ Clauses: 5, 6
 Confidence: 0.8
 ```
 
-Label prompt for level way lvl:for_loop@L4#5 (the model saw only the concept, the way's name 'diagnose an error' and its text; no level):
+Label prompt for level way lvl:for_loop@L4#5 (the model saw the concept, the way's name 'diagnose an error', its text, where the way stops and whether the words must be correct; no level):
 > rule broken: The number of passes is fixed by the init, the test and the update together. Kind: silent logic error. Trigger class: Wrong start value, < vs <=, a wrong step, or an extra update of the counter in the body (or outside the loop): the loop runs too few or too many passes (off by one, or skips values).
+>
+> Where this way stops: Locating and fixing the mistake for one given failing case is L3. A compiler-flagged slip fixed from the message is weak evidence.
 
 Model's reply:
 ```
 Label: not shown
 Clauses: none
-Confidence: 0.7
+Confidence: 0.8
 ```
 
-Label prompt for level way lvl:for_loop@L3#8 (the model saw only the concept, the way's name 'purpose of the whole' and its text; no level):
+Label prompt for level way lvl:for_loop@L3#8 (the model saw the concept, the way's name 'purpose of the whole', its text, where the way stops and whether the words must be correct; no level):
 > Plan: counted loop / counter-controlled repetition - do the body a known number of times, with the loop variable as a stepper (index, term number, trial number).
+>
+> Where this way stops: Narrating the lines is L2. A purpose induced from a few traced cases is L2. A wrong purpose is still L3, but with an error.
 
 Model's reply:
 ```
 Label: shown
-Clauses: 3, 5, 6
+Clauses: 3, 7
 Confidence: 0.8
 ```
 
@@ -980,7 +1006,7 @@ Parsed labels:
 |---|---|---|---|---|---|---|
 | lvl:for_loop@L3#2 | shown | 0.5 | 0.8 | 0.4 | c5, c6 | The loop starts at i = 1; because a[0] is already in max, and i < a.length stops at the last index without going past the end |
 | lvl:for_loop@L4#5 | not applied |  |  | 0.0 |  |  |
-| lvl:for_loop@L3#8 | shown | 0.25 | 0.8 | 0.2 | c3, c5, c6 | The loop then looks at every later element and, whenever one is bigger than max, max takes its value; The loop starts at i = 1; because a[0] is already in max, and i < a.length stops at the last index without going past the end |
+| lvl:for_loop@L3#8 | shown | 0.25 | 0.8 | 0.2 | c3, c7 | The loop then looks at every later element and, whenever one is bigger than max, max takes its value; For any array, this code prints its largest element |
 
 **Kept on a path at this depth** (best N in tiers: held misconception / broken edge, then held error, then correct / confirmed / shown):
 
@@ -1065,18 +1091,34 @@ Prune: the model's reply (edge id and score; the kept edges sum to 1):
 ```
 Kept by pruning: lvl:array_bounds@L3#0 (0.40), lvl:array_bounds@L4#0 (0.35), lvl:array_bounds@L3#1 (0.25)
 
-Label prompt for level way lvl:array_bounds@L3#0 (the model saw only the concept, the way's name 'relation to neighbour' and its text; no level):
+Label prompt for level way lvl:array_bounds@L3#0 (the model saw the concept, the way's name 'relation to neighbour', its text, where the way stops and whether the words must be correct; no level):
 > Every index value used in a[i] must satisfy 0 <= i <= a.length-1; the last element is a[a.length-1].
+>
+> Where this way stops: Two correct but separate rules are L1. Executing the two in sequence is L2. A relational answer may be correct or a relational error.
 
 Model's reply:
 ```
 Label: shown
-Clauses: 6
-Confidence: 0.85
+Clauses: 5, 6
+Confidence: 0.72
 ```
 
-Label prompt for level way lvl:array_bounds@L4#0 (the model saw only the concept, the way's name 'predict a change' and its text; no level):
+Label prompt for level way lvl:array_bounds@L4#0 (the model saw the concept, the way's name 'predict a change', its text, where the way stops and whether the words must be correct; no level):
 > Conservation: a loop bounded by i < a.length stays within bounds when the array size changes. Changing < to <= adds one pass that throws, and starting at 1 or ending at a.length-1 silently skips an element.
+>
+> Where this way stops: Re-tracing the changed code value by value is L2 on the new code. Adapting given code to a familiar variant may be only relational.
+
+Model's reply:
+```
+Label: not shown
+Clauses: none
+Confidence: 0.8
+```
+
+Label prompt for level way lvl:array_bounds@L3#1 (the model saw the concept, the way's name 'relation to neighbour', its text, where the way stops and whether the words must be correct; no level):
+> Because an out-of-bounds index stops the program, the loop test checks the bounds before the body uses the index (e.g. x > 0 && x < N-1 before a[x-1], a[x+1]).
+>
+> Where this way stops: Two correct but separate rules are L1. Executing the two in sequence is L2. A relational answer may be correct or a relational error.
 
 Model's reply:
 ```
@@ -1085,22 +1127,12 @@ Clauses: none
 Confidence: 0.65
 ```
 
-Label prompt for level way lvl:array_bounds@L3#1 (the model saw only the concept, the way's name 'relation to neighbour' and its text; no level):
-> Because an out-of-bounds index stops the program, the loop test checks the bounds before the body uses the index (e.g. x > 0 && x < N-1 before a[x-1], a[x+1]).
-
-Model's reply:
-```
-Label: shown
-Clauses: 6
-Confidence: 0.65
-```
-
 Parsed labels:
 | edge | label | prune score | confidence | score | clauses | words |
 |---|---|---|---|---|---|---|
-| lvl:array_bounds@L3#0 | shown | 0.4 | 0.85 | 0.34 | c6 | because a[0] is already in max, and i < a.length stops at the last index without going past the end |
+| lvl:array_bounds@L3#0 | shown | 0.4 | 0.72 | 0.29 | c5, c6 | The loop starts at i = 1; because a[0] is already in max, and i < a.length stops at the last index without going past the end |
 | lvl:array_bounds@L4#0 | not applied |  |  | 0.0 |  |  |
-| lvl:array_bounds@L3#1 | shown | 0.25 | 0.65 | 0.16 | c6 | because a[0] is already in max, and i < a.length stops at the last index without going past the end |
+| lvl:array_bounds@L3#1 | not applied |  |  | 0.0 |  |  |
 
 #### indexing, concept edges: 1 edges offered
 Edges offered:
@@ -1249,14 +1281,16 @@ Clauses: none
 Confidence: 0.85
 ```
 
-Label prompt for level way lvl:array_initializer@L4#0 (the model saw only the concept, the way's name 'predict a change' and its text; no level):
+Label prompt for level way lvl:array_initializer@L4#0 (the model saw the concept, the way's name 'predict a change', its text, where the way stops and whether the words must be correct; no level):
 > Conservation: adding or removing a value changes the length. Code that uses a.length (e.g. rank.length) adapts, while code with a hard-coded size breaks. Reordering values changes which index holds which value.
+>
+> Where this way stops: Re-tracing the changed code value by value is L2 on the new code. Adapting given code to a familiar variant may be only relational.
 
 Model's reply:
 ```
 Label: not shown
 Clauses: none
-Confidence: 0.6
+Confidence: 0.75
 ```
 
 Parsed labels:
@@ -1381,16 +1415,19 @@ Figure 6 (the graph after depth 3): C:\Users\magnu\OneDrive\Desktop\ES_VIterbi_P
 
 ## 4. Diagnosis (rules over the labelled graph, no model)
 Root-cause walk: held on [], broken at [], prerequisites {'array_initializer': ['array_declaration'], 'indexing': ['array_initializer'], 'length_field': ['array_initializer'], 'running_extreme': ['array_traversal'], 'increment_operators': ['assignment', 'loop_control'], 'if_statement': ['boolean_expression', 'control_flow'], 'boolean_expression': ['comparison_operators'], 'array_declaration': ['data_structure'], 'data_structure': ['data_type'], 'comparison_operators': ['expression'], 'array_traversal': ['for_loop', 'indexing', 'length_field'], 'loop_body': ['for_loop'], 'loop_scope': ['for_loop'], 'array_bounds': ['indexing'], 'for_loop': ['loop_control'], 'loop_control': ['loop_variable'], 'control_flow': ['statement'], 'println': ['statement']}
-- array_bounds: L3 via relation_to_neighbour "because a[0] is already in max, and i < a.length stops at the last index without going past the end"
+- way lvl:indexing@L3#1 not counted: confidence 0.60 is not above 0.60
+- way lvl:control_flow@L3#1 not counted: confidence 0.60 is not above 0.60
+- way lvl:loop_variable@L3#0 not counted: confidence 0.60 is not above 0.60
+- array_bounds: L3 via relation_to_neighbour "The loop starts at i = 1; because a[0] is already in max, and i < a.length stops at the last index without going past the end"
 - array_initializer: L2 via output_prediction "max starts as the first element, 3"
-- array_traversal: L3 via purpose_of_the_whole "The loop then looks at every later element and, whenever one is bigger than max, max takes its value; For any array, this code prints its largest element"
-- control_flow: L3 via relation_to_neighbour "The loop then looks at every later element and, whenever one is bigger than max, max takes its value; so after 8 it never changes"
+- array_traversal: L3 via relation_to_neighbour "max starts as the first element, 3; The loop then looks at every later element and, whenever one is bigger than max, max takes its value; so after 8 it never changes; because a[0] is already in max, and i < a.length stops at the last index without going past the end"
+- control_flow: L2 via line_by_line_trace "max starts as the first element, 3; The loop then looks at every later element and, whenever one is bigger than max, max takes its value; so after 8 it never changes; The loop starts at i = 1; because a[0] is already in max, and i < a.length stops at the last index without going past the end"
 - for_loop: L3 via relation_to_neighbour "The loop starts at i = 1; because a[0] is already in max, and i < a.length stops at the last index without going past the end"
-- indexing: L3 via relation_to_neighbour "The loop then looks at every later element and, whenever one is bigger than max, max takes its value; The loop starts at i = 1; because a[0] is already in max, and i < a.length stops at the last index without going past the end"
+- indexing: L3 via relation_to_neighbour "The loop starts at i = 1; because a[0] is already in max, and i < a.length stops at the last index without going past the end"
 - loop_control: L3 via relation_to_neighbour "The loop starts at i = 1; because a[0] is already in max, and i < a.length stops at the last index without going past the end"
 - loop_variable: L3 via purpose_of_the_whole "The loop then looks at every later element and, whenever one is bigger than max, max takes its value; The loop starts at i = 1; because a[0] is already in max, and i < a.length stops at the last index without going past the end"
 
-**Stop:** max depth at depth 3; prompts {'prune': 23, 'label': 48}, fresh model calls 5, cache hits 66
+**Stop:** max depth at depth 3; prompts {'prune': 23, 'label': 48}, fresh model calls 0, cache hits 71
 
 ### Held misconceptions
 (none)
@@ -1403,14 +1440,21 @@ Root-cause walk: held on [], broken at [], prerequisites {'array_initializer': [
 ### Level per concept
 | concept | level | way | misconception | source | quote | rule | also | note |
 |---|---|---|---|---|---|---|---|---|
-| array_bounds | L3 | relation_to_neighbour |  | level_way | because a[0] is already in max, and i < a.length stops at the last index without going past the end |  | L3 relation_to_neighbour |  |
+| array_bounds | L3 | relation_to_neighbour |  | level_way | The loop starts at i = 1; because a[0] is already in max, and i < a.length stops at the last index without going past the end |  |  |  |
 | array_initializer | L2 | output_prediction |  | level_way | max starts as the first element, 3 |  |  |  |
-| array_traversal | L3 | purpose_of_the_whole |  | level_way | The loop then looks at every later element and, whenever one is bigger than max, max takes its value; For any array, this code prints its largest element |  | L3 relation_to_neighbour, L3 relation_to_neighbour |  |
-| control_flow | L3 | relation_to_neighbour |  | level_way | The loop then looks at every later element and, whenever one is bigger than max, max takes its value; so after 8 it never changes |  | L2 line_by_line_trace, L2 output_prediction |  |
+| array_traversal | L3 | relation_to_neighbour |  | level_way | max starts as the first element, 3; The loop then looks at every later element and, whenever one is bigger than max, max takes its value; so after 8 it never changes; because a[0] is already in max, and i < a.length stops at the last index without going past the end |  | L3 purpose_of_the_whole, L3 relation_to_neighbour |  |
+| control_flow | L2 | line_by_line_trace |  | level_way | max starts as the first element, 3; The loop then looks at every later element and, whenever one is bigger than max, max takes its value; so after 8 it never changes; The loop starts at i = 1; because a[0] is already in max, and i < a.length stops at the last index without going past the end |  | L2 output_prediction |  |
 | for_loop | L3 | relation_to_neighbour |  | level_way | The loop starts at i = 1; because a[0] is already in max, and i < a.length stops at the last index without going past the end |  | L3 purpose_of_the_whole |  |
-| indexing | L3 | relation_to_neighbour |  | level_way | The loop then looks at every later element and, whenever one is bigger than max, max takes its value; The loop starts at i = 1; because a[0] is already in max, and i < a.length stops at the last index without going past the end |  | L3 relation_to_neighbour, L2 output_prediction |  |
+| indexing | L3 | relation_to_neighbour |  | level_way | The loop starts at i = 1; because a[0] is already in max, and i < a.length stops at the last index without going past the end |  | L2 output_prediction |  |
 | loop_control | L3 | relation_to_neighbour |  | level_way | The loop starts at i = 1; because a[0] is already in max, and i < a.length stops at the last index without going past the end |  | L3 purpose_of_the_whole, L2 output_prediction |  |
-| loop_variable | L3 | purpose_of_the_whole |  | level_way | The loop then looks at every later element and, whenever one is bigger than max, max takes its value; The loop starts at i = 1; because a[0] is already in max, and i < a.length stops at the last index without going past the end |  | L3 relation_to_neighbour, L2 output_prediction |  |
+| loop_variable | L3 | purpose_of_the_whole |  | level_way | The loop then looks at every later element and, whenever one is bigger than max, max takes its value; The loop starts at i = 1; because a[0] is already in max, and i < a.length stops at the last index without going past the end |  | L2 output_prediction |  |
+
+Shown ways above L2 that do not count for the level:
+| concept | edge | level | way | confidence | reason | quote |
+|---|---|---|---|---|---|---|
+| indexing | lvl:indexing@L3#1 | L3 | relation_to_neighbour | 0.6 | confidence 0.60 is not above 0.60 | The loop then looks at every later element and, whenever one is bigger than max, max takes its value; The loop starts at i = 1; because a[0] is already in max, and i < a.length stops at the last index without going past the end |
+| control_flow | lvl:control_flow@L3#1 | L3 | relation_to_neighbour | 0.6 | confidence 0.60 is not above 0.60 | The loop then looks at every later element and, whenever one is bigger than max, max takes its value; so after 8 it never changes; because a[0] is already in max, and i < a.length stops at the last index without going past the end |
+| loop_variable | lvl:loop_variable@L3#0 | L3 | relation_to_neighbour | 0.6 | confidence 0.60 is not above 0.60 | The loop starts at i = 1; because a[0] is already in max, and i < a.length stops at the last index without going past the end |
 
 ### Overall level: L3
 
@@ -1433,20 +1477,20 @@ Figure 7 (final picture): C:\Users\magnu\OneDrive\Desktop\ES_VIterbi_Personalize
 | 1 | array_traversal | mis:array_traversal->IdiomOverridesCode | misconception | correct | 0.4 | 0.9 | 0.36 | [5, 6] | The loop starts at i = 1; because a[0] is already in max, and i < a.length stops at the last index without going past the end |
 | 1 | array_traversal | mis:array_traversal->OffByOneBound | misconception | correct | 0.35 | 0.9 | 0.315 | [6] | because a[0] is already in max, and i < a.length stops at the last index without going past the end |
 | 1 | array_traversal | err:array_traversal->EarlyReturnInLoop | error | correct | 0.25 | 0.6 | 0.15 | [3, 7] | The loop then looks at every later element and, whenever one is bigger than max, max takes its value; For any array, this code prints its largest element |
-| 1 | array_traversal | lvl:array_traversal@L3#6 | level | shown | 0.4 | 0.6 | 0.24 | [2, 3, 4, 7] | max starts as the first element, 3; The loop then looks at every later element and, whenever one is bigger than max, max takes its value; so after 8 it never changes; For any array, this code prints its largest element |
-| 1 | array_traversal | lvl:array_traversal@L3#8 | level | shown | 0.3 | 0.9 | 0.27 | [3, 7] | The loop then looks at every later element and, whenever one is bigger than max, max takes its value; For any array, this code prints its largest element |
-| 1 | array_traversal | lvl:array_traversal@L3#2 | level | shown | 0.3 | 0.8 | 0.24 | [3, 5, 6] | The loop then looks at every later element and, whenever one is bigger than max, max takes its value; The loop starts at i = 1; because a[0] is already in max, and i < a.length stops at the last index without going past the end |
+| 1 | array_traversal | lvl:array_traversal@L3#6 | level | shown | 0.4 | 0.72 | 0.288 | [2, 3, 4, 6] | max starts as the first element, 3; The loop then looks at every later element and, whenever one is bigger than max, max takes its value; so after 8 it never changes; because a[0] is already in max, and i < a.length stops at the last index without going past the end |
+| 1 | array_traversal | lvl:array_traversal@L3#8 | level | shown | 0.3 | 0.85 | 0.255 | [2, 3, 7] | max starts as the first element, 3; The loop then looks at every later element and, whenever one is bigger than max, max takes its value; For any array, this code prints its largest element |
+| 1 | array_traversal | lvl:array_traversal@L3#2 | level | shown | 0.3 | 0.8 | 0.24 | [2, 5, 6] | max starts as the first element, 3; The loop starts at i = 1; because a[0] is already in max, and i < a.length stops at the last index without going past the end |
 | 1 | loop_control | mis:loop_control->OffByOneBound | misconception | correct | 0.45 | 0.9 | 0.405 | [6] | because a[0] is already in max, and i < a.length stops at the last index without going past the end |
 | 1 | loop_control | mis:loop_control->IdiomOverridesCode | misconception | correct | 0.35 | 0.85 | 0.2975 | [3, 5, 6] | The loop then looks at every later element and, whenever one is bigger than max, max takes its value; The loop starts at i = 1; because a[0] is already in max, and i < a.length stops at the last index without going past the end |
 | 1 | loop_control | err:loop_control->WrongIterationCount | error | correct | 0.2 | 0.8 | 0.16 | [5, 6] | The loop starts at i = 1; because a[0] is already in max, and i < a.length stops at the last index without going past the end |
-| 1 | loop_control | lvl:loop_control@L3#5 | level | shown | 0.45 | 0.75 | 0.3375 | [5, 6] | The loop starts at i = 1; because a[0] is already in max, and i < a.length stops at the last index without going past the end |
-| 1 | loop_control | lvl:loop_control@L3#6 | level | shown | 0.3 | 0.8 | 0.24 | [3, 5, 6] | The loop then looks at every later element and, whenever one is bigger than max, max takes its value; The loop starts at i = 1; because a[0] is already in max, and i < a.length stops at the last index without going past the end |
+| 1 | loop_control | lvl:loop_control@L3#5 | level | shown | 0.45 | 0.72 | 0.324 | [5, 6] | The loop starts at i = 1; because a[0] is already in max, and i < a.length stops at the last index without going past the end |
+| 1 | loop_control | lvl:loop_control@L3#6 | level | shown | 0.3 | 0.8 | 0.24 | [3, 5, 6, 7] | The loop then looks at every later element and, whenever one is bigger than max, max takes its value; The loop starts at i = 1; because a[0] is already in max, and i < a.length stops at the last index without going past the end; For any array, this code prints its largest element |
 | 1 | loop_control | lvl:loop_control@L2#1 | level | shown | 0.25 | 0.8 | 0.2 | [3, 5, 6] | The loop then looks at every later element and, whenever one is bigger than max, max takes its value; The loop starts at i = 1; because a[0] is already in max, and i < a.length stops at the last index without going past the end |
 | 1 | indexing | mis:indexing->ArrayIndexStartsAtOne | misconception | correct | 0.4 | 0.92 | 0.368 | [2, 6] | max starts as the first element, 3; because a[0] is already in max, and i < a.length stops at the last index without going past the end |
 | 1 | indexing | mis:indexing->ArrayRangeInclusive | misconception | correct | 0.35 | 0.85 | 0.2975 | [6] | because a[0] is already in max, and i < a.length stops at the last index without going past the end |
 | 1 | indexing | mis:indexing->IndexIsValue | misconception | correct | 0.25 | 0.8 | 0.2 | [2, 3, 6] | max starts as the first element, 3; The loop then looks at every later element and, whenever one is bigger than max, max takes its value; because a[0] is already in max, and i < a.length stops at the last index without going past the end |
-| 1 | indexing | lvl:indexing@L3#1 | level | shown | 0.4 | 0.75 | 0.3 | [3, 5, 6] | The loop then looks at every later element and, whenever one is bigger than max, max takes its value; The loop starts at i = 1; because a[0] is already in max, and i < a.length stops at the last index without going past the end |
-| 1 | indexing | lvl:indexing@L3#6 | level | shown | 0.35 | 0.8 | 0.28 | [5, 6] | The loop starts at i = 1; because a[0] is already in max, and i < a.length stops at the last index without going past the end |
+| 1 | indexing | lvl:indexing@L3#1 | level | shown | 0.4 | 0.6 | 0.24 | [3, 5, 6] | The loop then looks at every later element and, whenever one is bigger than max, max takes its value; The loop starts at i = 1; because a[0] is already in max, and i < a.length stops at the last index without going past the end |
+| 1 | indexing | lvl:indexing@L3#6 | level | shown | 0.35 | 0.7 | 0.245 | [5, 6] | The loop starts at i = 1; because a[0] is already in max, and i < a.length stops at the last index without going past the end |
 | 1 | indexing | lvl:indexing@L2#1 | level | shown | 0.25 | 0.7 | 0.175 | [2] | max starts as the first element, 3 |
 | 2 | array_traversal | pre:array_traversal->running_extreme | prerequisite | confirmed | 0.45 | 0.85 | 0.3825 | [2, 3, 4, 7] | max starts as the first element, 3; The loop then looks at every later element and, whenever one is bigger than max, max takes its value; so after 8 it never changes; For any array, this code prints its largest element |
 | 2 | array_traversal | pre:length_field->array_traversal | prerequisite | confirmed | 0.3 | 0.85 | 0.255 | [3, 5, 6] | The loop then looks at every later element and, whenever one is bigger than max, max takes its value; The loop starts at i = 1; because a[0] is already in max, and i < a.length stops at the last index without going past the end |
@@ -1459,21 +1503,20 @@ Figure 7 (final picture): C:\Users\magnu\OneDrive\Desktop\ES_VIterbi_Personalize
 | 2 | control_flow | mis:control_flow->ProgramEndsAfterLoop | misconception | correct | 0.35 | 0.8 | 0.28 | [1] | It prints 8 |
 | 2 | control_flow | lvl:control_flow@L2#0 | level | shown | 0.45 | 0.7 | 0.315 | [2, 3, 4, 5, 6] | max starts as the first element, 3; The loop then looks at every later element and, whenever one is bigger than max, max takes its value; so after 8 it never changes; The loop starts at i = 1; because a[0] is already in max, and i < a.length stops at the last index without going past the end |
 | 2 | control_flow | lvl:control_flow@L2#1 | level | shown | 0.3 | 0.85 | 0.255 | [1, 2, 3, 4] | It prints 8; max starts as the first element, 3; The loop then looks at every later element and, whenever one is bigger than max, max takes its value; so after 8 it never changes |
-| 2 | control_flow | lvl:control_flow@L3#1 | level | shown | 0.25 | 0.7 | 0.175 | [3, 4] | The loop then looks at every later element and, whenever one is bigger than max, max takes its value; so after 8 it never changes |
+| 2 | control_flow | lvl:control_flow@L3#1 | level | shown | 0.25 | 0.6 | 0.15 | [3, 4, 6] | The loop then looks at every later element and, whenever one is bigger than max, max takes its value; so after 8 it never changes; because a[0] is already in max, and i < a.length stops at the last index without going past the end |
 | 2 | loop_variable | mis:loop_variable->LoopOutputSameEachPass | misconception | correct | 0.45 | 0.75 | 0.3375 | [3, 4] | The loop then looks at every later element and, whenever one is bigger than max, max takes its value; so after 8 it never changes |
 | 2 | loop_variable | mis:loop_variable->LoopVariableLimitsValues | misconception | correct | 0.3 | 0.6 | 0.18 | [1, 3] | It prints 8; The loop then looks at every later element and, whenever one is bigger than max, max takes its value |
 | 2 | loop_variable | mis:loop_variable->ForInitRepeats | misconception | correct | 0.25 | 0.7 | 0.175 | [3, 5] | The loop then looks at every later element and, whenever one is bigger than max, max takes its value; The loop starts at i = 1 |
 | 2 | loop_variable | lvl:loop_variable@L3#0 | level | shown | 0.4 | 0.6 | 0.24 | [5, 6] | The loop starts at i = 1; because a[0] is already in max, and i < a.length stops at the last index without going past the end |
-| 2 | loop_variable | lvl:loop_variable@L3#2 | level | shown | 0.35 | 0.85 | 0.2975 | [3, 5, 6] | The loop then looks at every later element and, whenever one is bigger than max, max takes its value; The loop starts at i = 1; because a[0] is already in max, and i < a.length stops at the last index without going past the end |
+| 2 | loop_variable | lvl:loop_variable@L3#2 | level | shown | 0.35 | 0.7 | 0.245 | [3, 5, 6] | The loop then looks at every later element and, whenever one is bigger than max, max takes its value; The loop starts at i = 1; because a[0] is already in max, and i < a.length stops at the last index without going past the end |
 | 2 | loop_variable | lvl:loop_variable@L2#1 | level | shown | 0.25 | 0.7 | 0.175 | [5, 6] | The loop starts at i = 1; because a[0] is already in max, and i < a.length stops at the last index without going past the end |
 | 2 | for_loop | err:for_loop->WrongIterationCount | error | correct | 0.4 | 0.85 | 0.34 | [5, 6] | The loop starts at i = 1; because a[0] is already in max, and i < a.length stops at the last index without going past the end |
 | 2 | for_loop | mis:for_loop->IdiomOverridesCode | misconception | correct | 0.35 | 0.85 | 0.2975 | [5, 6] | The loop starts at i = 1; because a[0] is already in max, and i < a.length stops at the last index without going past the end |
 | 2 | for_loop | mis:for_loop->ForIsConditional | misconception | correct | 0.25 | 0.85 | 0.2125 | [3, 4] | The loop then looks at every later element and, whenever one is bigger than max, max takes its value; so after 8 it never changes |
 | 2 | for_loop | lvl:for_loop@L3#2 | level | shown | 0.5 | 0.8 | 0.4 | [5, 6] | The loop starts at i = 1; because a[0] is already in max, and i < a.length stops at the last index without going past the end |
-| 2 | for_loop | lvl:for_loop@L3#8 | level | shown | 0.25 | 0.8 | 0.2 | [3, 5, 6] | The loop then looks at every later element and, whenever one is bigger than max, max takes its value; The loop starts at i = 1; because a[0] is already in max, and i < a.length stops at the last index without going past the end |
+| 2 | for_loop | lvl:for_loop@L3#8 | level | shown | 0.25 | 0.8 | 0.2 | [3, 7] | The loop then looks at every later element and, whenever one is bigger than max, max takes its value; For any array, this code prints its largest element |
 | 3 | array_bounds | mis:array_bounds->OffByOneBound | misconception | correct | 0.85 | 0.85 | 0.7225 | [6] | because a[0] is already in max, and i < a.length stops at the last index without going past the end |
-| 3 | array_bounds | lvl:array_bounds@L3#0 | level | shown | 0.4 | 0.85 | 0.34 | [6] | because a[0] is already in max, and i < a.length stops at the last index without going past the end |
-| 3 | array_bounds | lvl:array_bounds@L3#1 | level | shown | 0.25 | 0.65 | 0.1625 | [6] | because a[0] is already in max, and i < a.length stops at the last index without going past the end |
+| 3 | array_bounds | lvl:array_bounds@L3#0 | level | shown | 0.4 | 0.72 | 0.288 | [5, 6] | The loop starts at i = 1; because a[0] is already in max, and i < a.length stops at the last index without going past the end |
 | 3 | indexing | pre:indexing->array_traversal | prerequisite | confirmed | 1.0 | 0.85 | 0.85 | [3, 5, 6] | The loop then looks at every later element and, whenever one is bigger than max, max takes its value; The loop starts at i = 1; because a[0] is already in max, and i < a.length stops at the last index without going past the end |
 | 3 | loop_control | pre:loop_control->for_loop | prerequisite | confirmed | 0.85 | 0.7 | 0.595 | [3, 5, 6] | The loop then looks at every later element and, whenever one is bigger than max, max takes its value; The loop starts at i = 1; because a[0] is already in max, and i < a.length stops at the last index without going past the end |
 | 3 | array_initializer | mis:array_initializer->ArrayBracketCountIsLength | misconception | correct | 0.4 | 0.6 | 0.24 | [1, 4, 6] | It prints 8; so after 8 it never changes; because a[0] is already in max, and i < a.length stops at the last index without going past the end |
@@ -1509,24 +1552,24 @@ start concepts (3): array_traversal, loop_control, indexing
     mis:array_traversal->OffByOneBound -> correct (0.32) "because a[0] is already in max, and i < a.length stops at the last index without going past the end"
     err:array_traversal->EarlyReturnInLoop -> correct (0.15) "The loop then looks at every later element and, whenever one is bigger than max, max takes its value; For any array, this code prints its largest element"
   array_traversal (level ways): 22 candidates -> kept lvl:array_traversal@L3#6 (0.40), lvl:array_traversal@L3#8 (0.30), lvl:array_traversal@L3#2 (0.30)
-    lvl:array_traversal@L3#6 -> shown (0.24) "max starts as the first element, 3; The loop then looks at every later element and, whenever one is bigger than max, max takes its value; so after 8 it never changes; For any array, this code prints its largest element"
-    lvl:array_traversal@L3#8 -> shown (0.27) "The loop then looks at every later element and, whenever one is bigger than max, max takes its value; For any array, this code prints its largest element"
-    lvl:array_traversal@L3#2 -> shown (0.24) "The loop then looks at every later element and, whenever one is bigger than max, max takes its value; The loop starts at i = 1; because a[0] is already in max, and i < a.length stops at the last index without going past the end"
+    lvl:array_traversal@L3#6 -> shown (0.29) "max starts as the first element, 3; The loop then looks at every later element and, whenever one is bigger than max, max takes its value; so after 8 it never changes; because a[0] is already in max, and i < a.length stops at the last index without going past the end"
+    lvl:array_traversal@L3#8 -> shown (0.26) "max starts as the first element, 3; The loop then looks at every later element and, whenever one is bigger than max, max takes its value; For any array, this code prints its largest element"
+    lvl:array_traversal@L3#2 -> shown (0.24) "max starts as the first element, 3; The loop starts at i = 1; because a[0] is already in max, and i < a.length stops at the last index without going past the end"
   loop_control (misconceptions): 11 candidates -> kept mis:loop_control->OffByOneBound (0.45), mis:loop_control->IdiomOverridesCode (0.35), err:loop_control->WrongIterationCount (0.20)
     mis:loop_control->OffByOneBound -> correct (0.41) "because a[0] is already in max, and i < a.length stops at the last index without going past the end"
     mis:loop_control->IdiomOverridesCode -> correct (0.30) "The loop then looks at every later element and, whenever one is bigger than max, max takes its value; The loop starts at i = 1; because a[0] is already in max, and i < a.length stops at the last index without going past the end"
     err:loop_control->WrongIterationCount -> correct (0.16) "The loop starts at i = 1; because a[0] is already in max, and i < a.length stops at the last index without going past the end"
   loop_control (level ways): 19 candidates -> kept lvl:loop_control@L3#5 (0.45), lvl:loop_control@L3#6 (0.30), lvl:loop_control@L2#1 (0.25)
-    lvl:loop_control@L3#5 -> shown (0.34) "The loop starts at i = 1; because a[0] is already in max, and i < a.length stops at the last index without going past the end"
-    lvl:loop_control@L3#6 -> shown (0.24) "The loop then looks at every later element and, whenever one is bigger than max, max takes its value; The loop starts at i = 1; because a[0] is already in max, and i < a.length stops at the last index without going past the end"
+    lvl:loop_control@L3#5 -> shown (0.32) "The loop starts at i = 1; because a[0] is already in max, and i < a.length stops at the last index without going past the end"
+    lvl:loop_control@L3#6 -> shown (0.24) "The loop then looks at every later element and, whenever one is bigger than max, max takes its value; The loop starts at i = 1; because a[0] is already in max, and i < a.length stops at the last index without going past the end; For any array, this code prints its largest element"
     lvl:loop_control@L2#1 -> shown (0.20) "The loop then looks at every later element and, whenever one is bigger than max, max takes its value; The loop starts at i = 1; because a[0] is already in max, and i < a.length stops at the last index without going past the end"
   indexing (misconceptions): 8 candidates -> kept mis:indexing->ArrayIndexStartsAtOne (0.40), mis:indexing->ArrayRangeInclusive (0.35), mis:indexing->IndexIsValue (0.25)
     mis:indexing->ArrayIndexStartsAtOne -> correct (0.37) "max starts as the first element, 3; because a[0] is already in max, and i < a.length stops at the last index without going past the end"
     mis:indexing->ArrayRangeInclusive -> correct (0.30) "because a[0] is already in max, and i < a.length stops at the last index without going past the end"
     mis:indexing->IndexIsValue -> correct (0.20) "max starts as the first element, 3; The loop then looks at every later element and, whenever one is bigger than max, max takes its value; because a[0] is already in max, and i < a.length stops at the last index without going past the end"
   indexing (level ways): 21 candidates -> kept lvl:indexing@L3#1 (0.40), lvl:indexing@L3#6 (0.35), lvl:indexing@L2#1 (0.25)
-    lvl:indexing@L3#1 -> shown (0.30) "The loop then looks at every later element and, whenever one is bigger than max, max takes its value; The loop starts at i = 1; because a[0] is already in max, and i < a.length stops at the last index without going past the end"
-    lvl:indexing@L3#6 -> shown (0.28) "The loop starts at i = 1; because a[0] is already in max, and i < a.length stops at the last index without going past the end"
+    lvl:indexing@L3#1 -> shown (0.24) "The loop then looks at every later element and, whenever one is bigger than max, max takes its value; The loop starts at i = 1; because a[0] is already in max, and i < a.length stops at the last index without going past the end"
+    lvl:indexing@L3#6 -> shown (0.24) "The loop starts at i = 1; because a[0] is already in max, and i < a.length stops at the last index without going past the end"
     lvl:indexing@L2#1 -> shown (0.17) "max starts as the first element, 3"
   kept: mis:loop_control->OffByOneBound [correct, tier 2, 0.41], mis:indexing->ArrayIndexStartsAtOne [correct, tier 2, 0.37], mis:array_traversal->IdiomOverridesCode [correct, tier 2, 0.36]
   clause coverage: c1 uncovered; c2 <- mis:indexing->ArrayIndexStartsAtOne; c3 <- err:array_traversal->EarlyReturnInLoop; c4 uncovered; c5 <- mis:array_traversal->IdiomOverridesCode; c6 <- mis:array_traversal->IdiomOverridesCode; c7 <- err:array_traversal->EarlyReturnInLoop
@@ -1551,14 +1594,14 @@ start concepts (3): array_traversal, loop_control, indexing
   control_flow (level ways): 15 candidates -> kept lvl:control_flow@L2#0 (0.45), lvl:control_flow@L2#1 (0.30), lvl:control_flow@L3#1 (0.25)
     lvl:control_flow@L2#0 -> shown (0.32) "max starts as the first element, 3; The loop then looks at every later element and, whenever one is bigger than max, max takes its value; so after 8 it never changes; The loop starts at i = 1; because a[0] is already in max, and i < a.length stops at the last index without going past the end"
     lvl:control_flow@L2#1 -> shown (0.26) "It prints 8; max starts as the first element, 3; The loop then looks at every later element and, whenever one is bigger than max, max takes its value; so after 8 it never changes"
-    lvl:control_flow@L3#1 -> shown (0.17) "The loop then looks at every later element and, whenever one is bigger than max, max takes its value; so after 8 it never changes"
+    lvl:control_flow@L3#1 -> shown (0.15) "The loop then looks at every later element and, whenever one is bigger than max, max takes its value; so after 8 it never changes; because a[0] is already in max, and i < a.length stops at the last index without going past the end"
   loop_variable (misconceptions): 7 candidates -> kept mis:loop_variable->LoopOutputSameEachPass (0.45), mis:loop_variable->LoopVariableLimitsValues (0.30), mis:loop_variable->ForInitRepeats (0.25)
     mis:loop_variable->LoopOutputSameEachPass -> correct (0.34) "The loop then looks at every later element and, whenever one is bigger than max, max takes its value; so after 8 it never changes"
     mis:loop_variable->LoopVariableLimitsValues -> correct (0.18) "It prints 8; The loop then looks at every later element and, whenever one is bigger than max, max takes its value"
     mis:loop_variable->ForInitRepeats -> correct (0.17) "The loop then looks at every later element and, whenever one is bigger than max, max takes its value; The loop starts at i = 1"
   loop_variable (level ways): 13 candidates -> kept lvl:loop_variable@L3#0 (0.40), lvl:loop_variable@L3#2 (0.35), lvl:loop_variable@L2#1 (0.25)
     lvl:loop_variable@L3#0 -> shown (0.24) "The loop starts at i = 1; because a[0] is already in max, and i < a.length stops at the last index without going past the end"
-    lvl:loop_variable@L3#2 -> shown (0.30) "The loop then looks at every later element and, whenever one is bigger than max, max takes its value; The loop starts at i = 1; because a[0] is already in max, and i < a.length stops at the last index without going past the end"
+    lvl:loop_variable@L3#2 -> shown (0.24) "The loop then looks at every later element and, whenever one is bigger than max, max takes its value; The loop starts at i = 1; because a[0] is already in max, and i < a.length stops at the last index without going past the end"
     lvl:loop_variable@L2#1 -> shown (0.17) "The loop starts at i = 1; because a[0] is already in max, and i < a.length stops at the last index without going past the end"
   for_loop (misconceptions): 21 candidates -> kept err:for_loop->WrongIterationCount (0.40), mis:for_loop->IdiomOverridesCode (0.35), mis:for_loop->ForIsConditional (0.25)
     err:for_loop->WrongIterationCount -> correct (0.34) "The loop starts at i = 1; because a[0] is already in max, and i < a.length stops at the last index without going past the end"
@@ -1567,7 +1610,7 @@ start concepts (3): array_traversal, loop_control, indexing
   for_loop (level ways): 24 candidates -> kept lvl:for_loop@L3#2 (0.50), lvl:for_loop@L4#5 (0.25), lvl:for_loop@L3#8 (0.25)
     lvl:for_loop@L3#2 -> shown (0.40) "The loop starts at i = 1; because a[0] is already in max, and i < a.length stops at the last index without going past the end"
     lvl:for_loop@L4#5 -> not applied (0.00) ""
-    lvl:for_loop@L3#8 -> shown (0.20) "The loop then looks at every later element and, whenever one is bigger than max, max takes its value; The loop starts at i = 1; because a[0] is already in max, and i < a.length stops at the last index without going past the end"
+    lvl:for_loop@L3#8 -> shown (0.20) "The loop then looks at every later element and, whenever one is bigger than max, max takes its value; For any array, this code prints its largest element"
   kept: pre:indexing->array_bounds [confirmed, tier 2, 0.45], pre:loop_variable->loop_control [confirmed, tier 2, 0.44], pre:array_initializer->indexing [confirmed, tier 2, 0.42]
   reached across pre:indexing->array_bounds, entered next: array_bounds
   reached across pre:array_initializer->indexing, entered next: array_initializer
@@ -1578,9 +1621,9 @@ start concepts (3): array_traversal, loop_control, indexing
     mis:array_bounds->OffByOneBound -> correct (0.72) "because a[0] is already in max, and i < a.length stops at the last index without going past the end"
     mis:array_bounds->OutOfBoundsElementsAreNull -> not applied (0.00) ""
   array_bounds (level ways): 14 candidates -> kept lvl:array_bounds@L3#0 (0.40), lvl:array_bounds@L4#0 (0.35), lvl:array_bounds@L3#1 (0.25)
-    lvl:array_bounds@L3#0 -> shown (0.34) "because a[0] is already in max, and i < a.length stops at the last index without going past the end"
+    lvl:array_bounds@L3#0 -> shown (0.29) "The loop starts at i = 1; because a[0] is already in max, and i < a.length stops at the last index without going past the end"
     lvl:array_bounds@L4#0 -> not applied (0.00) ""
-    lvl:array_bounds@L3#1 -> shown (0.16) "because a[0] is already in max, and i < a.length stops at the last index without going past the end"
+    lvl:array_bounds@L3#1 -> not applied (0.00) ""
   indexing (concept edges): 1 candidates -> kept pre:indexing->array_traversal (1.00)
     pre:indexing->array_traversal -> confirmed (0.85) "The loop then looks at every later element and, whenever one is bigger than max, max takes its value; The loop starts at i = 1; because a[0] is already in max, and i < a.length stops at the last index without going past the end"
   loop_control (concept edges): 2 candidates -> kept pre:loop_control->for_loop (0.85), pre:loop_control->increment_operators (0.15)
@@ -1604,12 +1647,15 @@ start concepts (3): array_traversal, loop_control, indexing
   clause coverage: c1 <- mis:control_flow->ProgramEndsAfterLoop; c2 <- mis:indexing->ArrayIndexStartsAtOne; c3 <- err:array_traversal->EarlyReturnInLoop; c4 <- pre:array_traversal->running_extreme; c5 <- mis:array_traversal->IdiomOverridesCode; c6 <- mis:array_traversal->IdiomOverridesCode; c7 <- err:array_traversal->EarlyReturnInLoop
   not yet read: pre:array_declaration->array_initializer, pre:array_initializer->length_field
   root-cause walk: held on [], broken at [], prerequisites {'array_initializer': ['array_declaration'], 'indexing': ['array_initializer'], 'length_field': ['array_initializer'], 'running_extreme': ['array_traversal'], 'increment_operators': ['assignment', 'loop_control'], 'if_statement': ['boolean_expression', 'control_flow'], 'boolean_expression': ['comparison_operators'], 'array_declaration': ['data_structure'], 'data_structure': ['data_type'], 'comparison_operators': ['expression'], 'array_traversal': ['for_loop', 'indexing', 'length_field'], 'loop_body': ['for_loop'], 'loop_scope': ['for_loop'], 'array_bounds': ['indexing'], 'for_loop': ['loop_control'], 'loop_control': ['loop_variable'], 'control_flow': ['statement'], 'println': ['statement']}
-  level array_bounds: L3 via relation_to_neighbour "because a[0] is already in max, and i < a.length stops at the last index without going past the end"
+  level way lvl:indexing@L3#1 not counted: confidence 0.60 is not above 0.60
+  level way lvl:control_flow@L3#1 not counted: confidence 0.60 is not above 0.60
+  level way lvl:loop_variable@L3#0 not counted: confidence 0.60 is not above 0.60
+  level array_bounds: L3 via relation_to_neighbour "The loop starts at i = 1; because a[0] is already in max, and i < a.length stops at the last index without going past the end"
   level array_initializer: L2 via output_prediction "max starts as the first element, 3"
-  level array_traversal: L3 via purpose_of_the_whole "The loop then looks at every later element and, whenever one is bigger than max, max takes its value; For any array, this code prints its largest element"
-  level control_flow: L3 via relation_to_neighbour "The loop then looks at every later element and, whenever one is bigger than max, max takes its value; so after 8 it never changes"
+  level array_traversal: L3 via relation_to_neighbour "max starts as the first element, 3; The loop then looks at every later element and, whenever one is bigger than max, max takes its value; so after 8 it never changes; because a[0] is already in max, and i < a.length stops at the last index without going past the end"
+  level control_flow: L2 via line_by_line_trace "max starts as the first element, 3; The loop then looks at every later element and, whenever one is bigger than max, max takes its value; so after 8 it never changes; The loop starts at i = 1; because a[0] is already in max, and i < a.length stops at the last index without going past the end"
   level for_loop: L3 via relation_to_neighbour "The loop starts at i = 1; because a[0] is already in max, and i < a.length stops at the last index without going past the end"
-  level indexing: L3 via relation_to_neighbour "The loop then looks at every later element and, whenever one is bigger than max, max takes its value; The loop starts at i = 1; because a[0] is already in max, and i < a.length stops at the last index without going past the end"
+  level indexing: L3 via relation_to_neighbour "The loop starts at i = 1; because a[0] is already in max, and i < a.length stops at the last index without going past the end"
   level loop_control: L3 via relation_to_neighbour "The loop starts at i = 1; because a[0] is already in max, and i < a.length stops at the last index without going past the end"
   level loop_variable: L3 via purpose_of_the_whole "The loop then looks at every later element and, whenever one is bigger than max, max takes its value; The loop starts at i = 1; because a[0] is already in max, and i < a.length stops at the last index without going past the end"
 ```
@@ -1623,7 +1669,8 @@ start concepts (3): array_traversal, loop_control, indexing
   "depth": 3,
   "prune_tools": "llm",
   "model": "claude-opus-5-5",
-  "backend": "claude-cli"
+  "backend": "claude-cli",
+  "level_v2": true
  },
  "clauses": [
   "It prints 8",
@@ -1648,12 +1695,10 @@ start concepts (3): array_traversal, loop_control, indexing
   "array_bounds": {
    "level": "L3",
    "way": "relation_to_neighbour",
-   "quote": "because a[0] is already in max, and i < a.length stops at the last index without going past the end",
+   "quote": "The loop starts at i = 1; because a[0] is already in max, and i < a.length stops at the last index without going past the end",
    "edge": "lvl:array_bounds@L3#0",
    "source": "level_way",
-   "also_shown": [
-    "L3 relation_to_neighbour"
-   ]
+   "also_shown": []
   },
   "array_initializer": {
    "level": "L2",
@@ -1665,23 +1710,22 @@ start concepts (3): array_traversal, loop_control, indexing
   },
   "array_traversal": {
    "level": "L3",
-   "way": "purpose_of_the_whole",
-   "quote": "The loop then looks at every later element and, whenever one is bigger than max, max takes its value; For any array, this code prints its largest element",
-   "edge": "lvl:array_traversal@L3#8",
+   "way": "relation_to_neighbour",
+   "quote": "max starts as the first element, 3; The loop then looks at every later element and, whenever one is bigger than max, max takes its value; so after 8 it never changes; because a[0] is already in max, and i < a.length stops at the last index without going past the end",
+   "edge": "lvl:array_traversal@L3#6",
    "source": "level_way",
    "also_shown": [
-    "L3 relation_to_neighbour",
+    "L3 purpose_of_the_whole",
     "L3 relation_to_neighbour"
    ]
   },
   "control_flow": {
-   "level": "L3",
-   "way": "relation_to_neighbour",
-   "quote": "The loop then looks at every later element and, whenever one is bigger than max, max takes its value; so after 8 it never changes",
-   "edge": "lvl:control_flow@L3#1",
+   "level": "L2",
+   "way": "line_by_line_trace",
+   "quote": "max starts as the first element, 3; The loop then looks at every later element and, whenever one is bigger than max, max takes its value; so after 8 it never changes; The loop starts at i = 1; because a[0] is already in max, and i < a.length stops at the last index without going past the end",
+   "edge": "lvl:control_flow@L2#0",
    "source": "level_way",
    "also_shown": [
-    "L2 line_by_line_trace",
     "L2 output_prediction"
    ]
   },
@@ -1698,11 +1742,10 @@ start concepts (3): array_traversal, loop_control, indexing
   "indexing": {
    "level": "L3",
    "way": "relation_to_neighbour",
-   "quote": "The loop then looks at every later element and, whenever one is bigger than max, max takes its value; The loop starts at i = 1; because a[0] is already in max, and i < a.length stops at the last index without going past the end",
-   "edge": "lvl:indexing@L3#1",
+   "quote": "The loop starts at i = 1; because a[0] is already in max, and i < a.length stops at the last index without going past the end",
+   "edge": "lvl:indexing@L3#6",
    "source": "level_way",
    "also_shown": [
-    "L3 relation_to_neighbour",
     "L2 output_prediction"
    ]
   },
@@ -1724,7 +1767,6 @@ start concepts (3): array_traversal, loop_control, indexing
    "edge": "lvl:loop_variable@L3#2",
    "source": "level_way",
    "also_shown": [
-    "L3 relation_to_neighbour",
     "L2 output_prediction"
    ]
   }
@@ -1966,12 +2008,12 @@ start concepts (3): array_traversal, loop_control, indexing
     2,
     3,
     4,
-    7
+    6
    ],
-   "quote": "max starts as the first element, 3; The loop then looks at every later element and, whenever one is bigger than max, max takes its value; so after 8 it never changes; For any array, this code prints its largest element",
-   "confidence": 0.6,
+   "quote": "max starts as the first element, 3; The loop then looks at every later element and, whenever one is bigger than max, max takes its value; so after 8 it never changes; because a[0] is already in max, and i < a.length stops at the last index without going past the end",
+   "confidence": 0.72,
    "prune_score": 0.4,
-   "score": 0.24,
+   "score": 0.288,
    "logic": "The running maximum is found in one traversal that keeps the largest value seen so far, starting from Double.NEGATIVE_INFINITY.",
    "twin_logic": null,
    "level": "L3",
@@ -1985,13 +2027,14 @@ start concepts (3): array_traversal, loop_control, indexing
    "kind": "level",
    "label": "shown",
    "clauses": [
+    2,
     3,
     7
    ],
-   "quote": "The loop then looks at every later element and, whenever one is bigger than max, max takes its value; For any array, this code prints its largest element",
-   "confidence": 0.9,
+   "quote": "max starts as the first element, 3; The loop then looks at every later element and, whenever one is bigger than max, max takes its value; For any array, this code prints its largest element",
+   "confidence": 0.85,
    "prune_score": 0.3,
-   "score": 0.27,
+   "score": 0.255,
    "logic": "Plan/role: the index is a stepper, and the loop carries out a Soloway-style plan (accumulate/sum with a gatherer, count, search, find the extreme, copy) once for each element.",
    "twin_logic": null,
    "level": "L3",
@@ -2005,11 +2048,11 @@ start concepts (3): array_traversal, loop_control, indexing
    "kind": "level",
    "label": "shown",
    "clauses": [
-    3,
+    2,
     5,
     6
    ],
-   "quote": "The loop then looks at every later element and, whenever one is bigger than max, max takes its value; The loop starts at i = 1; because a[0] is already in max, and i < a.length stops at the last index without going past the end",
+   "quote": "max starts as the first element, 3; The loop starts at i = 1; because a[0] is already in max, and i < a.length stops at the last index without going past the end",
    "confidence": 0.8,
    "prune_score": 0.3,
    "score": 0.24,
@@ -2087,9 +2130,9 @@ start concepts (3): array_traversal, loop_control, indexing
     6
    ],
    "quote": "The loop starts at i = 1; because a[0] is already in max, and i < a.length stops at the last index without going past the end",
-   "confidence": 0.75,
+   "confidence": 0.72,
    "prune_score": 0.45,
-   "score": 0.3375,
+   "score": 0.324,
    "logic": "The initialization and the condition of a loop fix how many times it runs; one wrong bound makes it run once too many or too few.",
    "twin_logic": null,
    "level": "L3",
@@ -2105,9 +2148,10 @@ start concepts (3): array_traversal, loop_control, indexing
    "clauses": [
     3,
     5,
-    6
+    6,
+    7
    ],
-   "quote": "The loop then looks at every later element and, whenever one is bigger than max, max takes its value; The loop starts at i = 1; because a[0] is already in max, and i < a.length stops at the last index without going past the end",
+   "quote": "The loop then looks at every later element and, whenever one is bigger than max, max takes its value; The loop starts at i = 1; because a[0] is already in max, and i < a.length stops at the last index without going past the end; For any array, this code prints its largest element",
    "confidence": 0.8,
    "prune_score": 0.3,
    "score": 0.24,
@@ -2207,9 +2251,9 @@ start concepts (3): array_traversal, loop_control, indexing
     6
    ],
    "quote": "The loop then looks at every later element and, whenever one is bigger than max, max takes its value; The loop starts at i = 1; because a[0] is already in max, and i < a.length stops at the last index without going past the end",
-   "confidence": 0.75,
+   "confidence": 0.6,
    "prune_score": 0.4,
-   "score": 0.3,
+   "score": 0.24,
    "logic": "A traversal uses the loop variable as the index, so the same expression a[i] reaches a different element on each pass.",
    "twin_logic": null,
    "level": "L3",
@@ -2227,9 +2271,9 @@ start concepts (3): array_traversal, loop_control, indexing
     6
    ],
    "quote": "The loop starts at i = 1; because a[0] is already in max, and i < a.length stops at the last index without going past the end",
-   "confidence": 0.8,
+   "confidence": 0.7,
    "prune_score": 0.35,
-   "score": 0.28,
+   "score": 0.245,
    "logic": "Indices start at 0, so the last element is a[N-1]; misreading this convention is the usual source of off-by-one errors.",
    "twin_logic": null,
    "level": "L3",
@@ -2476,12 +2520,13 @@ start concepts (3): array_traversal, loop_control, indexing
    "label": "shown",
    "clauses": [
     3,
-    4
+    4,
+    6
    ],
-   "quote": "The loop then looks at every later element and, whenever one is bigger than max, max takes its value; so after 8 it never changes",
-   "confidence": 0.7,
+   "quote": "The loop then looks at every later element and, whenever one is bigger than max, max takes its value; so after 8 it never changes; because a[0] is already in max, and i < a.length stops at the last index without going past the end",
+   "confidence": 0.6,
    "prune_score": 0.25,
-   "score": 0.175,
+   "score": 0.15,
    "logic": "An if changes the default top-to-bottom flow: its condition is tested once when control reaches it, its block runs only if true, and in both cases control then continues with the next statement.",
    "twin_logic": null,
    "level": "L3",
@@ -2577,9 +2622,9 @@ start concepts (3): array_traversal, loop_control, indexing
     6
    ],
    "quote": "The loop then looks at every later element and, whenever one is bigger than max, max takes its value; The loop starts at i = 1; because a[0] is already in max, and i < a.length stops at the last index without going past the end",
-   "confidence": 0.85,
+   "confidence": 0.7,
    "prune_score": 0.35,
-   "score": 0.2975,
+   "score": 0.245,
    "logic": "Role: stepper - a variable stepping through a systematic, predictable succession of values; it counts passes and often serves as an index.",
    "twin_logic": null,
    "level": "L3",
@@ -2691,10 +2736,9 @@ start concepts (3): array_traversal, loop_control, indexing
    "label": "shown",
    "clauses": [
     3,
-    5,
-    6
+    7
    ],
-   "quote": "The loop then looks at every later element and, whenever one is bigger than max, max takes its value; The loop starts at i = 1; because a[0] is already in max, and i < a.length stops at the last index without going past the end",
+   "quote": "The loop then looks at every later element and, whenever one is bigger than max, max takes its value; For any array, this code prints its largest element",
    "confidence": 0.8,
    "prune_score": 0.25,
    "score": 0.2,
@@ -2729,32 +2773,14 @@ start concepts (3): array_traversal, loop_control, indexing
    "kind": "level",
    "label": "shown",
    "clauses": [
+    5,
     6
    ],
-   "quote": "because a[0] is already in max, and i < a.length stops at the last index without going past the end",
-   "confidence": 0.85,
+   "quote": "The loop starts at i = 1; because a[0] is already in max, and i < a.length stops at the last index without going past the end",
+   "confidence": 0.72,
    "prune_score": 0.4,
-   "score": 0.34,
+   "score": 0.288,
    "logic": "Every index value used in a[i] must satisfy 0 <= i <= a.length-1; the last element is a[a.length-1].",
-   "twin_logic": null,
-   "level": "L3",
-   "way": "relation_to_neighbour"
-  },
-  {
-   "depth": 3,
-   "source": "array_bounds",
-   "edge": "lvl:array_bounds@L3#1",
-   "target": "array_bounds@L3",
-   "kind": "level",
-   "label": "shown",
-   "clauses": [
-    6
-   ],
-   "quote": "because a[0] is already in max, and i < a.length stops at the last index without going past the end",
-   "confidence": 0.65,
-   "prune_score": 0.25,
-   "score": 0.1625,
-   "logic": "Because an out-of-bounds index stops the program, the loop test checks the bounds before the body uses the index (e.g. x > 0 && x < N-1 before a[x-1], a[x+1]).",
    "twin_logic": null,
    "level": "L3",
    "way": "relation_to_neighbour"
@@ -2923,11 +2949,43 @@ start concepts (3): array_traversal, loop_control, indexing
  "unexplained_clauses": [],
  "stop_reason": "max depth",
  "depth_reached": 3,
- "llm_calls": 5,
- "llm_cache_hits": 66,
+ "llm_calls": 0,
+ "llm_cache_hits": 71,
  "llm_calls_by_step": {
   "prune": 23,
   "label": 48
+ },
+ "level_v2": {
+  "wrong_ways": [],
+  "not_counted": [
+   {
+    "concept": "indexing",
+    "edge": "lvl:indexing@L3#1",
+    "level": "L3",
+    "way": "relation_to_neighbour",
+    "quote": "The loop then looks at every later element and, whenever one is bigger than max, max takes its value; The loop starts at i = 1; because a[0] is already in max, and i < a.length stops at the last index without going past the end",
+    "confidence": 0.6,
+    "reason": "confidence 0.60 is not above 0.60"
+   },
+   {
+    "concept": "control_flow",
+    "edge": "lvl:control_flow@L3#1",
+    "level": "L3",
+    "way": "relation_to_neighbour",
+    "quote": "The loop then looks at every later element and, whenever one is bigger than max, max takes its value; so after 8 it never changes; because a[0] is already in max, and i < a.length stops at the last index without going past the end",
+    "confidence": 0.6,
+    "reason": "confidence 0.60 is not above 0.60"
+   },
+   {
+    "concept": "loop_variable",
+    "edge": "lvl:loop_variable@L3#0",
+    "level": "L3",
+    "way": "relation_to_neighbour",
+    "quote": "The loop starts at i = 1; because a[0] is already in max, and i < a.length stops at the last index without going past the end",
+    "confidence": 0.6,
+    "reason": "confidence 0.60 is not above 0.60"
+   }
+  ]
  }
 }
 ```

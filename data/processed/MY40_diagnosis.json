@@ -5,7 +5,8 @@
   "depth": 3,
   "prune_tools": "llm",
   "model": "claude-opus-5-5",
-  "backend": "claude-cli"
+  "backend": "claude-cli",
+  "level_v2": true
  },
  "clauses": [
   "5",
@@ -49,15 +50,12 @@
  },
  "levels": {
   "for_loop": {
-   "level": "L3",
-   "way": "relation_to_neighbour",
-   "quote": "so in 10 steps the surfer goes there exactly 5 times",
-   "edge": "lvl:for_loop@L3#3",
+   "level": "L2",
+   "way": "output_prediction",
+   "quote": "5; so in 10 steps the surfer goes there exactly 5 times",
+   "edge": "lvl:for_loop@L2#1",
    "source": "level_way",
-   "also_shown": [
-    "L3 purpose_of_the_whole",
-    "L2 output_prediction"
-   ]
+   "also_shown": []
   },
   "frequency_counting": {
    "level": "L0",
@@ -67,14 +65,6 @@
    "edge": "mis:frequency_counting->FewTrialsAreExact",
    "rule": "wrong rule: A short simulation gives the exact page ranks. Right rule: freq[i]/T is only an estimate: about 10^n moves for n-digit precision and many more for accuracy.",
    "source": "level_mis_links"
-  },
-  "loop_control": {
-   "level": "L3",
-   "way": "purpose_of_the_whole",
-   "quote": "so in 10 steps the surfer goes there exactly 5 times",
-   "edge": "lvl:loop_control@L3#6",
-   "source": "level_way",
-   "also_shown": []
   },
   "math_random": {
    "level": "L0",
@@ -249,40 +239,40 @@
   {
    "depth": 4,
    "source": "for_loop",
-   "edge": "lvl:for_loop@L3#3",
-   "target": "for_loop@L3",
-   "kind": "level",
-   "label": "shown",
-   "clauses": [
-    3
-   ],
-   "quote": "so in 10 steps the surfer goes there exactly 5 times",
-   "confidence": 0.6,
-   "prune_score": 0.45,
-   "score": 0.27,
-   "logic": "A simulation runs a fixed number of trials with an outer for loop (for (int t = 0; t < T; t++)), each trial simulated inside the body.",
-   "twin_logic": null,
-   "level": "L3",
-   "way": "relation_to_neighbour"
-  },
-  {
-   "depth": 4,
-   "source": "for_loop",
-   "edge": "lvl:for_loop@L3#8",
-   "target": "for_loop@L3",
-   "kind": "level",
-   "label": "shown",
+   "edge": "mis:for_loop->ForIsConditional",
+   "target": "ForIsConditional",
+   "kind": "misconception",
+   "label": "correct",
    "clauses": [
     3
    ],
    "quote": "so in 10 steps the surfer goes there exactly 5 times",
    "confidence": 0.65,
-   "prune_score": 0.35,
-   "score": 0.2275,
-   "logic": "Plan: counted loop / counter-controlled repetition - do the body a known number of times, with the loop variable as a stepper (index, term number, trial number).",
+   "prune_score": 0.2,
+   "score": 0.13,
+   "logic": "The body of a for statement executes at most once.",
+   "twin_logic": "The body of a for statement runs once for every pass on which the condition is true, which can be many times.",
+   "role": "primary"
+  },
+  {
+   "depth": 4,
+   "source": "for_loop",
+   "edge": "lvl:for_loop@L2#1",
+   "target": "for_loop@L2",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    1,
+    3
+   ],
+   "quote": "5; so in 10 steps the surfer goes there exactly 5 times",
+   "confidence": 0.6,
+   "prune_score": 0.2,
+   "score": 0.12,
+   "logic": "A for statement has no value; the passes it makes are fixed by its header: for (int i = 1; i <= N; i++) sum += i; leaves sum = N(N+1)/2, and for (int i = 2; i <= 8; i += 2) prints 2, 4, 6, 8,.",
    "twin_logic": null,
-   "level": "L3",
-   "way": "purpose_of_the_whole"
+   "level": "L2",
+   "way": "output_prediction"
   }
  ],
  "evidence": [
@@ -380,25 +370,6 @@
    "logic": "i < n and i <= n mean the same, so the loop runs until i equals n and the last pass can use a[n].",
    "twin_logic": "for (i = 0; i < n; i++) runs n times with i going up to n - 1; with <= it runs n + 1 times and reaches i = n.",
    "role": "primary"
-  },
-  {
-   "depth": 2,
-   "source": "loop_control",
-   "edge": "lvl:loop_control@L3#6",
-   "target": "loop_control@L3",
-   "kind": "level",
-   "label": "shown",
-   "clauses": [
-    3
-   ],
-   "quote": "so in 10 steps the surfer goes there exactly 5 times",
-   "confidence": 0.6,
-   "prune_score": 0.3,
-   "score": 0.18,
-   "logic": "Plan: counter-controlled loop - the loop variable is a stepper that walks a predictable sequence of values (0..N-1, 1..N, every 2nd value) and fixes the number of passes in advance.",
-   "twin_logic": null,
-   "level": "L3",
-   "way": "purpose_of_the_whole"
   },
   {
    "depth": 2,
@@ -549,44 +520,6 @@
   {
    "depth": 4,
    "source": "for_loop",
-   "edge": "lvl:for_loop@L3#3",
-   "target": "for_loop@L3",
-   "kind": "level",
-   "label": "shown",
-   "clauses": [
-    3
-   ],
-   "quote": "so in 10 steps the surfer goes there exactly 5 times",
-   "confidence": 0.6,
-   "prune_score": 0.45,
-   "score": 0.27,
-   "logic": "A simulation runs a fixed number of trials with an outer for loop (for (int t = 0; t < T; t++)), each trial simulated inside the body.",
-   "twin_logic": null,
-   "level": "L3",
-   "way": "relation_to_neighbour"
-  },
-  {
-   "depth": 4,
-   "source": "for_loop",
-   "edge": "lvl:for_loop@L3#8",
-   "target": "for_loop@L3",
-   "kind": "level",
-   "label": "shown",
-   "clauses": [
-    3
-   ],
-   "quote": "so in 10 steps the surfer goes there exactly 5 times",
-   "confidence": 0.65,
-   "prune_score": 0.35,
-   "score": 0.2275,
-   "logic": "Plan: counted loop / counter-controlled repetition - do the body a known number of times, with the loop variable as a stepper (index, term number, trial number).",
-   "twin_logic": null,
-   "level": "L3",
-   "way": "purpose_of_the_whole"
-  },
-  {
-   "depth": 4,
-   "source": "for_loop",
    "edge": "lvl:for_loop@L2#1",
    "target": "for_loop@L2",
    "kind": "level",
@@ -613,10 +546,110 @@
  "unexplained_clauses": [],
  "stop_reason": "max depth",
  "depth_reached": 4,
- "llm_calls": 70,
- "llm_cache_hits": 0,
+ "llm_calls": 0,
+ "llm_cache_hits": 70,
  "llm_calls_by_step": {
   "prune": 24,
   "label": 46
+ },
+ "level_v2": {
+  "wrong_ways": [
+   {
+    "concept": "arithmetic_operators",
+    "edge": "lvl:arithmetic_operators@L3#4",
+    "level": "L3",
+    "way": "purpose_of_the_whole",
+    "clauses": [
+     2,
+     3
+    ],
+    "quote": "Page 1 has probability 0.5; so in 10 steps the surfer goes there exactly 5 times",
+    "confidence": 0.6
+   },
+   {
+    "concept": "math_random",
+    "edge": "lvl:math_random@L3#2",
+    "level": "L3",
+    "way": "relation_to_neighbour",
+    "clauses": [
+     2,
+     3
+    ],
+    "quote": "Page 1 has probability 0.5; so in 10 steps the surfer goes there exactly 5 times",
+    "confidence": 0.8
+   },
+   {
+    "concept": "loop_control",
+    "edge": "lvl:loop_control@L3#6",
+    "level": "L3",
+    "way": "purpose_of_the_whole",
+    "clauses": [
+     2,
+     3
+    ],
+    "quote": "Page 1 has probability 0.5; so in 10 steps the surfer goes there exactly 5 times",
+    "confidence": 0.75
+   },
+   {
+    "concept": "frequency_counting",
+    "edge": "lvl:frequency_counting@L3#1",
+    "level": "L3",
+    "way": "relation_to_neighbour",
+    "clauses": [
+     2,
+     3
+    ],
+    "quote": "Page 1 has probability 0.5; so in 10 steps the surfer goes there exactly 5 times",
+    "confidence": 0.8
+   },
+   {
+    "concept": "math_library",
+    "edge": "lvl:math_library@L3#3",
+    "level": "L3",
+    "way": "relation_to_neighbour",
+    "clauses": [
+     2,
+     3
+    ],
+    "quote": "Page 1 has probability 0.5; so in 10 steps the surfer goes there exactly 5 times",
+    "confidence": 0.6
+   },
+   {
+    "concept": "math_library",
+    "edge": "lvl:math_library@L3#6",
+    "level": "L3",
+    "way": "relation_to_neighbour",
+    "clauses": [
+     2,
+     3
+    ],
+    "quote": "Page 1 has probability 0.5; so in 10 steps the surfer goes there exactly 5 times",
+    "confidence": 0.55
+   },
+   {
+    "concept": "for_loop",
+    "edge": "lvl:for_loop@L3#3",
+    "level": "L3",
+    "way": "relation_to_neighbour",
+    "clauses": [
+     2,
+     3
+    ],
+    "quote": "Page 1 has probability 0.5; so in 10 steps the surfer goes there exactly 5 times",
+    "confidence": 0.6
+   },
+   {
+    "concept": "for_loop",
+    "edge": "lvl:for_loop@L3#8",
+    "level": "L3",
+    "way": "purpose_of_the_whole",
+    "clauses": [
+     3
+    ],
+    "quote": "so in 10 steps the surfer goes there exactly 5 times",
+    "confidence": 0.6
+   }
+  ],
+  "not_counted": []
  }
 }

@@ -20,8 +20,8 @@ for (int i = 0; i < 3; i++) {
 
 - **Wrong rules held:** none
 - **Root cause:** none
-- **Overall level:** L3
-- **Level per concept:** `for_loop` L3, `loop_body` L2, `loop_control` L3, `loop_variable` L2
+- **Overall level:** L2
+- **Level per concept:** `for_loop` L2, `loop_body` L2, `loop_control` L2, `loop_variable` L2
 
 **Check of this result (read by hand, 2026-11-13).** The diagnosis matches the answer: nothing is held.
 
@@ -75,7 +75,7 @@ At each depth, for each current concept, the following happens.
 
 *One of the outputs at this stage:* at `for_loop` the level ways family is pruned to: L2 way “output prediction” 0.50, L2 way “line by line trace” 0.30, L3 way “relation to neighbour” 0.20.
 
-**3.3 Label (model, second question).** Each edge that survived is now read against the numbered clauses and gets a **label**. For a misconception or error edge: **held** (the student's words state this wrong rule), **correct** (they state the right rule, its twin) or **not applied** (the answer says nothing about it). For a level way: **shown** or not applied. For a prerequisite or parallel edge: **confirmed** (the answer carries the rule from one concept into the other) or **broken** (it fails to). The misconception edges of one concept are judged together in a single question, because the same sentence can fit several wrong rules and the model should give *held* only to the one the student really claims. With the label the model must return the **clause numbers** it rests on and a **confidence** from 0 to 1. A label with no clause is discarded. This is the safeguard of the method: the model never diagnoses from its own knowledge; every label is attached to one edge of G and to the student's words.
+**3.3 Label (model, second question).** Each edge that survived is now read against the numbered clauses and gets a **label**. For a misconception or error edge: **held** (the student's words state this wrong rule), **correct** (they state the right rule, its twin) or **not applied** (the answer says nothing about it). For a level way: **shown** or not applied. For a way above L2 the question also gives where the way stops (its boundary, stored in the graph) and whether the words must be correct, and the model may answer **wrong** (the student does this kind of thing, but what is said contradicts Java); a wrong way is not shown. For a prerequisite or parallel edge: **confirmed** (the answer carries the rule from one concept into the other) or **broken** (it fails to). The misconception edges of one concept are judged together in a single question, because the same sentence can fit several wrong rules and the model should give *held* only to the one the student really claims. With the label the model must return the **clause numbers** it rests on and a **confidence** from 0 to 1. A label with no clause is discarded. This is the safeguard of the method: the model never diagnoses from its own knowledge; every label is attached to one edge of G and to the student's words.
 
 *One of the outputs at this stage:* L2 way “output prediction” at `for_loop` is labelled **shown** on clause 1 (“The first pass prints 0, the second prints 1, the third prints 2, and then the loop ends”) with confidence 0.95. The rule on that edge: “A for statement has no value; the passes it makes are fixed by its header: for (int i = 1; i <= N; i++) sum += i; leaves sum = N(N+1)/2, and for (int…”
 
@@ -155,7 +155,7 @@ Every concept has five **levels**, taken from the SOLO taxonomy: **L0** prestruc
 
 The model is never asked for a level. In stage 3 it only said whether a way was *shown*; the level is read from where that way sits in the graph, in two steps.
 
-**6.1 Gather the evidence per concept.** Take every concept that appears in the evidence of stage 3 (kept in 3.4 or not). For each one collect two lists: the misconceptions held on it that are not shadows, and the ways shown on it.
+**6.1 Gather the evidence per concept.** Take every concept that appears in the evidence of stage 3 (kept in 3.4 or not). For each one collect two lists: the misconceptions held on it that are not shadows, and the ways shown on it. A shown way above L2 is counted only if two things hold: the model's confidence in it is above 0.60, and its clauses are not all clauses that a held misconception rests on. So a weak yes, or a wrong sentence already counted as a misconception, cannot lift a concept to L3 or L4.
 
 *One of the outputs at this stage:* 4 concepts appear in the evidence: `for_loop`, `loop_body`, `loop_control`, `loop_variable`.
 
@@ -172,9 +172,9 @@ A held error node is not a misconception, so rule (a) does not apply to it.
 
 | Concept | Level | Rule | Why |
 |---|---|---|---|
-| `for_loop` | L3 | (c) | ways shown: L2 “output prediction”, L2 “line by line trace”, L3 “relation to neighbour” |
+| `for_loop` | L2 | (c) | ways shown: L2 “output prediction”, L2 “line by line trace” |
 | `loop_body` | L2 | (c) | ways shown: L2 “output prediction”, L2 “line by line trace”, L2 “one step execution” |
-| `loop_control` | L3 | (c) | ways shown: L2 “output prediction”, L2 “line by line trace”, L3 “purpose of the whole” |
+| `loop_control` | L2 | (c) | ways shown: L2 “output prediction”, L2 “line by line trace” |
 | `loop_variable` | L2 | (c) | ways shown: L1 “states the rule”, L2 “output prediction”, L2 “line by line trace” |
 
 ## Stage 7. Overall level (rule, no model)
@@ -185,7 +185,7 @@ One level is reported for the whole answer.
 
 **7.2 Without a fault.** The levels of stage 6 are sorted from high to low and the one in the middle is taken: with n levels, the one at position (n − 1) ÷ 2, rounded down and counted from 0. So one weak or one strong concept does not decide for the whole answer.
 
-*One of the outputs at this stage:* 7.2 applies: there is no root cause. The levels from high to low are L3, L3, L2, L2; position (4 − 1) ÷ 2 = 1, counted from 0, is **L3**.
+*One of the outputs at this stage:* 7.2 applies: there is no root cause. The levels from high to low are L2, L2, L2, L2; position (4 − 1) ÷ 2 = 1, counted from 0, is **L2**.
 
 ## The final picture
 

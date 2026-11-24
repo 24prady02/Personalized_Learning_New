@@ -31,7 +31,7 @@ System.out.println(freq[1]);
 - **Wrong rules held:** FewTrialsAreExact at `frequency_counting`, ProbabilityIsPrediction at `math_random`
 - **Root cause:** `frequency_counting` / FewTrialsAreExact
 - **Overall level:** L0
-- **Level per concept:** `for_loop` L3, `frequency_counting` L0, `loop_control` L3, `math_random` L0, `println` L2
+- **Level per concept:** `for_loop` L2, `frequency_counting` L0, `math_random` L0, `println` L2
 
 **Check of this result (read by hand, 2026-11-14).** The diagnosis matches the answer. This scenario was run again without the line beginning 'Actual:', which had been pasted into the answer box. With only the student's own words the walk also holds FewTrialsAreExact (a short simulation gives the exact value), which states the student's claim of "exactly 5 times" directly and is now the root cause; ProbabilityIsPrediction is still held.
 
@@ -85,7 +85,7 @@ At each depth, for each current concept, the following happens.
 
 *One of the outputs at this stage:* at `frequency_counting` the misconception family is pruned to: FewTrialsAreExact 0.90, ManyDigitsMeanAccurate 0.10.
 
-**3.3 Label (model, second question).** Each edge that survived is now read against the numbered clauses and gets a **label**. For a misconception or error edge: **held** (the student's words state this wrong rule), **correct** (they state the right rule, its twin) or **not applied** (the answer says nothing about it). For a level way: **shown** or not applied. For a prerequisite or parallel edge: **confirmed** (the answer carries the rule from one concept into the other) or **broken** (it fails to). The misconception edges of one concept are judged together in a single question, because the same sentence can fit several wrong rules and the model should give *held* only to the one the student really claims. With the label the model must return the **clause numbers** it rests on and a **confidence** from 0 to 1. A label with no clause is discarded. This is the safeguard of the method: the model never diagnoses from its own knowledge; every label is attached to one edge of G and to the student's words.
+**3.3 Label (model, second question).** Each edge that survived is now read against the numbered clauses and gets a **label**. For a misconception or error edge: **held** (the student's words state this wrong rule), **correct** (they state the right rule, its twin) or **not applied** (the answer says nothing about it). For a level way: **shown** or not applied. For a way above L2 the question also gives where the way stops (its boundary, stored in the graph) and whether the words must be correct, and the model may answer **wrong** (the student does this kind of thing, but what is said contradicts Java); a wrong way is not shown. For a prerequisite or parallel edge: **confirmed** (the answer carries the rule from one concept into the other) or **broken** (it fails to). The misconception edges of one concept are judged together in a single question, because the same sentence can fit several wrong rules and the model should give *held* only to the one the student really claims. With the label the model must return the **clause numbers** it rests on and a **confidence** from 0 to 1. A label with no clause is discarded. This is the safeguard of the method: the model never diagnoses from its own knowledge; every label is attached to one edge of G and to the student's words.
 
 *One of the outputs at this stage:* FewTrialsAreExact at `frequency_counting` is labelled **held** on clauses 1, 2, 3 (“5; Page 1 has probability 0.5; so in 10 steps the surfer goes there exactly 5 times”) with confidence 0.92. The rule on that edge: “A short simulation gives the exact page ranks.”
 
@@ -168,7 +168,7 @@ Every concept has five **levels**, taken from the SOLO taxonomy: **L0** prestruc
 
 The model is never asked for a level. In stage 3 it only said whether a way was *shown*; the level is read from where that way sits in the graph, in two steps.
 
-**6.1 Gather the evidence per concept.** Take every concept that appears in the evidence of stage 3 (kept in 3.4 or not). For each one collect two lists: the misconceptions held on it that are not shadows, and the ways shown on it.
+**6.1 Gather the evidence per concept.** Take every concept that appears in the evidence of stage 3 (kept in 3.4 or not). For each one collect two lists: the misconceptions held on it that are not shadows, and the ways shown on it. A shown way above L2 is counted only if two things hold: the model's confidence in it is above 0.60, and its clauses are not all clauses that a held misconception rests on. So a weak yes, or a wrong sentence already counted as a misconception, cannot lift a concept to L3 or L4.
 
 *One of the outputs at this stage:* 8 concepts appear in the evidence: `counter_pattern`, `for_loop`, `frequency_counting`, `loop_control`, `loop_variable`, `math_library`, `math_random`, `println`.
 
@@ -186,11 +186,11 @@ A held error node is not a misconception, so rule (a) does not apply to it.
 | Concept | Level | Rule | Why |
 |---|---|---|---|
 | `counter_pattern` | none | (d) | nothing held, no way shown |
-| `for_loop` | L3 | (c) | ways shown: L2 “output prediction”, L3 “relation to neighbour”, L3 “purpose of the whole” |
+| `for_loop` | L2 | (c) | ways shown: L2 “output prediction”; answered wrong: L3 “relation to neighbour”, L3 “purpose of the whole” |
 | `frequency_counting` | L0 | (a) | holds FewTrialsAreExact |
-| `loop_control` | L3 | (c) | ways shown: L3 “purpose of the whole” |
+| `loop_control` | none | (d) | nothing held, no counted way; answered wrong: L3 “purpose of the whole” |
 | `loop_variable` | none | (d) | nothing held, no way shown |
-| `math_library` | none | (d) | nothing held, no way shown |
+| `math_library` | none | (d) | nothing held, no counted way; answered wrong: L3 “relation to neighbour” |
 | `math_random` | L0 | (a) | holds ProbabilityIsPrediction |
 | `println` | L2 | (c) | ways shown: L2 “output prediction” |
 

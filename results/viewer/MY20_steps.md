@@ -172,8 +172,10 @@ Clauses: none
 Confidence: 0.85
 ```
 
-Label prompt for level way lvl:arithmetic_operators@L3#0 (the model saw only the concept, the way's name 'relation to neighbour' and its text; no level):
+Label prompt for level way lvl:arithmetic_operators@L3#0 (the model saw the concept, the way's name 'relation to neighbour', its text, where the way stops and whether the words must be correct; no level):
 > Operators build larger expressions from smaller ones, and each operand can itself be any expression.
+>
+> Where this way stops: Two correct but separate rules are L1. Executing the two in sequence is L2. A relational answer may be correct or a relational error.
 
 Model's reply:
 ```
@@ -258,24 +260,28 @@ Prune: the model's reply (edge id and score; the kept edges sum to 1):
 ```
 Kept by pruning: lvl:explicit_cast@L3#1 (0.50), lvl:explicit_cast@L3#5 (0.30), lvl:explicit_cast@L2#1 (0.20)
 
-Label prompt for level way lvl:explicit_cast@L3#1 (the model saw only the concept, the way's name 'relation to neighbour' and its text; no level):
+Label prompt for level way lvl:explicit_cast@L3#1 (the model saw the concept, the way's name 'relation to neighbour', its text, where the way stops and whether the words must be correct; no level):
 > To turn Math.random()'s double into a random int from 0 to N-1, the cast must enclose the product: (int) (Math.random() * N); casting first gives 0.
+>
+> Where this way stops: Two correct but separate rules are L1. Executing the two in sequence is L2. A relational answer may be correct or a relational error.
 
 Model's reply:
 ```
 Label: not shown
 Clauses: none
-Confidence: 0.7
+Confidence: 0.85
 ```
 
-Label prompt for level way lvl:explicit_cast@L3#5 (the model saw only the concept, the way's name 'purpose of the whole' and its text; no level):
+Label prompt for level way lvl:explicit_cast@L3#5 (the model saw the concept, the way's name 'purpose of the whole', its text, where the way stops and whether the words must be correct; no level):
 > Used to discard information on purpose: truncating a scaled random number to an index, taking the integer part, converting between char and int codes ((char) ('a' + k)), or forcing real division with (double) sum / n.
+>
+> Where this way stops: Narrating the lines is L2. A purpose induced from a few traced cases is L2. A wrong purpose is still L3, but with an error.
 
 Model's reply:
 ```
 Label: not shown
 Clauses: none
-Confidence: 0.6
+Confidence: 0.8
 ```
 
 Label prompt for level way lvl:explicit_cast@L2#1 (the model saw only the concept, the way's name 'output prediction' and its text; no level):
@@ -365,14 +371,16 @@ Clauses: 1
 Confidence: 0.9
 ```
 
-Label prompt for level way lvl:math_random@L4#0 (the model saw only the concept, the way's name 'predict a change' and its text; no level):
+Label prompt for level way lvl:math_random@L4#0 (the model saw the concept, the way's name 'predict a change', its text, where the way stops and whether the words must be correct; no level):
 > Changing N in (int) (Math.random() * N) changes the range to 0..N-1, and adding a constant shifts it; the output changes from run to run, so a program using Math.random() cannot be checked by comparing exact outputs, only by statistics over many runs.
+>
+> Where this way stops: Re-tracing the changed code value by value is L2 on the new code. Adapting given code to a familiar variant may be only relational.
 
 Model's reply:
 ```
 Label: not shown
 Clauses: none
-Confidence: 0.85
+Confidence: 0.88
 ```
 
 Label prompt for level way lvl:math_random@L1#1 (the model saw only the concept, the way's name 'states the rule' and its text; no level):
@@ -591,8 +599,10 @@ Prune: the model's reply (edge id and score; the kept edges sum to 1):
 ```
 Kept by pruning: lvl:math_library@L3#1 (0.50), lvl:math_library@L3#3 (0.30), lvl:math_library@L2#2 (0.20)
 
-Label prompt for level way lvl:math_library@L3#1 (the model saw only the concept, the way's name 'relation to neighbour' and its text; no level):
+Label prompt for level way lvl:math_library@L3#1 (the model saw the concept, the way's name 'relation to neighbour', its text, where the way stops and whether the words must be correct; no level):
 > In the shuffle, r = i + (int) (Math.random() * (N-i)) scales Math.random() to a uniformly random position between i and N-1, so each remaining card is equally likely.
+>
+> Where this way stops: Two correct but separate rules are L1. Executing the two in sequence is L2. A relational answer may be correct or a relational error.
 
 Model's reply:
 ```
@@ -601,14 +611,16 @@ Clauses: none
 Confidence: 0.8
 ```
 
-Label prompt for level way lvl:math_library@L3#3 (the model saw only the concept, the way's name 'relation to neighbour' and its text; no level):
+Label prompt for level way lvl:math_library@L3#3 (the model saw the concept, the way's name 'relation to neighbour', its text, where the way stops and whether the words must be correct; no level):
 > Math.random() is the one Math method that takes no argument and is not a mathematical function: it returns a random double in [0, 1).
+>
+> Where this way stops: Two correct but separate rules are L1. Executing the two in sequence is L2. A relational answer may be correct or a relational error.
 
 Model's reply:
 ```
 Label: not shown
 Clauses: none
-Confidence: 0.9
+Confidence: 0.8
 ```
 
 Label prompt for level way lvl:math_library@L2#2 (the model saw only the concept, the way's name 'one step execution' and its text; no level):
@@ -719,14 +731,16 @@ Clauses: none
 Confidence: 0.6
 ```
 
-Label prompt for level way lvl:expression@L3#1 (the model saw only the concept, the way's name 'relation to neighbour' and its text; no level):
+Label prompt for level way lvl:expression@L3#1 (the model saw the concept, the way's name 'relation to neighbour', its text, where the way stops and whether the words must be correct; no level):
 > Operators combine operand values into a new value, and the operand types choose the operation (int / truncates, double / does not).
+>
+> Where this way stops: Two correct but separate rules are L1. Executing the two in sequence is L2. A relational answer may be correct or a relational error.
 
 Model's reply:
 ```
 Label: not shown
 Clauses: none
-Confidence: 0.6
+Confidence: 0.85
 ```
 
 Parsed labels:
@@ -858,36 +872,40 @@ Clauses: 1
 Confidence: 0.6
 ```
 
-Label prompt for level way lvl:type_conversion@L3#2 (the model saw only the concept, the way's name 'relation to neighbour' and its text; no level):
+Label prompt for level way lvl:type_conversion@L3#2 (the model saw the concept, the way's name 'relation to neighbour', its text, where the way stops and whether the words must be correct; no level):
 > A cast is the explicit conversion between primitive types, required when information may be lost: (int) 2.71828 is 2.
-
-Model's reply:
-```
-Label: shown
-Clauses: 1
-Confidence: 0.6
-```
-
-Label prompt for level way lvl:type_conversion@L3#0 (the model saw only the concept, the way's name 'relation to neighbour' and its text; no level):
-> Conversions between primitive types follow their ranges: int to double happens automatically, double to int needs a cast that drops the fraction, and boolean converts to no numeric type.
+>
+> Where this way stops: Two correct but separate rules are L1. Executing the two in sequence is L2. A relational answer may be correct or a relational error.
 
 Model's reply:
 ```
 Label: not shown
 Clauses: none
-Confidence: 0.7
+Confidence: 0.8
+```
+
+Label prompt for level way lvl:type_conversion@L3#0 (the model saw the concept, the way's name 'relation to neighbour', its text, where the way stops and whether the words must be correct; no level):
+> Conversions between primitive types follow their ranges: int to double happens automatically, double to int needs a cast that drops the fraction, and boolean converts to no numeric type.
+>
+> Where this way stops: Two correct but separate rules are L1. Executing the two in sequence is L2. A relational answer may be correct or a relational error.
+
+Model's reply:
+```
+Label: not shown
+Clauses: none
+Confidence: 0.8
 ```
 
 Parsed labels:
 | edge | label | prune score | confidence | score | clauses | words |
 |---|---|---|---|---|---|---|
 | lvl:type_conversion@L2#1 | shown | 0.4 | 0.6 | 0.24 | c1 | n is a whole number from 1 to 6, for example 4 |
-| lvl:type_conversion@L3#2 | shown | 0.35 | 0.6 | 0.21 | c1 | n is a whole number from 1 to 6, for example 4 |
+| lvl:type_conversion@L3#2 | not applied |  |  | 0.0 |  |  |
 | lvl:type_conversion@L3#0 | not applied |  |  | 0.0 |  |  |
 
 **Kept on a path at this depth** (best N in tiers: held misconception / broken edge, then held error, then correct / confirmed / shown):
 
-lvl:type_conversion@L2#1 [shown, tier 2, 0.24], lvl:type_conversion@L3#2 [shown, tier 2, 0.21]
+lvl:type_conversion@L2#1 [shown, tier 2, 0.24]
 
 **Clause coverage after this depth:**
 | clause | text | covered by |
@@ -904,9 +922,9 @@ Root-cause walk: held on [], broken at [], prerequisites {'expression': ['arithm
 - explicit_cast: L2 via output_prediction "n is a whole number from 1 to 6, for example 4"
 - expression: L2 via output_prediction "n is a whole number from 1 to 6, for example 4"
 - math_random: L2 via output_prediction "n is a whole number from 1 to 6, for example 4"
-- type_conversion: L3 via relation_to_neighbour "n is a whole number from 1 to 6, for example 4"
+- type_conversion: L2 via output_prediction "n is a whole number from 1 to 6, for example 4"
 
-**Stop:** max depth at depth 4; prompts {'prune': 16, 'label': 29}, fresh model calls 6, cache hits 39
+**Stop:** max depth at depth 4; prompts {'prune': 16, 'label': 29}, fresh model calls 0, cache hits 45
 
 ### Held misconceptions
 (none)
@@ -923,7 +941,7 @@ Root-cause walk: held on [], broken at [], prerequisites {'expression': ['arithm
 | explicit_cast | L2 | output_prediction |  | level_way | n is a whole number from 1 to 6, for example 4 |  |  |  |
 | expression | L2 | output_prediction |  | level_way | n is a whole number from 1 to 6, for example 4 |  |  |  |
 | math_random | L2 | output_prediction |  | level_way | n is a whole number from 1 to 6, for example 4 |  | L1 states_the_rule |  |
-| type_conversion | L3 | relation_to_neighbour |  | level_way | n is a whole number from 1 to 6, for example 4 |  | L2 output_prediction |  |
+| type_conversion | L2 | output_prediction |  | level_way | n is a whole number from 1 to 6, for example 4 |  |  |  |
 
 ### Overall level: L2
 
@@ -952,7 +970,6 @@ Figure 8 (final picture): C:\Users\magnu\OneDrive\Desktop\ES_VIterbi_Personalize
 | 3 | expression | lvl:expression@L2#1 | level | shown | 0.5 | 0.75 | 0.375 | [1] | n is a whole number from 1 to 6, for example 4 |
 | 3 | explicit_cast | pre:type_conversion->explicit_cast | prerequisite | confirmed | 1.0 | 0.8 | 0.8 | [1] | n is a whole number from 1 to 6, for example 4 |
 | 4 | type_conversion | lvl:type_conversion@L2#1 | level | shown | 0.4 | 0.6 | 0.24 | [1] | n is a whole number from 1 to 6, for example 4 |
-| 4 | type_conversion | lvl:type_conversion@L3#2 | level | shown | 0.35 | 0.6 | 0.21 | [1] | n is a whole number from 1 to 6, for example 4 |
 
 ## 6. The paths (what the keep step kept, depth by depth)
 | depth | source | edge | kind | label | score | clauses |
@@ -967,7 +984,6 @@ Figure 8 (final picture): C:\Users\magnu\OneDrive\Desktop\ES_VIterbi_Personalize
 | 3 | math_library | mis:math_library->CastRounds | misconception | correct | 0.6 | [1] |
 | 3 | expression | lvl:expression@L2#1 | level | shown | 0.375 | [1] |
 | 4 | type_conversion | lvl:type_conversion@L2#1 | level | shown | 0.24 | [1] |
-| 4 | type_conversion | lvl:type_conversion@L3#2 | level | shown | 0.21 | [1] |
 
 ## 7. Raw traversal log
 ```
@@ -1045,9 +1061,9 @@ start concepts (3): arithmetic_operators, explicit_cast, math_random
     mis:type_conversion->TargetTyping -> not applied (0.00) ""
   type_conversion (level ways): 18 candidates -> kept lvl:type_conversion@L2#1 (0.40), lvl:type_conversion@L3#2 (0.35), lvl:type_conversion@L3#0 (0.25)
     lvl:type_conversion@L2#1 -> shown (0.24) "n is a whole number from 1 to 6, for example 4"
-    lvl:type_conversion@L3#2 -> shown (0.21) "n is a whole number from 1 to 6, for example 4"
+    lvl:type_conversion@L3#2 -> not applied (0.00) ""
     lvl:type_conversion@L3#0 -> not applied (0.00) ""
-  kept: lvl:type_conversion@L2#1 [shown, tier 2, 0.24], lvl:type_conversion@L3#2 [shown, tier 2, 0.21]
+  kept: lvl:type_conversion@L2#1 [shown, tier 2, 0.24]
   clause coverage: c1 <- mis:explicit_cast->CastRounds
   not yet read: pre:expression->method_call, pre:method_call->math_library, pre:primitive_type->type_conversion
   root-cause walk: held on [], broken at [], prerequisites {'expression': ['arithmetic_operators'], 'math_random': ['explicit_cast', 'math_library'], 'method_call': ['expression'], 'api': ['method_call'], 'math_library': ['method_call'], 'type_conversion': ['primitive_type'], 'println': ['statement'], 'explicit_cast': ['type_conversion']}
@@ -1055,7 +1071,7 @@ start concepts (3): arithmetic_operators, explicit_cast, math_random
   level explicit_cast: L2 via output_prediction "n is a whole number from 1 to 6, for example 4"
   level expression: L2 via output_prediction "n is a whole number from 1 to 6, for example 4"
   level math_random: L2 via output_prediction "n is a whole number from 1 to 6, for example 4"
-  level type_conversion: L3 via relation_to_neighbour "n is a whole number from 1 to 6, for example 4"
+  level type_conversion: L2 via output_prediction "n is a whole number from 1 to 6, for example 4"
 ```
 
 ## 8. Full diagnosis JSON
@@ -1067,7 +1083,8 @@ start concepts (3): arithmetic_operators, explicit_cast, math_random
   "depth": 3,
   "prune_tools": "llm",
   "model": "claude-opus-5-5",
-  "backend": "claude-cli"
+  "backend": "claude-cli",
+  "level_v2": true
  },
  "clauses": [
   "n is a whole number from 1 to 6, for example 4"
@@ -1118,14 +1135,12 @@ start concepts (3): arithmetic_operators, explicit_cast, math_random
    ]
   },
   "type_conversion": {
-   "level": "L3",
-   "way": "relation_to_neighbour",
+   "level": "L2",
+   "way": "output_prediction",
    "quote": "n is a whole number from 1 to 6, for example 4",
-   "edge": "lvl:type_conversion@L3#2",
+   "edge": "lvl:type_conversion@L2#1",
    "source": "level_way",
-   "also_shown": [
-    "L2 output_prediction"
-   ]
+   "also_shown": []
   }
  },
  "overall_level": "L2",
@@ -1308,25 +1323,6 @@ start concepts (3): arithmetic_operators, explicit_cast, math_random
    "twin_logic": null,
    "level": "L2",
    "way": "output_prediction"
-  },
-  {
-   "depth": 4,
-   "source": "type_conversion",
-   "edge": "lvl:type_conversion@L3#2",
-   "target": "type_conversion@L3",
-   "kind": "level",
-   "label": "shown",
-   "clauses": [
-    1
-   ],
-   "quote": "n is a whole number from 1 to 6, for example 4",
-   "confidence": 0.6,
-   "prune_score": 0.35,
-   "score": 0.21,
-   "logic": "A cast is the explicit conversion between primitive types, required when information may be lost: (int) 2.71828 is 2.",
-   "twin_logic": null,
-   "level": "L3",
-   "way": "relation_to_neighbour"
   }
  ],
  "evidence": [
@@ -1600,25 +1596,6 @@ start concepts (3): arithmetic_operators, explicit_cast, math_random
    "twin_logic": null,
    "level": "L2",
    "way": "output_prediction"
-  },
-  {
-   "depth": 4,
-   "source": "type_conversion",
-   "edge": "lvl:type_conversion@L3#2",
-   "target": "type_conversion@L3",
-   "kind": "level",
-   "label": "shown",
-   "clauses": [
-    1
-   ],
-   "quote": "n is a whole number from 1 to 6, for example 4",
-   "confidence": 0.6,
-   "prune_score": 0.35,
-   "score": 0.21,
-   "logic": "A cast is the explicit conversion between primitive types, required when information may be lost: (int) 2.71828 is 2.",
-   "twin_logic": null,
-   "level": "L3",
-   "way": "relation_to_neighbour"
   }
  ],
  "clause_coverage": {
@@ -1627,11 +1604,15 @@ start concepts (3): arithmetic_operators, explicit_cast, math_random
  "unexplained_clauses": [],
  "stop_reason": "max depth",
  "depth_reached": 4,
- "llm_calls": 6,
- "llm_cache_hits": 39,
+ "llm_calls": 0,
+ "llm_cache_hits": 45,
  "llm_calls_by_step": {
   "prune": 16,
   "label": 29
+ },
+ "level_v2": {
+  "wrong_ways": [],
+  "not_counted": []
  }
 }
 ```

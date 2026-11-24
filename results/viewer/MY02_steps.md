@@ -165,14 +165,16 @@ Clauses: 4, 5
 Confidence: 0.55
 ```
 
-Label prompt for level way lvl:remainder_operator@L3#0 (the model saw only the concept, the way's name 'relation to neighbour' and its text; no level):
+Label prompt for level way lvl:remainder_operator@L3#0 (the model saw the concept, the way's name 'relation to neighbour', its text, where the way stops and whether the words must be correct; no level):
 > % is the companion of integer division, since a == (a / b) * b + a % b. Both use the same quotient rounded toward 0.
+>
+> Where this way stops: Two correct but separate rules are L1. Executing the two in sequence is L2. A relational answer may be correct or a relational error.
 
 Model's reply:
 ```
-Label: shown
-Clauses: 6
-Confidence: 0.6
+Label: wrong
+Clauses: 3, 5, 6
+Confidence: 0.85
 ```
 
 Parsed labels:
@@ -180,7 +182,6 @@ Parsed labels:
 |---|---|---|---|---|---|---|
 | lvl:remainder_operator@L0#0 | shown | 0.4 | 0.9 | 0.36 | c4, c5, c6 | A remainder is never negative; so -7 % 2 is 1; because -4 * 2 + 1 = -7 |
 | lvl:remainder_operator@L0#3 | shown | 0.35 | 0.55 | 0.19 | c4, c5 | A remainder is never negative; so -7 % 2 is 1 |
-| lvl:remainder_operator@L3#0 | shown | 0.25 | 0.6 | 0.15 | c6 | because -4 * 2 + 1 = -7 |
 
 #### arithmetic_operators, misconceptions: 3 edges offered
 Edges offered:
@@ -241,14 +242,16 @@ Prune: the model's reply (edge id and score; the kept edges sum to 1):
 ```
 Kept by pruning: lvl:arithmetic_operators@L3#1 (0.50), lvl:arithmetic_operators@L2#1 (0.35), lvl:arithmetic_operators@L2#0 (0.15)
 
-Label prompt for level way lvl:arithmetic_operators@L3#1 (the model saw only the concept, the way's name 'relation to neighbour' and its text; no level):
+Label prompt for level way lvl:arithmetic_operators@L3#1 (the model saw the concept, the way's name 'relation to neighbour', its text, where the way stops and whether the words must be correct; no level):
 > For ints, / gives the truncated quotient and % the remainder, so (a / b) * b + a % b == a.
+>
+> Where this way stops: Two correct but separate rules are L1. Executing the two in sequence is L2. A relational answer may be correct or a relational error.
 
 Model's reply:
 ```
-Label: shown
-Clauses: 6
-Confidence: 0.6
+Label: wrong
+Clauses: 2, 3, 4, 5, 6
+Confidence: 0.85
 ```
 
 Label prompt for level way lvl:arithmetic_operators@L2#1 (the model saw only the concept, the way's name 'output prediction' and its text; no level):
@@ -272,11 +275,7 @@ Confidence: 0.7
 ```
 
 Parsed labels:
-| edge | label | prune score | confidence | score | clauses | words |
-|---|---|---|---|---|---|---|
-| lvl:arithmetic_operators@L3#1 | shown | 0.5 | 0.6 | 0.3 | c6 | because -4 * 2 + 1 = -7 |
-| lvl:arithmetic_operators@L2#1 | not applied |  |  | 0.0 |  |  |
-| lvl:arithmetic_operators@L2#0 | not applied |  |  | 0.0 |  |  |
+(none)
 
 #### integer_division, misconceptions: 6 edges offered
 Edges offered:
@@ -344,24 +343,28 @@ Prune: the model's reply (edge id and score; the kept edges sum to 1):
 ```
 Kept by pruning: lvl:integer_division@L4#4 (0.50), lvl:integer_division@L3#0 (0.30), lvl:integer_division@L1#1 (0.20)
 
-Label prompt for level way lvl:integer_division@L4#4 (the model saw only the concept, the way's name 'diagnose an error' and its text; no level):
+Label prompt for level way lvl:integer_division@L4#4 (the model saw the concept, the way's name 'diagnose an error', its text, where the way stops and whether the words must be correct; no level):
 > rule broken: Integer division rounds toward zero, not down. Kind: silent logic error. Trigger class: Negative operands where floor was expected (-7 / 2 is -3, not -4).
+>
+> Where this way stops: Locating and fixing the mistake for one given failing case is L3. A compiler-flagged slip fixed from the message is weak evidence.
 
 Model's reply:
 ```
 Label: not shown
 Clauses: none
-Confidence: 0.9
+Confidence: 0.8
 ```
 
-Label prompt for level way lvl:integer_division@L3#0 (the model saw only the concept, the way's name 'relation to neighbour' and its text; no level):
+Label prompt for level way lvl:integer_division@L3#0 (the model saw the concept, the way's name 'relation to neighbour', its text, where the way stops and whether the words must be correct; no level):
 > / and % on ints are paired: q = a / b and r = a % b always satisfy a = b * q + r.
+>
+> Where this way stops: Two correct but separate rules are L1. Executing the two in sequence is L2. A relational answer may be correct or a relational error.
 
 Model's reply:
 ```
-Label: shown
-Clauses: 6
-Confidence: 0.85
+Label: wrong
+Clauses: 2, 4, 6
+Confidence: 0.8
 ```
 
 Label prompt for level way lvl:integer_division@L1#1 (the model saw only the concept, the way's name 'states the rule' and its text; no level):
@@ -378,8 +381,6 @@ Parsed labels:
 | edge | label | prune score | confidence | score | clauses | words |
 |---|---|---|---|---|---|---|
 | lvl:integer_division@L4#4 | not applied |  |  | 0.0 |  |  |
-| lvl:integer_division@L3#0 | shown | 0.3 | 0.85 | 0.26 | c6 | because -4 * 2 + 1 = -7 |
-| lvl:integer_division@L1#1 | not applied |  |  | 0.0 |  |  |
 
 **Kept on a path at this depth** (best N in tiers: held misconception / broken edge, then held error, then correct / confirmed / shown):
 
@@ -591,14 +592,16 @@ Prune: the model's reply (edge id and score; the kept edges sum to 1):
 ```
 Kept by pruning: lvl:expression@L3#1 (0.45), lvl:expression@L0#0 (0.30), lvl:expression@L2#1 (0.25)
 
-Label prompt for level way lvl:expression@L3#1 (the model saw only the concept, the way's name 'relation to neighbour' and its text; no level):
+Label prompt for level way lvl:expression@L3#1 (the model saw the concept, the way's name 'relation to neighbour', its text, where the way stops and whether the words must be correct; no level):
 > Operators combine operand values into a new value, and the operand types choose the operation (int / truncates, double / does not).
+>
+> Where this way stops: Two correct but separate rules are L1. Executing the two in sequence is L2. A relational answer may be correct or a relational error.
 
 Model's reply:
 ```
-Label: shown
-Clauses: 2, 3
-Confidence: 0.6
+Label: wrong
+Clauses: 2, 3, 4, 5, 6
+Confidence: 0.8
 ```
 
 Label prompt for level way lvl:expression@L0#0 (the model saw only the concept, the way's name 'everyday reading' and its text; no level):
@@ -622,11 +625,7 @@ Confidence: 0.7
 ```
 
 Parsed labels:
-| edge | label | prune score | confidence | score | clauses | words |
-|---|---|---|---|---|---|---|
-| lvl:expression@L3#1 | shown | 0.45 | 0.6 | 0.27 | c2, c3 | -7 / 2 is -3.5, and integer division rounds down; so it becomes -4 |
-| lvl:expression@L0#0 | shown | 0.3 | 0.65 | 0.2 | c2 | -7 / 2 is -3.5, and integer division rounds down |
-| lvl:expression@L2#1 | shown | 0.25 | 0.7 | 0.17 | c1, c2, c3, c5 | It prints -4 and then 1; -7 / 2 is -3.5, and integer division rounds down; so it becomes -4; so -7 % 2 is 1 |
+(none)
 
 #### arithmetic_operators, concept edges: 1 edges offered
 Edges offered:
@@ -659,7 +658,7 @@ Parsed labels:
 
 **Kept on a path at this depth** (best N in tiers: held misconception / broken edge, then held error, then correct / confirmed / shown):
 
-pre:arithmetic_operators->remainder_operator [confirmed, tier 2, 0.60], lvl:expression@L3#1 [shown, tier 2, 0.27], lvl:expression@L0#0 [shown, tier 2, 0.20]
+pre:arithmetic_operators->remainder_operator [confirmed, tier 2, 0.60], lvl:expression@L0#0 [shown, tier 2, 0.20], lvl:expression@L2#1 [shown, tier 2, 0.17]
 
 **Clause coverage after this depth:**
 | clause | text | covered by |
@@ -677,12 +676,11 @@ Held set after the one-fault rules: mis:remainder_operator->NegativeRemainderSig
 
 ## 4. Diagnosis (rules over the labelled graph, no model)
 Root-cause walk: held on ['remainder_operator'], broken at [], prerequisites {'expression': ['arithmetic_operators'], 'integer_division': ['arithmetic_operators'], 'remainder_operator': ['arithmetic_operators', 'integer_division'], 'println': ['statement']}
-- arithmetic_operators: L3 via relation_to_neighbour "because -4 * 2 + 1 = -7"
-- expression: L3 via relation_to_neighbour "-7 / 2 is -3.5, and integer division rounds down; so it becomes -4"
+- expression: L2 via output_prediction "It prints -4 and then 1; -7 / 2 is -3.5, and integer division rounds down; so it becomes -4; so -7 % 2 is 1"
 - integer_division: L0 via misconception "It prints -4 and then 1; -7 / 2 is -3.5, and integer division rounds down; so it becomes -4; A remainder is never negative; so -7 % 2 is 1; because -4 * 2 + 1 = -7"
 - remainder_operator: L0 via misconception "-7 / 2 is -3.5, and integer division rounds down; so it becomes -4; A remainder is never negative; so -7 % 2 is 1"
 
-**Stop:** sufficient at depth 3; prompts {'prune': 12, 'label': 21}, fresh model calls 3, cache hits 30
+**Stop:** sufficient at depth 3; prompts {'prune': 12, 'label': 21}, fresh model calls 0, cache hits 33
 
 ### Held misconceptions
 | concept | misconception | kind | quote | score | shares_evidence_with |
@@ -697,10 +695,17 @@ Root-cause walk: held on ['remainder_operator'], broken at [], prerequisites {'e
 ### Level per concept
 | concept | level | way | misconception | source | quote | rule | also | note |
 |---|---|---|---|---|---|---|---|---|
-| arithmetic_operators | L3 | relation_to_neighbour |  | level_way | because -4 * 2 + 1 = -7 |  |  |  |
-| expression | L3 | relation_to_neighbour |  | level_way | -7 / 2 is -3.5, and integer division rounds down; so it becomes -4 |  | L2 output_prediction, L0 everyday_reading |  |
+| expression | L2 | output_prediction |  | level_way | It prints -4 and then 1; -7 / 2 is -3.5, and integer division rounds down; so it becomes -4; so -7 % 2 is 1 |  | L0 everyday_reading |  |
 | integer_division | L0 | misconception | NegativeRemainderSign | level_mis_links | It prints -4 and then 1; -7 / 2 is -3.5, and integer division rounds down; so it becomes -4; A remainder is never negative; so -7 % 2 is 1; because -4 * 2 + 1 = -7 | wrong rule: a % b is never negative, and integer division of a negative number rounds down. Right rule: a / b rounds toward 0 and a % b takes the sign of a: -14 / 3 is -4 and -14 % 3 is -2. |  |  |
 | remainder_operator | L0 | misconception | NegativeRemainderSign | level_mis_links | -7 / 2 is -3.5, and integer division rounds down; so it becomes -4; A remainder is never negative; so -7 % 2 is 1 | wrong rule: a % b is never negative, and integer division of a negative number rounds down. Right rule: a / b rounds toward 0 and a % b takes the sign of a: -14 / 3 is -4 and -14 % 3 is -2. |  |  |
+
+Ways above L2 the model answered "wrong" (the kind of thing is done, but what is said contradicts Java; not shown):
+| concept | edge | level | way | confidence | clauses | quote |
+|---|---|---|---|---|---|---|
+| remainder_operator | lvl:remainder_operator@L3#0 | L3 | relation_to_neighbour | 0.85 | [3, 5, 6] | so it becomes -4; so -7 % 2 is 1; because -4 * 2 + 1 = -7 |
+| arithmetic_operators | lvl:arithmetic_operators@L3#1 | L3 | relation_to_neighbour | 0.85 | [2, 3, 4, 5, 6] | -7 / 2 is -3.5, and integer division rounds down; so it becomes -4; A remainder is never negative; so -7 % 2 is 1; because -4 * 2 + 1 = -7 |
+| integer_division | lvl:integer_division@L3#0 | L3 | relation_to_neighbour | 0.8 | [2, 4, 6] | -7 / 2 is -3.5, and integer division rounds down; A remainder is never negative; because -4 * 2 + 1 = -7 |
+| expression | lvl:expression@L3#1 | L3 | relation_to_neighbour | 0.8 | [2, 3, 4, 5, 6] | -7 / 2 is -3.5, and integer division rounds down; so it becomes -4; A remainder is never negative; so -7 % 2 is 1; because -4 * 2 + 1 = -7 |
 
 ### Overall level: L0
 
@@ -722,17 +727,13 @@ Figure 7 (final picture): C:\Users\magnu\OneDrive\Desktop\ES_VIterbi_Personalize
 | 1 | remainder_operator | mis:remainder_operator->NegativeRemainderSign | misconception | held | 0.9 | 0.97 | 0.873 | [2, 3, 4, 5] | -7 / 2 is -3.5, and integer division rounds down; so it becomes -4; A remainder is never negative; so -7 % 2 is 1 |
 | 1 | remainder_operator | lvl:remainder_operator@L0#0 | level | shown | 0.4 | 0.9 | 0.36 | [4, 5, 6] | A remainder is never negative; so -7 % 2 is 1; because -4 * 2 + 1 = -7 |
 | 1 | remainder_operator | lvl:remainder_operator@L0#3 | level | shown | 0.35 | 0.55 | 0.1925 | [4, 5] | A remainder is never negative; so -7 % 2 is 1 |
-| 1 | remainder_operator | lvl:remainder_operator@L3#0 | level | shown | 0.25 | 0.6 | 0.15 | [6] | because -4 * 2 + 1 = -7 |
 | 1 | arithmetic_operators | mis:arithmetic_operators->RemainderIsSubtraction | misconception | correct | 1.0 | 0.75 | 0.75 | [5, 6] | so -7 % 2 is 1; because -4 * 2 + 1 = -7 |
-| 1 | arithmetic_operators | lvl:arithmetic_operators@L3#1 | level | shown | 0.5 | 0.6 | 0.3 | [6] | because -4 * 2 + 1 = -7 |
 | 1 | integer_division | mis:integer_division->NegativeRemainderSign | misconception | held | 0.75 | 0.97 | 0.7275 | [1, 2, 3, 4, 5, 6] | It prints -4 and then 1; -7 / 2 is -3.5, and integer division rounds down; so it becomes -4; A remainder is never negative; so -7 % 2 is 1; because -4 * 2 + 1 = -7 |
 | 1 | integer_division | mis:integer_division->IntegerDivisionGivesFraction | misconception | correct | 0.2 | 0.75 | 0.15 | [2, 3] | -7 / 2 is -3.5, and integer division rounds down; so it becomes -4 |
-| 1 | integer_division | lvl:integer_division@L3#0 | level | shown | 0.3 | 0.85 | 0.255 | [6] | because -4 * 2 + 1 = -7 |
 | 2 | remainder_operator | pre:integer_division->remainder_operator | prerequisite | confirmed | 0.7 | 0.75 | 0.525 | [6] | because -4 * 2 + 1 = -7 |
 | 2 | remainder_operator | pre:arithmetic_operators->remainder_operator | prerequisite | confirmed | 0.3 | 0.6 | 0.18 | [5, 6] | so -7 % 2 is 1; because -4 * 2 + 1 = -7 |
 | 2 | integer_division | pre:arithmetic_operators->integer_division | prerequisite | confirmed | 1.0 | 0.6 | 0.6 | [3, 5, 6] | so it becomes -4; so -7 % 2 is 1; because -4 * 2 + 1 = -7 |
 | 2 | arithmetic_operators | pre:arithmetic_operators->expression | prerequisite | confirmed | 1.0 | 0.7 | 0.7 | [2, 5, 6] | -7 / 2 is -3.5, and integer division rounds down; so -7 % 2 is 1; because -4 * 2 + 1 = -7 |
-| 3 | expression | lvl:expression@L3#1 | level | shown | 0.45 | 0.6 | 0.27 | [2, 3] | -7 / 2 is -3.5, and integer division rounds down; so it becomes -4 |
 | 3 | expression | lvl:expression@L0#0 | level | shown | 0.3 | 0.65 | 0.195 | [2] | -7 / 2 is -3.5, and integer division rounds down |
 | 3 | expression | lvl:expression@L2#1 | level | shown | 0.25 | 0.7 | 0.175 | [1, 2, 3, 5] | It prints -4 and then 1; -7 / 2 is -3.5, and integer division rounds down; so it becomes -4; so -7 % 2 is 1 |
 | 3 | arithmetic_operators | pre:arithmetic_operators->remainder_operator | prerequisite | confirmed | 1.0 | 0.6 | 0.6 | [5, 6] | so -7 % 2 is 1; because -4 * 2 + 1 = -7 |
@@ -747,8 +748,8 @@ Figure 7 (final picture): C:\Users\magnu\OneDrive\Desktop\ES_VIterbi_Personalize
 | 2 | integer_division | pre:arithmetic_operators->integer_division | prerequisite | confirmed | 0.6 | [3, 5, 6] |
 | 2 | remainder_operator | pre:integer_division->remainder_operator | prerequisite | confirmed | 0.525 | [6] |
 | 3 | arithmetic_operators | pre:arithmetic_operators->remainder_operator | prerequisite | confirmed | 0.6 | [5, 6] |
-| 3 | expression | lvl:expression@L3#1 | level | shown | 0.27 | [2, 3] |
 | 3 | expression | lvl:expression@L0#0 | level | shown | 0.195 | [2] |
+| 3 | expression | lvl:expression@L2#1 | level | shown | 0.175 | [1, 2, 3, 5] |
 
 ## 7. Raw traversal log
 ```
@@ -764,11 +765,13 @@ start concepts (3): remainder_operator, arithmetic_operators, integer_division
   remainder_operator (level ways): 14 candidates -> kept lvl:remainder_operator@L0#0 (0.40), lvl:remainder_operator@L0#3 (0.35), lvl:remainder_operator@L3#0 (0.25)
     lvl:remainder_operator@L0#0 -> shown (0.36) "A remainder is never negative; so -7 % 2 is 1; because -4 * 2 + 1 = -7"
     lvl:remainder_operator@L0#3 -> shown (0.19) "A remainder is never negative; so -7 % 2 is 1"
-    lvl:remainder_operator@L3#0 -> shown (0.15) "because -4 * 2 + 1 = -7"
+    lvl:remainder_operator@L3#0: wrong (0.85) -> not applied
+    lvl:remainder_operator@L3#0 -> not applied (0.00) ""
   arithmetic_operators (misconceptions): 3 candidates -> kept mis:arithmetic_operators->RemainderIsSubtraction (1.00)
     mis:arithmetic_operators->RemainderIsSubtraction -> correct (0.75) "so -7 % 2 is 1; because -4 * 2 + 1 = -7"
   arithmetic_operators (level ways): 18 candidates -> kept lvl:arithmetic_operators@L3#1 (0.50), lvl:arithmetic_operators@L2#1 (0.35), lvl:arithmetic_operators@L2#0 (0.15)
-    lvl:arithmetic_operators@L3#1 -> shown (0.30) "because -4 * 2 + 1 = -7"
+    lvl:arithmetic_operators@L3#1: wrong (0.85) -> not applied
+    lvl:arithmetic_operators@L3#1 -> not applied (0.00) ""
     lvl:arithmetic_operators@L2#1 -> not applied (0.00) ""
     lvl:arithmetic_operators@L2#0 -> not applied (0.00) ""
   integer_division (misconceptions): 6 candidates -> kept mis:integer_division->NegativeRemainderSign (0.75), mis:integer_division->IntegerDivisionGivesFraction (0.20), mis:integer_division->CastAfterIntDivision (0.05)
@@ -777,7 +780,8 @@ start concepts (3): remainder_operator, arithmetic_operators, integer_division
     mis:integer_division->CastAfterIntDivision -> not applied (0.00) ""
   integer_division (level ways): 16 candidates -> kept lvl:integer_division@L4#4 (0.50), lvl:integer_division@L3#0 (0.30), lvl:integer_division@L1#1 (0.20)
     lvl:integer_division@L4#4 -> not applied (0.00) ""
-    lvl:integer_division@L3#0 -> shown (0.26) "because -4 * 2 + 1 = -7"
+    lvl:integer_division@L3#0: wrong (0.80) -> not applied
+    lvl:integer_division@L3#0 -> not applied (0.00) ""
     lvl:integer_division@L1#1 -> not applied (0.00) ""
   kept: mis:remainder_operator->NegativeRemainderSign [held, tier 0, 0.87], mis:integer_division->NegativeRemainderSign [held, tier 0, 0.73], mis:arithmetic_operators->RemainderIsSubtraction [correct, tier 2, 0.75]
   clause coverage: c1 <- mis:integer_division->NegativeRemainderSign; c2 <- mis:remainder_operator->NegativeRemainderSign; c3 <- mis:remainder_operator->NegativeRemainderSign; c4 <- mis:remainder_operator->NegativeRemainderSign; c5 <- mis:remainder_operator->NegativeRemainderSign; c6 <- mis:arithmetic_operators->RemainderIsSubtraction
@@ -800,17 +804,17 @@ start concepts (3): remainder_operator, arithmetic_operators, integer_division
     mis:expression->OutsideInMethodNesting -> not applied (0.00) ""
     mis:expression->NoAtomicExpression -> not applied (0.00) ""
   expression (level ways): 19 candidates -> kept lvl:expression@L3#1 (0.45), lvl:expression@L0#0 (0.30), lvl:expression@L2#1 (0.25)
-    lvl:expression@L3#1 -> shown (0.27) "-7 / 2 is -3.5, and integer division rounds down; so it becomes -4"
+    lvl:expression@L3#1: wrong (0.80) -> not applied
+    lvl:expression@L3#1 -> not applied (0.00) ""
     lvl:expression@L0#0 -> shown (0.20) "-7 / 2 is -3.5, and integer division rounds down"
     lvl:expression@L2#1 -> shown (0.17) "It prints -4 and then 1; -7 / 2 is -3.5, and integer division rounds down; so it becomes -4; so -7 % 2 is 1"
   arithmetic_operators (concept edges): 1 candidates -> kept pre:arithmetic_operators->remainder_operator (1.00)
     pre:arithmetic_operators->remainder_operator -> confirmed (0.60) "so -7 % 2 is 1; because -4 * 2 + 1 = -7"
-  kept: pre:arithmetic_operators->remainder_operator [confirmed, tier 2, 0.60], lvl:expression@L3#1 [shown, tier 2, 0.27], lvl:expression@L0#0 [shown, tier 2, 0.20]
+  kept: pre:arithmetic_operators->remainder_operator [confirmed, tier 2, 0.60], lvl:expression@L0#0 [shown, tier 2, 0.20], lvl:expression@L2#1 [shown, tier 2, 0.17]
   clause coverage: c1 <- mis:integer_division->NegativeRemainderSign; c2 <- mis:remainder_operator->NegativeRemainderSign; c3 <- mis:remainder_operator->NegativeRemainderSign; c4 <- mis:remainder_operator->NegativeRemainderSign; c5 <- mis:remainder_operator->NegativeRemainderSign; c6 <- mis:arithmetic_operators->RemainderIsSubtraction
   held: mis:remainder_operator->NegativeRemainderSign; filed at the dependent concept: mis:integer_division->NegativeRemainderSign
   root-cause walk: held on ['remainder_operator'], broken at [], prerequisites {'expression': ['arithmetic_operators'], 'integer_division': ['arithmetic_operators'], 'remainder_operator': ['arithmetic_operators', 'integer_division'], 'println': ['statement']}
-  level arithmetic_operators: L3 via relation_to_neighbour "because -4 * 2 + 1 = -7"
-  level expression: L3 via relation_to_neighbour "-7 / 2 is -3.5, and integer division rounds down; so it becomes -4"
+  level expression: L2 via output_prediction "It prints -4 and then 1; -7 / 2 is -3.5, and integer division rounds down; so it becomes -4; so -7 % 2 is 1"
   level integer_division: L0 via misconception "It prints -4 and then 1; -7 / 2 is -3.5, and integer division rounds down; so it becomes -4; A remainder is never negative; so -7 % 2 is 1; because -4 * 2 + 1 = -7"
   level remainder_operator: L0 via misconception "-7 / 2 is -3.5, and integer division rounds down; so it becomes -4; A remainder is never negative; so -7 % 2 is 1"
 ```
@@ -824,7 +828,8 @@ start concepts (3): remainder_operator, arithmetic_operators, integer_division
   "depth": 3,
   "prune_tools": "llm",
   "model": "claude-opus-5-5",
-  "backend": "claude-cli"
+  "backend": "claude-cli",
+  "level_v2": true
  },
  "clauses": [
   "It prints -4 and then 1",
@@ -856,22 +861,13 @@ start concepts (3): remainder_operator, arithmetic_operators, integer_division
   "misconception": "NegativeRemainderSign"
  },
  "levels": {
-  "arithmetic_operators": {
-   "level": "L3",
-   "way": "relation_to_neighbour",
-   "quote": "because -4 * 2 + 1 = -7",
-   "edge": "lvl:arithmetic_operators@L3#1",
-   "source": "level_way",
-   "also_shown": []
-  },
   "expression": {
-   "level": "L3",
-   "way": "relation_to_neighbour",
-   "quote": "-7 / 2 is -3.5, and integer division rounds down; so it becomes -4",
-   "edge": "lvl:expression@L3#1",
+   "level": "L2",
+   "way": "output_prediction",
+   "quote": "It prints -4 and then 1; -7 / 2 is -3.5, and integer division rounds down; so it becomes -4; so -7 % 2 is 1",
+   "edge": "lvl:expression@L2#1",
    "source": "level_way",
    "also_shown": [
-    "L2 output_prediction",
     "L0 everyday_reading"
    ]
   },
@@ -1035,26 +1031,6 @@ start concepts (3): remainder_operator, arithmetic_operators, integer_division
   {
    "depth": 3,
    "source": "expression",
-   "edge": "lvl:expression@L3#1",
-   "target": "expression@L3",
-   "kind": "level",
-   "label": "shown",
-   "clauses": [
-    2,
-    3
-   ],
-   "quote": "-7 / 2 is -3.5, and integer division rounds down; so it becomes -4",
-   "confidence": 0.6,
-   "prune_score": 0.45,
-   "score": 0.27,
-   "logic": "Operators combine operand values into a new value, and the operand types choose the operation (int / truncates, double / does not).",
-   "twin_logic": null,
-   "level": "L3",
-   "way": "relation_to_neighbour"
-  },
-  {
-   "depth": 3,
-   "source": "expression",
    "edge": "lvl:expression@L0#0",
    "target": "expression@L0",
    "kind": "level",
@@ -1070,6 +1046,28 @@ start concepts (3): remainder_operator, arithmetic_operators, integer_division
    "twin_logic": null,
    "level": "L0",
    "way": "everyday_reading"
+  },
+  {
+   "depth": 3,
+   "source": "expression",
+   "edge": "lvl:expression@L2#1",
+   "target": "expression@L2",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    1,
+    2,
+    3,
+    5
+   ],
+   "quote": "It prints -4 and then 1; -7 / 2 is -3.5, and integer division rounds down; so it becomes -4; so -7 % 2 is 1",
+   "confidence": 0.7,
+   "prune_score": 0.25,
+   "score": 0.175,
+   "logic": "An expression produces one value of a type fixed by its operands: hour * 60 + minute with hour = 11 and minute = 59 is the int 719.",
+   "twin_logic": null,
+   "level": "L2",
+   "way": "output_prediction"
   }
  ],
  "evidence": [
@@ -1137,25 +1135,6 @@ start concepts (3): remainder_operator, arithmetic_operators, integer_division
   },
   {
    "depth": 1,
-   "source": "remainder_operator",
-   "edge": "lvl:remainder_operator@L3#0",
-   "target": "remainder_operator@L3",
-   "kind": "level",
-   "label": "shown",
-   "clauses": [
-    6
-   ],
-   "quote": "because -4 * 2 + 1 = -7",
-   "confidence": 0.6,
-   "prune_score": 0.25,
-   "score": 0.15,
-   "logic": "% is the companion of integer division, since a == (a / b) * b + a % b. Both use the same quotient rounded toward 0.",
-   "twin_logic": null,
-   "level": "L3",
-   "way": "relation_to_neighbour"
-  },
-  {
-   "depth": 1,
    "source": "arithmetic_operators",
    "edge": "mis:arithmetic_operators->RemainderIsSubtraction",
    "target": "RemainderIsSubtraction",
@@ -1172,25 +1151,6 @@ start concepts (3): remainder_operator, arithmetic_operators, integer_division
    "logic": "9 % 5 means 9 minus 5 (a % b subtracts b from a).",
    "twin_logic": "% gives the remainder after integer division: 9 % 5 is 4 because 9 = 1 * 5 + 4, and 17 % 5 is 2, not 12.",
    "role": "context"
-  },
-  {
-   "depth": 1,
-   "source": "arithmetic_operators",
-   "edge": "lvl:arithmetic_operators@L3#1",
-   "target": "arithmetic_operators@L3",
-   "kind": "level",
-   "label": "shown",
-   "clauses": [
-    6
-   ],
-   "quote": "because -4 * 2 + 1 = -7",
-   "confidence": 0.6,
-   "prune_score": 0.5,
-   "score": 0.3,
-   "logic": "For ints, / gives the truncated quotient and % the remainder, so (a / b) * b + a % b == a.",
-   "twin_logic": null,
-   "level": "L3",
-   "way": "relation_to_neighbour"
   },
   {
    "depth": 1,
@@ -1233,25 +1193,6 @@ start concepts (3): remainder_operator, arithmetic_operators, integer_division
    "logic": "10 / 3 evaluates to 3.333....",
    "twin_logic": "Dividing two ints gives an int: the fractional part is discarded.",
    "role": "primary"
-  },
-  {
-   "depth": 1,
-   "source": "integer_division",
-   "edge": "lvl:integer_division@L3#0",
-   "target": "integer_division@L3",
-   "kind": "level",
-   "label": "shown",
-   "clauses": [
-    6
-   ],
-   "quote": "because -4 * 2 + 1 = -7",
-   "confidence": 0.85,
-   "prune_score": 0.3,
-   "score": 0.255,
-   "logic": "/ and % on ints are paired: q = a / b and r = a % b always satisfy a = b * q + r.",
-   "twin_logic": null,
-   "level": "L3",
-   "way": "relation_to_neighbour"
   },
   {
    "depth": 2,
@@ -1329,26 +1270,6 @@ start concepts (3): remainder_operator, arithmetic_operators, integer_division
   {
    "depth": 3,
    "source": "expression",
-   "edge": "lvl:expression@L3#1",
-   "target": "expression@L3",
-   "kind": "level",
-   "label": "shown",
-   "clauses": [
-    2,
-    3
-   ],
-   "quote": "-7 / 2 is -3.5, and integer division rounds down; so it becomes -4",
-   "confidence": 0.6,
-   "prune_score": 0.45,
-   "score": 0.27,
-   "logic": "Operators combine operand values into a new value, and the operand types choose the operation (int / truncates, double / does not).",
-   "twin_logic": null,
-   "level": "L3",
-   "way": "relation_to_neighbour"
-  },
-  {
-   "depth": 3,
-   "source": "expression",
    "edge": "lvl:expression@L0#0",
    "target": "expression@L0",
    "kind": "level",
@@ -1417,11 +1338,72 @@ start concepts (3): remainder_operator, arithmetic_operators, integer_division
  "unexplained_clauses": [],
  "stop_reason": "sufficient",
  "depth_reached": 3,
- "llm_calls": 3,
- "llm_cache_hits": 30,
+ "llm_calls": 0,
+ "llm_cache_hits": 33,
  "llm_calls_by_step": {
   "prune": 12,
   "label": 21
+ },
+ "level_v2": {
+  "wrong_ways": [
+   {
+    "concept": "remainder_operator",
+    "edge": "lvl:remainder_operator@L3#0",
+    "level": "L3",
+    "way": "relation_to_neighbour",
+    "clauses": [
+     3,
+     5,
+     6
+    ],
+    "quote": "so it becomes -4; so -7 % 2 is 1; because -4 * 2 + 1 = -7",
+    "confidence": 0.85
+   },
+   {
+    "concept": "arithmetic_operators",
+    "edge": "lvl:arithmetic_operators@L3#1",
+    "level": "L3",
+    "way": "relation_to_neighbour",
+    "clauses": [
+     2,
+     3,
+     4,
+     5,
+     6
+    ],
+    "quote": "-7 / 2 is -3.5, and integer division rounds down; so it becomes -4; A remainder is never negative; so -7 % 2 is 1; because -4 * 2 + 1 = -7",
+    "confidence": 0.85
+   },
+   {
+    "concept": "integer_division",
+    "edge": "lvl:integer_division@L3#0",
+    "level": "L3",
+    "way": "relation_to_neighbour",
+    "clauses": [
+     2,
+     4,
+     6
+    ],
+    "quote": "-7 / 2 is -3.5, and integer division rounds down; A remainder is never negative; because -4 * 2 + 1 = -7",
+    "confidence": 0.8
+   },
+   {
+    "concept": "expression",
+    "edge": "lvl:expression@L3#1",
+    "level": "L3",
+    "way": "relation_to_neighbour",
+    "clauses": [
+     2,
+     3,
+     4,
+     5,
+     6
+    ],
+    "quote": "-7 / 2 is -3.5, and integer division rounds down; so it becomes -4; A remainder is never negative; so -7 % 2 is 1; because -4 * 2 + 1 = -7",
+    "confidence": 0.8
+   }
+  ],
+  "not_counted": []
  }
 }
 ```

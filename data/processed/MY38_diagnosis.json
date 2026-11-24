@@ -5,7 +5,8 @@
   "depth": 3,
   "prune_tools": "llm",
   "model": "claude-opus-5-5",
-  "backend": "claude-cli"
+  "backend": "claude-cli",
+  "level_v2": true
  },
  "clauses": [
   "counts[r] is how many numbers leave remainder r when divided by 3",
@@ -34,13 +35,12 @@
    ]
   },
   "array_bounds": {
-   "level": "L4",
-   "way": "transfer_to_a_new_program",
+   "level": "L3",
+   "way": "relation_to_neighbour",
    "quote": "The % 3 turns each number into an index 0, 1 or 2; so it fits the array",
-   "edge": "lvl:array_bounds@L4#1",
+   "edge": "lvl:array_bounds@L3#0",
    "source": "level_way",
    "also_shown": [
-    "L3 relation_to_neighbour",
     "L1 names_the_element"
    ]
   },
@@ -55,24 +55,22 @@
    ]
   },
   "expression": {
-   "level": "L4",
-   "way": "transfer_to_a_new_program",
-   "quote": "The % 3 turns each number into an index 0, 1 or 2; so it fits the array",
-   "edge": "lvl:expression@L4#1",
+   "level": "L3",
+   "way": "purpose_of_the_whole",
+   "quote": "counts[r] is how many numbers leave remainder r when divided by 3; The % 3 turns each number into an index 0, 1 or 2; so it fits the array",
+   "edge": "lvl:expression@L3#5",
    "source": "level_way",
    "also_shown": [
-    "L3 purpose_of_the_whole",
     "L3 relation_to_neighbour"
    ]
   },
   "indexing": {
-   "level": "L4",
-   "way": "transfer_to_a_new_program",
-   "quote": "counts[r] is how many numbers leave remainder r when divided by 3; The % 3 turns each number into an index 0, 1 or 2; so it fits the array",
-   "edge": "lvl:indexing@L4#1",
+   "level": "L3",
+   "way": "relation_to_neighbour",
+   "quote": "The % 3 turns each number into an index 0, 1 or 2; so it fits the array",
+   "edge": "lvl:indexing@L3#5",
    "source": "level_way",
    "also_shown": [
-    "L3 relation_to_neighbour",
     "L3 purpose_of_the_whole"
    ]
   },
@@ -88,7 +86,7 @@
    ]
   }
  },
- "overall_level": "L4",
+ "overall_level": "L3",
  "paths": [
   {
    "depth": 1,
@@ -122,9 +120,9 @@
     3
    ],
    "quote": "counts[r] is how many numbers leave remainder r when divided by 3; The % 3 turns each number into an index 0, 1 or 2; so it fits the array",
-   "confidence": 0.85,
+   "confidence": 0.9,
    "prune_score": 0.5,
-   "score": 0.425,
+   "score": 0.45,
    "logic": "Plans: divisibility and parity tests (x % 2 == 0), digit extraction (x % 10), cyclic wrap-around ((i + 1) % n), leap-year rules, and splitting units (76 % 12 inches).",
    "twin_logic": null,
    "level": "L3",
@@ -143,9 +141,9 @@
     3
    ],
    "quote": "counts[r] is how many numbers leave remainder r when divided by 3; The % 3 turns each number into an index 0, 1 or 2; so it fits the array",
-   "confidence": 0.75,
+   "confidence": 0.88,
    "prune_score": 0.5,
-   "score": 0.375,
+   "score": 0.44,
    "logic": "Arithmetic operators turn formulas into code: totals, averages, unit conversions (inch * CM_PER_INCH), and digit extraction (n % 10, n / 10).",
    "twin_logic": null,
    "level": "L3",
@@ -274,9 +272,9 @@
     3
    ],
    "quote": "The % 3 turns each number into an index 0, 1 or 2; so it fits the array",
-   "confidence": 0.72,
+   "confidence": 0.8,
    "prune_score": 0.45,
-   "score": 0.324,
+   "score": 0.36,
    "logic": "Every index value used in a[i] must satisfy 0 <= i <= a.length-1; the last element is a[a.length-1].",
    "twin_logic": null,
    "level": "L3",
@@ -290,13 +288,14 @@
    "kind": "level",
    "label": "shown",
    "clauses": [
+    1,
     2,
     3
    ],
-   "quote": "The % 3 turns each number into an index 0, 1 or 2; so it fits the array",
-   "confidence": 0.8,
+   "quote": "counts[r] is how many numbers leave remainder r when divided by 3; The % 3 turns each number into an index 0, 1 or 2; so it fits the array",
+   "confidence": 0.85,
    "prune_score": 0.4,
-   "score": 0.32,
+   "score": 0.34,
    "logic": "Expressions compute new values from existing ones. They form the right side of every assignment, every condition, every method argument and every printed value.",
    "twin_logic": null,
    "level": "L3",
@@ -314,9 +313,9 @@
     3
    ],
    "quote": "The % 3 turns each number into an index 0, 1 or 2; so it fits the array",
-   "confidence": 0.7,
+   "confidence": 0.72,
    "prune_score": 0.35,
-   "score": 0.245,
+   "score": 0.252,
    "logic": "Operators combine operand values into a new value, and the operand types choose the operation (int / truncates, double / does not).",
    "twin_logic": null,
    "level": "L3",
@@ -356,9 +355,9 @@
     3
    ],
    "quote": "counts[r] is how many numbers leave remainder r when divided by 3; The % 3 turns each number into an index 0, 1 or 2; so it fits the array",
-   "confidence": 0.75,
+   "confidence": 0.88,
    "prune_score": 0.5,
-   "score": 0.375,
+   "score": 0.44,
    "logic": "Arithmetic operators turn formulas into code: totals, averages, unit conversions (inch * CM_PER_INCH), and digit extraction (n % 10, n / 10).",
    "twin_logic": null,
    "level": "L3",
@@ -435,9 +434,9 @@
     3
    ],
    "quote": "counts[r] is how many numbers leave remainder r when divided by 3; The % 3 turns each number into an index 0, 1 or 2; so it fits the array",
-   "confidence": 0.85,
+   "confidence": 0.9,
    "prune_score": 0.5,
-   "score": 0.425,
+   "score": 0.45,
    "logic": "Plans: divisibility and parity tests (x % 2 == 0), digit extraction (x % 10), cyclic wrap-around ((i + 1) % n), leap-year rules, and splitting units (76 % 12 inches).",
    "twin_logic": null,
    "level": "L3",
@@ -539,6 +538,26 @@
   },
   {
    "depth": 2,
+   "source": "length_field",
+   "edge": "lvl:length_field@L3#0",
+   "target": "length_field@L3",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    2,
+    3
+   ],
+   "quote": "The % 3 turns each number into an index 0, 1 or 2; so it fits the array",
+   "confidence": 0.6,
+   "prune_score": 0.4,
+   "score": 0.24,
+   "logic": "The n given to new becomes a.length and stays fixed for that array object.",
+   "twin_logic": null,
+   "level": "L3",
+   "way": "relation_to_neighbour"
+  },
+  {
+   "depth": 2,
    "source": "array_creation",
    "edge": "mis:array_creation->ArrayRangeInclusive",
    "target": "ArrayRangeInclusive",
@@ -579,6 +598,26 @@
   {
    "depth": 2,
    "source": "array_creation",
+   "edge": "lvl:array_creation@L3#7",
+   "target": "array_creation@L3",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    1,
+    3
+   ],
+   "quote": "counts[r] is how many numbers leave remainder r when divided by 3; so it fits the array",
+   "confidence": 0.6,
+   "prune_score": 0.25,
+   "score": 0.15,
+   "logic": "Plan/role: reserve storage for a number of values that may be known only at run time (e.g. N from the command line), before any value is stored.",
+   "twin_logic": null,
+   "level": "L3",
+   "way": "purpose_of_the_whole"
+  },
+  {
+   "depth": 2,
+   "source": "array_creation",
    "edge": "lvl:array_creation@L3#3",
    "target": "array_creation@L3",
    "kind": "level",
@@ -588,9 +627,9 @@
     3
    ],
    "quote": "The % 3 turns each number into an index 0, 1 or 2; so it fits the array",
-   "confidence": 0.55,
+   "confidence": 0.72,
    "prune_score": 0.15,
-   "score": 0.0825,
+   "score": 0.108,
    "logic": "The size n given to new becomes a.length and never changes for that array object.",
    "twin_logic": null,
    "level": "L3",
@@ -659,11 +698,10 @@
    "kind": "level",
    "label": "shown",
    "clauses": [
-    1,
     2,
     3
    ],
-   "quote": "counts[r] is how many numbers leave remainder r when divided by 3; The % 3 turns each number into an index 0, 1 or 2; so it fits the array",
+   "quote": "The % 3 turns each number into an index 0, 1 or 2; so it fits the array",
    "confidence": 0.85,
    "prune_score": 0.5,
    "score": 0.425,
@@ -675,8 +713,8 @@
   {
    "depth": 2,
    "source": "indexing",
-   "edge": "lvl:indexing@L4#1",
-   "target": "indexing@L4",
+   "edge": "lvl:indexing@L3#7",
+   "target": "indexing@L3",
    "kind": "level",
    "label": "shown",
    "clauses": [
@@ -685,29 +723,9 @@
     3
    ],
    "quote": "counts[r] is how many numbers leave remainder r when divided by 3; The % 3 turns each number into an index 0, 1 or 2; so it fits the array",
-   "confidence": 0.75,
-   "prune_score": 0.3,
-   "score": 0.225,
-   "logic": "Applicability: index when you need a particular element by position, or when the position is computed from data (counts[score]++, months[m]). When every value is processed in order and the position is never needed, an enhanced for loop is simpler.",
-   "twin_logic": null,
-   "level": "L4",
-   "way": "transfer_to_a_new_program"
-  },
-  {
-   "depth": 2,
-   "source": "indexing",
-   "edge": "lvl:indexing@L3#7",
-   "target": "indexing@L3",
-   "kind": "level",
-   "label": "shown",
-   "clauses": [
-    1,
-    2
-   ],
-   "quote": "counts[r] is how many numbers leave remainder r when divided by 3; The % 3 turns each number into an index 0, 1 or 2",
-   "confidence": 0.6,
+   "confidence": 0.85,
    "prune_score": 0.2,
-   "score": 0.12,
+   "score": 0.17,
    "logic": "Plan/role: random access, reaching any element directly by its position in constant time (address plus index), so code touches only the elements it needs.",
    "twin_logic": null,
    "level": "L3",
@@ -811,13 +829,14 @@
    "kind": "level",
    "label": "shown",
    "clauses": [
+    1,
     2,
     3
    ],
-   "quote": "The % 3 turns each number into an index 0, 1 or 2; so it fits the array",
-   "confidence": 0.8,
+   "quote": "counts[r] is how many numbers leave remainder r when divided by 3; The % 3 turns each number into an index 0, 1 or 2; so it fits the array",
+   "confidence": 0.85,
    "prune_score": 0.4,
-   "score": 0.32,
+   "score": 0.34,
    "logic": "Expressions compute new values from existing ones. They form the right side of every assignment, every condition, every method argument and every printed value.",
    "twin_logic": null,
    "level": "L3",
@@ -835,33 +854,13 @@
     3
    ],
    "quote": "The % 3 turns each number into an index 0, 1 or 2; so it fits the array",
-   "confidence": 0.7,
+   "confidence": 0.72,
    "prune_score": 0.35,
-   "score": 0.245,
+   "score": 0.252,
    "logic": "Operators combine operand values into a new value, and the operand types choose the operation (int / truncates, double / does not).",
    "twin_logic": null,
    "level": "L3",
    "way": "relation_to_neighbour"
-  },
-  {
-   "depth": 4,
-   "source": "expression",
-   "edge": "lvl:expression@L4#1",
-   "target": "expression@L4",
-   "kind": "level",
-   "label": "shown",
-   "clauses": [
-    2,
-    3
-   ],
-   "quote": "The % 3 turns each number into an index 0, 1 or 2; so it fits the array",
-   "confidence": 0.6,
-   "prune_score": 0.25,
-   "score": 0.15,
-   "logic": "Use an expression wherever a value is needed. Split a long or unclear expression into named intermediate variables, and add parentheses wherever the grouping is not obvious.",
-   "twin_logic": null,
-   "level": "L4",
-   "way": "transfer_to_a_new_program"
   },
   {
    "depth": 4,
@@ -894,9 +893,9 @@
     3
    ],
    "quote": "The % 3 turns each number into an index 0, 1 or 2; so it fits the array",
-   "confidence": 0.72,
+   "confidence": 0.8,
    "prune_score": 0.45,
-   "score": 0.324,
+   "score": 0.36,
    "logic": "Every index value used in a[i] must satisfy 0 <= i <= a.length-1; the last element is a[a.length-1].",
    "twin_logic": null,
    "level": "L3",
@@ -914,9 +913,9 @@
     3
    ],
    "quote": "The % 3 turns each number into an index 0, 1 or 2; so it fits the array",
-   "confidence": 0.7,
+   "confidence": 0.6,
    "prune_score": 0.35,
-   "score": 0.245,
+   "score": 0.21,
    "logic": "Applicability: check indices explicitly (or restrict the loop range) whenever an index is computed from data, a random number or a neighbour (i-1, i+1). A plain i < a.length traversal or an enhanced for loop needs no extra check.",
    "twin_logic": null,
    "level": "L4",
@@ -956,5 +955,37 @@
  "llm_calls_by_step": {
   "prune": 22,
   "label": 49
+ },
+ "level_v2": {
+  "wrong_ways": [],
+  "not_counted": [
+   {
+    "concept": "length_field",
+    "edge": "lvl:length_field@L3#0",
+    "level": "L3",
+    "way": "relation_to_neighbour",
+    "quote": "The % 3 turns each number into an index 0, 1 or 2; so it fits the array",
+    "confidence": 0.6,
+    "reason": "confidence 0.60 is not above 0.60"
+   },
+   {
+    "concept": "array_creation",
+    "edge": "lvl:array_creation@L3#7",
+    "level": "L3",
+    "way": "purpose_of_the_whole",
+    "quote": "counts[r] is how many numbers leave remainder r when divided by 3; so it fits the array",
+    "confidence": 0.6,
+    "reason": "confidence 0.60 is not above 0.60"
+   },
+   {
+    "concept": "array_bounds",
+    "edge": "lvl:array_bounds@L4#1",
+    "level": "L4",
+    "way": "transfer_to_a_new_program",
+    "quote": "The % 3 turns each number into an index 0, 1 or 2; so it fits the array",
+    "confidence": 0.6,
+    "reason": "confidence 0.60 is not above 0.60"
+   }
+  ]
  }
 }

@@ -227,24 +227,28 @@ Prune: the model's reply (edge id and score; the kept edges sum to 1):
 ```
 Kept by pruning: lvl:arithmetic_operators@L3#4 (0.50), lvl:arithmetic_operators@L3#1 (0.30), lvl:arithmetic_operators@L2#1 (0.20)
 
-Label prompt for level way lvl:arithmetic_operators@L3#4 (the model saw only the concept, the way's name 'purpose of the whole' and its text; no level):
+Label prompt for level way lvl:arithmetic_operators@L3#4 (the model saw the concept, the way's name 'purpose of the whole', its text, where the way stops and whether the words must be correct; no level):
 > Arithmetic operators turn formulas into code: totals, averages, unit conversions (inch * CM_PER_INCH), and digit extraction (n % 10, n / 10).
+>
+> Where this way stops: Narrating the lines is L2. A purpose induced from a few traced cases is L2. A wrong purpose is still L3, but with an error.
 
 Model's reply:
 ```
 Label: shown
 Clauses: 1, 2, 3
-Confidence: 0.75
+Confidence: 0.88
 ```
 
-Label prompt for level way lvl:arithmetic_operators@L3#1 (the model saw only the concept, the way's name 'relation to neighbour' and its text; no level):
+Label prompt for level way lvl:arithmetic_operators@L3#1 (the model saw the concept, the way's name 'relation to neighbour', its text, where the way stops and whether the words must be correct; no level):
 > For ints, / gives the truncated quotient and % the remainder, so (a / b) * b + a % b == a.
+>
+> Where this way stops: Two correct but separate rules are L1. Executing the two in sequence is L2. A relational answer may be correct or a relational error.
 
 Model's reply:
 ```
 Label: not shown
 Clauses: none
-Confidence: 0.85
+Confidence: 0.6
 ```
 
 Label prompt for level way lvl:arithmetic_operators@L2#1 (the model saw only the concept, the way's name 'output prediction' and its text; no level):
@@ -260,7 +264,7 @@ Confidence: 0.6
 Parsed labels:
 | edge | label | prune score | confidence | score | clauses | words |
 |---|---|---|---|---|---|---|
-| lvl:arithmetic_operators@L3#4 | shown | 0.5 | 0.75 | 0.38 | c1, c2, c3 | counts[r] is how many numbers leave remainder r when divided by 3; The % 3 turns each number into an index 0, 1 or 2; so it fits the array |
+| lvl:arithmetic_operators@L3#4 | shown | 0.5 | 0.88 | 0.44 | c1, c2, c3 | counts[r] is how many numbers leave remainder r when divided by 3; The % 3 turns each number into an index 0, 1 or 2; so it fits the array |
 | lvl:arithmetic_operators@L3#1 | not applied |  |  | 0.0 |  |  |
 | lvl:arithmetic_operators@L2#1 | shown | 0.2 | 0.6 | 0.12 | c1, c2 | counts[r] is how many numbers leave remainder r when divided by 3; The % 3 turns each number into an index 0, 1 or 2 |
 
@@ -327,14 +331,16 @@ Prune: the model's reply (edge id and score; the kept edges sum to 1):
 ```
 Kept by pruning: lvl:remainder_operator@L3#1 (0.50), lvl:remainder_operator@L1#0 (0.30), lvl:remainder_operator@L2#2 (0.20)
 
-Label prompt for level way lvl:remainder_operator@L3#1 (the model saw only the concept, the way's name 'purpose of the whole' and its text; no level):
+Label prompt for level way lvl:remainder_operator@L3#1 (the model saw the concept, the way's name 'purpose of the whole', its text, where the way stops and whether the words must be correct; no level):
 > Plans: divisibility and parity tests (x % 2 == 0), digit extraction (x % 10), cyclic wrap-around ((i + 1) % n), leap-year rules, and splitting units (76 % 12 inches).
+>
+> Where this way stops: Narrating the lines is L2. A purpose induced from a few traced cases is L2. A wrong purpose is still L3, but with an error.
 
 Model's reply:
 ```
 Label: shown
 Clauses: 1, 2, 3
-Confidence: 0.85
+Confidence: 0.9
 ```
 
 Label prompt for level way lvl:remainder_operator@L1#0 (the model saw only the concept, the way's name 'names the element' and its text; no level):
@@ -360,7 +366,7 @@ Confidence: 0.72
 Parsed labels:
 | edge | label | prune score | confidence | score | clauses | words |
 |---|---|---|---|---|---|---|
-| lvl:remainder_operator@L3#1 | shown | 0.5 | 0.85 | 0.42 | c1, c2, c3 | counts[r] is how many numbers leave remainder r when divided by 3; The % 3 turns each number into an index 0, 1 or 2; so it fits the array |
+| lvl:remainder_operator@L3#1 | shown | 0.5 | 0.9 | 0.45 | c1, c2, c3 | counts[r] is how many numbers leave remainder r when divided by 3; The % 3 turns each number into an index 0, 1 or 2; so it fits the array |
 | lvl:remainder_operator@L1#0 | shown | 0.3 | 0.8 | 0.24 | c1, c2 | counts[r] is how many numbers leave remainder r when divided by 3; The % 3 turns each number into an index 0, 1 or 2 |
 | lvl:remainder_operator@L2#2 | shown | 0.2 | 0.72 | 0.14 | c2, c3 | The % 3 turns each number into an index 0, 1 or 2; so it fits the array |
 
@@ -441,14 +447,16 @@ Clauses: none
 Confidence: 0.9
 ```
 
-Label prompt for level way lvl:array_initializer@L3#1 (the model saw only the concept, the way's name 'purpose of the whole' and its text; no level):
+Label prompt for level way lvl:array_initializer@L3#1 (the model saw the concept, the way's name 'purpose of the whole', its text, where the way stops and whether the words must be correct; no level):
 > Plan/role: build small fixed tables of constants known when the program is written (suits, ranks, month names), usually used as fixed-value lookup tables.
+>
+> Where this way stops: Narrating the lines is L2. A purpose induced from a few traced cases is L2. A wrong purpose is still L3, but with an error.
 
 Model's reply:
 ```
 Label: not shown
 Clauses: none
-Confidence: 0.85
+Confidence: 0.7
 ```
 
 Parsed labels:
@@ -460,7 +468,7 @@ Parsed labels:
 
 **Kept on a path at this depth** (best N in tiers: held misconception / broken edge, then held error, then correct / confirmed / shown):
 
-mis:arithmetic_operators->RemainderIsSubtraction [correct, tier 2, 0.81], lvl:remainder_operator@L3#1 [shown, tier 2, 0.42], lvl:arithmetic_operators@L3#4 [shown, tier 2, 0.38]
+mis:arithmetic_operators->RemainderIsSubtraction [correct, tier 2, 0.81], lvl:remainder_operator@L3#1 [shown, tier 2, 0.45], lvl:arithmetic_operators@L3#4 [shown, tier 2, 0.44]
 
 **Clause coverage after this depth:**
 | clause | text | covered by |
@@ -643,13 +651,15 @@ Prune: the model's reply (edge id and score; the kept edges sum to 1):
 ```
 Kept by pruning: lvl:length_field@L3#0 (0.40), lvl:length_field@L1#1 (0.35), lvl:length_field@L3#2 (0.25)
 
-Label prompt for level way lvl:length_field@L3#0 (the model saw only the concept, the way's name 'relation to neighbour' and its text; no level):
+Label prompt for level way lvl:length_field@L3#0 (the model saw the concept, the way's name 'relation to neighbour', its text, where the way stops and whether the words must be correct; no level):
 > The n given to new becomes a.length and stays fixed for that array object.
+>
+> Where this way stops: Two correct but separate rules are L1. Executing the two in sequence is L2. A relational answer may be correct or a relational error.
 
 Model's reply:
 ```
-Label: not shown
-Clauses: none
+Label: shown
+Clauses: 2, 3
 Confidence: 0.6
 ```
 
@@ -663,8 +673,10 @@ Clauses: none
 Confidence: 0.85
 ```
 
-Label prompt for level way lvl:length_field@L3#2 (the model saw only the concept, the way's name 'purpose of the whole' and its text; no level):
+Label prompt for level way lvl:length_field@L3#2 (the model saw the concept, the way's name 'purpose of the whole', its text, where the way stops and whether the words must be correct; no level):
 > Plan/role: a fixed value (Sajaniemi) that lets code adapt to any array size instead of a hard-coded magic number, e.g. loop bounds and the last element.
+>
+> Where this way stops: Narrating the lines is L2. A purpose induced from a few traced cases is L2. A wrong purpose is still L3, but with an error.
 
 Model's reply:
 ```
@@ -676,7 +688,7 @@ Confidence: 0.9
 Parsed labels:
 | edge | label | prune score | confidence | score | clauses | words |
 |---|---|---|---|---|---|---|
-| lvl:length_field@L3#0 | not applied |  |  | 0.0 |  |  |
+| lvl:length_field@L3#0 | shown | 0.4 | 0.6 | 0.24 | c2, c3 | The % 3 turns each number into an index 0, 1 or 2; so it fits the array |
 | lvl:length_field@L1#1 | not applied |  |  | 0.0 |  |  |
 | lvl:length_field@L3#2 | not applied |  |  | 0.0 |  |  |
 
@@ -754,8 +766,10 @@ Prune: the model's reply (edge id and score; the kept edges sum to 1):
 ```
 Kept by pruning: lvl:array_creation@L3#1 (0.60), lvl:array_creation@L3#7 (0.25), lvl:array_creation@L3#3 (0.15)
 
-Label prompt for level way lvl:array_creation@L3#1 (the model saw only the concept, the way's name 'relation to neighbour' and its text; no level):
+Label prompt for level way lvl:array_creation@L3#1 (the model saw the concept, the way's name 'relation to neighbour', its text, where the way stops and whether the words must be correct; no level):
 > Elements can be indexed only after creation, and the n given to new fixes the valid index range 0..n-1.
+>
+> Where this way stops: Two correct but separate rules are L1. Executing the two in sequence is L2. A relational answer may be correct or a relational error.
 
 Model's reply:
 ```
@@ -764,32 +778,36 @@ Clauses: 2, 3
 Confidence: 0.8
 ```
 
-Label prompt for level way lvl:array_creation@L3#7 (the model saw only the concept, the way's name 'purpose of the whole' and its text; no level):
+Label prompt for level way lvl:array_creation@L3#7 (the model saw the concept, the way's name 'purpose of the whole', its text, where the way stops and whether the words must be correct; no level):
 > Plan/role: reserve storage for a number of values that may be known only at run time (e.g. N from the command line), before any value is stored.
+>
+> Where this way stops: Narrating the lines is L2. A purpose induced from a few traced cases is L2. A wrong purpose is still L3, but with an error.
 
 Model's reply:
 ```
-Label: not shown
-Clauses: none
-Confidence: 0.7
+Label: shown
+Clauses: 1, 3
+Confidence: 0.6
 ```
 
-Label prompt for level way lvl:array_creation@L3#3 (the model saw only the concept, the way's name 'relation to neighbour' and its text; no level):
+Label prompt for level way lvl:array_creation@L3#3 (the model saw the concept, the way's name 'relation to neighbour', its text, where the way stops and whether the words must be correct; no level):
 > The size n given to new becomes a.length and never changes for that array object.
+>
+> Where this way stops: Two correct but separate rules are L1. Executing the two in sequence is L2. A relational answer may be correct or a relational error.
 
 Model's reply:
 ```
 Label: shown
 Clauses: 2, 3
-Confidence: 0.55
+Confidence: 0.72
 ```
 
 Parsed labels:
 | edge | label | prune score | confidence | score | clauses | words |
 |---|---|---|---|---|---|---|
 | lvl:array_creation@L3#1 | shown | 0.6 | 0.8 | 0.48 | c2, c3 | The % 3 turns each number into an index 0, 1 or 2; so it fits the array |
-| lvl:array_creation@L3#7 | not applied |  |  | 0.0 |  |  |
-| lvl:array_creation@L3#3 | shown | 0.15 | 0.55 | 0.08 | c2, c3 | The % 3 turns each number into an index 0, 1 or 2; so it fits the array |
+| lvl:array_creation@L3#7 | shown | 0.25 | 0.6 | 0.15 | c1, c3 | counts[r] is how many numbers leave remainder r when divided by 3; so it fits the array |
+| lvl:array_creation@L3#3 | shown | 0.15 | 0.72 | 0.11 | c2, c3 | The % 3 turns each number into an index 0, 1 or 2; so it fits the array |
 
 #### indexing, misconceptions: 8 edges offered
 Edges offered:
@@ -864,8 +882,34 @@ Prune: the model's reply (edge id and score; the kept edges sum to 1):
 ```
 Kept by pruning: lvl:indexing@L3#5 (0.50), lvl:indexing@L4#1 (0.30), lvl:indexing@L3#7 (0.20)
 
-Label prompt for level way lvl:indexing@L3#5 (the model saw only the concept, the way's name 'relation to neighbour' and its text; no level):
+Label prompt for level way lvl:indexing@L3#5 (the model saw the concept, the way's name 'relation to neighbour', its text, where the way stops and whether the words must be correct; no level):
 > A lookup table uses a data value as the index (months[m]), so the data must lie in 0..length-1.
+>
+> Where this way stops: Two correct but separate rules are L1. Executing the two in sequence is L2. A relational answer may be correct or a relational error.
+
+Model's reply:
+```
+Label: shown
+Clauses: 2, 3
+Confidence: 0.85
+```
+
+Label prompt for level way lvl:indexing@L4#1 (the model saw the concept, the way's name 'transfer to a new program', its text, where the way stops and whether the words must be correct; no level):
+> Applicability: index when you need a particular element by position, or when the position is computed from data (counts[score]++, months[m]). When every value is processed in order and the position is never needed, an enhanced for loop is simpler.
+>
+> Where this way stops: Reproducing or slightly varying a familiar program is L1 to L3.
+
+Model's reply:
+```
+Label: not shown
+Clauses: none
+Confidence: 0.8
+```
+
+Label prompt for level way lvl:indexing@L3#7 (the model saw the concept, the way's name 'purpose of the whole', its text, where the way stops and whether the words must be correct; no level):
+> Plan/role: random access, reaching any element directly by its position in constant time (address plus index), so code touches only the elements it needs.
+>
+> Where this way stops: Narrating the lines is L2. A purpose induced from a few traced cases is L2. A wrong purpose is still L3, but with an error.
 
 Model's reply:
 ```
@@ -874,32 +918,12 @@ Clauses: 1, 2, 3
 Confidence: 0.85
 ```
 
-Label prompt for level way lvl:indexing@L4#1 (the model saw only the concept, the way's name 'transfer to a new program' and its text; no level):
-> Applicability: index when you need a particular element by position, or when the position is computed from data (counts[score]++, months[m]). When every value is processed in order and the position is never needed, an enhanced for loop is simpler.
-
-Model's reply:
-```
-Label: shown
-Clauses: 1, 2, 3
-Confidence: 0.75
-```
-
-Label prompt for level way lvl:indexing@L3#7 (the model saw only the concept, the way's name 'purpose of the whole' and its text; no level):
-> Plan/role: random access, reaching any element directly by its position in constant time (address plus index), so code touches only the elements it needs.
-
-Model's reply:
-```
-Label: shown
-Clauses: 1, 2
-Confidence: 0.6
-```
-
 Parsed labels:
 | edge | label | prune score | confidence | score | clauses | words |
 |---|---|---|---|---|---|---|
-| lvl:indexing@L3#5 | shown | 0.5 | 0.85 | 0.42 | c1, c2, c3 | counts[r] is how many numbers leave remainder r when divided by 3; The % 3 turns each number into an index 0, 1 or 2; so it fits the array |
-| lvl:indexing@L4#1 | shown | 0.3 | 0.75 | 0.22 | c1, c2, c3 | counts[r] is how many numbers leave remainder r when divided by 3; The % 3 turns each number into an index 0, 1 or 2; so it fits the array |
-| lvl:indexing@L3#7 | shown | 0.2 | 0.6 | 0.12 | c1, c2 | counts[r] is how many numbers leave remainder r when divided by 3; The % 3 turns each number into an index 0, 1 or 2 |
+| lvl:indexing@L3#5 | shown | 0.5 | 0.85 | 0.42 | c2, c3 | The % 3 turns each number into an index 0, 1 or 2; so it fits the array |
+| lvl:indexing@L4#1 | not applied |  |  | 0.0 |  |  |
+| lvl:indexing@L3#7 | shown | 0.2 | 0.85 | 0.17 | c1, c2, c3 | counts[r] is how many numbers leave remainder r when divided by 3; The % 3 turns each number into an index 0, 1 or 2; so it fits the array |
 
 **Kept on a path at this depth** (best N in tiers: held misconception / broken edge, then held error, then correct / confirmed / shown):
 
@@ -1209,42 +1233,48 @@ Prune: the model's reply (edge id and score; the kept edges sum to 1):
 ```
 Kept by pruning: lvl:expression@L3#5 (0.40), lvl:expression@L3#1 (0.35), lvl:expression@L4#1 (0.25)
 
-Label prompt for level way lvl:expression@L3#5 (the model saw only the concept, the way's name 'purpose of the whole' and its text; no level):
+Label prompt for level way lvl:expression@L3#5 (the model saw the concept, the way's name 'purpose of the whole', its text, where the way stops and whether the words must be correct; no level):
 > Expressions compute new values from existing ones. They form the right side of every assignment, every condition, every method argument and every printed value.
+>
+> Where this way stops: Narrating the lines is L2. A purpose induced from a few traced cases is L2. A wrong purpose is still L3, but with an error.
 
 Model's reply:
 ```
 Label: shown
-Clauses: 2, 3
-Confidence: 0.8
+Clauses: 1, 2, 3
+Confidence: 0.85
 ```
 
-Label prompt for level way lvl:expression@L3#1 (the model saw only the concept, the way's name 'relation to neighbour' and its text; no level):
+Label prompt for level way lvl:expression@L3#1 (the model saw the concept, the way's name 'relation to neighbour', its text, where the way stops and whether the words must be correct; no level):
 > Operators combine operand values into a new value, and the operand types choose the operation (int / truncates, double / does not).
+>
+> Where this way stops: Two correct but separate rules are L1. Executing the two in sequence is L2. A relational answer may be correct or a relational error.
 
 Model's reply:
 ```
 Label: shown
 Clauses: 2, 3
-Confidence: 0.7
+Confidence: 0.72
 ```
 
-Label prompt for level way lvl:expression@L4#1 (the model saw only the concept, the way's name 'transfer to a new program' and its text; no level):
+Label prompt for level way lvl:expression@L4#1 (the model saw the concept, the way's name 'transfer to a new program', its text, where the way stops and whether the words must be correct; no level):
 > Use an expression wherever a value is needed. Split a long or unclear expression into named intermediate variables, and add parentheses wherever the grouping is not obvious.
+>
+> Where this way stops: Reproducing or slightly varying a familiar program is L1 to L3.
 
 Model's reply:
 ```
-Label: shown
-Clauses: 2, 3
-Confidence: 0.6
+Label: not shown
+Clauses: none
+Confidence: 0.85
 ```
 
 Parsed labels:
 | edge | label | prune score | confidence | score | clauses | words |
 |---|---|---|---|---|---|---|
-| lvl:expression@L3#5 | shown | 0.4 | 0.8 | 0.32 | c2, c3 | The % 3 turns each number into an index 0, 1 or 2; so it fits the array |
-| lvl:expression@L3#1 | shown | 0.35 | 0.7 | 0.24 | c2, c3 | The % 3 turns each number into an index 0, 1 or 2; so it fits the array |
-| lvl:expression@L4#1 | shown | 0.25 | 0.6 | 0.15 | c2, c3 | The % 3 turns each number into an index 0, 1 or 2; so it fits the array |
+| lvl:expression@L3#5 | shown | 0.4 | 0.85 | 0.34 | c1, c2, c3 | counts[r] is how many numbers leave remainder r when divided by 3; The % 3 turns each number into an index 0, 1 or 2; so it fits the array |
+| lvl:expression@L3#1 | shown | 0.35 | 0.72 | 0.25 | c2, c3 | The % 3 turns each number into an index 0, 1 or 2; so it fits the array |
+| lvl:expression@L4#1 | not applied |  |  | 0.0 |  |  |
 
 #### array_bounds, misconceptions: 2 edges offered
 Edges offered:
@@ -1303,24 +1333,28 @@ Prune: the model's reply (edge id and score; the kept edges sum to 1):
 ```
 Kept by pruning: lvl:array_bounds@L3#0 (0.45), lvl:array_bounds@L4#1 (0.35), lvl:array_bounds@L1#0 (0.20)
 
-Label prompt for level way lvl:array_bounds@L3#0 (the model saw only the concept, the way's name 'relation to neighbour' and its text; no level):
+Label prompt for level way lvl:array_bounds@L3#0 (the model saw the concept, the way's name 'relation to neighbour', its text, where the way stops and whether the words must be correct; no level):
 > Every index value used in a[i] must satisfy 0 <= i <= a.length-1; the last element is a[a.length-1].
+>
+> Where this way stops: Two correct but separate rules are L1. Executing the two in sequence is L2. A relational answer may be correct or a relational error.
 
 Model's reply:
 ```
 Label: shown
 Clauses: 2, 3
-Confidence: 0.72
+Confidence: 0.8
 ```
 
-Label prompt for level way lvl:array_bounds@L4#1 (the model saw only the concept, the way's name 'transfer to a new program' and its text; no level):
+Label prompt for level way lvl:array_bounds@L4#1 (the model saw the concept, the way's name 'transfer to a new program', its text, where the way stops and whether the words must be correct; no level):
 > Applicability: check indices explicitly (or restrict the loop range) whenever an index is computed from data, a random number or a neighbour (i-1, i+1). A plain i < a.length traversal or an enhanced for loop needs no extra check.
+>
+> Where this way stops: Reproducing or slightly varying a familiar program is L1 to L3.
 
 Model's reply:
 ```
 Label: shown
 Clauses: 2, 3
-Confidence: 0.7
+Confidence: 0.6
 ```
 
 Label prompt for level way lvl:array_bounds@L1#0 (the model saw only the concept, the way's name 'names the element' and its text; no level):
@@ -1336,13 +1370,13 @@ Confidence: 0.8
 Parsed labels:
 | edge | label | prune score | confidence | score | clauses | words |
 |---|---|---|---|---|---|---|
-| lvl:array_bounds@L3#0 | shown | 0.45 | 0.72 | 0.32 | c2, c3 | The % 3 turns each number into an index 0, 1 or 2; so it fits the array |
-| lvl:array_bounds@L4#1 | shown | 0.35 | 0.7 | 0.24 | c2, c3 | The % 3 turns each number into an index 0, 1 or 2; so it fits the array |
+| lvl:array_bounds@L3#0 | shown | 0.45 | 0.8 | 0.36 | c2, c3 | The % 3 turns each number into an index 0, 1 or 2; so it fits the array |
+| lvl:array_bounds@L4#1 | shown | 0.35 | 0.6 | 0.21 | c2, c3 | The % 3 turns each number into an index 0, 1 or 2; so it fits the array |
 | lvl:array_bounds@L1#0 | shown | 0.2 | 0.8 | 0.16 | c2, c3 | The % 3 turns each number into an index 0, 1 or 2; so it fits the array |
 
 **Kept on a path at this depth** (best N in tiers: held misconception / broken edge, then held error, then correct / confirmed / shown):
 
-lvl:array_bounds@L3#0 [shown, tier 2, 0.32], lvl:expression@L3#5 [shown, tier 2, 0.32], lvl:expression@L3#1 [shown, tier 2, 0.24]
+lvl:array_bounds@L3#0 [shown, tier 2, 0.36], lvl:expression@L3#5 [shown, tier 2, 0.34], lvl:expression@L3#1 [shown, tier 2, 0.25]
 
 **Clause coverage after this depth:**
 | clause | text | covered by |
@@ -1357,11 +1391,14 @@ Figure 7 (the graph after depth 4): C:\Users\magnu\OneDrive\Desktop\ES_VIterbi_P
 
 ## 4. Diagnosis (rules over the labelled graph, no model)
 Root-cause walk: held on [], broken at [], prerequisites {'expression': ['arithmetic_operators'], 'remainder_operator': ['arithmetic_operators'], 'array_default_values': ['array_creation'], 'array_initializer': ['array_creation', 'array_declaration'], 'indexing': ['array_creation', 'array_initializer'], 'length_field': ['array_creation', 'array_initializer'], 'array_creation': ['array_declaration'], 'increment_operators': ['assignment', 'loop_control'], 'boolean_expression': ['comparison_operators'], 'array_declaration': ['data_structure'], 'data_structure': ['data_type'], 'comparison_operators': ['expression'], 'array_traversal': ['for_loop', 'indexing', 'length_field'], 'loop_body': ['for_loop'], 'loop_scope': ['for_loop'], 'counter_pattern': ['increment_operators', 'loop_body'], 'array_bounds': ['indexing'], 'for_loop': ['loop_control'], 'loop_control': ['loop_variable'], 'control_flow': ['statement'], 'println': ['statement', 'string_literal'], 'string_conversion': ['string_concatenation']}
+- way lvl:length_field@L3#0 not counted: confidence 0.60 is not above 0.60
+- way lvl:array_creation@L3#7 not counted: confidence 0.60 is not above 0.60
+- way lvl:array_bounds@L4#1 not counted: confidence 0.60 is not above 0.60
 - arithmetic_operators: L3 via purpose_of_the_whole "counts[r] is how many numbers leave remainder r when divided by 3; The % 3 turns each number into an index 0, 1 or 2; so it fits the array"
-- array_bounds: L4 via transfer_to_a_new_program "The % 3 turns each number into an index 0, 1 or 2; so it fits the array"
+- array_bounds: L3 via relation_to_neighbour "The % 3 turns each number into an index 0, 1 or 2; so it fits the array"
 - array_creation: L3 via relation_to_neighbour "The % 3 turns each number into an index 0, 1 or 2; so it fits the array"
-- expression: L4 via transfer_to_a_new_program "The % 3 turns each number into an index 0, 1 or 2; so it fits the array"
-- indexing: L4 via transfer_to_a_new_program "counts[r] is how many numbers leave remainder r when divided by 3; The % 3 turns each number into an index 0, 1 or 2; so it fits the array"
+- expression: L3 via purpose_of_the_whole "counts[r] is how many numbers leave remainder r when divided by 3; The % 3 turns each number into an index 0, 1 or 2; so it fits the array"
+- indexing: L3 via relation_to_neighbour "The % 3 turns each number into an index 0, 1 or 2; so it fits the array"
 - remainder_operator: L3 via purpose_of_the_whole "counts[r] is how many numbers leave remainder r when divided by 3; The % 3 turns each number into an index 0, 1 or 2; so it fits the array"
 
 **Stop:** max depth at depth 4; prompts {'prune': 22, 'label': 49}, fresh model calls 0, cache hits 71
@@ -1378,13 +1415,20 @@ Root-cause walk: held on [], broken at [], prerequisites {'expression': ['arithm
 | concept | level | way | misconception | source | quote | rule | also | note |
 |---|---|---|---|---|---|---|---|---|
 | arithmetic_operators | L3 | purpose_of_the_whole |  | level_way | counts[r] is how many numbers leave remainder r when divided by 3; The % 3 turns each number into an index 0, 1 or 2; so it fits the array |  | L2 output_prediction |  |
-| array_bounds | L4 | transfer_to_a_new_program |  | level_way | The % 3 turns each number into an index 0, 1 or 2; so it fits the array |  | L3 relation_to_neighbour, L1 names_the_element |  |
+| array_bounds | L3 | relation_to_neighbour |  | level_way | The % 3 turns each number into an index 0, 1 or 2; so it fits the array |  | L1 names_the_element |  |
 | array_creation | L3 | relation_to_neighbour |  | level_way | The % 3 turns each number into an index 0, 1 or 2; so it fits the array |  | L3 relation_to_neighbour |  |
-| expression | L4 | transfer_to_a_new_program |  | level_way | The % 3 turns each number into an index 0, 1 or 2; so it fits the array |  | L3 purpose_of_the_whole, L3 relation_to_neighbour |  |
-| indexing | L4 | transfer_to_a_new_program |  | level_way | counts[r] is how many numbers leave remainder r when divided by 3; The % 3 turns each number into an index 0, 1 or 2; so it fits the array |  | L3 relation_to_neighbour, L3 purpose_of_the_whole |  |
+| expression | L3 | purpose_of_the_whole |  | level_way | counts[r] is how many numbers leave remainder r when divided by 3; The % 3 turns each number into an index 0, 1 or 2; so it fits the array |  | L3 relation_to_neighbour |  |
+| indexing | L3 | relation_to_neighbour |  | level_way | The % 3 turns each number into an index 0, 1 or 2; so it fits the array |  | L3 purpose_of_the_whole |  |
 | remainder_operator | L3 | purpose_of_the_whole |  | level_way | counts[r] is how many numbers leave remainder r when divided by 3; The % 3 turns each number into an index 0, 1 or 2; so it fits the array |  | L2 one_step_execution, L1 names_the_element |  |
 
-### Overall level: L4
+Shown ways above L2 that do not count for the level:
+| concept | edge | level | way | confidence | reason | quote |
+|---|---|---|---|---|---|---|
+| length_field | lvl:length_field@L3#0 | L3 | relation_to_neighbour | 0.6 | confidence 0.60 is not above 0.60 | The % 3 turns each number into an index 0, 1 or 2; so it fits the array |
+| array_creation | lvl:array_creation@L3#7 | L3 | purpose_of_the_whole | 0.6 | confidence 0.60 is not above 0.60 | counts[r] is how many numbers leave remainder r when divided by 3; so it fits the array |
+| array_bounds | lvl:array_bounds@L4#1 | L4 | transfer_to_a_new_program | 0.6 | confidence 0.60 is not above 0.60 | The % 3 turns each number into an index 0, 1 or 2; so it fits the array |
+
+### Overall level: L3
 
 Clause coverage (final):
 | clause | covered by |
@@ -1399,53 +1443,53 @@ Figure 8 (final picture): C:\Users\magnu\OneDrive\Desktop\ES_VIterbi_Personalize
 | depth | source | edge | kind | label | prune_score | confidence | score | clauses | quote |
 |---|---|---|---|---|---|---|---|---|---|
 | 1 | arithmetic_operators | mis:arithmetic_operators->RemainderIsSubtraction | misconception | correct | 0.9 | 0.9 | 0.81 | [1, 2] | counts[r] is how many numbers leave remainder r when divided by 3; The % 3 turns each number into an index 0, 1 or 2 |
-| 1 | arithmetic_operators | lvl:arithmetic_operators@L3#4 | level | shown | 0.5 | 0.75 | 0.375 | [1, 2, 3] | counts[r] is how many numbers leave remainder r when divided by 3; The % 3 turns each number into an index 0, 1 or 2; so it fits the array |
+| 1 | arithmetic_operators | lvl:arithmetic_operators@L3#4 | level | shown | 0.5 | 0.88 | 0.44 | [1, 2, 3] | counts[r] is how many numbers leave remainder r when divided by 3; The % 3 turns each number into an index 0, 1 or 2; so it fits the array |
 | 1 | arithmetic_operators | lvl:arithmetic_operators@L2#1 | level | shown | 0.2 | 0.6 | 0.12 | [1, 2] | counts[r] is how many numbers leave remainder r when divided by 3; The % 3 turns each number into an index 0, 1 or 2 |
 | 1 | remainder_operator | mis:remainder_operator->RemainderIsQuotient | misconception | correct | 0.45 | 0.8 | 0.36 | [1, 2] | counts[r] is how many numbers leave remainder r when divided by 3; The % 3 turns each number into an index 0, 1 or 2 |
 | 1 | remainder_operator | mis:remainder_operator->RemainderIsSubtraction | misconception | correct | 0.4 | 0.75 | 0.3 | [1, 2] | counts[r] is how many numbers leave remainder r when divided by 3; The % 3 turns each number into an index 0, 1 or 2 |
-| 1 | remainder_operator | lvl:remainder_operator@L3#1 | level | shown | 0.5 | 0.85 | 0.425 | [1, 2, 3] | counts[r] is how many numbers leave remainder r when divided by 3; The % 3 turns each number into an index 0, 1 or 2; so it fits the array |
+| 1 | remainder_operator | lvl:remainder_operator@L3#1 | level | shown | 0.5 | 0.9 | 0.45 | [1, 2, 3] | counts[r] is how many numbers leave remainder r when divided by 3; The % 3 turns each number into an index 0, 1 or 2; so it fits the array |
 | 1 | remainder_operator | lvl:remainder_operator@L1#0 | level | shown | 0.3 | 0.8 | 0.24 | [1, 2] | counts[r] is how many numbers leave remainder r when divided by 3; The % 3 turns each number into an index 0, 1 or 2 |
 | 1 | remainder_operator | lvl:remainder_operator@L2#2 | level | shown | 0.2 | 0.72 | 0.144 | [2, 3] | The % 3 turns each number into an index 0, 1 or 2; so it fits the array |
 | 2 | arithmetic_operators | pre:arithmetic_operators->remainder_operator | prerequisite | confirmed | 0.75 | 0.85 | 0.6375 | [1, 2] | counts[r] is how many numbers leave remainder r when divided by 3; The % 3 turns each number into an index 0, 1 or 2 |
 | 2 | arithmetic_operators | pre:arithmetic_operators->expression | prerequisite | confirmed | 0.2 | 0.8 | 0.16 | [2, 3] | The % 3 turns each number into an index 0, 1 or 2; so it fits the array |
 | 2 | array_initializer | pre:array_initializer->indexing | prerequisite | confirmed | 0.5 | 0.55 | 0.275 | [1, 2] | counts[r] is how many numbers leave remainder r when divided by 3; The % 3 turns each number into an index 0, 1 or 2 |
+| 2 | length_field | lvl:length_field@L3#0 | level | shown | 0.4 | 0.6 | 0.24 | [2, 3] | The % 3 turns each number into an index 0, 1 or 2; so it fits the array |
 | 2 | array_creation | mis:array_creation->ArrayRangeInclusive | misconception | correct | 0.6 | 0.8 | 0.48 | [2, 3] | The % 3 turns each number into an index 0, 1 or 2; so it fits the array |
 | 2 | array_creation | lvl:array_creation@L3#1 | level | shown | 0.6 | 0.8 | 0.48 | [2, 3] | The % 3 turns each number into an index 0, 1 or 2; so it fits the array |
-| 2 | array_creation | lvl:array_creation@L3#3 | level | shown | 0.15 | 0.55 | 0.0825 | [2, 3] | The % 3 turns each number into an index 0, 1 or 2; so it fits the array |
+| 2 | array_creation | lvl:array_creation@L3#7 | level | shown | 0.25 | 0.6 | 0.15 | [1, 3] | counts[r] is how many numbers leave remainder r when divided by 3; so it fits the array |
+| 2 | array_creation | lvl:array_creation@L3#3 | level | shown | 0.15 | 0.72 | 0.108 | [2, 3] | The % 3 turns each number into an index 0, 1 or 2; so it fits the array |
 | 2 | indexing | mis:indexing->IndexIsValue | misconception | correct | 0.4 | 0.8 | 0.32 | [1] | counts[r] is how many numbers leave remainder r when divided by 3 |
 | 2 | indexing | mis:indexing->ArrayRangeInclusive | misconception | correct | 0.35 | 0.8 | 0.28 | [2, 3] | The % 3 turns each number into an index 0, 1 or 2; so it fits the array |
 | 2 | indexing | mis:indexing->ArrayElementNotVariable | misconception | correct | 0.25 | 0.6 | 0.15 | [2] | The % 3 turns each number into an index 0, 1 or 2 |
-| 2 | indexing | lvl:indexing@L3#5 | level | shown | 0.5 | 0.85 | 0.425 | [1, 2, 3] | counts[r] is how many numbers leave remainder r when divided by 3; The % 3 turns each number into an index 0, 1 or 2; so it fits the array |
-| 2 | indexing | lvl:indexing@L4#1 | level | shown | 0.3 | 0.75 | 0.225 | [1, 2, 3] | counts[r] is how many numbers leave remainder r when divided by 3; The % 3 turns each number into an index 0, 1 or 2; so it fits the array |
-| 2 | indexing | lvl:indexing@L3#7 | level | shown | 0.2 | 0.6 | 0.12 | [1, 2] | counts[r] is how many numbers leave remainder r when divided by 3; The % 3 turns each number into an index 0, 1 or 2 |
+| 2 | indexing | lvl:indexing@L3#5 | level | shown | 0.5 | 0.85 | 0.425 | [2, 3] | The % 3 turns each number into an index 0, 1 or 2; so it fits the array |
+| 2 | indexing | lvl:indexing@L3#7 | level | shown | 0.2 | 0.85 | 0.17 | [1, 2, 3] | counts[r] is how many numbers leave remainder r when divided by 3; The % 3 turns each number into an index 0, 1 or 2; so it fits the array |
 | 3 | arithmetic_operators | pre:arithmetic_operators->expression | prerequisite | confirmed | 0.85 | 0.8 | 0.68 | [2, 3] | The % 3 turns each number into an index 0, 1 or 2; so it fits the array |
 | 3 | length_field | pre:array_creation->length_field | prerequisite | confirmed | 0.6 | 0.7 | 0.42 | [2, 3] | The % 3 turns each number into an index 0, 1 or 2; so it fits the array |
 | 3 | indexing | pre:indexing->array_bounds | prerequisite | confirmed | 0.6 | 0.85 | 0.51 | [2, 3] | The % 3 turns each number into an index 0, 1 or 2; so it fits the array |
 | 3 | indexing | pre:indexing->array_traversal | prerequisite | confirmed | 0.2 | 0.6 | 0.12 | [1, 2] | counts[r] is how many numbers leave remainder r when divided by 3; The % 3 turns each number into an index 0, 1 or 2 |
 | 3 | indexing | pre:array_initializer->indexing | prerequisite | confirmed | 0.2 | 0.55 | 0.11 | [1, 2] | counts[r] is how many numbers leave remainder r when divided by 3; The % 3 turns each number into an index 0, 1 or 2 |
-| 4 | expression | lvl:expression@L3#5 | level | shown | 0.4 | 0.8 | 0.32 | [2, 3] | The % 3 turns each number into an index 0, 1 or 2; so it fits the array |
-| 4 | expression | lvl:expression@L3#1 | level | shown | 0.35 | 0.7 | 0.245 | [2, 3] | The % 3 turns each number into an index 0, 1 or 2; so it fits the array |
-| 4 | expression | lvl:expression@L4#1 | level | shown | 0.25 | 0.6 | 0.15 | [2, 3] | The % 3 turns each number into an index 0, 1 or 2; so it fits the array |
+| 4 | expression | lvl:expression@L3#5 | level | shown | 0.4 | 0.85 | 0.34 | [1, 2, 3] | counts[r] is how many numbers leave remainder r when divided by 3; The % 3 turns each number into an index 0, 1 or 2; so it fits the array |
+| 4 | expression | lvl:expression@L3#1 | level | shown | 0.35 | 0.72 | 0.252 | [2, 3] | The % 3 turns each number into an index 0, 1 or 2; so it fits the array |
 | 4 | array_bounds | mis:array_bounds->OffByOneBound | misconception | correct | 0.4 | 0.6 | 0.24 | [2, 3] | The % 3 turns each number into an index 0, 1 or 2; so it fits the array |
-| 4 | array_bounds | lvl:array_bounds@L3#0 | level | shown | 0.45 | 0.72 | 0.324 | [2, 3] | The % 3 turns each number into an index 0, 1 or 2; so it fits the array |
-| 4 | array_bounds | lvl:array_bounds@L4#1 | level | shown | 0.35 | 0.7 | 0.245 | [2, 3] | The % 3 turns each number into an index 0, 1 or 2; so it fits the array |
+| 4 | array_bounds | lvl:array_bounds@L3#0 | level | shown | 0.45 | 0.8 | 0.36 | [2, 3] | The % 3 turns each number into an index 0, 1 or 2; so it fits the array |
+| 4 | array_bounds | lvl:array_bounds@L4#1 | level | shown | 0.35 | 0.6 | 0.21 | [2, 3] | The % 3 turns each number into an index 0, 1 or 2; so it fits the array |
 | 4 | array_bounds | lvl:array_bounds@L1#0 | level | shown | 0.2 | 0.8 | 0.16 | [2, 3] | The % 3 turns each number into an index 0, 1 or 2; so it fits the array |
 
 ## 6. The paths (what the keep step kept, depth by depth)
 | depth | source | edge | kind | label | score | clauses |
 |---|---|---|---|---|---|---|
 | 1 | arithmetic_operators | mis:arithmetic_operators->RemainderIsSubtraction | misconception | correct | 0.81 | [1, 2] |
-| 1 | remainder_operator | lvl:remainder_operator@L3#1 | level | shown | 0.425 | [1, 2, 3] |
-| 1 | arithmetic_operators | lvl:arithmetic_operators@L3#4 | level | shown | 0.375 | [1, 2, 3] |
+| 1 | remainder_operator | lvl:remainder_operator@L3#1 | level | shown | 0.45 | [1, 2, 3] |
+| 1 | arithmetic_operators | lvl:arithmetic_operators@L3#4 | level | shown | 0.44 | [1, 2, 3] |
 | 2 | arithmetic_operators | pre:arithmetic_operators->remainder_operator | prerequisite | confirmed | 0.6375 | [1, 2] |
 | 2 | array_creation | mis:array_creation->ArrayRangeInclusive | misconception | correct | 0.48 | [2, 3] |
 | 2 | array_creation | lvl:array_creation@L3#1 | level | shown | 0.48 | [2, 3] |
 | 3 | arithmetic_operators | pre:arithmetic_operators->expression | prerequisite | confirmed | 0.68 | [2, 3] |
 | 3 | indexing | pre:indexing->array_bounds | prerequisite | confirmed | 0.51 | [2, 3] |
 | 3 | length_field | pre:array_creation->length_field | prerequisite | confirmed | 0.42 | [2, 3] |
-| 4 | array_bounds | lvl:array_bounds@L3#0 | level | shown | 0.324 | [2, 3] |
-| 4 | expression | lvl:expression@L3#5 | level | shown | 0.32 | [2, 3] |
-| 4 | expression | lvl:expression@L3#1 | level | shown | 0.245 | [2, 3] |
+| 4 | array_bounds | lvl:array_bounds@L3#0 | level | shown | 0.36 | [2, 3] |
+| 4 | expression | lvl:expression@L3#5 | level | shown | 0.34 | [1, 2, 3] |
+| 4 | expression | lvl:expression@L3#1 | level | shown | 0.252 | [2, 3] |
 
 ## 7. Raw traversal log
 ```
@@ -1459,7 +1503,7 @@ start concepts (3): arithmetic_operators, remainder_operator, array_initializer
     mis:arithmetic_operators->CaretIsPower -> not applied (0.00) ""
     mis:arithmetic_operators->ArithmeticOnNumericStrings -> not applied (0.00) ""
   arithmetic_operators (level ways): 18 candidates -> kept lvl:arithmetic_operators@L3#4 (0.50), lvl:arithmetic_operators@L3#1 (0.30), lvl:arithmetic_operators@L2#1 (0.20)
-    lvl:arithmetic_operators@L3#4 -> shown (0.38) "counts[r] is how many numbers leave remainder r when divided by 3; The % 3 turns each number into an index 0, 1 or 2; so it fits the array"
+    lvl:arithmetic_operators@L3#4 -> shown (0.44) "counts[r] is how many numbers leave remainder r when divided by 3; The % 3 turns each number into an index 0, 1 or 2; so it fits the array"
     lvl:arithmetic_operators@L3#1 -> not applied (0.00) ""
     lvl:arithmetic_operators@L2#1 -> shown (0.12) "counts[r] is how many numbers leave remainder r when divided by 3; The % 3 turns each number into an index 0, 1 or 2"
   remainder_operator (misconceptions): 3 candidates -> kept mis:remainder_operator->RemainderIsQuotient (0.45), mis:remainder_operator->RemainderIsSubtraction (0.40), mis:remainder_operator->NegativeRemainderSign (0.15)
@@ -1467,7 +1511,7 @@ start concepts (3): arithmetic_operators, remainder_operator, array_initializer
     mis:remainder_operator->RemainderIsSubtraction -> correct (0.30) "counts[r] is how many numbers leave remainder r when divided by 3; The % 3 turns each number into an index 0, 1 or 2"
     mis:remainder_operator->NegativeRemainderSign -> not applied (0.00) ""
   remainder_operator (level ways): 14 candidates -> kept lvl:remainder_operator@L3#1 (0.50), lvl:remainder_operator@L1#0 (0.30), lvl:remainder_operator@L2#2 (0.20)
-    lvl:remainder_operator@L3#1 -> shown (0.42) "counts[r] is how many numbers leave remainder r when divided by 3; The % 3 turns each number into an index 0, 1 or 2; so it fits the array"
+    lvl:remainder_operator@L3#1 -> shown (0.45) "counts[r] is how many numbers leave remainder r when divided by 3; The % 3 turns each number into an index 0, 1 or 2; so it fits the array"
     lvl:remainder_operator@L1#0 -> shown (0.24) "counts[r] is how many numbers leave remainder r when divided by 3; The % 3 turns each number into an index 0, 1 or 2"
     lvl:remainder_operator@L2#2 -> shown (0.14) "The % 3 turns each number into an index 0, 1 or 2; so it fits the array"
   array_initializer (misconceptions): 2 candidates -> kept mis:array_initializer->ArrayBracketCountIsLength (0.60), mis:array_initializer->ArrayInitializerContentsInBrackets (0.40)
@@ -1477,7 +1521,7 @@ start concepts (3): arithmetic_operators, remainder_operator, array_initializer
     lvl:array_initializer@L2#2 -> not applied (0.00) ""
     lvl:array_initializer@L1#0 -> not applied (0.00) ""
     lvl:array_initializer@L3#1 -> not applied (0.00) ""
-  kept: mis:arithmetic_operators->RemainderIsSubtraction [correct, tier 2, 0.81], lvl:remainder_operator@L3#1 [shown, tier 2, 0.42], lvl:arithmetic_operators@L3#4 [shown, tier 2, 0.38]
+  kept: mis:arithmetic_operators->RemainderIsSubtraction [correct, tier 2, 0.81], lvl:remainder_operator@L3#1 [shown, tier 2, 0.45], lvl:arithmetic_operators@L3#4 [shown, tier 2, 0.44]
   clause coverage: c1 <- mis:arithmetic_operators->RemainderIsSubtraction; c2 <- mis:arithmetic_operators->RemainderIsSubtraction; c3 uncovered
   uncovered clauses bring in: length_field (2.50), array_creation (2.48), indexing (2.38)
   not yet read: own edges of array_creation, own edges of indexing, own edges of length_field, par:string_concatenation~arithmetic_operators, pre:arithmetic_operators->expression, pre:arithmetic_operators->remainder_operator, pre:array_creation->array_initializer, pre:array_declaration->array_initializer, pre:array_initializer->indexing, pre:array_initializer->length_field
@@ -1494,7 +1538,7 @@ start concepts (3): arithmetic_operators, remainder_operator, array_initializer
     mis:length_field->ArrayHasLengthMethod -> not applied (0.00) ""
     mis:length_field->ArrayLengthCannotBeZero -> not applied (0.00) ""
   length_field (level ways): 15 candidates -> kept lvl:length_field@L3#0 (0.40), lvl:length_field@L1#1 (0.35), lvl:length_field@L3#2 (0.25)
-    lvl:length_field@L3#0 -> not applied (0.00) ""
+    lvl:length_field@L3#0 -> shown (0.24) "The % 3 turns each number into an index 0, 1 or 2; so it fits the array"
     lvl:length_field@L1#1 -> not applied (0.00) ""
     lvl:length_field@L3#2 -> not applied (0.00) ""
   array_creation (misconceptions): 9 candidates -> kept mis:array_creation->ArrayRangeInclusive (0.60), mis:array_creation->ArraysGrow (0.25), mis:array_creation->ArrayAllocationWithoutNew (0.15)
@@ -1503,16 +1547,16 @@ start concepts (3): arithmetic_operators, remainder_operator, array_initializer
     mis:array_creation->ArrayAllocationWithoutNew -> not applied (0.00) ""
   array_creation (level ways): 21 candidates -> kept lvl:array_creation@L3#1 (0.60), lvl:array_creation@L3#7 (0.25), lvl:array_creation@L3#3 (0.15)
     lvl:array_creation@L3#1 -> shown (0.48) "The % 3 turns each number into an index 0, 1 or 2; so it fits the array"
-    lvl:array_creation@L3#7 -> not applied (0.00) ""
-    lvl:array_creation@L3#3 -> shown (0.08) "The % 3 turns each number into an index 0, 1 or 2; so it fits the array"
+    lvl:array_creation@L3#7 -> shown (0.15) "counts[r] is how many numbers leave remainder r when divided by 3; so it fits the array"
+    lvl:array_creation@L3#3 -> shown (0.11) "The % 3 turns each number into an index 0, 1 or 2; so it fits the array"
   indexing (misconceptions): 8 candidates -> kept mis:indexing->IndexIsValue (0.40), mis:indexing->ArrayRangeInclusive (0.35), mis:indexing->ArrayElementNotVariable (0.25)
     mis:indexing->IndexIsValue -> correct (0.32) "counts[r] is how many numbers leave remainder r when divided by 3"
     mis:indexing->ArrayRangeInclusive -> correct (0.28) "The % 3 turns each number into an index 0, 1 or 2; so it fits the array"
     mis:indexing->ArrayElementNotVariable -> correct (0.15) "The % 3 turns each number into an index 0, 1 or 2"
   indexing (level ways): 21 candidates -> kept lvl:indexing@L3#5 (0.50), lvl:indexing@L4#1 (0.30), lvl:indexing@L3#7 (0.20)
-    lvl:indexing@L3#5 -> shown (0.42) "counts[r] is how many numbers leave remainder r when divided by 3; The % 3 turns each number into an index 0, 1 or 2; so it fits the array"
-    lvl:indexing@L4#1 -> shown (0.22) "counts[r] is how many numbers leave remainder r when divided by 3; The % 3 turns each number into an index 0, 1 or 2; so it fits the array"
-    lvl:indexing@L3#7 -> shown (0.12) "counts[r] is how many numbers leave remainder r when divided by 3; The % 3 turns each number into an index 0, 1 or 2"
+    lvl:indexing@L3#5 -> shown (0.42) "The % 3 turns each number into an index 0, 1 or 2; so it fits the array"
+    lvl:indexing@L4#1 -> not applied (0.00) ""
+    lvl:indexing@L3#7 -> shown (0.17) "counts[r] is how many numbers leave remainder r when divided by 3; The % 3 turns each number into an index 0, 1 or 2; so it fits the array"
   kept: pre:arithmetic_operators->remainder_operator [confirmed, tier 2, 0.64], mis:array_creation->ArrayRangeInclusive [correct, tier 2, 0.48], lvl:array_creation@L3#1 [shown, tier 2, 0.48]
   clause coverage: c1 <- mis:arithmetic_operators->RemainderIsSubtraction; c2 <- mis:arithmetic_operators->RemainderIsSubtraction; c3 <- pre:arithmetic_operators->expression
   not yet read: pre:array_creation->array_default_values, pre:array_creation->indexing, pre:array_creation->length_field, pre:array_declaration->array_creation, pre:indexing->array_bounds, pre:indexing->array_traversal, pre:length_field->array_traversal
@@ -1543,25 +1587,28 @@ start concepts (3): arithmetic_operators, remainder_operator, array_initializer
     mis:expression->AssignmentIsEquation -> not applied (0.00) ""
     mis:expression->VariablesHoldExpressions -> not applied (0.00) ""
   expression (level ways): 19 candidates -> kept lvl:expression@L3#5 (0.40), lvl:expression@L3#1 (0.35), lvl:expression@L4#1 (0.25)
-    lvl:expression@L3#5 -> shown (0.32) "The % 3 turns each number into an index 0, 1 or 2; so it fits the array"
-    lvl:expression@L3#1 -> shown (0.24) "The % 3 turns each number into an index 0, 1 or 2; so it fits the array"
-    lvl:expression@L4#1 -> shown (0.15) "The % 3 turns each number into an index 0, 1 or 2; so it fits the array"
+    lvl:expression@L3#5 -> shown (0.34) "counts[r] is how many numbers leave remainder r when divided by 3; The % 3 turns each number into an index 0, 1 or 2; so it fits the array"
+    lvl:expression@L3#1 -> shown (0.25) "The % 3 turns each number into an index 0, 1 or 2; so it fits the array"
+    lvl:expression@L4#1 -> not applied (0.00) ""
   array_bounds (misconceptions): 2 candidates -> kept mis:array_bounds->OutOfBoundsElementsAreNull (0.60), mis:array_bounds->OffByOneBound (0.40)
     mis:array_bounds->OutOfBoundsElementsAreNull -> not applied (0.00) ""
     mis:array_bounds->OffByOneBound -> correct (0.24) "The % 3 turns each number into an index 0, 1 or 2; so it fits the array"
   array_bounds (level ways): 14 candidates -> kept lvl:array_bounds@L3#0 (0.45), lvl:array_bounds@L4#1 (0.35), lvl:array_bounds@L1#0 (0.20)
-    lvl:array_bounds@L3#0 -> shown (0.32) "The % 3 turns each number into an index 0, 1 or 2; so it fits the array"
-    lvl:array_bounds@L4#1 -> shown (0.24) "The % 3 turns each number into an index 0, 1 or 2; so it fits the array"
+    lvl:array_bounds@L3#0 -> shown (0.36) "The % 3 turns each number into an index 0, 1 or 2; so it fits the array"
+    lvl:array_bounds@L4#1 -> shown (0.21) "The % 3 turns each number into an index 0, 1 or 2; so it fits the array"
     lvl:array_bounds@L1#0 -> shown (0.16) "The % 3 turns each number into an index 0, 1 or 2; so it fits the array"
-  kept: lvl:array_bounds@L3#0 [shown, tier 2, 0.32], lvl:expression@L3#5 [shown, tier 2, 0.32], lvl:expression@L3#1 [shown, tier 2, 0.24]
+  kept: lvl:array_bounds@L3#0 [shown, tier 2, 0.36], lvl:expression@L3#5 [shown, tier 2, 0.34], lvl:expression@L3#1 [shown, tier 2, 0.25]
   clause coverage: c1 <- mis:arithmetic_operators->RemainderIsSubtraction; c2 <- mis:arithmetic_operators->RemainderIsSubtraction; c3 <- pre:arithmetic_operators->expression
   not yet read: pre:expression->comparison_operators
   root-cause walk: held on [], broken at [], prerequisites {'expression': ['arithmetic_operators'], 'remainder_operator': ['arithmetic_operators'], 'array_default_values': ['array_creation'], 'array_initializer': ['array_creation', 'array_declaration'], 'indexing': ['array_creation', 'array_initializer'], 'length_field': ['array_creation', 'array_initializer'], 'array_creation': ['array_declaration'], 'increment_operators': ['assignment', 'loop_control'], 'boolean_expression': ['comparison_operators'], 'array_declaration': ['data_structure'], 'data_structure': ['data_type'], 'comparison_operators': ['expression'], 'array_traversal': ['for_loop', 'indexing', 'length_field'], 'loop_body': ['for_loop'], 'loop_scope': ['for_loop'], 'counter_pattern': ['increment_operators', 'loop_body'], 'array_bounds': ['indexing'], 'for_loop': ['loop_control'], 'loop_control': ['loop_variable'], 'control_flow': ['statement'], 'println': ['statement', 'string_literal'], 'string_conversion': ['string_concatenation']}
+  level way lvl:length_field@L3#0 not counted: confidence 0.60 is not above 0.60
+  level way lvl:array_creation@L3#7 not counted: confidence 0.60 is not above 0.60
+  level way lvl:array_bounds@L4#1 not counted: confidence 0.60 is not above 0.60
   level arithmetic_operators: L3 via purpose_of_the_whole "counts[r] is how many numbers leave remainder r when divided by 3; The % 3 turns each number into an index 0, 1 or 2; so it fits the array"
-  level array_bounds: L4 via transfer_to_a_new_program "The % 3 turns each number into an index 0, 1 or 2; so it fits the array"
+  level array_bounds: L3 via relation_to_neighbour "The % 3 turns each number into an index 0, 1 or 2; so it fits the array"
   level array_creation: L3 via relation_to_neighbour "The % 3 turns each number into an index 0, 1 or 2; so it fits the array"
-  level expression: L4 via transfer_to_a_new_program "The % 3 turns each number into an index 0, 1 or 2; so it fits the array"
-  level indexing: L4 via transfer_to_a_new_program "counts[r] is how many numbers leave remainder r when divided by 3; The % 3 turns each number into an index 0, 1 or 2; so it fits the array"
+  level expression: L3 via purpose_of_the_whole "counts[r] is how many numbers leave remainder r when divided by 3; The % 3 turns each number into an index 0, 1 or 2; so it fits the array"
+  level indexing: L3 via relation_to_neighbour "The % 3 turns each number into an index 0, 1 or 2; so it fits the array"
   level remainder_operator: L3 via purpose_of_the_whole "counts[r] is how many numbers leave remainder r when divided by 3; The % 3 turns each number into an index 0, 1 or 2; so it fits the array"
 ```
 
@@ -1574,7 +1621,8 @@ start concepts (3): arithmetic_operators, remainder_operator, array_initializer
   "depth": 3,
   "prune_tools": "llm",
   "model": "claude-opus-5-5",
-  "backend": "claude-cli"
+  "backend": "claude-cli",
+  "level_v2": true
  },
  "clauses": [
   "counts[r] is how many numbers leave remainder r when divided by 3",
@@ -1603,13 +1651,12 @@ start concepts (3): arithmetic_operators, remainder_operator, array_initializer
    ]
   },
   "array_bounds": {
-   "level": "L4",
-   "way": "transfer_to_a_new_program",
+   "level": "L3",
+   "way": "relation_to_neighbour",
    "quote": "The % 3 turns each number into an index 0, 1 or 2; so it fits the array",
-   "edge": "lvl:array_bounds@L4#1",
+   "edge": "lvl:array_bounds@L3#0",
    "source": "level_way",
    "also_shown": [
-    "L3 relation_to_neighbour",
     "L1 names_the_element"
    ]
   },
@@ -1624,24 +1671,22 @@ start concepts (3): arithmetic_operators, remainder_operator, array_initializer
    ]
   },
   "expression": {
-   "level": "L4",
-   "way": "transfer_to_a_new_program",
-   "quote": "The % 3 turns each number into an index 0, 1 or 2; so it fits the array",
-   "edge": "lvl:expression@L4#1",
+   "level": "L3",
+   "way": "purpose_of_the_whole",
+   "quote": "counts[r] is how many numbers leave remainder r when divided by 3; The % 3 turns each number into an index 0, 1 or 2; so it fits the array",
+   "edge": "lvl:expression@L3#5",
    "source": "level_way",
    "also_shown": [
-    "L3 purpose_of_the_whole",
     "L3 relation_to_neighbour"
    ]
   },
   "indexing": {
-   "level": "L4",
-   "way": "transfer_to_a_new_program",
-   "quote": "counts[r] is how many numbers leave remainder r when divided by 3; The % 3 turns each number into an index 0, 1 or 2; so it fits the array",
-   "edge": "lvl:indexing@L4#1",
+   "level": "L3",
+   "way": "relation_to_neighbour",
+   "quote": "The % 3 turns each number into an index 0, 1 or 2; so it fits the array",
+   "edge": "lvl:indexing@L3#5",
    "source": "level_way",
    "also_shown": [
-    "L3 relation_to_neighbour",
     "L3 purpose_of_the_whole"
    ]
   },
@@ -1657,7 +1702,7 @@ start concepts (3): arithmetic_operators, remainder_operator, array_initializer
    ]
   }
  },
- "overall_level": "L4",
+ "overall_level": "L3",
  "paths": [
   {
    "depth": 1,
@@ -1691,9 +1736,9 @@ start concepts (3): arithmetic_operators, remainder_operator, array_initializer
     3
    ],
    "quote": "counts[r] is how many numbers leave remainder r when divided by 3; The % 3 turns each number into an index 0, 1 or 2; so it fits the array",
-   "confidence": 0.85,
+   "confidence": 0.9,
    "prune_score": 0.5,
-   "score": 0.425,
+   "score": 0.45,
    "logic": "Plans: divisibility and parity tests (x % 2 == 0), digit extraction (x % 10), cyclic wrap-around ((i + 1) % n), leap-year rules, and splitting units (76 % 12 inches).",
    "twin_logic": null,
    "level": "L3",
@@ -1712,9 +1757,9 @@ start concepts (3): arithmetic_operators, remainder_operator, array_initializer
     3
    ],
    "quote": "counts[r] is how many numbers leave remainder r when divided by 3; The % 3 turns each number into an index 0, 1 or 2; so it fits the array",
-   "confidence": 0.75,
+   "confidence": 0.88,
    "prune_score": 0.5,
-   "score": 0.375,
+   "score": 0.44,
    "logic": "Arithmetic operators turn formulas into code: totals, averages, unit conversions (inch * CM_PER_INCH), and digit extraction (n % 10, n / 10).",
    "twin_logic": null,
    "level": "L3",
@@ -1843,9 +1888,9 @@ start concepts (3): arithmetic_operators, remainder_operator, array_initializer
     3
    ],
    "quote": "The % 3 turns each number into an index 0, 1 or 2; so it fits the array",
-   "confidence": 0.72,
+   "confidence": 0.8,
    "prune_score": 0.45,
-   "score": 0.324,
+   "score": 0.36,
    "logic": "Every index value used in a[i] must satisfy 0 <= i <= a.length-1; the last element is a[a.length-1].",
    "twin_logic": null,
    "level": "L3",
@@ -1859,13 +1904,14 @@ start concepts (3): arithmetic_operators, remainder_operator, array_initializer
    "kind": "level",
    "label": "shown",
    "clauses": [
+    1,
     2,
     3
    ],
-   "quote": "The % 3 turns each number into an index 0, 1 or 2; so it fits the array",
-   "confidence": 0.8,
+   "quote": "counts[r] is how many numbers leave remainder r when divided by 3; The % 3 turns each number into an index 0, 1 or 2; so it fits the array",
+   "confidence": 0.85,
    "prune_score": 0.4,
-   "score": 0.32,
+   "score": 0.34,
    "logic": "Expressions compute new values from existing ones. They form the right side of every assignment, every condition, every method argument and every printed value.",
    "twin_logic": null,
    "level": "L3",
@@ -1883,9 +1929,9 @@ start concepts (3): arithmetic_operators, remainder_operator, array_initializer
     3
    ],
    "quote": "The % 3 turns each number into an index 0, 1 or 2; so it fits the array",
-   "confidence": 0.7,
+   "confidence": 0.72,
    "prune_score": 0.35,
-   "score": 0.245,
+   "score": 0.252,
    "logic": "Operators combine operand values into a new value, and the operand types choose the operation (int / truncates, double / does not).",
    "twin_logic": null,
    "level": "L3",
@@ -1925,9 +1971,9 @@ start concepts (3): arithmetic_operators, remainder_operator, array_initializer
     3
    ],
    "quote": "counts[r] is how many numbers leave remainder r when divided by 3; The % 3 turns each number into an index 0, 1 or 2; so it fits the array",
-   "confidence": 0.75,
+   "confidence": 0.88,
    "prune_score": 0.5,
-   "score": 0.375,
+   "score": 0.44,
    "logic": "Arithmetic operators turn formulas into code: totals, averages, unit conversions (inch * CM_PER_INCH), and digit extraction (n % 10, n / 10).",
    "twin_logic": null,
    "level": "L3",
@@ -2004,9 +2050,9 @@ start concepts (3): arithmetic_operators, remainder_operator, array_initializer
     3
    ],
    "quote": "counts[r] is how many numbers leave remainder r when divided by 3; The % 3 turns each number into an index 0, 1 or 2; so it fits the array",
-   "confidence": 0.85,
+   "confidence": 0.9,
    "prune_score": 0.5,
-   "score": 0.425,
+   "score": 0.45,
    "logic": "Plans: divisibility and parity tests (x % 2 == 0), digit extraction (x % 10), cyclic wrap-around ((i + 1) % n), leap-year rules, and splitting units (76 % 12 inches).",
    "twin_logic": null,
    "level": "L3",
@@ -2108,6 +2154,26 @@ start concepts (3): arithmetic_operators, remainder_operator, array_initializer
   },
   {
    "depth": 2,
+   "source": "length_field",
+   "edge": "lvl:length_field@L3#0",
+   "target": "length_field@L3",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    2,
+    3
+   ],
+   "quote": "The % 3 turns each number into an index 0, 1 or 2; so it fits the array",
+   "confidence": 0.6,
+   "prune_score": 0.4,
+   "score": 0.24,
+   "logic": "The n given to new becomes a.length and stays fixed for that array object.",
+   "twin_logic": null,
+   "level": "L3",
+   "way": "relation_to_neighbour"
+  },
+  {
+   "depth": 2,
    "source": "array_creation",
    "edge": "mis:array_creation->ArrayRangeInclusive",
    "target": "ArrayRangeInclusive",
@@ -2148,6 +2214,26 @@ start concepts (3): arithmetic_operators, remainder_operator, array_initializer
   {
    "depth": 2,
    "source": "array_creation",
+   "edge": "lvl:array_creation@L3#7",
+   "target": "array_creation@L3",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    1,
+    3
+   ],
+   "quote": "counts[r] is how many numbers leave remainder r when divided by 3; so it fits the array",
+   "confidence": 0.6,
+   "prune_score": 0.25,
+   "score": 0.15,
+   "logic": "Plan/role: reserve storage for a number of values that may be known only at run time (e.g. N from the command line), before any value is stored.",
+   "twin_logic": null,
+   "level": "L3",
+   "way": "purpose_of_the_whole"
+  },
+  {
+   "depth": 2,
+   "source": "array_creation",
    "edge": "lvl:array_creation@L3#3",
    "target": "array_creation@L3",
    "kind": "level",
@@ -2157,9 +2243,9 @@ start concepts (3): arithmetic_operators, remainder_operator, array_initializer
     3
    ],
    "quote": "The % 3 turns each number into an index 0, 1 or 2; so it fits the array",
-   "confidence": 0.55,
+   "confidence": 0.72,
    "prune_score": 0.15,
-   "score": 0.0825,
+   "score": 0.108,
    "logic": "The size n given to new becomes a.length and never changes for that array object.",
    "twin_logic": null,
    "level": "L3",
@@ -2228,11 +2314,10 @@ start concepts (3): arithmetic_operators, remainder_operator, array_initializer
    "kind": "level",
    "label": "shown",
    "clauses": [
-    1,
     2,
     3
    ],
-   "quote": "counts[r] is how many numbers leave remainder r when divided by 3; The % 3 turns each number into an index 0, 1 or 2; so it fits the array",
+   "quote": "The % 3 turns each number into an index 0, 1 or 2; so it fits the array",
    "confidence": 0.85,
    "prune_score": 0.5,
    "score": 0.425,
@@ -2244,8 +2329,8 @@ start concepts (3): arithmetic_operators, remainder_operator, array_initializer
   {
    "depth": 2,
    "source": "indexing",
-   "edge": "lvl:indexing@L4#1",
-   "target": "indexing@L4",
+   "edge": "lvl:indexing@L3#7",
+   "target": "indexing@L3",
    "kind": "level",
    "label": "shown",
    "clauses": [
@@ -2254,29 +2339,9 @@ start concepts (3): arithmetic_operators, remainder_operator, array_initializer
     3
    ],
    "quote": "counts[r] is how many numbers leave remainder r when divided by 3; The % 3 turns each number into an index 0, 1 or 2; so it fits the array",
-   "confidence": 0.75,
-   "prune_score": 0.3,
-   "score": 0.225,
-   "logic": "Applicability: index when you need a particular element by position, or when the position is computed from data (counts[score]++, months[m]). When every value is processed in order and the position is never needed, an enhanced for loop is simpler.",
-   "twin_logic": null,
-   "level": "L4",
-   "way": "transfer_to_a_new_program"
-  },
-  {
-   "depth": 2,
-   "source": "indexing",
-   "edge": "lvl:indexing@L3#7",
-   "target": "indexing@L3",
-   "kind": "level",
-   "label": "shown",
-   "clauses": [
-    1,
-    2
-   ],
-   "quote": "counts[r] is how many numbers leave remainder r when divided by 3; The % 3 turns each number into an index 0, 1 or 2",
-   "confidence": 0.6,
+   "confidence": 0.85,
    "prune_score": 0.2,
-   "score": 0.12,
+   "score": 0.17,
    "logic": "Plan/role: random access, reaching any element directly by its position in constant time (address plus index), so code touches only the elements it needs.",
    "twin_logic": null,
    "level": "L3",
@@ -2380,13 +2445,14 @@ start concepts (3): arithmetic_operators, remainder_operator, array_initializer
    "kind": "level",
    "label": "shown",
    "clauses": [
+    1,
     2,
     3
    ],
-   "quote": "The % 3 turns each number into an index 0, 1 or 2; so it fits the array",
-   "confidence": 0.8,
+   "quote": "counts[r] is how many numbers leave remainder r when divided by 3; The % 3 turns each number into an index 0, 1 or 2; so it fits the array",
+   "confidence": 0.85,
    "prune_score": 0.4,
-   "score": 0.32,
+   "score": 0.34,
    "logic": "Expressions compute new values from existing ones. They form the right side of every assignment, every condition, every method argument and every printed value.",
    "twin_logic": null,
    "level": "L3",
@@ -2404,33 +2470,13 @@ start concepts (3): arithmetic_operators, remainder_operator, array_initializer
     3
    ],
    "quote": "The % 3 turns each number into an index 0, 1 or 2; so it fits the array",
-   "confidence": 0.7,
+   "confidence": 0.72,
    "prune_score": 0.35,
-   "score": 0.245,
+   "score": 0.252,
    "logic": "Operators combine operand values into a new value, and the operand types choose the operation (int / truncates, double / does not).",
    "twin_logic": null,
    "level": "L3",
    "way": "relation_to_neighbour"
-  },
-  {
-   "depth": 4,
-   "source": "expression",
-   "edge": "lvl:expression@L4#1",
-   "target": "expression@L4",
-   "kind": "level",
-   "label": "shown",
-   "clauses": [
-    2,
-    3
-   ],
-   "quote": "The % 3 turns each number into an index 0, 1 or 2; so it fits the array",
-   "confidence": 0.6,
-   "prune_score": 0.25,
-   "score": 0.15,
-   "logic": "Use an expression wherever a value is needed. Split a long or unclear expression into named intermediate variables, and add parentheses wherever the grouping is not obvious.",
-   "twin_logic": null,
-   "level": "L4",
-   "way": "transfer_to_a_new_program"
   },
   {
    "depth": 4,
@@ -2463,9 +2509,9 @@ start concepts (3): arithmetic_operators, remainder_operator, array_initializer
     3
    ],
    "quote": "The % 3 turns each number into an index 0, 1 or 2; so it fits the array",
-   "confidence": 0.72,
+   "confidence": 0.8,
    "prune_score": 0.45,
-   "score": 0.324,
+   "score": 0.36,
    "logic": "Every index value used in a[i] must satisfy 0 <= i <= a.length-1; the last element is a[a.length-1].",
    "twin_logic": null,
    "level": "L3",
@@ -2483,9 +2529,9 @@ start concepts (3): arithmetic_operators, remainder_operator, array_initializer
     3
    ],
    "quote": "The % 3 turns each number into an index 0, 1 or 2; so it fits the array",
-   "confidence": 0.7,
+   "confidence": 0.6,
    "prune_score": 0.35,
-   "score": 0.245,
+   "score": 0.21,
    "logic": "Applicability: check indices explicitly (or restrict the loop range) whenever an index is computed from data, a random number or a neighbour (i-1, i+1). A plain i < a.length traversal or an enhanced for loop needs no extra check.",
    "twin_logic": null,
    "level": "L4",
@@ -2525,6 +2571,38 @@ start concepts (3): arithmetic_operators, remainder_operator, array_initializer
  "llm_calls_by_step": {
   "prune": 22,
   "label": 49
+ },
+ "level_v2": {
+  "wrong_ways": [],
+  "not_counted": [
+   {
+    "concept": "length_field",
+    "edge": "lvl:length_field@L3#0",
+    "level": "L3",
+    "way": "relation_to_neighbour",
+    "quote": "The % 3 turns each number into an index 0, 1 or 2; so it fits the array",
+    "confidence": 0.6,
+    "reason": "confidence 0.60 is not above 0.60"
+   },
+   {
+    "concept": "array_creation",
+    "edge": "lvl:array_creation@L3#7",
+    "level": "L3",
+    "way": "purpose_of_the_whole",
+    "quote": "counts[r] is how many numbers leave remainder r when divided by 3; so it fits the array",
+    "confidence": 0.6,
+    "reason": "confidence 0.60 is not above 0.60"
+   },
+   {
+    "concept": "array_bounds",
+    "edge": "lvl:array_bounds@L4#1",
+    "level": "L4",
+    "way": "transfer_to_a_new_program",
+    "quote": "The % 3 turns each number into an index 0, 1 or 2; so it fits the array",
+    "confidence": 0.6,
+    "reason": "confidence 0.60 is not above 0.60"
+   }
+  ]
  }
 }
 ```

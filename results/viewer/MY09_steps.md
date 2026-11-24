@@ -265,8 +265,10 @@ Clauses: 1
 Confidence: 0.6
 ```
 
-Label prompt for level way lvl:println@L3#3 (the model saw only the concept, the way's name 'relation to neighbour' and its text; no level):
+Label prompt for level way lvl:println@L3#3 (the model saw the concept, the way's name 'relation to neighbour', its text, where the way stops and whether the words must be correct; no level):
 > println prints numbers with all their digits and always ends the line; printf formats each value by its conversion code and ends the line only where the format has %n or \n.
+>
+> Where this way stops: Two correct but separate rules are L1. Executing the two in sequence is L2. A relational answer may be correct or a relational error.
 
 Model's reply:
 ```
@@ -350,14 +352,16 @@ Clauses: none
 Confidence: 0.9
 ```
 
-Label prompt for level way lvl:arithmetic_operators@L4#0 (the model saw only the concept, the way's name 'predict a change' and its text; no level):
+Label prompt for level way lvl:arithmetic_operators@L4#0 (the model saw the concept, the way's name 'predict a change', its text, where the way stops and whether the words must be correct; no level):
 > Changing an operand's type changes the operator's meaning (int / versus double /). Reordering * and / changes integer results (59 * 100 / 60 is 98, 59 / 60 * 100 is 0). Replacing ^ with Math.pow gives a real power.
+>
+> Where this way stops: Re-tracing the changed code value by value is L2 on the new code. Adapting given code to a familiar variant may be only relational.
 
 Model's reply:
 ```
 Label: not shown
 Clauses: none
-Confidence: 0.85
+Confidence: 0.7
 ```
 
 Label prompt for level way lvl:arithmetic_operators@L2#1 (the model saw only the concept, the way's name 'output prediction' and its text; no level):
@@ -549,13 +553,15 @@ Prune: the model's reply (edge id and score; the kept edges sum to 1):
 ```
 Kept by pruning: lvl:expression@L3#1 (0.50), lvl:expression@L1#1 (0.30), lvl:expression@L2#1 (0.20)
 
-Label prompt for level way lvl:expression@L3#1 (the model saw only the concept, the way's name 'relation to neighbour' and its text; no level):
+Label prompt for level way lvl:expression@L3#1 (the model saw the concept, the way's name 'relation to neighbour', its text, where the way stops and whether the words must be correct; no level):
 > Operators combine operand values into a new value, and the operand types choose the operation (int / truncates, double / does not).
+>
+> Where this way stops: Two correct but separate rules are L1. Executing the two in sequence is L2. A relational answer may be correct or a relational error.
 
 Model's reply:
 ```
-Label: not shown
-Clauses: none
+Label: wrong
+Clauses: 2, 3
 Confidence: 0.85
 ```
 
@@ -580,11 +586,7 @@ Confidence: 0.85
 ```
 
 Parsed labels:
-| edge | label | prune score | confidence | score | clauses | words |
-|---|---|---|---|---|---|---|
-| lvl:expression@L3#1 | not applied |  |  | 0.0 |  |  |
-| lvl:expression@L1#1 | not applied |  |  | 0.0 |  |  |
-| lvl:expression@L2#1 | not applied |  |  | 0.0 |  |  |
+(none)
 
 #### type_conversion, misconceptions: 3 edges offered
 Edges offered:
@@ -663,14 +665,16 @@ Clauses: 2, 3
 Confidence: 0.85
 ```
 
-Label prompt for level way lvl:type_conversion@L4#3 (the model saw only the concept, the way's name 'diagnose an error' and its text; no level):
+Label prompt for level way lvl:type_conversion@L4#3 (the model saw the concept, the way's name 'diagnose an error', its text, where the way stops and whether the words must be correct; no level):
 > rule broken: Promotion happens per operator, after an int division has already truncated. Kind: silent logic error. Trigger class: All-int division inside a double formula, e.g. double y = 1 / 3; or (9/5) * c + 32.
+>
+> Where this way stops: Locating and fixing the mistake for one given failing case is L3. A compiler-flagged slip fixed from the message is weak evidence.
 
 Model's reply:
 ```
-Label: not shown
-Clauses: none
-Confidence: 0.92
+Label: wrong
+Clauses: 2, 3
+Confidence: 0.7
 ```
 
 Label prompt for level way lvl:type_conversion@L2#0 (the model saw only the concept, the way's name 'line by line trace' and its text; no level):
@@ -687,8 +691,6 @@ Parsed labels:
 | edge | label | prune score | confidence | score | clauses | words |
 |---|---|---|---|---|---|---|
 | lvl:type_conversion@L0#0 | shown | 0.6 | 0.85 | 0.51 | c2, c3 | Because d is a double, Java knows the result should have decimals; so it does the division a / b with decimals and gets 3.0 |
-| lvl:type_conversion@L4#3 | not applied |  |  | 0.0 |  |  |
-| lvl:type_conversion@L2#0 | not applied |  |  | 0.0 |  |  |
 
 #### widening_conversion, misconceptions: 2 edges offered
 Edges offered:
@@ -748,14 +750,16 @@ Prune: the model's reply (edge id and score; the kept edges sum to 1):
 ```
 Kept by pruning: lvl:widening_conversion@L4#3 (0.50), lvl:widening_conversion@L2#0 (0.30), lvl:widening_conversion@L4#1 (0.20)
 
-Label prompt for level way lvl:widening_conversion@L4#3 (the model saw only the concept, the way's name 'diagnose an error' and its text; no level):
+Label prompt for level way lvl:widening_conversion@L4#3 (the model saw the concept, the way's name 'diagnose an error', its text, where the way stops and whether the words must be correct; no level):
 > rule broken: Widening applies to the value after the operation that produced it. Kind: silent logic error. Trigger class: Expecting double d = a / b; with int a, b to keep the fraction (gives the truncated quotient as a double).
+>
+> Where this way stops: Locating and fixing the mistake for one given failing case is L3. A compiler-flagged slip fixed from the message is weak evidence.
 
 Model's reply:
 ```
-Label: not shown
-Clauses: none
-Confidence: 0.9
+Label: wrong
+Clauses: 2, 3
+Confidence: 0.6
 ```
 
 Label prompt for level way lvl:widening_conversion@L2#0 (the model saw only the concept, the way's name 'line by line trace' and its text; no level):
@@ -768,22 +772,20 @@ Clauses: none
 Confidence: 0.9
 ```
 
-Label prompt for level way lvl:widening_conversion@L4#1 (the model saw only the concept, the way's name 'transfer to a new program' and its text; no level):
+Label prompt for level way lvl:widening_conversion@L4#1 (the model saw the concept, the way's name 'transfer to a new program', its text, where the way stops and whether the words must be correct; no level):
 > Rely on widening when mixing int and double in formulas or passing ints to double methods; do not expect it to fix an int division already performed; when a narrowing is intended, write the cast explicitly.
+>
+> Where this way stops: Reproducing or slightly varying a familiar program is L1 to L3.
 
 Model's reply:
 ```
 Label: not shown
 Clauses: none
-Confidence: 0.92
+Confidence: 0.7
 ```
 
 Parsed labels:
-| edge | label | prune score | confidence | score | clauses | words |
-|---|---|---|---|---|---|---|
-| lvl:widening_conversion@L4#3 | not applied |  |  | 0.0 |  |  |
-| lvl:widening_conversion@L2#0 | not applied |  |  | 0.0 |  |  |
-| lvl:widening_conversion@L4#1 | not applied |  |  | 0.0 |  |  |
+(none)
 
 **Kept on a path at this depth** (best N in tiers: held misconception / broken edge, then held error, then correct / confirmed / shown):
 
@@ -936,13 +938,15 @@ Clauses: none
 Confidence: 0.9
 ```
 
-Label prompt for level way lvl:primitive_type@L3#4 (the model saw only the concept, the way's name 'relation to neighbour' and its text; no level):
+Label prompt for level way lvl:primitive_type@L3#4 (the model saw the concept, the way's name 'relation to neighbour', its text, where the way stops and whether the words must be correct; no level):
 > double is the 64-bit IEEE 754 primitive. Once a double meets an integral operand in a binary operator, the whole operation becomes floating point.
+>
+> Where this way stops: Two correct but separate rules are L1. Executing the two in sequence is L2. A relational answer may be correct or a relational error.
 
 Model's reply:
 ```
-Label: not shown
-Clauses: none
+Label: wrong
+Clauses: 2, 3
 Confidence: 0.85
 ```
 
@@ -960,8 +964,6 @@ Parsed labels:
 | edge | label | prune score | confidence | score | clauses | words |
 |---|---|---|---|---|---|---|
 | lvl:primitive_type@L2#0 | not applied |  |  | 0.0 |  |  |
-| lvl:primitive_type@L3#4 | not applied |  |  | 0.0 |  |  |
-| lvl:primitive_type@L2#1 | not applied |  |  | 0.0 |  |  |
 
 **Kept on a path at this depth:** nothing
 
@@ -986,7 +988,7 @@ Root-cause walk: held on ['integer_division'], broken at [] (consequences: pre:a
 - println: L2 via output_prediction "It prints 3.0"
 - type_conversion: L0 via everyday_reading "Because d is a double, Java knows the result should have decimals; so it does the division a / b with decimals and gets 3.0"
 
-**Stop:** half_stop at depth 4; prompts {'prune': 18, 'label': 32}, fresh model calls 3, cache hits 47
+**Stop:** half_stop at depth 4; prompts {'prune': 18, 'label': 32}, fresh model calls 0, cache hits 50
 
 ### Held misconceptions
 | concept | misconception | kind | quote | score | shares_evidence_with |
@@ -1014,6 +1016,14 @@ Root-cause walk: held on ['integer_division'], broken at [] (consequences: pre:a
 | integer_division | L0 | misconception | TargetTyping | level_mis_links | Because d is a double, Java knows the result should have decimals; so it does the division a / b with decimals and gets 3.0 | wrong rule: The type of a numerical expression depends on the type expected by the surrounding context, so double d = a / b; keeps the fraction. Right rule: The type of a numerical expression is determined by the expression, so double d = a / b; with int a and b still divides as ints. |  |  |
 | println | L2 | output_prediction |  | level_way | It prints 3.0 |  |  |  |
 | type_conversion | L0 | everyday_reading |  | level_way | Because d is a double, Java knows the result should have decimals; so it does the division a / b with decimals and gets 3.0 |  |  |  |
+
+Ways above L2 the model answered "wrong" (the kind of thing is done, but what is said contradicts Java; not shown):
+| concept | edge | level | way | confidence | clauses | quote |
+|---|---|---|---|---|---|---|
+| expression | lvl:expression@L3#1 | L3 | relation_to_neighbour | 0.85 | [2, 3] | Because d is a double, Java knows the result should have decimals; so it does the division a / b with decimals and gets 3.0 |
+| type_conversion | lvl:type_conversion@L4#3 | L4 | diagnose_an_error | 0.7 | [2, 3] | Because d is a double, Java knows the result should have decimals; so it does the division a / b with decimals and gets 3.0 |
+| widening_conversion | lvl:widening_conversion@L4#3 | L4 | diagnose_an_error | 0.6 | [2, 3] | Because d is a double, Java knows the result should have decimals; so it does the division a / b with decimals and gets 3.0 |
+| primitive_type | lvl:primitive_type@L3#4 | L3 | relation_to_neighbour | 0.85 | [2, 3] | Because d is a double, Java knows the result should have decimals; so it does the division a / b with decimals and gets 3.0 |
 
 ### Overall level: L0
 
@@ -1098,6 +1108,7 @@ start concepts (3): integer_division, println, arithmetic_operators
     mis:expression->AssignmentIsEquation -> not applied (0.00) ""
     mis:expression->VariablesHoldExpressions -> not applied (0.00) ""
   expression (level ways): 19 candidates -> kept lvl:expression@L3#1 (0.50), lvl:expression@L1#1 (0.30), lvl:expression@L2#1 (0.20)
+    lvl:expression@L3#1: wrong (0.85) -> not applied
     lvl:expression@L3#1 -> not applied (0.00) ""
     lvl:expression@L1#1 -> not applied (0.00) ""
     lvl:expression@L2#1 -> not applied (0.00) ""
@@ -1107,12 +1118,14 @@ start concepts (3): integer_division, println, arithmetic_operators
     mis:type_conversion->NoCastIfSameSize -> not applied (0.00) ""
   type_conversion (level ways): 18 candidates -> kept lvl:type_conversion@L0#0 (0.60), lvl:type_conversion@L4#3 (0.25), lvl:type_conversion@L2#0 (0.15)
     lvl:type_conversion@L0#0 -> shown (0.51) "Because d is a double, Java knows the result should have decimals; so it does the division a / b with decimals and gets 3.0"
+    lvl:type_conversion@L4#3: wrong (0.70) -> not applied
     lvl:type_conversion@L4#3 -> not applied (0.00) ""
     lvl:type_conversion@L2#0 -> not applied (0.00) ""
   widening_conversion (misconceptions): 2 candidates -> kept mis:widening_conversion->NarrowingAssignmentAllowed (0.60), mis:widening_conversion->NoCastIfSameSize (0.40)
     mis:widening_conversion->NarrowingAssignmentAllowed -> not applied (0.00) ""
     mis:widening_conversion->NoCastIfSameSize -> not applied (0.00) ""
   widening_conversion (level ways): 14 candidates -> kept lvl:widening_conversion@L4#3 (0.50), lvl:widening_conversion@L2#0 (0.30), lvl:widening_conversion@L4#1 (0.20)
+    lvl:widening_conversion@L4#3: wrong (0.60) -> not applied
     lvl:widening_conversion@L4#3 -> not applied (0.00) ""
     lvl:widening_conversion@L2#0 -> not applied (0.00) ""
     lvl:widening_conversion@L4#1 -> not applied (0.00) ""
@@ -1133,6 +1146,7 @@ start concepts (3): integer_division, println, arithmetic_operators
     mis:primitive_type->NewArrayHoldsGarbage -> not applied (0.00) ""
   primitive_type (level ways): 21 candidates -> kept lvl:primitive_type@L2#0 (0.40), lvl:primitive_type@L3#4 (0.35), lvl:primitive_type@L2#1 (0.25)
     lvl:primitive_type@L2#0 -> not applied (0.00) ""
+    lvl:primitive_type@L3#4: wrong (0.85) -> not applied
     lvl:primitive_type@L3#4 -> not applied (0.00) ""
     lvl:primitive_type@L2#1 -> not applied (0.00) ""
   nothing kept at this depth
@@ -1155,7 +1169,8 @@ start concepts (3): integer_division, println, arithmetic_operators
   "depth": 3,
   "prune_tools": "llm",
   "model": "claude-opus-5-5",
-  "backend": "claude-cli"
+  "backend": "claude-cli",
+  "level_v2": true
  },
  "clauses": [
   "It prints 3.0",
@@ -1619,11 +1634,64 @@ start concepts (3): integer_division, println, arithmetic_operators
  "unexplained_clauses": [],
  "stop_reason": "half_stop",
  "depth_reached": 4,
- "llm_calls": 3,
- "llm_cache_hits": 47,
+ "llm_calls": 0,
+ "llm_cache_hits": 50,
  "llm_calls_by_step": {
   "prune": 18,
   "label": 32
+ },
+ "level_v2": {
+  "wrong_ways": [
+   {
+    "concept": "expression",
+    "edge": "lvl:expression@L3#1",
+    "level": "L3",
+    "way": "relation_to_neighbour",
+    "clauses": [
+     2,
+     3
+    ],
+    "quote": "Because d is a double, Java knows the result should have decimals; so it does the division a / b with decimals and gets 3.0",
+    "confidence": 0.85
+   },
+   {
+    "concept": "type_conversion",
+    "edge": "lvl:type_conversion@L4#3",
+    "level": "L4",
+    "way": "diagnose_an_error",
+    "clauses": [
+     2,
+     3
+    ],
+    "quote": "Because d is a double, Java knows the result should have decimals; so it does the division a / b with decimals and gets 3.0",
+    "confidence": 0.7
+   },
+   {
+    "concept": "widening_conversion",
+    "edge": "lvl:widening_conversion@L4#3",
+    "level": "L4",
+    "way": "diagnose_an_error",
+    "clauses": [
+     2,
+     3
+    ],
+    "quote": "Because d is a double, Java knows the result should have decimals; so it does the division a / b with decimals and gets 3.0",
+    "confidence": 0.6
+   },
+   {
+    "concept": "primitive_type",
+    "edge": "lvl:primitive_type@L3#4",
+    "level": "L3",
+    "way": "relation_to_neighbour",
+    "clauses": [
+     2,
+     3
+    ],
+    "quote": "Because d is a double, Java knows the result should have decimals; so it does the division a / b with decimals and gets 3.0",
+    "confidence": 0.85
+   }
+  ],
+  "not_counted": []
  }
 }
 ```

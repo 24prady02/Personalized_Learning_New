@@ -225,14 +225,16 @@ Prune: the model's reply (edge id and score; the kept edges sum to 1):
 ```
 Kept by pruning: lvl:sentinel_loop@L4#1 (0.50), lvl:sentinel_loop@L2#2 (0.30), lvl:sentinel_loop@L3#1 (0.20)
 
-Label prompt for level way lvl:sentinel_loop@L4#1 (the model saw only the concept, the way's name 'diagnose an error' and its text; no level):
+Label prompt for level way lvl:sentinel_loop@L4#1 (the model saw the concept, the way's name 'diagnose an error', its text, where the way stops and whether the words must be correct; no level):
 > rule broken: Check count > 0 before computing sum / count. Kind: run-time exception. Trigger class: The sentinel is the first value (count stays 0). With int operands this gives ArithmeticException (/ by zero); with a double sum it gives NaN silently.
+>
+> Where this way stops: Locating and fixing the mistake for one given failing case is L3. A compiler-flagged slip fixed from the message is weak evidence.
 
 Model's reply:
 ```
-Label: not shown
-Clauses: none
-Confidence: 0.85
+Label: wrong
+Clauses: 1, 3
+Confidence: 0.8
 ```
 
 Label prompt for level way lvl:sentinel_loop@L2#2 (the model saw only the concept, the way's name 'one step execution' and its text; no level):
@@ -245,22 +247,20 @@ Clauses: 2, 3
 Confidence: 0.8
 ```
 
-Label prompt for level way lvl:sentinel_loop@L3#1 (the model saw only the concept, the way's name 'relation to neighbour' and its text; no level):
+Label prompt for level way lvl:sentinel_loop@L3#1 (the model saw the concept, the way's name 'relation to neighbour', its text, where the way stops and whether the words must be correct; no level):
 > sum (a gatherer) and count must change only for values that are not the sentinel and pass the filter. The average is computed once, after the loop.
+>
+> Where this way stops: Two correct but separate rules are L1. Executing the two in sequence is L2. A relational answer may be correct or a relational error.
 
 Model's reply:
 ```
-Label: shown
+Label: wrong
 Clauses: 2, 3
-Confidence: 0.8
+Confidence: 0.85
 ```
 
 Parsed labels:
-| edge | label | prune score | confidence | score | clauses | words |
-|---|---|---|---|---|---|---|
-| lvl:sentinel_loop@L4#1 | not applied |  |  | 0.0 |  |  |
-| lvl:sentinel_loop@L2#2 | shown | 0.3 | 0.8 | 0.24 | c2, c3 | Nothing was added; so sum and count are both 0, and 0 divided by 0 is just 0 |
-| lvl:sentinel_loop@L3#1 | shown | 0.2 | 0.8 | 0.16 | c2, c3 | Nothing was added; so sum and count are both 0, and 0 divided by 0 is just 0 |
+(none)
 
 #### division_by_zero, misconceptions: 3 edges offered
 Edges offered:
@@ -324,14 +324,16 @@ Prune: the model's reply (edge id and score; the kept edges sum to 1):
 ```
 Kept by pruning: lvl:division_by_zero@L4#1 (0.50), lvl:division_by_zero@L2#1 (0.30), lvl:division_by_zero@L4#3 (0.20)
 
-Label prompt for level way lvl:division_by_zero@L4#1 (the model saw only the concept, the way's name 'diagnose an error' and its text; no level):
+Label prompt for level way lvl:division_by_zero@L4#1 (the model saw the concept, the way's name 'diagnose an error', its text, where the way stops and whether the words must be correct; no level):
 > rule broken: A divisor must be checked to be nonzero before dividing; an average of zero values is undefined. Kind: run-time exception. Trigger class: count == 0 (empty input, no values read): with int sum / count an ArithmeticException stops the program; with a double sum the division gives NaN (0.0/0.0) and prints a meaningless average as a silent logic error.
+>
+> Where this way stops: Locating and fixing the mistake for one given failing case is L3. A compiler-flagged slip fixed from the message is weak evidence.
 
 Model's reply:
 ```
-Label: not shown
-Clauses: none
-Confidence: 0.93
+Label: wrong
+Clauses: 1, 3
+Confidence: 0.85
 ```
 
 Label prompt for level way lvl:division_by_zero@L2#1 (the model saw only the concept, the way's name 'output prediction' and its text; no level):
@@ -344,22 +346,20 @@ Clauses: none
 Confidence: 0.95
 ```
 
-Label prompt for level way lvl:division_by_zero@L4#3 (the model saw only the concept, the way's name 'diagnose an error' and its text; no level):
+Label prompt for level way lvl:division_by_zero@L4#3 (the model saw the concept, the way's name 'diagnose an error', its text, where the way stops and whether the words must be correct; no level):
 > rule broken: Integer / and % require a nonzero right operand. Kind: run-time exception. Trigger class: Any int or long division or remainder whose right operand evaluates to 0, e.g. n % k with k = 0, or a loop dividing by a variable that reaches 0.
+>
+> Where this way stops: Locating and fixing the mistake for one given failing case is L3. A compiler-flagged slip fixed from the message is weak evidence.
 
 Model's reply:
 ```
-Label: not shown
-Clauses: none
-Confidence: 0.93
+Label: wrong
+Clauses: 1, 3
+Confidence: 0.9
 ```
 
 Parsed labels:
-| edge | label | prune score | confidence | score | clauses | words |
-|---|---|---|---|---|---|---|
-| lvl:division_by_zero@L4#1 | not applied |  |  | 0.0 |  |  |
-| lvl:division_by_zero@L2#1 | not applied |  |  | 0.0 |  |  |
-| lvl:division_by_zero@L4#3 | not applied |  |  | 0.0 |  |  |
+(none)
 
 #### compound_assignment, misconceptions: 2 edges offered
 Edges offered:
@@ -420,14 +420,16 @@ Prune: the model's reply (edge id and score; the kept edges sum to 1):
 ```
 Kept by pruning: lvl:compound_assignment@L3#3 (0.50), lvl:compound_assignment@L2#2 (0.30), lvl:compound_assignment@L3#0 (0.20)
 
-Label prompt for level way lvl:compound_assignment@L3#3 (the model saw only the concept, the way's name 'purpose of the whole' and its text; no level):
+Label prompt for level way lvl:compound_assignment@L3#3 (the model saw the concept, the way's name 'purpose of the whole', its text, where the way stops and whether the words must be correct; no level):
 > Plan/role: the update step of a gatherer (sum += a[i], product *= i) or of a stepper with a step other than 1 (i += 2).
+>
+> Where this way stops: Narrating the lines is L2. A purpose induced from a few traced cases is L2. A wrong purpose is still L3, but with an error.
 
 Model's reply:
 ```
-Label: shown
-Clauses: 2
-Confidence: 0.55
+Label: not shown
+Clauses: none
+Confidence: 0.8
 ```
 
 Label prompt for level way lvl:compound_assignment@L2#2 (the model saw only the concept, the way's name 'one step execution' and its text; no level):
@@ -440,8 +442,10 @@ Clauses: none
 Confidence: 0.75
 ```
 
-Label prompt for level way lvl:compound_assignment@L3#0 (the model saw only the concept, the way's name 'relation to neighbour' and its text; no level):
+Label prompt for level way lvl:compound_assignment@L3#0 (the model saw the concept, the way's name 'relation to neighbour', its text, where the way stops and whether the words must be correct; no level):
 > x op= e is shorthand for the assignment x = x op e, so the new value depends on the old one (x is read, then written).
+>
+> Where this way stops: Two correct but separate rules are L1. Executing the two in sequence is L2. A relational answer may be correct or a relational error.
 
 Model's reply:
 ```
@@ -453,13 +457,13 @@ Confidence: 0.85
 Parsed labels:
 | edge | label | prune score | confidence | score | clauses | words |
 |---|---|---|---|---|---|---|
-| lvl:compound_assignment@L3#3 | shown | 0.5 | 0.55 | 0.28 | c2 | Nothing was added |
+| lvl:compound_assignment@L3#3 | not applied |  |  | 0.0 |  |  |
 | lvl:compound_assignment@L2#2 | not applied |  |  | 0.0 |  |  |
 | lvl:compound_assignment@L3#0 | not applied |  |  | 0.0 |  |  |
 
 **Kept on a path at this depth** (best N in tiers: held misconception / broken edge, then held error, then correct / confirmed / shown):
 
-err:sentinel_loop->AverageWithoutZeroGuard [held, tier 1, 0.74], err:division_by_zero->AverageWithoutZeroGuard [held, tier 1, 0.51], lvl:compound_assignment@L3#3 [shown, tier 2, 0.28]
+err:sentinel_loop->AverageWithoutZeroGuard [held, tier 1, 0.74], err:division_by_zero->AverageWithoutZeroGuard [held, tier 1, 0.51], lvl:sentinel_loop@L2#2 [shown, tier 2, 0.24]
 
 **Clause coverage after this depth:**
 | clause | text | covered by |
@@ -689,24 +693,28 @@ Prune: the model's reply (edge id and score; the kept edges sum to 1):
 ```
 Kept by pruning: lvl:arithmetic_operators@L4#2 (0.50), lvl:arithmetic_operators@L3#2 (0.30), lvl:arithmetic_operators@L1#1 (0.20)
 
-Label prompt for level way lvl:arithmetic_operators@L4#2 (the model saw only the concept, the way's name 'diagnose an error' and its text; no level):
+Label prompt for level way lvl:arithmetic_operators@L4#2 (the model saw the concept, the way's name 'diagnose an error', its text, where the way stops and whether the words must be correct; no level):
 > rule broken: int / and % by zero are undefined. Kind: run-time exception. Trigger class: A divisor that evaluates to 0 (empty count, zero input): ArithmeticException: / by zero.
+>
+> Where this way stops: Locating and fixing the mistake for one given failing case is L3. A compiler-flagged slip fixed from the message is weak evidence.
 
 Model's reply:
 ```
-Label: not shown
-Clauses: none
-Confidence: 0.95
+Label: wrong
+Clauses: 1, 3
+Confidence: 0.8
 ```
 
-Label prompt for level way lvl:arithmetic_operators@L3#2 (the model saw only the concept, the way's name 'relation to neighbour' and its text; no level):
+Label prompt for level way lvl:arithmetic_operators@L3#2 (the model saw the concept, the way's name 'relation to neighbour', its text, where the way stops and whether the words must be correct; no level):
 > int / or % by zero throws a run-time exception, while floating-point division by zero gives Infinity or NaN.
+>
+> Where this way stops: Two correct but separate rules are L1. Executing the two in sequence is L2. A relational answer may be correct or a relational error.
 
 Model's reply:
 ```
-Label: not shown
-Clauses: none
-Confidence: 0.95
+Label: wrong
+Clauses: 3
+Confidence: 0.6
 ```
 
 Label prompt for level way lvl:arithmetic_operators@L1#1 (the model saw only the concept, the way's name 'states the rule' and its text; no level):
@@ -720,11 +728,7 @@ Confidence: 0.93
 ```
 
 Parsed labels:
-| edge | label | prune score | confidence | score | clauses | words |
-|---|---|---|---|---|---|---|
-| lvl:arithmetic_operators@L4#2 | not applied |  |  | 0.0 |  |  |
-| lvl:arithmetic_operators@L3#2 | not applied |  |  | 0.0 |  |  |
-| lvl:arithmetic_operators@L1#1 | not applied |  |  | 0.0 |  |  |
+(none)
 
 #### run_time_error, misconceptions: 7 edges offered
 Edges offered:
@@ -798,14 +802,16 @@ Prune: the model's reply (edge id and score; the kept edges sum to 1):
 ```
 Kept by pruning: lvl:run_time_error@L4#6 (0.60), lvl:run_time_error@L0#0 (0.25), lvl:run_time_error@L2#1 (0.15)
 
-Label prompt for level way lvl:run_time_error@L4#6 (the model saw only the concept, the way's name 'diagnose an error' and its text; no level):
+Label prompt for level way lvl:run_time_error@L4#6 (the model saw the concept, the way's name 'diagnose an error', its text, where the way stops and whether the words must be correct; no level):
 > rule broken: Integer division and remainder by zero are undefined. Kind: run-time exception. Trigger class: a / b or a % b with int b == 0: ArithmeticException: / by zero
+>
+> Where this way stops: Locating and fixing the mistake for one given failing case is L3. A compiler-flagged slip fixed from the message is weak evidence.
 
 Model's reply:
 ```
-Label: not shown
-Clauses: none
-Confidence: 0.95
+Label: wrong
+Clauses: 1, 3
+Confidence: 0.85
 ```
 
 Label prompt for level way lvl:run_time_error@L0#0 (the model saw only the concept, the way's name 'everyday reading' and its text; no level):
@@ -829,11 +835,7 @@ Confidence: 0.95
 ```
 
 Parsed labels:
-| edge | label | prune score | confidence | score | clauses | words |
-|---|---|---|---|---|---|---|
-| lvl:run_time_error@L4#6 | not applied |  |  | 0.0 |  |  |
-| lvl:run_time_error@L0#0 | not applied |  |  | 0.0 |  |  |
-| lvl:run_time_error@L2#1 | not applied |  |  | 0.0 |  |  |
+(none)
 
 #### accumulator_pattern, misconceptions: 4 edges offered
 Edges offered:
@@ -902,14 +904,16 @@ Prune: the model's reply (edge id and score; the kept edges sum to 1):
 ```
 Kept by pruning: lvl:accumulator_pattern@L3#2 (0.50), lvl:accumulator_pattern@L2#0 (0.30), lvl:accumulator_pattern@L2#1 (0.20)
 
-Label prompt for level way lvl:accumulator_pattern@L3#2 (the model saw only the concept, the way's name 'relation to neighbour' and its text; no level):
+Label prompt for level way lvl:accumulator_pattern@L3#2 (the model saw the concept, the way's name 'relation to neighbour', its text, where the way stops and whether the words must be correct; no level):
 > In a sentinel loop the sum and the count of the values read are both accumulators, updated only for values that are not the sentinel.
+>
+> Where this way stops: Two correct but separate rules are L1. Executing the two in sequence is L2. A relational answer may be correct or a relational error.
 
 Model's reply:
 ```
 Label: shown
 Clauses: 2, 3
-Confidence: 0.8
+Confidence: 0.6
 ```
 
 Label prompt for level way lvl:accumulator_pattern@L2#0 (the model saw only the concept, the way's name 'line by line trace' and its text; no level):
@@ -935,7 +939,7 @@ Confidence: 0.7
 Parsed labels:
 | edge | label | prune score | confidence | score | clauses | words |
 |---|---|---|---|---|---|---|
-| lvl:accumulator_pattern@L3#2 | shown | 0.5 | 0.8 | 0.4 | c2, c3 | Nothing was added; so sum and count are both 0, and 0 divided by 0 is just 0 |
+| lvl:accumulator_pattern@L3#2 | shown | 0.5 | 0.6 | 0.3 | c2, c3 | Nothing was added; so sum and count are both 0, and 0 divided by 0 is just 0 |
 | lvl:accumulator_pattern@L2#0 | shown | 0.3 | 0.7 | 0.21 | c2, c3 | Nothing was added; so sum and count are both 0, and 0 divided by 0 is just 0 |
 | lvl:accumulator_pattern@L2#1 | shown | 0.2 | 0.7 | 0.14 | c2, c3 | Nothing was added; so sum and count are both 0, and 0 divided by 0 is just 0 |
 
@@ -969,7 +973,7 @@ Parsed labels:
 
 **Kept on a path at this depth** (best N in tiers: held misconception / broken edge, then held error, then correct / confirmed / shown):
 
-pre:while_loop->sentinel_loop [confirmed, tier 2, 0.75], lvl:accumulator_pattern@L3#2 [shown, tier 2, 0.40], lvl:accumulator_pattern@L2#0 [shown, tier 2, 0.21]
+pre:while_loop->sentinel_loop [confirmed, tier 2, 0.75], lvl:accumulator_pattern@L3#2 [shown, tier 2, 0.30], lvl:accumulator_pattern@L2#0 [shown, tier 2, 0.21]
 
 reached across pre:while_loop->sentinel_loop, entered next: while_loop
 
@@ -1081,13 +1085,15 @@ Clauses: 2, 3
 Confidence: 0.75
 ```
 
-Label prompt for level way lvl:while_loop@L4#0 (the model saw only the concept, the way's name 'predict a change' and its text; no level):
+Label prompt for level way lvl:while_loop@L4#0 (the model saw the concept, the way's name 'predict a change', its text, where the way stops and whether the words must be correct; no level):
 > Changing < to <= adds exactly one pass at the boundary; removing the update from the body makes a loop that was entered never end; a condition that is false initially gives zero passes whatever the body does. Rewriting as for (init; cond; update) preserves behaviour if no continue is involved.
+>
+> Where this way stops: Re-tracing the changed code value by value is L2 on the new code. Adapting given code to a familiar variant may be only relational.
 
 Model's reply:
 ```
-Label: shown
-Clauses: 2, 3
+Label: not shown
+Clauses: none
 Confidence: 0.7
 ```
 
@@ -1105,12 +1111,12 @@ Parsed labels:
 | edge | label | prune score | confidence | score | clauses | words |
 |---|---|---|---|---|---|---|
 | lvl:while_loop@L2#2 | shown | 0.4 | 0.75 | 0.3 | c2, c3 | Nothing was added; so sum and count are both 0, and 0 divided by 0 is just 0 |
-| lvl:while_loop@L4#0 | shown | 0.35 | 0.7 | 0.24 | c2, c3 | Nothing was added; so sum and count are both 0, and 0 divided by 0 is just 0 |
+| lvl:while_loop@L4#0 | not applied |  |  | 0.0 |  |  |
 | lvl:while_loop@L2#0 | shown | 0.25 | 0.7 | 0.17 | c2, c3 | Nothing was added; so sum and count are both 0, and 0 divided by 0 is just 0 |
 
 **Kept on a path at this depth** (best N in tiers: held misconception / broken edge, then held error, then correct / confirmed / shown):
 
-mis:while_loop->LoopBodyAlwaysOnce [correct, tier 2, 0.41], lvl:while_loop@L2#2 [shown, tier 2, 0.30], lvl:while_loop@L4#0 [shown, tier 2, 0.24]
+mis:while_loop->LoopBodyAlwaysOnce [correct, tier 2, 0.41], lvl:while_loop@L2#2 [shown, tier 2, 0.30], err:while_loop->LoopIgnoresCodeBefore [correct, tier 2, 0.21]
 
 **Clause coverage after this depth:**
 | clause | text | covered by |
@@ -1125,10 +1131,10 @@ Figure 7 (the graph after depth 4): C:\Users\magnu\OneDrive\Desktop\ES_VIterbi_P
 
 ## 4. Diagnosis (rules over the labelled graph, no model)
 Root-cause walk: held on ['division_by_zero', 'sentinel_loop'], broken at ['division_by_zero', 'run_time_error'], prerequisites {'sentinel_loop': ['accumulator_pattern', 'while_loop'], 'division_by_zero': ['arithmetic_operators'], 'expression': ['arithmetic_operators'], 'integer_division': ['arithmetic_operators'], 'compound_assignment': ['assignment'], 'increment_operators': ['assignment', 'loop_control'], 'while_loop': ['boolean_expression'], 'boolean_expression': ['comparison_operators'], 'accumulator_pattern': ['compound_assignment', 'loop_body'], 'assignment': ['declaration'], 'named_constants': ['declaration'], 'run_time_error': ['division_by_zero'], 'comparison_operators': ['expression'], 'method_call': ['expression'], 'counter_pattern': ['increment_operators', 'loop_body'], 'api': ['method_call'], 'filter': ['standard_input'], 'input_format': ['standard_input'], 'control_flow': ['statement'], 'println': ['statement'], 'standard_input': ['stream_model'], 'standard_output': ['stream_model'], 'loop_body': ['while_loop'], 'loop_control': ['while_loop']}
-- accumulator_pattern: L3 via relation_to_neighbour "Nothing was added; so sum and count are both 0, and 0 divided by 0 is just 0"
-- compound_assignment: L3 via purpose_of_the_whole "Nothing was added"
-- sentinel_loop: L3 via relation_to_neighbour "Nothing was added; so sum and count are both 0, and 0 divided by 0 is just 0"
-- while_loop: L4 via predict_a_change "Nothing was added; so sum and count are both 0, and 0 divided by 0 is just 0"
+- way lvl:accumulator_pattern@L3#2 not counted: confidence 0.60 is not above 0.60
+- accumulator_pattern: L2 via line_by_line_trace "Nothing was added; so sum and count are both 0, and 0 divided by 0 is just 0"
+- sentinel_loop: L2 via one_step_execution "Nothing was added; so sum and count are both 0, and 0 divided by 0 is just 0"
+- while_loop: L2 via one_step_execution "Nothing was added; so sum and count are both 0, and 0 divided by 0 is just 0"
 
 **Stop:** max depth at depth 4; prompts {'prune': 18, 'label': 36}, fresh model calls 0, cache hits 54
 
@@ -1149,10 +1155,25 @@ Root-cause walk: held on ['division_by_zero', 'sentinel_loop'], broken at ['divi
 ### Level per concept
 | concept | level | way | misconception | source | quote | rule | also | note |
 |---|---|---|---|---|---|---|---|---|
-| accumulator_pattern | L3 | relation_to_neighbour |  | level_way | Nothing was added; so sum and count are both 0, and 0 divided by 0 is just 0 |  | L2 line_by_line_trace, L2 output_prediction |  |
-| compound_assignment | L3 | purpose_of_the_whole |  | level_way | Nothing was added |  |  |  |
-| sentinel_loop | L3 | relation_to_neighbour |  | level_way | Nothing was added; so sum and count are both 0, and 0 divided by 0 is just 0 |  | L2 one_step_execution |  |
-| while_loop | L4 | predict_a_change |  | level_way | Nothing was added; so sum and count are both 0, and 0 divided by 0 is just 0 |  | L2 one_step_execution, L2 line_by_line_trace |  |
+| accumulator_pattern | L2 | line_by_line_trace |  | level_way | Nothing was added; so sum and count are both 0, and 0 divided by 0 is just 0 |  | L2 output_prediction |  |
+| sentinel_loop | L2 | one_step_execution |  | level_way | Nothing was added; so sum and count are both 0, and 0 divided by 0 is just 0 |  |  |  |
+| while_loop | L2 | one_step_execution |  | level_way | Nothing was added; so sum and count are both 0, and 0 divided by 0 is just 0 |  | L2 line_by_line_trace |  |
+
+Shown ways above L2 that do not count for the level:
+| concept | edge | level | way | confidence | reason | quote |
+|---|---|---|---|---|---|---|
+| accumulator_pattern | lvl:accumulator_pattern@L3#2 | L3 | relation_to_neighbour | 0.6 | confidence 0.60 is not above 0.60 | Nothing was added; so sum and count are both 0, and 0 divided by 0 is just 0 |
+
+Ways above L2 the model answered "wrong" (the kind of thing is done, but what is said contradicts Java; not shown):
+| concept | edge | level | way | confidence | clauses | quote |
+|---|---|---|---|---|---|---|
+| sentinel_loop | lvl:sentinel_loop@L4#1 | L4 | diagnose_an_error | 0.8 | [1, 3] | 0; so sum and count are both 0, and 0 divided by 0 is just 0 |
+| sentinel_loop | lvl:sentinel_loop@L3#1 | L3 | relation_to_neighbour | 0.85 | [2, 3] | Nothing was added; so sum and count are both 0, and 0 divided by 0 is just 0 |
+| division_by_zero | lvl:division_by_zero@L4#1 | L4 | diagnose_an_error | 0.85 | [1, 3] | 0; so sum and count are both 0, and 0 divided by 0 is just 0 |
+| division_by_zero | lvl:division_by_zero@L4#3 | L4 | diagnose_an_error | 0.9 | [1, 3] | 0; so sum and count are both 0, and 0 divided by 0 is just 0 |
+| arithmetic_operators | lvl:arithmetic_operators@L4#2 | L4 | diagnose_an_error | 0.8 | [1, 3] | 0; so sum and count are both 0, and 0 divided by 0 is just 0 |
+| arithmetic_operators | lvl:arithmetic_operators@L3#2 | L3 | relation_to_neighbour | 0.6 | [3] | so sum and count are both 0, and 0 divided by 0 is just 0 |
+| run_time_error | lvl:run_time_error@L4#6 | L4 | diagnose_an_error | 0.85 | [1, 3] | 0; so sum and count are both 0, and 0 divided by 0 is just 0 |
 
 ### Overall level: None
 
@@ -1171,15 +1192,13 @@ Figure 8 (final picture): C:\Users\magnu\OneDrive\Desktop\ES_VIterbi_Personalize
 | 1 | sentinel_loop | err:sentinel_loop->AverageWithoutZeroGuard | error | held | 0.8 | 0.93 | 0.744 | [1, 3] | 0; so sum and count are both 0, and 0 divided by 0 is just 0 |
 | 1 | sentinel_loop | mis:sentinel_loop->SentinelProcessed | misconception | correct | 0.15 | 0.85 | 0.1275 | [2] | Nothing was added |
 | 1 | sentinel_loop | lvl:sentinel_loop@L2#2 | level | shown | 0.3 | 0.8 | 0.24 | [2, 3] | Nothing was added; so sum and count are both 0, and 0 divided by 0 is just 0 |
-| 1 | sentinel_loop | lvl:sentinel_loop@L3#1 | level | shown | 0.2 | 0.8 | 0.16 | [2, 3] | Nothing was added; so sum and count are both 0, and 0 divided by 0 is just 0 |
 | 1 | division_by_zero | err:division_by_zero->AverageWithoutZeroGuard | error | held | 0.6000000000000001 | 0.85 | 0.51 | [1, 3] | 0; so sum and count are both 0, and 0 divided by 0 is just 0 |
-| 1 | compound_assignment | lvl:compound_assignment@L3#3 | level | shown | 0.5 | 0.55 | 0.275 | [2] | Nothing was added |
 | 2 | sentinel_loop | pre:accumulator_pattern->sentinel_loop | prerequisite | confirmed | 0.6 | 0.8 | 0.48 | [2, 3] | Nothing was added; so sum and count are both 0, and 0 divided by 0 is just 0 |
 | 2 | sentinel_loop | pre:while_loop->sentinel_loop | prerequisite | confirmed | 0.4 | 0.75 | 0.3 | [2] | Nothing was added |
 | 2 | division_by_zero | pre:arithmetic_operators->division_by_zero | prerequisite | broken | 0.6 | 0.95 | 0.57 | [1, 3] | 0; so sum and count are both 0, and 0 divided by 0 is just 0 |
 | 2 | division_by_zero | pre:division_by_zero->run_time_error | prerequisite | broken | 0.4 | 0.95 | 0.38 | [1, 3] | 0; so sum and count are both 0, and 0 divided by 0 is just 0 |
 | 2 | compound_assignment | pre:compound_assignment->accumulator_pattern | prerequisite | confirmed | 0.5 | 0.75 | 0.375 | [2, 3] | Nothing was added; so sum and count are both 0, and 0 divided by 0 is just 0 |
-| 3 | accumulator_pattern | lvl:accumulator_pattern@L3#2 | level | shown | 0.5 | 0.8 | 0.4 | [2, 3] | Nothing was added; so sum and count are both 0, and 0 divided by 0 is just 0 |
+| 3 | accumulator_pattern | lvl:accumulator_pattern@L3#2 | level | shown | 0.5 | 0.6 | 0.3 | [2, 3] | Nothing was added; so sum and count are both 0, and 0 divided by 0 is just 0 |
 | 3 | accumulator_pattern | lvl:accumulator_pattern@L2#0 | level | shown | 0.3 | 0.7 | 0.21 | [2, 3] | Nothing was added; so sum and count are both 0, and 0 divided by 0 is just 0 |
 | 3 | accumulator_pattern | lvl:accumulator_pattern@L2#1 | level | shown | 0.2 | 0.7 | 0.14 | [2, 3] | Nothing was added; so sum and count are both 0, and 0 divided by 0 is just 0 |
 | 3 | sentinel_loop | pre:while_loop->sentinel_loop | prerequisite | confirmed | 1.0 | 0.75 | 0.75 | [2] | Nothing was added |
@@ -1187,7 +1206,6 @@ Figure 8 (final picture): C:\Users\magnu\OneDrive\Desktop\ES_VIterbi_Personalize
 | 4 | while_loop | err:while_loop->LoopIgnoresCodeBefore | error | correct | 0.3 | 0.7 | 0.21 | [2, 3] | Nothing was added; so sum and count are both 0, and 0 divided by 0 is just 0 |
 | 4 | while_loop | mis:while_loop->ProgramEndsAfterLoop | misconception | correct | 0.25 | 0.8 | 0.2 | [1, 3] | 0; so sum and count are both 0, and 0 divided by 0 is just 0 |
 | 4 | while_loop | lvl:while_loop@L2#2 | level | shown | 0.4 | 0.75 | 0.3 | [2, 3] | Nothing was added; so sum and count are both 0, and 0 divided by 0 is just 0 |
-| 4 | while_loop | lvl:while_loop@L4#0 | level | shown | 0.35 | 0.7 | 0.245 | [2, 3] | Nothing was added; so sum and count are both 0, and 0 divided by 0 is just 0 |
 | 4 | while_loop | lvl:while_loop@L2#0 | level | shown | 0.25 | 0.7 | 0.175 | [2, 3] | Nothing was added; so sum and count are both 0, and 0 divided by 0 is just 0 |
 
 ## 6. The paths (what the keep step kept, depth by depth)
@@ -1195,16 +1213,16 @@ Figure 8 (final picture): C:\Users\magnu\OneDrive\Desktop\ES_VIterbi_Personalize
 |---|---|---|---|---|---|---|
 | 1 | sentinel_loop | err:sentinel_loop->AverageWithoutZeroGuard | error | held | 0.744 | [1, 3] |
 | 1 | division_by_zero | err:division_by_zero->AverageWithoutZeroGuard | error | held | 0.51 | [1, 3] |
-| 1 | compound_assignment | lvl:compound_assignment@L3#3 | level | shown | 0.275 | [2] |
+| 1 | sentinel_loop | lvl:sentinel_loop@L2#2 | level | shown | 0.24 | [2, 3] |
 | 2 | division_by_zero | pre:arithmetic_operators->division_by_zero | prerequisite | broken | 0.57 | [1, 3] |
 | 2 | division_by_zero | pre:division_by_zero->run_time_error | prerequisite | broken | 0.38 | [1, 3] |
 | 2 | sentinel_loop | pre:accumulator_pattern->sentinel_loop | prerequisite | confirmed | 0.48 | [2, 3] |
 | 3 | sentinel_loop | pre:while_loop->sentinel_loop | prerequisite | confirmed | 0.75 | [2] |
-| 3 | accumulator_pattern | lvl:accumulator_pattern@L3#2 | level | shown | 0.4 | [2, 3] |
+| 3 | accumulator_pattern | lvl:accumulator_pattern@L3#2 | level | shown | 0.3 | [2, 3] |
 | 3 | accumulator_pattern | lvl:accumulator_pattern@L2#0 | level | shown | 0.21 | [2, 3] |
 | 4 | while_loop | mis:while_loop->LoopBodyAlwaysOnce | misconception | correct | 0.405 | [2, 3] |
 | 4 | while_loop | lvl:while_loop@L2#2 | level | shown | 0.3 | [2, 3] |
-| 4 | while_loop | lvl:while_loop@L4#0 | level | shown | 0.245 | [2, 3] |
+| 4 | while_loop | err:while_loop->LoopIgnoresCodeBefore | error | correct | 0.21 | [2, 3] |
 
 ## 7. Raw traversal log
 ```
@@ -1218,25 +1236,29 @@ start concepts (3): sentinel_loop, division_by_zero, compound_assignment
     mis:sentinel_loop->SentinelProcessed -> correct (0.13) "Nothing was added"
     err:sentinel_loop->NegativeNotFiltered -> not applied (0.00) ""
   sentinel_loop (level ways): 16 candidates -> kept lvl:sentinel_loop@L4#1 (0.50), lvl:sentinel_loop@L2#2 (0.30), lvl:sentinel_loop@L3#1 (0.20)
+    lvl:sentinel_loop@L4#1: wrong (0.80) -> not applied
     lvl:sentinel_loop@L4#1 -> not applied (0.00) ""
     lvl:sentinel_loop@L2#2 -> shown (0.24) "Nothing was added; so sum and count are both 0, and 0 divided by 0 is just 0"
-    lvl:sentinel_loop@L3#1 -> shown (0.16) "Nothing was added; so sum and count are both 0, and 0 divided by 0 is just 0"
+    lvl:sentinel_loop@L3#1: wrong (0.85) -> not applied
+    lvl:sentinel_loop@L3#1 -> not applied (0.00) ""
   division_by_zero (misconceptions): 3 candidates -> kept err:division_by_zero->AverageWithoutZeroGuard (0.60), mis:division_by_zero->ZeroDivisionAlwaysCrashes (0.30), mis:division_by_zero->DivisionByZeroIsCompileError (0.10)
     err:division_by_zero->AverageWithoutZeroGuard -> held (0.51) "0; so sum and count are both 0, and 0 divided by 0 is just 0"
     mis:division_by_zero->ZeroDivisionAlwaysCrashes -> not applied (0.00) ""
     mis:division_by_zero->DivisionByZeroIsCompileError -> not applied (0.00) ""
   division_by_zero (level ways): 15 candidates -> kept lvl:division_by_zero@L4#1 (0.50), lvl:division_by_zero@L2#1 (0.30), lvl:division_by_zero@L4#3 (0.20)
+    lvl:division_by_zero@L4#1: wrong (0.85) -> not applied
     lvl:division_by_zero@L4#1 -> not applied (0.00) ""
     lvl:division_by_zero@L2#1 -> not applied (0.00) ""
+    lvl:division_by_zero@L4#3: wrong (0.90) -> not applied
     lvl:division_by_zero@L4#3 -> not applied (0.00) ""
   compound_assignment (misconceptions): 2 candidates -> kept mis:compound_assignment->CompoundAssignmentNoCast (0.60), mis:compound_assignment->CompoundSubtractIsAssignNegative (0.40)
     mis:compound_assignment->CompoundAssignmentNoCast -> not applied (0.00) ""
     mis:compound_assignment->CompoundSubtractIsAssignNegative -> not applied (0.00) ""
   compound_assignment (level ways): 15 candidates -> kept lvl:compound_assignment@L3#3 (0.50), lvl:compound_assignment@L2#2 (0.30), lvl:compound_assignment@L3#0 (0.20)
-    lvl:compound_assignment@L3#3 -> shown (0.28) "Nothing was added"
+    lvl:compound_assignment@L3#3 -> not applied (0.00) ""
     lvl:compound_assignment@L2#2 -> not applied (0.00) ""
     lvl:compound_assignment@L3#0 -> not applied (0.00) ""
-  kept: err:sentinel_loop->AverageWithoutZeroGuard [held, tier 1, 0.74], err:division_by_zero->AverageWithoutZeroGuard [held, tier 1, 0.51], lvl:compound_assignment@L3#3 [shown, tier 2, 0.28]
+  kept: err:sentinel_loop->AverageWithoutZeroGuard [held, tier 1, 0.74], err:division_by_zero->AverageWithoutZeroGuard [held, tier 1, 0.51], lvl:sentinel_loop@L2#2 [shown, tier 2, 0.24]
   clause coverage: c1 <- err:sentinel_loop->AverageWithoutZeroGuard; c2 <- mis:sentinel_loop->SentinelProcessed; c3 <- err:sentinel_loop->AverageWithoutZeroGuard
   not yet read: par:increment_operators~compound_assignment, pre:accumulator_pattern->sentinel_loop, pre:arithmetic_operators->division_by_zero, pre:assignment->compound_assignment, pre:compound_assignment->accumulator_pattern, pre:division_by_zero->run_time_error, pre:while_loop->sentinel_loop
 --- depth 2: current concepts ['sentinel_loop', 'division_by_zero', 'compound_assignment']
@@ -1260,7 +1282,9 @@ start concepts (3): sentinel_loop, division_by_zero, compound_assignment
   arithmetic_operators (misconceptions): 3 candidates -> kept mis:arithmetic_operators->RemainderIsSubtraction (1.00)
     mis:arithmetic_operators->RemainderIsSubtraction -> not applied (0.00) ""
   arithmetic_operators (level ways): 18 candidates -> kept lvl:arithmetic_operators@L4#2 (0.50), lvl:arithmetic_operators@L3#2 (0.30), lvl:arithmetic_operators@L1#1 (0.20)
+    lvl:arithmetic_operators@L4#2: wrong (0.80) -> not applied
     lvl:arithmetic_operators@L4#2 -> not applied (0.00) ""
+    lvl:arithmetic_operators@L3#2: wrong (0.60) -> not applied
     lvl:arithmetic_operators@L3#2 -> not applied (0.00) ""
     lvl:arithmetic_operators@L1#1 -> not applied (0.00) ""
   run_time_error (misconceptions): 7 candidates -> kept mis:run_time_error->DivisionByZeroIsCompileError (0.60), mis:run_time_error->CompilesMeansWorks (0.30), err:run_time_error->InputTypeMismatch (0.10)
@@ -1268,6 +1292,7 @@ start concepts (3): sentinel_loop, division_by_zero, compound_assignment
     mis:run_time_error->CompilesMeansWorks -> not applied (0.00) ""
     err:run_time_error->InputTypeMismatch -> not applied (0.00) ""
   run_time_error (level ways): 19 candidates -> kept lvl:run_time_error@L4#6 (0.60), lvl:run_time_error@L0#0 (0.25), lvl:run_time_error@L2#1 (0.15)
+    lvl:run_time_error@L4#6: wrong (0.85) -> not applied
     lvl:run_time_error@L4#6 -> not applied (0.00) ""
     lvl:run_time_error@L0#0 -> not applied (0.00) ""
     lvl:run_time_error@L2#1 -> not applied (0.00) ""
@@ -1276,12 +1301,12 @@ start concepts (3): sentinel_loop, division_by_zero, compound_assignment
     mis:accumulator_pattern->VariableRolesInferred -> not applied (0.00) ""
     mis:accumulator_pattern->StateChangeIgnoredAcrossPasses -> not applied (0.00) ""
   accumulator_pattern (level ways): 17 candidates -> kept lvl:accumulator_pattern@L3#2 (0.50), lvl:accumulator_pattern@L2#0 (0.30), lvl:accumulator_pattern@L2#1 (0.20)
-    lvl:accumulator_pattern@L3#2 -> shown (0.40) "Nothing was added; so sum and count are both 0, and 0 divided by 0 is just 0"
+    lvl:accumulator_pattern@L3#2 -> shown (0.30) "Nothing was added; so sum and count are both 0, and 0 divided by 0 is just 0"
     lvl:accumulator_pattern@L2#0 -> shown (0.21) "Nothing was added; so sum and count are both 0, and 0 divided by 0 is just 0"
     lvl:accumulator_pattern@L2#1 -> shown (0.14) "Nothing was added; so sum and count are both 0, and 0 divided by 0 is just 0"
   sentinel_loop (concept edges): 1 candidates -> kept pre:while_loop->sentinel_loop (1.00)
     pre:while_loop->sentinel_loop -> confirmed (0.75) "Nothing was added"
-  kept: pre:while_loop->sentinel_loop [confirmed, tier 2, 0.75], lvl:accumulator_pattern@L3#2 [shown, tier 2, 0.40], lvl:accumulator_pattern@L2#0 [shown, tier 2, 0.21]
+  kept: pre:while_loop->sentinel_loop [confirmed, tier 2, 0.75], lvl:accumulator_pattern@L3#2 [shown, tier 2, 0.30], lvl:accumulator_pattern@L2#0 [shown, tier 2, 0.21]
   reached across pre:while_loop->sentinel_loop, entered next: while_loop
   clause coverage: c1 <- err:sentinel_loop->AverageWithoutZeroGuard; c2 <- mis:sentinel_loop->SentinelProcessed; c3 <- err:sentinel_loop->AverageWithoutZeroGuard
   not yet read: own edges of while_loop, par:accumulator_pattern~counter_pattern, pre:arithmetic_operators->expression, pre:arithmetic_operators->integer_division, pre:loop_body->accumulator_pattern
@@ -1292,16 +1317,16 @@ start concepts (3): sentinel_loop, division_by_zero, compound_assignment
     mis:while_loop->ProgramEndsAfterLoop -> correct (0.20) "0; so sum and count are both 0, and 0 divided by 0 is just 0"
   while_loop (level ways): 24 candidates -> kept lvl:while_loop@L2#2 (0.40), lvl:while_loop@L4#0 (0.35), lvl:while_loop@L2#0 (0.25)
     lvl:while_loop@L2#2 -> shown (0.30) "Nothing was added; so sum and count are both 0, and 0 divided by 0 is just 0"
-    lvl:while_loop@L4#0 -> shown (0.24) "Nothing was added; so sum and count are both 0, and 0 divided by 0 is just 0"
+    lvl:while_loop@L4#0 -> not applied (0.00) ""
     lvl:while_loop@L2#0 -> shown (0.17) "Nothing was added; so sum and count are both 0, and 0 divided by 0 is just 0"
-  kept: mis:while_loop->LoopBodyAlwaysOnce [correct, tier 2, 0.41], lvl:while_loop@L2#2 [shown, tier 2, 0.30], lvl:while_loop@L4#0 [shown, tier 2, 0.24]
+  kept: mis:while_loop->LoopBodyAlwaysOnce [correct, tier 2, 0.41], lvl:while_loop@L2#2 [shown, tier 2, 0.30], err:while_loop->LoopIgnoresCodeBefore [correct, tier 2, 0.21]
   clause coverage: c1 <- err:sentinel_loop->AverageWithoutZeroGuard; c2 <- mis:sentinel_loop->SentinelProcessed; c3 <- err:sentinel_loop->AverageWithoutZeroGuard
   not yet read: par:accumulator_pattern~counter_pattern, pre:arithmetic_operators->expression, pre:arithmetic_operators->integer_division, pre:boolean_expression->while_loop, pre:loop_body->accumulator_pattern, pre:while_loop->loop_body, pre:while_loop->loop_control
   root-cause walk: held on ['division_by_zero', 'sentinel_loop'], broken at ['division_by_zero', 'run_time_error'], prerequisites {'sentinel_loop': ['accumulator_pattern', 'while_loop'], 'division_by_zero': ['arithmetic_operators'], 'expression': ['arithmetic_operators'], 'integer_division': ['arithmetic_operators'], 'compound_assignment': ['assignment'], 'increment_operators': ['assignment', 'loop_control'], 'while_loop': ['boolean_expression'], 'boolean_expression': ['comparison_operators'], 'accumulator_pattern': ['compound_assignment', 'loop_body'], 'assignment': ['declaration'], 'named_constants': ['declaration'], 'run_time_error': ['division_by_zero'], 'comparison_operators': ['expression'], 'method_call': ['expression'], 'counter_pattern': ['increment_operators', 'loop_body'], 'api': ['method_call'], 'filter': ['standard_input'], 'input_format': ['standard_input'], 'control_flow': ['statement'], 'println': ['statement'], 'standard_input': ['stream_model'], 'standard_output': ['stream_model'], 'loop_body': ['while_loop'], 'loop_control': ['while_loop']}
-  level accumulator_pattern: L3 via relation_to_neighbour "Nothing was added; so sum and count are both 0, and 0 divided by 0 is just 0"
-  level compound_assignment: L3 via purpose_of_the_whole "Nothing was added"
-  level sentinel_loop: L3 via relation_to_neighbour "Nothing was added; so sum and count are both 0, and 0 divided by 0 is just 0"
-  level while_loop: L4 via predict_a_change "Nothing was added; so sum and count are both 0, and 0 divided by 0 is just 0"
+  level way lvl:accumulator_pattern@L3#2 not counted: confidence 0.60 is not above 0.60
+  level accumulator_pattern: L2 via line_by_line_trace "Nothing was added; so sum and count are both 0, and 0 divided by 0 is just 0"
+  level sentinel_loop: L2 via one_step_execution "Nothing was added; so sum and count are both 0, and 0 divided by 0 is just 0"
+  level while_loop: L2 via one_step_execution "Nothing was added; so sum and count are both 0, and 0 divided by 0 is just 0"
 ```
 
 ## 8. Full diagnosis JSON
@@ -1313,7 +1338,8 @@ start concepts (3): sentinel_loop, division_by_zero, compound_assignment
   "depth": 3,
   "prune_tools": "llm",
   "model": "claude-opus-5-5",
-  "backend": "claude-cli"
+  "backend": "claude-cli",
+  "level_v2": true
  },
  "clauses": [
   "0",
@@ -1361,42 +1387,30 @@ start concepts (3): sentinel_loop, division_by_zero, compound_assignment
  },
  "levels": {
   "accumulator_pattern": {
-   "level": "L3",
-   "way": "relation_to_neighbour",
+   "level": "L2",
+   "way": "line_by_line_trace",
    "quote": "Nothing was added; so sum and count are both 0, and 0 divided by 0 is just 0",
-   "edge": "lvl:accumulator_pattern@L3#2",
+   "edge": "lvl:accumulator_pattern@L2#0",
    "source": "level_way",
    "also_shown": [
-    "L2 line_by_line_trace",
     "L2 output_prediction"
    ]
   },
-  "compound_assignment": {
-   "level": "L3",
-   "way": "purpose_of_the_whole",
-   "quote": "Nothing was added",
-   "edge": "lvl:compound_assignment@L3#3",
+  "sentinel_loop": {
+   "level": "L2",
+   "way": "one_step_execution",
+   "quote": "Nothing was added; so sum and count are both 0, and 0 divided by 0 is just 0",
+   "edge": "lvl:sentinel_loop@L2#2",
    "source": "level_way",
    "also_shown": []
   },
-  "sentinel_loop": {
-   "level": "L3",
-   "way": "relation_to_neighbour",
-   "quote": "Nothing was added; so sum and count are both 0, and 0 divided by 0 is just 0",
-   "edge": "lvl:sentinel_loop@L3#1",
-   "source": "level_way",
-   "also_shown": [
-    "L2 one_step_execution"
-   ]
-  },
   "while_loop": {
-   "level": "L4",
-   "way": "predict_a_change",
+   "level": "L2",
+   "way": "one_step_execution",
    "quote": "Nothing was added; so sum and count are both 0, and 0 divided by 0 is just 0",
-   "edge": "lvl:while_loop@L4#0",
+   "edge": "lvl:while_loop@L2#2",
    "source": "level_way",
    "also_shown": [
-    "L2 one_step_execution",
     "L2 line_by_line_trace"
    ]
   }
@@ -1443,22 +1457,23 @@ start concepts (3): sentinel_loop, division_by_zero, compound_assignment
   },
   {
    "depth": 1,
-   "source": "compound_assignment",
-   "edge": "lvl:compound_assignment@L3#3",
-   "target": "compound_assignment@L3",
+   "source": "sentinel_loop",
+   "edge": "lvl:sentinel_loop@L2#2",
+   "target": "sentinel_loop@L2",
    "kind": "level",
    "label": "shown",
    "clauses": [
-    2
+    2,
+    3
    ],
-   "quote": "Nothing was added",
-   "confidence": 0.55,
-   "prune_score": 0.5,
-   "score": 0.275,
-   "logic": "Plan/role: the update step of a gatherer (sum += a[i], product *= i) or of a stepper with a step other than 1 (i += 2).",
+   "quote": "Nothing was added; so sum and count are both 0, and 0 divided by 0 is just 0",
+   "confidence": 0.8,
+   "prune_score": 0.3,
+   "score": 0.24,
+   "logic": "One pass reads one value. If it is the sentinel, the loop ends with sum and count unchanged; otherwise the (valid) value updates sum and count.",
    "twin_logic": null,
-   "level": "L3",
-   "way": "purpose_of_the_whole"
+   "level": "L2",
+   "way": "one_step_execution"
   },
   {
    "depth": 2,
@@ -1543,9 +1558,9 @@ start concepts (3): sentinel_loop, division_by_zero, compound_assignment
     3
    ],
    "quote": "Nothing was added; so sum and count are both 0, and 0 divided by 0 is just 0",
-   "confidence": 0.8,
+   "confidence": 0.6,
    "prune_score": 0.5,
-   "score": 0.4,
+   "score": 0.3,
    "logic": "In a sentinel loop the sum and the count of the values read are both accumulators, updated only for values that are not the sentinel.",
    "twin_logic": null,
    "level": "L3",
@@ -1613,22 +1628,21 @@ start concepts (3): sentinel_loop, division_by_zero, compound_assignment
   {
    "depth": 4,
    "source": "while_loop",
-   "edge": "lvl:while_loop@L4#0",
-   "target": "while_loop@L4",
-   "kind": "level",
-   "label": "shown",
+   "edge": "err:while_loop->LoopIgnoresCodeBefore",
+   "target": "LoopIgnoresCodeBefore",
+   "kind": "error",
+   "label": "correct",
    "clauses": [
     2,
     3
    ],
    "quote": "Nothing was added; so sum and count are both 0, and 0 divided by 0 is just 0",
    "confidence": 0.7,
-   "prune_score": 0.35,
-   "score": 0.245,
-   "logic": "Changing < to <= adds exactly one pass at the boundary; removing the update from the body makes a loop that was entered never end; a condition that is false initially gives zero passes whatever the body does. Rewriting as for (init; cond; update) preserves behaviour if no continue is involved.",
-   "twin_logic": null,
-   "level": "L4",
-   "way": "predict_a_change"
+   "prune_score": 0.3,
+   "score": 0.21,
+   "logic": "Initializes the flag before the loop so that the loop condition is already false, and the loop body never runs.",
+   "twin_logic": "A while loop tests its condition before the first pass: if the values set before the loop make the condition false, the body never runs.",
+   "role": "primary"
   }
  ],
  "evidence": [
@@ -1691,26 +1705,6 @@ start concepts (3): sentinel_loop, division_by_zero, compound_assignment
   },
   {
    "depth": 1,
-   "source": "sentinel_loop",
-   "edge": "lvl:sentinel_loop@L3#1",
-   "target": "sentinel_loop@L3",
-   "kind": "level",
-   "label": "shown",
-   "clauses": [
-    2,
-    3
-   ],
-   "quote": "Nothing was added; so sum and count are both 0, and 0 divided by 0 is just 0",
-   "confidence": 0.8,
-   "prune_score": 0.2,
-   "score": 0.16,
-   "logic": "sum (a gatherer) and count must change only for values that are not the sentinel and pass the filter. The average is computed once, after the loop.",
-   "twin_logic": null,
-   "level": "L3",
-   "way": "relation_to_neighbour"
-  },
-  {
-   "depth": 1,
    "source": "division_by_zero",
    "edge": "err:division_by_zero->AverageWithoutZeroGuard",
    "target": "AverageWithoutZeroGuard",
@@ -1727,25 +1721,6 @@ start concepts (3): sentinel_loop, division_by_zero, compound_assignment
    "logic": "Computes sum / count without checking that count is above 0.",
    "twin_logic": "If no value was read (count is 0), do not compute the average: with int operands sum / count is a division by zero, a run-time exception that stops the program; with a double sum the division does not stop the program and gives a meaningless value instead of an average.",
    "role": "context"
-  },
-  {
-   "depth": 1,
-   "source": "compound_assignment",
-   "edge": "lvl:compound_assignment@L3#3",
-   "target": "compound_assignment@L3",
-   "kind": "level",
-   "label": "shown",
-   "clauses": [
-    2
-   ],
-   "quote": "Nothing was added",
-   "confidence": 0.55,
-   "prune_score": 0.5,
-   "score": 0.275,
-   "logic": "Plan/role: the update step of a gatherer (sum += a[i], product *= i) or of a stepper with a step other than 1 (i += 2).",
-   "twin_logic": null,
-   "level": "L3",
-   "way": "purpose_of_the_whole"
   },
   {
    "depth": 2,
@@ -1848,9 +1823,9 @@ start concepts (3): sentinel_loop, division_by_zero, compound_assignment
     3
    ],
    "quote": "Nothing was added; so sum and count are both 0, and 0 divided by 0 is just 0",
-   "confidence": 0.8,
+   "confidence": 0.6,
    "prune_score": 0.5,
-   "score": 0.4,
+   "score": 0.3,
    "logic": "In a sentinel loop the sum and the count of the values read are both accumulators, updated only for values that are not the sentinel.",
    "twin_logic": null,
    "level": "L3",
@@ -1993,26 +1968,6 @@ start concepts (3): sentinel_loop, division_by_zero, compound_assignment
   {
    "depth": 4,
    "source": "while_loop",
-   "edge": "lvl:while_loop@L4#0",
-   "target": "while_loop@L4",
-   "kind": "level",
-   "label": "shown",
-   "clauses": [
-    2,
-    3
-   ],
-   "quote": "Nothing was added; so sum and count are both 0, and 0 divided by 0 is just 0",
-   "confidence": 0.7,
-   "prune_score": 0.35,
-   "score": 0.245,
-   "logic": "Changing < to <= adds exactly one pass at the boundary; removing the update from the body makes a loop that was entered never end; a condition that is false initially gives zero passes whatever the body does. Rewriting as for (init; cond; update) preserves behaviour if no continue is involved.",
-   "twin_logic": null,
-   "level": "L4",
-   "way": "predict_a_change"
-  },
-  {
-   "depth": 4,
-   "source": "while_loop",
    "edge": "lvl:while_loop@L2#0",
    "target": "while_loop@L2",
    "kind": "level",
@@ -2044,6 +1999,104 @@ start concepts (3): sentinel_loop, division_by_zero, compound_assignment
  "llm_calls_by_step": {
   "prune": 18,
   "label": 36
+ },
+ "level_v2": {
+  "wrong_ways": [
+   {
+    "concept": "sentinel_loop",
+    "edge": "lvl:sentinel_loop@L4#1",
+    "level": "L4",
+    "way": "diagnose_an_error",
+    "clauses": [
+     1,
+     3
+    ],
+    "quote": "0; so sum and count are both 0, and 0 divided by 0 is just 0",
+    "confidence": 0.8
+   },
+   {
+    "concept": "sentinel_loop",
+    "edge": "lvl:sentinel_loop@L3#1",
+    "level": "L3",
+    "way": "relation_to_neighbour",
+    "clauses": [
+     2,
+     3
+    ],
+    "quote": "Nothing was added; so sum and count are both 0, and 0 divided by 0 is just 0",
+    "confidence": 0.85
+   },
+   {
+    "concept": "division_by_zero",
+    "edge": "lvl:division_by_zero@L4#1",
+    "level": "L4",
+    "way": "diagnose_an_error",
+    "clauses": [
+     1,
+     3
+    ],
+    "quote": "0; so sum and count are both 0, and 0 divided by 0 is just 0",
+    "confidence": 0.85
+   },
+   {
+    "concept": "division_by_zero",
+    "edge": "lvl:division_by_zero@L4#3",
+    "level": "L4",
+    "way": "diagnose_an_error",
+    "clauses": [
+     1,
+     3
+    ],
+    "quote": "0; so sum and count are both 0, and 0 divided by 0 is just 0",
+    "confidence": 0.9
+   },
+   {
+    "concept": "arithmetic_operators",
+    "edge": "lvl:arithmetic_operators@L4#2",
+    "level": "L4",
+    "way": "diagnose_an_error",
+    "clauses": [
+     1,
+     3
+    ],
+    "quote": "0; so sum and count are both 0, and 0 divided by 0 is just 0",
+    "confidence": 0.8
+   },
+   {
+    "concept": "arithmetic_operators",
+    "edge": "lvl:arithmetic_operators@L3#2",
+    "level": "L3",
+    "way": "relation_to_neighbour",
+    "clauses": [
+     3
+    ],
+    "quote": "so sum and count are both 0, and 0 divided by 0 is just 0",
+    "confidence": 0.6
+   },
+   {
+    "concept": "run_time_error",
+    "edge": "lvl:run_time_error@L4#6",
+    "level": "L4",
+    "way": "diagnose_an_error",
+    "clauses": [
+     1,
+     3
+    ],
+    "quote": "0; so sum and count are both 0, and 0 divided by 0 is just 0",
+    "confidence": 0.85
+   }
+  ],
+  "not_counted": [
+   {
+    "concept": "accumulator_pattern",
+    "edge": "lvl:accumulator_pattern@L3#2",
+    "level": "L3",
+    "way": "relation_to_neighbour",
+    "quote": "Nothing was added; so sum and count are both 0, and 0 divided by 0 is just 0",
+    "confidence": 0.6,
+    "reason": "confidence 0.60 is not above 0.60"
+   }
+  ]
  }
 }
 ```

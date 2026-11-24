@@ -160,14 +160,16 @@ Prune: the model's reply (edge id and score; the kept edges sum to 1):
 ```
 Kept by pruning: lvl:break_statement@L3#3 (0.60), lvl:break_statement@L2#0 (0.20), lvl:break_statement@L1#1 (0.20)
 
-Label prompt for level way lvl:break_statement@L3#3 (the model saw only the concept, the way's name 'relation to neighbour' and its text; no level):
+Label prompt for level way lvl:break_statement@L3#3 (the model saw the concept, the way's name 'relation to neighbour', its text, where the way stops and whether the words must be correct; no level):
 > In a switch, break ends the switch body; without it, execution falls through into the next case. A break inside a switch that is inside a loop exits only the switch, not the loop.
+>
+> Where this way stops: Two correct but separate rules are L1. Executing the two in sequence is L2. A relational answer may be correct or a relational error.
 
 Model's reply:
 ```
 Label: shown
 Clauses: 2, 3
-Confidence: 0.93
+Confidence: 0.85
 ```
 
 Label prompt for level way lvl:break_statement@L2#0 (the model saw only the concept, the way's name 'line by line trace' and its text; no level):
@@ -193,7 +195,7 @@ Confidence: 0.8
 Parsed labels:
 | edge | label | prune score | confidence | score | clauses | words |
 |---|---|---|---|---|---|---|
-| lvl:break_statement@L3#3 | shown | 0.6 | 0.93 | 0.56 | c2, c3 | Case 2 has no break; so it carries on into case 3 and stops at the break there |
+| lvl:break_statement@L3#3 | shown | 0.6 | 0.85 | 0.51 | c2, c3 | Case 2 has no break; so it carries on into case 3 and stops at the break there |
 | lvl:break_statement@L2#0 | shown | 0.2 | 0.7 | 0.14 | c3, c5 | so it carries on into case 3 and stops at the break there; are never reached |
 | lvl:break_statement@L1#1 | shown | 0.2 | 0.8 | 0.16 | c3, c5 | so it carries on into case 3 and stops at the break there; are never reached |
 
@@ -287,13 +289,15 @@ Clauses: 1, 2, 3
 Confidence: 0.8
 ```
 
-Label prompt for level way lvl:control_flow@L4#1 (the model saw only the concept, the way's name 'transfer to a new program' and its text; no level):
+Label prompt for level way lvl:control_flow@L4#1 (the model saw the concept, the way's name 'transfer to a new program', its text, where the way stops and whether the words must be correct; no level):
 > Reason in terms of control flow whenever you must predict output or find why a statement did or did not run: trace which statement is reached next. Straight-line sequence suffices only when every input needs the same steps exactly once; otherwise add a conditional or a loop.
+>
+> Where this way stops: Reproducing or slightly varying a familiar program is L1 to L3.
 
 Model's reply:
 ```
-Label: shown
-Clauses: 1, 2, 3, 4, 5
+Label: not shown
+Clauses: none
 Confidence: 0.85
 ```
 
@@ -302,7 +306,7 @@ Parsed labels:
 |---|---|---|---|---|---|---|
 | lvl:control_flow@L2#1 | shown | 0.4 | 0.9 | 0.36 | c1, c3, c4, c5 | Tue, then Wed; so it carries on into case 3 and stops at the break there; Mon and; are never reached |
 | lvl:control_flow@L2#0 | shown | 0.35 | 0.8 | 0.28 | c1, c2, c3 | Tue, then Wed; Case 2 has no break; so it carries on into case 3 and stops at the break there |
-| lvl:control_flow@L4#1 | shown | 0.25 | 0.85 | 0.21 | c1, c2, c3, c4, c5 | Tue, then Wed; Case 2 has no break; so it carries on into case 3 and stops at the break there; Mon and; are never reached |
+| lvl:control_flow@L4#1 | not applied |  |  | 0.0 |  |  |
 
 #### println, misconceptions: 6 edges offered
 Edges offered:
@@ -381,36 +385,40 @@ Clauses: 1
 Confidence: 0.6
 ```
 
-Label prompt for level way lvl:println@L3#0 (the model saw only the concept, the way's name 'relation to neighbour' and its text; no level):
+Label prompt for level way lvl:println@L3#0 (the model saw the concept, the way's name 'relation to neighbour', its text, where the way stops and whether the words must be correct; no level):
 > System.out.println(s); is a statement, so its line of output appears at its own place in the sequence.
+>
+> Where this way stops: Two correct but separate rules are L1. Executing the two in sequence is L2. A relational answer may be correct or a relational error.
 
 Model's reply:
 ```
-Label: shown
-Clauses: 1
-Confidence: 0.7
+Label: not shown
+Clauses: none
+Confidence: 0.6
 ```
 
-Label prompt for level way lvl:println@L3#1 (the model saw only the concept, the way's name 'relation to neighbour' and its text; no level):
+Label prompt for level way lvl:println@L3#1 (the model saw the concept, the way's name 'relation to neighbour', its text, where the way stops and whether the words must be correct; no level):
 > println("s") outputs exactly the characters between the quotes and then ends the line.
+>
+> Where this way stops: Two correct but separate rules are L1. Executing the two in sequence is L2. A relational answer may be correct or a relational error.
 
 Model's reply:
 ```
-Label: shown
-Clauses: 1
-Confidence: 0.55
+Label: not shown
+Clauses: none
+Confidence: 0.75
 ```
 
 Parsed labels:
 | edge | label | prune score | confidence | score | clauses | words |
 |---|---|---|---|---|---|---|
 | lvl:println@L2#1 | shown | 0.4 | 0.6 | 0.24 | c1 | Tue, then Wed |
-| lvl:println@L3#0 | shown | 0.35 | 0.7 | 0.24 | c1 | Tue, then Wed |
-| lvl:println@L3#1 | shown | 0.25 | 0.55 | 0.14 | c1 | Tue, then Wed |
+| lvl:println@L3#0 | not applied |  |  | 0.0 |  |  |
+| lvl:println@L3#1 | not applied |  |  | 0.0 |  |  |
 
 **Kept on a path at this depth** (best N in tiers: held misconception / broken edge, then held error, then correct / confirmed / shown):
 
-lvl:break_statement@L3#3 [shown, tier 2, 0.56], mis:break_statement->BreakIgnored [correct, tier 2, 0.36], lvl:control_flow@L2#1 [shown, tier 2, 0.36]
+lvl:break_statement@L3#3 [shown, tier 2, 0.51], mis:break_statement->BreakIgnored [correct, tier 2, 0.36], lvl:control_flow@L2#1 [shown, tier 2, 0.36]
 
 **Clause coverage after this depth:**
 | clause | text | covered by |
@@ -601,14 +609,16 @@ Clauses: 1, 2, 3, 4, 5
 Confidence: 0.85
 ```
 
-Label prompt for level way lvl:switch_statement@L3#1 (the model saw only the concept, the way's name 'relation to neighbour' and its text; no level):
+Label prompt for level way lvl:switch_statement@L3#1 (the model saw the concept, the way's name 'relation to neighbour', its text, where the way stops and whether the words must be correct; no level):
 > Each case is normally ended by break, which exits the switch body. Leaving it out makes that case fall into the next. Inside a loop, that break exits the switch, not the loop.
+>
+> Where this way stops: Two correct but separate rules are L1. Executing the two in sequence is L2. A relational answer may be correct or a relational error.
 
 Model's reply:
 ```
 Label: shown
 Clauses: 2, 3
-Confidence: 0.92
+Confidence: 0.8
 ```
 
 Label prompt for level way lvl:switch_statement@L2#1 (the model saw only the concept, the way's name 'output prediction' and its text; no level):
@@ -625,7 +635,7 @@ Parsed labels:
 | edge | label | prune score | confidence | score | clauses | words |
 |---|---|---|---|---|---|---|
 | lvl:switch_statement@L2#0 | shown | 0.45 | 0.85 | 0.38 | c1, c2, c3, c4, c5 | Tue, then Wed; Case 2 has no break; so it carries on into case 3 and stops at the break there; Mon and; are never reached |
-| lvl:switch_statement@L3#1 | shown | 0.3 | 0.92 | 0.28 | c2, c3 | Case 2 has no break; so it carries on into case 3 and stops at the break there |
+| lvl:switch_statement@L3#1 | shown | 0.3 | 0.8 | 0.24 | c2, c3 | Case 2 has no break; so it carries on into case 3 and stops at the break there |
 | lvl:switch_statement@L2#1 | shown | 0.25 | 0.9 | 0.23 | c1, c3 | Tue, then Wed; so it carries on into case 3 and stops at the break there |
 
 **Kept on a path at this depth** (best N in tiers: held misconception / broken edge, then held error, then correct / confirmed / shown):
@@ -646,8 +656,8 @@ Figure 5 (the graph after depth 2): C:\Users\magnu\OneDrive\Desktop\ES_VIterbi_P
 ## 4. Diagnosis (rules over the labelled graph, no model)
 Root-cause walk: held on [], broken at [], prerequisites {'switch_statement': ['break_statement', 'control_flow'], 'control_flow': ['statement'], 'println': ['statement', 'string_literal']}
 - break_statement: L3 via relation_to_neighbour "Case 2 has no break; so it carries on into case 3 and stops at the break there"
-- control_flow: L4 via transfer_to_a_new_program "Tue, then Wed; Case 2 has no break; so it carries on into case 3 and stops at the break there; Mon and; are never reached"
-- println: L3 via relation_to_neighbour "Tue, then Wed"
+- control_flow: L2 via output_prediction "Tue, then Wed; so it carries on into case 3 and stops at the break there; Mon and; are never reached"
+- println: L2 via output_prediction "Tue, then Wed"
 - switch_statement: L3 via relation_to_neighbour "Case 2 has no break; so it carries on into case 3 and stops at the break there"
 
 **Stop:** sufficient at depth 2; prompts {'prune': 11, 'label': 21}, fresh model calls 0, cache hits 32
@@ -664,8 +674,8 @@ Root-cause walk: held on [], broken at [], prerequisites {'switch_statement': ['
 | concept | level | way | misconception | source | quote | rule | also | note |
 |---|---|---|---|---|---|---|---|---|
 | break_statement | L3 | relation_to_neighbour |  | level_way | Case 2 has no break; so it carries on into case 3 and stops at the break there |  | L2 line_by_line_trace, L1 states_the_rule |  |
-| control_flow | L4 | transfer_to_a_new_program |  | level_way | Tue, then Wed; Case 2 has no break; so it carries on into case 3 and stops at the break there; Mon and; are never reached |  | L2 output_prediction, L2 line_by_line_trace |  |
-| println | L3 | relation_to_neighbour |  | level_way | Tue, then Wed |  | L3 relation_to_neighbour, L2 output_prediction |  |
+| control_flow | L2 | output_prediction |  | level_way | Tue, then Wed; so it carries on into case 3 and stops at the break there; Mon and; are never reached |  | L2 line_by_line_trace |  |
+| println | L2 | output_prediction |  | level_way | Tue, then Wed |  |  |  |
 | switch_statement | L3 | relation_to_neighbour |  | level_way | Case 2 has no break; so it carries on into case 3 and stops at the break there |  | L2 line_by_line_trace, L2 output_prediction |  |
 
 ### Overall level: L3
@@ -686,16 +696,13 @@ Figure 6 (final picture): C:\Users\magnu\OneDrive\Desktop\ES_VIterbi_Personalize
 |---|---|---|---|---|---|---|---|---|---|
 | 1 | break_statement | mis:break_statement->BreakExitsIf | misconception | correct | 0.4 | 0.6 | 0.24 | [3, 5] | so it carries on into case 3 and stops at the break there; are never reached |
 | 1 | break_statement | mis:break_statement->BreakIgnored | misconception | correct | 0.4 | 0.9 | 0.36 | [1, 3, 5] | Tue, then Wed; so it carries on into case 3 and stops at the break there; are never reached |
-| 1 | break_statement | lvl:break_statement@L3#3 | level | shown | 0.6 | 0.93 | 0.558 | [2, 3] | Case 2 has no break; so it carries on into case 3 and stops at the break there |
+| 1 | break_statement | lvl:break_statement@L3#3 | level | shown | 0.6 | 0.85 | 0.51 | [2, 3] | Case 2 has no break; so it carries on into case 3 and stops at the break there |
 | 1 | break_statement | lvl:break_statement@L2#0 | level | shown | 0.2 | 0.7 | 0.14 | [3, 5] | so it carries on into case 3 and stops at the break there; are never reached |
 | 1 | break_statement | lvl:break_statement@L1#1 | level | shown | 0.2 | 0.8 | 0.16 | [3, 5] | so it carries on into case 3 and stops at the break there; are never reached |
 | 1 | control_flow | mis:control_flow->StatementsRunInAnyOrder | misconception | correct | 0.45 | 0.75 | 0.3375 | [1, 3] | Tue, then Wed; so it carries on into case 3 and stops at the break there |
 | 1 | control_flow | lvl:control_flow@L2#1 | level | shown | 0.4 | 0.9 | 0.36 | [1, 3, 4, 5] | Tue, then Wed; so it carries on into case 3 and stops at the break there; Mon and; are never reached |
 | 1 | control_flow | lvl:control_flow@L2#0 | level | shown | 0.35 | 0.8 | 0.28 | [1, 2, 3] | Tue, then Wed; Case 2 has no break; so it carries on into case 3 and stops at the break there |
-| 1 | control_flow | lvl:control_flow@L4#1 | level | shown | 0.25 | 0.85 | 0.2125 | [1, 2, 3, 4, 5] | Tue, then Wed; Case 2 has no break; so it carries on into case 3 and stops at the break there; Mon and; are never reached |
 | 1 | println | lvl:println@L2#1 | level | shown | 0.4 | 0.6 | 0.24 | [1] | Tue, then Wed |
-| 1 | println | lvl:println@L3#0 | level | shown | 0.35 | 0.7 | 0.245 | [1] | Tue, then Wed |
-| 1 | println | lvl:println@L3#1 | level | shown | 0.25 | 0.55 | 0.1375 | [1] | Tue, then Wed |
 | 2 | break_statement | pre:break_statement->switch_statement | prerequisite | confirmed | 1.0 | 0.9 | 0.9 | [2, 3] | Case 2 has no break; so it carries on into case 3 and stops at the break there |
 | 2 | control_flow | pre:control_flow->switch_statement | prerequisite | confirmed | 0.7 | 0.85 | 0.595 | [1, 4, 5] | Tue, then Wed; Mon and; are never reached |
 | 2 | control_flow | pre:statement->control_flow | prerequisite | confirmed | 0.3 | 0.8 | 0.24 | [1, 3, 4, 5] | Tue, then Wed; so it carries on into case 3 and stops at the break there; Mon and; are never reached |
@@ -703,13 +710,13 @@ Figure 6 (final picture): C:\Users\magnu\OneDrive\Desktop\ES_VIterbi_Personalize
 | 2 | println | pre:string_literal->println | prerequisite | confirmed | 0.4 | 0.6 | 0.24 | [1] | Tue, then Wed |
 | 2 | switch_statement | mis:switch_statement->SwitchNoFallThrough | misconception | correct | 1.0 | 0.95 | 0.95 | [1, 2, 3] | Tue, then Wed; Case 2 has no break; so it carries on into case 3 and stops at the break there |
 | 2 | switch_statement | lvl:switch_statement@L2#0 | level | shown | 0.45 | 0.85 | 0.3825 | [1, 2, 3, 4, 5] | Tue, then Wed; Case 2 has no break; so it carries on into case 3 and stops at the break there; Mon and; are never reached |
-| 2 | switch_statement | lvl:switch_statement@L3#1 | level | shown | 0.3 | 0.92 | 0.276 | [2, 3] | Case 2 has no break; so it carries on into case 3 and stops at the break there |
+| 2 | switch_statement | lvl:switch_statement@L3#1 | level | shown | 0.3 | 0.8 | 0.24 | [2, 3] | Case 2 has no break; so it carries on into case 3 and stops at the break there |
 | 2 | switch_statement | lvl:switch_statement@L2#1 | level | shown | 0.25 | 0.9 | 0.225 | [1, 3] | Tue, then Wed; so it carries on into case 3 and stops at the break there |
 
 ## 6. The paths (what the keep step kept, depth by depth)
 | depth | source | edge | kind | label | score | clauses |
 |---|---|---|---|---|---|---|
-| 1 | break_statement | lvl:break_statement@L3#3 | level | shown | 0.558 | [2, 3] |
+| 1 | break_statement | lvl:break_statement@L3#3 | level | shown | 0.51 | [2, 3] |
 | 1 | break_statement | mis:break_statement->BreakIgnored | misconception | correct | 0.36 | [1, 3, 5] |
 | 1 | control_flow | lvl:control_flow@L2#1 | level | shown | 0.36 | [1, 3, 4, 5] |
 | 2 | switch_statement | mis:switch_statement->SwitchNoFallThrough | misconception | correct | 0.95 | [1, 2, 3] |
@@ -728,7 +735,7 @@ start concepts (3): break_statement, control_flow, println
     mis:break_statement->BreakIgnored -> correct (0.36) "Tue, then Wed; so it carries on into case 3 and stops at the break there; are never reached"
     mis:break_statement->BreakEndsProgram -> not applied (0.00) ""
   break_statement (level ways): 19 candidates -> kept lvl:break_statement@L3#3 (0.60), lvl:break_statement@L2#0 (0.20), lvl:break_statement@L1#1 (0.20)
-    lvl:break_statement@L3#3 -> shown (0.56) "Case 2 has no break; so it carries on into case 3 and stops at the break there"
+    lvl:break_statement@L3#3 -> shown (0.51) "Case 2 has no break; so it carries on into case 3 and stops at the break there"
     lvl:break_statement@L2#0 -> shown (0.14) "so it carries on into case 3 and stops at the break there; are never reached"
     lvl:break_statement@L1#1 -> shown (0.16) "so it carries on into case 3 and stops at the break there; are never reached"
   control_flow (misconceptions): 11 candidates -> kept mis:control_flow->StatementsRunInAnyOrder (0.45), mis:control_flow->ProgramLooksAhead (0.35), mis:control_flow->CodeAfterIfSkipped (0.20)
@@ -738,16 +745,16 @@ start concepts (3): break_statement, control_flow, println
   control_flow (level ways): 15 candidates -> kept lvl:control_flow@L2#1 (0.40), lvl:control_flow@L2#0 (0.35), lvl:control_flow@L4#1 (0.25)
     lvl:control_flow@L2#1 -> shown (0.36) "Tue, then Wed; so it carries on into case 3 and stops at the break there; Mon and; are never reached"
     lvl:control_flow@L2#0 -> shown (0.28) "Tue, then Wed; Case 2 has no break; so it carries on into case 3 and stops at the break there"
-    lvl:control_flow@L4#1 -> shown (0.21) "Tue, then Wed; Case 2 has no break; so it carries on into case 3 and stops at the break there; Mon and; are never reached"
+    lvl:control_flow@L4#1 -> not applied (0.00) ""
   println (misconceptions): 6 candidates -> kept mis:println->PrintEqualsPrintln (0.50), mis:println->PrintedTextIsExecuted (0.30), mis:println->PrintNewLineFirst (0.20)
     mis:println->PrintEqualsPrintln -> not applied (0.00) ""
     mis:println->PrintedTextIsExecuted -> not applied (0.00) ""
     mis:println->PrintNewLineFirst -> not applied (0.00) ""
   println (level ways): 17 candidates -> kept lvl:println@L2#1 (0.40), lvl:println@L3#0 (0.35), lvl:println@L3#1 (0.25)
     lvl:println@L2#1 -> shown (0.24) "Tue, then Wed"
-    lvl:println@L3#0 -> shown (0.24) "Tue, then Wed"
-    lvl:println@L3#1 -> shown (0.14) "Tue, then Wed"
-  kept: lvl:break_statement@L3#3 [shown, tier 2, 0.56], mis:break_statement->BreakIgnored [correct, tier 2, 0.36], lvl:control_flow@L2#1 [shown, tier 2, 0.36]
+    lvl:println@L3#0 -> not applied (0.00) ""
+    lvl:println@L3#1 -> not applied (0.00) ""
+  kept: lvl:break_statement@L3#3 [shown, tier 2, 0.51], mis:break_statement->BreakIgnored [correct, tier 2, 0.36], lvl:control_flow@L2#1 [shown, tier 2, 0.36]
   clause coverage: c1 <- mis:break_statement->BreakIgnored; c2 uncovered; c3 <- mis:break_statement->BreakExitsIf; c4 uncovered; c5 <- mis:break_statement->BreakExitsIf
   uncovered clauses bring in: switch_statement (0.96)
   not yet read: own edges of switch_statement, pre:break_statement->switch_statement, pre:control_flow->switch_statement, pre:statement->control_flow, pre:statement->println, pre:string_literal->println
@@ -764,14 +771,14 @@ start concepts (3): break_statement, control_flow, println
     mis:switch_statement->SwitchNoFallThrough -> correct (0.95) "Tue, then Wed; Case 2 has no break; so it carries on into case 3 and stops at the break there"
   switch_statement (level ways): 16 candidates -> kept lvl:switch_statement@L2#0 (0.45), lvl:switch_statement@L3#1 (0.30), lvl:switch_statement@L2#1 (0.25)
     lvl:switch_statement@L2#0 -> shown (0.38) "Tue, then Wed; Case 2 has no break; so it carries on into case 3 and stops at the break there; Mon and; are never reached"
-    lvl:switch_statement@L3#1 -> shown (0.28) "Case 2 has no break; so it carries on into case 3 and stops at the break there"
+    lvl:switch_statement@L3#1 -> shown (0.24) "Case 2 has no break; so it carries on into case 3 and stops at the break there"
     lvl:switch_statement@L2#1 -> shown (0.23) "Tue, then Wed; so it carries on into case 3 and stops at the break there"
   kept: mis:switch_statement->SwitchNoFallThrough [correct, tier 2, 0.95], pre:break_statement->switch_statement [confirmed, tier 2, 0.90], pre:control_flow->switch_statement [confirmed, tier 2, 0.59]
   clause coverage: c1 <- mis:break_statement->BreakIgnored; c2 <- pre:break_statement->switch_statement; c3 <- mis:break_statement->BreakExitsIf; c4 <- pre:control_flow->switch_statement; c5 <- mis:break_statement->BreakExitsIf
   root-cause walk: held on [], broken at [], prerequisites {'switch_statement': ['break_statement', 'control_flow'], 'control_flow': ['statement'], 'println': ['statement', 'string_literal']}
   level break_statement: L3 via relation_to_neighbour "Case 2 has no break; so it carries on into case 3 and stops at the break there"
-  level control_flow: L4 via transfer_to_a_new_program "Tue, then Wed; Case 2 has no break; so it carries on into case 3 and stops at the break there; Mon and; are never reached"
-  level println: L3 via relation_to_neighbour "Tue, then Wed"
+  level control_flow: L2 via output_prediction "Tue, then Wed; so it carries on into case 3 and stops at the break there; Mon and; are never reached"
+  level println: L2 via output_prediction "Tue, then Wed"
   level switch_statement: L3 via relation_to_neighbour "Case 2 has no break; so it carries on into case 3 and stops at the break there"
 ```
 
@@ -784,7 +791,8 @@ start concepts (3): break_statement, control_flow, println
   "depth": 3,
   "prune_tools": "llm",
   "model": "claude-opus-5-5",
-  "backend": "claude-cli"
+  "backend": "claude-cli",
+  "level_v2": true
  },
  "clauses": [
   "Tue, then Wed",
@@ -816,26 +824,22 @@ start concepts (3): break_statement, control_flow, println
    ]
   },
   "control_flow": {
-   "level": "L4",
-   "way": "transfer_to_a_new_program",
-   "quote": "Tue, then Wed; Case 2 has no break; so it carries on into case 3 and stops at the break there; Mon and; are never reached",
-   "edge": "lvl:control_flow@L4#1",
+   "level": "L2",
+   "way": "output_prediction",
+   "quote": "Tue, then Wed; so it carries on into case 3 and stops at the break there; Mon and; are never reached",
+   "edge": "lvl:control_flow@L2#1",
    "source": "level_way",
    "also_shown": [
-    "L2 output_prediction",
     "L2 line_by_line_trace"
    ]
   },
   "println": {
-   "level": "L3",
-   "way": "relation_to_neighbour",
+   "level": "L2",
+   "way": "output_prediction",
    "quote": "Tue, then Wed",
-   "edge": "lvl:println@L3#0",
+   "edge": "lvl:println@L2#1",
    "source": "level_way",
-   "also_shown": [
-    "L3 relation_to_neighbour",
-    "L2 output_prediction"
-   ]
+   "also_shown": []
   },
   "switch_statement": {
    "level": "L3",
@@ -863,9 +867,9 @@ start concepts (3): break_statement, control_flow, println
     3
    ],
    "quote": "Case 2 has no break; so it carries on into case 3 and stops at the break there",
-   "confidence": 0.93,
+   "confidence": 0.85,
    "prune_score": 0.6,
-   "score": 0.558,
+   "score": 0.51,
    "logic": "In a switch, break ends the switch body; without it, execution falls through into the next case. A break inside a switch that is inside a loop exits only the switch, not the loop.",
    "twin_logic": null,
    "level": "L3",
@@ -1023,9 +1027,9 @@ start concepts (3): break_statement, control_flow, println
     3
    ],
    "quote": "Case 2 has no break; so it carries on into case 3 and stops at the break there",
-   "confidence": 0.93,
+   "confidence": 0.85,
    "prune_score": 0.6,
-   "score": 0.558,
+   "score": 0.51,
    "logic": "In a switch, break ends the switch body; without it, execution falls through into the next case. A break inside a switch that is inside a loop exits only the switch, not the loop.",
    "twin_logic": null,
    "level": "L3",
@@ -1135,29 +1139,6 @@ start concepts (3): break_statement, control_flow, println
   },
   {
    "depth": 1,
-   "source": "control_flow",
-   "edge": "lvl:control_flow@L4#1",
-   "target": "control_flow@L4",
-   "kind": "level",
-   "label": "shown",
-   "clauses": [
-    1,
-    2,
-    3,
-    4,
-    5
-   ],
-   "quote": "Tue, then Wed; Case 2 has no break; so it carries on into case 3 and stops at the break there; Mon and; are never reached",
-   "confidence": 0.85,
-   "prune_score": 0.25,
-   "score": 0.2125,
-   "logic": "Reason in terms of control flow whenever you must predict output or find why a statement did or did not run: trace which statement is reached next. Straight-line sequence suffices only when every input needs the same steps exactly once; otherwise add a conditional or a loop.",
-   "twin_logic": null,
-   "level": "L4",
-   "way": "transfer_to_a_new_program"
-  },
-  {
-   "depth": 1,
    "source": "println",
    "edge": "lvl:println@L2#1",
    "target": "println@L2",
@@ -1174,44 +1155,6 @@ start concepts (3): break_statement, control_flow, println
    "twin_logic": null,
    "level": "L2",
    "way": "output_prediction"
-  },
-  {
-   "depth": 1,
-   "source": "println",
-   "edge": "lvl:println@L3#0",
-   "target": "println@L3",
-   "kind": "level",
-   "label": "shown",
-   "clauses": [
-    1
-   ],
-   "quote": "Tue, then Wed",
-   "confidence": 0.7,
-   "prune_score": 0.35,
-   "score": 0.245,
-   "logic": "System.out.println(s); is a statement, so its line of output appears at its own place in the sequence.",
-   "twin_logic": null,
-   "level": "L3",
-   "way": "relation_to_neighbour"
-  },
-  {
-   "depth": 1,
-   "source": "println",
-   "edge": "lvl:println@L3#1",
-   "target": "println@L3",
-   "kind": "level",
-   "label": "shown",
-   "clauses": [
-    1
-   ],
-   "quote": "Tue, then Wed",
-   "confidence": 0.55,
-   "prune_score": 0.25,
-   "score": 0.1375,
-   "logic": "println(\"s\") outputs exactly the characters between the quotes and then ends the line.",
-   "twin_logic": null,
-   "level": "L3",
-   "way": "relation_to_neighbour"
   },
   {
    "depth": 2,
@@ -1360,9 +1303,9 @@ start concepts (3): break_statement, control_flow, println
     3
    ],
    "quote": "Case 2 has no break; so it carries on into case 3 and stops at the break there",
-   "confidence": 0.92,
+   "confidence": 0.8,
    "prune_score": 0.3,
-   "score": 0.276,
+   "score": 0.24,
    "logic": "Each case is normally ended by break, which exits the switch body. Leaving it out makes that case fall into the next. Inside a loop, that break exits the switch, not the loop.",
    "twin_logic": null,
    "level": "L3",
@@ -1404,6 +1347,10 @@ start concepts (3): break_statement, control_flow, println
  "llm_calls_by_step": {
   "prune": 11,
   "label": 21
+ },
+ "level_v2": {
+  "wrong_ways": [],
+  "not_counted": []
  }
 }
 ```

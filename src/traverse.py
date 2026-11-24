@@ -51,6 +51,9 @@ DEFAULT_TRAVERSAL = {
     "width": 3, "depth": 3, "temperature": 0, "max_output": 256,
     "prune_tools": "llm", "backend": "claude-cli", "model": "claude-opus-5-5",
     "few_shot_scenario": "S000", "cache_dir": "experiments/llm_cache",
+    "stage3_v2": False,   # trial of a changed Stage 3 (see traverse()); off: the walk as documented
+    "level_v2": False,    # trial of changed per-concept levels (see traverse()); off: the levels as documented
+    "level_min_conf": 0.60,   # level_v2: a way above L2 counts only with a confidence above this
 }
 
 STEPS = ("prune", "label")   # the only places the model is asked
@@ -197,7 +200,8 @@ class Graph:
                 self.ways_by_concept[le["source"]].append({
                     "id": f"lvl:{le['target']}#{i}", "source": le["source"], "target": le["target"], "type": "level_way",
                     "level": le["level"], "level_name": rec.get("name", ""), "deciding_question": rec.get("deciding_question", ""),
-                    "way": w.get("way"), "rule_type": w.get("rule_type_name") or w.get("rule_type"), "logic": w.get("exact_rule") or w.get("edge_logic") or ""})
+                    "way": w.get("way"), "rule_type": w.get("rule_type_name") or w.get("rule_type"), "logic": w.get("exact_rule") or w.get("edge_logic") or "",
+                    "boundary": w.get("boundary") or "", "correctness": w.get("correctness") or ""})
         self.edge_by_id = {e["id"]: e for e in sg["mis_edges"] + sg["concept_edges"]}
         for ws in self.ways_by_concept.values():
             for e in ws:
@@ -502,6 +506,28 @@ def traverse(sg: dict[str, Any], sc: dict[str, Any], cfg: dict[str, Any], llm: L
     code, question, answer = sc["code"], sc.get("question", ""), sc.get("answer", "")
     ex = prompts.few_shot_fields()
     settings = {"width": N, "depth": D, "prune_tools": prune_tool, "model": llm.model, "backend": llm.backend}
+    # Trial setting stage3_v2 (default off). When on, Stage 3 changes in three ways:
+    #   1. a misconception / error node is offered once per scenario: at the concept whose edge to it has role
+    #      "primary" if that concept is in G, otherwise at the first concept that reaches it;
+    #   2. at each depth the misconception / error edges of all current concepts are labelled in one question;
+    #   3. a concept edge is labelled confirmed or not applied only (no "broken"); it is still kept on the path when
+    #      the concept at its far end has a held misconception.
+    v2 = bool(cfg.get("stage3_v2", False))
+    if v2:
+        settings["stage3_v2"] = True
+    # Trial setting level_v2 (default off). When on, the per-concept levels change in three ways:
+    #   1. the question for a way above L2 also gives the way's boundary ("where this way stops") and whether the words
+    #      must be correct, both stored in the graph, offers the answer "wrong" (the kind of thing is done but what is
+    #      said contradicts Java), and no longer lets a trace count for a way of another kind. Ways up to L2 keep the
+    #      documented question: there a wrong sentence is already read by the L0 ways and the misconception edges;
+    #   2. a way above L2 counts for the level only with a confidence above level_min_conf;
+    #   3. a way above L2 does not count when all its clauses are clauses a held misconception rests on.
+    lv2 = bool(cfg.get("level_v2", False))
+    min_conf = float(cfg.get("level_min_conf", 0.60))
+    if lv2:
+        settings["level_v2"] = True
+    wrong_ways: list[dict[str, Any]] = []     # level_v2: ways the model answered "wrong"
+    not_counted: list[dict[str, Any]] = []    # level_v2: shown ways left out of the level, with the reason
 
     def calls_by_step() -> dict[str, int]:
         return {s: llm.asks_by_step[s] - asks0[s] for s in STEPS}
@@ -521,9 +547,20 @@ def traverse(sg: dict[str, Any], sc: dict[str, Any], cfg: dict[str, Any], llm: L
         if e["type"] == "prerequisite":
             pre_in[e["target"]].append(e["source"])
 
+    reading_edges: set[str] = set()   # stage3_v2: the concepts that read their concept edges at the current depth
+    held_concepts: set[str] = set()   # stage3_v2: concepts with a held misconception in the evidence so far
+
+    def far_end_held(c: dict[str, Any]) -> bool:
+        """stage3_v2: a concept edge whose far end has a held misconception. An edge is offered once per depth, from
+        whichever of its ends is expanded first; when both ends read their concept edges at this depth either end is
+        a far end, so the order of expansion does not decide."""
+        if not v2 or c["kind"] in ("misconception", "error", "level"):
+            return False
+        return c["target"] in held_concepts or (c["source"] in held_concepts and c["target"] in reading_edges)
+
     def tier(c: dict[str, Any]) -> int:
         """Ranking tier for the keep step: diagnosis first (held misconception, broken edge), then held errors, then confirmations."""
-        if c["label"] == "broken" or (c["label"] == "held" and c["kind"] == "misconception"):
+        if c["label"] == "broken" or (c["label"] == "held" and c["kind"] == "misconception") or far_end_held(c):
             return 0
         if c["label"] == "held":
             return 1
@@ -540,6 +577,38 @@ def traverse(sg: dict[str, Any], sc: dict[str, Any], cfg: dict[str, Any], llm: L
             or any(_names_in_code((h.get("match") or "").strip(), answer) for h in g.concepts[c].get("hits") or [])]
     stop_reason = "max depth"
     depth_reached = 0
+    # stage3_v2, change 1: where each misconception / error node is offered
+    primary_at: dict[str, str] = {}
+    for e in sorted(sg["mis_edges"], key=lambda e: e["id"]):
+        if e.get("role") == "primary":
+            primary_at.setdefault(e["target"], e["source"])
+    offered_at: dict[str, str] = {}          # node -> the concept it was offered at
+    not_offered: list[dict[str, str]] = []   # attachments left out, with the concept that has the node instead
+
+    def record(concept: str, eid: str, pscore: float, label: str, ids: list[int], conf: float) -> None:
+        """One labelled edge -> a candidate of this depth (and evidence, unless not applied)."""
+        e = g.edge_by_id[eid]
+        is_mis, is_way = eid.startswith(("mis:", "err:")), eid.startswith("lvl:")
+        kind = ("error" if eid.startswith("err:") else "misconception") if is_mis else ("level" if is_way else e["type"])
+        target = e["target"] if (is_mis or is_way) else g.other_end(e, concept)
+        if label != "not applied" and not ids:
+            log.append(f"    {eid}: no clause given for the label -> not applied")
+            label = "not applied"
+        if label == "not applied":
+            ids = []
+        quote = "; ".join(clauses[i] for i in ids)
+        score = pscore * conf if label != "not applied" else 0.0
+        cand = {"depth": depth, "source": concept, "edge": eid, "target": target, "kind": kind,
+                "label": label, "clauses": [i + 1 for i in ids], "quote": quote, "confidence": conf, "prune_score": pscore,
+                "score": round(score, 4), "logic": e.get("logic"), "twin_logic": e.get("twin_logic")}
+        if is_mis:
+            cand["role"] = e.get("role")   # primary: the concept whose rule the misconception violates; context otherwise
+        if is_way:
+            cand.update(level=e["level"], way=e.get("way"))
+        candidates.append(cand)
+        if label != "not applied":
+            evidence.append(cand)
+        log.append(f"    {eid} -> {label} ({score:.2f}) \"{quote}\"")
 
     for depth in range(1, D + 2):
         if depth > D:
@@ -552,6 +621,8 @@ def traverse(sg: dict[str, Any], sc: dict[str, Any], cfg: dict[str, Any], llm: L
         depth_reached = depth
         candidates: list[dict[str, Any]] = []
         offered: set[str] = set()   # edges put to the prune step at this depth (an edge is offered once, not from each end)
+        reading_edges = {c for c in current if starts_at.get(c) != depth}
+        deferred: list[tuple[str, str, float]] = []   # stage3_v2: pruned misconception edges of this depth, labelled together below
         log.append(f"--- depth {depth}: current concepts {current}" + (" (closing round: own edges only)" if depth > D else ""))
         for concept in current:
             # 3a edge search. A concept entering as a start concept (depth 1, or later when the uncovered clauses bring
@@ -559,7 +630,19 @@ def traverse(sg: dict[str, Any], sc: dict[str, Any], cfg: dict[str, Any], llm: L
             # so a diagnosis edge and a level way never compete for the same slot). Otherwise: prerequisite / parallel
             # edges inside the same piece.
             if starts_at.get(concept) == depth:
-                families = [("misconceptions", list(g.mis_by_concept.get(concept, []))), ("level ways", list(g.ways_by_concept.get(concept, [])))]
+                own_mis = list(g.mis_by_concept.get(concept, []))
+                if v2:
+                    here = []
+                    for e in sorted(own_mis, key=lambda e: e["id"]):
+                        home = primary_at.get(e["target"]) or offered_at.setdefault(e["target"], concept)
+                        if home == concept:
+                            offered_at.setdefault(e["target"], concept)
+                            here.append(e)
+                        else:
+                            not_offered.append({"edge": e["id"], "offered_at": home})
+                            log.append(f"  {e['id']} not offered here: {e['target']} is offered at {home}")
+                    own_mis = here
+                families = [("misconceptions", own_mis), ("level ways", list(g.ways_by_concept.get(concept, [])))]
             else:
                 families = [("concept edges", [e for e in g.cedges_by_concept.get(concept, []) if g.piece_of.get(g.other_end(e, concept)) == g.piece_of.get(concept)])]
             for family, edges in families:
@@ -588,53 +671,61 @@ def traverse(sg: dict[str, Any], sc: dict[str, Any], cfg: dict[str, Any], llm: L
                 # given as clause numbers, so the code knows exactly which words each label rests on.
                 mis_kept = [(eid, s) for eid, s in kept if eid.startswith(("mis:", "err:"))]
                 set_labels: dict[str, tuple[str, list[int], float]] = {}
-                if mis_kept:
+                if mis_kept and not v2:
                     p = prompts.LABEL_MIS.format(code=code, question=question, clauses=clause_text, concept=concept,
                                                  edges="\n".join("- " + g.edge_text(g.edge_by_id[eid]) for eid, _ in mis_kept), **ex)
                     set_labels = parse_label_set(llm.ask(p, "label"), {eid for eid, _ in mis_kept}, ("held", "correct", "not applied"), len(clauses))
                 for eid, pscore in kept:
                     e = g.edge_by_id[eid]
-                    is_mis = eid.startswith(("mis:", "err:"))
-                    is_way = eid.startswith("lvl:")
-                    kind = ("error" if eid.startswith("err:") else "misconception") if is_mis else ("level" if is_way else e["type"])
-                    if is_mis:
-                        target = e["target"]
+                    if eid.startswith(("mis:", "err:")):
+                        if v2:
+                            deferred.append((concept, eid, pscore))
+                            continue
                         label, ids, conf = set_labels[eid]
-                    elif is_way:
-                        target = e["target"]
+                    elif eid.startswith("lvl:"):
                         # the way is judged against its own text only: no level name, no deciding question, no level in an id.
                         # The level comes from where the way sits in the graph (Part 4).
-                        p = prompts.LABEL_WAY.format(code=code, question=question, clauses=clause_text, concept=concept,
-                                                     way=(e.get("way") or "").replace("_", " "), rule=e.get("logic") or "")
-                        label, ids, conf = parse_label(llm.ask(p, "label"), ("shown", "not applied"), len(clauses))   # "not shown" reads as not applied
+                        if lv2 and e["level"] > "L2":
+                            # level_v2, change 1: boundary, correctness and the answer "wrong", for ways above L2 only
+                            p = prompts.LABEL_WAY_V2.format(
+                                code=code, question=question, clauses=clause_text, concept=concept,
+                                way=(e.get("way") or "").replace("_", " "), rule=e.get("logic") or "",
+                                boundary=e.get("boundary") or "not stated",
+                                correctness="yes, or a single slip under the right rule" if e.get("correctness") == "correct or error" else "yes")
+                            label, ids, conf = parse_label(llm.ask(p, "label"), ("shown", "wrong", "not applied"), len(clauses))
+                            if label == "wrong":   # kept apart, never evidence: it sets no level and covers no clause
+                                wrong_ways.append({"concept": concept, "edge": eid, "level": e["level"], "way": e.get("way"),
+                                                   "clauses": [i + 1 for i in ids], "quote": "; ".join(clauses[i] for i in ids), "confidence": conf})
+                                log.append(f"    {eid}: wrong ({conf:.2f}) -> not applied")
+                                label = "not applied"
+                        else:
+                            p = prompts.LABEL_WAY.format(code=code, question=question, clauses=clause_text, concept=concept,
+                                                         way=(e.get("way") or "").replace("_", " "), rule=e.get("logic") or "")
+                            label, ids, conf = parse_label(llm.ask(p, "label"), ("shown", "not applied"), len(clauses))   # "not shown" reads as not applied
                     else:
-                        target = g.other_end(e, concept)
-                        p = prompts.LABEL_CONCEPT.format(code=code, question=question, clauses=clause_text, edge_id=eid,
-                                                         source=e["source"], target=e["target"], etype=e["type"], logic=e.get("logic") or "")
-                        label, ids, conf = parse_label(llm.ask(p, "label"), ("confirmed", "broken", "not applied"), len(clauses))
-                    if label != "not applied" and not ids:
-                        log.append(f"    {eid}: no clause given for the label -> not applied")
-                        label = "not applied"
-                    if label == "not applied":
-                        ids = []
-                    quote = "; ".join(clauses[i] for i in ids)
-                    score = pscore * conf if label != "not applied" else 0.0
-                    cand = {"depth": depth, "source": concept, "edge": eid, "target": target, "kind": kind,
-                            "label": label, "clauses": [i + 1 for i in ids], "quote": quote, "confidence": conf, "prune_score": pscore,
-                            "score": round(score, 4), "logic": e.get("logic"), "twin_logic": e.get("twin_logic")}
-                    if is_mis:
-                        cand["role"] = e.get("role")   # primary: the concept whose rule the misconception violates; context otherwise
-                    if is_way:
-                        cand.update(level=e["level"], way=e.get("way"))
-                    candidates.append(cand)
-                    if label != "not applied":
-                        evidence.append(cand)
-                    log.append(f"    {eid} -> {label} ({score:.2f}) \"{quote}\"")
+                        p = (prompts.LABEL_CONCEPT_V2 if v2 else prompts.LABEL_CONCEPT).format(
+                            code=code, question=question, clauses=clause_text, edge_id=eid,
+                            source=e["source"], target=e["target"], etype=e["type"], logic=e.get("logic") or "")
+                        allowed = ("confirmed", "not applied") if v2 else ("confirmed", "broken", "not applied")
+                        label, ids, conf = parse_label(llm.ask(p, "label"), allowed, len(clauses))
+                    record(concept, eid, pscore, label, ids, conf)
+        if deferred:
+            # stage3_v2, change 2: the misconception / error edges of all current concepts in one question
+            names = list(dict.fromkeys(c for c, _, _ in deferred))
+            p = prompts.LABEL_MIS_ALL.format(code=code, question=question, clauses=clause_text, concepts=", ".join(names),
+                                             edges="\n".join("- " + g.edge_text(g.edge_by_id[eid]) for _, eid, _ in deferred), **ex)
+            set_labels = parse_label_set(llm.ask(p, "label"), {eid for _, eid, _ in deferred}, ("held", "correct", "not applied"), len(clauses))
+            log.append(f"  misconception edges of {', '.join(names)} labelled together ({len(deferred)} edges)")
+            for concept, eid, pscore in deferred:
+                record(concept, eid, pscore, *set_labels[eid])
+        held_concepts = {c["source"] for c in evidence if c["kind"] == "misconception" and c["label"] == "held"}
         # 3e keep the best: diagnosis tier first (held misconception, broken), then held errors, then confirmations; score within a tier
         # (the same edge reached from both of its ends in one round counts once, with its higher score)
         best_by_edge: dict[str, dict[str, Any]] = {}
         for c in sorted(candidates, key=lambda c: -c["score"]):
-            if c["label"] != "not applied" and c["score"] > 0:
+            if (c["label"] != "not applied" and c["score"] > 0) or far_end_held(c):
+                if far_end_held(c):
+                    c["kept_because"] = "far end holds a misconception"   # stage3_v2, change 3
                 best_by_edge.setdefault(c["edge"], c)
         # a diagnosis finding (tier 0) is never cut by the beam: every held misconception / broken edge is kept, and
         # the rest fill the N slots
@@ -787,10 +878,23 @@ def traverse(sg: dict[str, Any], sc: dict[str, Any], cfg: dict[str, Any], llm: L
     # A concept with no held misconception and no shown way gets no level.
     held_mis_ev: dict[str, list[dict[str, Any]]] = defaultdict(list)
     shown_ev: dict[str, list[dict[str, Any]]] = defaultdict(list)
+    mis_clauses = {i for c in all_held_mis for i in c["clauses"]}   # level_v2: clauses any held misconception rests on (shadows too)
     for c in evidence:
         if c["kind"] == "misconception" and c["label"] == "held" and c["edge"] not in shadow:
             held_mis_ev[c["source"]].append(c)
         elif c["kind"] == "level" and c["label"] == "shown":
+            if lv2 and c["level"] > "L2":
+                # level_v2, changes 2 and 3
+                why = None
+                if c["confidence"] <= min_conf:
+                    why = f"confidence {c['confidence']:.2f} is not above {min_conf:.2f}"
+                elif c["clauses"] and set(c["clauses"]) <= mis_clauses:
+                    why = "all its clauses are clauses a held misconception rests on"
+                if why:
+                    not_counted.append({"concept": c["source"], "edge": c["edge"], "level": c["level"], "way": c.get("way"),
+                                        "quote": c["quote"], "confidence": c["confidence"], "reason": why})
+                    log.append(f"  level way {c['edge']} not counted: {why}")
+                    continue
             shown_ev[c["source"]].append(c)
     touched = sorted({c["source"] for c in evidence} | {c["target"] for c in evidence if c["kind"] not in ("misconception", "error", "level")})
     levels: dict[str, dict[str, Any]] = {}
@@ -860,6 +964,8 @@ def traverse(sg: dict[str, Any], sc: dict[str, Any], cfg: dict[str, Any], llm: L
         "llm_calls": llm.calls,
         "llm_cache_hits": llm.cache_hits,
         "llm_calls_by_step": calls_by_step(),
+        **({"stage3_v2": {"not_offered": not_offered, "offered_at": offered_at}} if v2 else {}),
+        **({"level_v2": {"wrong_ways": wrong_ways, "not_counted": not_counted}} if lv2 else {}),
     }
 
 
@@ -879,8 +985,10 @@ def main(argv=None) -> None:
     ap.add_argument("--width", type=int, default=tcfg["width"])
     ap.add_argument("--depth", type=int, default=tcfg["depth"])
     ap.add_argument("--tag", default="", help="suffix for the output files, e.g. --tag bm25 -> S007_diagnosis.bm25.json")
+    ap.add_argument("--stage3-v2", action="store_true", default=bool(tcfg.get("stage3_v2")), help="trial: the changed Stage 3")
+    ap.add_argument("--level-v2", action="store_true", default=bool(tcfg.get("level_v2")), help="trial: the changed per-concept levels")
     a = ap.parse_args(argv)
-    tcfg.update(prune_tools=a.prune_tools, backend=a.backend, model=a.model, width=a.width, depth=a.depth)
+    tcfg.update(prune_tools=a.prune_tools, backend=a.backend, model=a.model, width=a.width, depth=a.depth, stage3_v2=a.stage3_v2, level_v2=a.level_v2)
     tag = f".{a.tag}" if a.tag else ""
 
     scenarios = {s["id"]: s for s in load_scenarios(a.scenarios)}

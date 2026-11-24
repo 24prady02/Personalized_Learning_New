@@ -22,7 +22,7 @@ System.out.println(avg);
 - **Wrong rules held:** CastAfterIntDivision at `explicit_cast`
 - **Root cause:** `explicit_cast` / CastAfterIntDivision
 - **Overall level:** L0
-- **Level per concept:** `arithmetic_operators` L4, `explicit_cast` L0, `integer_division` L0, `primitive_type` L3, `type_conversion` L0
+- **Level per concept:** `explicit_cast` L0, `integer_division` L0, `type_conversion` L0
 
 **Check of this result (read by hand, 2026-11-13).** The diagnosis matches the answer.
 
@@ -76,7 +76,7 @@ At each depth, for each current concept, the following happens.
 
 *One of the outputs at this stage:* at `explicit_cast` the misconception family is pruned to: CastAfterIntDivision 0.70, LaterDoubleLiteralFixesDivision 0.20, CastAppliesToWholeExpression 0.10.
 
-**3.3 Label (model, second question).** Each edge that survived is now read against the numbered clauses and gets a **label**. For a misconception or error edge: **held** (the student's words state this wrong rule), **correct** (they state the right rule, its twin) or **not applied** (the answer says nothing about it). For a level way: **shown** or not applied. For a prerequisite or parallel edge: **confirmed** (the answer carries the rule from one concept into the other) or **broken** (it fails to). The misconception edges of one concept are judged together in a single question, because the same sentence can fit several wrong rules and the model should give *held* only to the one the student really claims. With the label the model must return the **clause numbers** it rests on and a **confidence** from 0 to 1. A label with no clause is discarded. This is the safeguard of the method: the model never diagnoses from its own knowledge; every label is attached to one edge of G and to the student's words.
+**3.3 Label (model, second question).** Each edge that survived is now read against the numbered clauses and gets a **label**. For a misconception or error edge: **held** (the student's words state this wrong rule), **correct** (they state the right rule, its twin) or **not applied** (the answer says nothing about it). For a level way: **shown** or not applied. For a way above L2 the question also gives where the way stops (its boundary, stored in the graph) and whether the words must be correct, and the model may answer **wrong** (the student does this kind of thing, but what is said contradicts Java); a wrong way is not shown. For a prerequisite or parallel edge: **confirmed** (the answer carries the rule from one concept into the other) or **broken** (it fails to). The misconception edges of one concept are judged together in a single question, because the same sentence can fit several wrong rules and the model should give *held* only to the one the student really claims. With the label the model must return the **clause numbers** it rests on and a **confidence** from 0 to 1. A label with no clause is discarded. This is the safeguard of the method: the model never diagnoses from its own knowledge; every label is attached to one edge of G and to the student's words.
 
 *One of the outputs at this stage:* CastAfterIntDivision at `explicit_cast` is labelled **held** on clauses 1, 2, 3 (“3.5; The cast makes it a double division; so you get the decimal part”) with confidence 0.95. The rule on that edge: “(double) (3 / 5) is 0.6.”
 
@@ -161,7 +161,7 @@ Every concept has five **levels**, taken from the SOLO taxonomy: **L0** prestruc
 
 The model is never asked for a level. In stage 3 it only said whether a way was *shown*; the level is read from where that way sits in the graph, in two steps.
 
-**6.1 Gather the evidence per concept.** Take every concept that appears in the evidence of stage 3 (kept in 3.4 or not). For each one collect two lists: the misconceptions held on it that are not shadows, and the ways shown on it.
+**6.1 Gather the evidence per concept.** Take every concept that appears in the evidence of stage 3 (kept in 3.4 or not). For each one collect two lists: the misconceptions held on it that are not shadows, and the ways shown on it. A shown way above L2 is counted only if two things hold: the model's confidence in it is above 0.60, and its clauses are not all clauses that a held misconception rests on. So a weak yes, or a wrong sentence already counted as a misconception, cannot lift a concept to L3 or L4.
 
 *One of the outputs at this stage:* 5 concepts appear in the evidence: `arithmetic_operators`, `explicit_cast`, `integer_division`, `primitive_type`, `type_conversion`.
 
@@ -178,11 +178,11 @@ A held error node is not a misconception, so rule (a) does not apply to it.
 
 | Concept | Level | Rule | Why |
 |---|---|---|---|
-| `arithmetic_operators` | L4 | (c) | ways shown: L4 “predict a change” |
+| `arithmetic_operators` | none | (d) | nothing held, no counted way; answered wrong: L4 “predict a change” |
 | `explicit_cast` | L0 | (a) | holds CastAfterIntDivision |
-| `integer_division` | L0 | (b) | ways shown: L0 “inconsistent trace” |
-| `primitive_type` | L3 | (c) | ways shown: L3 “relation to neighbour” |
-| `type_conversion` | L0 | (b) | ways shown: L0 “everyday reading” |
+| `integer_division` | L0 | (b) | ways shown: L0 “inconsistent trace”; answered wrong: L4 “predict a change” |
+| `primitive_type` | none | (d) | nothing held, no counted way; answered wrong: L3 “relation to neighbour” |
+| `type_conversion` | L0 | (b) | ways shown: L0 “everyday reading”; answered wrong: L4 “diagnose an error” |
 
 ## Stage 7. Overall level (rule, no model)
 

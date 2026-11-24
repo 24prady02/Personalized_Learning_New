@@ -8,12 +8,14 @@ start concepts (3): arithmetic_operators, char_arithmetic, println
     mis:arithmetic_operators->RemainderIsSubtraction -> not applied (0.00) ""
   arithmetic_operators (level ways): 18 candidates -> kept lvl:arithmetic_operators@L1#1 (0.50), lvl:arithmetic_operators@L4#3 (0.30), lvl:arithmetic_operators@L0#0 (0.20)
     lvl:arithmetic_operators@L1#1 -> not applied (0.00) ""
+    lvl:arithmetic_operators@L4#3: wrong (0.85) -> not applied
     lvl:arithmetic_operators@L4#3 -> not applied (0.00) ""
     lvl:arithmetic_operators@L0#0 -> not applied (0.00) ""
   char_arithmetic (misconceptions): 1 candidates -> kept mis:char_arithmetic->CharNotNumeric (1.00)
     mis:char_arithmetic->CharNotNumeric -> held (0.95) "A letter is not a number; so Java cannot add 1 to it, and this line gives a compile error"
   char_arithmetic (level ways): 14 candidates -> kept lvl:char_arithmetic@L0#0 (0.70), lvl:char_arithmetic@L4#2 (0.20), lvl:char_arithmetic@L0#2 (0.10)
     lvl:char_arithmetic@L0#0 -> shown (0.63) "A letter is not a number; so Java cannot add 1 to it, and this line gives a compile error"
+    lvl:char_arithmetic@L4#2: wrong (0.90) -> not applied
     lvl:char_arithmetic@L4#2 -> not applied (0.00) ""
     lvl:char_arithmetic@L0#2 -> not applied (0.00) ""
   println (misconceptions): 6 candidates -> kept mis:println->PrintedTextIsExecuted (0.40), mis:println->ParenthesesOnlyIfArgument (0.30), mis:println->IdentifierCaseInsensitive (0.30)
@@ -44,6 +46,7 @@ start concepts (3): arithmetic_operators, char_arithmetic, println
     mis:char->CharNotNumeric -> held (0.97) "A letter is not a number; so Java cannot add 1 to it, and this line gives a compile error"
   char (level ways): 19 candidates -> kept lvl:char@L0#0 (0.60), lvl:char@L3#0 (0.25), lvl:char@L2#0 (0.15)
     lvl:char@L0#0 -> shown (0.56) "A letter is not a number; so Java cannot add 1 to it, and this line gives a compile error"
+    lvl:char@L3#0: wrong (0.80) -> not applied
     lvl:char@L3#0 -> not applied (0.00) ""
     lvl:char@L2#0 -> not applied (0.00) ""
   expression (misconceptions): 8 candidates -> kept mis:expression->TargetTyping (0.45), mis:expression->NoAtomicExpression (0.35), mis:expression->VariablesHoldExpressions (0.20)
@@ -51,14 +54,15 @@ start concepts (3): arithmetic_operators, char_arithmetic, println
     mis:expression->NoAtomicExpression -> not applied (0.00) ""
     mis:expression->VariablesHoldExpressions -> not applied (0.00) ""
   expression (level ways): 19 candidates -> kept lvl:expression@L4#4 (0.45), lvl:expression@L3#1 (0.30), lvl:expression@L0#0 (0.25)
-    lvl:expression@L4#4 -> shown (0.36) "A letter is not a number; so Java cannot add 1 to it, and this line gives a compile error"
+    lvl:expression@L4#4: wrong (0.90) -> not applied
+    lvl:expression@L4#4 -> not applied (0.00) ""
+    lvl:expression@L3#1: wrong (0.80) -> not applied
     lvl:expression@L3#1 -> not applied (0.00) ""
     lvl:expression@L0#0 -> not applied (0.00) ""
-  kept: mis:char->CharNotNumeric [held, tier 0, 0.97], lvl:char@L0#0 [shown, tier 2, 0.56], lvl:expression@L4#4 [shown, tier 2, 0.36]
+  kept: mis:char->CharNotNumeric [held, tier 0, 0.97], lvl:char@L0#0 [shown, tier 2, 0.56]
   clause coverage: c1 uncovered; c2 <- mis:char_arithmetic->CharNotNumeric; c3 <- mis:char_arithmetic->CharNotNumeric
   held: mis:char->CharNotNumeric; filed at the dependent concept: mis:char_arithmetic->CharNotNumeric
   shadows: mis:char_arithmetic->CharNotNumeric (shadow of mis:char->CharNotNumeric)
   root-cause walk: held on ['char'], broken at [] (consequences: pre:char->char_arithmetic, pre:arithmetic_operators->expression), prerequisites {'expression': ['arithmetic_operators'], 'char_arithmetic': ['char'], 'println': ['statement']}
   level char: L0 via misconception "A letter is not a number; so Java cannot add 1 to it, and this line gives a compile error"
   level char_arithmetic: L0 via everyday_reading "A letter is not a number; so Java cannot add 1 to it, and this line gives a compile error"
-  level expression: L4 via diagnose_an_error "A letter is not a number; so Java cannot add 1 to it, and this line gives a compile error"

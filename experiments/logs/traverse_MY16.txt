@@ -10,7 +10,7 @@ start concepts (3): accumulator_pattern, arithmetic_operators, running_extreme
     mis:accumulator_pattern->VariableRolesInferred -> not applied (0.00) ""
   accumulator_pattern (level ways): 17 candidates -> kept lvl:accumulator_pattern@L2#1 (0.45), lvl:accumulator_pattern@L3#3 (0.35), lvl:accumulator_pattern@L2#0 (0.20)
     lvl:accumulator_pattern@L2#1 -> shown (0.38) "sum adds every element, giving 22; max starts at 4 and keeps the biggest, 9"
-    lvl:accumulator_pattern@L3#3 -> shown (0.21) "sum adds every element, giving 22; max starts at 4 and keeps the biggest, 9"
+    lvl:accumulator_pattern@L3#3 -> not applied (0.00) ""
     lvl:accumulator_pattern@L2#0 -> shown (0.12) "sum adds every element, giving 22; max starts at 4 and keeps the biggest, 9"
   arithmetic_operators (misconceptions): 3 candidates -> kept mis:arithmetic_operators->RemainderIsSubtraction (1.00)
     mis:arithmetic_operators->RemainderIsSubtraction -> not applied (0.00) ""
@@ -50,7 +50,7 @@ start concepts (3): accumulator_pattern, arithmetic_operators, running_extreme
     mis:compound_assignment->CompoundSubtractIsAssignNegative -> not applied (0.00) ""
     mis:compound_assignment->CompoundAssignmentNoCast -> not applied (0.00) ""
   compound_assignment (level ways): 15 candidates -> kept lvl:compound_assignment@L3#3 (0.50), lvl:compound_assignment@L2#1 (0.25), lvl:compound_assignment@L3#0 (0.25)
-    lvl:compound_assignment@L3#3 -> shown (0.38) "sum adds every element, giving 22"
+    lvl:compound_assignment@L3#3 -> shown (0.30) "sum adds every element, giving 22"
     lvl:compound_assignment@L2#1 -> shown (0.14) "sum adds every element, giving 22"
     lvl:compound_assignment@L3#0 -> not applied (0.00) ""
   for_loop (misconceptions): 21 candidates -> kept mis:for_loop->ForIsConditional (0.40), mis:for_loop->LoopCountIsStatementCount (0.30), mis:for_loop->ProgramEndsAfterLoop (0.30)
@@ -59,7 +59,7 @@ start concepts (3): accumulator_pattern, arithmetic_operators, running_extreme
     mis:for_loop->ProgramEndsAfterLoop -> correct (0.24) "For avg, sum / a.length is divided first as ints, 22 / 4 = 5, and then the (double) makes it 5.0"
   for_loop (level ways): 24 candidates -> kept lvl:for_loop@L2#1 (0.40), lvl:for_loop@L3#2 (0.35), lvl:for_loop@L2#0 (0.25)
     lvl:for_loop@L2#1 -> shown (0.32) "sum adds every element, giving 22; max starts at 4 and keeps the biggest, 9"
-    lvl:for_loop@L3#2 -> shown (0.21) "sum adds every element, giving 22"
+    lvl:for_loop@L3#2 -> not applied (0.00) ""
     lvl:for_loop@L2#0 -> not applied (0.00) ""
   kept: mis:explicit_cast->CastAppliesToWholeExpression [held, tier 0, 0.54], pre:array_traversal->running_extreme [confirmed, tier 2, 0.85], pre:arithmetic_operators->expression [confirmed, tier 2, 0.51]
   reached across pre:array_traversal->running_extreme, entered next: array_traversal
@@ -75,9 +75,9 @@ start concepts (3): accumulator_pattern, arithmetic_operators, running_extreme
     mis:array_traversal->OffByOneBound -> correct (0.18) "sum adds every element, giving 22; max starts at 4 and keeps the biggest, 9"
     mis:array_traversal->IdiomOverridesCode -> not applied (0.00) ""
   array_traversal (level ways): 22 candidates -> kept lvl:array_traversal@L3#8 (0.40), lvl:array_traversal@L2#1 (0.35), lvl:array_traversal@L3#6 (0.25)
-    lvl:array_traversal@L3#8 -> shown (0.34) "sum adds every element, giving 22; max starts at 4 and keeps the biggest, 9"
+    lvl:array_traversal@L3#8 -> shown (0.28) "sum adds every element, giving 22; max starts at 4 and keeps the biggest, 9"
     lvl:array_traversal@L2#1 -> shown (0.30) "sum adds every element, giving 22; max starts at 4 and keeps the biggest, 9"
-    lvl:array_traversal@L3#6 -> shown (0.15) "max starts at 4 and keeps the biggest, 9"
+    lvl:array_traversal@L3#6 -> not applied (0.00) ""
   running_extreme (concept edges): 1 candidates -> kept par:running_extreme~accumulator_pattern (1.00)
     par:running_extreme~accumulator_pattern -> confirmed (0.85) "sum adds every element, giving 22; max starts at 4 and keeps the biggest, 9"
   expression (misconceptions): 8 candidates -> kept mis:expression->TargetTyping (0.60), mis:expression->AssignmentIsEquation (0.20), mis:expression->VariablesHoldExpressions (0.20)
@@ -85,8 +85,10 @@ start concepts (3): accumulator_pattern, arithmetic_operators, running_extreme
     mis:expression->AssignmentIsEquation -> not applied (0.00) ""
     mis:expression->VariablesHoldExpressions -> not applied (0.00) ""
   expression (level ways): 19 candidates -> kept lvl:expression@L3#2 (0.50), lvl:expression@L3#1 (0.30), lvl:expression@L0#2 (0.20)
+    lvl:expression@L3#2: wrong (0.88) -> not applied
     lvl:expression@L3#2 -> not applied (0.00) ""
-    lvl:expression@L3#1 -> shown (0.21) "For avg, sum / a.length is divided first as ints, 22 / 4 = 5, and then the (double) makes it 5.0"
+    lvl:expression@L3#1: wrong (0.85) -> not applied
+    lvl:expression@L3#1 -> not applied (0.00) ""
     lvl:expression@L0#2 -> not applied (0.00) ""
   arithmetic_operators (concept edges): 1 candidates -> kept par:string_concatenation~arithmetic_operators (1.00)
     par:string_concatenation~arithmetic_operators -> not applied (0.00) ""
@@ -110,16 +112,17 @@ start concepts (3): accumulator_pattern, arithmetic_operators, running_extreme
   type_conversion (level ways): 18 candidates -> kept lvl:type_conversion@L2#0 (0.45), lvl:type_conversion@L4#0 (0.35), lvl:type_conversion@L4#3 (0.20)
     lvl:type_conversion@L2#0 -> not applied (0.00) ""
     lvl:type_conversion@L4#0 -> not applied (0.00) ""
+    lvl:type_conversion@L4#3: wrong (0.85) -> not applied
     lvl:type_conversion@L4#3 -> not applied (0.00) ""
   kept: mis:type_conversion->TargetTyping [correct, tier 2, 0.48]
   clause coverage: c1 <- mis:accumulator_pattern->StateChangeIgnoredAcrossPasses; c2 <- mis:accumulator_pattern->StateChangeIgnoredAcrossPasses; c3 <- mis:explicit_cast->CastAppliesToWholeExpression
   not yet read: pre:expression->comparison_operators, pre:indexing->array_traversal, pre:length_field->array_traversal, pre:primitive_type->type_conversion
   root-cause walk: held on ['explicit_cast'], broken at [] (consequences: pre:type_conversion->explicit_cast), prerequisites {'expression': ['arithmetic_operators'], 'array_initializer': ['array_declaration'], 'indexing': ['array_initializer'], 'length_field': ['array_initializer'], 'running_extreme': ['array_traversal'], 'compound_assignment': ['assignment', 'explicit_cast'], 'increment_operators': ['assignment', 'loop_control'], 'if_statement': ['boolean_expression', 'control_flow'], 'boolean_expression': ['comparison_operators'], 'accumulator_pattern': ['compound_assignment', 'loop_body'], 'array_declaration': ['data_structure'], 'data_structure': ['data_type'], 'primitive_type': ['data_type'], 'comparison_operators': ['expression'], 'array_traversal': ['for_loop', 'indexing', 'length_field'], 'loop_body': ['for_loop'], 'loop_scope': ['for_loop'], 'array_bounds': ['indexing'], 'for_loop': ['loop_control'], 'loop_control': ['loop_variable'], 'type_conversion': ['primitive_type'], 'control_flow': ['statement'], 'println': ['statement', 'string_literal'], 'string_conversion': ['string_concatenation'], 'explicit_cast': ['type_conversion']}
-  level accumulator_pattern: L3 via relation_to_neighbour "sum adds every element, giving 22; max starts at 4 and keeps the biggest, 9"
+  level way lvl:compound_assignment@L3#3 not counted: confidence 0.60 is not above 0.60
+  level accumulator_pattern: L2 via output_prediction "sum adds every element, giving 22; max starts at 4 and keeps the biggest, 9"
   level arithmetic_operators: L2 via output_prediction "For avg, sum / a.length is divided first as ints, 22 / 4 = 5, and then the (double) makes it 5.0"
   level array_traversal: L3 via purpose_of_the_whole "sum adds every element, giving 22; max starts at 4 and keeps the biggest, 9"
-  level compound_assignment: L3 via purpose_of_the_whole "sum adds every element, giving 22"
+  level compound_assignment: L2 via output_prediction "sum adds every element, giving 22"
   level explicit_cast: L0 via misconception "For avg, sum / a.length is divided first as ints, 22 / 4 = 5, and then the (double) makes it 5.0"
-  level expression: L3 via relation_to_neighbour "For avg, sum / a.length is divided first as ints, 22 / 4 = 5, and then the (double) makes it 5.0"
-  level for_loop: L3 via relation_to_neighbour "sum adds every element, giving 22"
+  level for_loop: L2 via output_prediction "sum adds every element, giving 22; max starts at 4 and keeps the biggest, 9"
   level running_extreme: L2 via output_prediction "max starts at 4 and keeps the biggest, 9"

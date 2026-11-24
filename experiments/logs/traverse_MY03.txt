@@ -40,6 +40,7 @@ start concepts (3): array_aliasing, indexing, array_initializer
   not yet read: own edges of array_reference
 --- depth 3: current concepts ['array_reference', 'array_aliasing', 'array_initializer', 'indexing']
   array_reference (level ways): 12 candidates -> kept lvl:array_reference@L4#0 (0.50), lvl:array_reference@L0#0 (0.30), lvl:array_reference@L2#2 (0.20)
+    lvl:array_reference@L4#0: wrong (0.80) -> not applied
     lvl:array_reference@L4#0 -> not applied (0.00) ""
     lvl:array_reference@L0#0 -> shown (0.24) "The line b = a makes b a copy of a; so b is a separate array; Changing b[0] to 9 only changes b, and a[0] is still 1"
     lvl:array_reference@L2#2 -> not applied (0.00) ""

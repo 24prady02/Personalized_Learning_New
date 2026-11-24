@@ -214,28 +214,34 @@ Prune: the model's reply (edge id and score; the kept edges sum to 1):
 ```
 Kept by pruning: lvl:array_reversal@L4#2 (0.60), lvl:array_reversal@L4#0 (0.25), lvl:array_reversal@L3#1 (0.15)
 
-Label prompt for level way lvl:array_reversal@L4#2 (the model saw only the concept, the way's name 'diagnose an error' and its text; no level):
+Label prompt for level way lvl:array_reversal@L4#2 (the model saw the concept, the way's name 'diagnose an error', its text, where the way stops and whether the words must be correct; no level):
 > rule broken: Only the first half is traversed. Kind: silent logic error. Trigger class: the loop runs i < N, so every pair is swapped twice and the array ends unchanged
+>
+> Where this way stops: Locating and fixing the mistake for one given failing case is L3. A compiler-flagged slip fixed from the message is weak evidence.
 
 Model's reply:
 ```
 Label: shown
-Clauses: 1, 2, 3
-Confidence: 0.95
+Clauses: 2, 3
+Confidence: 0.8
 ```
 
-Label prompt for level way lvl:array_reversal@L4#0 (the model saw only the concept, the way's name 'predict a change' and its text; no level):
+Label prompt for level way lvl:array_reversal@L4#0 (the model saw the concept, the way's name 'predict a change', its text, where the way stops and whether the words must be correct; no level):
 > Conservation: the multiset of values is preserved (only exchanges are used). Reversal is its own inverse: reversing twice, or running the loop to N instead of N/2, gives back the original order.
+>
+> Where this way stops: Re-tracing the changed code value by value is L2 on the new code. Adapting given code to a familiar variant may be only relational.
 
 Model's reply:
 ```
 Label: shown
-Clauses: 1, 2, 3
-Confidence: 0.9
+Clauses: 2, 3
+Confidence: 0.8
 ```
 
-Label prompt for level way lvl:array_reversal@L3#1 (the model saw only the concept, the way's name 'relation to neighbour' and its text; no level):
+Label prompt for level way lvl:array_reversal@L3#1 (the model saw the concept, the way's name 'relation to neighbour', its text, where the way stops and whether the words must be correct; no level):
 > Reversal traverses only the first half (i < N/2) while indexing the second half through the mirror index.
+>
+> Where this way stops: Two correct but separate rules are L1. Executing the two in sequence is L2. A relational answer may be correct or a relational error.
 
 Model's reply:
 ```
@@ -247,8 +253,8 @@ Confidence: 0.85
 Parsed labels:
 | edge | label | prune score | confidence | score | clauses | words |
 |---|---|---|---|---|---|---|
-| lvl:array_reversal@L4#2 | shown | 0.6 | 0.95 | 0.57 | c1, c2, c3 | 1 2 3 4, unchanged; Every pair gets swapped twice: i = 0 swaps a[0] and a[3], then i = 3 swaps them back; The loop should only run while i < a.length / 2 |
-| lvl:array_reversal@L4#0 | shown | 0.25 | 0.9 | 0.23 | c1, c2, c3 | 1 2 3 4, unchanged; Every pair gets swapped twice: i = 0 swaps a[0] and a[3], then i = 3 swaps them back; The loop should only run while i < a.length / 2 |
+| lvl:array_reversal@L4#2 | shown | 0.6 | 0.8 | 0.48 | c2, c3 | Every pair gets swapped twice: i = 0 swaps a[0] and a[3], then i = 3 swaps them back; The loop should only run while i < a.length / 2 |
+| lvl:array_reversal@L4#0 | shown | 0.25 | 0.8 | 0.2 | c2, c3 | Every pair gets swapped twice: i = 0 swaps a[0] and a[3], then i = 3 swaps them back; The loop should only run while i < a.length / 2 |
 | lvl:array_reversal@L3#1 | shown | 0.15 | 0.85 | 0.13 | c2, c3 | Every pair gets swapped twice: i = 0 swaps a[0] and a[3], then i = 3 swaps them back; The loop should only run while i < a.length / 2 |
 
 #### array_traversal, misconceptions: 6 edges offered
@@ -323,14 +329,16 @@ Prune: the model's reply (edge id and score; the kept edges sum to 1):
 ```
 Kept by pruning: lvl:array_traversal@L3#4 (0.60), lvl:array_traversal@L2#1 (0.20), lvl:array_traversal@L2#0 (0.20)
 
-Label prompt for level way lvl:array_traversal@L3#4 (the model saw only the concept, the way's name 'relation to neighbour' and its text; no level):
+Label prompt for level way lvl:array_traversal@L3#4 (the model saw the concept, the way's name 'relation to neighbour', its text, where the way stops and whether the words must be correct; no level):
 > Reversal traverses only the first half (i < N/2), exchanging each a[i] with its mirror a[N-1-i].
+>
+> Where this way stops: Two correct but separate rules are L1. Executing the two in sequence is L2. A relational answer may be correct or a relational error.
 
 Model's reply:
 ```
 Label: shown
 Clauses: 2, 3
-Confidence: 0.9
+Confidence: 0.85
 ```
 
 Label prompt for level way lvl:array_traversal@L2#1 (the model saw only the concept, the way's name 'output prediction' and its text; no level):
@@ -356,7 +364,7 @@ Confidence: 0.7
 Parsed labels:
 | edge | label | prune score | confidence | score | clauses | words |
 |---|---|---|---|---|---|---|
-| lvl:array_traversal@L3#4 | shown | 0.6 | 0.9 | 0.54 | c2, c3 | Every pair gets swapped twice: i = 0 swaps a[0] and a[3], then i = 3 swaps them back; The loop should only run while i < a.length / 2 |
+| lvl:array_traversal@L3#4 | shown | 0.6 | 0.85 | 0.51 | c2, c3 | Every pair gets swapped twice: i = 0 swaps a[0] and a[3], then i = 3 swaps them back; The loop should only run while i < a.length / 2 |
 | lvl:array_traversal@L2#1 | shown | 0.2 | 0.85 | 0.17 | c1, c2 | 1 2 3 4, unchanged; Every pair gets swapped twice: i = 0 swaps a[0] and a[3], then i = 3 swaps them back |
 | lvl:array_traversal@L2#0 | shown | 0.2 | 0.7 | 0.14 | c1, c2 | 1 2 3 4, unchanged; Every pair gets swapped twice: i = 0 swaps a[0] and a[3], then i = 3 swaps them back |
 
@@ -434,24 +442,28 @@ Prune: the model's reply (edge id and score; the kept edges sum to 1):
 ```
 Kept by pruning: lvl:loop_control@L4#1 (0.50), lvl:loop_control@L3#5 (0.30), lvl:loop_control@L2#1 (0.20)
 
-Label prompt for level way lvl:loop_control@L4#1 (the model saw only the concept, the way's name 'diagnose an error' and its text; no level):
+Label prompt for level way lvl:loop_control@L4#1 (the model saw the concept, the way's name 'diagnose an error', its text, where the way stops and whether the words must be correct; no level):
 > rule broken: The number of passes is fixed by the init, the test and the update together. Kind: silent logic error. Trigger class: Wrong start value, < vs <=, a wrong step, or an extra update of the counter in the body (or outside the loop): the loop runs too few or too many passes (off by one, or skips values).
+>
+> Where this way stops: Locating and fixing the mistake for one given failing case is L3. A compiler-flagged slip fixed from the message is weak evidence.
 
 Model's reply:
 ```
 Label: shown
 Clauses: 2, 3
-Confidence: 0.9
+Confidence: 0.82
 ```
 
-Label prompt for level way lvl:loop_control@L3#5 (the model saw only the concept, the way's name 'relation to neighbour' and its text; no level):
+Label prompt for level way lvl:loop_control@L3#5 (the model saw the concept, the way's name 'relation to neighbour', its text, where the way stops and whether the words must be correct; no level):
 > The initialization and the condition of a loop fix how many times it runs; one wrong bound makes it run once too many or too few.
+>
+> Where this way stops: Two correct but separate rules are L1. Executing the two in sequence is L2. A relational answer may be correct or a relational error.
 
 Model's reply:
 ```
 Label: shown
 Clauses: 2, 3
-Confidence: 0.85
+Confidence: 0.8
 ```
 
 Label prompt for level way lvl:loop_control@L2#1 (the model saw only the concept, the way's name 'output prediction' and its text; no level):
@@ -467,13 +479,13 @@ Confidence: 0.85
 Parsed labels:
 | edge | label | prune score | confidence | score | clauses | words |
 |---|---|---|---|---|---|---|
-| lvl:loop_control@L4#1 | shown | 0.5 | 0.9 | 0.45 | c2, c3 | Every pair gets swapped twice: i = 0 swaps a[0] and a[3], then i = 3 swaps them back; The loop should only run while i < a.length / 2 |
-| lvl:loop_control@L3#5 | shown | 0.3 | 0.85 | 0.26 | c2, c3 | Every pair gets swapped twice: i = 0 swaps a[0] and a[3], then i = 3 swaps them back; The loop should only run while i < a.length / 2 |
+| lvl:loop_control@L4#1 | shown | 0.5 | 0.82 | 0.41 | c2, c3 | Every pair gets swapped twice: i = 0 swaps a[0] and a[3], then i = 3 swaps them back; The loop should only run while i < a.length / 2 |
+| lvl:loop_control@L3#5 | shown | 0.3 | 0.8 | 0.24 | c2, c3 | Every pair gets swapped twice: i = 0 swaps a[0] and a[3], then i = 3 swaps them back; The loop should only run while i < a.length / 2 |
 | lvl:loop_control@L2#1 | shown | 0.2 | 0.85 | 0.17 | c2, c3 | Every pair gets swapped twice: i = 0 swaps a[0] and a[3], then i = 3 swaps them back; The loop should only run while i < a.length / 2 |
 
 **Kept on a path at this depth** (best N in tiers: held misconception / broken edge, then held error, then correct / confirmed / shown):
 
-mis:array_reversal->ReverseFullLength [correct, tier 2, 0.85], lvl:array_reversal@L4#2 [shown, tier 2, 0.57], lvl:array_traversal@L3#4 [shown, tier 2, 0.54]
+mis:array_reversal->ReverseFullLength [correct, tier 2, 0.85], err:loop_control->WrongIterationCount [correct, tier 2, 0.54], lvl:array_traversal@L3#4 [shown, tier 2, 0.51]
 
 **Clause coverage after this depth:**
 | clause | text | covered by |
@@ -822,14 +834,16 @@ Clauses: 2
 Confidence: 0.75
 ```
 
-Label prompt for level way lvl:loop_variable@L4#0 (the model saw only the concept, the way's name 'predict a change' and its text; no level):
+Label prompt for level way lvl:loop_variable@L4#0 (the model saw the concept, the way's name 'predict a change', its text, where the way stops and whether the words must be correct; no level):
 > Shifting the start and the bound by the same amount keeps the number of passes but changes the values the body sees; assigning to the loop variable inside the body changes the pass count.
+>
+> Where this way stops: Re-tracing the changed code value by value is L2 on the new code. Adapting given code to a familiar variant may be only relational.
 
 Model's reply:
 ```
 Label: not shown
 Clauses: none
-Confidence: 0.65
+Confidence: 0.7
 ```
 
 Label prompt for level way lvl:loop_variable@L2#0 (the model saw only the concept, the way's name 'line by line trace' and its text; no level):
@@ -959,32 +973,36 @@ Clauses: none
 Confidence: 0.7
 ```
 
-Label prompt for level way lvl:length_field@L4#1 (the model saw only the concept, the way's name 'transfer to a new program' and its text; no level):
+Label prompt for level way lvl:length_field@L4#1 (the model saw the concept, the way's name 'transfer to a new program', its text, where the way stops and whether the words must be correct; no level):
 > Applicability: use a.length wherever code must follow the array's real size (loop bounds, last element, copying); use a[i].length for each row of a possibly ragged 2-D array; use s.length() for Strings.
+>
+> Where this way stops: Reproducing or slightly varying a familiar program is L1 to L3.
 
 Model's reply:
 ```
-Label: shown
-Clauses: 3
-Confidence: 0.7
+Label: not shown
+Clauses: none
+Confidence: 0.75
 ```
 
-Label prompt for level way lvl:length_field@L3#2 (the model saw only the concept, the way's name 'purpose of the whole' and its text; no level):
+Label prompt for level way lvl:length_field@L3#2 (the model saw the concept, the way's name 'purpose of the whole', its text, where the way stops and whether the words must be correct; no level):
 > Plan/role: a fixed value (Sajaniemi) that lets code adapt to any array size instead of a hard-coded magic number, e.g. loop bounds and the last element.
+>
+> Where this way stops: Narrating the lines is L2. A purpose induced from a few traced cases is L2. A wrong purpose is still L3, but with an error.
 
 Model's reply:
 ```
-Label: shown
-Clauses: 3
-Confidence: 0.6
+Label: not shown
+Clauses: none
+Confidence: 0.7
 ```
 
 Parsed labels:
 | edge | label | prune score | confidence | score | clauses | words |
 |---|---|---|---|---|---|---|
 | lvl:length_field@L2#0 | not applied |  |  | 0.0 |  |  |
-| lvl:length_field@L4#1 | shown | 0.35 | 0.7 | 0.24 | c3 | The loop should only run while i < a.length / 2 |
-| lvl:length_field@L3#2 | shown | 0.25 | 0.6 | 0.15 | c3 | The loop should only run while i < a.length / 2 |
+| lvl:length_field@L4#1 | not applied |  |  | 0.0 |  |  |
+| lvl:length_field@L3#2 | not applied |  |  | 0.0 |  |  |
 
 **Kept on a path at this depth** (best N in tiers: held misconception / broken edge, then held error, then correct / confirmed / shown):
 
@@ -1096,14 +1114,16 @@ Prune: the model's reply (edge id and score; the kept edges sum to 1):
 ```
 Kept by pruning: lvl:for_loop@L4#5 (0.50), lvl:for_loop@L2#0 (0.30), lvl:for_loop@L3#2 (0.20)
 
-Label prompt for level way lvl:for_loop@L4#5 (the model saw only the concept, the way's name 'diagnose an error' and its text; no level):
+Label prompt for level way lvl:for_loop@L4#5 (the model saw the concept, the way's name 'diagnose an error', its text, where the way stops and whether the words must be correct; no level):
 > rule broken: The number of passes is fixed by the init, the test and the update together. Kind: silent logic error. Trigger class: Wrong start value, < vs <=, a wrong step, or an extra update of the counter in the body (or outside the loop): the loop runs too few or too many passes (off by one, or skips values).
+>
+> Where this way stops: Locating and fixing the mistake for one given failing case is L3. A compiler-flagged slip fixed from the message is weak evidence.
 
 Model's reply:
 ```
 Label: shown
 Clauses: 2, 3
-Confidence: 0.9
+Confidence: 0.8
 ```
 
 Label prompt for level way lvl:for_loop@L2#0 (the model saw only the concept, the way's name 'line by line trace' and its text; no level):
@@ -1116,22 +1136,24 @@ Clauses: 2, 3
 Confidence: 0.8
 ```
 
-Label prompt for level way lvl:for_loop@L3#2 (the model saw only the concept, the way's name 'relation to neighbour' and its text; no level):
+Label prompt for level way lvl:for_loop@L3#2 (the model saw the concept, the way's name 'relation to neighbour', its text, where the way stops and whether the words must be correct; no level):
 > for (int i = 0; i < N; i++) gives i each valid index 0..N-1 exactly once in increasing order, the standard way to process every array element.
+>
+> Where this way stops: Two correct but separate rules are L1. Executing the two in sequence is L2. A relational answer may be correct or a relational error.
 
 Model's reply:
 ```
 Label: shown
-Clauses: 2
-Confidence: 0.75
+Clauses: 2, 3
+Confidence: 0.8
 ```
 
 Parsed labels:
 | edge | label | prune score | confidence | score | clauses | words |
 |---|---|---|---|---|---|---|
-| lvl:for_loop@L4#5 | shown | 0.5 | 0.9 | 0.45 | c2, c3 | Every pair gets swapped twice: i = 0 swaps a[0] and a[3], then i = 3 swaps them back; The loop should only run while i < a.length / 2 |
+| lvl:for_loop@L4#5 | shown | 0.5 | 0.8 | 0.4 | c2, c3 | Every pair gets swapped twice: i = 0 swaps a[0] and a[3], then i = 3 swaps them back; The loop should only run while i < a.length / 2 |
 | lvl:for_loop@L2#0 | shown | 0.3 | 0.8 | 0.24 | c2, c3 | Every pair gets swapped twice: i = 0 swaps a[0] and a[3], then i = 3 swaps them back; The loop should only run while i < a.length / 2 |
-| lvl:for_loop@L3#2 | shown | 0.2 | 0.75 | 0.15 | c2 | Every pair gets swapped twice: i = 0 swaps a[0] and a[3], then i = 3 swaps them back |
+| lvl:for_loop@L3#2 | shown | 0.2 | 0.8 | 0.16 | c2, c3 | Every pair gets swapped twice: i = 0 swaps a[0] and a[3], then i = 3 swaps them back; The loop should only run while i < a.length / 2 |
 
 #### array_exchange, misconceptions: 1 edges offered
 Edges offered:
@@ -1189,24 +1211,28 @@ Prune: the model's reply (edge id and score; the kept edges sum to 1):
 ```
 Kept by pruning: lvl:array_exchange@L4#0 (0.45), lvl:array_exchange@L3#3 (0.40), lvl:array_exchange@L2#1 (0.15)
 
-Label prompt for level way lvl:array_exchange@L4#0 (the model saw only the concept, the way's name 'predict a change' and its text; no level):
+Label prompt for level way lvl:array_exchange@L4#0 (the model saw the concept, the way's name 'predict a change', its text, where the way stops and whether the words must be correct; no level):
 > Conservation: the set of values in the array is unchanged; doing the same exchange again restores the original order; i == j leaves the array unchanged. Changing the order of the three statements breaks it.
+>
+> Where this way stops: Re-tracing the changed code value by value is L2 on the new code. Adapting given code to a familiar variant may be only relational.
 
 Model's reply:
 ```
 Label: shown
-Clauses: 1, 2
-Confidence: 0.9
+Clauses: 2
+Confidence: 0.8
 ```
 
-Label prompt for level way lvl:array_exchange@L3#3 (the model saw only the concept, the way's name 'relation to neighbour' and its text; no level):
+Label prompt for level way lvl:array_exchange@L3#3 (the model saw the concept, the way's name 'relation to neighbour', its text, where the way stops and whether the words must be correct; no level):
 > Reversal exchanges a[i] with a[N-1-i] for each i in the first half.
+>
+> Where this way stops: Two correct but separate rules are L1. Executing the two in sequence is L2. A relational answer may be correct or a relational error.
 
 Model's reply:
 ```
 Label: shown
 Clauses: 2, 3
-Confidence: 0.85
+Confidence: 0.8
 ```
 
 Label prompt for level way lvl:array_exchange@L2#1 (the model saw only the concept, the way's name 'output prediction' and its text; no level):
@@ -1222,13 +1248,13 @@ Confidence: 0.7
 Parsed labels:
 | edge | label | prune score | confidence | score | clauses | words |
 |---|---|---|---|---|---|---|
-| lvl:array_exchange@L4#0 | shown | 0.45 | 0.9 | 0.41 | c1, c2 | 1 2 3 4, unchanged; Every pair gets swapped twice: i = 0 swaps a[0] and a[3], then i = 3 swaps them back |
-| lvl:array_exchange@L3#3 | shown | 0.4 | 0.85 | 0.34 | c2, c3 | Every pair gets swapped twice: i = 0 swaps a[0] and a[3], then i = 3 swaps them back; The loop should only run while i < a.length / 2 |
+| lvl:array_exchange@L4#0 | shown | 0.45 | 0.8 | 0.36 | c2 | Every pair gets swapped twice: i = 0 swaps a[0] and a[3], then i = 3 swaps them back |
+| lvl:array_exchange@L3#3 | shown | 0.4 | 0.8 | 0.32 | c2, c3 | Every pair gets swapped twice: i = 0 swaps a[0] and a[3], then i = 3 swaps them back; The loop should only run while i < a.length / 2 |
 | lvl:array_exchange@L2#1 | shown | 0.15 | 0.7 | 0.1 | c2 | Every pair gets swapped twice: i = 0 swaps a[0] and a[3], then i = 3 swaps them back |
 
 **Kept on a path at this depth** (best N in tiers: held misconception / broken edge, then held error, then correct / confirmed / shown):
 
-err:for_loop->WrongIterationCount [correct, tier 2, 0.59], lvl:for_loop@L4#5 [shown, tier 2, 0.45], lvl:array_exchange@L4#0 [shown, tier 2, 0.41]
+err:for_loop->WrongIterationCount [correct, tier 2, 0.59], lvl:for_loop@L4#5 [shown, tier 2, 0.40], lvl:array_exchange@L4#0 [shown, tier 2, 0.36]
 
 **Clause coverage after this depth:**
 | clause | text | covered by |
@@ -1243,11 +1269,10 @@ Figure 7 (the graph after depth 4): C:\Users\magnu\OneDrive\Desktop\ES_VIterbi_P
 
 ## 4. Diagnosis (rules over the labelled graph, no model)
 Root-cause walk: held on [], broken at [], prerequisites {'expression': ['arithmetic_operators'], 'array_initializer': ['array_declaration'], 'array_reversal': ['array_exchange', 'array_traversal', 'length_field'], 'indexing': ['array_initializer'], 'length_field': ['array_initializer'], 'array_exchange': ['assignment', 'indexing'], 'increment_operators': ['assignment', 'loop_control'], 'boolean_expression': ['comparison_operators'], 'array_declaration': ['data_structure'], 'data_structure': ['data_type'], 'comparison_operators': ['expression'], 'array_traversal': ['for_loop', 'indexing', 'length_field'], 'loop_body': ['for_loop'], 'loop_scope': ['for_loop'], 'array_bounds': ['indexing'], 'for_loop': ['loop_control'], 'loop_control': ['loop_variable'], 'control_flow': ['statement'], 'print': ['statement', 'string_literal']}
-- array_exchange: L4 via predict_a_change "1 2 3 4, unchanged; Every pair gets swapped twice: i = 0 swaps a[0] and a[3], then i = 3 swaps them back"
-- array_reversal: L4 via diagnose_an_error "1 2 3 4, unchanged; Every pair gets swapped twice: i = 0 swaps a[0] and a[3], then i = 3 swaps them back; The loop should only run while i < a.length / 2"
+- array_exchange: L4 via predict_a_change "Every pair gets swapped twice: i = 0 swaps a[0] and a[3], then i = 3 swaps them back"
+- array_reversal: L4 via diagnose_an_error "Every pair gets swapped twice: i = 0 swaps a[0] and a[3], then i = 3 swaps them back; The loop should only run while i < a.length / 2"
 - array_traversal: L3 via relation_to_neighbour "Every pair gets swapped twice: i = 0 swaps a[0] and a[3], then i = 3 swaps them back; The loop should only run while i < a.length / 2"
 - for_loop: L4 via diagnose_an_error "Every pair gets swapped twice: i = 0 swaps a[0] and a[3], then i = 3 swaps them back; The loop should only run while i < a.length / 2"
-- length_field: L4 via transfer_to_a_new_program "The loop should only run while i < a.length / 2"
 - loop_control: L4 via diagnose_an_error "Every pair gets swapped twice: i = 0 swaps a[0] and a[3], then i = 3 swaps them back; The loop should only run while i < a.length / 2"
 - loop_variable: L2 via output_prediction "Every pair gets swapped twice: i = 0 swaps a[0] and a[3], then i = 3 swaps them back"
 
@@ -1264,11 +1289,10 @@ Root-cause walk: held on [], broken at [], prerequisites {'expression': ['arithm
 ### Level per concept
 | concept | level | way | misconception | source | quote | rule | also | note |
 |---|---|---|---|---|---|---|---|---|
-| array_exchange | L4 | predict_a_change |  | level_way | 1 2 3 4, unchanged; Every pair gets swapped twice: i = 0 swaps a[0] and a[3], then i = 3 swaps them back |  | L3 relation_to_neighbour, L2 output_prediction |  |
-| array_reversal | L4 | diagnose_an_error |  | level_way | 1 2 3 4, unchanged; Every pair gets swapped twice: i = 0 swaps a[0] and a[3], then i = 3 swaps them back; The loop should only run while i < a.length / 2 |  | L4 predict_a_change, L3 relation_to_neighbour |  |
+| array_exchange | L4 | predict_a_change |  | level_way | Every pair gets swapped twice: i = 0 swaps a[0] and a[3], then i = 3 swaps them back |  | L3 relation_to_neighbour, L2 output_prediction |  |
+| array_reversal | L4 | diagnose_an_error |  | level_way | Every pair gets swapped twice: i = 0 swaps a[0] and a[3], then i = 3 swaps them back; The loop should only run while i < a.length / 2 |  | L4 predict_a_change, L3 relation_to_neighbour |  |
 | array_traversal | L3 | relation_to_neighbour |  | level_way | Every pair gets swapped twice: i = 0 swaps a[0] and a[3], then i = 3 swaps them back; The loop should only run while i < a.length / 2 |  | L2 output_prediction, L2 line_by_line_trace |  |
 | for_loop | L4 | diagnose_an_error |  | level_way | Every pair gets swapped twice: i = 0 swaps a[0] and a[3], then i = 3 swaps them back; The loop should only run while i < a.length / 2 |  | L3 relation_to_neighbour, L2 line_by_line_trace |  |
-| length_field | L4 | transfer_to_a_new_program |  | level_way | The loop should only run while i < a.length / 2 |  | L3 purpose_of_the_whole |  |
 | loop_control | L4 | diagnose_an_error |  | level_way | Every pair gets swapped twice: i = 0 swaps a[0] and a[3], then i = 3 swaps them back; The loop should only run while i < a.length / 2 |  | L3 relation_to_neighbour, L2 output_prediction |  |
 | loop_variable | L2 | output_prediction |  | level_way | Every pair gets swapped twice: i = 0 swaps a[0] and a[3], then i = 3 swaps them back |  | L2 line_by_line_trace |  |
 
@@ -1287,18 +1311,18 @@ Figure 8 (final picture): C:\Users\magnu\OneDrive\Desktop\ES_VIterbi_Personalize
 | depth | source | edge | kind | label | prune_score | confidence | score | clauses | quote |
 |---|---|---|---|---|---|---|---|---|---|
 | 1 | array_reversal | mis:array_reversal->ReverseFullLength | misconception | correct | 0.9 | 0.95 | 0.855 | [1, 2, 3] | 1 2 3 4, unchanged; Every pair gets swapped twice: i = 0 swaps a[0] and a[3], then i = 3 swaps them back; The loop should only run while i < a.length / 2 |
-| 1 | array_reversal | lvl:array_reversal@L4#2 | level | shown | 0.6 | 0.95 | 0.57 | [1, 2, 3] | 1 2 3 4, unchanged; Every pair gets swapped twice: i = 0 swaps a[0] and a[3], then i = 3 swaps them back; The loop should only run while i < a.length / 2 |
-| 1 | array_reversal | lvl:array_reversal@L4#0 | level | shown | 0.25 | 0.9 | 0.225 | [1, 2, 3] | 1 2 3 4, unchanged; Every pair gets swapped twice: i = 0 swaps a[0] and a[3], then i = 3 swaps them back; The loop should only run while i < a.length / 2 |
+| 1 | array_reversal | lvl:array_reversal@L4#2 | level | shown | 0.6 | 0.8 | 0.48 | [2, 3] | Every pair gets swapped twice: i = 0 swaps a[0] and a[3], then i = 3 swaps them back; The loop should only run while i < a.length / 2 |
+| 1 | array_reversal | lvl:array_reversal@L4#0 | level | shown | 0.25 | 0.8 | 0.2 | [2, 3] | Every pair gets swapped twice: i = 0 swaps a[0] and a[3], then i = 3 swaps them back; The loop should only run while i < a.length / 2 |
 | 1 | array_reversal | lvl:array_reversal@L3#1 | level | shown | 0.15 | 0.85 | 0.1275 | [2, 3] | Every pair gets swapped twice: i = 0 swaps a[0] and a[3], then i = 3 swaps them back; The loop should only run while i < a.length / 2 |
 | 1 | array_traversal | mis:array_traversal->IdiomOverridesCode | misconception | correct | 0.4 | 0.8 | 0.32 | [1, 2] | 1 2 3 4, unchanged; Every pair gets swapped twice: i = 0 swaps a[0] and a[3], then i = 3 swaps them back |
 | 1 | array_traversal | mis:array_traversal->ArrayUseScansAllCells | misconception | correct | 0.35 | 0.8 | 0.28 | [3] | The loop should only run while i < a.length / 2 |
 | 1 | array_traversal | mis:array_traversal->ElementBoundToOldIndex | misconception | correct | 0.25 | 0.7 | 0.175 | [2] | Every pair gets swapped twice: i = 0 swaps a[0] and a[3], then i = 3 swaps them back |
-| 1 | array_traversal | lvl:array_traversal@L3#4 | level | shown | 0.6 | 0.9 | 0.54 | [2, 3] | Every pair gets swapped twice: i = 0 swaps a[0] and a[3], then i = 3 swaps them back; The loop should only run while i < a.length / 2 |
+| 1 | array_traversal | lvl:array_traversal@L3#4 | level | shown | 0.6 | 0.85 | 0.51 | [2, 3] | Every pair gets swapped twice: i = 0 swaps a[0] and a[3], then i = 3 swaps them back; The loop should only run while i < a.length / 2 |
 | 1 | array_traversal | lvl:array_traversal@L2#1 | level | shown | 0.2 | 0.85 | 0.17 | [1, 2] | 1 2 3 4, unchanged; Every pair gets swapped twice: i = 0 swaps a[0] and a[3], then i = 3 swaps them back |
 | 1 | array_traversal | lvl:array_traversal@L2#0 | level | shown | 0.2 | 0.7 | 0.14 | [1, 2] | 1 2 3 4, unchanged; Every pair gets swapped twice: i = 0 swaps a[0] and a[3], then i = 3 swaps them back |
 | 1 | loop_control | err:loop_control->WrongIterationCount | error | correct | 0.6 | 0.9 | 0.54 | [1, 2, 3] | 1 2 3 4, unchanged; Every pair gets swapped twice: i = 0 swaps a[0] and a[3], then i = 3 swaps them back; The loop should only run while i < a.length / 2 |
-| 1 | loop_control | lvl:loop_control@L4#1 | level | shown | 0.5 | 0.9 | 0.45 | [2, 3] | Every pair gets swapped twice: i = 0 swaps a[0] and a[3], then i = 3 swaps them back; The loop should only run while i < a.length / 2 |
-| 1 | loop_control | lvl:loop_control@L3#5 | level | shown | 0.3 | 0.85 | 0.255 | [2, 3] | Every pair gets swapped twice: i = 0 swaps a[0] and a[3], then i = 3 swaps them back; The loop should only run while i < a.length / 2 |
+| 1 | loop_control | lvl:loop_control@L4#1 | level | shown | 0.5 | 0.82 | 0.41 | [2, 3] | Every pair gets swapped twice: i = 0 swaps a[0] and a[3], then i = 3 swaps them back; The loop should only run while i < a.length / 2 |
+| 1 | loop_control | lvl:loop_control@L3#5 | level | shown | 0.3 | 0.8 | 0.24 | [2, 3] | Every pair gets swapped twice: i = 0 swaps a[0] and a[3], then i = 3 swaps them back; The loop should only run while i < a.length / 2 |
 | 1 | loop_control | lvl:loop_control@L2#1 | level | shown | 0.2 | 0.85 | 0.17 | [2, 3] | Every pair gets swapped twice: i = 0 swaps a[0] and a[3], then i = 3 swaps them back; The loop should only run while i < a.length / 2 |
 | 2 | array_reversal | pre:array_traversal->array_reversal | prerequisite | confirmed | 0.5 | 0.95 | 0.475 | [1, 2, 3] | 1 2 3 4, unchanged; Every pair gets swapped twice: i = 0 swaps a[0] and a[3], then i = 3 swaps them back; The loop should only run while i < a.length / 2 |
 | 2 | array_reversal | pre:array_exchange->array_reversal | prerequisite | confirmed | 0.3 | 0.95 | 0.285 | [2, 3] | Every pair gets swapped twice: i = 0 swaps a[0] and a[3], then i = 3 swaps them back; The loop should only run while i < a.length / 2 |
@@ -1317,22 +1341,20 @@ Figure 8 (final picture): C:\Users\magnu\OneDrive\Desktop\ES_VIterbi_Personalize
 | 3 | loop_variable | lvl:loop_variable@L2#0 | level | shown | 0.25 | 0.75 | 0.1875 | [2] | Every pair gets swapped twice: i = 0 swaps a[0] and a[3], then i = 3 swaps them back |
 | 3 | loop_control | pre:loop_control->for_loop | prerequisite | confirmed | 0.85 | 0.85 | 0.7225 | [2, 3] | Every pair gets swapped twice: i = 0 swaps a[0] and a[3], then i = 3 swaps them back; The loop should only run while i < a.length / 2 |
 | 3 | length_field | mis:length_field->ArrayHasLengthMethod | misconception | correct | 0.9 | 0.75 | 0.675 | [3] | The loop should only run while i < a.length / 2 |
-| 3 | length_field | lvl:length_field@L4#1 | level | shown | 0.35 | 0.7 | 0.245 | [3] | The loop should only run while i < a.length / 2 |
-| 3 | length_field | lvl:length_field@L3#2 | level | shown | 0.25 | 0.6 | 0.15 | [3] | The loop should only run while i < a.length / 2 |
 | 4 | for_loop | err:for_loop->WrongIterationCount | error | correct | 0.7000000000000001 | 0.85 | 0.595 | [2, 3] | Every pair gets swapped twice: i = 0 swaps a[0] and a[3], then i = 3 swaps them back; The loop should only run while i < a.length / 2 |
-| 4 | for_loop | lvl:for_loop@L4#5 | level | shown | 0.5 | 0.9 | 0.45 | [2, 3] | Every pair gets swapped twice: i = 0 swaps a[0] and a[3], then i = 3 swaps them back; The loop should only run while i < a.length / 2 |
+| 4 | for_loop | lvl:for_loop@L4#5 | level | shown | 0.5 | 0.8 | 0.4 | [2, 3] | Every pair gets swapped twice: i = 0 swaps a[0] and a[3], then i = 3 swaps them back; The loop should only run while i < a.length / 2 |
 | 4 | for_loop | lvl:for_loop@L2#0 | level | shown | 0.3 | 0.8 | 0.24 | [2, 3] | Every pair gets swapped twice: i = 0 swaps a[0] and a[3], then i = 3 swaps them back; The loop should only run while i < a.length / 2 |
-| 4 | for_loop | lvl:for_loop@L3#2 | level | shown | 0.2 | 0.75 | 0.15 | [2] | Every pair gets swapped twice: i = 0 swaps a[0] and a[3], then i = 3 swaps them back |
-| 4 | array_exchange | lvl:array_exchange@L4#0 | level | shown | 0.45 | 0.9 | 0.405 | [1, 2] | 1 2 3 4, unchanged; Every pair gets swapped twice: i = 0 swaps a[0] and a[3], then i = 3 swaps them back |
-| 4 | array_exchange | lvl:array_exchange@L3#3 | level | shown | 0.4 | 0.85 | 0.34 | [2, 3] | Every pair gets swapped twice: i = 0 swaps a[0] and a[3], then i = 3 swaps them back; The loop should only run while i < a.length / 2 |
+| 4 | for_loop | lvl:for_loop@L3#2 | level | shown | 0.2 | 0.8 | 0.16 | [2, 3] | Every pair gets swapped twice: i = 0 swaps a[0] and a[3], then i = 3 swaps them back; The loop should only run while i < a.length / 2 |
+| 4 | array_exchange | lvl:array_exchange@L4#0 | level | shown | 0.45 | 0.8 | 0.36 | [2] | Every pair gets swapped twice: i = 0 swaps a[0] and a[3], then i = 3 swaps them back |
+| 4 | array_exchange | lvl:array_exchange@L3#3 | level | shown | 0.4 | 0.8 | 0.32 | [2, 3] | Every pair gets swapped twice: i = 0 swaps a[0] and a[3], then i = 3 swaps them back; The loop should only run while i < a.length / 2 |
 | 4 | array_exchange | lvl:array_exchange@L2#1 | level | shown | 0.15 | 0.7 | 0.105 | [2] | Every pair gets swapped twice: i = 0 swaps a[0] and a[3], then i = 3 swaps them back |
 
 ## 6. The paths (what the keep step kept, depth by depth)
 | depth | source | edge | kind | label | score | clauses |
 |---|---|---|---|---|---|---|
 | 1 | array_reversal | mis:array_reversal->ReverseFullLength | misconception | correct | 0.855 | [1, 2, 3] |
-| 1 | array_reversal | lvl:array_reversal@L4#2 | level | shown | 0.57 | [1, 2, 3] |
-| 1 | array_traversal | lvl:array_traversal@L3#4 | level | shown | 0.54 | [2, 3] |
+| 1 | loop_control | err:loop_control->WrongIterationCount | error | correct | 0.54 | [1, 2, 3] |
+| 1 | array_traversal | lvl:array_traversal@L3#4 | level | shown | 0.51 | [2, 3] |
 | 2 | array_reversal | pre:array_traversal->array_reversal | prerequisite | confirmed | 0.475 | [1, 2, 3] |
 | 2 | loop_control | pre:loop_variable->loop_control | prerequisite | confirmed | 0.44 | [2, 3] |
 | 2 | array_traversal | pre:length_field->array_traversal | prerequisite | confirmed | 0.3825 | [2, 3] |
@@ -1340,8 +1362,8 @@ Figure 8 (final picture): C:\Users\magnu\OneDrive\Desktop\ES_VIterbi_Personalize
 | 3 | array_reversal | pre:array_exchange->array_reversal | prerequisite | confirmed | 0.7125 | [2, 3] |
 | 3 | length_field | mis:length_field->ArrayHasLengthMethod | misconception | correct | 0.675 | [3] |
 | 4 | for_loop | err:for_loop->WrongIterationCount | error | correct | 0.595 | [2, 3] |
-| 4 | for_loop | lvl:for_loop@L4#5 | level | shown | 0.45 | [2, 3] |
-| 4 | array_exchange | lvl:array_exchange@L4#0 | level | shown | 0.405 | [1, 2] |
+| 4 | for_loop | lvl:for_loop@L4#5 | level | shown | 0.4 | [2, 3] |
+| 4 | array_exchange | lvl:array_exchange@L4#0 | level | shown | 0.36 | [2] |
 
 ## 7. Raw traversal log
 ```
@@ -1355,15 +1377,15 @@ start concepts (3): array_reversal, array_traversal, loop_control
     mis:array_reversal->ReverseFullLength -> correct (0.85) "1 2 3 4, unchanged; Every pair gets swapped twice: i = 0 swaps a[0] and a[3], then i = 3 swaps them back; The loop should only run while i < a.length / 2"
     mis:array_reversal->OffByOneBound -> not applied (0.00) ""
   array_reversal (level ways): 15 candidates -> kept lvl:array_reversal@L4#2 (0.60), lvl:array_reversal@L4#0 (0.25), lvl:array_reversal@L3#1 (0.15)
-    lvl:array_reversal@L4#2 -> shown (0.57) "1 2 3 4, unchanged; Every pair gets swapped twice: i = 0 swaps a[0] and a[3], then i = 3 swaps them back; The loop should only run while i < a.length / 2"
-    lvl:array_reversal@L4#0 -> shown (0.23) "1 2 3 4, unchanged; Every pair gets swapped twice: i = 0 swaps a[0] and a[3], then i = 3 swaps them back; The loop should only run while i < a.length / 2"
+    lvl:array_reversal@L4#2 -> shown (0.48) "Every pair gets swapped twice: i = 0 swaps a[0] and a[3], then i = 3 swaps them back; The loop should only run while i < a.length / 2"
+    lvl:array_reversal@L4#0 -> shown (0.20) "Every pair gets swapped twice: i = 0 swaps a[0] and a[3], then i = 3 swaps them back; The loop should only run while i < a.length / 2"
     lvl:array_reversal@L3#1 -> shown (0.13) "Every pair gets swapped twice: i = 0 swaps a[0] and a[3], then i = 3 swaps them back; The loop should only run while i < a.length / 2"
   array_traversal (misconceptions): 6 candidates -> kept mis:array_traversal->IdiomOverridesCode (0.40), mis:array_traversal->ArrayUseScansAllCells (0.35), mis:array_traversal->ElementBoundToOldIndex (0.25)
     mis:array_traversal->IdiomOverridesCode -> correct (0.32) "1 2 3 4, unchanged; Every pair gets swapped twice: i = 0 swaps a[0] and a[3], then i = 3 swaps them back"
     mis:array_traversal->ArrayUseScansAllCells -> correct (0.28) "The loop should only run while i < a.length / 2"
     mis:array_traversal->ElementBoundToOldIndex -> correct (0.17) "Every pair gets swapped twice: i = 0 swaps a[0] and a[3], then i = 3 swaps them back"
   array_traversal (level ways): 22 candidates -> kept lvl:array_traversal@L3#4 (0.60), lvl:array_traversal@L2#1 (0.20), lvl:array_traversal@L2#0 (0.20)
-    lvl:array_traversal@L3#4 -> shown (0.54) "Every pair gets swapped twice: i = 0 swaps a[0] and a[3], then i = 3 swaps them back; The loop should only run while i < a.length / 2"
+    lvl:array_traversal@L3#4 -> shown (0.51) "Every pair gets swapped twice: i = 0 swaps a[0] and a[3], then i = 3 swaps them back; The loop should only run while i < a.length / 2"
     lvl:array_traversal@L2#1 -> shown (0.17) "1 2 3 4, unchanged; Every pair gets swapped twice: i = 0 swaps a[0] and a[3], then i = 3 swaps them back"
     lvl:array_traversal@L2#0 -> shown (0.14) "1 2 3 4, unchanged; Every pair gets swapped twice: i = 0 swaps a[0] and a[3], then i = 3 swaps them back"
   loop_control (misconceptions): 11 candidates -> kept err:loop_control->WrongIterationCount (0.60), mis:loop_control->IdiomOverridesCode (0.25), mis:loop_control->OffByOneBound (0.15)
@@ -1371,10 +1393,10 @@ start concepts (3): array_reversal, array_traversal, loop_control
     mis:loop_control->IdiomOverridesCode -> not applied (0.00) ""
     mis:loop_control->OffByOneBound -> not applied (0.00) ""
   loop_control (level ways): 19 candidates -> kept lvl:loop_control@L4#1 (0.50), lvl:loop_control@L3#5 (0.30), lvl:loop_control@L2#1 (0.20)
-    lvl:loop_control@L4#1 -> shown (0.45) "Every pair gets swapped twice: i = 0 swaps a[0] and a[3], then i = 3 swaps them back; The loop should only run while i < a.length / 2"
-    lvl:loop_control@L3#5 -> shown (0.26) "Every pair gets swapped twice: i = 0 swaps a[0] and a[3], then i = 3 swaps them back; The loop should only run while i < a.length / 2"
+    lvl:loop_control@L4#1 -> shown (0.41) "Every pair gets swapped twice: i = 0 swaps a[0] and a[3], then i = 3 swaps them back; The loop should only run while i < a.length / 2"
+    lvl:loop_control@L3#5 -> shown (0.24) "Every pair gets swapped twice: i = 0 swaps a[0] and a[3], then i = 3 swaps them back; The loop should only run while i < a.length / 2"
     lvl:loop_control@L2#1 -> shown (0.17) "Every pair gets swapped twice: i = 0 swaps a[0] and a[3], then i = 3 swaps them back; The loop should only run while i < a.length / 2"
-  kept: mis:array_reversal->ReverseFullLength [correct, tier 2, 0.85], lvl:array_reversal@L4#2 [shown, tier 2, 0.57], lvl:array_traversal@L3#4 [shown, tier 2, 0.54]
+  kept: mis:array_reversal->ReverseFullLength [correct, tier 2, 0.85], err:loop_control->WrongIterationCount [correct, tier 2, 0.54], lvl:array_traversal@L3#4 [shown, tier 2, 0.51]
   clause coverage: c1 <- mis:array_reversal->ReverseFullLength; c2 <- mis:array_reversal->ReverseFullLength; c3 <- mis:array_reversal->ReverseFullLength
   not yet read: pre:array_exchange->array_reversal, pre:array_traversal->array_reversal, pre:for_loop->array_traversal, pre:indexing->array_traversal, pre:length_field->array_reversal, pre:length_field->array_traversal, pre:loop_control->for_loop, pre:loop_control->increment_operators, pre:loop_variable->loop_control
 --- depth 2: current concepts ['array_reversal', 'array_traversal', 'loop_control']
@@ -1418,8 +1440,8 @@ start concepts (3): array_reversal, array_traversal, loop_control
     mis:length_field->ArrayLengthCannotBeZero -> not applied (0.00) ""
   length_field (level ways): 15 candidates -> kept lvl:length_field@L2#0 (0.40), lvl:length_field@L4#1 (0.35), lvl:length_field@L3#2 (0.25)
     lvl:length_field@L2#0 -> not applied (0.00) ""
-    lvl:length_field@L4#1 -> shown (0.24) "The loop should only run while i < a.length / 2"
-    lvl:length_field@L3#2 -> shown (0.15) "The loop should only run while i < a.length / 2"
+    lvl:length_field@L4#1 -> not applied (0.00) ""
+    lvl:length_field@L3#2 -> not applied (0.00) ""
   kept: pre:loop_control->for_loop [confirmed, tier 2, 0.72], pre:array_exchange->array_reversal [confirmed, tier 2, 0.71], mis:length_field->ArrayHasLengthMethod [correct, tier 2, 0.68]
   reached across pre:loop_control->for_loop, entered next: for_loop
   reached across pre:array_exchange->array_reversal, entered next: array_exchange
@@ -1431,24 +1453,23 @@ start concepts (3): array_reversal, array_traversal, loop_control
     mis:for_loop->IdiomOverridesCode -> not applied (0.00) ""
     mis:for_loop->LoopCountIsStatementCount -> not applied (0.00) ""
   for_loop (level ways): 24 candidates -> kept lvl:for_loop@L4#5 (0.50), lvl:for_loop@L2#0 (0.30), lvl:for_loop@L3#2 (0.20)
-    lvl:for_loop@L4#5 -> shown (0.45) "Every pair gets swapped twice: i = 0 swaps a[0] and a[3], then i = 3 swaps them back; The loop should only run while i < a.length / 2"
+    lvl:for_loop@L4#5 -> shown (0.40) "Every pair gets swapped twice: i = 0 swaps a[0] and a[3], then i = 3 swaps them back; The loop should only run while i < a.length / 2"
     lvl:for_loop@L2#0 -> shown (0.24) "Every pair gets swapped twice: i = 0 swaps a[0] and a[3], then i = 3 swaps them back; The loop should only run while i < a.length / 2"
-    lvl:for_loop@L3#2 -> shown (0.15) "Every pair gets swapped twice: i = 0 swaps a[0] and a[3], then i = 3 swaps them back"
+    lvl:for_loop@L3#2 -> shown (0.16) "Every pair gets swapped twice: i = 0 swaps a[0] and a[3], then i = 3 swaps them back; The loop should only run while i < a.length / 2"
   array_exchange (misconceptions): 1 candidates -> kept mis:array_exchange->SwapWithoutTemp (1.00)
     mis:array_exchange->SwapWithoutTemp -> not applied (0.00) ""
   array_exchange (level ways): 17 candidates -> kept lvl:array_exchange@L4#0 (0.45), lvl:array_exchange@L3#3 (0.40), lvl:array_exchange@L2#1 (0.15)
-    lvl:array_exchange@L4#0 -> shown (0.41) "1 2 3 4, unchanged; Every pair gets swapped twice: i = 0 swaps a[0] and a[3], then i = 3 swaps them back"
-    lvl:array_exchange@L3#3 -> shown (0.34) "Every pair gets swapped twice: i = 0 swaps a[0] and a[3], then i = 3 swaps them back; The loop should only run while i < a.length / 2"
+    lvl:array_exchange@L4#0 -> shown (0.36) "Every pair gets swapped twice: i = 0 swaps a[0] and a[3], then i = 3 swaps them back"
+    lvl:array_exchange@L3#3 -> shown (0.32) "Every pair gets swapped twice: i = 0 swaps a[0] and a[3], then i = 3 swaps them back; The loop should only run while i < a.length / 2"
     lvl:array_exchange@L2#1 -> shown (0.10) "Every pair gets swapped twice: i = 0 swaps a[0] and a[3], then i = 3 swaps them back"
-  kept: err:for_loop->WrongIterationCount [correct, tier 2, 0.59], lvl:for_loop@L4#5 [shown, tier 2, 0.45], lvl:array_exchange@L4#0 [shown, tier 2, 0.41]
+  kept: err:for_loop->WrongIterationCount [correct, tier 2, 0.59], lvl:for_loop@L4#5 [shown, tier 2, 0.40], lvl:array_exchange@L4#0 [shown, tier 2, 0.36]
   clause coverage: c1 <- mis:array_reversal->ReverseFullLength; c2 <- mis:array_reversal->ReverseFullLength; c3 <- mis:array_reversal->ReverseFullLength
   not yet read: pre:array_initializer->length_field, pre:assignment->array_exchange, pre:for_loop->loop_body, pre:for_loop->loop_scope, pre:indexing->array_exchange
   root-cause walk: held on [], broken at [], prerequisites {'expression': ['arithmetic_operators'], 'array_initializer': ['array_declaration'], 'array_reversal': ['array_exchange', 'array_traversal', 'length_field'], 'indexing': ['array_initializer'], 'length_field': ['array_initializer'], 'array_exchange': ['assignment', 'indexing'], 'increment_operators': ['assignment', 'loop_control'], 'boolean_expression': ['comparison_operators'], 'array_declaration': ['data_structure'], 'data_structure': ['data_type'], 'comparison_operators': ['expression'], 'array_traversal': ['for_loop', 'indexing', 'length_field'], 'loop_body': ['for_loop'], 'loop_scope': ['for_loop'], 'array_bounds': ['indexing'], 'for_loop': ['loop_control'], 'loop_control': ['loop_variable'], 'control_flow': ['statement'], 'print': ['statement', 'string_literal']}
-  level array_exchange: L4 via predict_a_change "1 2 3 4, unchanged; Every pair gets swapped twice: i = 0 swaps a[0] and a[3], then i = 3 swaps them back"
-  level array_reversal: L4 via diagnose_an_error "1 2 3 4, unchanged; Every pair gets swapped twice: i = 0 swaps a[0] and a[3], then i = 3 swaps them back; The loop should only run while i < a.length / 2"
+  level array_exchange: L4 via predict_a_change "Every pair gets swapped twice: i = 0 swaps a[0] and a[3], then i = 3 swaps them back"
+  level array_reversal: L4 via diagnose_an_error "Every pair gets swapped twice: i = 0 swaps a[0] and a[3], then i = 3 swaps them back; The loop should only run while i < a.length / 2"
   level array_traversal: L3 via relation_to_neighbour "Every pair gets swapped twice: i = 0 swaps a[0] and a[3], then i = 3 swaps them back; The loop should only run while i < a.length / 2"
   level for_loop: L4 via diagnose_an_error "Every pair gets swapped twice: i = 0 swaps a[0] and a[3], then i = 3 swaps them back; The loop should only run while i < a.length / 2"
-  level length_field: L4 via transfer_to_a_new_program "The loop should only run while i < a.length / 2"
   level loop_control: L4 via diagnose_an_error "Every pair gets swapped twice: i = 0 swaps a[0] and a[3], then i = 3 swaps them back; The loop should only run while i < a.length / 2"
   level loop_variable: L2 via output_prediction "Every pair gets swapped twice: i = 0 swaps a[0] and a[3], then i = 3 swaps them back"
 ```
@@ -1462,7 +1483,8 @@ start concepts (3): array_reversal, array_traversal, loop_control
   "depth": 3,
   "prune_tools": "llm",
   "model": "claude-opus-5-5",
-  "backend": "claude-cli"
+  "backend": "claude-cli",
+  "level_v2": true
  },
  "clauses": [
   "1 2 3 4, unchanged",
@@ -1483,7 +1505,7 @@ start concepts (3): array_reversal, array_traversal, loop_control
   "array_exchange": {
    "level": "L4",
    "way": "predict_a_change",
-   "quote": "1 2 3 4, unchanged; Every pair gets swapped twice: i = 0 swaps a[0] and a[3], then i = 3 swaps them back",
+   "quote": "Every pair gets swapped twice: i = 0 swaps a[0] and a[3], then i = 3 swaps them back",
    "edge": "lvl:array_exchange@L4#0",
    "source": "level_way",
    "also_shown": [
@@ -1494,7 +1516,7 @@ start concepts (3): array_reversal, array_traversal, loop_control
   "array_reversal": {
    "level": "L4",
    "way": "diagnose_an_error",
-   "quote": "1 2 3 4, unchanged; Every pair gets swapped twice: i = 0 swaps a[0] and a[3], then i = 3 swaps them back; The loop should only run while i < a.length / 2",
+   "quote": "Every pair gets swapped twice: i = 0 swaps a[0] and a[3], then i = 3 swaps them back; The loop should only run while i < a.length / 2",
    "edge": "lvl:array_reversal@L4#2",
    "source": "level_way",
    "also_shown": [
@@ -1522,16 +1544,6 @@ start concepts (3): array_reversal, array_traversal, loop_control
    "also_shown": [
     "L3 relation_to_neighbour",
     "L2 line_by_line_trace"
-   ]
-  },
-  "length_field": {
-   "level": "L4",
-   "way": "transfer_to_a_new_program",
-   "quote": "The loop should only run while i < a.length / 2",
-   "edge": "lvl:length_field@L4#1",
-   "source": "level_way",
-   "also_shown": [
-    "L3 purpose_of_the_whole"
    ]
   },
   "loop_control": {
@@ -1580,24 +1592,23 @@ start concepts (3): array_reversal, array_traversal, loop_control
   },
   {
    "depth": 1,
-   "source": "array_reversal",
-   "edge": "lvl:array_reversal@L4#2",
-   "target": "array_reversal@L4",
-   "kind": "level",
-   "label": "shown",
+   "source": "loop_control",
+   "edge": "err:loop_control->WrongIterationCount",
+   "target": "WrongIterationCount",
+   "kind": "error",
+   "label": "correct",
    "clauses": [
     1,
     2,
     3
    ],
    "quote": "1 2 3 4, unchanged; Every pair gets swapped twice: i = 0 swaps a[0] and a[3], then i = 3 swaps them back; The loop should only run while i < a.length / 2",
-   "confidence": 0.95,
+   "confidence": 0.9,
    "prune_score": 0.6,
-   "score": 0.57,
-   "logic": "rule broken: Only the first half is traversed. Kind: silent logic error. Trigger class: the loop runs i < N, so every pair is swapped twice and the array ends unchanged",
-   "twin_logic": null,
-   "level": "L4",
-   "way": "diagnose_an_error"
+   "score": 0.54,
+   "logic": "Updates the loop counter so that the loop runs the wrong number of times.",
+   "twin_logic": "The init, test and update together decide the number of passes; trace them to check the count.",
+   "role": "context"
   },
   {
    "depth": 1,
@@ -1611,9 +1622,9 @@ start concepts (3): array_reversal, array_traversal, loop_control
     3
    ],
    "quote": "Every pair gets swapped twice: i = 0 swaps a[0] and a[3], then i = 3 swaps them back; The loop should only run while i < a.length / 2",
-   "confidence": 0.9,
+   "confidence": 0.85,
    "prune_score": 0.6,
-   "score": 0.54,
+   "score": 0.51,
    "logic": "Reversal traverses only the first half (i < N/2), exchanging each a[i] with its mirror a[N-1-i].",
    "twin_logic": null,
    "level": "L3",
@@ -1759,9 +1770,9 @@ start concepts (3): array_reversal, array_traversal, loop_control
     3
    ],
    "quote": "Every pair gets swapped twice: i = 0 swaps a[0] and a[3], then i = 3 swaps them back; The loop should only run while i < a.length / 2",
-   "confidence": 0.9,
+   "confidence": 0.8,
    "prune_score": 0.5,
-   "score": 0.45,
+   "score": 0.4,
    "logic": "rule broken: The number of passes is fixed by the init, the test and the update together. Kind: silent logic error. Trigger class: Wrong start value, < vs <=, a wrong step, or an extra update of the counter in the body (or outside the loop): the loop runs too few or too many passes (off by one, or skips values).",
    "twin_logic": null,
    "level": "L4",
@@ -1775,13 +1786,12 @@ start concepts (3): array_reversal, array_traversal, loop_control
    "kind": "level",
    "label": "shown",
    "clauses": [
-    1,
     2
    ],
-   "quote": "1 2 3 4, unchanged; Every pair gets swapped twice: i = 0 swaps a[0] and a[3], then i = 3 swaps them back",
-   "confidence": 0.9,
+   "quote": "Every pair gets swapped twice: i = 0 swaps a[0] and a[3], then i = 3 swaps them back",
+   "confidence": 0.8,
    "prune_score": 0.45,
-   "score": 0.405,
+   "score": 0.36,
    "logic": "Conservation: the set of values in the array is unchanged; doing the same exchange again restores the original order; i == j leaves the array unchanged. Changing the order of the three statements breaks it.",
    "twin_logic": null,
    "level": "L4",
@@ -1817,14 +1827,13 @@ start concepts (3): array_reversal, array_traversal, loop_control
    "kind": "level",
    "label": "shown",
    "clauses": [
-    1,
     2,
     3
    ],
-   "quote": "1 2 3 4, unchanged; Every pair gets swapped twice: i = 0 swaps a[0] and a[3], then i = 3 swaps them back; The loop should only run while i < a.length / 2",
-   "confidence": 0.95,
+   "quote": "Every pair gets swapped twice: i = 0 swaps a[0] and a[3], then i = 3 swaps them back; The loop should only run while i < a.length / 2",
+   "confidence": 0.8,
    "prune_score": 0.6,
-   "score": 0.57,
+   "score": 0.48,
    "logic": "rule broken: Only the first half is traversed. Kind: silent logic error. Trigger class: the loop runs i < N, so every pair is swapped twice and the array ends unchanged",
    "twin_logic": null,
    "level": "L4",
@@ -1838,14 +1847,13 @@ start concepts (3): array_reversal, array_traversal, loop_control
    "kind": "level",
    "label": "shown",
    "clauses": [
-    1,
     2,
     3
    ],
-   "quote": "1 2 3 4, unchanged; Every pair gets swapped twice: i = 0 swaps a[0] and a[3], then i = 3 swaps them back; The loop should only run while i < a.length / 2",
-   "confidence": 0.9,
+   "quote": "Every pair gets swapped twice: i = 0 swaps a[0] and a[3], then i = 3 swaps them back; The loop should only run while i < a.length / 2",
+   "confidence": 0.8,
    "prune_score": 0.25,
-   "score": 0.225,
+   "score": 0.2,
    "logic": "Conservation: the multiset of values is preserved (only exchanges are used). Reversal is its own inverse: reversing twice, or running the loop to N instead of N/2, gives back the original order.",
    "twin_logic": null,
    "level": "L4",
@@ -1938,9 +1946,9 @@ start concepts (3): array_reversal, array_traversal, loop_control
     3
    ],
    "quote": "Every pair gets swapped twice: i = 0 swaps a[0] and a[3], then i = 3 swaps them back; The loop should only run while i < a.length / 2",
-   "confidence": 0.9,
+   "confidence": 0.85,
    "prune_score": 0.6,
-   "score": 0.54,
+   "score": 0.51,
    "logic": "Reversal traverses only the first half (i < N/2), exchanging each a[i] with its mirror a[N-1-i].",
    "twin_logic": null,
    "level": "L3",
@@ -2018,9 +2026,9 @@ start concepts (3): array_reversal, array_traversal, loop_control
     3
    ],
    "quote": "Every pair gets swapped twice: i = 0 swaps a[0] and a[3], then i = 3 swaps them back; The loop should only run while i < a.length / 2",
-   "confidence": 0.9,
+   "confidence": 0.82,
    "prune_score": 0.5,
-   "score": 0.45,
+   "score": 0.41,
    "logic": "rule broken: The number of passes is fixed by the init, the test and the update together. Kind: silent logic error. Trigger class: Wrong start value, < vs <=, a wrong step, or an extra update of the counter in the body (or outside the loop): the loop runs too few or too many passes (off by one, or skips values).",
    "twin_logic": null,
    "level": "L4",
@@ -2038,9 +2046,9 @@ start concepts (3): array_reversal, array_traversal, loop_control
     3
    ],
    "quote": "Every pair gets swapped twice: i = 0 swaps a[0] and a[3], then i = 3 swaps them back; The loop should only run while i < a.length / 2",
-   "confidence": 0.85,
+   "confidence": 0.8,
    "prune_score": 0.3,
-   "score": 0.255,
+   "score": 0.24,
    "logic": "The initialization and the condition of a loop fix how many times it runs; one wrong bound makes it run once too many or too few.",
    "twin_logic": null,
    "level": "L3",
@@ -2374,44 +2382,6 @@ start concepts (3): array_reversal, array_traversal, loop_control
    "role": "primary"
   },
   {
-   "depth": 3,
-   "source": "length_field",
-   "edge": "lvl:length_field@L4#1",
-   "target": "length_field@L4",
-   "kind": "level",
-   "label": "shown",
-   "clauses": [
-    3
-   ],
-   "quote": "The loop should only run while i < a.length / 2",
-   "confidence": 0.7,
-   "prune_score": 0.35,
-   "score": 0.245,
-   "logic": "Applicability: use a.length wherever code must follow the array's real size (loop bounds, last element, copying); use a[i].length for each row of a possibly ragged 2-D array; use s.length() for Strings.",
-   "twin_logic": null,
-   "level": "L4",
-   "way": "transfer_to_a_new_program"
-  },
-  {
-   "depth": 3,
-   "source": "length_field",
-   "edge": "lvl:length_field@L3#2",
-   "target": "length_field@L3",
-   "kind": "level",
-   "label": "shown",
-   "clauses": [
-    3
-   ],
-   "quote": "The loop should only run while i < a.length / 2",
-   "confidence": 0.6,
-   "prune_score": 0.25,
-   "score": 0.15,
-   "logic": "Plan/role: a fixed value (Sajaniemi) that lets code adapt to any array size instead of a hard-coded magic number, e.g. loop bounds and the last element.",
-   "twin_logic": null,
-   "level": "L3",
-   "way": "purpose_of_the_whole"
-  },
-  {
    "depth": 4,
    "source": "for_loop",
    "edge": "err:for_loop->WrongIterationCount",
@@ -2442,9 +2412,9 @@ start concepts (3): array_reversal, array_traversal, loop_control
     3
    ],
    "quote": "Every pair gets swapped twice: i = 0 swaps a[0] and a[3], then i = 3 swaps them back; The loop should only run while i < a.length / 2",
-   "confidence": 0.9,
+   "confidence": 0.8,
    "prune_score": 0.5,
-   "score": 0.45,
+   "score": 0.4,
    "logic": "rule broken: The number of passes is fixed by the init, the test and the update together. Kind: silent logic error. Trigger class: Wrong start value, < vs <=, a wrong step, or an extra update of the counter in the body (or outside the loop): the loop runs too few or too many passes (off by one, or skips values).",
    "twin_logic": null,
    "level": "L4",
@@ -2478,12 +2448,13 @@ start concepts (3): array_reversal, array_traversal, loop_control
    "kind": "level",
    "label": "shown",
    "clauses": [
-    2
+    2,
+    3
    ],
-   "quote": "Every pair gets swapped twice: i = 0 swaps a[0] and a[3], then i = 3 swaps them back",
-   "confidence": 0.75,
+   "quote": "Every pair gets swapped twice: i = 0 swaps a[0] and a[3], then i = 3 swaps them back; The loop should only run while i < a.length / 2",
+   "confidence": 0.8,
    "prune_score": 0.2,
-   "score": 0.15,
+   "score": 0.16,
    "logic": "for (int i = 0; i < N; i++) gives i each valid index 0..N-1 exactly once in increasing order, the standard way to process every array element.",
    "twin_logic": null,
    "level": "L3",
@@ -2497,13 +2468,12 @@ start concepts (3): array_reversal, array_traversal, loop_control
    "kind": "level",
    "label": "shown",
    "clauses": [
-    1,
     2
    ],
-   "quote": "1 2 3 4, unchanged; Every pair gets swapped twice: i = 0 swaps a[0] and a[3], then i = 3 swaps them back",
-   "confidence": 0.9,
+   "quote": "Every pair gets swapped twice: i = 0 swaps a[0] and a[3], then i = 3 swaps them back",
+   "confidence": 0.8,
    "prune_score": 0.45,
-   "score": 0.405,
+   "score": 0.36,
    "logic": "Conservation: the set of values in the array is unchanged; doing the same exchange again restores the original order; i == j leaves the array unchanged. Changing the order of the three statements breaks it.",
    "twin_logic": null,
    "level": "L4",
@@ -2521,9 +2491,9 @@ start concepts (3): array_reversal, array_traversal, loop_control
     3
    ],
    "quote": "Every pair gets swapped twice: i = 0 swaps a[0] and a[3], then i = 3 swaps them back; The loop should only run while i < a.length / 2",
-   "confidence": 0.85,
+   "confidence": 0.8,
    "prune_score": 0.4,
-   "score": 0.34,
+   "score": 0.32,
    "logic": "Reversal exchanges a[i] with a[N-1-i] for each i in the first half.",
    "twin_logic": null,
    "level": "L3",
@@ -2562,6 +2532,10 @@ start concepts (3): array_reversal, array_traversal, loop_control
  "llm_calls_by_step": {
   "prune": 20,
   "label": 43
+ },
+ "level_v2": {
+  "wrong_ways": [],
+  "not_counted": []
  }
 }
 ```

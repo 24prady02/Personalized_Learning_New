@@ -183,24 +183,28 @@ Clauses: 2, 3
 Confidence: 0.6
 ```
 
-Label prompt for level way lvl:assignment@L3#6 (the model saw only the concept, the way's name 'relation to neighbour' and its text; no level):
+Label prompt for level way lvl:assignment@L3#6 (the model saw the concept, the way's name 'relation to neighbour', its text, where the way stops and whether the words must be correct; no level):
 > As a statement, i++ has the same effect as the assignment i = i + 1.
+>
+> Where this way stops: Two correct but separate rules are L1. Executing the two in sequence is L2. A relational answer may be correct or a relational error.
 
 Model's reply:
 ```
 Label: not shown
 Clauses: none
-Confidence: 0.75
+Confidence: 0.7
 ```
 
-Label prompt for level way lvl:assignment@L4#6 (the model saw only the concept, the way's name 'diagnose an error' and its text; no level):
+Label prompt for level way lvl:assignment@L4#6 (the model saw the concept, the way's name 'diagnose an error', its text, where the way stops and whether the words must be correct; no level):
 > rule broken: The assigned value's type must fit the variable's type. Kind: compile-time. Trigger class: Assigning a double to an int, an int to a String, and so on: 'incompatible types'.
+>
+> Where this way stops: Locating and fixing the mistake for one given failing case is L3. A compiler-flagged slip fixed from the message is weak evidence.
 
 Model's reply:
 ```
 Label: not shown
 Clauses: none
-Confidence: 0.92
+Confidence: 0.9
 ```
 
 Parsed labels:
@@ -301,14 +305,16 @@ Clauses: none
 Confidence: 0.85
 ```
 
-Label prompt for level way lvl:expression@L3#0 (the model saw only the concept, the way's name 'relation to neighbour' and its text; no level):
+Label prompt for level way lvl:expression@L3#0 (the model saw the concept, the way's name 'relation to neighbour', its text, where the way stops and whether the words must be correct; no level):
 > A variable name inside an expression contributes the variable's value at the moment of evaluation.
+>
+> Where this way stops: Two correct but separate rules are L1. Executing the two in sequence is L2. A relational answer may be correct or a relational error.
 
 Model's reply:
 ```
 Label: shown
-Clauses: 3
-Confidence: 0.7
+Clauses: 3, 4
+Confidence: 0.55
 ```
 
 Parsed labels:
@@ -316,7 +322,7 @@ Parsed labels:
 |---|---|---|---|---|---|---|
 | lvl:expression@L2#1 | not applied |  |  | 0.0 |  |  |
 | lvl:expression@L1#1 | not applied |  |  | 0.0 |  |  |
-| lvl:expression@L3#0 | shown | 0.25 | 0.7 | 0.17 | c3 | Then k = c + 1 is the letter after b |
+| lvl:expression@L3#0 | shown | 0.25 | 0.55 | 0.14 | c3, c4 | Then k = c + 1 is the letter after b; so it prints c |
 
 #### arithmetic_operators, misconceptions: 3 edges offered
 Edges offered:
@@ -422,7 +428,7 @@ Parsed labels:
 
 **Kept on a path at this depth** (best N in tiers: held misconception / broken edge, then held error, then correct / confirmed / shown):
 
-mis:assignment->VariableKeepsOldValue [correct, tier 2, 0.38], lvl:assignment@L2#0 [shown, tier 2, 0.24], lvl:expression@L3#0 [shown, tier 2, 0.17]
+mis:assignment->VariableKeepsOldValue [correct, tier 2, 0.38], lvl:assignment@L2#0 [shown, tier 2, 0.24], mis:assignment->AssignmentOppositeDirection [correct, tier 2, 0.15]
 
 **Clause coverage after this depth:**
 | clause | text | covered by |
@@ -571,13 +577,15 @@ Clauses: 1, 4
 Confidence: 0.7
 ```
 
-Label prompt for level way lvl:println@L3#0 (the model saw only the concept, the way's name 'relation to neighbour' and its text; no level):
+Label prompt for level way lvl:println@L3#0 (the model saw the concept, the way's name 'relation to neighbour', its text, where the way stops and whether the words must be correct; no level):
 > System.out.println(s); is a statement, so its line of output appears at its own place in the sequence.
+>
+> Where this way stops: Two correct but separate rules are L1. Executing the two in sequence is L2. A relational answer may be correct or a relational error.
 
 Model's reply:
 ```
-Label: shown
-Clauses: 1, 4
+Label: not shown
+Clauses: none
 Confidence: 0.6
 ```
 
@@ -595,7 +603,7 @@ Parsed labels:
 | edge | label | prune score | confidence | score | clauses | words |
 |---|---|---|---|---|---|---|
 | lvl:println@L2#1 | shown | 0.45 | 0.7 | 0.32 | c1, c4 | b; so it prints c |
-| lvl:println@L3#0 | shown | 0.3 | 0.6 | 0.18 | c1, c4 | b; so it prints c |
+| lvl:println@L3#0 | not applied |  |  | 0.0 |  |  |
 | lvl:println@L2#0 | shown | 0.25 | 0.65 | 0.16 | c1, c4 | b; so it prints c |
 
 #### char_arithmetic, misconceptions: 1 edges offered
@@ -671,14 +679,16 @@ Clauses: 1, 2
 Confidence: 0.8
 ```
 
-Label prompt for level way lvl:char_arithmetic@L3#0 (the model saw only the concept, the way's name 'relation to neighbour' and its text; no level):
+Label prompt for level way lvl:char_arithmetic@L3#0 (the model saw the concept, the way's name 'relation to neighbour', its text, where the way stops and whether the words must be correct; no level):
 > Char arithmetic uses each char's numeric code, so the result is an int, not a char, unless it is cast back.
+>
+> Where this way stops: Two correct but separate rules are L1. Executing the two in sequence is L2. A relational answer may be correct or a relational error.
 
 Model's reply:
 ```
-Label: not shown
-Clauses: none
-Confidence: 0.9
+Label: wrong
+Clauses: 3, 4
+Confidence: 0.8
 ```
 
 Parsed labels:
@@ -686,7 +696,6 @@ Parsed labels:
 |---|---|---|---|---|---|---|
 | lvl:char_arithmetic@L0#2 | not applied |  |  | 0.0 |  |  |
 | lvl:char_arithmetic@L2#2 | shown | 0.3 | 0.8 | 0.24 | c1, c2 | b; because c++ moves to the next letter |
-| lvl:char_arithmetic@L3#0 | not applied |  |  | 0.0 |  |  |
 
 #### increment_operators, misconceptions: 5 edges offered
 Edges offered:
@@ -773,14 +782,16 @@ Clauses: 1, 2
 Confidence: 0.7
 ```
 
-Label prompt for level way lvl:increment_operators@L3#2 (the model saw only the concept, the way's name 'relation to neighbour' and its text; no level):
+Label prompt for level way lvl:increment_operators@L3#2 (the model saw the concept, the way's name 'relation to neighbour', its text, where the way stops and whether the words must be correct; no level):
 > i++ is shorthand for the assignment i = i + 1 (and i += k for i = i + k), so it changes the variable's stored value.
+>
+> Where this way stops: Two correct but separate rules are L1. Executing the two in sequence is L2. A relational answer may be correct or a relational error.
 
 Model's reply:
 ```
 Label: shown
-Clauses: 1, 2
-Confidence: 0.6
+Clauses: 2, 3
+Confidence: 0.55
 ```
 
 Parsed labels:
@@ -788,7 +799,7 @@ Parsed labels:
 |---|---|---|---|---|---|---|
 | lvl:increment_operators@L2#2 | shown | 0.5 | 0.7 | 0.35 | c1, c2 | b; because c++ moves to the next letter |
 | lvl:increment_operators@L2#1 | shown | 0.3 | 0.7 | 0.21 | c1, c2 | b; because c++ moves to the next letter |
-| lvl:increment_operators@L3#2 | shown | 0.2 | 0.6 | 0.12 | c1, c2 | b; because c++ moves to the next letter |
+| lvl:increment_operators@L3#2 | shown | 0.2 | 0.55 | 0.11 | c2, c3 | because c++ moves to the next letter; Then k = c + 1 is the letter after b |
 
 **Kept on a path at this depth** (best N in tiers: held misconception / broken edge, then held error, then correct / confirmed / shown):
 
@@ -962,14 +973,16 @@ Clauses: 1, 2
 Confidence: 0.75
 ```
 
-Label prompt for level way lvl:char@L3#3 (the model saw only the concept, the way's name 'relation to neighbour' and its text; no level):
+Label prompt for level way lvl:char@L3#3 (the model saw the concept, the way's name 'relation to neighbour', its text, where the way stops and whether the words must be correct; no level):
 > Char arithmetic works on each char's numeric code and yields an int. A cast turns the result back into a character.
+>
+> Where this way stops: Two correct but separate rules are L1. Executing the two in sequence is L2. A relational answer may be correct or a relational error.
 
 Model's reply:
 ```
-Label: not shown
-Clauses: none
-Confidence: 0.85
+Label: wrong
+Clauses: 3, 4
+Confidence: 0.8
 ```
 
 Parsed labels:
@@ -977,7 +990,6 @@ Parsed labels:
 |---|---|---|---|---|---|---|
 | lvl:char@L0#0 | shown | 0.5 | 0.85 | 0.42 | c3, c4 | Then k = c + 1 is the letter after b; so it prints c |
 | lvl:char@L2#2 | shown | 0.3 | 0.75 | 0.22 | c1, c2 | b; because c++ moves to the next letter |
-| lvl:char@L3#3 | not applied |  |  | 0.0 |  |  |
 
 #### statement, misconceptions: 5 edges offered
 Edges offered:
@@ -1102,12 +1114,13 @@ Figure 7 (the graph after depth 4): C:\Users\magnu\OneDrive\Desktop\ES_VIterbi_P
 
 ## 4. Diagnosis (rules over the labelled graph, no model)
 Root-cause walk: held on ['char_arithmetic'], broken at [] (consequences: pre:char->char_arithmetic), prerequisites {'expression': ['arithmetic_operators'], 'increment_operators': ['assignment'], 'char_arithmetic': ['char'], 'println': ['statement']}
+- way lvl:expression@L3#0 not counted: confidence 0.55 is not above 0.60
+- way lvl:increment_operators@L3#2 not counted: confidence 0.55 is not above 0.60
 - assignment: L2 via line_by_line_trace "because c++ moves to the next letter; Then k = c + 1 is the letter after b"
 - char: L2 via one_step_execution "b; because c++ moves to the next letter"
 - char_arithmetic: L0 via misconception "Then k = c + 1 is the letter after b; so it prints c"
-- expression: L3 via relation_to_neighbour "Then k = c + 1 is the letter after b"
-- increment_operators: L3 via relation_to_neighbour "b; because c++ moves to the next letter"
-- println: L3 via relation_to_neighbour "b; so it prints c"
+- increment_operators: L2 via one_step_execution "b; because c++ moves to the next letter"
+- println: L2 via output_prediction "b; so it prints c"
 - statement: L2 via line_by_line_trace "because c++ moves to the next letter; Then k = c + 1 is the letter after b"
 
 **Stop:** sufficient at depth 4; prompts {'prune': 20, 'label': 36}, fresh model calls 0, cache hits 56
@@ -1130,10 +1143,21 @@ Root-cause walk: held on ['char_arithmetic'], broken at [] (consequences: pre:ch
 | assignment | L2 | line_by_line_trace |  | level_way | because c++ moves to the next letter; Then k = c + 1 is the letter after b |  |  |  |
 | char | L2 | one_step_execution |  | level_way | b; because c++ moves to the next letter |  | L0 everyday_reading |  |
 | char_arithmetic | L0 | misconception | CharNotNumeric | level_mis_links | Then k = c + 1 is the letter after b; so it prints c | wrong rule: char is not a numeric type. Right rule: A char is encoded as a 16-bit integer, so arithmetic such as 'b' + 'c' or 'a' + 4 works on the character codes. |  |  |
-| expression | L3 | relation_to_neighbour |  | level_way | Then k = c + 1 is the letter after b |  |  |  |
-| increment_operators | L3 | relation_to_neighbour |  | level_way | b; because c++ moves to the next letter |  | L2 one_step_execution, L2 output_prediction |  |
-| println | L3 | relation_to_neighbour |  | level_way | b; so it prints c |  | L2 output_prediction, L2 line_by_line_trace |  |
+| increment_operators | L2 | one_step_execution |  | level_way | b; because c++ moves to the next letter |  | L2 output_prediction |  |
+| println | L2 | output_prediction |  | level_way | b; so it prints c |  | L2 line_by_line_trace |  |
 | statement | L2 | line_by_line_trace |  | level_way | because c++ moves to the next letter; Then k = c + 1 is the letter after b |  | L2 one_step_execution, L2 output_prediction |  |
+
+Shown ways above L2 that do not count for the level:
+| concept | edge | level | way | confidence | reason | quote |
+|---|---|---|---|---|---|---|
+| expression | lvl:expression@L3#0 | L3 | relation_to_neighbour | 0.55 | confidence 0.55 is not above 0.60 | Then k = c + 1 is the letter after b; so it prints c |
+| increment_operators | lvl:increment_operators@L3#2 | L3 | relation_to_neighbour | 0.55 | confidence 0.55 is not above 0.60 | because c++ moves to the next letter; Then k = c + 1 is the letter after b |
+
+Ways above L2 the model answered "wrong" (the kind of thing is done, but what is said contradicts Java; not shown):
+| concept | edge | level | way | confidence | clauses | quote |
+|---|---|---|---|---|---|---|
+| char_arithmetic | lvl:char_arithmetic@L3#0 | L3 | relation_to_neighbour | 0.8 | [3, 4] | Then k = c + 1 is the letter after b; so it prints c |
+| char | lvl:char@L3#3 | L3 | relation_to_neighbour | 0.8 | [3, 4] | Then k = c + 1 is the letter after b; so it prints c |
 
 ### Overall level: L0
 
@@ -1143,7 +1167,7 @@ Clause coverage (final):
 | b | mis:assignment->VariableKeepsOldValue |
 | because c++ moves to the next letter | mis:assignment->VariableKeepsOldValue |
 | Then k = c + 1 is the letter after b | mis:assignment->VariableKeepsOldValue |
-| so it prints c | pre:arithmetic_operators->expression |
+| so it prints c | lvl:expression@L3#0 |
 
 Figure 8 (final picture): C:\Users\magnu\OneDrive\Desktop\ES_VIterbi_Personalized_Learning\results\viewer\MY30_figure08.png
 
@@ -1153,18 +1177,17 @@ Figure 8 (final picture): C:\Users\magnu\OneDrive\Desktop\ES_VIterbi_Personalize
 | 1 | assignment | mis:assignment->VariableKeepsOldValue | misconception | correct | 0.45 | 0.85 | 0.3825 | [1, 2, 3] | b; because c++ moves to the next letter; Then k = c + 1 is the letter after b |
 | 1 | assignment | mis:assignment->AssignmentOppositeDirection | misconception | correct | 0.25 | 0.6 | 0.15 | [3] | Then k = c + 1 is the letter after b |
 | 1 | assignment | lvl:assignment@L2#0 | level | shown | 0.4 | 0.6 | 0.24 | [2, 3] | because c++ moves to the next letter; Then k = c + 1 is the letter after b |
-| 1 | expression | lvl:expression@L3#0 | level | shown | 0.25 | 0.7 | 0.175 | [3] | Then k = c + 1 is the letter after b |
+| 1 | expression | lvl:expression@L3#0 | level | shown | 0.25 | 0.55 | 0.1375 | [3, 4] | Then k = c + 1 is the letter after b; so it prints c |
 | 2 | assignment | pre:assignment->increment_operators | prerequisite | confirmed | 1.0 | 0.7 | 0.7 | [1, 2] | b; because c++ moves to the next letter |
 | 2 | expression | pre:arithmetic_operators->expression | prerequisite | confirmed | 1.0 | 0.6 | 0.6 | [3, 4] | Then k = c + 1 is the letter after b; so it prints c |
 | 2 | println | lvl:println@L2#1 | level | shown | 0.45 | 0.7 | 0.315 | [1, 4] | b; so it prints c |
-| 2 | println | lvl:println@L3#0 | level | shown | 0.3 | 0.6 | 0.18 | [1, 4] | b; so it prints c |
 | 2 | println | lvl:println@L2#0 | level | shown | 0.25 | 0.65 | 0.1625 | [1, 4] | b; so it prints c |
 | 2 | char_arithmetic | mis:char_arithmetic->CharNotNumeric | misconception | held | 1.0 | 0.6 | 0.6 | [3, 4] | Then k = c + 1 is the letter after b; so it prints c |
 | 2 | char_arithmetic | lvl:char_arithmetic@L2#2 | level | shown | 0.3 | 0.8 | 0.24 | [1, 2] | b; because c++ moves to the next letter |
 | 2 | increment_operators | mis:increment_operators->IncrementByTwo | misconception | correct | 0.8 | 0.9 | 0.72 | [1, 2] | b; because c++ moves to the next letter |
 | 2 | increment_operators | lvl:increment_operators@L2#2 | level | shown | 0.5 | 0.7 | 0.35 | [1, 2] | b; because c++ moves to the next letter |
 | 2 | increment_operators | lvl:increment_operators@L2#1 | level | shown | 0.3 | 0.7 | 0.21 | [1, 2] | b; because c++ moves to the next letter |
-| 2 | increment_operators | lvl:increment_operators@L3#2 | level | shown | 0.2 | 0.6 | 0.12 | [1, 2] | b; because c++ moves to the next letter |
+| 2 | increment_operators | lvl:increment_operators@L3#2 | level | shown | 0.2 | 0.55 | 0.11 | [2, 3] | because c++ moves to the next letter; Then k = c + 1 is the letter after b |
 | 3 | char_arithmetic | pre:char->char_arithmetic | prerequisite | broken | 1.0 | 0.9 | 0.9 | [3, 4] | Then k = c + 1 is the letter after b; so it prints c |
 | 3 | println | pre:statement->println | prerequisite | confirmed | 1.0 | 0.7 | 0.7 | [1, 4] | b; so it prints c |
 | 4 | char | lvl:char@L0#0 | level | shown | 0.5 | 0.85 | 0.425 | [3, 4] | Then k = c + 1 is the letter after b; so it prints c |
@@ -1179,7 +1202,7 @@ Figure 8 (final picture): C:\Users\magnu\OneDrive\Desktop\ES_VIterbi_Personalize
 |---|---|---|---|---|---|---|
 | 1 | assignment | mis:assignment->VariableKeepsOldValue | misconception | correct | 0.3825 | [1, 2, 3] |
 | 1 | assignment | lvl:assignment@L2#0 | level | shown | 0.24 | [2, 3] |
-| 1 | expression | lvl:expression@L3#0 | level | shown | 0.175 | [3] |
+| 1 | assignment | mis:assignment->AssignmentOppositeDirection | misconception | correct | 0.15 | [3] |
 | 2 | char_arithmetic | mis:char_arithmetic->CharNotNumeric | misconception | held | 0.6 | [3, 4] |
 | 2 | increment_operators | mis:increment_operators->IncrementByTwo | misconception | correct | 0.72 | [1, 2] |
 | 2 | assignment | pre:assignment->increment_operators | prerequisite | confirmed | 0.7 | [1, 2] |
@@ -1212,7 +1235,7 @@ start concepts (3): assignment, expression, arithmetic_operators
   expression (level ways): 19 candidates -> kept lvl:expression@L2#1 (0.45), lvl:expression@L1#1 (0.30), lvl:expression@L3#0 (0.25)
     lvl:expression@L2#1 -> not applied (0.00) ""
     lvl:expression@L1#1 -> not applied (0.00) ""
-    lvl:expression@L3#0 -> shown (0.17) "Then k = c + 1 is the letter after b"
+    lvl:expression@L3#0 -> shown (0.14) "Then k = c + 1 is the letter after b; so it prints c"
   arithmetic_operators (misconceptions): 3 candidates -> kept mis:arithmetic_operators->ArithmeticOnNumericStrings (0.80), mis:arithmetic_operators->RemainderIsSubtraction (0.10), mis:arithmetic_operators->CaretIsPower (0.10)
     mis:arithmetic_operators->ArithmeticOnNumericStrings -> not applied (0.00) ""
     mis:arithmetic_operators->RemainderIsSubtraction -> not applied (0.00) ""
@@ -1221,7 +1244,7 @@ start concepts (3): assignment, expression, arithmetic_operators
     lvl:arithmetic_operators@L1#1 -> not applied (0.00) ""
     lvl:arithmetic_operators@L2#0 -> not applied (0.00) ""
     lvl:arithmetic_operators@L0#0 -> not applied (0.00) ""
-  kept: mis:assignment->VariableKeepsOldValue [correct, tier 2, 0.38], lvl:assignment@L2#0 [shown, tier 2, 0.24], lvl:expression@L3#0 [shown, tier 2, 0.17]
+  kept: mis:assignment->VariableKeepsOldValue [correct, tier 2, 0.38], lvl:assignment@L2#0 [shown, tier 2, 0.24], mis:assignment->AssignmentOppositeDirection [correct, tier 2, 0.15]
   clause coverage: c1 <- mis:assignment->VariableKeepsOldValue; c2 <- mis:assignment->VariableKeepsOldValue; c3 <- mis:assignment->VariableKeepsOldValue; c4 uncovered
   uncovered clauses bring in: println (2.22), char_arithmetic (1.62), increment_operators (0.18)
   not yet read: own edges of char_arithmetic, own edges of increment_operators, own edges of println, pre:arithmetic_operators->expression, pre:assignment->increment_operators
@@ -1236,13 +1259,14 @@ start concepts (3): assignment, expression, arithmetic_operators
     mis:println->PrintedTextIsExecuted -> not applied (0.00) ""
   println (level ways): 17 candidates -> kept lvl:println@L2#1 (0.45), lvl:println@L3#0 (0.30), lvl:println@L2#0 (0.25)
     lvl:println@L2#1 -> shown (0.32) "b; so it prints c"
-    lvl:println@L3#0 -> shown (0.18) "b; so it prints c"
+    lvl:println@L3#0 -> not applied (0.00) ""
     lvl:println@L2#0 -> shown (0.16) "b; so it prints c"
   char_arithmetic (misconceptions): 1 candidates -> kept mis:char_arithmetic->CharNotNumeric (1.00)
     mis:char_arithmetic->CharNotNumeric -> held (0.60) "Then k = c + 1 is the letter after b; so it prints c"
   char_arithmetic (level ways): 14 candidates -> kept lvl:char_arithmetic@L0#2 (0.50), lvl:char_arithmetic@L2#2 (0.30), lvl:char_arithmetic@L3#0 (0.20)
     lvl:char_arithmetic@L0#2 -> not applied (0.00) ""
     lvl:char_arithmetic@L2#2 -> shown (0.24) "b; because c++ moves to the next letter"
+    lvl:char_arithmetic@L3#0: wrong (0.80) -> not applied
     lvl:char_arithmetic@L3#0 -> not applied (0.00) ""
   increment_operators (misconceptions): 5 candidates -> kept mis:increment_operators->IncrementByTwo (0.80), mis:increment_operators->PrePostIncrementSameValue (0.12), mis:increment_operators->PostIncrementAssignsLater (0.08)
     mis:increment_operators->IncrementByTwo -> correct (0.72) "b; because c++ moves to the next letter"
@@ -1251,7 +1275,7 @@ start concepts (3): assignment, expression, arithmetic_operators
   increment_operators (level ways): 16 candidates -> kept lvl:increment_operators@L2#2 (0.50), lvl:increment_operators@L2#1 (0.30), lvl:increment_operators@L3#2 (0.20)
     lvl:increment_operators@L2#2 -> shown (0.35) "b; because c++ moves to the next letter"
     lvl:increment_operators@L2#1 -> shown (0.21) "b; because c++ moves to the next letter"
-    lvl:increment_operators@L3#2 -> shown (0.12) "b; because c++ moves to the next letter"
+    lvl:increment_operators@L3#2 -> shown (0.11) "because c++ moves to the next letter; Then k = c + 1 is the letter after b"
   kept: mis:char_arithmetic->CharNotNumeric [held, tier 0, 0.60], mis:increment_operators->IncrementByTwo [correct, tier 2, 0.72], pre:assignment->increment_operators [confirmed, tier 2, 0.70]
   clause coverage: c1 <- mis:assignment->VariableKeepsOldValue; c2 <- mis:assignment->VariableKeepsOldValue; c3 <- mis:assignment->VariableKeepsOldValue; c4 <- pre:arithmetic_operators->expression
   not yet read: pre:char->char_arithmetic, pre:statement->println
@@ -1271,6 +1295,7 @@ start concepts (3): assignment, expression, arithmetic_operators
   char (level ways): 19 candidates -> kept lvl:char@L0#0 (0.50), lvl:char@L2#2 (0.30), lvl:char@L3#3 (0.20)
     lvl:char@L0#0 -> shown (0.42) "Then k = c + 1 is the letter after b; so it prints c"
     lvl:char@L2#2 -> shown (0.22) "b; because c++ moves to the next letter"
+    lvl:char@L3#3: wrong (0.80) -> not applied
     lvl:char@L3#3 -> not applied (0.00) ""
   statement (misconceptions): 5 candidates -> kept mis:statement->StatementsRunInAnyOrder (0.45), mis:statement->ProgramLooksAhead (0.35), mis:statement->ComputerFillsInIntent (0.20)
     mis:statement->StatementsRunInAnyOrder -> correct (0.32) "because c++ moves to the next letter; Then k = c + 1 is the letter after b"
@@ -1283,12 +1308,13 @@ start concepts (3): assignment, expression, arithmetic_operators
   kept: lvl:char@L0#0 [shown, tier 2, 0.42], lvl:statement@L2#0 [shown, tier 2, 0.36], mis:statement->StatementsRunInAnyOrder [correct, tier 2, 0.32]
   clause coverage: c1 <- mis:assignment->VariableKeepsOldValue; c2 <- mis:assignment->VariableKeepsOldValue; c3 <- mis:assignment->VariableKeepsOldValue; c4 <- pre:arithmetic_operators->expression
   root-cause walk: held on ['char_arithmetic'], broken at [] (consequences: pre:char->char_arithmetic), prerequisites {'expression': ['arithmetic_operators'], 'increment_operators': ['assignment'], 'char_arithmetic': ['char'], 'println': ['statement']}
+  level way lvl:expression@L3#0 not counted: confidence 0.55 is not above 0.60
+  level way lvl:increment_operators@L3#2 not counted: confidence 0.55 is not above 0.60
   level assignment: L2 via line_by_line_trace "because c++ moves to the next letter; Then k = c + 1 is the letter after b"
   level char: L2 via one_step_execution "b; because c++ moves to the next letter"
   level char_arithmetic: L0 via misconception "Then k = c + 1 is the letter after b; so it prints c"
-  level expression: L3 via relation_to_neighbour "Then k = c + 1 is the letter after b"
-  level increment_operators: L3 via relation_to_neighbour "b; because c++ moves to the next letter"
-  level println: L3 via relation_to_neighbour "b; so it prints c"
+  level increment_operators: L2 via one_step_execution "b; because c++ moves to the next letter"
+  level println: L2 via output_prediction "b; so it prints c"
   level statement: L2 via line_by_line_trace "because c++ moves to the next letter; Then k = c + 1 is the letter after b"
 ```
 
@@ -1301,7 +1327,8 @@ start concepts (3): assignment, expression, arithmetic_operators
   "depth": 3,
   "prune_tools": "llm",
   "model": "claude-opus-5-5",
-  "backend": "claude-cli"
+  "backend": "claude-cli",
+  "level_v2": true
  },
  "clauses": [
   "b",
@@ -1365,33 +1392,23 @@ start concepts (3): assignment, expression, arithmetic_operators
    "rule": "wrong rule: char is not a numeric type. Right rule: A char is encoded as a 16-bit integer, so arithmetic such as 'b' + 'c' or 'a' + 4 works on the character codes.",
    "source": "level_mis_links"
   },
-  "expression": {
-   "level": "L3",
-   "way": "relation_to_neighbour",
-   "quote": "Then k = c + 1 is the letter after b",
-   "edge": "lvl:expression@L3#0",
-   "source": "level_way",
-   "also_shown": []
-  },
   "increment_operators": {
-   "level": "L3",
-   "way": "relation_to_neighbour",
+   "level": "L2",
+   "way": "one_step_execution",
    "quote": "b; because c++ moves to the next letter",
-   "edge": "lvl:increment_operators@L3#2",
+   "edge": "lvl:increment_operators@L2#2",
    "source": "level_way",
    "also_shown": [
-    "L2 one_step_execution",
     "L2 output_prediction"
    ]
   },
   "println": {
-   "level": "L3",
-   "way": "relation_to_neighbour",
+   "level": "L2",
+   "way": "output_prediction",
    "quote": "b; so it prints c",
-   "edge": "lvl:println@L3#0",
+   "edge": "lvl:println@L2#1",
    "source": "level_way",
    "also_shown": [
-    "L2 output_prediction",
     "L2 line_by_line_trace"
    ]
   },
@@ -1451,22 +1468,21 @@ start concepts (3): assignment, expression, arithmetic_operators
   },
   {
    "depth": 1,
-   "source": "expression",
-   "edge": "lvl:expression@L3#0",
-   "target": "expression@L3",
-   "kind": "level",
-   "label": "shown",
+   "source": "assignment",
+   "edge": "mis:assignment->AssignmentOppositeDirection",
+   "target": "AssignmentOppositeDirection",
+   "kind": "misconception",
+   "label": "correct",
    "clauses": [
     3
    ],
    "quote": "Then k = c + 1 is the letter after b",
-   "confidence": 0.7,
+   "confidence": 0.6,
    "prune_score": 0.25,
-   "score": 0.175,
-   "logic": "A variable name inside an expression contributes the variable's value at the moment of evaluation.",
-   "twin_logic": null,
-   "level": "L3",
-   "way": "relation_to_neighbour"
+   "score": 0.15,
+   "logic": "a = b copies the value of a into b.",
+   "twin_logic": "Assignment stores the value of the right side into the variable on the left.",
+   "role": "primary"
   },
   {
    "depth": 2,
@@ -1688,12 +1704,13 @@ start concepts (3): assignment, expression, arithmetic_operators
    "kind": "level",
    "label": "shown",
    "clauses": [
-    3
+    3,
+    4
    ],
-   "quote": "Then k = c + 1 is the letter after b",
-   "confidence": 0.7,
+   "quote": "Then k = c + 1 is the letter after b; so it prints c",
+   "confidence": 0.55,
    "prune_score": 0.25,
-   "score": 0.175,
+   "score": 0.1375,
    "logic": "A variable name inside an expression contributes the variable's value at the moment of evaluation.",
    "twin_logic": null,
    "level": "L3",
@@ -1754,26 +1771,6 @@ start concepts (3): assignment, expression, arithmetic_operators
    "twin_logic": null,
    "level": "L2",
    "way": "output_prediction"
-  },
-  {
-   "depth": 2,
-   "source": "println",
-   "edge": "lvl:println@L3#0",
-   "target": "println@L3",
-   "kind": "level",
-   "label": "shown",
-   "clauses": [
-    1,
-    4
-   ],
-   "quote": "b; so it prints c",
-   "confidence": 0.6,
-   "prune_score": 0.3,
-   "score": 0.18,
-   "logic": "System.out.println(s); is a statement, so its line of output appears at its own place in the sequence.",
-   "twin_logic": null,
-   "level": "L3",
-   "way": "relation_to_neighbour"
   },
   {
    "depth": 2,
@@ -1901,13 +1898,13 @@ start concepts (3): assignment, expression, arithmetic_operators
    "kind": "level",
    "label": "shown",
    "clauses": [
-    1,
-    2
+    2,
+    3
    ],
-   "quote": "b; because c++ moves to the next letter",
-   "confidence": 0.6,
+   "quote": "because c++ moves to the next letter; Then k = c + 1 is the letter after b",
+   "confidence": 0.55,
    "prune_score": 0.2,
-   "score": 0.12,
+   "score": 0.11,
    "logic": "i++ is shorthand for the assignment i = i + 1 (and i += k for i = i + k), so it changes the variable's stored value.",
    "twin_logic": null,
    "level": "L3",
@@ -2075,7 +2072,7 @@ start concepts (3): assignment, expression, arithmetic_operators
   "b": "mis:assignment->VariableKeepsOldValue",
   "because c++ moves to the next letter": "mis:assignment->VariableKeepsOldValue",
   "Then k = c + 1 is the letter after b": "mis:assignment->VariableKeepsOldValue",
-  "so it prints c": "pre:arithmetic_operators->expression"
+  "so it prints c": "lvl:expression@L3#0"
  },
  "unexplained_clauses": [],
  "stop_reason": "sufficient",
@@ -2085,6 +2082,54 @@ start concepts (3): assignment, expression, arithmetic_operators
  "llm_calls_by_step": {
   "prune": 20,
   "label": 36
+ },
+ "level_v2": {
+  "wrong_ways": [
+   {
+    "concept": "char_arithmetic",
+    "edge": "lvl:char_arithmetic@L3#0",
+    "level": "L3",
+    "way": "relation_to_neighbour",
+    "clauses": [
+     3,
+     4
+    ],
+    "quote": "Then k = c + 1 is the letter after b; so it prints c",
+    "confidence": 0.8
+   },
+   {
+    "concept": "char",
+    "edge": "lvl:char@L3#3",
+    "level": "L3",
+    "way": "relation_to_neighbour",
+    "clauses": [
+     3,
+     4
+    ],
+    "quote": "Then k = c + 1 is the letter after b; so it prints c",
+    "confidence": 0.8
+   }
+  ],
+  "not_counted": [
+   {
+    "concept": "expression",
+    "edge": "lvl:expression@L3#0",
+    "level": "L3",
+    "way": "relation_to_neighbour",
+    "quote": "Then k = c + 1 is the letter after b; so it prints c",
+    "confidence": 0.55,
+    "reason": "confidence 0.55 is not above 0.60"
+   },
+   {
+    "concept": "increment_operators",
+    "edge": "lvl:increment_operators@L3#2",
+    "level": "L3",
+    "way": "relation_to_neighbour",
+    "quote": "because c++ moves to the next letter; Then k = c + 1 is the letter after b",
+    "confidence": 0.55,
+    "reason": "confidence 0.55 is not above 0.60"
+   }
+  ]
  }
 }
 ```

@@ -5,7 +5,8 @@
   "depth": 3,
   "prune_tools": "llm",
   "model": "claude-opus-5-5",
-  "backend": "claude-cli"
+  "backend": "claude-cli",
+  "level_v2": true
  },
  "clauses": [
   "n is a whole number from 1 to 6, for example 4"
@@ -56,14 +57,12 @@
    ]
   },
   "type_conversion": {
-   "level": "L3",
-   "way": "relation_to_neighbour",
+   "level": "L2",
+   "way": "output_prediction",
    "quote": "n is a whole number from 1 to 6, for example 4",
-   "edge": "lvl:type_conversion@L3#2",
+   "edge": "lvl:type_conversion@L2#1",
    "source": "level_way",
-   "also_shown": [
-    "L2 output_prediction"
-   ]
+   "also_shown": []
   }
  },
  "overall_level": "L2",
@@ -246,25 +245,6 @@
    "twin_logic": null,
    "level": "L2",
    "way": "output_prediction"
-  },
-  {
-   "depth": 4,
-   "source": "type_conversion",
-   "edge": "lvl:type_conversion@L3#2",
-   "target": "type_conversion@L3",
-   "kind": "level",
-   "label": "shown",
-   "clauses": [
-    1
-   ],
-   "quote": "n is a whole number from 1 to 6, for example 4",
-   "confidence": 0.6,
-   "prune_score": 0.35,
-   "score": 0.21,
-   "logic": "A cast is the explicit conversion between primitive types, required when information may be lost: (int) 2.71828 is 2.",
-   "twin_logic": null,
-   "level": "L3",
-   "way": "relation_to_neighbour"
   }
  ],
  "evidence": [
@@ -538,25 +518,6 @@
    "twin_logic": null,
    "level": "L2",
    "way": "output_prediction"
-  },
-  {
-   "depth": 4,
-   "source": "type_conversion",
-   "edge": "lvl:type_conversion@L3#2",
-   "target": "type_conversion@L3",
-   "kind": "level",
-   "label": "shown",
-   "clauses": [
-    1
-   ],
-   "quote": "n is a whole number from 1 to 6, for example 4",
-   "confidence": 0.6,
-   "prune_score": 0.35,
-   "score": 0.21,
-   "logic": "A cast is the explicit conversion between primitive types, required when information may be lost: (int) 2.71828 is 2.",
-   "twin_logic": null,
-   "level": "L3",
-   "way": "relation_to_neighbour"
   }
  ],
  "clause_coverage": {
@@ -565,10 +526,14 @@
  "unexplained_clauses": [],
  "stop_reason": "max depth",
  "depth_reached": 4,
- "llm_calls": 6,
- "llm_cache_hits": 39,
+ "llm_calls": 0,
+ "llm_cache_hits": 45,
  "llm_calls_by_step": {
   "prune": 16,
   "label": 29
+ },
+ "level_v2": {
+  "wrong_ways": [],
+  "not_counted": []
  }
 }

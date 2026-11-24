@@ -26,7 +26,7 @@ System.out.println(sum + " " + max + " " + avg);
 - **Wrong rules held:** CastAppliesToWholeExpression at `explicit_cast`
 - **Root cause:** `explicit_cast` / CastAppliesToWholeExpression
 - **Overall level:** L0
-- **Level per concept:** `accumulator_pattern` L3, `arithmetic_operators` L2, `array_traversal` L3, `compound_assignment` L3, `explicit_cast` L0, `expression` L3, `for_loop` L3, `running_extreme` L2
+- **Level per concept:** `accumulator_pattern` L2, `arithmetic_operators` L2, `array_traversal` L3, `compound_assignment` L2, `explicit_cast` L0, `for_loop` L2, `running_extreme` L2
 
 **Check of this result (read by hand, 2026-11-13).** The diagnosis matches the answer.
 
@@ -80,7 +80,7 @@ At each depth, for each current concept, the following happens.
 
 *One of the outputs at this stage:* at `explicit_cast` the misconception family is pruned to: CastAppliesToWholeExpression 0.60, CastAfterIntDivision 0.30, LaterDoubleLiteralFixesDivision 0.10.
 
-**3.3 Label (model, second question).** Each edge that survived is now read against the numbered clauses and gets a **label**. For a misconception or error edge: **held** (the student's words state this wrong rule), **correct** (they state the right rule, its twin) or **not applied** (the answer says nothing about it). For a level way: **shown** or not applied. For a prerequisite or parallel edge: **confirmed** (the answer carries the rule from one concept into the other) or **broken** (it fails to). The misconception edges of one concept are judged together in a single question, because the same sentence can fit several wrong rules and the model should give *held* only to the one the student really claims. With the label the model must return the **clause numbers** it rests on and a **confidence** from 0 to 1. A label with no clause is discarded. This is the safeguard of the method: the model never diagnoses from its own knowledge; every label is attached to one edge of G and to the student's words.
+**3.3 Label (model, second question).** Each edge that survived is now read against the numbered clauses and gets a **label**. For a misconception or error edge: **held** (the student's words state this wrong rule), **correct** (they state the right rule, its twin) or **not applied** (the answer says nothing about it). For a level way: **shown** or not applied. For a way above L2 the question also gives where the way stops (its boundary, stored in the graph) and whether the words must be correct, and the model may answer **wrong** (the student does this kind of thing, but what is said contradicts Java); a wrong way is not shown. For a prerequisite or parallel edge: **confirmed** (the answer carries the rule from one concept into the other) or **broken** (it fails to). The misconception edges of one concept are judged together in a single question, because the same sentence can fit several wrong rules and the model should give *held* only to the one the student really claims. With the label the model must return the **clause numbers** it rests on and a **confidence** from 0 to 1. A label with no clause is discarded. This is the safeguard of the method: the model never diagnoses from its own knowledge; every label is attached to one edge of G and to the student's words.
 
 *One of the outputs at this stage:* CastAppliesToWholeExpression at `explicit_cast` is labelled **held** on clause 3 (“For avg, sum / a.length is divided first as ints, 22 / 4 = 5, and then the (double) makes…”) with confidence 0.90. The rule on that edge: “(int) 2.5 / 0.15 casts the whole quotient to int.”
 
@@ -162,7 +162,7 @@ Every concept has five **levels**, taken from the SOLO taxonomy: **L0** prestruc
 
 The model is never asked for a level. In stage 3 it only said whether a way was *shown*; the level is read from where that way sits in the graph, in two steps.
 
-**6.1 Gather the evidence per concept.** Take every concept that appears in the evidence of stage 3 (kept in 3.4 or not). For each one collect two lists: the misconceptions held on it that are not shadows, and the ways shown on it.
+**6.1 Gather the evidence per concept.** Take every concept that appears in the evidence of stage 3 (kept in 3.4 or not). For each one collect two lists: the misconceptions held on it that are not shadows, and the ways shown on it. A shown way above L2 is counted only if two things hold: the model's confidence in it is above 0.60, and its clauses are not all clauses that a held misconception rests on. So a weak yes, or a wrong sentence already counted as a misconception, cannot lift a concept to L3 or L4.
 
 *One of the outputs at this stage:* 13 concepts appear in the evidence: `accumulator_pattern`, `arithmetic_operators`, `array_traversal`, `assignment`, `compound_assignment`, `explicit_cast`, `expression`, `for_loop`, `increment_operators`, `loop_body`, `loop_control`, `running_extreme`, `type_conversion`.
 
@@ -179,19 +179,19 @@ A held error node is not a misconception, so rule (a) does not apply to it.
 
 | Concept | Level | Rule | Why |
 |---|---|---|---|
-| `accumulator_pattern` | L3 | (c) | ways shown: L2 “output prediction”, L2 “line by line trace”, L3 “relation to neighbour” |
+| `accumulator_pattern` | L2 | (c) | ways shown: L2 “output prediction”, L2 “line by line trace” |
 | `arithmetic_operators` | L2 | (c) | ways shown: L2 “output prediction” |
-| `array_traversal` | L3 | (c) | ways shown: L2 “output prediction”, L3 “purpose of the whole”, L3 “relation to neighbour” |
+| `array_traversal` | L3 | (c) | ways shown: L2 “output prediction”, L3 “purpose of the whole” |
 | `assignment` | none | (d) | nothing held, no way shown |
-| `compound_assignment` | L3 | (c) | ways shown: L2 “output prediction”, L3 “purpose of the whole” |
+| `compound_assignment` | L2 | (c) | ways shown: L2 “output prediction”; not counted: L3 “purpose of the whole” (confidence 0.60) |
 | `explicit_cast` | L0 | (a) | holds CastAppliesToWholeExpression |
-| `expression` | L3 | (c) | ways shown: L3 “relation to neighbour” |
-| `for_loop` | L3 | (c) | ways shown: L2 “output prediction”, L3 “relation to neighbour” |
+| `expression` | none | (d) | nothing held, no counted way; answered wrong: L3 “relation to neighbour” |
+| `for_loop` | L2 | (c) | ways shown: L2 “output prediction” |
 | `increment_operators` | none | (d) | nothing held, no way shown |
 | `loop_body` | none | (d) | nothing held, no way shown |
 | `loop_control` | none | (d) | nothing held, no way shown |
 | `running_extreme` | L2 | (c) | ways shown: L1 “names the element”, L2 “output prediction”, L2 “line by line trace” |
-| `type_conversion` | none | (d) | nothing held, no way shown |
+| `type_conversion` | none | (d) | nothing held, no counted way; answered wrong: L4 “diagnose an error” |
 
 ## Stage 7. Overall level (rule, no model)
 

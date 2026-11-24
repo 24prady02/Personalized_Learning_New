@@ -25,7 +25,7 @@ switch (day) {
 - **Wrong rules held:** SwitchNoFallThrough at `switch_statement`
 - **Root cause:** `switch_statement` / SwitchNoFallThrough
 - **Overall level:** L0
-- **Level per concept:** `control_flow` L0, `println` L3, `statement` L0, `string_literal` L3, `switch_statement` L0
+- **Level per concept:** `control_flow` L0, `println` L2, `statement` L0, `string_literal` L2, `switch_statement` L0
 
 **Check of this result (read by hand, 2026-11-13).** The diagnosis matches the answer.
 
@@ -79,7 +79,7 @@ At each depth, for each current concept, the following happens.
 
 *One of the outputs at this stage:* at `switch_statement` the misconception family is pruned to: SwitchNoFallThrough 1.00.
 
-**3.3 Label (model, second question).** Each edge that survived is now read against the numbered clauses and gets a **label**. For a misconception or error edge: **held** (the student's words state this wrong rule), **correct** (they state the right rule, its twin) or **not applied** (the answer says nothing about it). For a level way: **shown** or not applied. For a prerequisite or parallel edge: **confirmed** (the answer carries the rule from one concept into the other) or **broken** (it fails to). The misconception edges of one concept are judged together in a single question, because the same sentence can fit several wrong rules and the model should give *held* only to the one the student really claims. With the label the model must return the **clause numbers** it rests on and a **confidence** from 0 to 1. A label with no clause is discarded. This is the safeguard of the method: the model never diagnoses from its own knowledge; every label is attached to one edge of G and to the student's words.
+**3.3 Label (model, second question).** Each edge that survived is now read against the numbered clauses and gets a **label**. For a misconception or error edge: **held** (the student's words state this wrong rule), **correct** (they state the right rule, its twin) or **not applied** (the answer says nothing about it). For a level way: **shown** or not applied. For a way above L2 the question also gives where the way stops (its boundary, stored in the graph) and whether the words must be correct, and the model may answer **wrong** (the student does this kind of thing, but what is said contradicts Java); a wrong way is not shown. For a prerequisite or parallel edge: **confirmed** (the answer carries the rule from one concept into the other) or **broken** (it fails to). The misconception edges of one concept are judged together in a single question, because the same sentence can fit several wrong rules and the model should give *held* only to the one the student really claims. With the label the model must return the **clause numbers** it rests on and a **confidence** from 0 to 1. A label with no clause is discarded. This is the safeguard of the method: the model never diagnoses from its own knowledge; every label is attached to one edge of G and to the student's words.
 
 *One of the outputs at this stage:* SwitchNoFallThrough at `switch_statement` is labelled **held** on clauses 1, 3, 4, 5 (“It prints only Tue; so the switch jumps to case 2, prints Tue, and then the switch is fin…”) with confidence 0.96. The rule on that edge: “After the matching case runs, the switch ends even without break.”
 
@@ -163,7 +163,7 @@ Every concept has five **levels**, taken from the SOLO taxonomy: **L0** prestruc
 
 The model is never asked for a level. In stage 3 it only said whether a way was *shown*; the level is read from where that way sits in the graph, in two steps.
 
-**6.1 Gather the evidence per concept.** Take every concept that appears in the evidence of stage 3 (kept in 3.4 or not). For each one collect two lists: the misconceptions held on it that are not shadows, and the ways shown on it.
+**6.1 Gather the evidence per concept.** Take every concept that appears in the evidence of stage 3 (kept in 3.4 or not). For each one collect two lists: the misconceptions held on it that are not shadows, and the ways shown on it. A shown way above L2 is counted only if two things hold: the model's confidence in it is above 0.60, and its clauses are not all clauses that a held misconception rests on. So a weak yes, or a wrong sentence already counted as a misconception, cannot lift a concept to L3 or L4.
 
 *One of the outputs at this stage:* 5 concepts appear in the evidence: `control_flow`, `println`, `statement`, `string_literal`, `switch_statement`.
 
@@ -181,9 +181,9 @@ A held error node is not a misconception, so rule (a) does not apply to it.
 | Concept | Level | Rule | Why |
 |---|---|---|---|
 | `control_flow` | L0 | (b) | ways shown: L0 “everyday reading” |
-| `println` | L3 | (c) | ways shown: L2 “output prediction”, L3 “relation to neighbour” |
-| `statement` | L0 | (b) | ways shown: L0 “inconsistent trace” |
-| `string_literal` | L3 | (c) | ways shown: L2 “output prediction”, L3 “relation to neighbour” |
+| `println` | L2 | (c) | ways shown: L2 “output prediction” |
+| `statement` | L0 | (b) | ways shown: L0 “inconsistent trace”; answered wrong: L3 “relation to neighbour” |
+| `string_literal` | L2 | (c) | ways shown: L2 “output prediction” |
 | `switch_statement` | L0 | (a) | holds SwitchNoFallThrough |
 
 ## Stage 7. Overall level (rule, no model)

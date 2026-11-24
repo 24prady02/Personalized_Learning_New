@@ -220,14 +220,16 @@ Prune: the model's reply (edge id and score; the kept edges sum to 1):
 ```
 Kept by pruning: lvl:two_dimensional_array@L3#2 (0.45), lvl:two_dimensional_array@L0#0 (0.30), lvl:two_dimensional_array@L4#2 (0.25)
 
-Label prompt for level way lvl:two_dimensional_array@L3#2 (the model saw only the concept, the way's name 'relation to neighbour' and its text; no level):
+Label prompt for level way lvl:two_dimensional_array@L3#2 (the model saw the concept, the way's name 'relation to neighbour', its text, where the way stops and whether the words must be correct; no level):
 > Since each row is a separate array, rows may have different lengths; such arrays are ragged.
+>
+> Where this way stops: Two correct but separate rules are L1. Executing the two in sequence is L2. A relational answer may be correct or a relational error.
 
 Model's reply:
 ```
-Label: not shown
-Clauses: none
-Confidence: 0.95
+Label: wrong
+Clauses: 2, 3
+Confidence: 0.85
 ```
 
 Label prompt for level way lvl:two_dimensional_array@L0#0 (the model saw only the concept, the way's name 'everyday reading' and its text; no level):
@@ -240,22 +242,20 @@ Clauses: 2, 3
 Confidence: 0.7
 ```
 
-Label prompt for level way lvl:two_dimensional_array@L4#2 (the model saw only the concept, the way's name 'diagnose an error' and its text; no level):
+Label prompt for level way lvl:two_dimensional_array@L4#2 (the model saw the concept, the way's name 'diagnose an error', its text, where the way stops and whether the words must be correct; no level):
 > rule broken: Indices must be within each dimension (i < a.length, j < a[i].length). Kind: run-time exception. Trigger class: row and column bounds swapped in a non-square M-by-N array, or j bounded by N on a shorter ragged row (ArrayIndexOutOfBoundsException)
+>
+> Where this way stops: Locating and fixing the mistake for one given failing case is L3. A compiler-flagged slip fixed from the message is weak evidence.
 
 Model's reply:
 ```
-Label: not shown
-Clauses: none
-Confidence: 0.95
+Label: wrong
+Clauses: 2, 3
+Confidence: 0.7
 ```
 
 Parsed labels:
-| edge | label | prune score | confidence | score | clauses | words |
-|---|---|---|---|---|---|---|
-| lvl:two_dimensional_array@L3#2 | not applied |  |  | 0.0 |  |  |
-| lvl:two_dimensional_array@L0#0 | shown | 0.3 | 0.7 | 0.21 | c2, c3 | t[0].length is 3, and every row of a 2D array has the same length; so it visits three columns in every row and adds all six numbers |
-| lvl:two_dimensional_array@L4#2 | not applied |  |  | 0.0 |  |  |
+(none)
 
 #### ragged_array, misconceptions: 2 edges offered
 Edges offered:
@@ -334,14 +334,16 @@ Clauses: 2, 3
 Confidence: 0.8
 ```
 
-Label prompt for level way lvl:ragged_array@L4#2 (the model saw only the concept, the way's name 'diagnose an error' and its text; no level):
+Label prompt for level way lvl:ragged_array@L4#2 (the model saw the concept, the way's name 'diagnose an error', its text, where the way stops and whether the words must be correct; no level):
 > rule broken: Each row must be processed up to its own length. Kind: run-time exception. Trigger class: the inner loop uses N or a[0].length, and a shorter row is indexed past its end (ArrayIndexOutOfBoundsException)
+>
+> Where this way stops: Locating and fixing the mistake for one given failing case is L3. A compiler-flagged slip fixed from the message is weak evidence.
 
 Model's reply:
 ```
-Label: not shown
-Clauses: none
-Confidence: 0.93
+Label: wrong
+Clauses: 2, 3
+Confidence: 0.6
 ```
 
 Parsed labels:
@@ -349,7 +351,6 @@ Parsed labels:
 |---|---|---|---|---|---|---|
 | lvl:ragged_array@L0#0 | shown | 0.5 | 0.8 | 0.4 | c2, c3 | t[0].length is 3, and every row of a 2D array has the same length; so it visits three columns in every row and adds all six numbers |
 | lvl:ragged_array@L0#3 | shown | 0.35 | 0.8 | 0.28 | c2, c3 | t[0].length is 3, and every row of a 2D array has the same length; so it visits three columns in every row and adds all six numbers |
-| lvl:ragged_array@L4#2 | not applied |  |  | 0.0 |  |  |
 
 #### indexing, misconceptions: 8 edges offered
 Edges offered:
@@ -424,8 +425,22 @@ Prune: the model's reply (edge id and score; the kept edges sum to 1):
 ```
 Kept by pruning: lvl:indexing@L3#3 (0.45), lvl:indexing@L4#2 (0.35), lvl:indexing@L3#2 (0.20)
 
-Label prompt for level way lvl:indexing@L3#3 (the model saw only the concept, the way's name 'relation to neighbour' and its text; no level):
+Label prompt for level way lvl:indexing@L3#3 (the model saw the concept, the way's name 'relation to neighbour', its text, where the way stops and whether the words must be correct; no level):
 > a[i] on a 2-D array yields row i (itself a 1-D array), and a[i][j] then indexes into that row.
+>
+> Where this way stops: Two correct but separate rules are L1. Executing the two in sequence is L2. A relational answer may be correct or a relational error.
+
+Model's reply:
+```
+Label: wrong
+Clauses: 2, 3
+Confidence: 0.8
+```
+
+Label prompt for level way lvl:indexing@L4#2 (the model saw the concept, the way's name 'diagnose an error', its text, where the way stops and whether the words must be correct; no level):
+> rule broken: The index must be in 0..a.length-1. Kind: run-time exception. Trigger class: index < 0 or >= a.length, e.g. a[a.length], a[i+1] on the last pass, a[i-1] at i = 0, a[0] of an empty array (ArrayIndexOutOfBoundsException)
+>
+> Where this way stops: Locating and fixing the mistake for one given failing case is L3. A compiler-flagged slip fixed from the message is weak evidence.
 
 Model's reply:
 ```
@@ -434,32 +449,20 @@ Clauses: none
 Confidence: 0.6
 ```
 
-Label prompt for level way lvl:indexing@L4#2 (the model saw only the concept, the way's name 'diagnose an error' and its text; no level):
-> rule broken: The index must be in 0..a.length-1. Kind: run-time exception. Trigger class: index < 0 or >= a.length, e.g. a[a.length], a[i+1] on the last pass, a[i-1] at i = 0, a[0] of an empty array (ArrayIndexOutOfBoundsException)
-
-Model's reply:
-```
-Label: not shown
-Clauses: none
-Confidence: 0.95
-```
-
-Label prompt for level way lvl:indexing@L3#2 (the model saw only the concept, the way's name 'relation to neighbour' and its text; no level):
+Label prompt for level way lvl:indexing@L3#2 (the model saw the concept, the way's name 'relation to neighbour', its text, where the way stops and whether the words must be correct; no level):
 > Every index value is checked against 0 and a.length at run time; any other value throws.
+>
+> Where this way stops: Two correct but separate rules are L1. Executing the two in sequence is L2. A relational answer may be correct or a relational error.
 
 Model's reply:
 ```
-Label: not shown
-Clauses: none
-Confidence: 0.9
+Label: wrong
+Clauses: 2, 3
+Confidence: 0.85
 ```
 
 Parsed labels:
-| edge | label | prune score | confidence | score | clauses | words |
-|---|---|---|---|---|---|---|
-| lvl:indexing@L3#3 | not applied |  |  | 0.0 |  |  |
-| lvl:indexing@L4#2 | not applied |  |  | 0.0 |  |  |
-| lvl:indexing@L3#2 | not applied |  |  | 0.0 |  |  |
+(none)
 
 **Kept on a path at this depth** (best N in tiers: held misconception / broken edge, then held error, then correct / confirmed / shown):
 
@@ -756,13 +759,15 @@ Clauses: none
 Confidence: 0.6
 ```
 
-Label prompt for level way lvl:array_bounds@L3#0 (the model saw only the concept, the way's name 'relation to neighbour' and its text; no level):
+Label prompt for level way lvl:array_bounds@L3#0 (the model saw the concept, the way's name 'relation to neighbour', its text, where the way stops and whether the words must be correct; no level):
 > Every index value used in a[i] must satisfy 0 <= i <= a.length-1; the last element is a[a.length-1].
+>
+> Where this way stops: Two correct but separate rules are L1. Executing the two in sequence is L2. A relational answer may be correct or a relational error.
 
 Model's reply:
 ```
-Label: not shown
-Clauses: none
+Label: wrong
+Clauses: 1, 2, 3
 Confidence: 0.85
 ```
 
@@ -771,7 +776,6 @@ Parsed labels:
 |---|---|---|---|---|---|---|
 | lvl:array_bounds@L0#2 | not applied |  |  | 0.0 |  |  |
 | lvl:array_bounds@L0#0 | not applied |  |  | 0.0 |  |  |
-| lvl:array_bounds@L3#0 | not applied |  |  | 0.0 |  |  |
 
 #### array_initializer, misconceptions: 2 edges offered
 Edges offered:
@@ -912,42 +916,44 @@ Prune: the model's reply (edge id and score; the kept edges sum to 1):
 ```
 Kept by pruning: lvl:row_major_order@L4#2 (0.45), lvl:row_major_order@L4#1 (0.35), lvl:row_major_order@L3#0 (0.20)
 
-Label prompt for level way lvl:row_major_order@L4#2 (the model saw only the concept, the way's name 'diagnose an error' and its text; no level):
+Label prompt for level way lvl:row_major_order@L4#2 (the model saw the concept, the way's name 'diagnose an error', its text, where the way stops and whether the words must be correct; no level):
 > rule broken: Each loop bound must match the index it controls (i < M rows, j < N columns). Kind: run-time exception. Trigger class: after swapping the loops the bounds are not swapped with them, so in a non-square array a[i][j] gets i up to N-1 (ArrayIndexOutOfBoundsException)
+>
+> Where this way stops: Locating and fixing the mistake for one given failing case is L3. A compiler-flagged slip fixed from the message is weak evidence.
 
 Model's reply:
 ```
-Label: not shown
-Clauses: none
-Confidence: 0.9
+Label: wrong
+Clauses: 2, 3
+Confidence: 0.6
 ```
 
-Label prompt for level way lvl:row_major_order@L4#1 (the model saw only the concept, the way's name 'transfer to a new program' and its text; no level):
+Label prompt for level way lvl:row_major_order@L4#1 (the model saw the concept, the way's name 'transfer to a new program', its text, where the way stops and whether the words must be correct; no level):
 > Applicability: use row-major by default in Java (rows are arrays; printing goes line by line). Use column-major when the result is per column, and remember that ragged arrays have no full columns.
+>
+> Where this way stops: Reproducing or slightly varying a familiar program is L1 to L3.
 
 Model's reply:
 ```
-Label: not shown
-Clauses: none
-Confidence: 0.85
+Label: wrong
+Clauses: 2, 3
+Confidence: 0.6
 ```
 
-Label prompt for level way lvl:row_major_order@L3#0 (the model saw only the concept, the way's name 'relation to neighbour' and its text; no level):
+Label prompt for level way lvl:row_major_order@L3#0 (the model saw the concept, the way's name 'relation to neighbour', its text, where the way stops and whether the words must be correct; no level):
 > Because a[i] is a row array, row-major order walks along each row array in turn; column-major jumps between row arrays at each step.
+>
+> Where this way stops: Two correct but separate rules are L1. Executing the two in sequence is L2. A relational answer may be correct or a relational error.
 
 Model's reply:
 ```
-Label: not shown
-Clauses: none
+Label: wrong
+Clauses: 2, 3
 Confidence: 0.8
 ```
 
 Parsed labels:
-| edge | label | prune score | confidence | score | clauses | words |
-|---|---|---|---|---|---|---|
-| lvl:row_major_order@L4#2 | not applied |  |  | 0.0 |  |  |
-| lvl:row_major_order@L4#1 | not applied |  |  | 0.0 |  |  |
-| lvl:row_major_order@L3#0 | not applied |  |  | 0.0 |  |  |
+(none)
 
 **Kept on a path at this depth:** nothing
 
@@ -1000,6 +1006,19 @@ Root-cause walk: held on ['ragged_array'], broken at [] (consequences: pre:two_d
 |---|---|---|---|---|---|---|---|---|
 | ragged_array | L0 | misconception | RaggedRowsSameLength | level_mis_links | t[0].length is 3, and every row of a 2D array has the same length; so it visits three columns in every row and adds all six numbers | wrong rule: All rows of a 2-D array have the same length, so one N works for every row. Right rule: Rows may differ in length; use a[i].length for row i. | NoJaggedArrays |  |
 | two_dimensional_array | L0 | everyday_reading |  | level_way | t[0].length is 3, and every row of a 2D array has the same length; so it visits three columns in every row and adds all six numbers |  |  |  |
+
+Ways above L2 the model answered "wrong" (the kind of thing is done, but what is said contradicts Java; not shown):
+| concept | edge | level | way | confidence | clauses | quote |
+|---|---|---|---|---|---|---|
+| two_dimensional_array | lvl:two_dimensional_array@L3#2 | L3 | relation_to_neighbour | 0.85 | [2, 3] | t[0].length is 3, and every row of a 2D array has the same length; so it visits three columns in every row and adds all six numbers |
+| two_dimensional_array | lvl:two_dimensional_array@L4#2 | L4 | diagnose_an_error | 0.7 | [2, 3] | t[0].length is 3, and every row of a 2D array has the same length; so it visits three columns in every row and adds all six numbers |
+| ragged_array | lvl:ragged_array@L4#2 | L4 | diagnose_an_error | 0.6 | [2, 3] | t[0].length is 3, and every row of a 2D array has the same length; so it visits three columns in every row and adds all six numbers |
+| indexing | lvl:indexing@L3#3 | L3 | relation_to_neighbour | 0.8 | [2, 3] | t[0].length is 3, and every row of a 2D array has the same length; so it visits three columns in every row and adds all six numbers |
+| indexing | lvl:indexing@L3#2 | L3 | relation_to_neighbour | 0.85 | [2, 3] | t[0].length is 3, and every row of a 2D array has the same length; so it visits three columns in every row and adds all six numbers |
+| array_bounds | lvl:array_bounds@L3#0 | L3 | relation_to_neighbour | 0.85 | [1, 2, 3] | 21; t[0].length is 3, and every row of a 2D array has the same length; so it visits three columns in every row and adds all six numbers |
+| row_major_order | lvl:row_major_order@L4#2 | L4 | diagnose_an_error | 0.6 | [2, 3] | t[0].length is 3, and every row of a 2D array has the same length; so it visits three columns in every row and adds all six numbers |
+| row_major_order | lvl:row_major_order@L4#1 | L4 | transfer_to_a_new_program | 0.6 | [2, 3] | t[0].length is 3, and every row of a 2D array has the same length; so it visits three columns in every row and adds all six numbers |
+| row_major_order | lvl:row_major_order@L3#0 | L3 | relation_to_neighbour | 0.8 | [2, 3] | t[0].length is 3, and every row of a 2D array has the same length; so it visits three columns in every row and adds all six numbers |
 
 ### Overall level: L0
 
@@ -1056,8 +1075,10 @@ start concepts (3): two_dimensional_array, ragged_array, indexing
     mis:two_dimensional_array->NoJaggedArrays -> held (0.28) "t[0].length is 3, and every row of a 2D array has the same length"
     mis:two_dimensional_array->MultidimensionalArray -> correct (0.06) "t[0].length is 3, and every row of a 2D array has the same length"
   two_dimensional_array (level ways): 18 candidates -> kept lvl:two_dimensional_array@L3#2 (0.45), lvl:two_dimensional_array@L0#0 (0.30), lvl:two_dimensional_array@L4#2 (0.25)
+    lvl:two_dimensional_array@L3#2: wrong (0.85) -> not applied
     lvl:two_dimensional_array@L3#2 -> not applied (0.00) ""
     lvl:two_dimensional_array@L0#0 -> shown (0.21) "t[0].length is 3, and every row of a 2D array has the same length; so it visits three columns in every row and adds all six numbers"
+    lvl:two_dimensional_array@L4#2: wrong (0.70) -> not applied
     lvl:two_dimensional_array@L4#2 -> not applied (0.00) ""
   ragged_array (misconceptions): 2 candidates -> kept mis:ragged_array->RaggedRowsSameLength (0.60), mis:ragged_array->NoJaggedArrays (0.40)
     mis:ragged_array->RaggedRowsSameLength -> held (0.57) "t[0].length is 3, and every row of a 2D array has the same length; so it visits three columns in every row and adds all six numbers"
@@ -1065,14 +1086,17 @@ start concepts (3): two_dimensional_array, ragged_array, indexing
   ragged_array (level ways): 13 candidates -> kept lvl:ragged_array@L0#0 (0.50), lvl:ragged_array@L0#3 (0.35), lvl:ragged_array@L4#2 (0.15)
     lvl:ragged_array@L0#0 -> shown (0.40) "t[0].length is 3, and every row of a 2D array has the same length; so it visits three columns in every row and adds all six numbers"
     lvl:ragged_array@L0#3 -> shown (0.28) "t[0].length is 3, and every row of a 2D array has the same length; so it visits three columns in every row and adds all six numbers"
+    lvl:ragged_array@L4#2: wrong (0.60) -> not applied
     lvl:ragged_array@L4#2 -> not applied (0.00) ""
   indexing (misconceptions): 8 candidates -> kept mis:indexing->ArrayUseScansAllCells (0.50), mis:indexing->ArrayRangeInclusive (0.30), mis:indexing->IndexIsValue (0.20)
     mis:indexing->ArrayUseScansAllCells -> not applied (0.00) ""
     mis:indexing->ArrayRangeInclusive -> correct (0.17) "t[0].length is 3, and every row of a 2D array has the same length; so it visits three columns in every row and adds all six numbers"
     mis:indexing->IndexIsValue -> not applied (0.00) ""
   indexing (level ways): 21 candidates -> kept lvl:indexing@L3#3 (0.45), lvl:indexing@L4#2 (0.35), lvl:indexing@L3#2 (0.20)
+    lvl:indexing@L3#3: wrong (0.80) -> not applied
     lvl:indexing@L3#3 -> not applied (0.00) ""
     lvl:indexing@L4#2 -> not applied (0.00) ""
+    lvl:indexing@L3#2: wrong (0.85) -> not applied
     lvl:indexing@L3#2 -> not applied (0.00) ""
   kept: mis:ragged_array->RaggedRowsSameLength [held, tier 0, 0.57], mis:two_dimensional_array->RaggedRowsSameLength [held, tier 0, 0.47], mis:two_dimensional_array->NoJaggedArrays [held, tier 0, 0.28], mis:ragged_array->NoJaggedArrays [held, tier 0, 0.22]
   clause coverage: c1 uncovered; c2 <- mis:two_dimensional_array->RaggedRowsSameLength; c3 <- mis:two_dimensional_array->RaggedRowsSameLength
@@ -1103,6 +1127,7 @@ start concepts (3): two_dimensional_array, ragged_array, indexing
   array_bounds (level ways): 14 candidates -> kept lvl:array_bounds@L0#2 (0.50), lvl:array_bounds@L0#0 (0.30), lvl:array_bounds@L3#0 (0.20)
     lvl:array_bounds@L0#2 -> not applied (0.00) ""
     lvl:array_bounds@L0#0 -> not applied (0.00) ""
+    lvl:array_bounds@L3#0: wrong (0.85) -> not applied
     lvl:array_bounds@L3#0 -> not applied (0.00) ""
   array_initializer (misconceptions): 2 candidates -> kept mis:array_initializer->ArrayBracketCountIsLength (0.85), mis:array_initializer->ArrayInitializerContentsInBrackets (0.15)
     mis:array_initializer->ArrayBracketCountIsLength -> not applied (0.00) ""
@@ -1117,8 +1142,11 @@ start concepts (3): two_dimensional_array, ragged_array, indexing
   not yet read: own edges of row_major_order, pre:array_initializer->length_field
 --- depth 4: current concepts ['row_major_order'] (closing round: own edges only)
   row_major_order (level ways): 13 candidates -> kept lvl:row_major_order@L4#2 (0.45), lvl:row_major_order@L4#1 (0.35), lvl:row_major_order@L3#0 (0.20)
+    lvl:row_major_order@L4#2: wrong (0.60) -> not applied
     lvl:row_major_order@L4#2 -> not applied (0.00) ""
+    lvl:row_major_order@L4#1: wrong (0.60) -> not applied
     lvl:row_major_order@L4#1 -> not applied (0.00) ""
+    lvl:row_major_order@L3#0: wrong (0.80) -> not applied
     lvl:row_major_order@L3#0 -> not applied (0.00) ""
   nothing kept at this depth
   clause coverage: c1 <- pre:indexing->array_bounds; c2 <- mis:two_dimensional_array->RaggedRowsSameLength; c3 <- mis:two_dimensional_array->RaggedRowsSameLength
@@ -1139,7 +1167,8 @@ start concepts (3): two_dimensional_array, ragged_array, indexing
   "depth": 3,
   "prune_tools": "llm",
   "model": "claude-opus-5-5",
-  "backend": "claude-cli"
+  "backend": "claude-cli",
+  "level_v2": true
  },
  "clauses": [
   "21",
@@ -1707,6 +1736,120 @@ start concepts (3): two_dimensional_array, ragged_array, indexing
  "llm_calls_by_step": {
   "prune": 16,
   "label": 31
+ },
+ "level_v2": {
+  "wrong_ways": [
+   {
+    "concept": "two_dimensional_array",
+    "edge": "lvl:two_dimensional_array@L3#2",
+    "level": "L3",
+    "way": "relation_to_neighbour",
+    "clauses": [
+     2,
+     3
+    ],
+    "quote": "t[0].length is 3, and every row of a 2D array has the same length; so it visits three columns in every row and adds all six numbers",
+    "confidence": 0.85
+   },
+   {
+    "concept": "two_dimensional_array",
+    "edge": "lvl:two_dimensional_array@L4#2",
+    "level": "L4",
+    "way": "diagnose_an_error",
+    "clauses": [
+     2,
+     3
+    ],
+    "quote": "t[0].length is 3, and every row of a 2D array has the same length; so it visits three columns in every row and adds all six numbers",
+    "confidence": 0.7
+   },
+   {
+    "concept": "ragged_array",
+    "edge": "lvl:ragged_array@L4#2",
+    "level": "L4",
+    "way": "diagnose_an_error",
+    "clauses": [
+     2,
+     3
+    ],
+    "quote": "t[0].length is 3, and every row of a 2D array has the same length; so it visits three columns in every row and adds all six numbers",
+    "confidence": 0.6
+   },
+   {
+    "concept": "indexing",
+    "edge": "lvl:indexing@L3#3",
+    "level": "L3",
+    "way": "relation_to_neighbour",
+    "clauses": [
+     2,
+     3
+    ],
+    "quote": "t[0].length is 3, and every row of a 2D array has the same length; so it visits three columns in every row and adds all six numbers",
+    "confidence": 0.8
+   },
+   {
+    "concept": "indexing",
+    "edge": "lvl:indexing@L3#2",
+    "level": "L3",
+    "way": "relation_to_neighbour",
+    "clauses": [
+     2,
+     3
+    ],
+    "quote": "t[0].length is 3, and every row of a 2D array has the same length; so it visits three columns in every row and adds all six numbers",
+    "confidence": 0.85
+   },
+   {
+    "concept": "array_bounds",
+    "edge": "lvl:array_bounds@L3#0",
+    "level": "L3",
+    "way": "relation_to_neighbour",
+    "clauses": [
+     1,
+     2,
+     3
+    ],
+    "quote": "21; t[0].length is 3, and every row of a 2D array has the same length; so it visits three columns in every row and adds all six numbers",
+    "confidence": 0.85
+   },
+   {
+    "concept": "row_major_order",
+    "edge": "lvl:row_major_order@L4#2",
+    "level": "L4",
+    "way": "diagnose_an_error",
+    "clauses": [
+     2,
+     3
+    ],
+    "quote": "t[0].length is 3, and every row of a 2D array has the same length; so it visits three columns in every row and adds all six numbers",
+    "confidence": 0.6
+   },
+   {
+    "concept": "row_major_order",
+    "edge": "lvl:row_major_order@L4#1",
+    "level": "L4",
+    "way": "transfer_to_a_new_program",
+    "clauses": [
+     2,
+     3
+    ],
+    "quote": "t[0].length is 3, and every row of a 2D array has the same length; so it visits three columns in every row and adds all six numbers",
+    "confidence": 0.6
+   },
+   {
+    "concept": "row_major_order",
+    "edge": "lvl:row_major_order@L3#0",
+    "level": "L3",
+    "way": "relation_to_neighbour",
+    "clauses": [
+     2,
+     3
+    ],
+    "quote": "t[0].length is 3, and every row of a 2D array has the same length; so it visits three columns in every row and adds all six numbers",
+    "confidence": 0.8
+   }
+  ],
+  "not_counted": []
  }
 }
 ```

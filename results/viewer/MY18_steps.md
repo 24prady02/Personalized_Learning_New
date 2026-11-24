@@ -217,32 +217,34 @@ Clauses: 2, 3, 4
 Confidence: 0.9
 ```
 
-Label prompt for level way lvl:array_traversal@L4#3 (the model saw only the concept, the way's name 'diagnose an error' and its text; no level):
+Label prompt for level way lvl:array_traversal@L4#3 (the model saw the concept, the way's name 'diagnose an error', its text, where the way stops and whether the words must be correct; no level):
 > rule broken: The guard must be i < a.length. Kind: run-time exception. Trigger class: i <= a.length (or a body that reads a[i+1]) makes the last pass index a.length (ArrayIndexOutOfBoundsException)
+>
+> Where this way stops: Locating and fixing the mistake for one given failing case is L3. A compiler-flagged slip fixed from the message is weak evidence.
 
 Model's reply:
 ```
-Label: not shown
-Clauses: none
-Confidence: 0.95
+Label: wrong
+Clauses: 2, 3, 4
+Confidence: 0.85
 ```
 
-Label prompt for level way lvl:array_traversal@L3#2 (the model saw only the concept, the way's name 'relation to neighbour' and its text; no level):
+Label prompt for level way lvl:array_traversal@L3#2 (the model saw the concept, the way's name 'relation to neighbour', its text, where the way stops and whether the words must be correct; no level):
 > for (int i = 0; i < a.length; i++) gives i every valid index exactly once, in increasing order; the bound must be < a.length, not <=.
+>
+> Where this way stops: Two correct but separate rules are L1. Executing the two in sequence is L2. A relational answer may be correct or a relational error.
 
 Model's reply:
 ```
-Label: not shown
-Clauses: none
-Confidence: 0.95
+Label: wrong
+Clauses: 2, 3
+Confidence: 0.85
 ```
 
 Parsed labels:
 | edge | label | prune score | confidence | score | clauses | words |
 |---|---|---|---|---|---|---|
 | lvl:array_traversal@L0#0 | shown | 0.5 | 0.9 | 0.45 | c2, c3, c4 | Using <= or < makes no difference here; because both go through the whole array; so it visits each element once |
-| lvl:array_traversal@L4#3 | not applied |  |  | 0.0 |  |  |
-| lvl:array_traversal@L3#2 | not applied |  |  | 0.0 |  |  |
 
 #### loop_control, misconceptions: 11 edges offered
 Edges offered:
@@ -318,24 +320,28 @@ Prune: the model's reply (edge id and score; the kept edges sum to 1):
 ```
 Kept by pruning: lvl:loop_control@L4#0 (0.45), lvl:loop_control@L3#5 (0.30), lvl:loop_control@L2#1 (0.25)
 
-Label prompt for level way lvl:loop_control@L4#0 (the model saw only the concept, the way's name 'predict a change' and its text; no level):
+Label prompt for level way lvl:loop_control@L4#0 (the model saw the concept, the way's name 'predict a change', its text, where the way stops and whether the words must be correct; no level):
 > Changing < to <= adds one pass; starting at 1 instead of 0 removes one; doubling the step halves the passes; reversing init and bound with i-- visits the same values in reverse order (and still processes the same set only if both ends are adjusted).
+>
+> Where this way stops: Re-tracing the changed code value by value is L2 on the new code. Adapting given code to a familiar variant may be only relational.
 
 Model's reply:
 ```
-Label: not shown
-Clauses: none
-Confidence: 0.93
+Label: wrong
+Clauses: 2, 3
+Confidence: 0.85
 ```
 
-Label prompt for level way lvl:loop_control@L3#5 (the model saw only the concept, the way's name 'relation to neighbour' and its text; no level):
+Label prompt for level way lvl:loop_control@L3#5 (the model saw the concept, the way's name 'relation to neighbour', its text, where the way stops and whether the words must be correct; no level):
 > The initialization and the condition of a loop fix how many times it runs; one wrong bound makes it run once too many or too few.
+>
+> Where this way stops: Two correct but separate rules are L1. Executing the two in sequence is L2. A relational answer may be correct or a relational error.
 
 Model's reply:
 ```
-Label: not shown
-Clauses: none
-Confidence: 0.9
+Label: wrong
+Clauses: 1, 2, 3, 4
+Confidence: 0.85
 ```
 
 Label prompt for level way lvl:loop_control@L2#1 (the model saw only the concept, the way's name 'output prediction' and its text; no level):
@@ -349,11 +355,7 @@ Confidence: 0.8
 ```
 
 Parsed labels:
-| edge | label | prune score | confidence | score | clauses | words |
-|---|---|---|---|---|---|---|
-| lvl:loop_control@L4#0 | not applied |  |  | 0.0 |  |  |
-| lvl:loop_control@L3#5 | not applied |  |  | 0.0 |  |  |
-| lvl:loop_control@L2#1 | not applied |  |  | 0.0 |  |  |
+(none)
 
 #### for_loop, misconceptions: 21 edges offered
 Edges offered:
@@ -444,42 +446,44 @@ Prune: the model's reply (edge id and score; the kept edges sum to 1):
 ```
 Kept by pruning: lvl:for_loop@L4#5 (0.40), lvl:for_loop@L4#0 (0.35), lvl:for_loop@L3#2 (0.25)
 
-Label prompt for level way lvl:for_loop@L4#5 (the model saw only the concept, the way's name 'diagnose an error' and its text; no level):
+Label prompt for level way lvl:for_loop@L4#5 (the model saw the concept, the way's name 'diagnose an error', its text, where the way stops and whether the words must be correct; no level):
 > rule broken: The number of passes is fixed by the init, the test and the update together. Kind: silent logic error. Trigger class: Wrong start value, < vs <=, a wrong step, or an extra update of the counter in the body (or outside the loop): the loop runs too few or too many passes (off by one, or skips values).
+>
+> Where this way stops: Locating and fixing the mistake for one given failing case is L3. A compiler-flagged slip fixed from the message is weak evidence.
 
 Model's reply:
 ```
-Label: not shown
-Clauses: none
-Confidence: 0.92
+Label: wrong
+Clauses: 2, 3, 4
+Confidence: 0.85
 ```
 
-Label prompt for level way lvl:for_loop@L4#0 (the model saw only the concept, the way's name 'predict a change' and its text; no level):
+Label prompt for level way lvl:for_loop@L4#0 (the model saw the concept, the way's name 'predict a change', its text, where the way stops and whether the words must be correct; no level):
 > Rewriting a for as the equivalent while (init before, update at the end of the body) keeps behaviour, except that continue then skips the update and the loop variable stays in scope after the loop. Changing the bound or the step changes the pass count predictably (< to <= adds one pass).
+>
+> Where this way stops: Re-tracing the changed code value by value is L2 on the new code. Adapting given code to a familiar variant may be only relational.
 
 Model's reply:
 ```
-Label: not shown
-Clauses: none
-Confidence: 0.93
+Label: wrong
+Clauses: 2, 3
+Confidence: 0.85
 ```
 
-Label prompt for level way lvl:for_loop@L3#2 (the model saw only the concept, the way's name 'relation to neighbour' and its text; no level):
+Label prompt for level way lvl:for_loop@L3#2 (the model saw the concept, the way's name 'relation to neighbour', its text, where the way stops and whether the words must be correct; no level):
 > for (int i = 0; i < N; i++) gives i each valid index 0..N-1 exactly once in increasing order, the standard way to process every array element.
+>
+> Where this way stops: Two correct but separate rules are L1. Executing the two in sequence is L2. A relational answer may be correct or a relational error.
 
 Model's reply:
 ```
-Label: not shown
-Clauses: none
+Label: wrong
+Clauses: 2, 3, 4
 Confidence: 0.85
 ```
 
 Parsed labels:
-| edge | label | prune score | confidence | score | clauses | words |
-|---|---|---|---|---|---|---|
-| lvl:for_loop@L4#5 | not applied |  |  | 0.0 |  |  |
-| lvl:for_loop@L4#0 | not applied |  |  | 0.0 |  |  |
-| lvl:for_loop@L3#2 | not applied |  |  | 0.0 |  |  |
+(none)
 
 **Kept on a path at this depth** (best N in tiers: held misconception / broken edge, then held error, then correct / confirmed / shown):
 
@@ -747,14 +751,16 @@ Clauses: 2, 3
 Confidence: 0.7
 ```
 
-Label prompt for level way lvl:off_by_one_error@L4#0 (the model saw only the concept, the way's name 'predict a change' and its text; no level):
+Label prompt for level way lvl:off_by_one_error@L4#0 (the model saw the concept, the way's name 'predict a change', its text, where the way stops and whether the words must be correct; no level):
 > Conservation: changing < to <= adds exactly one pass; starting at 1 instead of 0 removes exactly one; both keep the loop otherwise the same.
+>
+> Where this way stops: Re-tracing the changed code value by value is L2 on the new code. Adapting given code to a familiar variant may be only relational.
 
 Model's reply:
 ```
-Label: not shown
-Clauses: none
-Confidence: 0.95
+Label: wrong
+Clauses: 2, 3
+Confidence: 0.85
 ```
 
 Label prompt for level way lvl:off_by_one_error@L0#0 (the model saw only the concept, the way's name 'everyday reading' and its text; no level):
@@ -771,8 +777,6 @@ Parsed labels:
 | edge | label | prune score | confidence | score | clauses | words |
 |---|---|---|---|---|---|---|
 | lvl:off_by_one_error@L0#2 | shown | 0.5 | 0.7 | 0.35 | c2, c3 | Using <= or < makes no difference here; because both go through the whole array |
-| lvl:off_by_one_error@L4#0 | not applied |  |  | 0.0 |  |  |
-| lvl:off_by_one_error@L0#0 | shown | 0.25 | 0.7 | 0.17 | c1, c2, c3 | i goes from 0 to a.length; Using <= or < makes no difference here; because both go through the whole array |
 
 #### loop_control, concept edges: 1 edges offered
 Edges offered:
@@ -873,14 +877,16 @@ Clauses: 1, 2, 3
 Confidence: 0.7
 ```
 
-Label prompt for level way lvl:length_field@L4#4 (the model saw only the concept, the way's name 'diagnose an error' and its text; no level):
+Label prompt for level way lvl:length_field@L4#4 (the model saw the concept, the way's name 'diagnose an error', its text, where the way stops and whether the words must be correct; no level):
 > rule broken: The last valid index is a.length-1. Kind: run-time exception. Trigger class: a[a.length] or a loop with i <= a.length (ArrayIndexOutOfBoundsException)
+>
+> Where this way stops: Locating and fixing the mistake for one given failing case is L3. A compiler-flagged slip fixed from the message is weak evidence.
 
 Model's reply:
 ```
-Label: not shown
-Clauses: none
-Confidence: 0.95
+Label: wrong
+Clauses: 1, 2, 3, 4
+Confidence: 0.8
 ```
 
 Label prompt for level way lvl:length_field@L0#0 (the model saw only the concept, the way's name 'everyday reading' and its text; no level):
@@ -897,8 +903,6 @@ Parsed labels:
 | edge | label | prune score | confidence | score | clauses | words |
 |---|---|---|---|---|---|---|
 | lvl:length_field@L0#2 | shown | 0.45 | 0.7 | 0.32 | c1, c2, c3 | i goes from 0 to a.length; Using <= or < makes no difference here; because both go through the whole array |
-| lvl:length_field@L4#4 | not applied |  |  | 0.0 |  |  |
-| lvl:length_field@L0#0 | shown | 0.2 | 0.72 | 0.14 | c1, c2, c3 | i goes from 0 to a.length; Using <= or < makes no difference here; because both go through the whole array |
 
 #### array_traversal, concept edges: 1 edges offered
 Edges offered:
@@ -1054,14 +1058,16 @@ Clauses: 1, 2, 3
 Confidence: 0.6
 ```
 
-Label prompt for level way lvl:loop_variable@L3#0 (the model saw only the concept, the way's name 'relation to neighbour' and its text; no level):
+Label prompt for level way lvl:loop_variable@L3#0 (the model saw the concept, the way's name 'relation to neighbour', its text, where the way stops and whether the words must be correct; no level):
 > The init, condition and update all act on the loop variable: the init sets it, the condition tests it, the update changes it.
+>
+> Where this way stops: Two correct but separate rules are L1. Executing the two in sequence is L2. A relational answer may be correct or a relational error.
 
 Model's reply:
 ```
-Label: shown
-Clauses: 1
-Confidence: 0.55
+Label: wrong
+Clauses: 1, 2, 3
+Confidence: 0.8
 ```
 
 Parsed labels:
@@ -1069,7 +1075,6 @@ Parsed labels:
 |---|---|---|---|---|---|---|
 | lvl:loop_variable@L2#1 | shown | 0.45 | 0.6 | 0.27 | c1 | i goes from 0 to a.length |
 | lvl:loop_variable@L0#0 | shown | 0.3 | 0.6 | 0.18 | c1, c2, c3 | i goes from 0 to a.length; Using <= or < makes no difference here; because both go through the whole array |
-| lvl:loop_variable@L3#0 | shown | 0.25 | 0.55 | 0.14 | c1 | i goes from 0 to a.length |
 
 **Kept on a path at this depth** (best N in tiers: held misconception / broken edge, then held error, then correct / confirmed / shown):
 
@@ -1164,24 +1169,28 @@ Prune: the model's reply (edge id and score; the kept edges sum to 1):
 ```
 Kept by pruning: lvl:indexing@L4#2 (0.40), lvl:indexing@L3#6 (0.35), lvl:indexing@L1#1 (0.25)
 
-Label prompt for level way lvl:indexing@L4#2 (the model saw only the concept, the way's name 'diagnose an error' and its text; no level):
+Label prompt for level way lvl:indexing@L4#2 (the model saw the concept, the way's name 'diagnose an error', its text, where the way stops and whether the words must be correct; no level):
 > rule broken: The index must be in 0..a.length-1. Kind: run-time exception. Trigger class: index < 0 or >= a.length, e.g. a[a.length], a[i+1] on the last pass, a[i-1] at i = 0, a[0] of an empty array (ArrayIndexOutOfBoundsException)
+>
+> Where this way stops: Locating and fixing the mistake for one given failing case is L3. A compiler-flagged slip fixed from the message is weak evidence.
 
 Model's reply:
 ```
-Label: not shown
-Clauses: none
-Confidence: 0.95
+Label: wrong
+Clauses: 2, 3
+Confidence: 0.75
 ```
 
-Label prompt for level way lvl:indexing@L3#6 (the model saw only the concept, the way's name 'relation to neighbour' and its text; no level):
+Label prompt for level way lvl:indexing@L3#6 (the model saw the concept, the way's name 'relation to neighbour', its text, where the way stops and whether the words must be correct; no level):
 > Indices start at 0, so the last element is a[N-1]; misreading this convention is the usual source of off-by-one errors.
+>
+> Where this way stops: Two correct but separate rules are L1. Executing the two in sequence is L2. A relational answer may be correct or a relational error.
 
 Model's reply:
 ```
-Label: not shown
-Clauses: none
-Confidence: 0.9
+Label: wrong
+Clauses: 2, 3
+Confidence: 0.8
 ```
 
 Label prompt for level way lvl:indexing@L1#1 (the model saw only the concept, the way's name 'states the rule' and its text; no level):
@@ -1195,11 +1204,7 @@ Confidence: 0.93
 ```
 
 Parsed labels:
-| edge | label | prune score | confidence | score | clauses | words |
-|---|---|---|---|---|---|---|
-| lvl:indexing@L4#2 | not applied |  |  | 0.0 |  |  |
-| lvl:indexing@L3#6 | not applied |  |  | 0.0 |  |  |
-| lvl:indexing@L1#1 | not applied |  |  | 0.0 |  |  |
+(none)
 
 **Kept on a path at this depth** (best N in tiers: held misconception / broken edge, then held error, then correct / confirmed / shown):
 
@@ -1228,10 +1233,10 @@ Root-cause walk: held on ['for_loop', 'indexing', 'loop_control'], broken at [] 
 - indexing: L0 via misconception "i goes from 0 to a.length; Using <= or < makes no difference here; because both go through the whole array"
 - length_field: L0 via inconsistent_trace "i goes from 0 to a.length; Using <= or < makes no difference here; because both go through the whole array"
 - loop_control: L0 via misconception "i goes from 0 to a.length; Using <= or < makes no difference here; because both go through the whole array"
-- loop_variable: L3 via relation_to_neighbour "i goes from 0 to a.length"
+- loop_variable: L2 via output_prediction "i goes from 0 to a.length"
 - off_by_one_error: L0 via misconception "i goes from 0 to a.length; Using <= or < makes no difference here; because both go through the whole array; so it visits each element once"
 
-**Stop:** max depth at depth 4; prompts {'prune': 20, 'label': 40}, fresh model calls 5, cache hits 55
+**Stop:** max depth at depth 4; prompts {'prune': 20, 'label': 40}, fresh model calls 0, cache hits 60
 
 ### Held misconceptions
 | concept | misconception | kind | quote | score | shares_evidence_with |
@@ -1264,8 +1269,24 @@ Root-cause walk: held on ['for_loop', 'indexing', 'loop_control'], broken at [] 
 | indexing | L0 | misconception | ArrayRangeInclusive | level_mis_links | i goes from 0 to a.length; Using <= or < makes no difference here; because both go through the whole array | wrong rule: new int[n] has slots 0 to n, inclusive. Right rule: The slots are 0 to n - 1. |  |  |
 | length_field | L0 | inconsistent_trace |  | level_way | i goes from 0 to a.length; Using <= or < makes no difference here; because both go through the whole array |  | L0 everyday_reading |  |
 | loop_control | L0 | misconception | OffByOneBound | level_mis_links | i goes from 0 to a.length; Using <= or < makes no difference here; because both go through the whole array | wrong rule: < vs <= and 0..n vs 0..n-1 are interchangeable. Right rule: for (i = 0; i < n; i++) runs n times with i going up to n - 1; with <= it runs n + 1 times and reaches i = n. |  |  |
-| loop_variable | L3 | relation_to_neighbour |  | level_way | i goes from 0 to a.length |  | L2 output_prediction, L0 everyday_reading |  |
+| loop_variable | L2 | output_prediction |  | level_way | i goes from 0 to a.length |  | L0 everyday_reading |  |
 | off_by_one_error | L0 | misconception | OffByOneBound | level_mis_links | i goes from 0 to a.length; Using <= or < makes no difference here; because both go through the whole array; so it visits each element once | wrong rule: < and <= (and 0..n versus 0..n-1) are interchangeable in a loop bound. Right rule: i < N runs N times from 0 and i <= N runs N+1 times; with an array of length N only i < N stays inside the indices 0..N-1. |  |  |
+
+Ways above L2 the model answered "wrong" (the kind of thing is done, but what is said contradicts Java; not shown):
+| concept | edge | level | way | confidence | clauses | quote |
+|---|---|---|---|---|---|---|
+| array_traversal | lvl:array_traversal@L4#3 | L4 | diagnose_an_error | 0.85 | [2, 3, 4] | Using <= or < makes no difference here; because both go through the whole array; so it visits each element once |
+| array_traversal | lvl:array_traversal@L3#2 | L3 | relation_to_neighbour | 0.85 | [2, 3] | Using <= or < makes no difference here; because both go through the whole array |
+| loop_control | lvl:loop_control@L4#0 | L4 | predict_a_change | 0.85 | [2, 3] | Using <= or < makes no difference here; because both go through the whole array |
+| loop_control | lvl:loop_control@L3#5 | L3 | relation_to_neighbour | 0.85 | [1, 2, 3, 4] | i goes from 0 to a.length; Using <= or < makes no difference here; because both go through the whole array; so it visits each element once |
+| for_loop | lvl:for_loop@L4#5 | L4 | diagnose_an_error | 0.85 | [2, 3, 4] | Using <= or < makes no difference here; because both go through the whole array; so it visits each element once |
+| for_loop | lvl:for_loop@L4#0 | L4 | predict_a_change | 0.85 | [2, 3] | Using <= or < makes no difference here; because both go through the whole array |
+| for_loop | lvl:for_loop@L3#2 | L3 | relation_to_neighbour | 0.85 | [2, 3, 4] | Using <= or < makes no difference here; because both go through the whole array; so it visits each element once |
+| off_by_one_error | lvl:off_by_one_error@L4#0 | L4 | predict_a_change | 0.85 | [2, 3] | Using <= or < makes no difference here; because both go through the whole array |
+| length_field | lvl:length_field@L4#4 | L4 | diagnose_an_error | 0.8 | [1, 2, 3, 4] | i goes from 0 to a.length; Using <= or < makes no difference here; because both go through the whole array; so it visits each element once |
+| loop_variable | lvl:loop_variable@L3#0 | L3 | relation_to_neighbour | 0.8 | [1, 2, 3] | i goes from 0 to a.length; Using <= or < makes no difference here; because both go through the whole array |
+| indexing | lvl:indexing@L4#2 | L4 | diagnose_an_error | 0.75 | [2, 3] | Using <= or < makes no difference here; because both go through the whole array |
+| indexing | lvl:indexing@L3#6 | L3 | relation_to_neighbour | 0.8 | [2, 3] | Using <= or < makes no difference here; because both go through the whole array |
 
 ### Overall level: L0
 
@@ -1303,7 +1324,6 @@ Figure 8 (final picture): C:\Users\magnu\OneDrive\Desktop\ES_VIterbi_Personalize
 | 3 | loop_variable | mis:loop_variable->LoopOutputSameEachPass | misconception | correct | 0.35 | 0.75 | 0.2625 | [4] | so it visits each element once |
 | 3 | loop_variable | lvl:loop_variable@L2#1 | level | shown | 0.45 | 0.6 | 0.27 | [1] | i goes from 0 to a.length |
 | 3 | loop_variable | lvl:loop_variable@L0#0 | level | shown | 0.3 | 0.6 | 0.18 | [1, 2, 3] | i goes from 0 to a.length; Using <= or < makes no difference here; because both go through the whole array |
-| 3 | loop_variable | lvl:loop_variable@L3#0 | level | shown | 0.25 | 0.55 | 0.1375 | [1] | i goes from 0 to a.length |
 | 4 | indexing | mis:indexing->ArrayRangeInclusive | misconception | held | 0.7 | 0.9 | 0.63 | [1, 2, 3] | i goes from 0 to a.length; Using <= or < makes no difference here; because both go through the whole array |
 
 ## 6. The paths (what the keep step kept, depth by depth)
@@ -1337,14 +1357,18 @@ start concepts (3): array_traversal, loop_control, for_loop
     mis:array_traversal->ArrayUseScansAllCells -> not applied (0.00) ""
   array_traversal (level ways): 22 candidates -> kept lvl:array_traversal@L0#0 (0.50), lvl:array_traversal@L4#3 (0.30), lvl:array_traversal@L3#2 (0.20)
     lvl:array_traversal@L0#0 -> shown (0.45) "Using <= or < makes no difference here; because both go through the whole array; so it visits each element once"
+    lvl:array_traversal@L4#3: wrong (0.85) -> not applied
     lvl:array_traversal@L4#3 -> not applied (0.00) ""
+    lvl:array_traversal@L3#2: wrong (0.85) -> not applied
     lvl:array_traversal@L3#2 -> not applied (0.00) ""
   loop_control (misconceptions): 11 candidates -> kept mis:loop_control->OffByOneBound (0.60), mis:loop_control->IdiomOverridesCode (0.25), err:loop_control->WrongIterationCount (0.15)
     mis:loop_control->OffByOneBound -> held (0.55) "i goes from 0 to a.length; Using <= or < makes no difference here; because both go through the whole array"
     mis:loop_control->IdiomOverridesCode -> held (0.19) "because both go through the whole array; so it visits each element once"
     err:loop_control->WrongIterationCount -> not applied (0.00) ""
   loop_control (level ways): 19 candidates -> kept lvl:loop_control@L4#0 (0.45), lvl:loop_control@L3#5 (0.30), lvl:loop_control@L2#1 (0.25)
+    lvl:loop_control@L4#0: wrong (0.85) -> not applied
     lvl:loop_control@L4#0 -> not applied (0.00) ""
+    lvl:loop_control@L3#5: wrong (0.85) -> not applied
     lvl:loop_control@L3#5 -> not applied (0.00) ""
     lvl:loop_control@L2#1 -> not applied (0.00) ""
   for_loop (misconceptions): 21 candidates -> kept mis:for_loop->IdiomOverridesCode (0.60), err:for_loop->WrongIterationCount (0.30), mis:for_loop->LoopHeaderIsEquations (0.10)
@@ -1352,8 +1376,11 @@ start concepts (3): array_traversal, loop_control, for_loop
     err:for_loop->WrongIterationCount -> not applied (0.00) ""
     mis:for_loop->LoopHeaderIsEquations -> not applied (0.00) ""
   for_loop (level ways): 24 candidates -> kept lvl:for_loop@L4#5 (0.40), lvl:for_loop@L4#0 (0.35), lvl:for_loop@L3#2 (0.25)
+    lvl:for_loop@L4#5: wrong (0.85) -> not applied
     lvl:for_loop@L4#5 -> not applied (0.00) ""
+    lvl:for_loop@L4#0: wrong (0.85) -> not applied
     lvl:for_loop@L4#0 -> not applied (0.00) ""
+    lvl:for_loop@L3#2: wrong (0.85) -> not applied
     lvl:for_loop@L3#2 -> not applied (0.00) ""
   kept: mis:array_traversal->OffByOneBound [held, tier 0, 0.57], mis:loop_control->OffByOneBound [held, tier 0, 0.55], mis:for_loop->IdiomOverridesCode [held, tier 0, 0.54], mis:loop_control->IdiomOverridesCode [held, tier 0, 0.19]
   clause coverage: c1 <- mis:array_traversal->OffByOneBound; c2 <- mis:array_traversal->OffByOneBound; c3 <- mis:array_traversal->OffByOneBound; c4 <- mis:array_traversal->OffByOneBound
@@ -1383,6 +1410,7 @@ start concepts (3): array_traversal, loop_control, for_loop
     mis:off_by_one_error->DoubleLoopIndexCount -> not applied (0.00) ""
   off_by_one_error (level ways): 16 candidates -> kept lvl:off_by_one_error@L0#2 (0.50), lvl:off_by_one_error@L4#0 (0.25), lvl:off_by_one_error@L0#0 (0.25)
     lvl:off_by_one_error@L0#2 -> shown (0.35) "Using <= or < makes no difference here; because both go through the whole array"
+    lvl:off_by_one_error@L4#0: wrong (0.85) -> not applied
     lvl:off_by_one_error@L4#0 -> not applied (0.00) ""
     lvl:off_by_one_error@L0#0 -> shown (0.17) "i goes from 0 to a.length; Using <= or < makes no difference here; because both go through the whole array"
   loop_control (concept edges): 1 candidates -> kept pre:loop_control->increment_operators (1.00)
@@ -1392,6 +1420,7 @@ start concepts (3): array_traversal, loop_control, for_loop
     mis:length_field->ArrayLengthCannotBeZero -> not applied (0.00) ""
   length_field (level ways): 15 candidates -> kept lvl:length_field@L0#2 (0.45), lvl:length_field@L4#4 (0.35), lvl:length_field@L0#0 (0.20)
     lvl:length_field@L0#2 -> shown (0.32) "i goes from 0 to a.length; Using <= or < makes no difference here; because both go through the whole array"
+    lvl:length_field@L4#4: wrong (0.80) -> not applied
     lvl:length_field@L4#4 -> not applied (0.00) ""
     lvl:length_field@L0#0 -> shown (0.14) "i goes from 0 to a.length; Using <= or < makes no difference here; because both go through the whole array"
   array_traversal (concept edges): 1 candidates -> kept pre:indexing->array_traversal (1.00)
@@ -1406,7 +1435,8 @@ start concepts (3): array_traversal, loop_control, for_loop
   loop_variable (level ways): 13 candidates -> kept lvl:loop_variable@L2#1 (0.45), lvl:loop_variable@L0#0 (0.30), lvl:loop_variable@L3#0 (0.25)
     lvl:loop_variable@L2#1 -> shown (0.27) "i goes from 0 to a.length"
     lvl:loop_variable@L0#0 -> shown (0.18) "i goes from 0 to a.length; Using <= or < makes no difference here; because both go through the whole array"
-    lvl:loop_variable@L3#0 -> shown (0.14) "i goes from 0 to a.length"
+    lvl:loop_variable@L3#0: wrong (0.80) -> not applied
+    lvl:loop_variable@L3#0 -> not applied (0.00) ""
   kept: mis:off_by_one_error->OffByOneBound [held, tier 0, 0.67], pre:indexing->array_traversal [confirmed, tier 2, 0.60], lvl:off_by_one_error@L0#2 [shown, tier 2, 0.35]
   reached across pre:indexing->array_traversal, entered next: indexing
   clause coverage: c1 <- mis:array_traversal->OffByOneBound; c2 <- mis:array_traversal->OffByOneBound; c3 <- mis:array_traversal->OffByOneBound; c4 <- mis:array_traversal->OffByOneBound
@@ -1417,7 +1447,9 @@ start concepts (3): array_traversal, loop_control, for_loop
     mis:indexing->ArrayIndexStartsAtOne -> not applied (0.00) ""
     mis:indexing->ArrayUseScansAllCells -> not applied (0.00) ""
   indexing (level ways): 21 candidates -> kept lvl:indexing@L4#2 (0.40), lvl:indexing@L3#6 (0.35), lvl:indexing@L1#1 (0.25)
+    lvl:indexing@L4#2: wrong (0.75) -> not applied
     lvl:indexing@L4#2 -> not applied (0.00) ""
+    lvl:indexing@L3#6: wrong (0.80) -> not applied
     lvl:indexing@L3#6 -> not applied (0.00) ""
     lvl:indexing@L1#1 -> not applied (0.00) ""
   kept: mis:indexing->ArrayRangeInclusive [held, tier 0, 0.63]
@@ -1431,7 +1463,7 @@ start concepts (3): array_traversal, loop_control, for_loop
   level indexing: L0 via misconception "i goes from 0 to a.length; Using <= or < makes no difference here; because both go through the whole array"
   level length_field: L0 via inconsistent_trace "i goes from 0 to a.length; Using <= or < makes no difference here; because both go through the whole array"
   level loop_control: L0 via misconception "i goes from 0 to a.length; Using <= or < makes no difference here; because both go through the whole array"
-  level loop_variable: L3 via relation_to_neighbour "i goes from 0 to a.length"
+  level loop_variable: L2 via output_prediction "i goes from 0 to a.length"
   level off_by_one_error: L0 via misconception "i goes from 0 to a.length; Using <= or < makes no difference here; because both go through the whole array; so it visits each element once"
 ```
 
@@ -1444,7 +1476,8 @@ start concepts (3): array_traversal, loop_control, for_loop
   "depth": 3,
   "prune_tools": "llm",
   "model": "claude-opus-5-5",
-  "backend": "claude-cli"
+  "backend": "claude-cli",
+  "level_v2": true
  },
  "clauses": [
   "i goes from 0 to a.length",
@@ -1574,13 +1607,12 @@ start concepts (3): array_traversal, loop_control, for_loop
    "source": "level_mis_links"
   },
   "loop_variable": {
-   "level": "L3",
-   "way": "relation_to_neighbour",
+   "level": "L2",
+   "way": "output_prediction",
    "quote": "i goes from 0 to a.length",
-   "edge": "lvl:loop_variable@L3#0",
+   "edge": "lvl:loop_variable@L2#1",
    "source": "level_way",
    "also_shown": [
-    "L2 output_prediction",
     "L0 everyday_reading"
    ]
   },
@@ -2275,25 +2307,6 @@ start concepts (3): array_traversal, loop_control, for_loop
    "way": "everyday_reading"
   },
   {
-   "depth": 3,
-   "source": "loop_variable",
-   "edge": "lvl:loop_variable@L3#0",
-   "target": "loop_variable@L3",
-   "kind": "level",
-   "label": "shown",
-   "clauses": [
-    1
-   ],
-   "quote": "i goes from 0 to a.length",
-   "confidence": 0.55,
-   "prune_score": 0.25,
-   "score": 0.1375,
-   "logic": "The init, condition and update all act on the loop variable: the init sets it, the condition tests it, the update changes it.",
-   "twin_logic": null,
-   "level": "L3",
-   "way": "relation_to_neighbour"
-  },
-  {
    "depth": 4,
    "source": "indexing",
    "edge": "mis:indexing->ArrayRangeInclusive",
@@ -2323,11 +2336,168 @@ start concepts (3): array_traversal, loop_control, for_loop
  "unexplained_clauses": [],
  "stop_reason": "max depth",
  "depth_reached": 4,
- "llm_calls": 5,
- "llm_cache_hits": 55,
+ "llm_calls": 0,
+ "llm_cache_hits": 60,
  "llm_calls_by_step": {
   "prune": 20,
   "label": 40
+ },
+ "level_v2": {
+  "wrong_ways": [
+   {
+    "concept": "array_traversal",
+    "edge": "lvl:array_traversal@L4#3",
+    "level": "L4",
+    "way": "diagnose_an_error",
+    "clauses": [
+     2,
+     3,
+     4
+    ],
+    "quote": "Using <= or < makes no difference here; because both go through the whole array; so it visits each element once",
+    "confidence": 0.85
+   },
+   {
+    "concept": "array_traversal",
+    "edge": "lvl:array_traversal@L3#2",
+    "level": "L3",
+    "way": "relation_to_neighbour",
+    "clauses": [
+     2,
+     3
+    ],
+    "quote": "Using <= or < makes no difference here; because both go through the whole array",
+    "confidence": 0.85
+   },
+   {
+    "concept": "loop_control",
+    "edge": "lvl:loop_control@L4#0",
+    "level": "L4",
+    "way": "predict_a_change",
+    "clauses": [
+     2,
+     3
+    ],
+    "quote": "Using <= or < makes no difference here; because both go through the whole array",
+    "confidence": 0.85
+   },
+   {
+    "concept": "loop_control",
+    "edge": "lvl:loop_control@L3#5",
+    "level": "L3",
+    "way": "relation_to_neighbour",
+    "clauses": [
+     1,
+     2,
+     3,
+     4
+    ],
+    "quote": "i goes from 0 to a.length; Using <= or < makes no difference here; because both go through the whole array; so it visits each element once",
+    "confidence": 0.85
+   },
+   {
+    "concept": "for_loop",
+    "edge": "lvl:for_loop@L4#5",
+    "level": "L4",
+    "way": "diagnose_an_error",
+    "clauses": [
+     2,
+     3,
+     4
+    ],
+    "quote": "Using <= or < makes no difference here; because both go through the whole array; so it visits each element once",
+    "confidence": 0.85
+   },
+   {
+    "concept": "for_loop",
+    "edge": "lvl:for_loop@L4#0",
+    "level": "L4",
+    "way": "predict_a_change",
+    "clauses": [
+     2,
+     3
+    ],
+    "quote": "Using <= or < makes no difference here; because both go through the whole array",
+    "confidence": 0.85
+   },
+   {
+    "concept": "for_loop",
+    "edge": "lvl:for_loop@L3#2",
+    "level": "L3",
+    "way": "relation_to_neighbour",
+    "clauses": [
+     2,
+     3,
+     4
+    ],
+    "quote": "Using <= or < makes no difference here; because both go through the whole array; so it visits each element once",
+    "confidence": 0.85
+   },
+   {
+    "concept": "off_by_one_error",
+    "edge": "lvl:off_by_one_error@L4#0",
+    "level": "L4",
+    "way": "predict_a_change",
+    "clauses": [
+     2,
+     3
+    ],
+    "quote": "Using <= or < makes no difference here; because both go through the whole array",
+    "confidence": 0.85
+   },
+   {
+    "concept": "length_field",
+    "edge": "lvl:length_field@L4#4",
+    "level": "L4",
+    "way": "diagnose_an_error",
+    "clauses": [
+     1,
+     2,
+     3,
+     4
+    ],
+    "quote": "i goes from 0 to a.length; Using <= or < makes no difference here; because both go through the whole array; so it visits each element once",
+    "confidence": 0.8
+   },
+   {
+    "concept": "loop_variable",
+    "edge": "lvl:loop_variable@L3#0",
+    "level": "L3",
+    "way": "relation_to_neighbour",
+    "clauses": [
+     1,
+     2,
+     3
+    ],
+    "quote": "i goes from 0 to a.length; Using <= or < makes no difference here; because both go through the whole array",
+    "confidence": 0.8
+   },
+   {
+    "concept": "indexing",
+    "edge": "lvl:indexing@L4#2",
+    "level": "L4",
+    "way": "diagnose_an_error",
+    "clauses": [
+     2,
+     3
+    ],
+    "quote": "Using <= or < makes no difference here; because both go through the whole array",
+    "confidence": 0.75
+   },
+   {
+    "concept": "indexing",
+    "edge": "lvl:indexing@L3#6",
+    "level": "L3",
+    "way": "relation_to_neighbour",
+    "clauses": [
+     2,
+     3
+    ],
+    "quote": "Using <= or < makes no difference here; because both go through the whole array",
+    "confidence": 0.8
+   }
+  ],
+  "not_counted": []
  }
 }
 ```

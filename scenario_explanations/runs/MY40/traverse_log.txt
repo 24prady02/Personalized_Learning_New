@@ -8,6 +8,7 @@ start concepts (3): arithmetic_operators, compound_assignment, println
     mis:arithmetic_operators->CaretIsPower -> not applied (0.00) ""
     mis:arithmetic_operators->ArithmeticOnNumericStrings -> not applied (0.00) ""
   arithmetic_operators (level ways): 18 candidates -> kept lvl:arithmetic_operators@L3#4 (0.40), lvl:arithmetic_operators@L2#1 (0.35), lvl:arithmetic_operators@L0#0 (0.25)
+    lvl:arithmetic_operators@L3#4: wrong (0.60) -> not applied
     lvl:arithmetic_operators@L3#4 -> not applied (0.00) ""
     lvl:arithmetic_operators@L2#1 -> not applied (0.00) ""
     lvl:arithmetic_operators@L0#0 -> not applied (0.00) ""
@@ -44,6 +45,7 @@ start concepts (3): arithmetic_operators, compound_assignment, println
     mis:math_random->RandomCanReturnOne -> not applied (0.00) ""
   math_random (level ways): 16 candidates -> kept lvl:math_random@L0#0 (0.60), lvl:math_random@L3#2 (0.25), lvl:math_random@L4#0 (0.15)
     lvl:math_random@L0#0 -> shown (0.51) "5; so in 10 steps the surfer goes there exactly 5 times"
+    lvl:math_random@L3#2: wrong (0.80) -> not applied
     lvl:math_random@L3#2 -> not applied (0.00) ""
     lvl:math_random@L4#0 -> not applied (0.00) ""
   loop_control (misconceptions): 11 candidates -> kept err:loop_control->WrongIterationCount (0.45), mis:loop_control->OffByOneBound (0.30), mis:loop_control->IdiomOverridesCode (0.25)
@@ -52,13 +54,15 @@ start concepts (3): arithmetic_operators, compound_assignment, println
     mis:loop_control->IdiomOverridesCode -> not applied (0.00) ""
   loop_control (level ways): 19 candidates -> kept lvl:loop_control@L2#1 (0.45), lvl:loop_control@L3#6 (0.30), lvl:loop_control@L4#2 (0.25)
     lvl:loop_control@L2#1 -> not applied (0.00) ""
-    lvl:loop_control@L3#6 -> shown (0.18) "so in 10 steps the surfer goes there exactly 5 times"
+    lvl:loop_control@L3#6: wrong (0.75) -> not applied
+    lvl:loop_control@L3#6 -> not applied (0.00) ""
     lvl:loop_control@L4#2 -> not applied (0.00) ""
   frequency_counting (misconceptions): 2 candidates -> kept mis:frequency_counting->FewTrialsAreExact (0.90), mis:frequency_counting->ManyDigitsMeanAccurate (0.10)
     mis:frequency_counting->FewTrialsAreExact -> held (0.83) "5; Page 1 has probability 0.5; so in 10 steps the surfer goes there exactly 5 times"
     mis:frequency_counting->ManyDigitsMeanAccurate -> not applied (0.00) ""
   frequency_counting (level ways): 14 candidates -> kept lvl:frequency_counting@L0#3 (0.50), lvl:frequency_counting@L3#1 (0.30), lvl:frequency_counting@L1#1 (0.20)
     lvl:frequency_counting@L0#3 -> shown (0.28) "5; so in 10 steps the surfer goes there exactly 5 times"
+    lvl:frequency_counting@L3#1: wrong (0.80) -> not applied
     lvl:frequency_counting@L3#1 -> not applied (0.00) ""
     lvl:frequency_counting@L1#1 -> not applied (0.00) ""
   kept: mis:frequency_counting->FewTrialsAreExact [held, tier 0, 0.83], mis:math_random->ProbabilityIsPrediction [held, tier 0, 0.81], lvl:math_random@L0#0 [shown, tier 2, 0.51]
@@ -85,8 +89,10 @@ start concepts (3): arithmetic_operators, compound_assignment, println
     err:math_library->WrongArgumentType -> not applied (0.00) ""
     err:math_library->MathMethodWithoutClassName -> not applied (0.00) ""
   math_library (level ways): 20 candidates -> kept lvl:math_library@L3#3 (0.40), lvl:math_library@L2#2 (0.35), lvl:math_library@L3#6 (0.25)
+    lvl:math_library@L3#3: wrong (0.60) -> not applied
     lvl:math_library@L3#3 -> not applied (0.00) ""
     lvl:math_library@L2#2 -> not applied (0.00) ""
+    lvl:math_library@L3#6: wrong (0.55) -> not applied
     lvl:math_library@L3#6 -> not applied (0.00) ""
   counter_pattern (misconceptions): 2 candidates -> kept mis:counter_pattern->VariableRolesInferred (0.60), err:counter_pattern->AccumulatorDeclaredInLoop (0.40)
     mis:counter_pattern->VariableRolesInferred -> not applied (0.00) ""
@@ -100,15 +106,16 @@ start concepts (3): arithmetic_operators, compound_assignment, println
     mis:for_loop->LoopCountIsStatementCount -> not applied (0.00) ""
     mis:for_loop->ForIsConditional -> correct (0.13) "so in 10 steps the surfer goes there exactly 5 times"
   for_loop (level ways): 24 candidates -> kept lvl:for_loop@L3#3 (0.45), lvl:for_loop@L3#8 (0.35), lvl:for_loop@L2#1 (0.20)
-    lvl:for_loop@L3#3 -> shown (0.27) "so in 10 steps the surfer goes there exactly 5 times"
-    lvl:for_loop@L3#8 -> shown (0.23) "so in 10 steps the surfer goes there exactly 5 times"
+    lvl:for_loop@L3#3: wrong (0.60) -> not applied
+    lvl:for_loop@L3#3 -> not applied (0.00) ""
+    lvl:for_loop@L3#8: wrong (0.60) -> not applied
+    lvl:for_loop@L3#8 -> not applied (0.00) ""
     lvl:for_loop@L2#1 -> shown (0.12) "5; so in 10 steps the surfer goes there exactly 5 times"
-  kept: err:for_loop->WrongIterationCount [correct, tier 2, 0.38], lvl:for_loop@L3#3 [shown, tier 2, 0.27], lvl:for_loop@L3#8 [shown, tier 2, 0.23]
+  kept: err:for_loop->WrongIterationCount [correct, tier 2, 0.38], mis:for_loop->ForIsConditional [correct, tier 2, 0.13], lvl:for_loop@L2#1 [shown, tier 2, 0.12]
   clause coverage: c1 <- mis:math_random->ProbabilityIsPrediction; c2 <- mis:math_random->ProbabilityIsPrediction; c3 <- mis:math_random->ProbabilityIsPrediction
   not yet read: par:accumulator_pattern~counter_pattern, pre:for_loop->loop_body, pre:for_loop->loop_scope, pre:for_loop->nested_loops, pre:increment_operators->counter_pattern, pre:loop_body->counter_pattern, pre:method_call->math_library
   root-cause walk: held on ['frequency_counting', 'math_random'], broken at [] (consequences: pre:math_library->math_random), prerequisites {'expression': ['arithmetic_operators'], 'array_default_values': ['array_creation'], 'array_initializer': ['array_creation', 'array_declaration'], 'indexing': ['array_creation', 'array_initializer'], 'array_creation': ['array_declaration'], 'compound_assignment': ['assignment'], 'increment_operators': ['assignment', 'loop_control'], 'while_loop': ['boolean_expression'], 'boolean_expression': ['comparison_operators'], 'accumulator_pattern': ['compound_assignment', 'loop_body'], 'frequency_counting': ['counter_pattern'], 'array_declaration': ['data_structure'], 'data_structure': ['data_type'], 'comparison_operators': ['expression'], 'method_call': ['expression'], 'loop_body': ['for_loop', 'while_loop'], 'loop_scope': ['for_loop'], 'nested_loops': ['for_loop'], 'counter_pattern': ['increment_operators', 'loop_body'], 'for_loop': ['loop_control'], 'loop_control': ['loop_variable', 'while_loop'], 'math_random': ['math_library'], 'api': ['method_call'], 'math_library': ['method_call'], 'control_flow': ['statement'], 'println': ['statement'], 'loop_variable': ['while_loop']}
-  level for_loop: L3 via relation_to_neighbour "so in 10 steps the surfer goes there exactly 5 times"
+  level for_loop: L2 via output_prediction "5; so in 10 steps the surfer goes there exactly 5 times"
   level frequency_counting: L0 via misconception "5; Page 1 has probability 0.5; so in 10 steps the surfer goes there exactly 5 times"
-  level loop_control: L3 via purpose_of_the_whole "so in 10 steps the surfer goes there exactly 5 times"
   level math_random: L0 via misconception "5; Page 1 has probability 0.5; so in 10 steps the surfer goes there exactly 5 times"
   level println: L2 via output_prediction "5"

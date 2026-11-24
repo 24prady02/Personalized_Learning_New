@@ -360,13 +360,15 @@ Prune: the model's reply (edge id and score; the kept edges sum to 1):
 ```
 Kept by pruning: lvl:arithmetic_operators@L4#0 (0.45), lvl:arithmetic_operators@L2#0 (0.30), lvl:arithmetic_operators@L2#1 (0.25)
 
-Label prompt for level way lvl:arithmetic_operators@L4#0 (the model saw only the concept, the way's name 'predict a change' and its text; no level):
+Label prompt for level way lvl:arithmetic_operators@L4#0 (the model saw the concept, the way's name 'predict a change', its text, where the way stops and whether the words must be correct; no level):
 > Changing an operand's type changes the operator's meaning (int / versus double /). Reordering * and / changes integer results (59 * 100 / 60 is 98, 59 / 60 * 100 is 0). Replacing ^ with Math.pow gives a real power.
+>
+> Where this way stops: Re-tracing the changed code value by value is L2 on the new code. Adapting given code to a familiar variant may be only relational.
 
 Model's reply:
 ```
-Label: shown
-Clauses: 3, 4, 5
+Label: not shown
+Clauses: none
 Confidence: 0.6
 ```
 
@@ -393,7 +395,7 @@ Confidence: 0.85
 Parsed labels:
 | edge | label | prune score | confidence | score | clauses | words |
 |---|---|---|---|---|---|---|
-| lvl:arithmetic_operators@L4#0 | shown | 0.45 | 0.6 | 0.27 | c3, c4, c5 | the cast comes first; so the division is a decimal one; so 7 / 2 is 3.5 |
+| lvl:arithmetic_operators@L4#0 | not applied |  |  | 0.0 |  |  |
 | lvl:arithmetic_operators@L2#0 | not applied |  |  | 0.0 |  |  |
 | lvl:arithmetic_operators@L2#1 | not applied |  |  | 0.0 |  |  |
 
@@ -585,24 +587,28 @@ Prune: the model's reply (edge id and score; the kept edges sum to 1):
 ```
 Kept by pruning: lvl:expression@L3#2 (0.45), lvl:expression@L3#1 (0.35), lvl:expression@L2#0 (0.20)
 
-Label prompt for level way lvl:expression@L3#2 (the model saw only the concept, the way's name 'relation to neighbour' and its text; no level):
+Label prompt for level way lvl:expression@L3#2 (the model saw the concept, the way's name 'relation to neighbour', its text, where the way stops and whether the words must be correct; no level):
 > With several operators, precedence and left associativity decide the grouping, and parentheses override both.
+>
+> Where this way stops: Two correct but separate rules are L1. Executing the two in sequence is L2. A relational answer may be correct or a relational error.
 
 Model's reply:
 ```
-Label: not shown
-Clauses: none
-Confidence: 0.75
+Label: wrong
+Clauses: 3, 4, 5
+Confidence: 0.9
 ```
 
-Label prompt for level way lvl:expression@L3#1 (the model saw only the concept, the way's name 'relation to neighbour' and its text; no level):
+Label prompt for level way lvl:expression@L3#1 (the model saw the concept, the way's name 'relation to neighbour', its text, where the way stops and whether the words must be correct; no level):
 > Operators combine operand values into a new value, and the operand types choose the operation (int / truncates, double / does not).
+>
+> Where this way stops: Two correct but separate rules are L1. Executing the two in sequence is L2. A relational answer may be correct or a relational error.
 
 Model's reply:
 ```
-Label: shown
-Clauses: 4, 5
-Confidence: 0.6
+Label: wrong
+Clauses: 3, 4, 5
+Confidence: 0.85
 ```
 
 Label prompt for level way lvl:expression@L2#0 (the model saw only the concept, the way's name 'line by line trace' and its text; no level):
@@ -616,11 +622,7 @@ Confidence: 0.85
 ```
 
 Parsed labels:
-| edge | label | prune score | confidence | score | clauses | words |
-|---|---|---|---|---|---|---|
-| lvl:expression@L3#2 | not applied |  |  | 0.0 |  |  |
-| lvl:expression@L3#1 | shown | 0.35 | 0.6 | 0.21 | c4, c5 | so the division is a decimal one; so 7 / 2 is 3.5 |
-| lvl:expression@L2#0 | not applied |  |  | 0.0 |  |  |
+(none)
 
 #### type_conversion, misconceptions: 3 edges offered
 Edges offered:
@@ -699,32 +701,34 @@ Clauses: none
 Confidence: 0.85
 ```
 
-Label prompt for level way lvl:type_conversion@L4#3 (the model saw only the concept, the way's name 'diagnose an error' and its text; no level):
+Label prompt for level way lvl:type_conversion@L4#3 (the model saw the concept, the way's name 'diagnose an error', its text, where the way stops and whether the words must be correct; no level):
 > rule broken: Promotion happens per operator, after an int division has already truncated. Kind: silent logic error. Trigger class: All-int division inside a double formula, e.g. double y = 1 / 3; or (9/5) * c + 32.
+>
+> Where this way stops: Locating and fixing the mistake for one given failing case is L3. A compiler-flagged slip fixed from the message is weak evidence.
 
 Model's reply:
 ```
-Label: not shown
-Clauses: none
-Confidence: 0.93
+Label: wrong
+Clauses: 3, 4, 5
+Confidence: 0.8
 ```
 
-Label prompt for level way lvl:type_conversion@L4#0 (the model saw only the concept, the way's name 'predict a change' and its text; no level):
+Label prompt for level way lvl:type_conversion@L4#0 (the model saw the concept, the way's name 'predict a change', its text, where the way stops and whether the words must be correct; no level):
 > Moving the point of conversion changes the result: (double) (a / b) differs from (double) a / b, and (int) 11 * 0.3 differs from (int) (11 * 0.3). Widening int to double and back is reversible for int values; narrowing double to int loses the fraction irreversibly.
+>
+> Where this way stops: Re-tracing the changed code value by value is L2 on the new code. Adapting given code to a familiar variant may be only relational.
 
 Model's reply:
 ```
 Label: not shown
 Clauses: none
-Confidence: 0.85
+Confidence: 0.75
 ```
 
 Parsed labels:
 | edge | label | prune score | confidence | score | clauses | words |
 |---|---|---|---|---|---|---|
 | lvl:type_conversion@L2#0 | not applied |  |  | 0.0 |  |  |
-| lvl:type_conversion@L4#3 | not applied |  |  | 0.0 |  |  |
-| lvl:type_conversion@L4#0 | not applied |  |  | 0.0 |  |  |
 
 #### println, misconceptions: 6 edges offered
 Edges offered:
@@ -1137,14 +1141,16 @@ Clauses: none
 Confidence: 0.8
 ```
 
-Label prompt for level way lvl:primitive_type@L3#4 (the model saw only the concept, the way's name 'relation to neighbour' and its text; no level):
+Label prompt for level way lvl:primitive_type@L3#4 (the model saw the concept, the way's name 'relation to neighbour', its text, where the way stops and whether the words must be correct; no level):
 > double is the 64-bit IEEE 754 primitive. Once a double meets an integral operand in a binary operator, the whole operation becomes floating point.
+>
+> Where this way stops: Two correct but separate rules are L1. Executing the two in sequence is L2. A relational answer may be correct or a relational error.
 
 Model's reply:
 ```
-Label: shown
-Clauses: 4, 5
-Confidence: 0.6
+Label: wrong
+Clauses: 3, 4, 5
+Confidence: 0.85
 ```
 
 Label prompt for level way lvl:primitive_type@L2#0 (the model saw only the concept, the way's name 'line by line trace' and its text; no level):
@@ -1161,12 +1167,8 @@ Parsed labels:
 | edge | label | prune score | confidence | score | clauses | words |
 |---|---|---|---|---|---|---|
 | lvl:primitive_type@L0#2 | not applied |  |  | 0.0 |  |  |
-| lvl:primitive_type@L3#4 | shown | 0.3 | 0.6 | 0.18 | c4, c5 | so the division is a decimal one; so 7 / 2 is 3.5 |
-| lvl:primitive_type@L2#0 | not applied |  |  | 0.0 |  |  |
 
-**Kept on a path at this depth** (best N in tiers: held misconception / broken edge, then held error, then correct / confirmed / shown):
-
-lvl:primitive_type@L3#4 [shown, tier 2, 0.18]
+**Kept on a path at this depth:** nothing
 
 **Clause coverage after this depth:**
 | clause | text | covered by |
@@ -1187,13 +1189,10 @@ Shadows (a held label on a prerequisite, on a generic concept, or at a concept w
 
 ## 4. Diagnosis (rules over the labelled graph, no model)
 Root-cause walk: held on ['explicit_cast'], broken at [] (consequences: pre:arithmetic_operators->integer_division, pre:integer_division->explicit_cast, pre:arithmetic_operators->expression, pre:primitive_type->type_conversion), prerequisites {'expression': ['arithmetic_operators'], 'integer_division': ['arithmetic_operators'], 'explicit_cast': ['integer_division', 'type_conversion'], 'type_conversion': ['primitive_type'], 'println': ['statement']}
-- arithmetic_operators: L4 via predict_a_change "the cast comes first; so the division is a decimal one; so 7 / 2 is 3.5"
 - explicit_cast: L0 via misconception "the cast comes first; so the division is a decimal one; so 7 / 2 is 3.5"
-- expression: L3 via relation_to_neighbour "so the division is a decimal one; so 7 / 2 is 3.5"
 - integer_division: L0 via inconsistent_trace "the cast comes first; so the division is a decimal one; so 7 / 2 is 3.5"
-- primitive_type: L3 via relation_to_neighbour "so the division is a decimal one; so 7 / 2 is 3.5"
 
-**Stop:** half_stop at depth 4; prompts {'prune': 22, 'label': 39}, fresh model calls 7, cache hits 54
+**Stop:** half_stop at depth 4; prompts {'prune': 22, 'label': 39}, fresh model calls 0, cache hits 61
 
 ### Held misconceptions
 | concept | misconception | kind | quote | score | shares_evidence_with |
@@ -1220,11 +1219,16 @@ Root-cause walk: held on ['explicit_cast'], broken at [] (consequences: pre:arit
 ### Level per concept
 | concept | level | way | misconception | source | quote | rule | also | note |
 |---|---|---|---|---|---|---|---|---|
-| arithmetic_operators | L4 | predict_a_change |  | level_way | the cast comes first; so the division is a decimal one; so 7 / 2 is 3.5 |  |  |  |
 | explicit_cast | L0 | misconception | CastAfterIntDivision | level_mis_links | the cast comes first; so the division is a decimal one; so 7 / 2 is 3.5 | wrong rule: (double) (3 / 5) is 0.6. Right rule: The integer division 3 / 5 = 0 happens inside the parentheses before the cast, so the result is 0.0; write (double) 3 / 5 to get 0.6. |  |  |
-| expression | L3 | relation_to_neighbour |  | level_way | so the division is a decimal one; so 7 / 2 is 3.5 |  |  |  |
 | integer_division | L0 | inconsistent_trace |  | level_way | the cast comes first; so the division is a decimal one; so 7 / 2 is 3.5 |  |  |  |
-| primitive_type | L3 | relation_to_neighbour |  | level_way | so the division is a decimal one; so 7 / 2 is 3.5 |  |  |  |
+
+Ways above L2 the model answered "wrong" (the kind of thing is done, but what is said contradicts Java; not shown):
+| concept | edge | level | way | confidence | clauses | quote |
+|---|---|---|---|---|---|---|
+| expression | lvl:expression@L3#2 | L3 | relation_to_neighbour | 0.9 | [3, 4, 5] | the cast comes first; so the division is a decimal one; so 7 / 2 is 3.5 |
+| expression | lvl:expression@L3#1 | L3 | relation_to_neighbour | 0.85 | [3, 4, 5] | the cast comes first; so the division is a decimal one; so 7 / 2 is 3.5 |
+| type_conversion | lvl:type_conversion@L4#3 | L4 | diagnose_an_error | 0.8 | [3, 4, 5] | the cast comes first; so the division is a decimal one; so 7 / 2 is 3.5 |
+| primitive_type | lvl:primitive_type@L3#4 | L3 | relation_to_neighbour | 0.85 | [3, 4, 5] | the cast comes first; so the division is a decimal one; so 7 / 2 is 3.5 |
 
 ### Overall level: L0
 
@@ -1246,15 +1250,12 @@ Figure 8 (final picture): C:\Users\magnu\OneDrive\Desktop\ES_VIterbi_Personalize
 | 1 | explicit_cast | lvl:explicit_cast@L0#0 | level | shown | 0.2 | 0.7 | 0.14 | [3, 4, 5] | the cast comes first; so the division is a decimal one; so 7 / 2 is 3.5 |
 | 1 | integer_division | mis:integer_division->CastAfterIntDivision | misconception | held | 0.6 | 0.93 | 0.558 | [3, 4, 5] | the cast comes first; so the division is a decimal one; so 7 / 2 is 3.5 |
 | 1 | integer_division | lvl:integer_division@L0#4 | level | shown | 0.5 | 0.6 | 0.3 | [3, 4, 5] | the cast comes first; so the division is a decimal one; so 7 / 2 is 3.5 |
-| 1 | arithmetic_operators | lvl:arithmetic_operators@L4#0 | level | shown | 0.45 | 0.6 | 0.27 | [3, 4, 5] | the cast comes first; so the division is a decimal one; so 7 / 2 is 3.5 |
 | 2 | explicit_cast | pre:integer_division->explicit_cast | prerequisite | broken | 0.8 | 0.9 | 0.72 | [3, 4, 5] | the cast comes first; so the division is a decimal one; so 7 / 2 is 3.5 |
 | 2 | integer_division | pre:arithmetic_operators->integer_division | prerequisite | broken | 1.0 | 0.9 | 0.9 | [4, 5] | so the division is a decimal one; so 7 / 2 is 3.5 |
 | 2 | arithmetic_operators | pre:arithmetic_operators->expression | prerequisite | broken | 1.0 | 0.7 | 0.7 | [3, 4, 5] | the cast comes first; so the division is a decimal one; so 7 / 2 is 3.5 |
 | 2 | expression | mis:expression->OutsideInMethodNesting | misconception | held | 0.35 | 0.8 | 0.28 | [3, 4, 5] | the cast comes first; so the division is a decimal one; so 7 / 2 is 3.5 |
-| 2 | expression | lvl:expression@L3#1 | level | shown | 0.35 | 0.6 | 0.21 | [4, 5] | so the division is a decimal one; so 7 / 2 is 3.5 |
 | 2 | type_conversion | mis:type_conversion->TargetTyping | misconception | held | 0.8 | 0.6 | 0.48 | [3, 4, 5] | the cast comes first; so the division is a decimal one; so 7 / 2 is 3.5 |
 | 3 | type_conversion | pre:primitive_type->type_conversion | prerequisite | broken | 1.0 | 0.6 | 0.6 | [3, 4, 5] | the cast comes first; so the division is a decimal one; so 7 / 2 is 3.5 |
-| 4 | primitive_type | lvl:primitive_type@L3#4 | level | shown | 0.3 | 0.6 | 0.18 | [4, 5] | so the division is a decimal one; so 7 / 2 is 3.5 |
 
 ## 6. The paths (what the keep step kept, depth by depth)
 | depth | source | edge | kind | label | score | clauses |
@@ -1268,7 +1269,6 @@ Figure 8 (final picture): C:\Users\magnu\OneDrive\Desktop\ES_VIterbi_Personalize
 | 2 | type_conversion | mis:type_conversion->TargetTyping | misconception | held | 0.48 | [3, 4, 5] |
 | 2 | expression | mis:expression->OutsideInMethodNesting | misconception | held | 0.28 | [3, 4, 5] |
 | 3 | type_conversion | pre:primitive_type->type_conversion | prerequisite | broken | 0.6 | [3, 4, 5] |
-| 4 | primitive_type | lvl:primitive_type@L3#4 | level | shown | 0.18 | [4, 5] |
 
 ## 7. Raw traversal log
 ```
@@ -1299,7 +1299,7 @@ start concepts (3): explicit_cast, integer_division, arithmetic_operators
     mis:arithmetic_operators->CaretIsPower -> not applied (0.00) ""
     mis:arithmetic_operators->ArithmeticOnNumericStrings -> not applied (0.00) ""
   arithmetic_operators (level ways): 18 candidates -> kept lvl:arithmetic_operators@L4#0 (0.45), lvl:arithmetic_operators@L2#0 (0.30), lvl:arithmetic_operators@L2#1 (0.25)
-    lvl:arithmetic_operators@L4#0 -> shown (0.27) "the cast comes first; so the division is a decimal one; so 7 / 2 is 3.5"
+    lvl:arithmetic_operators@L4#0 -> not applied (0.00) ""
     lvl:arithmetic_operators@L2#0 -> not applied (0.00) ""
     lvl:arithmetic_operators@L2#1 -> not applied (0.00) ""
   kept: mis:explicit_cast->CastAfterIntDivision [held, tier 0, 0.65], mis:integer_division->CastAfterIntDivision [held, tier 0, 0.56], lvl:integer_division@L0#4 [shown, tier 2, 0.30]
@@ -1319,8 +1319,10 @@ start concepts (3): explicit_cast, integer_division, arithmetic_operators
     mis:expression->OutsideInMethodNesting -> held (0.28) "the cast comes first; so the division is a decimal one; so 7 / 2 is 3.5"
     mis:expression->AssignmentIsEquation -> not applied (0.00) ""
   expression (level ways): 19 candidates -> kept lvl:expression@L3#2 (0.45), lvl:expression@L3#1 (0.35), lvl:expression@L2#0 (0.20)
+    lvl:expression@L3#2: wrong (0.90) -> not applied
     lvl:expression@L3#2 -> not applied (0.00) ""
-    lvl:expression@L3#1 -> shown (0.21) "so the division is a decimal one; so 7 / 2 is 3.5"
+    lvl:expression@L3#1: wrong (0.85) -> not applied
+    lvl:expression@L3#1 -> not applied (0.00) ""
     lvl:expression@L2#0 -> not applied (0.00) ""
   type_conversion (misconceptions): 3 candidates -> kept mis:type_conversion->TargetTyping (0.80), mis:type_conversion->NarrowingAssignmentAllowed (0.10), mis:type_conversion->NoCastIfSameSize (0.10)
     mis:type_conversion->TargetTyping -> held (0.48) "the cast comes first; so the division is a decimal one; so 7 / 2 is 3.5"
@@ -1328,6 +1330,7 @@ start concepts (3): explicit_cast, integer_division, arithmetic_operators
     mis:type_conversion->NoCastIfSameSize -> not applied (0.00) ""
   type_conversion (level ways): 18 candidates -> kept lvl:type_conversion@L2#0 (0.40), lvl:type_conversion@L4#3 (0.35), lvl:type_conversion@L4#0 (0.25)
     lvl:type_conversion@L2#0 -> not applied (0.00) ""
+    lvl:type_conversion@L4#3: wrong (0.80) -> not applied
     lvl:type_conversion@L4#3 -> not applied (0.00) ""
     lvl:type_conversion@L4#0 -> not applied (0.00) ""
   println (misconceptions): 6 candidates -> kept mis:println->PrintNewLineFirst (0.40), mis:println->PrintEqualsPrintln (0.30), mis:println->PrintedTextIsExecuted (0.30)
@@ -1367,19 +1370,17 @@ start concepts (3): explicit_cast, integer_division, arithmetic_operators
     mis:primitive_type->NewArrayHoldsGarbage -> not applied (0.00) ""
   primitive_type (level ways): 21 candidates -> kept lvl:primitive_type@L0#2 (0.45), lvl:primitive_type@L3#4 (0.30), lvl:primitive_type@L2#0 (0.25)
     lvl:primitive_type@L0#2 -> not applied (0.00) ""
-    lvl:primitive_type@L3#4 -> shown (0.18) "so the division is a decimal one; so 7 / 2 is 3.5"
+    lvl:primitive_type@L3#4: wrong (0.85) -> not applied
+    lvl:primitive_type@L3#4 -> not applied (0.00) ""
     lvl:primitive_type@L2#0 -> not applied (0.00) ""
-  kept: lvl:primitive_type@L3#4 [shown, tier 2, 0.18]
+  nothing kept at this depth
   clause coverage: c1 uncovered; c2 uncovered; c3 <- mis:explicit_cast->CastAfterIntDivision; c4 <- mis:explicit_cast->CastAfterIntDivision; c5 <- mis:explicit_cast->CastAfterIntDivision
   no next nodes -> half_stop
   held: mis:explicit_cast->CastAfterIntDivision, mis:type_conversion->TargetTyping, mis:expression->OutsideInMethodNesting; filed at the dependent concept: mis:integer_division->CastAfterIntDivision
   shadows: mis:expression->OutsideInMethodNesting (shadow of mis:type_conversion->TargetTyping), mis:type_conversion->TargetTyping (shadow of mis:explicit_cast->CastAfterIntDivision), mis:integer_division->CastAfterIntDivision (shadow of mis:explicit_cast->CastAfterIntDivision)
   root-cause walk: held on ['explicit_cast'], broken at [] (consequences: pre:arithmetic_operators->integer_division, pre:integer_division->explicit_cast, pre:arithmetic_operators->expression, pre:primitive_type->type_conversion), prerequisites {'expression': ['arithmetic_operators'], 'integer_division': ['arithmetic_operators'], 'explicit_cast': ['integer_division', 'type_conversion'], 'type_conversion': ['primitive_type'], 'println': ['statement']}
-  level arithmetic_operators: L4 via predict_a_change "the cast comes first; so the division is a decimal one; so 7 / 2 is 3.5"
   level explicit_cast: L0 via misconception "the cast comes first; so the division is a decimal one; so 7 / 2 is 3.5"
-  level expression: L3 via relation_to_neighbour "so the division is a decimal one; so 7 / 2 is 3.5"
   level integer_division: L0 via inconsistent_trace "the cast comes first; so the division is a decimal one; so 7 / 2 is 3.5"
-  level primitive_type: L3 via relation_to_neighbour "so the division is a decimal one; so 7 / 2 is 3.5"
 ```
 
 ## 8. Full diagnosis JSON
@@ -1391,7 +1392,8 @@ start concepts (3): explicit_cast, integer_division, arithmetic_operators
   "depth": 3,
   "prune_tools": "llm",
   "model": "claude-opus-5-5",
-  "backend": "claude-cli"
+  "backend": "claude-cli",
+  "level_v2": true
  },
  "clauses": [
   "In double avg = (double)",
@@ -1469,14 +1471,6 @@ start concepts (3): explicit_cast, integer_division, arithmetic_operators
   "misconception": "CastAfterIntDivision"
  },
  "levels": {
-  "arithmetic_operators": {
-   "level": "L4",
-   "way": "predict_a_change",
-   "quote": "the cast comes first; so the division is a decimal one; so 7 / 2 is 3.5",
-   "edge": "lvl:arithmetic_operators@L4#0",
-   "source": "level_way",
-   "also_shown": []
-  },
   "explicit_cast": {
    "level": "L0",
    "way": "misconception",
@@ -1486,27 +1480,11 @@ start concepts (3): explicit_cast, integer_division, arithmetic_operators
    "rule": "wrong rule: (double) (3 / 5) is 0.6. Right rule: The integer division 3 / 5 = 0 happens inside the parentheses before the cast, so the result is 0.0; write (double) 3 / 5 to get 0.6.",
    "source": "level_mis_links"
   },
-  "expression": {
-   "level": "L3",
-   "way": "relation_to_neighbour",
-   "quote": "so the division is a decimal one; so 7 / 2 is 3.5",
-   "edge": "lvl:expression@L3#1",
-   "source": "level_way",
-   "also_shown": []
-  },
   "integer_division": {
    "level": "L0",
    "way": "inconsistent_trace",
    "quote": "the cast comes first; so the division is a decimal one; so 7 / 2 is 3.5",
    "edge": "lvl:integer_division@L0#4",
-   "source": "level_way",
-   "also_shown": []
-  },
-  "primitive_type": {
-   "level": "L3",
-   "way": "relation_to_neighbour",
-   "quote": "so the division is a decimal one; so 7 / 2 is 3.5",
-   "edge": "lvl:primitive_type@L3#4",
    "source": "level_way",
    "also_shown": []
   }
@@ -1692,26 +1670,6 @@ start concepts (3): explicit_cast, integer_division, arithmetic_operators
    "logic": "Conversion moves a value between primitive types: int to double happens automatically, while double to int needs a cast that drops the fraction.",
    "twin_logic": null,
    "consequence_of": "mis:explicit_cast->CastAfterIntDivision"
-  },
-  {
-   "depth": 4,
-   "source": "primitive_type",
-   "edge": "lvl:primitive_type@L3#4",
-   "target": "primitive_type@L3",
-   "kind": "level",
-   "label": "shown",
-   "clauses": [
-    4,
-    5
-   ],
-   "quote": "so the division is a decimal one; so 7 / 2 is 3.5",
-   "confidence": 0.6,
-   "prune_score": 0.3,
-   "score": 0.18,
-   "logic": "double is the 64-bit IEEE 754 primitive. Once a double meets an integral operand in a binary operator, the whole operation becomes floating point.",
-   "twin_logic": null,
-   "level": "L3",
-   "way": "relation_to_neighbour"
   }
  ],
  "evidence": [
@@ -1798,27 +1756,6 @@ start concepts (3): explicit_cast, integer_division, arithmetic_operators
    "way": "inconsistent_trace"
   },
   {
-   "depth": 1,
-   "source": "arithmetic_operators",
-   "edge": "lvl:arithmetic_operators@L4#0",
-   "target": "arithmetic_operators@L4",
-   "kind": "level",
-   "label": "shown",
-   "clauses": [
-    3,
-    4,
-    5
-   ],
-   "quote": "the cast comes first; so the division is a decimal one; so 7 / 2 is 3.5",
-   "confidence": 0.6,
-   "prune_score": 0.45,
-   "score": 0.27,
-   "logic": "Changing an operand's type changes the operator's meaning (int / versus double /). Reordering * and / changes integer results (59 * 100 / 60 is 98, 59 / 60 * 100 is 0). Replacing ^ with Math.pow gives a real power.",
-   "twin_logic": null,
-   "level": "L4",
-   "way": "predict_a_change"
-  },
-  {
    "depth": 2,
    "source": "explicit_cast",
    "edge": "pre:integer_division->explicit_cast",
@@ -1899,26 +1836,6 @@ start concepts (3): explicit_cast, integer_division, arithmetic_operators
   },
   {
    "depth": 2,
-   "source": "expression",
-   "edge": "lvl:expression@L3#1",
-   "target": "expression@L3",
-   "kind": "level",
-   "label": "shown",
-   "clauses": [
-    4,
-    5
-   ],
-   "quote": "so the division is a decimal one; so 7 / 2 is 3.5",
-   "confidence": 0.6,
-   "prune_score": 0.35,
-   "score": 0.21,
-   "logic": "Operators combine operand values into a new value, and the operand types choose the operation (int / truncates, double / does not).",
-   "twin_logic": null,
-   "level": "L3",
-   "way": "relation_to_neighbour"
-  },
-  {
-   "depth": 2,
    "source": "type_conversion",
    "edge": "mis:type_conversion->TargetTyping",
    "target": "TargetTyping",
@@ -1956,26 +1873,6 @@ start concepts (3): explicit_cast, integer_division, arithmetic_operators
    "logic": "Conversion moves a value between primitive types: int to double happens automatically, while double to int needs a cast that drops the fraction.",
    "twin_logic": null,
    "consequence_of": "mis:explicit_cast->CastAfterIntDivision"
-  },
-  {
-   "depth": 4,
-   "source": "primitive_type",
-   "edge": "lvl:primitive_type@L3#4",
-   "target": "primitive_type@L3",
-   "kind": "level",
-   "label": "shown",
-   "clauses": [
-    4,
-    5
-   ],
-   "quote": "so the division is a decimal one; so 7 / 2 is 3.5",
-   "confidence": 0.6,
-   "prune_score": 0.3,
-   "score": 0.18,
-   "logic": "double is the 64-bit IEEE 754 primitive. Once a double meets an integral operand in a binary operator, the whole operation becomes floating point.",
-   "twin_logic": null,
-   "level": "L3",
-   "way": "relation_to_neighbour"
   }
  ],
  "clause_coverage": {
@@ -1989,11 +1886,68 @@ start concepts (3): explicit_cast, integer_division, arithmetic_operators
  ],
  "stop_reason": "half_stop",
  "depth_reached": 4,
- "llm_calls": 7,
- "llm_cache_hits": 54,
+ "llm_calls": 0,
+ "llm_cache_hits": 61,
  "llm_calls_by_step": {
   "prune": 22,
   "label": 39
+ },
+ "level_v2": {
+  "wrong_ways": [
+   {
+    "concept": "expression",
+    "edge": "lvl:expression@L3#2",
+    "level": "L3",
+    "way": "relation_to_neighbour",
+    "clauses": [
+     3,
+     4,
+     5
+    ],
+    "quote": "the cast comes first; so the division is a decimal one; so 7 / 2 is 3.5",
+    "confidence": 0.9
+   },
+   {
+    "concept": "expression",
+    "edge": "lvl:expression@L3#1",
+    "level": "L3",
+    "way": "relation_to_neighbour",
+    "clauses": [
+     3,
+     4,
+     5
+    ],
+    "quote": "the cast comes first; so the division is a decimal one; so 7 / 2 is 3.5",
+    "confidence": 0.85
+   },
+   {
+    "concept": "type_conversion",
+    "edge": "lvl:type_conversion@L4#3",
+    "level": "L4",
+    "way": "diagnose_an_error",
+    "clauses": [
+     3,
+     4,
+     5
+    ],
+    "quote": "the cast comes first; so the division is a decimal one; so 7 / 2 is 3.5",
+    "confidence": 0.8
+   },
+   {
+    "concept": "primitive_type",
+    "edge": "lvl:primitive_type@L3#4",
+    "level": "L3",
+    "way": "relation_to_neighbour",
+    "clauses": [
+     3,
+     4,
+     5
+    ],
+    "quote": "the cast comes first; so the division is a decimal one; so 7 / 2 is 3.5",
+    "confidence": 0.85
+   }
+  ],
+  "not_counted": []
  }
 }
 ```

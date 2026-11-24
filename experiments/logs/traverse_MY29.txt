@@ -8,12 +8,12 @@ start concepts (3): double, arithmetic_operators, if_statement
     mis:double->WholeNumberLiteralIsInt -> not applied (0.00) ""
     mis:double->FloatingPointIsExact -> not applied (0.00) ""
   double (level ways): 19 candidates -> kept lvl:double@L3#0 (0.50), lvl:double@L1#1 (0.30), lvl:double@L4#3 (0.20)
-    lvl:double@L3#0 -> shown (0.35) "The cast makes it a double division; so you get the decimal part"
+    lvl:double@L3#0 -> not applied (0.00) ""
     lvl:double@L1#1 -> shown (0.21) "The cast makes it a double division; so you get the decimal part"
-    lvl:double@L4#3 -> shown (0.12) "The cast makes it a double division; so you get the decimal part"
+    lvl:double@L4#3 -> not applied (0.00) ""
   arithmetic_operators (misconceptions): 3 candidates -> kept 
   arithmetic_operators (level ways): 18 candidates -> kept lvl:arithmetic_operators@L4#0 (0.45), lvl:arithmetic_operators@L2#1 (0.35), lvl:arithmetic_operators@L1#1 (0.20)
-    lvl:arithmetic_operators@L4#0 -> shown (0.34) "The cast makes it a double division; so you get the decimal part"
+    lvl:arithmetic_operators@L4#0 -> not applied (0.00) ""
     lvl:arithmetic_operators@L2#1 -> shown (0.21) "3.5; The cast makes it a double division; so you get the decimal part"
     lvl:arithmetic_operators@L1#1 -> shown (0.11) "The cast makes it a double division; so you get the decimal part"
   if_statement (misconceptions): 22 candidates -> kept mis:if_statement->BranchChosenByIntent (0.50), mis:if_statement->ThenAlwaysExecutes (0.30), mis:if_statement->ProgramLooksAhead (0.20)
@@ -24,7 +24,7 @@ start concepts (3): double, arithmetic_operators, if_statement
     lvl:if_statement@L2#1 -> not applied (0.00) ""
     lvl:if_statement@L3#1 -> not applied (0.00) ""
     lvl:if_statement@L0#14 -> not applied (0.00) ""
-  kept: lvl:double@L3#0 [shown, tier 2, 0.35], lvl:arithmetic_operators@L4#0 [shown, tier 2, 0.34], lvl:double@L1#1 [shown, tier 2, 0.21]
+  kept: lvl:double@L1#1 [shown, tier 2, 0.21], lvl:arithmetic_operators@L2#1 [shown, tier 2, 0.21], lvl:arithmetic_operators@L1#1 [shown, tier 2, 0.11]
   clause coverage: c1 uncovered; c2 uncovered; c3 uncovered
   uncovered clauses bring in: println (5.41), boolean_expression (4.02), floating_point_precision (3.16)
   not yet read: own edges of boolean_expression, own edges of floating_point_precision, own edges of println, pre:arithmetic_operators->expression, pre:boolean_expression->if_statement, pre:control_flow->if_statement, pre:double->floating_point_precision, pre:if_statement->if_else_statement
@@ -111,5 +111,5 @@ start concepts (3): double, arithmetic_operators, if_statement
   clause coverage: c1 <- pre:string_literal->println; c2 uncovered; c3 uncovered
   not yet read: par:assignment~comparison_operators, pre:expression->comparison_operators, pre:statement->control_flow
   root-cause walk: held on [], broken at ['println'], prerequisites {'expression': ['arithmetic_operators'], 'if_statement': ['boolean_expression', 'control_flow'], 'boolean_expression': ['comparison_operators'], 'floating_point_precision': ['double'], 'comparison_operators': ['expression'], 'if_else_statement': ['if_statement'], 'control_flow': ['statement'], 'println': ['statement', 'string_literal']}
-  level arithmetic_operators: L4 via predict_a_change "The cast makes it a double division; so you get the decimal part"
-  level double: L4 via diagnose_an_error "The cast makes it a double division; so you get the decimal part"
+  level arithmetic_operators: L2 via output_prediction "3.5; The cast makes it a double division; so you get the decimal part"
+  level double: L1 via states_the_rule "The cast makes it a double division; so you get the decimal part"

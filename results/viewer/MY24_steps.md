@@ -253,14 +253,16 @@ Clauses: 1, 2, 3
 Confidence: 0.9
 ```
 
-Label prompt for level way lvl:string_concatenation@L3#2 (the model saw only the concept, the way's name 'relation to neighbour' and its text; no level):
+Label prompt for level way lvl:string_concatenation@L3#2 (the model saw the concept, the way's name 'relation to neighbour', its text, where the way stops and whether the words must be correct; no level):
 > + adds when both operands are numbers and concatenates when either operand is a String, converting the other operand to a String. It is left-associative, so 1 + 2 + "3" is "33" but "1" + 2 + 3 is "123".
+>
+> Where this way stops: Two correct but separate rules are L1. Executing the two in sequence is L2. A relational answer may be correct or a relational error.
 
 Model's reply:
 ```
 Label: shown
 Clauses: 1, 2, 3
-Confidence: 0.85
+Confidence: 0.75
 ```
 
 Label prompt for level way lvl:string_concatenation@L2#1 (the model saw only the concept, the way's name 'output prediction' and its text; no level):
@@ -277,7 +279,7 @@ Parsed labels:
 | edge | label | prune score | confidence | score | clauses | words |
 |---|---|---|---|---|---|---|
 | lvl:string_concatenation@L2#0 | shown | 0.45 | 0.9 | 0.41 | c1, c2, c3 | + is worked out left to right; Once there is text, it is like gluing words together; so 5 and then 3 are stuck on as characters, giving Total: 53 |
-| lvl:string_concatenation@L3#2 | shown | 0.3 | 0.85 | 0.26 | c1, c2, c3 | + is worked out left to right; Once there is text, it is like gluing words together; so 5 and then 3 are stuck on as characters, giving Total: 53 |
+| lvl:string_concatenation@L3#2 | shown | 0.3 | 0.75 | 0.22 | c1, c2, c3 | + is worked out left to right; Once there is text, it is like gluing words together; so 5 and then 3 are stuck on as characters, giving Total: 53 |
 | lvl:string_concatenation@L2#1 | shown | 0.25 | 0.9 | 0.23 | c1, c2, c3 | + is worked out left to right; Once there is text, it is like gluing words together; so 5 and then 3 are stuck on as characters, giving Total: 53 |
 
 #### arithmetic_operators, misconceptions: 3 edges offered
@@ -345,14 +347,16 @@ Prune: the model's reply (edge id and score; the kept edges sum to 1):
 ```
 Kept by pruning: lvl:arithmetic_operators@L3#3 (0.65), lvl:arithmetic_operators@L2#0 (0.20), lvl:arithmetic_operators@L1#1 (0.15)
 
-Label prompt for level way lvl:arithmetic_operators@L3#3 (the model saw only the concept, the way's name 'relation to neighbour' and its text; no level):
+Label prompt for level way lvl:arithmetic_operators@L3#3 (the model saw the concept, the way's name 'relation to neighbour', its text, where the way stops and whether the words must be correct; no level):
 > + adds when both operands are numbers and concatenates when either operand is a String, converting the other operand to a String. It is left-associative, so 1 + 2 + "3" is "33" but "1" + 2 + 3 is "123".
+>
+> Where this way stops: Two correct but separate rules are L1. Executing the two in sequence is L2. A relational answer may be correct or a relational error.
 
 Model's reply:
 ```
 Label: shown
 Clauses: 1, 2, 3
-Confidence: 0.85
+Confidence: 0.72
 ```
 
 Label prompt for level way lvl:arithmetic_operators@L2#0 (the model saw only the concept, the way's name 'line by line trace' and its text; no level):
@@ -378,13 +382,13 @@ Confidence: 0.7
 Parsed labels:
 | edge | label | prune score | confidence | score | clauses | words |
 |---|---|---|---|---|---|---|
-| lvl:arithmetic_operators@L3#3 | shown | 0.65 | 0.85 | 0.55 | c1, c2, c3 | + is worked out left to right; Once there is text, it is like gluing words together; so 5 and then 3 are stuck on as characters, giving Total: 53 |
+| lvl:arithmetic_operators@L3#3 | shown | 0.65 | 0.72 | 0.47 | c1, c2, c3 | + is worked out left to right; Once there is text, it is like gluing words together; so 5 and then 3 are stuck on as characters, giving Total: 53 |
 | lvl:arithmetic_operators@L2#0 | shown | 0.2 | 0.75 | 0.15 | c1, c2, c3 | + is worked out left to right; Once there is text, it is like gluing words together; so 5 and then 3 are stuck on as characters, giving Total: 53 |
 | lvl:arithmetic_operators@L1#1 | not applied |  |  | 0.0 |  |  |
 
 **Kept on a path at this depth** (best N in tiers: held misconception / broken edge, then held error, then correct / confirmed / shown):
 
-lvl:arithmetic_operators@L3#3 [shown, tier 2, 0.55], mis:string_concatenation->ArithmeticPlusPrecedes [correct, tier 2, 0.52], lvl:string_concatenation@L2#0 [shown, tier 2, 0.41]
+mis:string_concatenation->ArithmeticPlusPrecedes [correct, tier 2, 0.52], lvl:arithmetic_operators@L3#3 [shown, tier 2, 0.47], lvl:string_concatenation@L2#0 [shown, tier 2, 0.41]
 
 **Clause coverage after this depth:**
 | clause | text | covered by |
@@ -599,24 +603,28 @@ Prune: the model's reply (edge id and score; the kept edges sum to 1):
 ```
 Kept by pruning: lvl:expression@L3#2 (0.40), lvl:expression@L3#1 (0.35), lvl:expression@L2#0 (0.25)
 
-Label prompt for level way lvl:expression@L3#2 (the model saw only the concept, the way's name 'relation to neighbour' and its text; no level):
+Label prompt for level way lvl:expression@L3#2 (the model saw the concept, the way's name 'relation to neighbour', its text, where the way stops and whether the words must be correct; no level):
 > With several operators, precedence and left associativity decide the grouping, and parentheses override both.
+>
+> Where this way stops: Two correct but separate rules are L1. Executing the two in sequence is L2. A relational answer may be correct or a relational error.
 
 Model's reply:
 ```
-Label: shown
-Clauses: 1, 3
-Confidence: 0.8
+Label: not shown
+Clauses: none
+Confidence: 0.6
 ```
 
-Label prompt for level way lvl:expression@L3#1 (the model saw only the concept, the way's name 'relation to neighbour' and its text; no level):
+Label prompt for level way lvl:expression@L3#1 (the model saw the concept, the way's name 'relation to neighbour', its text, where the way stops and whether the words must be correct; no level):
 > Operators combine operand values into a new value, and the operand types choose the operation (int / truncates, double / does not).
+>
+> Where this way stops: Two correct but separate rules are L1. Executing the two in sequence is L2. A relational answer may be correct or a relational error.
 
 Model's reply:
 ```
 Label: shown
-Clauses: 2, 3
-Confidence: 0.8
+Clauses: 1, 2, 3
+Confidence: 0.7
 ```
 
 Label prompt for level way lvl:expression@L2#0 (the model saw only the concept, the way's name 'line by line trace' and its text; no level):
@@ -632,8 +640,8 @@ Confidence: 0.85
 Parsed labels:
 | edge | label | prune score | confidence | score | clauses | words |
 |---|---|---|---|---|---|---|
-| lvl:expression@L3#2 | shown | 0.4 | 0.8 | 0.32 | c1, c3 | + is worked out left to right; so 5 and then 3 are stuck on as characters, giving Total: 53 |
-| lvl:expression@L3#1 | shown | 0.35 | 0.8 | 0.28 | c2, c3 | Once there is text, it is like gluing words together; so 5 and then 3 are stuck on as characters, giving Total: 53 |
+| lvl:expression@L3#2 | not applied |  |  | 0.0 |  |  |
+| lvl:expression@L3#1 | shown | 0.35 | 0.7 | 0.24 | c1, c2, c3 | + is worked out left to right; Once there is text, it is like gluing words together; so 5 and then 3 are stuck on as characters, giving Total: 53 |
 | lvl:expression@L2#0 | shown | 0.25 | 0.85 | 0.21 | c1, c3 | + is worked out left to right; so 5 and then 3 are stuck on as characters, giving Total: 53 |
 
 #### string_conversion, misconceptions: 1 edges offered
@@ -698,8 +706,10 @@ Clauses: 1, 2, 3
 Confidence: 0.85
 ```
 
-Label prompt for level way lvl:string_conversion@L3#0 (the model saw only the concept, the way's name 'relation to neighbour' and its text; no level):
+Label prompt for level way lvl:string_conversion@L3#0 (the model saw the concept, the way's name 'relation to neighbour', its text, where the way stops and whether the words must be correct; no level):
 > Conversion happens first, then concatenation: the non-String operand is turned into its characters before the two Strings are joined.
+>
+> Where this way stops: Two correct but separate rules are L1. Executing the two in sequence is L2. A relational answer may be correct or a relational error.
 
 Model's reply:
 ```
@@ -727,7 +737,7 @@ Parsed labels:
 
 **Kept on a path at this depth** (best N in tiers: held misconception / broken edge, then held error, then correct / confirmed / shown):
 
-mis:string_conversion->StringPlusLeftToRight [correct, tier 2, 0.90], lvl:string_conversion@L2#0 [shown, tier 2, 0.42], lvl:expression@L3#2 [shown, tier 2, 0.32]
+mis:string_conversion->StringPlusLeftToRight [correct, tier 2, 0.90], lvl:string_conversion@L2#0 [shown, tier 2, 0.42], lvl:expression@L3#1 [shown, tier 2, 0.24]
 
 **Clause coverage after this depth:**
 | clause | text | covered by |
@@ -741,11 +751,11 @@ Figure 6 (the graph after depth 3): C:\Users\magnu\OneDrive\Desktop\ES_VIterbi_P
 ## 4. Diagnosis (rules over the labelled graph, no model)
 Root-cause walk: held on [], broken at [], prerequisites {'expression': ['arithmetic_operators'], 'println': ['statement', 'string_literal'], 'string_conversion': ['string_concatenation']}
 - arithmetic_operators: L3 via relation_to_neighbour "+ is worked out left to right; Once there is text, it is like gluing words together; so 5 and then 3 are stuck on as characters, giving Total: 53"
-- expression: L3 via relation_to_neighbour "+ is worked out left to right; so 5 and then 3 are stuck on as characters, giving Total: 53"
+- expression: L3 via relation_to_neighbour "+ is worked out left to right; Once there is text, it is like gluing words together; so 5 and then 3 are stuck on as characters, giving Total: 53"
 - string_concatenation: L3 via relation_to_neighbour "+ is worked out left to right; Once there is text, it is like gluing words together; so 5 and then 3 are stuck on as characters, giving Total: 53"
 - string_conversion: L3 via relation_to_neighbour "Once there is text, it is like gluing words together; so 5 and then 3 are stuck on as characters, giving Total: 53"
 
-**Stop:** sufficient at depth 3; prompts {'prune': 13, 'label': 25}, fresh model calls 2, cache hits 36
+**Stop:** sufficient at depth 3; prompts {'prune': 13, 'label': 25}, fresh model calls 0, cache hits 38
 
 ### Held misconceptions
 (none)
@@ -759,7 +769,7 @@ Root-cause walk: held on [], broken at [], prerequisites {'expression': ['arithm
 | concept | level | way | misconception | source | quote | rule | also | note |
 |---|---|---|---|---|---|---|---|---|
 | arithmetic_operators | L3 | relation_to_neighbour |  | level_way | + is worked out left to right; Once there is text, it is like gluing words together; so 5 and then 3 are stuck on as characters, giving Total: 53 |  | L2 line_by_line_trace |  |
-| expression | L3 | relation_to_neighbour |  | level_way | + is worked out left to right; so 5 and then 3 are stuck on as characters, giving Total: 53 |  | L3 relation_to_neighbour, L2 line_by_line_trace |  |
+| expression | L3 | relation_to_neighbour |  | level_way | + is worked out left to right; Once there is text, it is like gluing words together; so 5 and then 3 are stuck on as characters, giving Total: 53 |  | L2 line_by_line_trace |  |
 | string_concatenation | L3 | relation_to_neighbour |  | level_way | + is worked out left to right; Once there is text, it is like gluing words together; so 5 and then 3 are stuck on as characters, giving Total: 53 |  | L2 line_by_line_trace, L2 output_prediction |  |
 | string_conversion | L3 | relation_to_neighbour |  | level_way | Once there is text, it is like gluing words together; so 5 and then 3 are stuck on as characters, giving Total: 53 |  | L2 line_by_line_trace, L2 output_prediction |  |
 
@@ -780,15 +790,14 @@ Figure 7 (final picture): C:\Users\magnu\OneDrive\Desktop\ES_VIterbi_Personalize
 | 1 | string_concatenation | mis:string_concatenation->ArithmeticPlusPrecedes | misconception | correct | 0.55 | 0.95 | 0.5225 | [1, 2, 3] | + is worked out left to right; Once there is text, it is like gluing words together; so 5 and then 3 are stuck on as characters, giving Total: 53 |
 | 1 | string_concatenation | mis:string_concatenation->StringPlusLeftToRight | misconception | correct | 0.4 | 0.6 | 0.24 | [1] | + is worked out left to right |
 | 1 | string_concatenation | lvl:string_concatenation@L2#0 | level | shown | 0.45 | 0.9 | 0.405 | [1, 2, 3] | + is worked out left to right; Once there is text, it is like gluing words together; so 5 and then 3 are stuck on as characters, giving Total: 53 |
-| 1 | string_concatenation | lvl:string_concatenation@L3#2 | level | shown | 0.3 | 0.85 | 0.255 | [1, 2, 3] | + is worked out left to right; Once there is text, it is like gluing words together; so 5 and then 3 are stuck on as characters, giving Total: 53 |
+| 1 | string_concatenation | lvl:string_concatenation@L3#2 | level | shown | 0.3 | 0.75 | 0.225 | [1, 2, 3] | + is worked out left to right; Once there is text, it is like gluing words together; so 5 and then 3 are stuck on as characters, giving Total: 53 |
 | 1 | string_concatenation | lvl:string_concatenation@L2#1 | level | shown | 0.25 | 0.9 | 0.225 | [1, 2, 3] | + is worked out left to right; Once there is text, it is like gluing words together; so 5 and then 3 are stuck on as characters, giving Total: 53 |
-| 1 | arithmetic_operators | lvl:arithmetic_operators@L3#3 | level | shown | 0.65 | 0.85 | 0.5525 | [1, 2, 3] | + is worked out left to right; Once there is text, it is like gluing words together; so 5 and then 3 are stuck on as characters, giving Total: 53 |
+| 1 | arithmetic_operators | lvl:arithmetic_operators@L3#3 | level | shown | 0.65 | 0.72 | 0.468 | [1, 2, 3] | + is worked out left to right; Once there is text, it is like gluing words together; so 5 and then 3 are stuck on as characters, giving Total: 53 |
 | 1 | arithmetic_operators | lvl:arithmetic_operators@L2#0 | level | shown | 0.2 | 0.75 | 0.15 | [1, 2, 3] | + is worked out left to right; Once there is text, it is like gluing words together; so 5 and then 3 are stuck on as characters, giving Total: 53 |
 | 2 | string_concatenation | par:string_concatenation~arithmetic_operators | parallel | confirmed | 0.6 | 0.9 | 0.54 | [1, 2, 3] | + is worked out left to right; Once there is text, it is like gluing words together; so 5 and then 3 are stuck on as characters, giving Total: 53 |
 | 2 | string_concatenation | pre:string_concatenation->string_conversion | prerequisite | confirmed | 0.4 | 0.85 | 0.34 | [2, 3] | Once there is text, it is like gluing words together; so 5 and then 3 are stuck on as characters, giving Total: 53 |
 | 2 | arithmetic_operators | pre:arithmetic_operators->expression | prerequisite | confirmed | 1.0 | 0.8 | 0.8 | [1, 3] | + is worked out left to right; so 5 and then 3 are stuck on as characters, giving Total: 53 |
-| 3 | expression | lvl:expression@L3#2 | level | shown | 0.4 | 0.8 | 0.32 | [1, 3] | + is worked out left to right; so 5 and then 3 are stuck on as characters, giving Total: 53 |
-| 3 | expression | lvl:expression@L3#1 | level | shown | 0.35 | 0.8 | 0.28 | [2, 3] | Once there is text, it is like gluing words together; so 5 and then 3 are stuck on as characters, giving Total: 53 |
+| 3 | expression | lvl:expression@L3#1 | level | shown | 0.35 | 0.7 | 0.245 | [1, 2, 3] | + is worked out left to right; Once there is text, it is like gluing words together; so 5 and then 3 are stuck on as characters, giving Total: 53 |
 | 3 | expression | lvl:expression@L2#0 | level | shown | 0.25 | 0.85 | 0.2125 | [1, 3] | + is worked out left to right; so 5 and then 3 are stuck on as characters, giving Total: 53 |
 | 3 | string_conversion | mis:string_conversion->StringPlusLeftToRight | misconception | correct | 1.0 | 0.9 | 0.9 | [1, 2, 3] | + is worked out left to right; Once there is text, it is like gluing words together; so 5 and then 3 are stuck on as characters, giving Total: 53 |
 | 3 | string_conversion | lvl:string_conversion@L2#0 | level | shown | 0.5 | 0.85 | 0.425 | [1, 2, 3] | + is worked out left to right; Once there is text, it is like gluing words together; so 5 and then 3 are stuck on as characters, giving Total: 53 |
@@ -798,15 +807,15 @@ Figure 7 (final picture): C:\Users\magnu\OneDrive\Desktop\ES_VIterbi_Personalize
 ## 6. The paths (what the keep step kept, depth by depth)
 | depth | source | edge | kind | label | score | clauses |
 |---|---|---|---|---|---|---|
-| 1 | arithmetic_operators | lvl:arithmetic_operators@L3#3 | level | shown | 0.5525 | [1, 2, 3] |
 | 1 | string_concatenation | mis:string_concatenation->ArithmeticPlusPrecedes | misconception | correct | 0.5225 | [1, 2, 3] |
+| 1 | arithmetic_operators | lvl:arithmetic_operators@L3#3 | level | shown | 0.468 | [1, 2, 3] |
 | 1 | string_concatenation | lvl:string_concatenation@L2#0 | level | shown | 0.405 | [1, 2, 3] |
 | 2 | arithmetic_operators | pre:arithmetic_operators->expression | prerequisite | confirmed | 0.8 | [1, 3] |
 | 2 | string_concatenation | par:string_concatenation~arithmetic_operators | parallel | confirmed | 0.54 | [1, 2, 3] |
 | 2 | string_concatenation | pre:string_concatenation->string_conversion | prerequisite | confirmed | 0.34 | [2, 3] |
 | 3 | string_conversion | mis:string_conversion->StringPlusLeftToRight | misconception | correct | 0.9 | [1, 2, 3] |
 | 3 | string_conversion | lvl:string_conversion@L2#0 | level | shown | 0.425 | [1, 2, 3] |
-| 3 | expression | lvl:expression@L3#2 | level | shown | 0.32 | [1, 3] |
+| 3 | expression | lvl:expression@L3#1 | level | shown | 0.245 | [1, 2, 3] |
 
 ## 7. Raw traversal log
 ```
@@ -829,17 +838,17 @@ start concepts (3): println, string_concatenation, arithmetic_operators
     mis:string_concatenation->StringPlusStringifiesExpression -> not applied (0.00) ""
   string_concatenation (level ways): 16 candidates -> kept lvl:string_concatenation@L2#0 (0.45), lvl:string_concatenation@L3#2 (0.30), lvl:string_concatenation@L2#1 (0.25)
     lvl:string_concatenation@L2#0 -> shown (0.41) "+ is worked out left to right; Once there is text, it is like gluing words together; so 5 and then 3 are stuck on as characters, giving Total: 53"
-    lvl:string_concatenation@L3#2 -> shown (0.26) "+ is worked out left to right; Once there is text, it is like gluing words together; so 5 and then 3 are stuck on as characters, giving Total: 53"
+    lvl:string_concatenation@L3#2 -> shown (0.22) "+ is worked out left to right; Once there is text, it is like gluing words together; so 5 and then 3 are stuck on as characters, giving Total: 53"
     lvl:string_concatenation@L2#1 -> shown (0.23) "+ is worked out left to right; Once there is text, it is like gluing words together; so 5 and then 3 are stuck on as characters, giving Total: 53"
   arithmetic_operators (misconceptions): 3 candidates -> kept mis:arithmetic_operators->ArithmeticOnNumericStrings (0.80), mis:arithmetic_operators->RemainderIsSubtraction (0.10), mis:arithmetic_operators->CaretIsPower (0.10)
     mis:arithmetic_operators->ArithmeticOnNumericStrings -> not applied (0.00) ""
     mis:arithmetic_operators->RemainderIsSubtraction -> not applied (0.00) ""
     mis:arithmetic_operators->CaretIsPower -> not applied (0.00) ""
   arithmetic_operators (level ways): 18 candidates -> kept lvl:arithmetic_operators@L3#3 (0.65), lvl:arithmetic_operators@L2#0 (0.20), lvl:arithmetic_operators@L1#1 (0.15)
-    lvl:arithmetic_operators@L3#3 -> shown (0.55) "+ is worked out left to right; Once there is text, it is like gluing words together; so 5 and then 3 are stuck on as characters, giving Total: 53"
+    lvl:arithmetic_operators@L3#3 -> shown (0.47) "+ is worked out left to right; Once there is text, it is like gluing words together; so 5 and then 3 are stuck on as characters, giving Total: 53"
     lvl:arithmetic_operators@L2#0 -> shown (0.15) "+ is worked out left to right; Once there is text, it is like gluing words together; so 5 and then 3 are stuck on as characters, giving Total: 53"
     lvl:arithmetic_operators@L1#1 -> not applied (0.00) ""
-  kept: lvl:arithmetic_operators@L3#3 [shown, tier 2, 0.55], mis:string_concatenation->ArithmeticPlusPrecedes [correct, tier 2, 0.52], lvl:string_concatenation@L2#0 [shown, tier 2, 0.41]
+  kept: mis:string_concatenation->ArithmeticPlusPrecedes [correct, tier 2, 0.52], lvl:arithmetic_operators@L3#3 [shown, tier 2, 0.47], lvl:string_concatenation@L2#0 [shown, tier 2, 0.41]
   clause coverage: c1 <- mis:string_concatenation->ArithmeticPlusPrecedes; c2 <- mis:string_concatenation->ArithmeticPlusPrecedes; c3 <- mis:string_concatenation->ArithmeticPlusPrecedes
   not yet read: par:string_concatenation~arithmetic_operators, pre:arithmetic_operators->expression, pre:statement->println, pre:string_concatenation->string_conversion, pre:string_literal->println
 --- depth 2: current concepts ['println', 'string_concatenation', 'arithmetic_operators']
@@ -862,8 +871,8 @@ start concepts (3): println, string_concatenation, arithmetic_operators
     mis:expression->OutsideInMethodNesting -> not applied (0.00) ""
     mis:expression->NoAtomicExpression -> not applied (0.00) ""
   expression (level ways): 19 candidates -> kept lvl:expression@L3#2 (0.40), lvl:expression@L3#1 (0.35), lvl:expression@L2#0 (0.25)
-    lvl:expression@L3#2 -> shown (0.32) "+ is worked out left to right; so 5 and then 3 are stuck on as characters, giving Total: 53"
-    lvl:expression@L3#1 -> shown (0.28) "Once there is text, it is like gluing words together; so 5 and then 3 are stuck on as characters, giving Total: 53"
+    lvl:expression@L3#2 -> not applied (0.00) ""
+    lvl:expression@L3#1 -> shown (0.24) "+ is worked out left to right; Once there is text, it is like gluing words together; so 5 and then 3 are stuck on as characters, giving Total: 53"
     lvl:expression@L2#0 -> shown (0.21) "+ is worked out left to right; so 5 and then 3 are stuck on as characters, giving Total: 53"
   string_conversion (misconceptions): 1 candidates -> kept mis:string_conversion->StringPlusLeftToRight (1.00)
     mis:string_conversion->StringPlusLeftToRight -> correct (0.90) "+ is worked out left to right; Once there is text, it is like gluing words together; so 5 and then 3 are stuck on as characters, giving Total: 53"
@@ -871,11 +880,11 @@ start concepts (3): println, string_concatenation, arithmetic_operators
     lvl:string_conversion@L2#0 -> shown (0.42) "+ is worked out left to right; Once there is text, it is like gluing words together; so 5 and then 3 are stuck on as characters, giving Total: 53"
     lvl:string_conversion@L3#0 -> shown (0.20) "Once there is text, it is like gluing words together; so 5 and then 3 are stuck on as characters, giving Total: 53"
     lvl:string_conversion@L2#1 -> shown (0.18) "+ is worked out left to right; Once there is text, it is like gluing words together; so 5 and then 3 are stuck on as characters, giving Total: 53"
-  kept: mis:string_conversion->StringPlusLeftToRight [correct, tier 2, 0.90], lvl:string_conversion@L2#0 [shown, tier 2, 0.42], lvl:expression@L3#2 [shown, tier 2, 0.32]
+  kept: mis:string_conversion->StringPlusLeftToRight [correct, tier 2, 0.90], lvl:string_conversion@L2#0 [shown, tier 2, 0.42], lvl:expression@L3#1 [shown, tier 2, 0.24]
   clause coverage: c1 <- mis:string_concatenation->ArithmeticPlusPrecedes; c2 <- mis:string_concatenation->ArithmeticPlusPrecedes; c3 <- mis:string_concatenation->ArithmeticPlusPrecedes
   root-cause walk: held on [], broken at [], prerequisites {'expression': ['arithmetic_operators'], 'println': ['statement', 'string_literal'], 'string_conversion': ['string_concatenation']}
   level arithmetic_operators: L3 via relation_to_neighbour "+ is worked out left to right; Once there is text, it is like gluing words together; so 5 and then 3 are stuck on as characters, giving Total: 53"
-  level expression: L3 via relation_to_neighbour "+ is worked out left to right; so 5 and then 3 are stuck on as characters, giving Total: 53"
+  level expression: L3 via relation_to_neighbour "+ is worked out left to right; Once there is text, it is like gluing words together; so 5 and then 3 are stuck on as characters, giving Total: 53"
   level string_concatenation: L3 via relation_to_neighbour "+ is worked out left to right; Once there is text, it is like gluing words together; so 5 and then 3 are stuck on as characters, giving Total: 53"
   level string_conversion: L3 via relation_to_neighbour "Once there is text, it is like gluing words together; so 5 and then 3 are stuck on as characters, giving Total: 53"
 ```
@@ -889,7 +898,8 @@ start concepts (3): println, string_concatenation, arithmetic_operators
   "depth": 3,
   "prune_tools": "llm",
   "model": "claude-opus-5-5",
-  "backend": "claude-cli"
+  "backend": "claude-cli",
+  "level_v2": true
  },
  "clauses": [
   "+ is worked out left to right",
@@ -920,11 +930,10 @@ start concepts (3): println, string_concatenation, arithmetic_operators
   "expression": {
    "level": "L3",
    "way": "relation_to_neighbour",
-   "quote": "+ is worked out left to right; so 5 and then 3 are stuck on as characters, giving Total: 53",
-   "edge": "lvl:expression@L3#2",
+   "quote": "+ is worked out left to right; Once there is text, it is like gluing words together; so 5 and then 3 are stuck on as characters, giving Total: 53",
+   "edge": "lvl:expression@L3#1",
    "source": "level_way",
    "also_shown": [
-    "L3 relation_to_neighbour",
     "L2 line_by_line_trace"
    ]
   },
@@ -955,27 +964,6 @@ start concepts (3): println, string_concatenation, arithmetic_operators
  "paths": [
   {
    "depth": 1,
-   "source": "arithmetic_operators",
-   "edge": "lvl:arithmetic_operators@L3#3",
-   "target": "arithmetic_operators@L3",
-   "kind": "level",
-   "label": "shown",
-   "clauses": [
-    1,
-    2,
-    3
-   ],
-   "quote": "+ is worked out left to right; Once there is text, it is like gluing words together; so 5 and then 3 are stuck on as characters, giving Total: 53",
-   "confidence": 0.85,
-   "prune_score": 0.65,
-   "score": 0.5525,
-   "logic": "+ adds when both operands are numbers and concatenates when either operand is a String, converting the other operand to a String. It is left-associative, so 1 + 2 + \"3\" is \"33\" but \"1\" + 2 + 3 is \"123\".",
-   "twin_logic": null,
-   "level": "L3",
-   "way": "relation_to_neighbour"
-  },
-  {
-   "depth": 1,
    "source": "string_concatenation",
    "edge": "mis:string_concatenation->ArithmeticPlusPrecedes",
    "target": "ArithmeticPlusPrecedes",
@@ -993,6 +981,27 @@ start concepts (3): println, string_concatenation, arithmetic_operators
    "logic": "In \"s\" + a + b, the numbers a and b are added first and their sum is joined to s.",
    "twin_logic": "Both uses of + have the same precedence and are evaluated left to right, so \"s\" + a + b joins a and then b as text; only \"s\" + (a + b) adds them first.",
    "role": "primary"
+  },
+  {
+   "depth": 1,
+   "source": "arithmetic_operators",
+   "edge": "lvl:arithmetic_operators@L3#3",
+   "target": "arithmetic_operators@L3",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    1,
+    2,
+    3
+   ],
+   "quote": "+ is worked out left to right; Once there is text, it is like gluing words together; so 5 and then 3 are stuck on as characters, giving Total: 53",
+   "confidence": 0.72,
+   "prune_score": 0.65,
+   "score": 0.468,
+   "logic": "+ adds when both operands are numbers and concatenates when either operand is a String, converting the other operand to a String. It is left-associative, so 1 + 2 + \"3\" is \"33\" but \"1\" + 2 + 3 is \"123\".",
+   "twin_logic": null,
+   "level": "L3",
+   "way": "relation_to_neighbour"
   },
   {
    "depth": 1,
@@ -1114,19 +1123,20 @@ start concepts (3): println, string_concatenation, arithmetic_operators
   {
    "depth": 3,
    "source": "expression",
-   "edge": "lvl:expression@L3#2",
+   "edge": "lvl:expression@L3#1",
    "target": "expression@L3",
    "kind": "level",
    "label": "shown",
    "clauses": [
     1,
+    2,
     3
    ],
-   "quote": "+ is worked out left to right; so 5 and then 3 are stuck on as characters, giving Total: 53",
-   "confidence": 0.8,
-   "prune_score": 0.4,
-   "score": 0.32,
-   "logic": "With several operators, precedence and left associativity decide the grouping, and parentheses override both.",
+   "quote": "+ is worked out left to right; Once there is text, it is like gluing words together; so 5 and then 3 are stuck on as characters, giving Total: 53",
+   "confidence": 0.7,
+   "prune_score": 0.35,
+   "score": 0.245,
+   "logic": "Operators combine operand values into a new value, and the operand types choose the operation (int / truncates, double / does not).",
    "twin_logic": null,
    "level": "L3",
    "way": "relation_to_neighbour"
@@ -1205,9 +1215,9 @@ start concepts (3): println, string_concatenation, arithmetic_operators
     3
    ],
    "quote": "+ is worked out left to right; Once there is text, it is like gluing words together; so 5 and then 3 are stuck on as characters, giving Total: 53",
-   "confidence": 0.85,
+   "confidence": 0.75,
    "prune_score": 0.3,
-   "score": 0.255,
+   "score": 0.225,
    "logic": "+ adds when both operands are numbers and concatenates when either operand is a String, converting the other operand to a String. It is left-associative, so 1 + 2 + \"3\" is \"33\" but \"1\" + 2 + 3 is \"123\".",
    "twin_logic": null,
    "level": "L3",
@@ -1247,9 +1257,9 @@ start concepts (3): println, string_concatenation, arithmetic_operators
     3
    ],
    "quote": "+ is worked out left to right; Once there is text, it is like gluing words together; so 5 and then 3 are stuck on as characters, giving Total: 53",
-   "confidence": 0.85,
+   "confidence": 0.72,
    "prune_score": 0.65,
-   "score": 0.5525,
+   "score": 0.468,
    "logic": "+ adds when both operands are numbers and concatenates when either operand is a String, converting the other operand to a String. It is left-associative, so 1 + 2 + \"3\" is \"33\" but \"1\" + 2 + 3 is \"123\".",
    "twin_logic": null,
    "level": "L3",
@@ -1334,38 +1344,19 @@ start concepts (3): println, string_concatenation, arithmetic_operators
   {
    "depth": 3,
    "source": "expression",
-   "edge": "lvl:expression@L3#2",
-   "target": "expression@L3",
-   "kind": "level",
-   "label": "shown",
-   "clauses": [
-    1,
-    3
-   ],
-   "quote": "+ is worked out left to right; so 5 and then 3 are stuck on as characters, giving Total: 53",
-   "confidence": 0.8,
-   "prune_score": 0.4,
-   "score": 0.32,
-   "logic": "With several operators, precedence and left associativity decide the grouping, and parentheses override both.",
-   "twin_logic": null,
-   "level": "L3",
-   "way": "relation_to_neighbour"
-  },
-  {
-   "depth": 3,
-   "source": "expression",
    "edge": "lvl:expression@L3#1",
    "target": "expression@L3",
    "kind": "level",
    "label": "shown",
    "clauses": [
+    1,
     2,
     3
    ],
-   "quote": "Once there is text, it is like gluing words together; so 5 and then 3 are stuck on as characters, giving Total: 53",
-   "confidence": 0.8,
+   "quote": "+ is worked out left to right; Once there is text, it is like gluing words together; so 5 and then 3 are stuck on as characters, giving Total: 53",
+   "confidence": 0.7,
    "prune_score": 0.35,
-   "score": 0.28,
+   "score": 0.245,
    "logic": "Operators combine operand values into a new value, and the operand types choose the operation (int / truncates, double / does not).",
    "twin_logic": null,
    "level": "L3",
@@ -1482,11 +1473,15 @@ start concepts (3): println, string_concatenation, arithmetic_operators
  "unexplained_clauses": [],
  "stop_reason": "sufficient",
  "depth_reached": 3,
- "llm_calls": 2,
- "llm_cache_hits": 36,
+ "llm_calls": 0,
+ "llm_cache_hits": 38,
  "llm_calls_by_step": {
   "prune": 13,
   "label": 25
+ },
+ "level_v2": {
+  "wrong_ways": [],
+  "not_counted": []
  }
 }
 ```

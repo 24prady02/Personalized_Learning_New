@@ -193,14 +193,16 @@ Clauses: none
 Confidence: 0.95
 ```
 
-Label prompt for level way lvl:if_statement@L3#2 (the model saw only the concept, the way's name 'relation to neighbour' and its text; no level):
+Label prompt for level way lvl:if_statement@L3#2 (the model saw the concept, the way's name 'relation to neighbour', its text, where the way stops and whether the words must be correct; no level):
 > An if is a fork in the control flow: one path through the body, one around it, both rejoining at the next statement.
+>
+> Where this way stops: Two correct but separate rules are L1. Executing the two in sequence is L2. A relational answer may be correct or a relational error.
 
 Model's reply:
 ```
-Label: not shown
-Clauses: none
-Confidence: 0.95
+Label: wrong
+Clauses: 1, 2
+Confidence: 0.7
 ```
 
 Parsed labels:
@@ -208,7 +210,6 @@ Parsed labels:
 |---|---|---|---|---|---|---|
 | lvl:if_statement@L0#14 | not applied |  |  | 0.0 |  |  |
 | lvl:if_statement@L2#0 | not applied |  |  | 0.0 |  |  |
-| lvl:if_statement@L3#2 | not applied |  |  | 0.0 |  |  |
 
 #### control_flow, misconceptions: 11 edges offered
 Edges offered:
@@ -280,14 +281,16 @@ Prune: the model's reply (edge id and score; the kept edges sum to 1):
 ```
 Kept by pruning: lvl:control_flow@L3#1 (0.45), lvl:control_flow@L2#0 (0.30), lvl:control_flow@L1#1 (0.25)
 
-Label prompt for level way lvl:control_flow@L3#1 (the model saw only the concept, the way's name 'relation to neighbour' and its text; no level):
+Label prompt for level way lvl:control_flow@L3#1 (the model saw the concept, the way's name 'relation to neighbour', its text, where the way stops and whether the words must be correct; no level):
 > An if changes the default top-to-bottom flow: its condition is tested once when control reaches it, its block runs only if true, and in both cases control then continues with the next statement.
+>
+> Where this way stops: Two correct but separate rules are L1. Executing the two in sequence is L2. A relational answer may be correct or a relational error.
 
 Model's reply:
 ```
-Label: not shown
-Clauses: none
-Confidence: 0.95
+Label: wrong
+Clauses: 1, 2
+Confidence: 0.8
 ```
 
 Label prompt for level way lvl:control_flow@L2#0 (the model saw only the concept, the way's name 'line by line trace' and its text; no level):
@@ -311,11 +314,7 @@ Confidence: 0.85
 ```
 
 Parsed labels:
-| edge | label | prune score | confidence | score | clauses | words |
-|---|---|---|---|---|---|---|
-| lvl:control_flow@L3#1 | not applied |  |  | 0.0 |  |  |
-| lvl:control_flow@L2#0 | not applied |  |  | 0.0 |  |  |
-| lvl:control_flow@L1#1 | not applied |  |  | 0.0 |  |  |
+(none)
 
 #### println, misconceptions: 6 edges offered
 Edges offered:
@@ -384,14 +383,16 @@ Prune: the model's reply (edge id and score; the kept edges sum to 1):
 ```
 Kept by pruning: lvl:println@L3#0 (0.50), lvl:println@L2#1 (0.30), lvl:println@L2#0 (0.20)
 
-Label prompt for level way lvl:println@L3#0 (the model saw only the concept, the way's name 'relation to neighbour' and its text; no level):
+Label prompt for level way lvl:println@L3#0 (the model saw the concept, the way's name 'relation to neighbour', its text, where the way stops and whether the words must be correct; no level):
 > System.out.println(s); is a statement, so its line of output appears at its own place in the sequence.
+>
+> Where this way stops: Two correct but separate rules are L1. Executing the two in sequence is L2. A relational answer may be correct or a relational error.
 
 Model's reply:
 ```
-Label: shown
+Label: wrong
 Clauses: 2
-Confidence: 0.65
+Confidence: 0.7
 ```
 
 Label prompt for level way lvl:println@L2#1 (the model saw only the concept, the way's name 'output prediction' and its text; no level):
@@ -415,15 +416,11 @@ Confidence: 0.85
 ```
 
 Parsed labels:
-| edge | label | prune score | confidence | score | clauses | words |
-|---|---|---|---|---|---|---|
-| lvl:println@L3#0 | shown | 0.5 | 0.65 | 0.33 | c2 | so the println inside the if runs too, and then done is printed |
-| lvl:println@L2#1 | shown | 0.3 | 0.6 | 0.18 | c2 | so the println inside the if runs too, and then done is printed |
-| lvl:println@L2#0 | not applied |  |  | 0.0 |  |  |
+(none)
 
 **Kept on a path at this depth** (best N in tiers: held misconception / broken edge, then held error, then correct / confirmed / shown):
 
-mis:if_statement->ThenAlwaysExecutes [held, tier 0, 0.59], lvl:println@L3#0 [shown, tier 2, 0.33], mis:control_flow->StatementsRunInAnyOrder [correct, tier 2, 0.21]
+mis:if_statement->ThenAlwaysExecutes [held, tier 0, 0.59], mis:control_flow->StatementsRunInAnyOrder [correct, tier 2, 0.21], lvl:println@L2#1 [shown, tier 2, 0.18]
 
 **Clause coverage after this depth:**
 | clause | text | covered by |
@@ -635,14 +632,16 @@ Prune: the model's reply (edge id and score; the kept edges sum to 1):
 ```
 Kept by pruning: lvl:statement@L3#4 (0.50), lvl:statement@L2#0 (0.30), lvl:statement@L0#2 (0.20)
 
-Label prompt for level way lvl:statement@L3#4 (the model saw only the concept, the way's name 'relation to neighbour' and its text; no level):
+Label prompt for level way lvl:statement@L3#4 (the model saw the concept, the way's name 'relation to neighbour', its text, where the way stops and whether the words must be correct; no level):
 > Control flow is the order in which statements run; without control statements it is straight-line, each once in order.
+>
+> Where this way stops: Two correct but separate rules are L1. Executing the two in sequence is L2. A relational answer may be correct or a relational error.
 
 Model's reply:
 ```
-Label: shown
-Clauses: 1
-Confidence: 0.6
+Label: wrong
+Clauses: 1, 2
+Confidence: 0.8
 ```
 
 Label prompt for level way lvl:statement@L2#0 (the model saw only the concept, the way's name 'line by line trace' and its text; no level):
@@ -666,11 +665,7 @@ Confidence: 0.72
 ```
 
 Parsed labels:
-| edge | label | prune score | confidence | score | clauses | words |
-|---|---|---|---|---|---|---|
-| lvl:statement@L3#4 | shown | 0.5 | 0.6 | 0.3 | c1 | The program runs every line from top to bottom |
-| lvl:statement@L2#0 | shown | 0.3 | 0.7 | 0.21 | c1, c2 | The program runs every line from top to bottom; so the println inside the if runs too, and then done is printed |
-| lvl:statement@L0#2 | not applied |  |  | 0.0 |  |  |
+(none)
 
 #### boolean_expression, misconceptions: 8 edges offered
 Edges offered:
@@ -745,24 +740,28 @@ Prune: the model's reply (edge id and score; the kept edges sum to 1):
 ```
 Kept by pruning: lvl:boolean_expression@L3#2 (0.60), lvl:boolean_expression@L3#6 (0.20), lvl:boolean_expression@L2#1 (0.20)
 
-Label prompt for level way lvl:boolean_expression@L3#2 (the model saw only the concept, the way's name 'relation to neighbour' and its text; no level):
+Label prompt for level way lvl:boolean_expression@L3#2 (the model saw the concept, the way's name 'relation to neighbour', its text, where the way stops and whether the words must be correct; no level):
 > The if statement evaluates its boolean expression once and runs its block only when the value is true; the expression must have type boolean, so if (x = 5) with int x does not compile.
+>
+> Where this way stops: Two correct but separate rules are L1. Executing the two in sequence is L2. A relational answer may be correct or a relational error.
 
 Model's reply:
 ```
-Label: not shown
-Clauses: none
-Confidence: 0.95
+Label: wrong
+Clauses: 1, 2
+Confidence: 0.6
 ```
 
-Label prompt for level way lvl:boolean_expression@L3#6 (the model saw only the concept, the way's name 'purpose of the whole' and its text; no level):
+Label prompt for level way lvl:boolean_expression@L3#6 (the model saw the concept, the way's name 'purpose of the whole', its text, where the way stops and whether the words must be correct; no level):
 > Expresses a decision condition or guard (which branch runs, whether a loop continues) or computes a flag; common plans: range test lo <= x && x <= hi, divisibility test n % k == 0, combined rule as in LeapYear.
+>
+> Where this way stops: Narrating the lines is L2. A purpose induced from a few traced cases is L2. A wrong purpose is still L3, but with an error.
 
 Model's reply:
 ```
 Label: not shown
 Clauses: none
-Confidence: 0.92
+Confidence: 0.85
 ```
 
 Label prompt for level way lvl:boolean_expression@L2#1 (the model saw only the concept, the way's name 'output prediction' and its text; no level):
@@ -776,15 +775,11 @@ Confidence: 0.85
 ```
 
 Parsed labels:
-| edge | label | prune score | confidence | score | clauses | words |
-|---|---|---|---|---|---|---|
-| lvl:boolean_expression@L3#2 | not applied |  |  | 0.0 |  |  |
-| lvl:boolean_expression@L3#6 | not applied |  |  | 0.0 |  |  |
-| lvl:boolean_expression@L2#1 | not applied |  |  | 0.0 |  |  |
+(none)
 
 **Kept on a path at this depth** (best N in tiers: held misconception / broken edge, then held error, then correct / confirmed / shown):
 
-mis:statement->StatementsRunInAnyOrder [correct, tier 2, 0.39], lvl:statement@L3#4 [shown, tier 2, 0.30], lvl:statement@L2#0 [shown, tier 2, 0.21]
+mis:statement->StatementsRunInAnyOrder [correct, tier 2, 0.39], lvl:statement@L2#0 [shown, tier 2, 0.21]
 
 **Clause coverage after this depth:**
 | clause | text | covered by |
@@ -799,10 +794,10 @@ Figure 6 (the graph after depth 3): C:\Users\magnu\OneDrive\Desktop\ES_VIterbi_P
 ## 4. Diagnosis (rules over the labelled graph, no model)
 Root-cause walk: held on ['if_statement'], broken at [] (consequences: pre:statement->control_flow, pre:control_flow->if_statement, pre:boolean_expression->if_statement), prerequisites {'if_statement': ['boolean_expression', 'control_flow'], 'boolean_expression': ['comparison_operators'], 'comparison_operators': ['expression'], 'control_flow': ['statement'], 'println': ['statement', 'string_literal']}
 - if_statement: L0 via misconception "The program runs every line from top to bottom; so the println inside the if runs too, and then done is printed"
-- println: L3 via relation_to_neighbour "so the println inside the if runs too, and then done is printed"
-- statement: L3 via relation_to_neighbour "The program runs every line from top to bottom"
+- println: L2 via output_prediction "so the println inside the if runs too, and then done is printed"
+- statement: L2 via line_by_line_trace "The program runs every line from top to bottom; so the println inside the if runs too, and then done is printed"
 
-**Stop:** max depth at depth 3; prompts {'prune': 13, 'label': 25}, fresh model calls 6, cache hits 32
+**Stop:** max depth at depth 3; prompts {'prune': 13, 'label': 25}, fresh model calls 0, cache hits 38
 
 ### Held misconceptions
 | concept | misconception | kind | quote | score | shares_evidence_with |
@@ -822,8 +817,17 @@ Root-cause walk: held on ['if_statement'], broken at [] (consequences: pre:state
 | concept | level | way | misconception | source | quote | rule | also | note |
 |---|---|---|---|---|---|---|---|---|
 | if_statement | L0 | misconception | ThenAlwaysExecutes | level_mis_links | The program runs every line from top to bottom; so the println inside the if runs too, and then done is printed | wrong rule: The then branch always runs. Right rule: The then branch runs only when the condition is true. |  |  |
-| println | L3 | relation_to_neighbour |  | level_way | so the println inside the if runs too, and then done is printed |  | L2 output_prediction |  |
-| statement | L3 | relation_to_neighbour |  | level_way | The program runs every line from top to bottom |  | L2 line_by_line_trace |  |
+| println | L2 | output_prediction |  | level_way | so the println inside the if runs too, and then done is printed |  |  |  |
+| statement | L2 | line_by_line_trace |  | level_way | The program runs every line from top to bottom; so the println inside the if runs too, and then done is printed |  |  |  |
+
+Ways above L2 the model answered "wrong" (the kind of thing is done, but what is said contradicts Java; not shown):
+| concept | edge | level | way | confidence | clauses | quote |
+|---|---|---|---|---|---|---|
+| if_statement | lvl:if_statement@L3#2 | L3 | relation_to_neighbour | 0.7 | [1, 2] | The program runs every line from top to bottom; so the println inside the if runs too, and then done is printed |
+| control_flow | lvl:control_flow@L3#1 | L3 | relation_to_neighbour | 0.8 | [1, 2] | The program runs every line from top to bottom; so the println inside the if runs too, and then done is printed |
+| println | lvl:println@L3#0 | L3 | relation_to_neighbour | 0.7 | [2] | so the println inside the if runs too, and then done is printed |
+| statement | lvl:statement@L3#4 | L3 | relation_to_neighbour | 0.8 | [1, 2] | The program runs every line from top to bottom; so the println inside the if runs too, and then done is printed |
+| boolean_expression | lvl:boolean_expression@L3#2 | L3 | relation_to_neighbour | 0.6 | [1, 2] | The program runs every line from top to bottom; so the println inside the if runs too, and then done is printed |
 
 ### Overall level: L0
 
@@ -842,27 +846,24 @@ Figure 7 (final picture): C:\Users\magnu\OneDrive\Desktop\ES_VIterbi_Personalize
 | 1 | if_statement | mis:if_statement->CodeAfterIfSkipped | misconception | correct | 0.20000000000000004 | 0.8 | 0.16 | [2] | so the println inside the if runs too, and then done is printed |
 | 1 | control_flow | mis:control_flow->StatementsRunInAnyOrder | misconception | correct | 0.3 | 0.7 | 0.21 | [1] | The program runs every line from top to bottom |
 | 1 | control_flow | mis:control_flow->CodeAfterIfSkipped | misconception | correct | 0.2 | 0.75 | 0.15 | [2] | so the println inside the if runs too, and then done is printed |
-| 1 | println | lvl:println@L3#0 | level | shown | 0.5 | 0.65 | 0.325 | [2] | so the println inside the if runs too, and then done is printed |
 | 1 | println | lvl:println@L2#1 | level | shown | 0.3 | 0.6 | 0.18 | [2] | so the println inside the if runs too, and then done is printed |
 | 2 | if_statement | pre:control_flow->if_statement | prerequisite | broken | 0.65 | 0.95 | 0.6175 | [1, 2] | The program runs every line from top to bottom; so the println inside the if runs too, and then done is printed |
 | 2 | if_statement | pre:boolean_expression->if_statement | prerequisite | broken | 0.35 | 0.95 | 0.3325 | [1, 2] | The program runs every line from top to bottom; so the println inside the if runs too, and then done is printed |
 | 2 | control_flow | pre:statement->control_flow | prerequisite | broken | 1.0 | 0.85 | 0.85 | [1, 2] | The program runs every line from top to bottom; so the println inside the if runs too, and then done is printed |
 | 2 | println | pre:statement->println | prerequisite | confirmed | 0.8 | 0.55 | 0.44 | [1, 2] | The program runs every line from top to bottom; so the println inside the if runs too, and then done is printed |
 | 3 | statement | mis:statement->StatementsRunInAnyOrder | misconception | correct | 0.7 | 0.55 | 0.385 | [1] | The program runs every line from top to bottom |
-| 3 | statement | lvl:statement@L3#4 | level | shown | 0.5 | 0.6 | 0.3 | [1] | The program runs every line from top to bottom |
 | 3 | statement | lvl:statement@L2#0 | level | shown | 0.3 | 0.7 | 0.21 | [1, 2] | The program runs every line from top to bottom; so the println inside the if runs too, and then done is printed |
 
 ## 6. The paths (what the keep step kept, depth by depth)
 | depth | source | edge | kind | label | score | clauses |
 |---|---|---|---|---|---|---|
 | 1 | if_statement | mis:if_statement->ThenAlwaysExecutes | misconception | held | 0.595 | [1, 2] |
-| 1 | println | lvl:println@L3#0 | level | shown | 0.325 | [2] |
 | 1 | control_flow | mis:control_flow->StatementsRunInAnyOrder | misconception | correct | 0.21 | [1] |
+| 1 | println | lvl:println@L2#1 | level | shown | 0.18 | [2] |
 | 2 | control_flow | pre:statement->control_flow | prerequisite | broken | 0.85 | [1, 2] |
 | 2 | if_statement | pre:control_flow->if_statement | prerequisite | broken | 0.6175 | [1, 2] |
 | 2 | if_statement | pre:boolean_expression->if_statement | prerequisite | broken | 0.3325 | [1, 2] |
 | 3 | statement | mis:statement->StatementsRunInAnyOrder | misconception | correct | 0.385 | [1] |
-| 3 | statement | lvl:statement@L3#4 | level | shown | 0.3 | [1] |
 | 3 | statement | lvl:statement@L2#0 | level | shown | 0.21 | [1, 2] |
 
 ## 7. Raw traversal log
@@ -879,12 +880,14 @@ start concepts (3): if_statement, control_flow, println
   if_statement (level ways): 19 candidates -> kept lvl:if_statement@L0#14 (0.60), lvl:if_statement@L2#0 (0.25), lvl:if_statement@L3#2 (0.15)
     lvl:if_statement@L0#14 -> not applied (0.00) ""
     lvl:if_statement@L2#0 -> not applied (0.00) ""
+    lvl:if_statement@L3#2: wrong (0.70) -> not applied
     lvl:if_statement@L3#2 -> not applied (0.00) ""
   control_flow (misconceptions): 11 candidates -> kept mis:control_flow->FalseConditionRestartsProgram (0.50), mis:control_flow->StatementsRunInAnyOrder (0.30), mis:control_flow->CodeAfterIfSkipped (0.20)
     mis:control_flow->FalseConditionRestartsProgram -> not applied (0.00) ""
     mis:control_flow->StatementsRunInAnyOrder -> correct (0.21) "The program runs every line from top to bottom"
     mis:control_flow->CodeAfterIfSkipped -> correct (0.15) "so the println inside the if runs too, and then done is printed"
   control_flow (level ways): 15 candidates -> kept lvl:control_flow@L3#1 (0.45), lvl:control_flow@L2#0 (0.30), lvl:control_flow@L1#1 (0.25)
+    lvl:control_flow@L3#1: wrong (0.80) -> not applied
     lvl:control_flow@L3#1 -> not applied (0.00) ""
     lvl:control_flow@L2#0 -> not applied (0.00) ""
     lvl:control_flow@L1#1 -> not applied (0.00) ""
@@ -893,10 +896,11 @@ start concepts (3): if_statement, control_flow, println
     mis:println->PrintEqualsPrintln -> not applied (0.00) ""
     mis:println->PrintNewLineFirst -> not applied (0.00) ""
   println (level ways): 17 candidates -> kept lvl:println@L3#0 (0.50), lvl:println@L2#1 (0.30), lvl:println@L2#0 (0.20)
-    lvl:println@L3#0 -> shown (0.33) "so the println inside the if runs too, and then done is printed"
+    lvl:println@L3#0: wrong (0.70) -> not applied
+    lvl:println@L3#0 -> not applied (0.00) ""
     lvl:println@L2#1 -> shown (0.18) "so the println inside the if runs too, and then done is printed"
     lvl:println@L2#0 -> not applied (0.00) ""
-  kept: mis:if_statement->ThenAlwaysExecutes [held, tier 0, 0.59], lvl:println@L3#0 [shown, tier 2, 0.33], mis:control_flow->StatementsRunInAnyOrder [correct, tier 2, 0.21]
+  kept: mis:if_statement->ThenAlwaysExecutes [held, tier 0, 0.59], mis:control_flow->StatementsRunInAnyOrder [correct, tier 2, 0.21], lvl:println@L2#1 [shown, tier 2, 0.18]
   clause coverage: c1 <- mis:if_statement->ThenAlwaysExecutes; c2 <- mis:if_statement->ThenAlwaysExecutes
   not yet read: pre:boolean_expression->if_statement, pre:control_flow->if_statement, pre:statement->control_flow, pre:statement->println, pre:string_literal->println
 --- depth 2: current concepts ['if_statement', 'control_flow', 'println']
@@ -919,7 +923,8 @@ start concepts (3): if_statement, control_flow, println
     mis:statement->ProgramLooksAhead -> not applied (0.00) ""
     mis:statement->WhitespaceIsSignificant -> not applied (0.00) ""
   statement (level ways): 19 candidates -> kept lvl:statement@L3#4 (0.50), lvl:statement@L2#0 (0.30), lvl:statement@L0#2 (0.20)
-    lvl:statement@L3#4 -> shown (0.30) "The program runs every line from top to bottom"
+    lvl:statement@L3#4: wrong (0.80) -> not applied
+    lvl:statement@L3#4 -> not applied (0.00) ""
     lvl:statement@L2#0 -> shown (0.21) "The program runs every line from top to bottom; so the println inside the if runs too, and then done is printed"
     lvl:statement@L0#2 -> not applied (0.00) ""
   boolean_expression (misconceptions): 8 candidates -> kept mis:boolean_expression->ArithmeticInsteadOfBoolean (0.50), mis:boolean_expression->ComparisonWithBooleanLiteral (0.25), mis:boolean_expression->LoopForOneTimeTest (0.25)
@@ -927,16 +932,17 @@ start concepts (3): if_statement, control_flow, println
     mis:boolean_expression->ComparisonWithBooleanLiteral -> not applied (0.00) ""
     mis:boolean_expression->LoopForOneTimeTest -> not applied (0.00) ""
   boolean_expression (level ways): 19 candidates -> kept lvl:boolean_expression@L3#2 (0.60), lvl:boolean_expression@L3#6 (0.20), lvl:boolean_expression@L2#1 (0.20)
+    lvl:boolean_expression@L3#2: wrong (0.60) -> not applied
     lvl:boolean_expression@L3#2 -> not applied (0.00) ""
     lvl:boolean_expression@L3#6 -> not applied (0.00) ""
     lvl:boolean_expression@L2#1 -> not applied (0.00) ""
-  kept: mis:statement->StatementsRunInAnyOrder [correct, tier 2, 0.39], lvl:statement@L3#4 [shown, tier 2, 0.30], lvl:statement@L2#0 [shown, tier 2, 0.21]
+  kept: mis:statement->StatementsRunInAnyOrder [correct, tier 2, 0.39], lvl:statement@L2#0 [shown, tier 2, 0.21]
   clause coverage: c1 <- mis:if_statement->ThenAlwaysExecutes; c2 <- mis:if_statement->ThenAlwaysExecutes
   not yet read: pre:comparison_operators->boolean_expression
   root-cause walk: held on ['if_statement'], broken at [] (consequences: pre:statement->control_flow, pre:control_flow->if_statement, pre:boolean_expression->if_statement), prerequisites {'if_statement': ['boolean_expression', 'control_flow'], 'boolean_expression': ['comparison_operators'], 'comparison_operators': ['expression'], 'control_flow': ['statement'], 'println': ['statement', 'string_literal']}
   level if_statement: L0 via misconception "The program runs every line from top to bottom; so the println inside the if runs too, and then done is printed"
-  level println: L3 via relation_to_neighbour "so the println inside the if runs too, and then done is printed"
-  level statement: L3 via relation_to_neighbour "The program runs every line from top to bottom"
+  level println: L2 via output_prediction "so the println inside the if runs too, and then done is printed"
+  level statement: L2 via line_by_line_trace "The program runs every line from top to bottom; so the println inside the if runs too, and then done is printed"
 ```
 
 ## 8. Full diagnosis JSON
@@ -948,7 +954,8 @@ start concepts (3): if_statement, control_flow, println
   "depth": 3,
   "prune_tools": "llm",
   "model": "claude-opus-5-5",
-  "backend": "claude-cli"
+  "backend": "claude-cli",
+  "level_v2": true
  },
  "clauses": [
   "The program runs every line from top to bottom",
@@ -1005,24 +1012,20 @@ start concepts (3): if_statement, control_flow, println
    "source": "level_mis_links"
   },
   "println": {
-   "level": "L3",
-   "way": "relation_to_neighbour",
+   "level": "L2",
+   "way": "output_prediction",
    "quote": "so the println inside the if runs too, and then done is printed",
-   "edge": "lvl:println@L3#0",
+   "edge": "lvl:println@L2#1",
    "source": "level_way",
-   "also_shown": [
-    "L2 output_prediction"
-   ]
+   "also_shown": []
   },
   "statement": {
-   "level": "L3",
-   "way": "relation_to_neighbour",
-   "quote": "The program runs every line from top to bottom",
-   "edge": "lvl:statement@L3#4",
+   "level": "L2",
+   "way": "line_by_line_trace",
+   "quote": "The program runs every line from top to bottom; so the println inside the if runs too, and then done is printed",
+   "edge": "lvl:statement@L2#0",
    "source": "level_way",
-   "also_shown": [
-    "L2 line_by_line_trace"
-   ]
+   "also_shown": []
   }
  },
  "overall_level": "L0",
@@ -1048,25 +1051,6 @@ start concepts (3): if_statement, control_flow, println
   },
   {
    "depth": 1,
-   "source": "println",
-   "edge": "lvl:println@L3#0",
-   "target": "println@L3",
-   "kind": "level",
-   "label": "shown",
-   "clauses": [
-    2
-   ],
-   "quote": "so the println inside the if runs too, and then done is printed",
-   "confidence": 0.65,
-   "prune_score": 0.5,
-   "score": 0.325,
-   "logic": "System.out.println(s); is a statement, so its line of output appears at its own place in the sequence.",
-   "twin_logic": null,
-   "level": "L3",
-   "way": "relation_to_neighbour"
-  },
-  {
-   "depth": 1,
    "source": "control_flow",
    "edge": "mis:control_flow->StatementsRunInAnyOrder",
    "target": "StatementsRunInAnyOrder",
@@ -1082,6 +1066,25 @@ start concepts (3): if_statement, control_flow, println
    "logic": "Statements in a program can run in any order.",
    "twin_logic": "Without control statements, statements run once each, top to bottom.",
    "role": "primary"
+  },
+  {
+   "depth": 1,
+   "source": "println",
+   "edge": "lvl:println@L2#1",
+   "target": "println@L2",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    2
+   ],
+   "quote": "so the println inside the if runs too, and then done is printed",
+   "confidence": 0.6,
+   "prune_score": 0.3,
+   "score": 0.18,
+   "logic": "Output is the value's characters followed by a line break: println(\"Hello, \"); println(\"World!\"); prints two lines.",
+   "twin_logic": null,
+   "level": "L2",
+   "way": "output_prediction"
   },
   {
    "depth": 2,
@@ -1157,25 +1160,6 @@ start concepts (3): if_statement, control_flow, println
    "logic": "Statements in a program can run in any order.",
    "twin_logic": "Without control statements, statements run once each, top to bottom.",
    "role": "context"
-  },
-  {
-   "depth": 3,
-   "source": "statement",
-   "edge": "lvl:statement@L3#4",
-   "target": "statement@L3",
-   "kind": "level",
-   "label": "shown",
-   "clauses": [
-    1
-   ],
-   "quote": "The program runs every line from top to bottom",
-   "confidence": 0.6,
-   "prune_score": 0.5,
-   "score": 0.3,
-   "logic": "Control flow is the order in which statements run; without control statements it is straight-line, each once in order.",
-   "twin_logic": null,
-   "level": "L3",
-   "way": "relation_to_neighbour"
   },
   {
    "depth": 3,
@@ -1271,25 +1255,6 @@ start concepts (3): if_statement, control_flow, println
    "logic": "When the then branch runs, the code after the if is skipped.",
    "twin_logic": "After the if finishes, execution continues with the next statement either way.",
    "role": "context"
-  },
-  {
-   "depth": 1,
-   "source": "println",
-   "edge": "lvl:println@L3#0",
-   "target": "println@L3",
-   "kind": "level",
-   "label": "shown",
-   "clauses": [
-    2
-   ],
-   "quote": "so the println inside the if runs too, and then done is printed",
-   "confidence": 0.65,
-   "prune_score": 0.5,
-   "score": 0.325,
-   "logic": "System.out.println(s); is a statement, so its line of output appears at its own place in the sequence.",
-   "twin_logic": null,
-   "level": "L3",
-   "way": "relation_to_neighbour"
   },
   {
    "depth": 1,
@@ -1406,25 +1371,6 @@ start concepts (3): if_statement, control_flow, println
   {
    "depth": 3,
    "source": "statement",
-   "edge": "lvl:statement@L3#4",
-   "target": "statement@L3",
-   "kind": "level",
-   "label": "shown",
-   "clauses": [
-    1
-   ],
-   "quote": "The program runs every line from top to bottom",
-   "confidence": 0.6,
-   "prune_score": 0.5,
-   "score": 0.3,
-   "logic": "Control flow is the order in which statements run; without control statements it is straight-line, each once in order.",
-   "twin_logic": null,
-   "level": "L3",
-   "way": "relation_to_neighbour"
-  },
-  {
-   "depth": 3,
-   "source": "statement",
    "edge": "lvl:statement@L2#0",
    "target": "statement@L2",
    "kind": "level",
@@ -1450,11 +1396,75 @@ start concepts (3): if_statement, control_flow, println
  "unexplained_clauses": [],
  "stop_reason": "max depth",
  "depth_reached": 3,
- "llm_calls": 6,
- "llm_cache_hits": 32,
+ "llm_calls": 0,
+ "llm_cache_hits": 38,
  "llm_calls_by_step": {
   "prune": 13,
   "label": 25
+ },
+ "level_v2": {
+  "wrong_ways": [
+   {
+    "concept": "if_statement",
+    "edge": "lvl:if_statement@L3#2",
+    "level": "L3",
+    "way": "relation_to_neighbour",
+    "clauses": [
+     1,
+     2
+    ],
+    "quote": "The program runs every line from top to bottom; so the println inside the if runs too, and then done is printed",
+    "confidence": 0.7
+   },
+   {
+    "concept": "control_flow",
+    "edge": "lvl:control_flow@L3#1",
+    "level": "L3",
+    "way": "relation_to_neighbour",
+    "clauses": [
+     1,
+     2
+    ],
+    "quote": "The program runs every line from top to bottom; so the println inside the if runs too, and then done is printed",
+    "confidence": 0.8
+   },
+   {
+    "concept": "println",
+    "edge": "lvl:println@L3#0",
+    "level": "L3",
+    "way": "relation_to_neighbour",
+    "clauses": [
+     2
+    ],
+    "quote": "so the println inside the if runs too, and then done is printed",
+    "confidence": 0.7
+   },
+   {
+    "concept": "statement",
+    "edge": "lvl:statement@L3#4",
+    "level": "L3",
+    "way": "relation_to_neighbour",
+    "clauses": [
+     1,
+     2
+    ],
+    "quote": "The program runs every line from top to bottom; so the println inside the if runs too, and then done is printed",
+    "confidence": 0.8
+   },
+   {
+    "concept": "boolean_expression",
+    "edge": "lvl:boolean_expression@L3#2",
+    "level": "L3",
+    "way": "relation_to_neighbour",
+    "clauses": [
+     1,
+     2
+    ],
+    "quote": "The program runs every line from top to bottom; so the println inside the if runs too, and then done is printed",
+    "confidence": 0.6
+   }
+  ],
+  "not_counted": []
  }
 }
 ```

@@ -7,6 +7,7 @@ start concepts (3): arithmetic_operators, overflow, println
     mis:arithmetic_operators->RemainderIsSubtraction -> not applied (0.00) ""
     mis:arithmetic_operators->CaretIsPower -> not applied (0.00) ""
   arithmetic_operators (level ways): 18 candidates -> kept lvl:arithmetic_operators@L4#5 (0.60), lvl:arithmetic_operators@L1#1 (0.25), lvl:arithmetic_operators@L2#2 (0.15)
+    lvl:arithmetic_operators@L4#5: wrong (0.70) -> not applied
     lvl:arithmetic_operators@L4#5 -> not applied (0.00) ""
     lvl:arithmetic_operators@L1#1 -> not applied (0.00) ""
     lvl:arithmetic_operators@L2#2 -> shown (0.09) "Adding 1 to 2147483647 gives 2147483648, and Java just stores the bigger number in big"
@@ -47,6 +48,7 @@ start concepts (3): arithmetic_operators, overflow, println
   int (level ways): 20 candidates -> kept lvl:int@L0#0 (0.50), lvl:int@L2#2 (0.25), lvl:int@L3#3 (0.25)
     lvl:int@L0#0 -> shown (0.42) "It prints 2147483648; Adding 1 to 2147483647 gives 2147483648, and Java just stores the bigger number in big; because it makes room for it automatically"
     lvl:int@L2#2 -> not applied (0.00) ""
+    lvl:int@L3#3: wrong (0.80) -> not applied
     lvl:int@L3#3 -> not applied (0.00) ""
   expression (misconceptions): 8 candidates -> kept mis:expression->TargetTyping (0.60), mis:expression->AssignmentIsEquation (0.25), mis:expression->VariablesHoldExpressions (0.15)
     mis:expression->TargetTyping -> not applied (0.00) ""
@@ -55,6 +57,7 @@ start concepts (3): arithmetic_operators, overflow, println
   expression (level ways): 19 candidates -> kept lvl:expression@L0#0 (0.50), lvl:expression@L2#1 (0.30), lvl:expression@L3#1 (0.20)
     lvl:expression@L0#0 -> shown (0.42) "It prints 2147483648; Adding 1 to 2147483647 gives 2147483648, and Java just stores the bigger number in big; because it makes room for it automatically"
     lvl:expression@L2#1 -> not applied (0.00) ""
+    lvl:expression@L3#1: wrong (0.72) -> not applied
     lvl:expression@L3#1 -> not applied (0.00) ""
   kept: mis:int->IntOverflowWidensAutomatically [held, tier 0, 0.92], lvl:int@L0#0 [shown, tier 2, 0.42], lvl:expression@L0#0 [shown, tier 2, 0.42]
   clause coverage: c1 <- mis:overflow->IntOverflowWidensAutomatically; c2 <- mis:overflow->IntOverflowWidensAutomatically; c3 <- mis:overflow->IntOverflowWidensAutomatically

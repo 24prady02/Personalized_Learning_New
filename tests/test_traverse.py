@@ -369,3 +369,136 @@ def test_s007_diagnosis_from_cached_replies():
     assert d["root_cause"] == {"concept": "loop_control", "misconception": "OffByOneBound"}
     assert d["overall_level"] == "L0" and d["levels"]["loop_control"]["level"] == "L0"
     assert d["stop_reason"] == "sufficient" and d["unexplained_clauses"] == []
+
+
+# ---------------------------------------------------------------- the trial setting stage3_v2 (default off)
+
+V2 = {**CFG, "stage3_v2": True}
+
+
+def _mis_label_prompts(llm):
+    return [p for step, p in llm.prompts if step == "label" and "Edges (each with its wrong rule and the right rule)" in p]
+
+
+def test_stage3_v2_is_off_by_default():
+    assert DEFAULT_TRAVERSAL["stage3_v2"] is False
+    d = traverse.traverse(TINY, TINY_SC, {**CFG, "depth": 1}, ScriptedLLM(make_script({})), [])
+    assert "stage3_v2" not in d and "stage3_v2" not in d["settings"]
+
+
+def test_stage3_v2_offers_a_misconception_once_at_its_primary_concept_or_the_first_that_reaches_it():
+    import copy
+    tiny = copy.deepcopy(TINY)
+    tiny["mis_edges"].append({"id": "mis:B->MisC", "source": "B", "target": "MisC", "type": "misconception", "role": "context",
+                              "logic": "wrong C", "twin_logic": "right C"})
+    labels = {"mis:B->MisC": ("held", "It prints 0"), "mis:C->MisC": ("held", "It prints 0")}
+    # default: both attachments are offered
+    llm = ScriptedLLM(make_script(labels))
+    traverse.traverse(tiny, TINY_SC, {**CFG, "depth": 1}, llm, [])
+    assert any("- mis:B->MisC |" in p for _, p in llm.prompts)
+    # v2: C is primary for MisC and is in G, so the attachment at B (read first) is not offered
+    llm = ScriptedLLM(make_script(labels))
+    d = traverse.traverse(tiny, TINY_SC, {**V2, "depth": 1}, llm, [])
+    assert not any("- mis:B->MisC |" in p for _, p in llm.prompts) and any("- mis:C->MisC |" in p for _, p in llm.prompts)
+    assert d["stage3_v2"]["not_offered"] == [{"edge": "mis:B->MisC", "offered_at": "C"}]
+    assert [(h["concept"], h["misconception"]) for h in d["held_misconceptions"]] == [("C", "MisC")]
+    # no primary attachment in G: offered at the first concept that reaches it (B is read before C)
+    next(e for e in tiny["mis_edges"] if e["id"] == "mis:C->MisC")["role"] = "context"
+    llm = ScriptedLLM(make_script(labels))
+    d = traverse.traverse(tiny, TINY_SC, {**V2, "depth": 1}, llm, [])
+    assert any("- mis:B->MisC |" in p for _, p in llm.prompts) and not any("- mis:C->MisC |" in p for _, p in llm.prompts)
+    assert d["stage3_v2"]["not_offered"] == [{"edge": "mis:C->MisC", "offered_at": "B"}]
+    assert [(h["concept"], h["misconception"]) for h in d["held_misconceptions"]] == [("B", "MisC")]
+
+
+def test_stage3_v2_labels_the_misconception_edges_of_all_current_concepts_in_one_question():
+    labels = {"mis:B->MisB": ("held", "x is unset"), "mis:C->MisC": ("held", "It prints 0")}
+    llm = ScriptedLLM(make_script(labels))
+    traverse.traverse(TINY, TINY_SC, {**CFG, "depth": 1}, llm, [])
+    assert len(_mis_label_prompts(llm)) == 2                       # default: one question per concept (B, C)
+    llm = ScriptedLLM(make_script(labels))
+    d = traverse.traverse(TINY, TINY_SC, {**V2, "depth": 1}, llm, [])
+    asked = _mis_label_prompts(llm)
+    assert len(asked) == 1 and "Concepts: B, C" in asked[0]
+    assert all(f"- {e} |" in asked[0] for e in ("mis:B->MisB", "mis:B->MisB2", "mis:C->MisC", "mis:C->MisC2"))
+    assert sorted(h["misconception"] for h in d["held_misconceptions"]) == ["MisB", "MisC"]
+
+
+def test_stage3_v2_has_no_broken_label_and_keeps_a_concept_edge_whose_far_end_holds_a_misconception():
+    # MisB held at B; the model answers "broken" for pre:A->B and nothing for pre:B->C
+    labels = {"mis:B->MisB": ("held", "x is unset"), "pre:A->B": ("broken", "It prints 0")}
+    llm = ScriptedLLM(make_script(labels))
+    d = traverse.traverse(TINY, TINY_SC, V2, llm, [])
+    asked = [p for _, p in llm.prompts if "Edge: pre:" in p]
+    assert asked and all("broken" not in p for p in asked)             # the question does not offer the label
+    assert d["broken_edges"] == [] and not any(c["label"] == "broken" for c in d["paths"] + d["evidence"])
+    kept = {c["edge"]: c for c in d["paths"] if c["edge"].startswith("pre:")}
+    assert set(kept) == {"pre:A->B", "pre:B->C"}                       # both touch B, which holds MisB
+    assert all(c["label"] == "not applied" and c["kept_because"] == "far end holds a misconception" for c in kept.values())
+    assert d["root_cause"] == {"concept": "B", "misconception": "MisB"}
+    # default: the same replies give a broken edge and nothing is kept for pre:B->C
+    d = traverse.traverse(TINY, TINY_SC, CFG, ScriptedLLM(make_script(labels)), [])
+    assert [b["edge"] for b in d["broken_edges"]] == ["pre:A->B"] and not any(c["edge"] == "pre:B->C" for c in d["paths"])
+
+
+# ---------------------------------------------------------------- the trial setting level_v2 (default off)
+
+LV2 = {**CFG, "depth": 1, "level_v2": True}
+
+
+def _way_script(labels, conf):
+    """make_script for the level_v2 way question: the way is found by its rule line, each way gets its own confidence."""
+    base = make_script(labels)
+    way_by_text = {w["exact_rule"]: f"lvl:{le['target']}#{i}" for le in TINY["level_edges"] for i, w in enumerate(le["ways"])}
+
+    def script(prompt: str) -> str:
+        m = re.search(r"Rule of this way: (.+)", prompt)
+        if not m:
+            return base(prompt)
+        eid = way_by_text[m.group(1).strip()]
+        reply = base(prompt.replace("Rule of this way:", "What an answer that shows this way does:"))
+        return reply.replace("Confidence: 0.9", f"Confidence: {conf.get(eid, 0.9)}")
+    return script
+
+
+def test_level_v2_is_off_by_default():
+    assert DEFAULT_TRAVERSAL["level_v2"] is False
+    llm = ScriptedLLM(make_script({}))
+    d = traverse.traverse(TINY, TINY_SC, {**CFG, "depth": 1}, llm, [])
+    assert "level_v2" not in d and "level_v2" not in d["settings"]
+    assert not any("Where this way stops" in p for _, p in llm.prompts)
+
+
+def test_level_v2_question_gives_the_boundary_and_a_wrong_answer_sets_no_level():
+    import copy
+    tiny = copy.deepcopy(TINY)
+    tiny["level_edges"][2]["ways"][0].update(boundary="Executing the two in sequence is L2.", correctness="correct or error")
+    labels = {"lvl:C@L2#0": ("shown", "It prints 0"), "lvl:C@L3#0": ("wrong", "x is unset")}
+    llm = ScriptedLLM(_way_script(labels, {}))
+    d = traverse.traverse(tiny, TINY_SC, LV2, llm, [])
+    asked = [p for _, p in llm.prompts if "Rule of this way: relates x to its declaration" in p]
+    assert len(asked) == 1 and "Where this way stops: Executing the two in sequence is L2." in asked[0]
+    assert "Label: shown | wrong | not shown" in asked[0]
+    assert d["levels"]["C"]["level"] == "L2"                                   # the wrong L3 way does not count
+    assert [w["edge"] for w in d["level_v2"]["wrong_ways"]] == ["lvl:C@L3#0"]
+    assert not any(c["edge"] == "lvl:C@L3#0" for c in d["evidence"])
+
+
+def test_level_v2_a_way_above_l2_needs_confidence_above_the_floor():
+    labels = {"lvl:C@L2#0": ("shown", "It prints 0"), "lvl:C@L3#0": ("shown", "x is unset")}
+    d = traverse.traverse(TINY, TINY_SC, LV2, ScriptedLLM(_way_script(labels, {"lvl:C@L3#0": 0.6, "lvl:C@L2#0": 0.5})), [])
+    assert d["levels"]["C"]["level"] == "L2"                                   # the floor does not apply to L2 and below
+    assert [(w["edge"], w["reason"]) for w in d["level_v2"]["not_counted"]] == [("lvl:C@L3#0", "confidence 0.60 is not above 0.60")]
+    d = traverse.traverse(TINY, TINY_SC, LV2, ScriptedLLM(_way_script(labels, {"lvl:C@L3#0": 0.7})), [])
+    assert d["levels"]["C"]["level"] == "L3" and d["level_v2"]["not_counted"] == []
+
+
+def test_level_v2_a_way_above_l2_does_not_count_on_the_clauses_of_a_held_misconception():
+    # MisB is held at B on clause 2; the L3 way at C rests on the same clause -> C falls to its L2 way
+    labels = {"mis:B->MisB": ("held", "x is unset"), "lvl:C@L2#0": ("shown", "It prints 0"), "lvl:C@L3#0": ("shown", "x is unset")}
+    d = traverse.traverse(TINY, TINY_SC, LV2, ScriptedLLM(_way_script(labels, {})), [])
+    assert d["levels"]["C"]["level"] == "L2" and d["levels"]["B"]["level"] == "L0"
+    assert d["level_v2"]["not_counted"][0]["reason"] == "all its clauses are clauses a held misconception rests on"
+    # default: the same replies give C the L3
+    d = traverse.traverse(TINY, TINY_SC, {**CFG, "depth": 1}, ScriptedLLM(make_script(labels)), [])
+    assert d["levels"]["C"]["level"] == "L3"

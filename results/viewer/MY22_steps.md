@@ -443,14 +443,16 @@ Prune: the model's reply (edge id and score; the kept edges sum to 1):
 ```
 Kept by pruning: lvl:assignment@L3#6 (0.50), lvl:assignment@L2#2 (0.30), lvl:assignment@L0#9 (0.20)
 
-Label prompt for level way lvl:assignment@L3#6 (the model saw only the concept, the way's name 'relation to neighbour' and its text; no level):
+Label prompt for level way lvl:assignment@L3#6 (the model saw the concept, the way's name 'relation to neighbour', its text, where the way stops and whether the words must be correct; no level):
 > As a statement, i++ has the same effect as the assignment i = i + 1.
+>
+> Where this way stops: Two correct but separate rules are L1. Executing the two in sequence is L2. A relational answer may be correct or a relational error.
 
 Model's reply:
 ```
 Label: not shown
 Clauses: none
-Confidence: 0.65
+Confidence: 0.8
 ```
 
 Label prompt for level way lvl:assignment@L2#2 (the model saw only the concept, the way's name 'one step execution' and its text; no level):
@@ -497,7 +499,7 @@ Root-cause walk: held on [], broken at [], prerequisites {'increment_operators':
 - assignment: L2 via one_step_execution "Probably it makes i 6"
 - increment_operators: L2 via output_prediction "Probably it makes i 6"
 
-**Stop:** sufficient at depth 3; prompts {'prune': 8, 'label': 14}, fresh model calls 4, cache hits 18
+**Stop:** sufficient at depth 3; prompts {'prune': 8, 'label': 14}, fresh model calls 0, cache hits 22
 
 ### Held misconceptions
 (none)
@@ -603,7 +605,8 @@ start concepts (2): increment_operators, println
   "depth": 3,
   "prune_tools": "llm",
   "model": "claude-opus-5-5",
-  "backend": "claude-cli"
+  "backend": "claude-cli",
+  "level_v2": true
  },
  "clauses": [
   "I think i++ adds 1 to i, though it might add 2, Im not sure",
@@ -898,11 +901,15 @@ start concepts (2): increment_operators, println
  "unexplained_clauses": [],
  "stop_reason": "sufficient",
  "depth_reached": 3,
- "llm_calls": 4,
- "llm_cache_hits": 18,
+ "llm_calls": 0,
+ "llm_cache_hits": 22,
  "llm_calls_by_step": {
   "prune": 8,
   "label": 14
+ },
+ "level_v2": {
+  "wrong_ways": [],
+  "not_counted": []
  }
 }
 ```

@@ -247,14 +247,16 @@ Prune: the model's reply (edge id and score; the kept edges sum to 1):
 ```
 Kept by pruning: lvl:arithmetic_operators@L3#4 (0.40), lvl:arithmetic_operators@L2#1 (0.35), lvl:arithmetic_operators@L0#0 (0.25)
 
-Label prompt for level way lvl:arithmetic_operators@L3#4 (the model saw only the concept, the way's name 'purpose of the whole' and its text; no level):
+Label prompt for level way lvl:arithmetic_operators@L3#4 (the model saw the concept, the way's name 'purpose of the whole', its text, where the way stops and whether the words must be correct; no level):
 > Arithmetic operators turn formulas into code: totals, averages, unit conversions (inch * CM_PER_INCH), and digit extraction (n % 10, n / 10).
+>
+> Where this way stops: Narrating the lines is L2. A purpose induced from a few traced cases is L2. A wrong purpose is still L3, but with an error.
 
 Model's reply:
 ```
-Label: not shown
-Clauses: none
-Confidence: 0.8
+Label: wrong
+Clauses: 2, 3
+Confidence: 0.6
 ```
 
 Label prompt for level way lvl:arithmetic_operators@L2#1 (the model saw only the concept, the way's name 'output prediction' and its text; no level):
@@ -278,11 +280,7 @@ Confidence: 0.85
 ```
 
 Parsed labels:
-| edge | label | prune score | confidence | score | clauses | words |
-|---|---|---|---|---|---|---|
-| lvl:arithmetic_operators@L3#4 | not applied |  |  | 0.0 |  |  |
-| lvl:arithmetic_operators@L2#1 | not applied |  |  | 0.0 |  |  |
-| lvl:arithmetic_operators@L0#0 | not applied |  |  | 0.0 |  |  |
+(none)
 
 #### compound_assignment, misconceptions: 2 edges offered
 Edges offered:
@@ -353,8 +351,10 @@ Clauses: none
 Confidence: 0.9
 ```
 
-Label prompt for level way lvl:compound_assignment@L3#3 (the model saw only the concept, the way's name 'purpose of the whole' and its text; no level):
+Label prompt for level way lvl:compound_assignment@L3#3 (the model saw the concept, the way's name 'purpose of the whole', its text, where the way stops and whether the words must be correct; no level):
 > Plan/role: the update step of a gatherer (sum += a[i], product *= i) or of a stepper with a step other than 1 (i += 2).
+>
+> Where this way stops: Narrating the lines is L2. A purpose induced from a few traced cases is L2. A wrong purpose is still L3, but with an error.
 
 Model's reply:
 ```
@@ -457,8 +457,10 @@ Clauses: 1
 Confidence: 0.6
 ```
 
-Label prompt for level way lvl:println@L3#4 (the model saw only the concept, the way's name 'purpose of the whole' and its text; no level):
+Label prompt for level way lvl:println@L3#4 (the model saw the concept, the way's name 'purpose of the whole', its text, where the way stops and whether the words must be correct; no level):
 > Purpose: produce one complete line of output, e.g. each result on its own line, or end a line built with print.
+>
+> Where this way stops: Narrating the lines is L2. A purpose induced from a few traced cases is L2. A wrong purpose is still L3, but with an error.
 
 Model's reply:
 ```
@@ -679,32 +681,34 @@ Clauses: 1, 3
 Confidence: 0.85
 ```
 
-Label prompt for level way lvl:math_random@L3#2 (the model saw only the concept, the way's name 'relation to neighbour' and its text; no level):
+Label prompt for level way lvl:math_random@L3#2 (the model saw the concept, the way's name 'relation to neighbour', its text, where the way stops and whether the words must be correct; no level):
 > Each trial of a Monte Carlo simulation draws fresh values with Math.random(); estimates become reliable only over many trials.
+>
+> Where this way stops: Two correct but separate rules are L1. Executing the two in sequence is L2. A relational answer may be correct or a relational error.
 
 Model's reply:
 ```
-Label: not shown
-Clauses: none
-Confidence: 0.9
+Label: wrong
+Clauses: 2, 3
+Confidence: 0.8
 ```
 
-Label prompt for level way lvl:math_random@L4#0 (the model saw only the concept, the way's name 'predict a change' and its text; no level):
+Label prompt for level way lvl:math_random@L4#0 (the model saw the concept, the way's name 'predict a change', its text, where the way stops and whether the words must be correct; no level):
 > Changing N in (int) (Math.random() * N) changes the range to 0..N-1, and adding a constant shifts it; the output changes from run to run, so a program using Math.random() cannot be checked by comparing exact outputs, only by statistics over many runs.
+>
+> Where this way stops: Re-tracing the changed code value by value is L2 on the new code. Adapting given code to a familiar variant may be only relational.
 
 Model's reply:
 ```
 Label: not shown
 Clauses: none
-Confidence: 0.9
+Confidence: 0.75
 ```
 
 Parsed labels:
 | edge | label | prune score | confidence | score | clauses | words |
 |---|---|---|---|---|---|---|
 | lvl:math_random@L0#0 | shown | 0.6 | 0.85 | 0.51 | c1, c3 | 5; so in 10 steps the surfer goes there exactly 5 times |
-| lvl:math_random@L3#2 | not applied |  |  | 0.0 |  |  |
-| lvl:math_random@L4#0 | not applied |  |  | 0.0 |  |  |
 
 #### loop_control, misconceptions: 11 edges offered
 Edges offered:
@@ -790,32 +794,34 @@ Clauses: none
 Confidence: 0.6
 ```
 
-Label prompt for level way lvl:loop_control@L3#6 (the model saw only the concept, the way's name 'purpose of the whole' and its text; no level):
+Label prompt for level way lvl:loop_control@L3#6 (the model saw the concept, the way's name 'purpose of the whole', its text, where the way stops and whether the words must be correct; no level):
 > Plan: counter-controlled loop - the loop variable is a stepper that walks a predictable sequence of values (0..N-1, 1..N, every 2nd value) and fixes the number of passes in advance.
+>
+> Where this way stops: Narrating the lines is L2. A purpose induced from a few traced cases is L2. A wrong purpose is still L3, but with an error.
 
 Model's reply:
 ```
-Label: shown
-Clauses: 3
-Confidence: 0.6
+Label: wrong
+Clauses: 2, 3
+Confidence: 0.75
 ```
 
-Label prompt for level way lvl:loop_control@L4#2 (the model saw only the concept, the way's name 'transfer to a new program' and its text; no level):
+Label prompt for level way lvl:loop_control@L4#2 (the model saw the concept, the way's name 'transfer to a new program', its text, where the way stops and whether the words must be correct; no level):
 > Use explicit init/test/update control when the passes are counted or follow a fixed step; when the number of passes depends on data computed in the body, control the loop by that data (a while condition) instead.
+>
+> Where this way stops: Reproducing or slightly varying a familiar program is L1 to L3.
 
 Model's reply:
 ```
 Label: not shown
 Clauses: none
-Confidence: 0.92
+Confidence: 0.9
 ```
 
 Parsed labels:
 | edge | label | prune score | confidence | score | clauses | words |
 |---|---|---|---|---|---|---|
 | lvl:loop_control@L2#1 | not applied |  |  | 0.0 |  |  |
-| lvl:loop_control@L3#6 | shown | 0.3 | 0.6 | 0.18 | c3 | so in 10 steps the surfer goes there exactly 5 times |
-| lvl:loop_control@L4#2 | not applied |  |  | 0.0 |  |  |
 
 #### frequency_counting, misconceptions: 2 edges offered
 Edges offered:
@@ -885,14 +891,16 @@ Clauses: 1, 3
 Confidence: 0.55
 ```
 
-Label prompt for level way lvl:frequency_counting@L3#1 (the model saw only the concept, the way's name 'relation to neighbour' and its text; no level):
+Label prompt for level way lvl:frequency_counting@L3#1 (the model saw the concept, the way's name 'relation to neighbour', its text, where the way stops and whether the words must be correct; no level):
 > freq[i]/T converges to the same page ranks the power method computes, but only as an estimate.
+>
+> Where this way stops: Two correct but separate rules are L1. Executing the two in sequence is L2. A relational answer may be correct or a relational error.
 
 Model's reply:
 ```
-Label: not shown
-Clauses: none
-Confidence: 0.85
+Label: wrong
+Clauses: 2, 3
+Confidence: 0.8
 ```
 
 Label prompt for level way lvl:frequency_counting@L1#1 (the model saw only the concept, the way's name 'states the rule' and its text; no level):
@@ -909,8 +917,6 @@ Parsed labels:
 | edge | label | prune score | confidence | score | clauses | words |
 |---|---|---|---|---|---|---|
 | lvl:frequency_counting@L0#3 | shown | 0.5 | 0.55 | 0.28 | c1, c3 | 5; so in 10 steps the surfer goes there exactly 5 times |
-| lvl:frequency_counting@L3#1 | not applied |  |  | 0.0 |  |  |
-| lvl:frequency_counting@L1#1 | not applied |  |  | 0.0 |  |  |
 
 **Kept on a path at this depth** (best N in tiers: held misconception / broken edge, then held error, then correct / confirmed / shown):
 
@@ -1128,14 +1134,16 @@ Prune: the model's reply (edge id and score; the kept edges sum to 1):
 ```
 Kept by pruning: lvl:math_library@L3#3 (0.40), lvl:math_library@L2#2 (0.35), lvl:math_library@L3#6 (0.25)
 
-Label prompt for level way lvl:math_library@L3#3 (the model saw only the concept, the way's name 'relation to neighbour' and its text; no level):
+Label prompt for level way lvl:math_library@L3#3 (the model saw the concept, the way's name 'relation to neighbour', its text, where the way stops and whether the words must be correct; no level):
 > Math.random() is the one Math method that takes no argument and is not a mathematical function: it returns a random double in [0, 1).
+>
+> Where this way stops: Two correct but separate rules are L1. Executing the two in sequence is L2. A relational answer may be correct or a relational error.
 
 Model's reply:
 ```
-Label: not shown
-Clauses: none
-Confidence: 0.9
+Label: wrong
+Clauses: 2, 3
+Confidence: 0.6
 ```
 
 Label prompt for level way lvl:math_library@L2#2 (the model saw only the concept, the way's name 'one step execution' and its text; no level):
@@ -1148,22 +1156,20 @@ Clauses: none
 Confidence: 0.85
 ```
 
-Label prompt for level way lvl:math_library@L3#6 (the model saw only the concept, the way's name 'relation to neighbour' and its text; no level):
+Label prompt for level way lvl:math_library@L3#6 (the model saw the concept, the way's name 'relation to neighbour', its text, where the way stops and whether the words must be correct; no level):
 > The random move draws r = Math.random() once per move and compares it with growing cumulative sums of row p[page] to find which interval contains it.
+>
+> Where this way stops: Two correct but separate rules are L1. Executing the two in sequence is L2. A relational answer may be correct or a relational error.
 
 Model's reply:
 ```
-Label: not shown
-Clauses: none
-Confidence: 0.9
+Label: wrong
+Clauses: 2, 3
+Confidence: 0.55
 ```
 
 Parsed labels:
-| edge | label | prune score | confidence | score | clauses | words |
-|---|---|---|---|---|---|---|
-| lvl:math_library@L3#3 | not applied |  |  | 0.0 |  |  |
-| lvl:math_library@L2#2 | not applied |  |  | 0.0 |  |  |
-| lvl:math_library@L3#6 | not applied |  |  | 0.0 |  |  |
+(none)
 
 #### counter_pattern, misconceptions: 2 edges offered
 Edges offered:
@@ -1245,8 +1251,10 @@ Clauses: none
 Confidence: 0.8
 ```
 
-Label prompt for level way lvl:counter_pattern@L4#2 (the model saw only the concept, the way's name 'transfer to a new program' and its text; no level):
+Label prompt for level way lvl:counter_pattern@L4#2 (the model saw the concept, the way's name 'transfer to a new program', its text, where the way stops and whether the words must be correct; no level):
 > Use a counter when the question is 'how many' (wins, bets, primes, distinct values); use an accumulator when it is 'how much in total', and a boolean flag when you only need 'whether any'. When you need a count for each of many values, use an array of counters (a histogram) instead of many separate variables.
+>
+> Where this way stops: Reproducing or slightly varying a familiar program is L1 to L3.
 
 Model's reply:
 ```
@@ -1351,24 +1359,28 @@ Prune: the model's reply (edge id and score; the kept edges sum to 1):
 ```
 Kept by pruning: lvl:for_loop@L3#3 (0.45), lvl:for_loop@L3#8 (0.35), lvl:for_loop@L2#1 (0.20)
 
-Label prompt for level way lvl:for_loop@L3#3 (the model saw only the concept, the way's name 'relation to neighbour' and its text; no level):
+Label prompt for level way lvl:for_loop@L3#3 (the model saw the concept, the way's name 'relation to neighbour', its text, where the way stops and whether the words must be correct; no level):
 > A simulation runs a fixed number of trials with an outer for loop (for (int t = 0; t < T; t++)), each trial simulated inside the body.
+>
+> Where this way stops: Two correct but separate rules are L1. Executing the two in sequence is L2. A relational answer may be correct or a relational error.
 
 Model's reply:
 ```
-Label: shown
-Clauses: 3
+Label: wrong
+Clauses: 2, 3
 Confidence: 0.6
 ```
 
-Label prompt for level way lvl:for_loop@L3#8 (the model saw only the concept, the way's name 'purpose of the whole' and its text; no level):
+Label prompt for level way lvl:for_loop@L3#8 (the model saw the concept, the way's name 'purpose of the whole', its text, where the way stops and whether the words must be correct; no level):
 > Plan: counted loop / counter-controlled repetition - do the body a known number of times, with the loop variable as a stepper (index, term number, trial number).
+>
+> Where this way stops: Narrating the lines is L2. A purpose induced from a few traced cases is L2. A wrong purpose is still L3, but with an error.
 
 Model's reply:
 ```
-Label: shown
+Label: wrong
 Clauses: 3
-Confidence: 0.65
+Confidence: 0.6
 ```
 
 Label prompt for level way lvl:for_loop@L2#1 (the model saw only the concept, the way's name 'output prediction' and its text; no level):
@@ -1382,15 +1394,11 @@ Confidence: 0.6
 ```
 
 Parsed labels:
-| edge | label | prune score | confidence | score | clauses | words |
-|---|---|---|---|---|---|---|
-| lvl:for_loop@L3#3 | shown | 0.45 | 0.6 | 0.27 | c3 | so in 10 steps the surfer goes there exactly 5 times |
-| lvl:for_loop@L3#8 | shown | 0.35 | 0.65 | 0.23 | c3 | so in 10 steps the surfer goes there exactly 5 times |
-| lvl:for_loop@L2#1 | shown | 0.2 | 0.6 | 0.12 | c1, c3 | 5; so in 10 steps the surfer goes there exactly 5 times |
+(none)
 
 **Kept on a path at this depth** (best N in tiers: held misconception / broken edge, then held error, then correct / confirmed / shown):
 
-err:for_loop->WrongIterationCount [correct, tier 2, 0.38], lvl:for_loop@L3#3 [shown, tier 2, 0.27], lvl:for_loop@L3#8 [shown, tier 2, 0.23]
+err:for_loop->WrongIterationCount [correct, tier 2, 0.38], mis:for_loop->ForIsConditional [correct, tier 2, 0.13], lvl:for_loop@L2#1 [shown, tier 2, 0.12]
 
 **Clause coverage after this depth:**
 | clause | text | covered by |
@@ -1405,13 +1413,12 @@ Figure 7 (the graph after depth 4): C:\Users\magnu\OneDrive\Desktop\ES_VIterbi_P
 
 ## 4. Diagnosis (rules over the labelled graph, no model)
 Root-cause walk: held on ['frequency_counting', 'math_random'], broken at [] (consequences: pre:math_library->math_random), prerequisites {'expression': ['arithmetic_operators'], 'array_default_values': ['array_creation'], 'array_initializer': ['array_creation', 'array_declaration'], 'indexing': ['array_creation', 'array_initializer'], 'array_creation': ['array_declaration'], 'compound_assignment': ['assignment'], 'increment_operators': ['assignment', 'loop_control'], 'while_loop': ['boolean_expression'], 'boolean_expression': ['comparison_operators'], 'accumulator_pattern': ['compound_assignment', 'loop_body'], 'frequency_counting': ['counter_pattern'], 'array_declaration': ['data_structure'], 'data_structure': ['data_type'], 'comparison_operators': ['expression'], 'method_call': ['expression'], 'loop_body': ['for_loop', 'while_loop'], 'loop_scope': ['for_loop'], 'nested_loops': ['for_loop'], 'counter_pattern': ['increment_operators', 'loop_body'], 'for_loop': ['loop_control'], 'loop_control': ['loop_variable', 'while_loop'], 'math_random': ['math_library'], 'api': ['method_call'], 'math_library': ['method_call'], 'control_flow': ['statement'], 'println': ['statement'], 'loop_variable': ['while_loop']}
-- for_loop: L3 via relation_to_neighbour "so in 10 steps the surfer goes there exactly 5 times"
+- for_loop: L2 via output_prediction "5; so in 10 steps the surfer goes there exactly 5 times"
 - frequency_counting: L0 via misconception "5; Page 1 has probability 0.5; so in 10 steps the surfer goes there exactly 5 times"
-- loop_control: L3 via purpose_of_the_whole "so in 10 steps the surfer goes there exactly 5 times"
 - math_random: L0 via misconception "5; Page 1 has probability 0.5; so in 10 steps the surfer goes there exactly 5 times"
 - println: L2 via output_prediction "5"
 
-**Stop:** max depth at depth 4; prompts {'prune': 24, 'label': 46}, fresh model calls 70, cache hits 0
+**Stop:** max depth at depth 4; prompts {'prune': 24, 'label': 46}, fresh model calls 0, cache hits 70
 
 ### Held misconceptions
 | concept | misconception | kind | quote | score | shares_evidence_with |
@@ -1429,11 +1436,22 @@ Root-cause walk: held on ['frequency_counting', 'math_random'], broken at [] (co
 ### Level per concept
 | concept | level | way | misconception | source | quote | rule | also | note |
 |---|---|---|---|---|---|---|---|---|
-| for_loop | L3 | relation_to_neighbour |  | level_way | so in 10 steps the surfer goes there exactly 5 times |  | L3 purpose_of_the_whole, L2 output_prediction |  |
+| for_loop | L2 | output_prediction |  | level_way | 5; so in 10 steps the surfer goes there exactly 5 times |  |  |  |
 | frequency_counting | L0 | misconception | FewTrialsAreExact | level_mis_links | 5; Page 1 has probability 0.5; so in 10 steps the surfer goes there exactly 5 times | wrong rule: A short simulation gives the exact page ranks. Right rule: freq[i]/T is only an estimate: about 10^n moves for n-digit precision and many more for accuracy. |  |  |
-| loop_control | L3 | purpose_of_the_whole |  | level_way | so in 10 steps the surfer goes there exactly 5 times |  |  |  |
 | math_random | L0 | misconception | ProbabilityIsPrediction | level_mis_links | 5; Page 1 has probability 0.5; so in 10 steps the surfer goes there exactly 5 times | wrong rule: A probability (e.g. 70%) predicts what the next single trial will do. Right rule: A probability describes the long-run frequency over many trials, not one outcome; Math.random() < 0.7 is true on about 70% of many calls, and any single call can go either way. |  |  |
 | println | L2 | output_prediction |  | level_way | 5 |  |  |  |
+
+Ways above L2 the model answered "wrong" (the kind of thing is done, but what is said contradicts Java; not shown):
+| concept | edge | level | way | confidence | clauses | quote |
+|---|---|---|---|---|---|---|
+| arithmetic_operators | lvl:arithmetic_operators@L3#4 | L3 | purpose_of_the_whole | 0.6 | [2, 3] | Page 1 has probability 0.5; so in 10 steps the surfer goes there exactly 5 times |
+| math_random | lvl:math_random@L3#2 | L3 | relation_to_neighbour | 0.8 | [2, 3] | Page 1 has probability 0.5; so in 10 steps the surfer goes there exactly 5 times |
+| loop_control | lvl:loop_control@L3#6 | L3 | purpose_of_the_whole | 0.75 | [2, 3] | Page 1 has probability 0.5; so in 10 steps the surfer goes there exactly 5 times |
+| frequency_counting | lvl:frequency_counting@L3#1 | L3 | relation_to_neighbour | 0.8 | [2, 3] | Page 1 has probability 0.5; so in 10 steps the surfer goes there exactly 5 times |
+| math_library | lvl:math_library@L3#3 | L3 | relation_to_neighbour | 0.6 | [2, 3] | Page 1 has probability 0.5; so in 10 steps the surfer goes there exactly 5 times |
+| math_library | lvl:math_library@L3#6 | L3 | relation_to_neighbour | 0.55 | [2, 3] | Page 1 has probability 0.5; so in 10 steps the surfer goes there exactly 5 times |
+| for_loop | lvl:for_loop@L3#3 | L3 | relation_to_neighbour | 0.6 | [2, 3] | Page 1 has probability 0.5; so in 10 steps the surfer goes there exactly 5 times |
+| for_loop | lvl:for_loop@L3#8 | L3 | purpose_of_the_whole | 0.6 | [3] | so in 10 steps the surfer goes there exactly 5 times |
 
 ### Overall level: L0
 
@@ -1454,7 +1472,6 @@ Figure 8 (final picture): C:\Users\magnu\OneDrive\Desktop\ES_VIterbi_Personalize
 | 2 | math_random | lvl:math_random@L0#0 | level | shown | 0.6 | 0.85 | 0.51 | [1, 3] | 5; so in 10 steps the surfer goes there exactly 5 times |
 | 2 | loop_control | err:loop_control->WrongIterationCount | error | correct | 0.45 | 0.6 | 0.27 | [3] | so in 10 steps the surfer goes there exactly 5 times |
 | 2 | loop_control | mis:loop_control->OffByOneBound | misconception | correct | 0.3 | 0.5 | 0.15 | [3] | so in 10 steps the surfer goes there exactly 5 times |
-| 2 | loop_control | lvl:loop_control@L3#6 | level | shown | 0.3 | 0.6 | 0.18 | [3] | so in 10 steps the surfer goes there exactly 5 times |
 | 2 | frequency_counting | mis:frequency_counting->FewTrialsAreExact | misconception | held | 0.9 | 0.92 | 0.828 | [1, 2, 3] | 5; Page 1 has probability 0.5; so in 10 steps the surfer goes there exactly 5 times |
 | 2 | frequency_counting | lvl:frequency_counting@L0#3 | level | shown | 0.5 | 0.55 | 0.275 | [1, 3] | 5; so in 10 steps the surfer goes there exactly 5 times |
 | 3 | frequency_counting | pre:counter_pattern->frequency_counting | prerequisite | confirmed | 1.0 | 0.6 | 0.6 | [3] | so in 10 steps the surfer goes there exactly 5 times |
@@ -1463,8 +1480,6 @@ Figure 8 (final picture): C:\Users\magnu\OneDrive\Desktop\ES_VIterbi_Personalize
 | 3 | loop_control | pre:loop_variable->loop_control | prerequisite | confirmed | 0.3 | 0.55 | 0.165 | [3] | so in 10 steps the surfer goes there exactly 5 times |
 | 4 | for_loop | err:for_loop->WrongIterationCount | error | correct | 0.5 | 0.75 | 0.375 | [3] | so in 10 steps the surfer goes there exactly 5 times |
 | 4 | for_loop | mis:for_loop->ForIsConditional | misconception | correct | 0.2 | 0.65 | 0.13 | [3] | so in 10 steps the surfer goes there exactly 5 times |
-| 4 | for_loop | lvl:for_loop@L3#3 | level | shown | 0.45 | 0.6 | 0.27 | [3] | so in 10 steps the surfer goes there exactly 5 times |
-| 4 | for_loop | lvl:for_loop@L3#8 | level | shown | 0.35 | 0.65 | 0.2275 | [3] | so in 10 steps the surfer goes there exactly 5 times |
 | 4 | for_loop | lvl:for_loop@L2#1 | level | shown | 0.2 | 0.6 | 0.12 | [1, 3] | 5; so in 10 steps the surfer goes there exactly 5 times |
 
 ## 6. The paths (what the keep step kept, depth by depth)
@@ -1478,8 +1493,8 @@ Figure 8 (final picture): C:\Users\magnu\OneDrive\Desktop\ES_VIterbi_Personalize
 | 3 | frequency_counting | pre:counter_pattern->frequency_counting | prerequisite | confirmed | 0.6 | [3] |
 | 3 | loop_control | pre:loop_control->for_loop | prerequisite | confirmed | 0.275 | [3] |
 | 4 | for_loop | err:for_loop->WrongIterationCount | error | correct | 0.375 | [3] |
-| 4 | for_loop | lvl:for_loop@L3#3 | level | shown | 0.27 | [3] |
-| 4 | for_loop | lvl:for_loop@L3#8 | level | shown | 0.2275 | [3] |
+| 4 | for_loop | mis:for_loop->ForIsConditional | misconception | correct | 0.13 | [3] |
+| 4 | for_loop | lvl:for_loop@L2#1 | level | shown | 0.12 | [1, 3] |
 
 ## 7. Raw traversal log
 ```
@@ -1493,6 +1508,7 @@ start concepts (3): arithmetic_operators, compound_assignment, println
     mis:arithmetic_operators->CaretIsPower -> not applied (0.00) ""
     mis:arithmetic_operators->ArithmeticOnNumericStrings -> not applied (0.00) ""
   arithmetic_operators (level ways): 18 candidates -> kept lvl:arithmetic_operators@L3#4 (0.40), lvl:arithmetic_operators@L2#1 (0.35), lvl:arithmetic_operators@L0#0 (0.25)
+    lvl:arithmetic_operators@L3#4: wrong (0.60) -> not applied
     lvl:arithmetic_operators@L3#4 -> not applied (0.00) ""
     lvl:arithmetic_operators@L2#1 -> not applied (0.00) ""
     lvl:arithmetic_operators@L0#0 -> not applied (0.00) ""
@@ -1529,6 +1545,7 @@ start concepts (3): arithmetic_operators, compound_assignment, println
     mis:math_random->RandomCanReturnOne -> not applied (0.00) ""
   math_random (level ways): 16 candidates -> kept lvl:math_random@L0#0 (0.60), lvl:math_random@L3#2 (0.25), lvl:math_random@L4#0 (0.15)
     lvl:math_random@L0#0 -> shown (0.51) "5; so in 10 steps the surfer goes there exactly 5 times"
+    lvl:math_random@L3#2: wrong (0.80) -> not applied
     lvl:math_random@L3#2 -> not applied (0.00) ""
     lvl:math_random@L4#0 -> not applied (0.00) ""
   loop_control (misconceptions): 11 candidates -> kept err:loop_control->WrongIterationCount (0.45), mis:loop_control->OffByOneBound (0.30), mis:loop_control->IdiomOverridesCode (0.25)
@@ -1537,13 +1554,15 @@ start concepts (3): arithmetic_operators, compound_assignment, println
     mis:loop_control->IdiomOverridesCode -> not applied (0.00) ""
   loop_control (level ways): 19 candidates -> kept lvl:loop_control@L2#1 (0.45), lvl:loop_control@L3#6 (0.30), lvl:loop_control@L4#2 (0.25)
     lvl:loop_control@L2#1 -> not applied (0.00) ""
-    lvl:loop_control@L3#6 -> shown (0.18) "so in 10 steps the surfer goes there exactly 5 times"
+    lvl:loop_control@L3#6: wrong (0.75) -> not applied
+    lvl:loop_control@L3#6 -> not applied (0.00) ""
     lvl:loop_control@L4#2 -> not applied (0.00) ""
   frequency_counting (misconceptions): 2 candidates -> kept mis:frequency_counting->FewTrialsAreExact (0.90), mis:frequency_counting->ManyDigitsMeanAccurate (0.10)
     mis:frequency_counting->FewTrialsAreExact -> held (0.83) "5; Page 1 has probability 0.5; so in 10 steps the surfer goes there exactly 5 times"
     mis:frequency_counting->ManyDigitsMeanAccurate -> not applied (0.00) ""
   frequency_counting (level ways): 14 candidates -> kept lvl:frequency_counting@L0#3 (0.50), lvl:frequency_counting@L3#1 (0.30), lvl:frequency_counting@L1#1 (0.20)
     lvl:frequency_counting@L0#3 -> shown (0.28) "5; so in 10 steps the surfer goes there exactly 5 times"
+    lvl:frequency_counting@L3#1: wrong (0.80) -> not applied
     lvl:frequency_counting@L3#1 -> not applied (0.00) ""
     lvl:frequency_counting@L1#1 -> not applied (0.00) ""
   kept: mis:frequency_counting->FewTrialsAreExact [held, tier 0, 0.83], mis:math_random->ProbabilityIsPrediction [held, tier 0, 0.81], lvl:math_random@L0#0 [shown, tier 2, 0.51]
@@ -1570,8 +1589,10 @@ start concepts (3): arithmetic_operators, compound_assignment, println
     err:math_library->WrongArgumentType -> not applied (0.00) ""
     err:math_library->MathMethodWithoutClassName -> not applied (0.00) ""
   math_library (level ways): 20 candidates -> kept lvl:math_library@L3#3 (0.40), lvl:math_library@L2#2 (0.35), lvl:math_library@L3#6 (0.25)
+    lvl:math_library@L3#3: wrong (0.60) -> not applied
     lvl:math_library@L3#3 -> not applied (0.00) ""
     lvl:math_library@L2#2 -> not applied (0.00) ""
+    lvl:math_library@L3#6: wrong (0.55) -> not applied
     lvl:math_library@L3#6 -> not applied (0.00) ""
   counter_pattern (misconceptions): 2 candidates -> kept mis:counter_pattern->VariableRolesInferred (0.60), err:counter_pattern->AccumulatorDeclaredInLoop (0.40)
     mis:counter_pattern->VariableRolesInferred -> not applied (0.00) ""
@@ -1585,16 +1606,17 @@ start concepts (3): arithmetic_operators, compound_assignment, println
     mis:for_loop->LoopCountIsStatementCount -> not applied (0.00) ""
     mis:for_loop->ForIsConditional -> correct (0.13) "so in 10 steps the surfer goes there exactly 5 times"
   for_loop (level ways): 24 candidates -> kept lvl:for_loop@L3#3 (0.45), lvl:for_loop@L3#8 (0.35), lvl:for_loop@L2#1 (0.20)
-    lvl:for_loop@L3#3 -> shown (0.27) "so in 10 steps the surfer goes there exactly 5 times"
-    lvl:for_loop@L3#8 -> shown (0.23) "so in 10 steps the surfer goes there exactly 5 times"
+    lvl:for_loop@L3#3: wrong (0.60) -> not applied
+    lvl:for_loop@L3#3 -> not applied (0.00) ""
+    lvl:for_loop@L3#8: wrong (0.60) -> not applied
+    lvl:for_loop@L3#8 -> not applied (0.00) ""
     lvl:for_loop@L2#1 -> shown (0.12) "5; so in 10 steps the surfer goes there exactly 5 times"
-  kept: err:for_loop->WrongIterationCount [correct, tier 2, 0.38], lvl:for_loop@L3#3 [shown, tier 2, 0.27], lvl:for_loop@L3#8 [shown, tier 2, 0.23]
+  kept: err:for_loop->WrongIterationCount [correct, tier 2, 0.38], mis:for_loop->ForIsConditional [correct, tier 2, 0.13], lvl:for_loop@L2#1 [shown, tier 2, 0.12]
   clause coverage: c1 <- mis:math_random->ProbabilityIsPrediction; c2 <- mis:math_random->ProbabilityIsPrediction; c3 <- mis:math_random->ProbabilityIsPrediction
   not yet read: par:accumulator_pattern~counter_pattern, pre:for_loop->loop_body, pre:for_loop->loop_scope, pre:for_loop->nested_loops, pre:increment_operators->counter_pattern, pre:loop_body->counter_pattern, pre:method_call->math_library
   root-cause walk: held on ['frequency_counting', 'math_random'], broken at [] (consequences: pre:math_library->math_random), prerequisites {'expression': ['arithmetic_operators'], 'array_default_values': ['array_creation'], 'array_initializer': ['array_creation', 'array_declaration'], 'indexing': ['array_creation', 'array_initializer'], 'array_creation': ['array_declaration'], 'compound_assignment': ['assignment'], 'increment_operators': ['assignment', 'loop_control'], 'while_loop': ['boolean_expression'], 'boolean_expression': ['comparison_operators'], 'accumulator_pattern': ['compound_assignment', 'loop_body'], 'frequency_counting': ['counter_pattern'], 'array_declaration': ['data_structure'], 'data_structure': ['data_type'], 'comparison_operators': ['expression'], 'method_call': ['expression'], 'loop_body': ['for_loop', 'while_loop'], 'loop_scope': ['for_loop'], 'nested_loops': ['for_loop'], 'counter_pattern': ['increment_operators', 'loop_body'], 'for_loop': ['loop_control'], 'loop_control': ['loop_variable', 'while_loop'], 'math_random': ['math_library'], 'api': ['method_call'], 'math_library': ['method_call'], 'control_flow': ['statement'], 'println': ['statement'], 'loop_variable': ['while_loop']}
-  level for_loop: L3 via relation_to_neighbour "so in 10 steps the surfer goes there exactly 5 times"
+  level for_loop: L2 via output_prediction "5; so in 10 steps the surfer goes there exactly 5 times"
   level frequency_counting: L0 via misconception "5; Page 1 has probability 0.5; so in 10 steps the surfer goes there exactly 5 times"
-  level loop_control: L3 via purpose_of_the_whole "so in 10 steps the surfer goes there exactly 5 times"
   level math_random: L0 via misconception "5; Page 1 has probability 0.5; so in 10 steps the surfer goes there exactly 5 times"
   level println: L2 via output_prediction "5"
 ```
@@ -1608,7 +1630,8 @@ start concepts (3): arithmetic_operators, compound_assignment, println
   "depth": 3,
   "prune_tools": "llm",
   "model": "claude-opus-5-5",
-  "backend": "claude-cli"
+  "backend": "claude-cli",
+  "level_v2": true
  },
  "clauses": [
   "5",
@@ -1652,15 +1675,12 @@ start concepts (3): arithmetic_operators, compound_assignment, println
  },
  "levels": {
   "for_loop": {
-   "level": "L3",
-   "way": "relation_to_neighbour",
-   "quote": "so in 10 steps the surfer goes there exactly 5 times",
-   "edge": "lvl:for_loop@L3#3",
+   "level": "L2",
+   "way": "output_prediction",
+   "quote": "5; so in 10 steps the surfer goes there exactly 5 times",
+   "edge": "lvl:for_loop@L2#1",
    "source": "level_way",
-   "also_shown": [
-    "L3 purpose_of_the_whole",
-    "L2 output_prediction"
-   ]
+   "also_shown": []
   },
   "frequency_counting": {
    "level": "L0",
@@ -1670,14 +1690,6 @@ start concepts (3): arithmetic_operators, compound_assignment, println
    "edge": "mis:frequency_counting->FewTrialsAreExact",
    "rule": "wrong rule: A short simulation gives the exact page ranks. Right rule: freq[i]/T is only an estimate: about 10^n moves for n-digit precision and many more for accuracy.",
    "source": "level_mis_links"
-  },
-  "loop_control": {
-   "level": "L3",
-   "way": "purpose_of_the_whole",
-   "quote": "so in 10 steps the surfer goes there exactly 5 times",
-   "edge": "lvl:loop_control@L3#6",
-   "source": "level_way",
-   "also_shown": []
   },
   "math_random": {
    "level": "L0",
@@ -1852,40 +1864,40 @@ start concepts (3): arithmetic_operators, compound_assignment, println
   {
    "depth": 4,
    "source": "for_loop",
-   "edge": "lvl:for_loop@L3#3",
-   "target": "for_loop@L3",
-   "kind": "level",
-   "label": "shown",
-   "clauses": [
-    3
-   ],
-   "quote": "so in 10 steps the surfer goes there exactly 5 times",
-   "confidence": 0.6,
-   "prune_score": 0.45,
-   "score": 0.27,
-   "logic": "A simulation runs a fixed number of trials with an outer for loop (for (int t = 0; t < T; t++)), each trial simulated inside the body.",
-   "twin_logic": null,
-   "level": "L3",
-   "way": "relation_to_neighbour"
-  },
-  {
-   "depth": 4,
-   "source": "for_loop",
-   "edge": "lvl:for_loop@L3#8",
-   "target": "for_loop@L3",
-   "kind": "level",
-   "label": "shown",
+   "edge": "mis:for_loop->ForIsConditional",
+   "target": "ForIsConditional",
+   "kind": "misconception",
+   "label": "correct",
    "clauses": [
     3
    ],
    "quote": "so in 10 steps the surfer goes there exactly 5 times",
    "confidence": 0.65,
-   "prune_score": 0.35,
-   "score": 0.2275,
-   "logic": "Plan: counted loop / counter-controlled repetition - do the body a known number of times, with the loop variable as a stepper (index, term number, trial number).",
+   "prune_score": 0.2,
+   "score": 0.13,
+   "logic": "The body of a for statement executes at most once.",
+   "twin_logic": "The body of a for statement runs once for every pass on which the condition is true, which can be many times.",
+   "role": "primary"
+  },
+  {
+   "depth": 4,
+   "source": "for_loop",
+   "edge": "lvl:for_loop@L2#1",
+   "target": "for_loop@L2",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    1,
+    3
+   ],
+   "quote": "5; so in 10 steps the surfer goes there exactly 5 times",
+   "confidence": 0.6,
+   "prune_score": 0.2,
+   "score": 0.12,
+   "logic": "A for statement has no value; the passes it makes are fixed by its header: for (int i = 1; i <= N; i++) sum += i; leaves sum = N(N+1)/2, and for (int i = 2; i <= 8; i += 2) prints 2, 4, 6, 8,.",
    "twin_logic": null,
-   "level": "L3",
-   "way": "purpose_of_the_whole"
+   "level": "L2",
+   "way": "output_prediction"
   }
  ],
  "evidence": [
@@ -1983,25 +1995,6 @@ start concepts (3): arithmetic_operators, compound_assignment, println
    "logic": "i < n and i <= n mean the same, so the loop runs until i equals n and the last pass can use a[n].",
    "twin_logic": "for (i = 0; i < n; i++) runs n times with i going up to n - 1; with <= it runs n + 1 times and reaches i = n.",
    "role": "primary"
-  },
-  {
-   "depth": 2,
-   "source": "loop_control",
-   "edge": "lvl:loop_control@L3#6",
-   "target": "loop_control@L3",
-   "kind": "level",
-   "label": "shown",
-   "clauses": [
-    3
-   ],
-   "quote": "so in 10 steps the surfer goes there exactly 5 times",
-   "confidence": 0.6,
-   "prune_score": 0.3,
-   "score": 0.18,
-   "logic": "Plan: counter-controlled loop - the loop variable is a stepper that walks a predictable sequence of values (0..N-1, 1..N, every 2nd value) and fixes the number of passes in advance.",
-   "twin_logic": null,
-   "level": "L3",
-   "way": "purpose_of_the_whole"
   },
   {
    "depth": 2,
@@ -2152,44 +2145,6 @@ start concepts (3): arithmetic_operators, compound_assignment, println
   {
    "depth": 4,
    "source": "for_loop",
-   "edge": "lvl:for_loop@L3#3",
-   "target": "for_loop@L3",
-   "kind": "level",
-   "label": "shown",
-   "clauses": [
-    3
-   ],
-   "quote": "so in 10 steps the surfer goes there exactly 5 times",
-   "confidence": 0.6,
-   "prune_score": 0.45,
-   "score": 0.27,
-   "logic": "A simulation runs a fixed number of trials with an outer for loop (for (int t = 0; t < T; t++)), each trial simulated inside the body.",
-   "twin_logic": null,
-   "level": "L3",
-   "way": "relation_to_neighbour"
-  },
-  {
-   "depth": 4,
-   "source": "for_loop",
-   "edge": "lvl:for_loop@L3#8",
-   "target": "for_loop@L3",
-   "kind": "level",
-   "label": "shown",
-   "clauses": [
-    3
-   ],
-   "quote": "so in 10 steps the surfer goes there exactly 5 times",
-   "confidence": 0.65,
-   "prune_score": 0.35,
-   "score": 0.2275,
-   "logic": "Plan: counted loop / counter-controlled repetition - do the body a known number of times, with the loop variable as a stepper (index, term number, trial number).",
-   "twin_logic": null,
-   "level": "L3",
-   "way": "purpose_of_the_whole"
-  },
-  {
-   "depth": 4,
-   "source": "for_loop",
    "edge": "lvl:for_loop@L2#1",
    "target": "for_loop@L2",
    "kind": "level",
@@ -2216,11 +2171,111 @@ start concepts (3): arithmetic_operators, compound_assignment, println
  "unexplained_clauses": [],
  "stop_reason": "max depth",
  "depth_reached": 4,
- "llm_calls": 70,
- "llm_cache_hits": 0,
+ "llm_calls": 0,
+ "llm_cache_hits": 70,
  "llm_calls_by_step": {
   "prune": 24,
   "label": 46
+ },
+ "level_v2": {
+  "wrong_ways": [
+   {
+    "concept": "arithmetic_operators",
+    "edge": "lvl:arithmetic_operators@L3#4",
+    "level": "L3",
+    "way": "purpose_of_the_whole",
+    "clauses": [
+     2,
+     3
+    ],
+    "quote": "Page 1 has probability 0.5; so in 10 steps the surfer goes there exactly 5 times",
+    "confidence": 0.6
+   },
+   {
+    "concept": "math_random",
+    "edge": "lvl:math_random@L3#2",
+    "level": "L3",
+    "way": "relation_to_neighbour",
+    "clauses": [
+     2,
+     3
+    ],
+    "quote": "Page 1 has probability 0.5; so in 10 steps the surfer goes there exactly 5 times",
+    "confidence": 0.8
+   },
+   {
+    "concept": "loop_control",
+    "edge": "lvl:loop_control@L3#6",
+    "level": "L3",
+    "way": "purpose_of_the_whole",
+    "clauses": [
+     2,
+     3
+    ],
+    "quote": "Page 1 has probability 0.5; so in 10 steps the surfer goes there exactly 5 times",
+    "confidence": 0.75
+   },
+   {
+    "concept": "frequency_counting",
+    "edge": "lvl:frequency_counting@L3#1",
+    "level": "L3",
+    "way": "relation_to_neighbour",
+    "clauses": [
+     2,
+     3
+    ],
+    "quote": "Page 1 has probability 0.5; so in 10 steps the surfer goes there exactly 5 times",
+    "confidence": 0.8
+   },
+   {
+    "concept": "math_library",
+    "edge": "lvl:math_library@L3#3",
+    "level": "L3",
+    "way": "relation_to_neighbour",
+    "clauses": [
+     2,
+     3
+    ],
+    "quote": "Page 1 has probability 0.5; so in 10 steps the surfer goes there exactly 5 times",
+    "confidence": 0.6
+   },
+   {
+    "concept": "math_library",
+    "edge": "lvl:math_library@L3#6",
+    "level": "L3",
+    "way": "relation_to_neighbour",
+    "clauses": [
+     2,
+     3
+    ],
+    "quote": "Page 1 has probability 0.5; so in 10 steps the surfer goes there exactly 5 times",
+    "confidence": 0.55
+   },
+   {
+    "concept": "for_loop",
+    "edge": "lvl:for_loop@L3#3",
+    "level": "L3",
+    "way": "relation_to_neighbour",
+    "clauses": [
+     2,
+     3
+    ],
+    "quote": "Page 1 has probability 0.5; so in 10 steps the surfer goes there exactly 5 times",
+    "confidence": 0.6
+   },
+   {
+    "concept": "for_loop",
+    "edge": "lvl:for_loop@L3#8",
+    "level": "L3",
+    "way": "purpose_of_the_whole",
+    "clauses": [
+     3
+    ],
+    "quote": "so in 10 steps the surfer goes there exactly 5 times",
+    "confidence": 0.6
+   }
+  ],
+  "not_counted": []
  }
 }
 ```

@@ -9,15 +9,15 @@ start concepts (3): array_traversal, for_loop, loop_control
     mis:array_traversal->ElementBoundToOldIndex -> correct (0.19) "The loop visits each index from 0 to a.length - 1 and adds that element to sum; so it prints Total: 12; so the loop runs once more and prints Total: 20, with no other change to the code"
   array_traversal (level ways): 22 candidates -> kept lvl:array_traversal@L2#1 (0.45), lvl:array_traversal@L4#0 (0.30), lvl:array_traversal@L3#2 (0.25)
     lvl:array_traversal@L2#1 -> shown (0.41) "so it prints Total: 12; so the loop runs once more and prints Total: 20, with no other change to the code"
-    lvl:array_traversal@L4#0 -> shown (0.24) "With 8 added, a.length becomes 4; so the loop runs once more and prints Total: 20, with no other change to the code"
+    lvl:array_traversal@L4#0 -> shown (0.26) "With 8 added, a.length becomes 4; so the loop runs once more and prints Total: 20, with no other change to the code"
     lvl:array_traversal@L3#2 -> shown (0.20) "The loop visits each index from 0 to a.length - 1 and adds that element to sum; With 8 added, a.length becomes 4; so the loop runs once more and prints Total: 20, with no other change to the code"
   for_loop (misconceptions): 21 candidates -> kept err:for_loop->WrongIterationCount (0.45), mis:for_loop->IdiomOverridesCode (0.30), mis:for_loop->ForIsConditional (0.25)
     err:for_loop->WrongIterationCount -> correct (0.38) "The loop visits each index from 0 to a.length - 1 and adds that element to sum; so it prints Total: 12; With 8 added, a.length becomes 4; so the loop runs once more and prints Total: 20, with no other change to the code"
     mis:for_loop->IdiomOverridesCode -> not applied (0.00) ""
     mis:for_loop->ForIsConditional -> correct (0.21) "The loop visits each index from 0 to a.length - 1 and adds that element to sum; so it prints Total: 12; so the loop runs once more and prints Total: 20, with no other change to the code"
   for_loop (level ways): 24 candidates -> kept lvl:for_loop@L3#2 (0.40), lvl:for_loop@L4#0 (0.35), lvl:for_loop@L2#1 (0.25)
-    lvl:for_loop@L3#2 -> shown (0.36) "The loop visits each index from 0 to a.length - 1 and adds that element to sum; With 8 added, a.length becomes 4; so the loop runs once more and prints Total: 20, with no other change to the code"
-    lvl:for_loop@L4#0 -> shown (0.26) "With 8 added, a.length becomes 4; so the loop runs once more and prints Total: 20, with no other change to the code"
+    lvl:for_loop@L3#2 -> shown (0.30) "The loop visits each index from 0 to a.length - 1 and adds that element to sum; With 8 added, a.length becomes 4; so the loop runs once more and prints Total: 20, with no other change to the code"
+    lvl:for_loop@L4#0 -> shown (0.30) "With 8 added, a.length becomes 4; so the loop runs once more and prints Total: 20, with no other change to the code"
     lvl:for_loop@L2#1 -> shown (0.23) "The loop visits each index from 0 to a.length - 1 and adds that element to sum; so it prints Total: 12; With 8 added, a.length becomes 4; so the loop runs once more and prints Total: 20, with no other change to the code"
   loop_control (misconceptions): 11 candidates -> kept mis:loop_control->OffByOneBound (0.45), err:loop_control->WrongIterationCount (0.35), mis:loop_control->IdiomOverridesCode (0.20)
     mis:loop_control->OffByOneBound -> correct (0.38) "The loop visits each index from 0 to a.length - 1 and adds that element to sum; so it prints Total: 12; so the loop runs once more and prints Total: 20, with no other change to the code"
@@ -26,7 +26,7 @@ start concepts (3): array_traversal, for_loop, loop_control
   loop_control (level ways): 19 candidates -> kept lvl:loop_control@L2#1 (0.40), lvl:loop_control@L3#5 (0.35), lvl:loop_control@L4#0 (0.25)
     lvl:loop_control@L2#1 -> shown (0.36) "The loop visits each index from 0 to a.length - 1 and adds that element to sum; so it prints Total: 12; so the loop runs once more and prints Total: 20, with no other change to the code"
     lvl:loop_control@L3#5 -> shown (0.28) "The loop visits each index from 0 to a.length - 1 and adds that element to sum; With 8 added, a.length becomes 4; so the loop runs once more and prints Total: 20, with no other change to the code"
-    lvl:loop_control@L4#0 -> shown (0.17) "With 8 added, a.length becomes 4; so the loop runs once more and prints Total: 20, with no other change to the code"
+    lvl:loop_control@L4#0 -> shown (0.20) "With 8 added, a.length becomes 4; so the loop runs once more and prints Total: 20, with no other change to the code"
   kept: lvl:array_traversal@L2#1 [shown, tier 2, 0.41], mis:array_traversal->OffByOneBound [correct, tier 2, 0.38], err:for_loop->WrongIterationCount [correct, tier 2, 0.38]
   clause coverage: c1 <- mis:array_traversal->OffByOneBound; c2 <- mis:array_traversal->ElementBoundToOldIndex; c3 <- mis:array_traversal->OffByOneBound; c4 <- mis:array_traversal->OffByOneBound
   not yet read: pre:for_loop->array_traversal, pre:for_loop->loop_body, pre:for_loop->loop_scope, pre:indexing->array_traversal, pre:length_field->array_traversal, pre:loop_control->for_loop, pre:loop_control->increment_operators, pre:loop_variable->loop_control
@@ -55,8 +55,8 @@ start concepts (3): array_traversal, for_loop, loop_control
     mis:loop_variable->LoopVariableLimitsValues -> correct (0.17) "so it prints Total: 12; so the loop runs once more and prints Total: 20, with no other change to the code"
   loop_variable (level ways): 13 candidates -> kept lvl:loop_variable@L2#1 (0.40), lvl:loop_variable@L3#2 (0.30), lvl:loop_variable@L4#0 (0.30)
     lvl:loop_variable@L2#1 -> shown (0.28) "The loop visits each index from 0 to a.length - 1 and adds that element to sum; so the loop runs once more and prints Total: 20, with no other change to the code"
-    lvl:loop_variable@L3#2 -> shown (0.26) "The loop visits each index from 0 to a.length - 1 and adds that element to sum; so the loop runs once more and prints Total: 20, with no other change to the code"
-    lvl:loop_variable@L4#0 -> not applied (0.00) ""
+    lvl:loop_variable@L3#2 -> shown (0.24) "The loop visits each index from 0 to a.length - 1 and adds that element to sum; so the loop runs once more and prints Total: 20, with no other change to the code"
+    lvl:loop_variable@L4#0 -> shown (0.21) "With 8 added, a.length becomes 4; so the loop runs once more and prints Total: 20, with no other change to the code"
   loop_control (concept edges): 2 candidates -> kept pre:loop_control->for_loop (0.75), pre:loop_control->increment_operators (0.25)
     pre:loop_control->for_loop -> confirmed (0.45) "The loop visits each index from 0 to a.length - 1 and adds that element to sum; so the loop runs once more and prints Total: 20, with no other change to the code"
     pre:loop_control->increment_operators -> not applied (0.00) ""
@@ -64,8 +64,8 @@ start concepts (3): array_traversal, for_loop, loop_control
     mis:length_field->ArrayHasLengthMethod -> correct (0.72) "The loop visits each index from 0 to a.length - 1 and adds that element to sum; With 8 added, a.length becomes 4"
     mis:length_field->ArrayLengthCannotBeZero -> not applied (0.00) ""
   length_field (level ways): 15 candidates -> kept lvl:length_field@L4#0 (0.50), lvl:length_field@L3#2 (0.30), lvl:length_field@L1#1 (0.20)
-    lvl:length_field@L4#0 -> shown (0.44) "With 8 added, a.length becomes 4; so the loop runs once more and prints Total: 20, with no other change to the code"
-    lvl:length_field@L3#2 -> shown (0.26) "With 8 added, a.length becomes 4; so the loop runs once more and prints Total: 20, with no other change to the code"
+    lvl:length_field@L4#0 -> shown (0.42) "With 8 added, a.length becomes 4; so the loop runs once more and prints Total: 20, with no other change to the code"
+    lvl:length_field@L3#2 -> shown (0.18) "With 8 added, a.length becomes 4; so the loop runs once more and prints Total: 20, with no other change to the code"
     lvl:length_field@L1#1 -> shown (0.16) "The loop visits each index from 0 to a.length - 1 and adds that element to sum; With 8 added, a.length becomes 4"
   array_traversal (concept edges): 2 candidates -> kept pre:for_loop->array_traversal (0.60), pre:indexing->array_traversal (0.40)
     pre:for_loop->array_traversal -> confirmed (0.56) "The loop visits each index from 0 to a.length - 1 and adds that element to sum; With 8 added, a.length becomes 4; so the loop runs once more and prints Total: 20, with no other change to the code"
@@ -75,7 +75,7 @@ start concepts (3): array_traversal, for_loop, loop_control
     mis:loop_body->LoopOutputSameEachPass -> correct (0.18) "The loop visits each index from 0 to a.length - 1 and adds that element to sum"
     mis:loop_body->StatementAfterLoopInBody -> correct (0.15) "so it prints Total: 12; so the loop runs once more and prints Total: 20, with no other change to the code"
   loop_body (level ways): 14 candidates -> kept lvl:loop_body@L3#0 (0.40), lvl:loop_body@L2#1 (0.35), lvl:loop_body@L4#0 (0.25)
-    lvl:loop_body@L3#0 -> shown (0.24) "The loop visits each index from 0 to a.length - 1 and adds that element to sum; so the loop runs once more and prints Total: 20, with no other change to the code"
+    lvl:loop_body@L3#0 -> not applied (0.00) ""
     lvl:loop_body@L2#1 -> shown (0.24) "The loop visits each index from 0 to a.length - 1 and adds that element to sum; so the loop runs once more and prints Total: 20, with no other change to the code"
     lvl:loop_body@L4#0 -> not applied (0.00) ""
   for_loop (concept edges): 1 candidates -> kept pre:for_loop->loop_scope (1.00)
@@ -84,9 +84,10 @@ start concepts (3): array_traversal, for_loop, loop_control
   clause coverage: c1 <- mis:array_traversal->OffByOneBound; c2 <- mis:array_traversal->ElementBoundToOldIndex; c3 <- mis:array_traversal->OffByOneBound; c4 <- mis:array_traversal->OffByOneBound
   not yet read: pre:array_initializer->length_field, pre:loop_body->accumulator_pattern
   root-cause walk: held on [], broken at [], prerequisites {'array_initializer': ['array_declaration'], 'indexing': ['array_initializer'], 'length_field': ['array_initializer'], 'compound_assignment': ['assignment'], 'increment_operators': ['assignment', 'loop_control'], 'boolean_expression': ['comparison_operators'], 'accumulator_pattern': ['compound_assignment', 'loop_body'], 'array_declaration': ['data_structure'], 'data_structure': ['data_type'], 'comparison_operators': ['expression'], 'array_traversal': ['for_loop', 'indexing', 'length_field'], 'loop_body': ['for_loop'], 'loop_scope': ['for_loop'], 'array_bounds': ['indexing'], 'for_loop': ['loop_control'], 'loop_control': ['loop_variable'], 'control_flow': ['statement'], 'println': ['statement', 'string_literal'], 'string_conversion': ['string_concatenation']}
+  level way lvl:length_field@L3#2 not counted: confidence 0.60 is not above 0.60
   level array_traversal: L4 via predict_a_change "With 8 added, a.length becomes 4; so the loop runs once more and prints Total: 20, with no other change to the code"
   level for_loop: L4 via predict_a_change "With 8 added, a.length becomes 4; so the loop runs once more and prints Total: 20, with no other change to the code"
   level length_field: L4 via predict_a_change "With 8 added, a.length becomes 4; so the loop runs once more and prints Total: 20, with no other change to the code"
-  level loop_body: L3 via relation_to_neighbour "The loop visits each index from 0 to a.length - 1 and adds that element to sum; so the loop runs once more and prints Total: 20, with no other change to the code"
+  level loop_body: L2 via output_prediction "The loop visits each index from 0 to a.length - 1 and adds that element to sum; so the loop runs once more and prints Total: 20, with no other change to the code"
   level loop_control: L4 via predict_a_change "With 8 added, a.length becomes 4; so the loop runs once more and prints Total: 20, with no other change to the code"
-  level loop_variable: L3 via purpose_of_the_whole "The loop visits each index from 0 to a.length - 1 and adds that element to sum; so the loop runs once more and prints Total: 20, with no other change to the code"
+  level loop_variable: L4 via predict_a_change "With 8 added, a.length becomes 4; so the loop runs once more and prints Total: 20, with no other change to the code"

@@ -150,13 +150,15 @@ Clauses: none
 Confidence: 0.7
 ```
 
-Label prompt for level way lvl:arithmetic_operators@L4#3 (the model saw only the concept, the way's name 'diagnose an error' and its text; no level):
+Label prompt for level way lvl:arithmetic_operators@L4#3 (the model saw the concept, the way's name 'diagnose an error', its text, where the way stops and whether the words must be correct; no level):
 > rule broken: Arithmetic operators other than + are not defined for Strings. Kind: compile-time. Trigger class: "10" - 1 or "6" * "2": 'bad operand types for binary operator'.
+>
+> Where this way stops: Locating and fixing the mistake for one given failing case is L3. A compiler-flagged slip fixed from the message is weak evidence.
 
 Model's reply:
 ```
-Label: not shown
-Clauses: none
+Label: wrong
+Clauses: 2, 3
 Confidence: 0.85
 ```
 
@@ -174,8 +176,6 @@ Parsed labels:
 | edge | label | prune score | confidence | score | clauses | words |
 |---|---|---|---|---|---|---|
 | lvl:arithmetic_operators@L1#1 | not applied |  |  | 0.0 |  |  |
-| lvl:arithmetic_operators@L4#3 | not applied |  |  | 0.0 |  |  |
-| lvl:arithmetic_operators@L0#0 | not applied |  |  | 0.0 |  |  |
 
 #### char_arithmetic, misconceptions: 1 edges offered
 Edges offered:
@@ -240,13 +240,15 @@ Clauses: 2, 3
 Confidence: 0.9
 ```
 
-Label prompt for level way lvl:char_arithmetic@L4#2 (the model saw only the concept, the way's name 'diagnose an error' and its text; no level):
+Label prompt for level way lvl:char_arithmetic@L4#2 (the model saw the concept, the way's name 'diagnose an error', its text, where the way stops and whether the words must be correct; no level):
 > rule broken: Arithmetic on chars yields an int, which needs a cast to go back into a char. Kind: compile-time. Trigger class: char next = c + 1; or char d = 'a' + k;: 'possible lossy conversion from int to char'.
+>
+> Where this way stops: Locating and fixing the mistake for one given failing case is L3. A compiler-flagged slip fixed from the message is weak evidence.
 
 Model's reply:
 ```
-Label: not shown
-Clauses: none
+Label: wrong
+Clauses: 2, 3
 Confidence: 0.9
 ```
 
@@ -264,8 +266,6 @@ Parsed labels:
 | edge | label | prune score | confidence | score | clauses | words |
 |---|---|---|---|---|---|---|
 | lvl:char_arithmetic@L0#0 | shown | 0.7000000000000001 | 0.9 | 0.63 | c2, c3 | A letter is not a number; so Java cannot add 1 to it, and this line gives a compile error |
-| lvl:char_arithmetic@L4#2 | not applied |  |  | 0.0 |  |  |
-| lvl:char_arithmetic@L0#2 | not applied |  |  | 0.0 |  |  |
 
 #### println, misconceptions: 6 edges offered
 Edges offered:
@@ -354,14 +354,16 @@ Clauses: none
 Confidence: 0.97
 ```
 
-Label prompt for level way lvl:println@L4#3 (the model saw only the concept, the way's name 'diagnose an error' and its text; no level):
+Label prompt for level way lvl:println@L4#3 (the model saw the concept, the way's name 'diagnose an error', its text, where the way stops and whether the words must be correct; no level):
 > rule broken: Method names are case-sensitive. Kind: compile-time. Trigger class: System.out.Println or system.out.println: cannot find symbol
+>
+> Where this way stops: Locating and fixing the mistake for one given failing case is L3. A compiler-flagged slip fixed from the message is weak evidence.
 
 Model's reply:
 ```
 Label: not shown
 Clauses: none
-Confidence: 0.95
+Confidence: 0.7
 ```
 
 Parsed labels:
@@ -558,14 +560,16 @@ Clauses: 2, 3
 Confidence: 0.93
 ```
 
-Label prompt for level way lvl:char@L3#0 (the model saw only the concept, the way's name 'relation to neighbour' and its text; no level):
+Label prompt for level way lvl:char@L3#0 (the model saw the concept, the way's name 'relation to neighbour', its text, where the way stops and whether the words must be correct; no level):
 > A char is stored as an unsigned 16-bit code, so in arithmetic it acts as an int ('a' + 1 is 98). Going from int to char needs a cast.
+>
+> Where this way stops: Two correct but separate rules are L1. Executing the two in sequence is L2. A relational answer may be correct or a relational error.
 
 Model's reply:
 ```
-Label: not shown
-Clauses: none
-Confidence: 0.95
+Label: wrong
+Clauses: 2, 3
+Confidence: 0.8
 ```
 
 Label prompt for level way lvl:char@L2#0 (the model saw only the concept, the way's name 'line by line trace' and its text; no level):
@@ -582,8 +586,6 @@ Parsed labels:
 | edge | label | prune score | confidence | score | clauses | words |
 |---|---|---|---|---|---|---|
 | lvl:char@L0#0 | shown | 0.6 | 0.93 | 0.56 | c2, c3 | A letter is not a number; so Java cannot add 1 to it, and this line gives a compile error |
-| lvl:char@L3#0 | not applied |  |  | 0.0 |  |  |
-| lvl:char@L2#0 | not applied |  |  | 0.0 |  |  |
 
 #### expression, misconceptions: 8 edges offered
 Edges offered:
@@ -656,24 +658,28 @@ Prune: the model's reply (edge id and score; the kept edges sum to 1):
 ```
 Kept by pruning: lvl:expression@L4#4 (0.45), lvl:expression@L3#1 (0.30), lvl:expression@L0#0 (0.25)
 
-Label prompt for level way lvl:expression@L4#4 (the model saw only the concept, the way's name 'diagnose an error' and its text; no level):
+Label prompt for level way lvl:expression@L4#4 (the model saw the concept, the way's name 'diagnose an error', its text, where the way stops and whether the words must be correct; no level):
 > rule broken: Operators accept only operands of suitable types. Kind: compile-time. Trigger class: Applying arithmetic to Strings ("Hello" - 1) or comparing booleans with <: 'bad operand types'.
+>
+> Where this way stops: Locating and fixing the mistake for one given failing case is L3. A compiler-flagged slip fixed from the message is weak evidence.
 
 Model's reply:
 ```
-Label: shown
+Label: wrong
+Clauses: 2, 3
+Confidence: 0.9
+```
+
+Label prompt for level way lvl:expression@L3#1 (the model saw the concept, the way's name 'relation to neighbour', its text, where the way stops and whether the words must be correct; no level):
+> Operators combine operand values into a new value, and the operand types choose the operation (int / truncates, double / does not).
+>
+> Where this way stops: Two correct but separate rules are L1. Executing the two in sequence is L2. A relational answer may be correct or a relational error.
+
+Model's reply:
+```
+Label: wrong
 Clauses: 2, 3
 Confidence: 0.8
-```
-
-Label prompt for level way lvl:expression@L3#1 (the model saw only the concept, the way's name 'relation to neighbour' and its text; no level):
-> Operators combine operand values into a new value, and the operand types choose the operation (int / truncates, double / does not).
-
-Model's reply:
-```
-Label: not shown
-Clauses: none
-Confidence: 0.75
 ```
 
 Label prompt for level way lvl:expression@L0#0 (the model saw only the concept, the way's name 'everyday reading' and its text; no level):
@@ -687,15 +693,11 @@ Confidence: 0.75
 ```
 
 Parsed labels:
-| edge | label | prune score | confidence | score | clauses | words |
-|---|---|---|---|---|---|---|
-| lvl:expression@L4#4 | shown | 0.45 | 0.8 | 0.36 | c2, c3 | A letter is not a number; so Java cannot add 1 to it, and this line gives a compile error |
-| lvl:expression@L3#1 | not applied |  |  | 0.0 |  |  |
-| lvl:expression@L0#0 | not applied |  |  | 0.0 |  |  |
+(none)
 
 **Kept on a path at this depth** (best N in tiers: held misconception / broken edge, then held error, then correct / confirmed / shown):
 
-mis:char->CharNotNumeric [held, tier 0, 0.97], lvl:char@L0#0 [shown, tier 2, 0.56], lvl:expression@L4#4 [shown, tier 2, 0.36]
+mis:char->CharNotNumeric [held, tier 0, 0.97], lvl:char@L0#0 [shown, tier 2, 0.56]
 
 **Clause coverage after this depth:**
 | clause | text | covered by |
@@ -714,9 +716,8 @@ Shadows (a held label on a prerequisite, on a generic concept, or at a concept w
 Root-cause walk: held on ['char'], broken at [] (consequences: pre:char->char_arithmetic, pre:arithmetic_operators->expression), prerequisites {'expression': ['arithmetic_operators'], 'char_arithmetic': ['char'], 'println': ['statement']}
 - char: L0 via misconception "A letter is not a number; so Java cannot add 1 to it, and this line gives a compile error"
 - char_arithmetic: L0 via everyday_reading "A letter is not a number; so Java cannot add 1 to it, and this line gives a compile error"
-- expression: L4 via diagnose_an_error "A letter is not a number; so Java cannot add 1 to it, and this line gives a compile error"
 
-**Stop:** max depth at depth 3; prompts {'prune': 13, 'label': 23}, fresh model calls 1, cache hits 35
+**Stop:** max depth at depth 3; prompts {'prune': 13, 'label': 23}, fresh model calls 0, cache hits 36
 
 ### Held misconceptions
 | concept | misconception | kind | quote | score | shares_evidence_with |
@@ -741,7 +742,15 @@ Root-cause walk: held on ['char'], broken at [] (consequences: pre:char->char_ar
 |---|---|---|---|---|---|---|---|---|
 | char | L0 | misconception | CharNotNumeric | level_mis_links | A letter is not a number; so Java cannot add 1 to it, and this line gives a compile error | wrong rule: char is not a numeric type. Right rule: A char is encoded as a 16-bit integer, so arithmetic such as 'b' + 'c' or 'a' + 4 works on the character codes. |  |  |
 | char_arithmetic | L0 | everyday_reading |  | level_way | A letter is not a number; so Java cannot add 1 to it, and this line gives a compile error |  |  |  |
-| expression | L4 | diagnose_an_error |  | level_way | A letter is not a number; so Java cannot add 1 to it, and this line gives a compile error |  |  |  |
+
+Ways above L2 the model answered "wrong" (the kind of thing is done, but what is said contradicts Java; not shown):
+| concept | edge | level | way | confidence | clauses | quote |
+|---|---|---|---|---|---|---|
+| arithmetic_operators | lvl:arithmetic_operators@L4#3 | L4 | diagnose_an_error | 0.85 | [2, 3] | A letter is not a number; so Java cannot add 1 to it, and this line gives a compile error |
+| char_arithmetic | lvl:char_arithmetic@L4#2 | L4 | diagnose_an_error | 0.9 | [2, 3] | A letter is not a number; so Java cannot add 1 to it, and this line gives a compile error |
+| char | lvl:char@L3#0 | L3 | relation_to_neighbour | 0.8 | [2, 3] | A letter is not a number; so Java cannot add 1 to it, and this line gives a compile error |
+| expression | lvl:expression@L4#4 | L4 | diagnose_an_error | 0.9 | [2, 3] | A letter is not a number; so Java cannot add 1 to it, and this line gives a compile error |
+| expression | lvl:expression@L3#1 | L3 | relation_to_neighbour | 0.8 | [2, 3] | A letter is not a number; so Java cannot add 1 to it, and this line gives a compile error |
 
 ### Overall level: L0
 
@@ -764,7 +773,6 @@ Figure 7 (final picture): C:\Users\magnu\OneDrive\Desktop\ES_VIterbi_Personalize
 | 2 | arithmetic_operators | pre:arithmetic_operators->expression | prerequisite | broken | 1.0 | 0.8 | 0.8 | [2, 3] | A letter is not a number; so Java cannot add 1 to it, and this line gives a compile error |
 | 3 | char | mis:char->CharNotNumeric | misconception | held | 1.0 | 0.97 | 0.97 | [2, 3] | A letter is not a number; so Java cannot add 1 to it, and this line gives a compile error |
 | 3 | char | lvl:char@L0#0 | level | shown | 0.6 | 0.93 | 0.558 | [2, 3] | A letter is not a number; so Java cannot add 1 to it, and this line gives a compile error |
-| 3 | expression | lvl:expression@L4#4 | level | shown | 0.45 | 0.8 | 0.36 | [2, 3] | A letter is not a number; so Java cannot add 1 to it, and this line gives a compile error |
 
 ## 6. The paths (what the keep step kept, depth by depth)
 | depth | source | edge | kind | label | score | clauses |
@@ -775,7 +783,6 @@ Figure 7 (final picture): C:\Users\magnu\OneDrive\Desktop\ES_VIterbi_Personalize
 | 2 | arithmetic_operators | pre:arithmetic_operators->expression | prerequisite | broken | 0.8 | [2, 3] |
 | 3 | char | mis:char->CharNotNumeric | misconception | held | 0.97 | [2, 3] |
 | 3 | char | lvl:char@L0#0 | level | shown | 0.558 | [2, 3] |
-| 3 | expression | lvl:expression@L4#4 | level | shown | 0.36 | [2, 3] |
 
 ## 7. Raw traversal log
 ```
@@ -789,12 +796,14 @@ start concepts (3): arithmetic_operators, char_arithmetic, println
     mis:arithmetic_operators->RemainderIsSubtraction -> not applied (0.00) ""
   arithmetic_operators (level ways): 18 candidates -> kept lvl:arithmetic_operators@L1#1 (0.50), lvl:arithmetic_operators@L4#3 (0.30), lvl:arithmetic_operators@L0#0 (0.20)
     lvl:arithmetic_operators@L1#1 -> not applied (0.00) ""
+    lvl:arithmetic_operators@L4#3: wrong (0.85) -> not applied
     lvl:arithmetic_operators@L4#3 -> not applied (0.00) ""
     lvl:arithmetic_operators@L0#0 -> not applied (0.00) ""
   char_arithmetic (misconceptions): 1 candidates -> kept mis:char_arithmetic->CharNotNumeric (1.00)
     mis:char_arithmetic->CharNotNumeric -> held (0.95) "A letter is not a number; so Java cannot add 1 to it, and this line gives a compile error"
   char_arithmetic (level ways): 14 candidates -> kept lvl:char_arithmetic@L0#0 (0.70), lvl:char_arithmetic@L4#2 (0.20), lvl:char_arithmetic@L0#2 (0.10)
     lvl:char_arithmetic@L0#0 -> shown (0.63) "A letter is not a number; so Java cannot add 1 to it, and this line gives a compile error"
+    lvl:char_arithmetic@L4#2: wrong (0.90) -> not applied
     lvl:char_arithmetic@L4#2 -> not applied (0.00) ""
     lvl:char_arithmetic@L0#2 -> not applied (0.00) ""
   println (misconceptions): 6 candidates -> kept mis:println->PrintedTextIsExecuted (0.40), mis:println->ParenthesesOnlyIfArgument (0.30), mis:println->IdentifierCaseInsensitive (0.30)
@@ -825,6 +834,7 @@ start concepts (3): arithmetic_operators, char_arithmetic, println
     mis:char->CharNotNumeric -> held (0.97) "A letter is not a number; so Java cannot add 1 to it, and this line gives a compile error"
   char (level ways): 19 candidates -> kept lvl:char@L0#0 (0.60), lvl:char@L3#0 (0.25), lvl:char@L2#0 (0.15)
     lvl:char@L0#0 -> shown (0.56) "A letter is not a number; so Java cannot add 1 to it, and this line gives a compile error"
+    lvl:char@L3#0: wrong (0.80) -> not applied
     lvl:char@L3#0 -> not applied (0.00) ""
     lvl:char@L2#0 -> not applied (0.00) ""
   expression (misconceptions): 8 candidates -> kept mis:expression->TargetTyping (0.45), mis:expression->NoAtomicExpression (0.35), mis:expression->VariablesHoldExpressions (0.20)
@@ -832,17 +842,18 @@ start concepts (3): arithmetic_operators, char_arithmetic, println
     mis:expression->NoAtomicExpression -> not applied (0.00) ""
     mis:expression->VariablesHoldExpressions -> not applied (0.00) ""
   expression (level ways): 19 candidates -> kept lvl:expression@L4#4 (0.45), lvl:expression@L3#1 (0.30), lvl:expression@L0#0 (0.25)
-    lvl:expression@L4#4 -> shown (0.36) "A letter is not a number; so Java cannot add 1 to it, and this line gives a compile error"
+    lvl:expression@L4#4: wrong (0.90) -> not applied
+    lvl:expression@L4#4 -> not applied (0.00) ""
+    lvl:expression@L3#1: wrong (0.80) -> not applied
     lvl:expression@L3#1 -> not applied (0.00) ""
     lvl:expression@L0#0 -> not applied (0.00) ""
-  kept: mis:char->CharNotNumeric [held, tier 0, 0.97], lvl:char@L0#0 [shown, tier 2, 0.56], lvl:expression@L4#4 [shown, tier 2, 0.36]
+  kept: mis:char->CharNotNumeric [held, tier 0, 0.97], lvl:char@L0#0 [shown, tier 2, 0.56]
   clause coverage: c1 uncovered; c2 <- mis:char_arithmetic->CharNotNumeric; c3 <- mis:char_arithmetic->CharNotNumeric
   held: mis:char->CharNotNumeric; filed at the dependent concept: mis:char_arithmetic->CharNotNumeric
   shadows: mis:char_arithmetic->CharNotNumeric (shadow of mis:char->CharNotNumeric)
   root-cause walk: held on ['char'], broken at [] (consequences: pre:char->char_arithmetic, pre:arithmetic_operators->expression), prerequisites {'expression': ['arithmetic_operators'], 'char_arithmetic': ['char'], 'println': ['statement']}
   level char: L0 via misconception "A letter is not a number; so Java cannot add 1 to it, and this line gives a compile error"
   level char_arithmetic: L0 via everyday_reading "A letter is not a number; so Java cannot add 1 to it, and this line gives a compile error"
-  level expression: L4 via diagnose_an_error "A letter is not a number; so Java cannot add 1 to it, and this line gives a compile error"
 ```
 
 ## 8. Full diagnosis JSON
@@ -854,7 +865,8 @@ start concepts (3): arithmetic_operators, char_arithmetic, println
   "depth": 3,
   "prune_tools": "llm",
   "model": "claude-opus-5-5",
-  "backend": "claude-cli"
+  "backend": "claude-cli",
+  "level_v2": true
  },
  "clauses": [
   "c holds the letter A",
@@ -918,14 +930,6 @@ start concepts (3): arithmetic_operators, char_arithmetic, println
    "way": "everyday_reading",
    "quote": "A letter is not a number; so Java cannot add 1 to it, and this line gives a compile error",
    "edge": "lvl:char_arithmetic@L0#0",
-   "source": "level_way",
-   "also_shown": []
-  },
-  "expression": {
-   "level": "L4",
-   "way": "diagnose_an_error",
-   "quote": "A letter is not a number; so Java cannot add 1 to it, and this line gives a compile error",
-   "edge": "lvl:expression@L4#4",
    "source": "level_way",
    "also_shown": []
   }
@@ -1047,26 +1051,6 @@ start concepts (3): arithmetic_operators, char_arithmetic, println
    "twin_logic": null,
    "level": "L0",
    "way": "everyday_reading"
-  },
-  {
-   "depth": 3,
-   "source": "expression",
-   "edge": "lvl:expression@L4#4",
-   "target": "expression@L4",
-   "kind": "level",
-   "label": "shown",
-   "clauses": [
-    2,
-    3
-   ],
-   "quote": "A letter is not a number; so Java cannot add 1 to it, and this line gives a compile error",
-   "confidence": 0.8,
-   "prune_score": 0.45,
-   "score": 0.36,
-   "logic": "rule broken: Operators accept only operands of suitable types. Kind: compile-time. Trigger class: Applying arithmetic to Strings (\"Hello\" - 1) or comparing booleans with <: 'bad operand types'.",
-   "twin_logic": null,
-   "level": "L4",
-   "way": "diagnose_an_error"
   }
  ],
  "evidence": [
@@ -1185,26 +1169,6 @@ start concepts (3): arithmetic_operators, char_arithmetic, println
    "twin_logic": null,
    "level": "L0",
    "way": "everyday_reading"
-  },
-  {
-   "depth": 3,
-   "source": "expression",
-   "edge": "lvl:expression@L4#4",
-   "target": "expression@L4",
-   "kind": "level",
-   "label": "shown",
-   "clauses": [
-    2,
-    3
-   ],
-   "quote": "A letter is not a number; so Java cannot add 1 to it, and this line gives a compile error",
-   "confidence": 0.8,
-   "prune_score": 0.45,
-   "score": 0.36,
-   "logic": "rule broken: Operators accept only operands of suitable types. Kind: compile-time. Trigger class: Applying arithmetic to Strings (\"Hello\" - 1) or comparing booleans with <: 'bad operand types'.",
-   "twin_logic": null,
-   "level": "L4",
-   "way": "diagnose_an_error"
   }
  ],
  "clause_coverage": {
@@ -1216,11 +1180,76 @@ start concepts (3): arithmetic_operators, char_arithmetic, println
  ],
  "stop_reason": "max depth",
  "depth_reached": 3,
- "llm_calls": 1,
- "llm_cache_hits": 35,
+ "llm_calls": 0,
+ "llm_cache_hits": 36,
  "llm_calls_by_step": {
   "prune": 13,
   "label": 23
+ },
+ "level_v2": {
+  "wrong_ways": [
+   {
+    "concept": "arithmetic_operators",
+    "edge": "lvl:arithmetic_operators@L4#3",
+    "level": "L4",
+    "way": "diagnose_an_error",
+    "clauses": [
+     2,
+     3
+    ],
+    "quote": "A letter is not a number; so Java cannot add 1 to it, and this line gives a compile error",
+    "confidence": 0.85
+   },
+   {
+    "concept": "char_arithmetic",
+    "edge": "lvl:char_arithmetic@L4#2",
+    "level": "L4",
+    "way": "diagnose_an_error",
+    "clauses": [
+     2,
+     3
+    ],
+    "quote": "A letter is not a number; so Java cannot add 1 to it, and this line gives a compile error",
+    "confidence": 0.9
+   },
+   {
+    "concept": "char",
+    "edge": "lvl:char@L3#0",
+    "level": "L3",
+    "way": "relation_to_neighbour",
+    "clauses": [
+     2,
+     3
+    ],
+    "quote": "A letter is not a number; so Java cannot add 1 to it, and this line gives a compile error",
+    "confidence": 0.8
+   },
+   {
+    "concept": "expression",
+    "edge": "lvl:expression@L4#4",
+    "level": "L4",
+    "way": "diagnose_an_error",
+    "clauses": [
+     2,
+     3
+    ],
+    "quote": "A letter is not a number; so Java cannot add 1 to it, and this line gives a compile error",
+    "confidence": 0.9
+   },
+   {
+    "concept": "expression",
+    "edge": "lvl:expression@L3#1",
+    "level": "L3",
+    "way": "relation_to_neighbour",
+    "clauses": [
+     2,
+     3
+    ],
+    "quote": "A letter is not a number; so Java cannot add 1 to it, and this line gives a compile error",
+    "confidence": 0.8
+   }
+  ],
+  "not_counted": []
  }
 }
 ```

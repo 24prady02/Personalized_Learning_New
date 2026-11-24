@@ -23,7 +23,7 @@ System.out.println("done");
 - **Wrong rules held:** ThenAlwaysExecutes at `if_statement`
 - **Root cause:** `if_statement` / ThenAlwaysExecutes
 - **Overall level:** L0
-- **Level per concept:** `if_statement` L0, `println` L3, `statement` L3
+- **Level per concept:** `if_statement` L0, `println` L2, `statement` L2
 
 **Check of this result (read by hand, 2026-11-13).** The diagnosis matches the answer.
 
@@ -77,13 +77,13 @@ At each depth, for each current concept, the following happens.
 
 *One of the outputs at this stage:* at `if_statement` the misconception family is pruned to: ThenAlwaysExecutes 0.70, CodeAfterIfSkipped 0.20, StatementAfterIfInBranch 0.10.
 
-**3.3 Label (model, second question).** Each edge that survived is now read against the numbered clauses and gets a **label**. For a misconception or error edge: **held** (the student's words state this wrong rule), **correct** (they state the right rule, its twin) or **not applied** (the answer says nothing about it). For a level way: **shown** or not applied. For a prerequisite or parallel edge: **confirmed** (the answer carries the rule from one concept into the other) or **broken** (it fails to). The misconception edges of one concept are judged together in a single question, because the same sentence can fit several wrong rules and the model should give *held* only to the one the student really claims. With the label the model must return the **clause numbers** it rests on and a **confidence** from 0 to 1. A label with no clause is discarded. This is the safeguard of the method: the model never diagnoses from its own knowledge; every label is attached to one edge of G and to the student's words.
+**3.3 Label (model, second question).** Each edge that survived is now read against the numbered clauses and gets a **label**. For a misconception or error edge: **held** (the student's words state this wrong rule), **correct** (they state the right rule, its twin) or **not applied** (the answer says nothing about it). For a level way: **shown** or not applied. For a way above L2 the question also gives where the way stops (its boundary, stored in the graph) and whether the words must be correct, and the model may answer **wrong** (the student does this kind of thing, but what is said contradicts Java); a wrong way is not shown. For a prerequisite or parallel edge: **confirmed** (the answer carries the rule from one concept into the other) or **broken** (it fails to). The misconception edges of one concept are judged together in a single question, because the same sentence can fit several wrong rules and the model should give *held* only to the one the student really claims. With the label the model must return the **clause numbers** it rests on and a **confidence** from 0 to 1. A label with no clause is discarded. This is the safeguard of the method: the model never diagnoses from its own knowledge; every label is attached to one edge of G and to the student's words.
 
 *One of the outputs at this stage:* ThenAlwaysExecutes at `if_statement` is labelled **held** on clauses 1, 2 (“The program runs every line from top to bottom; so the println inside the if runs too, an…”) with confidence 0.85. The rule on that edge: “The then branch always runs.”
 
 **3.4 Score and keep.** The **score** of a labelled edge is prune score × confidence: an edge counts for much only if it was both relevant and confidently labelled. The edges are then ranked in **tiers**. Tier 0 is a held misconception or a broken edge: these are findings about a fault and are always kept. Tier 1 is a held error. Tier 2 is everything that only confirms understanding (correct, confirmed, shown); these fill whatever is left of the N = 3 places, best score first. Kept edges are added to the paths. Every edge with a label other than *not applied*, kept or not, is added to the evidence, because the levels in stage 6 are read from all of it.
 
-*One of the outputs at this stage:* the score of ThenAlwaysExecutes is 0.70 × 0.85 = 0.59. At depth 1 the kept edges are: ThenAlwaysExecutes (held, tier 0, 0.59); L3 way “relation to neighbour” (shown, tier 2, 0.33); StatementsRunInAnyOrder (correct, tier 2, 0.21).
+*One of the outputs at this stage:* the score of ThenAlwaysExecutes is 0.70 × 0.85 = 0.59. At depth 1 the kept edges are: ThenAlwaysExecutes (held, tier 0, 0.59); StatementsRunInAnyOrder (correct, tier 2, 0.21); L2 way “output prediction” (shown, tier 2, 0.18).
 
 **3.5 Move to the next concepts.** Three things decide where the walk goes next. A kept prerequisite or parallel edge leads to the concept at its other end; that concept is **entered** and will be read inwards at the next depth, so it gets misconceptions and a level of its own. A concept with a held misconception stays current, so that its prerequisites are examined: the fault may begin further back. And any entered concept whose outward edges have not been read yet stays current until they are.
 
@@ -159,7 +159,7 @@ Every concept has five **levels**, taken from the SOLO taxonomy: **L0** prestruc
 
 The model is never asked for a level. In stage 3 it only said whether a way was *shown*; the level is read from where that way sits in the graph, in two steps.
 
-**6.1 Gather the evidence per concept.** Take every concept that appears in the evidence of stage 3 (kept in 3.4 or not). For each one collect two lists: the misconceptions held on it that are not shadows, and the ways shown on it.
+**6.1 Gather the evidence per concept.** Take every concept that appears in the evidence of stage 3 (kept in 3.4 or not). For each one collect two lists: the misconceptions held on it that are not shadows, and the ways shown on it. A shown way above L2 is counted only if two things hold: the model's confidence in it is above 0.60, and its clauses are not all clauses that a held misconception rests on. So a weak yes, or a wrong sentence already counted as a misconception, cannot lift a concept to L3 or L4.
 
 *One of the outputs at this stage:* 5 concepts appear in the evidence: `boolean_expression`, `control_flow`, `if_statement`, `println`, `statement`.
 
@@ -176,11 +176,11 @@ A held error node is not a misconception, so rule (a) does not apply to it.
 
 | Concept | Level | Rule | Why |
 |---|---|---|---|
-| `boolean_expression` | none | (d) | nothing held, no way shown |
-| `control_flow` | none | (d) | nothing held, no way shown |
+| `boolean_expression` | none | (d) | nothing held, no counted way; answered wrong: L3 “relation to neighbour” |
+| `control_flow` | none | (d) | nothing held, no counted way; answered wrong: L3 “relation to neighbour” |
 | `if_statement` | L0 | (a) | holds ThenAlwaysExecutes |
-| `println` | L3 | (c) | ways shown: L2 “output prediction”, L3 “relation to neighbour” |
-| `statement` | L3 | (c) | ways shown: L2 “line by line trace”, L3 “relation to neighbour” |
+| `println` | L2 | (c) | ways shown: L2 “output prediction”; answered wrong: L3 “relation to neighbour” |
+| `statement` | L2 | (c) | ways shown: L2 “line by line trace”; answered wrong: L3 “relation to neighbour” |
 
 ## Stage 7. Overall level (rule, no model)
 

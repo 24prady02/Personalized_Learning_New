@@ -192,12 +192,14 @@ Clauses: 3, 4, 6
 Confidence: 0.8
 ```
 
-Label prompt for level way lvl:comparison_operators@L3#1 (the model saw only the concept, the way's name 'relation to neighbour' and its text; no level):
+Label prompt for level way lvl:comparison_operators@L3#1 (the model saw the concept, the way's name 'relation to neighbour', its text, where the way stops and whether the words must be correct; no level):
 > Comparisons are the building blocks of conditions: together with boolean logic they provide the basis for decision-making.
+>
+> Where this way stops: Two correct but separate rules are L1. Executing the two in sequence is L2. A relational answer may be correct or a relational error.
 
 Model's reply:
 ```
-Label: shown
+Label: wrong
 Clauses: 3, 4, 5, 6, 7
 Confidence: 0.7
 ```
@@ -216,8 +218,6 @@ Parsed labels:
 | edge | label | prune score | confidence | score | clauses | words |
 |---|---|---|---|---|---|---|
 | lvl:comparison_operators@L2#1 | shown | 0.4 | 0.8 | 0.32 | c3, c4, c6 | x > 0; and thats true; x > 10 is false |
-| lvl:comparison_operators@L3#1 | shown | 0.35 | 0.7 | 0.24 | c3, c4, c5, c6, c7 | x > 0; and thats true; so the else is skipped; x > 10 is false; so big isnt printed either |
-| lvl:comparison_operators@L2#0 | shown | 0.25 | 0.7 | 0.17 | c3, c4, c6 | x > 0; and thats true; x > 10 is false |
 
 #### println, misconceptions: 6 edges offered
 Edges offered:
@@ -286,14 +286,16 @@ Prune: the model's reply (edge id and score; the kept edges sum to 1):
 ```
 Kept by pruning: lvl:println@L3#0 (0.45), lvl:println@L2#1 (0.35), lvl:println@L2#0 (0.20)
 
-Label prompt for level way lvl:println@L3#0 (the model saw only the concept, the way's name 'relation to neighbour' and its text; no level):
+Label prompt for level way lvl:println@L3#0 (the model saw the concept, the way's name 'relation to neighbour', its text, where the way stops and whether the words must be correct; no level):
 > System.out.println(s); is a statement, so its line of output appears at its own place in the sequence.
+>
+> Where this way stops: Two correct but separate rules are L1. Executing the two in sequence is L2. A relational answer may be correct or a relational error.
 
 Model's reply:
 ```
-Label: not shown
-Clauses: none
-Confidence: 0.7
+Label: wrong
+Clauses: 2, 5, 7
+Confidence: 0.6
 ```
 
 Label prompt for level way lvl:println@L2#1 (the model saw only the concept, the way's name 'output prediction' and its text; no level):
@@ -317,11 +319,7 @@ Confidence: 0.85
 ```
 
 Parsed labels:
-| edge | label | prune score | confidence | score | clauses | words |
-|---|---|---|---|---|---|---|
-| lvl:println@L3#0 | not applied |  |  | 0.0 |  |  |
-| lvl:println@L2#1 | not applied |  |  | 0.0 |  |  |
-| lvl:println@L2#0 | not applied |  |  | 0.0 |  |  |
+(none)
 
 #### if_statement, misconceptions: 22 edges offered
 Edges offered:
@@ -408,24 +406,28 @@ Prune: the model's reply (edge id and score; the kept edges sum to 1):
 ```
 Kept by pruning: lvl:if_statement@L4#4 (0.50), lvl:if_statement@L3#1 (0.30), lvl:if_statement@L2#0 (0.20)
 
-Label prompt for level way lvl:if_statement@L4#4 (the model saw only the concept, the way's name 'diagnose an error' and its text; no level):
+Label prompt for level way lvl:if_statement@L4#4 (the model saw the concept, the way's name 'diagnose an error', its text, where the way stops and whether the words must be correct; no level):
 > rule broken: Without braces, the body of an if, while or for is exactly one statement; indentation does not add statements to it. Kind: silent logic error. Trigger class: A braceless header followed by two or more indented statements: only the first is controlled, the others run once, after the if/loop, on every input.
+>
+> Where this way stops: Locating and fixing the mistake for one given failing case is L3. A compiler-flagged slip fixed from the message is weak evidence.
 
 Model's reply:
 ```
 Label: not shown
 Clauses: none
-Confidence: 0.9
+Confidence: 0.6
 ```
 
-Label prompt for level way lvl:if_statement@L3#1 (the model saw only the concept, the way's name 'relation to neighbour' and its text; no level):
+Label prompt for level way lvl:if_statement@L3#1 (the model saw the concept, the way's name 'relation to neighbour', its text, where the way stops and whether the words must be correct; no level):
 > if-else extends if with a second branch that runs exactly when the condition is false; a lone if has an implicit empty else-case.
+>
+> Where this way stops: Two correct but separate rules are L1. Executing the two in sequence is L2. A relational answer may be correct or a relational error.
 
 Model's reply:
 ```
-Label: shown
-Clauses: 3, 4, 5, 6, 7
-Confidence: 0.7
+Label: wrong
+Clauses: 1, 2, 5
+Confidence: 0.85
 ```
 
 Label prompt for level way lvl:if_statement@L2#0 (the model saw only the concept, the way's name 'line by line trace' and its text; no level):
@@ -442,12 +444,10 @@ Parsed labels:
 | edge | label | prune score | confidence | score | clauses | words |
 |---|---|---|---|---|---|---|
 | lvl:if_statement@L4#4 | not applied |  |  | 0.0 |  |  |
-| lvl:if_statement@L3#1 | shown | 0.3 | 0.7 | 0.21 | c3, c4, c5, c6, c7 | x > 0; and thats true; so the else is skipped; x > 10 is false; so big isnt printed either |
-| lvl:if_statement@L2#0 | shown | 0.2 | 0.8 | 0.16 | c3, c4, c5, c6, c7 | x > 0; and thats true; so the else is skipped; x > 10 is false; so big isnt printed either |
 
 **Kept on a path at this depth** (best N in tiers: held misconception / broken edge, then held error, then correct / confirmed / shown):
 
-mis:comparison_operators->LessGreaterSwapped [correct, tier 2, 0.68], lvl:comparison_operators@L2#1 [shown, tier 2, 0.32], lvl:comparison_operators@L3#1 [shown, tier 2, 0.24]
+mis:comparison_operators->LessGreaterSwapped [correct, tier 2, 0.68], lvl:comparison_operators@L2#1 [shown, tier 2, 0.32], lvl:comparison_operators@L2#0 [shown, tier 2, 0.17]
 
 **Clause coverage after this depth:**
 | clause | text | covered by |
@@ -793,14 +793,16 @@ Clauses: none
 Confidence: 0.93
 ```
 
-Label prompt for level way lvl:dangling_else@L4#2 (the model saw only the concept, the way's name 'diagnose an error' and its text; no level):
+Label prompt for level way lvl:dangling_else@L4#2 (the model saw the concept, the way's name 'diagnose an error', its text, where the way stops and whether the words must be correct; no level):
 > rule broken: An else belongs to the innermost unmatched if. Kind: silent logic error. Trigger class: Nested braceless ifs with the else indented under the outer if: the else case runs for inner-false inputs and never for outer-false inputs.
+>
+> Where this way stops: Locating and fixing the mistake for one given failing case is L3. A compiler-flagged slip fixed from the message is weak evidence.
 
 Model's reply:
 ```
 Label: not shown
 Clauses: none
-Confidence: 0.92
+Confidence: 0.6
 ```
 
 Parsed labels:
@@ -894,14 +896,16 @@ Clauses: 1, 2, 5
 Confidence: 0.85
 ```
 
-Label prompt for level way lvl:nested_conditionals@L4#2 (the model saw only the concept, the way's name 'diagnose an error' and its text; no level):
+Label prompt for level way lvl:nested_conditionals@L4#2 (the model saw the concept, the way's name 'diagnose an error', its text, where the way stops and whether the words must be correct; no level):
 > rule broken: Without braces an else pairs with the innermost if, whatever the indentation. Kind: silent logic error. Trigger class: if (a) if (b) X; else Y; written with else under the outer if: Y runs when a is true and b false, not when a is false.
+>
+> Where this way stops: Locating and fixing the mistake for one given failing case is L3. A compiler-flagged slip fixed from the message is weak evidence.
 
 Model's reply:
 ```
-Label: not shown
-Clauses: none
-Confidence: 0.9
+Label: wrong
+Clauses: 1, 2, 5
+Confidence: 0.8
 ```
 
 Parsed labels:
@@ -909,7 +913,6 @@ Parsed labels:
 |---|---|---|---|---|---|---|
 | lvl:nested_conditionals@L0#3 | shown | 0.45 | 0.85 | 0.38 | c2, c5 | The else lines up with if; so the else is skipped |
 | lvl:nested_conditionals@L0#0 | shown | 0.35 | 0.85 | 0.3 | c1, c2, c5 | Nothing; The else lines up with if; so the else is skipped |
-| lvl:nested_conditionals@L4#2 | not applied |  |  | 0.0 |  |  |
 
 **Kept on a path at this depth** (best N in tiers: held misconception / broken edge, then held error, then correct / confirmed / shown):
 
@@ -1130,13 +1133,15 @@ Prune: the model's reply (edge id and score; the kept edges sum to 1):
 ```
 Kept by pruning: lvl:if_else_statement@L3#1 (0.60), lvl:if_else_statement@L2#0 (0.25), lvl:if_else_statement@L2#1 (0.15)
 
-Label prompt for level way lvl:if_else_statement@L3#1 (the model saw only the concept, the way's name 'relation to neighbour' and its text; no level):
+Label prompt for level way lvl:if_else_statement@L3#1 (the model saw the concept, the way's name 'relation to neighbour', its text, where the way stops and whether the words must be correct; no level):
 > Either branch may itself be an if or if-else, which nests conditionals; without braces an inner else pairs with the innermost if.
+>
+> Where this way stops: Two correct but separate rules are L1. Executing the two in sequence is L2. A relational answer may be correct or a relational error.
 
 Model's reply:
 ```
-Label: not shown
-Clauses: none
+Label: wrong
+Clauses: 2, 3, 4, 5
 Confidence: 0.85
 ```
 
@@ -1161,11 +1166,7 @@ Confidence: 0.6
 ```
 
 Parsed labels:
-| edge | label | prune score | confidence | score | clauses | words |
-|---|---|---|---|---|---|---|
-| lvl:if_else_statement@L3#1 | not applied |  |  | 0.0 |  |  |
-| lvl:if_else_statement@L2#0 | shown | 0.25 | 0.8 | 0.2 | c3, c4, c5, c6, c7 | x > 0; and thats true; so the else is skipped; x > 10 is false; so big isnt printed either |
-| lvl:if_else_statement@L2#1 | shown | 0.15 | 0.6 | 0.09 | c3, c4, c5 | x > 0; and thats true; so the else is skipped |
+(none)
 
 **Kept on a path at this depth** (best N in tiers: held misconception / broken edge, then held error, then correct / confirmed / shown):
 
@@ -1190,11 +1191,11 @@ Shadows (a held label on a prerequisite, on a generic concept, or at a concept w
 
 ## 4. Diagnosis (rules over the labelled graph, no model)
 Root-cause walk: held on ['dangling_else'], broken at [] (consequences: pre:nested_conditionals->dangling_else, pre:if_else_statement->nested_conditionals), prerequisites {'if_statement': ['boolean_expression', 'control_flow'], 'boolean_expression': ['comparison_operators'], 'comparison_operators': ['expression'], 'nested_conditionals': ['if_else_statement', 'if_statement'], 'if_else_statement': ['if_statement'], 'dangling_else': ['nested_conditionals'], 'control_flow': ['statement'], 'println': ['statement', 'string_literal']}
-- comparison_operators: L3 via relation_to_neighbour "x > 0; and thats true; so the else is skipped; x > 10 is false; so big isnt printed either"
+- comparison_operators: L2 via output_prediction "x > 0; and thats true; x > 10 is false"
 - control_flow: L2 via line_by_line_trace "x > 0; and thats true; so the else is skipped; x > 10 is false; so big isnt printed either"
 - dangling_else: L0 via misconception "Nothing; The else lines up with if; x > 0; and thats true; so the else is skipped"
 - if_else_statement: L2 via line_by_line_trace "x > 0; and thats true; so the else is skipped; x > 10 is false; so big isnt printed either"
-- if_statement: L3 via relation_to_neighbour "x > 0; and thats true; so the else is skipped; x > 10 is false; so big isnt printed either"
+- if_statement: L2 via line_by_line_trace "x > 0; and thats true; so the else is skipped; x > 10 is false; so big isnt printed either"
 - nested_conditionals: L0 via inconsistent_trace "The else lines up with if; so the else is skipped"
 
 **Stop:** sufficient at depth 4; prompts {'prune': 20, 'label': 41}, fresh model calls 0, cache hits 61
@@ -1220,12 +1221,21 @@ Root-cause walk: held on ['dangling_else'], broken at [] (consequences: pre:nest
 ### Level per concept
 | concept | level | way | misconception | source | quote | rule | also | note |
 |---|---|---|---|---|---|---|---|---|
-| comparison_operators | L3 | relation_to_neighbour |  | level_way | x > 0; and thats true; so the else is skipped; x > 10 is false; so big isnt printed either |  | L2 output_prediction, L2 line_by_line_trace |  |
+| comparison_operators | L2 | output_prediction |  | level_way | x > 0; and thats true; x > 10 is false |  | L2 line_by_line_trace |  |
 | control_flow | L2 | line_by_line_trace |  | level_way | x > 0; and thats true; so the else is skipped; x > 10 is false; so big isnt printed either |  | L2 output_prediction |  |
 | dangling_else | L0 | misconception | ElseMatchesIndentation | level_mis_links | Nothing; The else lines up with if; x > 0; and thats true; so the else is skipped | wrong rule: The else belongs to the if it is lined up with. Right rule: The else belongs to the most recent unmatched if, whatever the indentation. |  |  |
 | if_else_statement | L2 | line_by_line_trace |  | level_way | x > 0; and thats true; so the else is skipped; x > 10 is false; so big isnt printed either |  | L2 output_prediction |  |
-| if_statement | L3 | relation_to_neighbour |  | level_way | x > 0; and thats true; so the else is skipped; x > 10 is false; so big isnt printed either |  | L2 line_by_line_trace |  |
+| if_statement | L2 | line_by_line_trace |  | level_way | x > 0; and thats true; so the else is skipped; x > 10 is false; so big isnt printed either |  |  |  |
 | nested_conditionals | L0 | inconsistent_trace |  | level_way | The else lines up with if; so the else is skipped |  | L0 everyday_reading |  |
+
+Ways above L2 the model answered "wrong" (the kind of thing is done, but what is said contradicts Java; not shown):
+| concept | edge | level | way | confidence | clauses | quote |
+|---|---|---|---|---|---|---|
+| comparison_operators | lvl:comparison_operators@L3#1 | L3 | relation_to_neighbour | 0.7 | [3, 4, 5, 6, 7] | x > 0; and thats true; so the else is skipped; x > 10 is false; so big isnt printed either |
+| println | lvl:println@L3#0 | L3 | relation_to_neighbour | 0.6 | [2, 5, 7] | The else lines up with if; so the else is skipped; so big isnt printed either |
+| if_statement | lvl:if_statement@L3#1 | L3 | relation_to_neighbour | 0.85 | [1, 2, 5] | Nothing; The else lines up with if; so the else is skipped |
+| nested_conditionals | lvl:nested_conditionals@L4#2 | L4 | diagnose_an_error | 0.8 | [1, 2, 5] | Nothing; The else lines up with if; so the else is skipped |
+| if_else_statement | lvl:if_else_statement@L3#1 | L3 | relation_to_neighbour | 0.85 | [2, 3, 4, 5] | The else lines up with if; x > 0; and thats true; so the else is skipped |
 
 ### Overall level: L0
 
@@ -1236,9 +1246,9 @@ Clause coverage (final):
 | The else lines up with if | mis:dangling_else->ElseMatchesIndentation |
 | x > 0 | mis:comparison_operators->LessGreaterSwapped |
 | and thats true | mis:comparison_operators->LessGreaterSwapped |
-| so the else is skipped | lvl:comparison_operators@L3#1 |
+| so the else is skipped | lvl:if_statement@L2#0 |
 | x > 10 is false | mis:comparison_operators->LessGreaterSwapped |
-| so big isnt printed either | lvl:comparison_operators@L3#1 |
+| so big isnt printed either | mis:if_statement->BranchChosenByIntent |
 
 Figure 8 (final picture): C:\Users\magnu\OneDrive\Desktop\ES_VIterbi_Personalized_Learning\results\viewer\MY34_figure08.png
 
@@ -1247,11 +1257,9 @@ Figure 8 (final picture): C:\Users\magnu\OneDrive\Desktop\ES_VIterbi_Personalize
 |---|---|---|---|---|---|---|---|---|---|
 | 1 | comparison_operators | mis:comparison_operators->LessGreaterSwapped | misconception | correct | 0.8 | 0.85 | 0.68 | [3, 4, 6] | x > 0; and thats true; x > 10 is false |
 | 1 | comparison_operators | lvl:comparison_operators@L2#1 | level | shown | 0.4 | 0.8 | 0.32 | [3, 4, 6] | x > 0; and thats true; x > 10 is false |
-| 1 | comparison_operators | lvl:comparison_operators@L3#1 | level | shown | 0.35 | 0.7 | 0.245 | [3, 4, 5, 6, 7] | x > 0; and thats true; so the else is skipped; x > 10 is false; so big isnt printed either |
 | 1 | comparison_operators | lvl:comparison_operators@L2#0 | level | shown | 0.25 | 0.7 | 0.175 | [3, 4, 6] | x > 0; and thats true; x > 10 is false |
 | 1 | if_statement | mis:if_statement->BranchChosenByIntent | misconception | correct | 0.3 | 0.55 | 0.165 | [3, 4, 6, 7] | x > 0; and thats true; x > 10 is false; so big isnt printed either |
 | 1 | if_statement | mis:if_statement->ThenAlwaysExecutes | misconception | correct | 0.2 | 0.85 | 0.17 | [6, 7] | x > 10 is false; so big isnt printed either |
-| 1 | if_statement | lvl:if_statement@L3#1 | level | shown | 0.3 | 0.7 | 0.21 | [3, 4, 5, 6, 7] | x > 0; and thats true; so the else is skipped; x > 10 is false; so big isnt printed either |
 | 1 | if_statement | lvl:if_statement@L2#0 | level | shown | 0.2 | 0.8 | 0.16 | [3, 4, 5, 6, 7] | x > 0; and thats true; so the else is skipped; x > 10 is false; so big isnt printed either |
 | 2 | comparison_operators | pre:comparison_operators->boolean_expression | prerequisite | confirmed | 0.6000000000000001 | 0.8 | 0.48 | [3, 4, 6, 7] | x > 0; and thats true; x > 10 is false; so big isnt printed either |
 | 2 | comparison_operators | pre:expression->comparison_operators | prerequisite | confirmed | 0.30000000000000004 | 0.8 | 0.24 | [3, 4, 6] | x > 0; and thats true; x > 10 is false |
@@ -1283,7 +1291,7 @@ Figure 8 (final picture): C:\Users\magnu\OneDrive\Desktop\ES_VIterbi_Personalize
 |---|---|---|---|---|---|---|
 | 1 | comparison_operators | mis:comparison_operators->LessGreaterSwapped | misconception | correct | 0.68 | [3, 4, 6] |
 | 1 | comparison_operators | lvl:comparison_operators@L2#1 | level | shown | 0.32 | [3, 4, 6] |
-| 1 | comparison_operators | lvl:comparison_operators@L3#1 | level | shown | 0.245 | [3, 4, 5, 6, 7] |
+| 1 | comparison_operators | lvl:comparison_operators@L2#0 | level | shown | 0.175 | [3, 4, 6] |
 | 2 | dangling_else | mis:dangling_else->ElseMatchesIndentation | misconception | held | 0.93 | [1, 2, 3, 4, 5] |
 | 2 | nested_conditionals | mis:nested_conditionals->ElseMatchesIndentation | misconception | held | 0.651 | [2, 3, 4, 5] |
 | 2 | dangling_else | lvl:dangling_else@L0#0 | level | shown | 0.595 | [2, 3, 4, 5] |
@@ -1308,13 +1316,15 @@ start concepts (3): comparison_operators, println, if_statement
     mis:comparison_operators->ComparisonWithBooleanLiteral -> not applied (0.00) ""
   comparison_operators (level ways): 20 candidates -> kept lvl:comparison_operators@L2#1 (0.40), lvl:comparison_operators@L3#1 (0.35), lvl:comparison_operators@L2#0 (0.25)
     lvl:comparison_operators@L2#1 -> shown (0.32) "x > 0; and thats true; x > 10 is false"
-    lvl:comparison_operators@L3#1 -> shown (0.24) "x > 0; and thats true; so the else is skipped; x > 10 is false; so big isnt printed either"
+    lvl:comparison_operators@L3#1: wrong (0.70) -> not applied
+    lvl:comparison_operators@L3#1 -> not applied (0.00) ""
     lvl:comparison_operators@L2#0 -> shown (0.17) "x > 0; and thats true; x > 10 is false"
   println (misconceptions): 6 candidates -> kept mis:println->PrintedTextIsExecuted (0.60), mis:println->PrintEqualsPrintln (0.20), mis:println->PrintNewLineFirst (0.20)
     mis:println->PrintedTextIsExecuted -> not applied (0.00) ""
     mis:println->PrintEqualsPrintln -> not applied (0.00) ""
     mis:println->PrintNewLineFirst -> not applied (0.00) ""
   println (level ways): 17 candidates -> kept lvl:println@L3#0 (0.45), lvl:println@L2#1 (0.35), lvl:println@L2#0 (0.20)
+    lvl:println@L3#0: wrong (0.60) -> not applied
     lvl:println@L3#0 -> not applied (0.00) ""
     lvl:println@L2#1 -> not applied (0.00) ""
     lvl:println@L2#0 -> not applied (0.00) ""
@@ -1324,9 +1334,10 @@ start concepts (3): comparison_operators, println, if_statement
     mis:if_statement->ThenAlwaysExecutes -> correct (0.17) "x > 10 is false; so big isnt printed either"
   if_statement (level ways): 19 candidates -> kept lvl:if_statement@L4#4 (0.50), lvl:if_statement@L3#1 (0.30), lvl:if_statement@L2#0 (0.20)
     lvl:if_statement@L4#4 -> not applied (0.00) ""
-    lvl:if_statement@L3#1 -> shown (0.21) "x > 0; and thats true; so the else is skipped; x > 10 is false; so big isnt printed either"
+    lvl:if_statement@L3#1: wrong (0.85) -> not applied
+    lvl:if_statement@L3#1 -> not applied (0.00) ""
     lvl:if_statement@L2#0 -> shown (0.16) "x > 0; and thats true; so the else is skipped; x > 10 is false; so big isnt printed either"
-  kept: mis:comparison_operators->LessGreaterSwapped [correct, tier 2, 0.68], lvl:comparison_operators@L2#1 [shown, tier 2, 0.32], lvl:comparison_operators@L3#1 [shown, tier 2, 0.24]
+  kept: mis:comparison_operators->LessGreaterSwapped [correct, tier 2, 0.68], lvl:comparison_operators@L2#1 [shown, tier 2, 0.32], lvl:comparison_operators@L2#0 [shown, tier 2, 0.17]
   clause coverage: c1 uncovered; c2 uncovered; c3 <- mis:comparison_operators->LessGreaterSwapped; c4 <- mis:comparison_operators->LessGreaterSwapped; c5 uncovered; c6 <- mis:comparison_operators->LessGreaterSwapped; c7 <- mis:if_statement->BranchChosenByIntent
   uncovered clauses bring in: control_flow (5.84), dangling_else (4.86), nested_conditionals (4.69)
   not yet read: own edges of control_flow, own edges of dangling_else, own edges of nested_conditionals, par:assignment~comparison_operators, pre:boolean_expression->if_statement, pre:comparison_operators->boolean_expression, pre:control_flow->if_statement, pre:expression->comparison_operators, pre:if_statement->if_else_statement, pre:if_statement->nested_conditionals, pre:statement->println, pre:string_literal->println
@@ -1363,6 +1374,7 @@ start concepts (3): comparison_operators, println, if_statement
   nested_conditionals (level ways): 14 candidates -> kept lvl:nested_conditionals@L0#3 (0.45), lvl:nested_conditionals@L0#0 (0.35), lvl:nested_conditionals@L4#2 (0.20)
     lvl:nested_conditionals@L0#3 -> shown (0.38) "The else lines up with if; so the else is skipped"
     lvl:nested_conditionals@L0#0 -> shown (0.30) "Nothing; The else lines up with if; so the else is skipped"
+    lvl:nested_conditionals@L4#2: wrong (0.80) -> not applied
     lvl:nested_conditionals@L4#2 -> not applied (0.00) ""
   kept: mis:dangling_else->ElseMatchesIndentation [held, tier 0, 0.93], mis:nested_conditionals->ElseMatchesIndentation [held, tier 0, 0.65], lvl:dangling_else@L0#0 [shown, tier 2, 0.59]
   clause coverage: c1 <- mis:dangling_else->ElseMatchesIndentation; c2 <- mis:dangling_else->ElseMatchesIndentation; c3 <- mis:comparison_operators->LessGreaterSwapped; c4 <- mis:comparison_operators->LessGreaterSwapped; c5 <- pre:if_statement->if_else_statement; c6 <- mis:comparison_operators->LessGreaterSwapped; c7 <- mis:if_statement->BranchChosenByIntent
@@ -1386,6 +1398,7 @@ start concepts (3): comparison_operators, println, if_statement
     mis:if_else_statement->ElseAlwaysExecutes -> correct (0.34) "x > 0; and thats true; so the else is skipped"
     mis:if_else_statement->BothBranchesExecute -> correct (0.15) "and thats true; so the else is skipped"
   if_else_statement (level ways): 17 candidates -> kept lvl:if_else_statement@L3#1 (0.60), lvl:if_else_statement@L2#0 (0.25), lvl:if_else_statement@L2#1 (0.15)
+    lvl:if_else_statement@L3#1: wrong (0.85) -> not applied
     lvl:if_else_statement@L3#1 -> not applied (0.00) ""
     lvl:if_else_statement@L2#0 -> shown (0.20) "x > 0; and thats true; so the else is skipped; x > 10 is false; so big isnt printed either"
     lvl:if_else_statement@L2#1 -> shown (0.09) "x > 0; and thats true; so the else is skipped"
@@ -1394,11 +1407,11 @@ start concepts (3): comparison_operators, println, if_statement
   held: mis:dangling_else->ElseMatchesIndentation; filed at the dependent concept: mis:nested_conditionals->ElseMatchesIndentation
   shadows: mis:nested_conditionals->ElseMatchesIndentation (shadow of mis:dangling_else->ElseMatchesIndentation)
   root-cause walk: held on ['dangling_else'], broken at [] (consequences: pre:nested_conditionals->dangling_else, pre:if_else_statement->nested_conditionals), prerequisites {'if_statement': ['boolean_expression', 'control_flow'], 'boolean_expression': ['comparison_operators'], 'comparison_operators': ['expression'], 'nested_conditionals': ['if_else_statement', 'if_statement'], 'if_else_statement': ['if_statement'], 'dangling_else': ['nested_conditionals'], 'control_flow': ['statement'], 'println': ['statement', 'string_literal']}
-  level comparison_operators: L3 via relation_to_neighbour "x > 0; and thats true; so the else is skipped; x > 10 is false; so big isnt printed either"
+  level comparison_operators: L2 via output_prediction "x > 0; and thats true; x > 10 is false"
   level control_flow: L2 via line_by_line_trace "x > 0; and thats true; so the else is skipped; x > 10 is false; so big isnt printed either"
   level dangling_else: L0 via misconception "Nothing; The else lines up with if; x > 0; and thats true; so the else is skipped"
   level if_else_statement: L2 via line_by_line_trace "x > 0; and thats true; so the else is skipped; x > 10 is false; so big isnt printed either"
-  level if_statement: L3 via relation_to_neighbour "x > 0; and thats true; so the else is skipped; x > 10 is false; so big isnt printed either"
+  level if_statement: L2 via line_by_line_trace "x > 0; and thats true; so the else is skipped; x > 10 is false; so big isnt printed either"
   level nested_conditionals: L0 via inconsistent_trace "The else lines up with if; so the else is skipped"
 ```
 
@@ -1411,7 +1424,8 @@ start concepts (3): comparison_operators, println, if_statement
   "depth": 3,
   "prune_tools": "llm",
   "model": "claude-opus-5-5",
-  "backend": "claude-cli"
+  "backend": "claude-cli",
+  "level_v2": true
  },
  "clauses": [
   "Nothing",
@@ -1466,13 +1480,12 @@ start concepts (3): comparison_operators, println, if_statement
  },
  "levels": {
   "comparison_operators": {
-   "level": "L3",
-   "way": "relation_to_neighbour",
-   "quote": "x > 0; and thats true; so the else is skipped; x > 10 is false; so big isnt printed either",
-   "edge": "lvl:comparison_operators@L3#1",
+   "level": "L2",
+   "way": "output_prediction",
+   "quote": "x > 0; and thats true; x > 10 is false",
+   "edge": "lvl:comparison_operators@L2#1",
    "source": "level_way",
    "also_shown": [
-    "L2 output_prediction",
     "L2 line_by_line_trace"
    ]
   },
@@ -1506,14 +1519,12 @@ start concepts (3): comparison_operators, println, if_statement
    ]
   },
   "if_statement": {
-   "level": "L3",
-   "way": "relation_to_neighbour",
+   "level": "L2",
+   "way": "line_by_line_trace",
    "quote": "x > 0; and thats true; so the else is skipped; x > 10 is false; so big isnt printed either",
-   "edge": "lvl:if_statement@L3#1",
+   "edge": "lvl:if_statement@L2#0",
    "source": "level_way",
-   "also_shown": [
-    "L2 line_by_line_trace"
-   ]
+   "also_shown": []
   },
   "nested_conditionals": {
    "level": "L0",
@@ -1572,25 +1583,23 @@ start concepts (3): comparison_operators, println, if_statement
   {
    "depth": 1,
    "source": "comparison_operators",
-   "edge": "lvl:comparison_operators@L3#1",
-   "target": "comparison_operators@L3",
+   "edge": "lvl:comparison_operators@L2#0",
+   "target": "comparison_operators@L2",
    "kind": "level",
    "label": "shown",
    "clauses": [
     3,
     4,
-    5,
-    6,
-    7
+    6
    ],
-   "quote": "x > 0; and thats true; so the else is skipped; x > 10 is false; so big isnt printed either",
+   "quote": "x > 0; and thats true; x > 10 is false",
    "confidence": 0.7,
-   "prune_score": 0.35,
-   "score": 0.245,
-   "logic": "Comparisons are the building blocks of conditions: together with boolean logic they provide the basis for decision-making.",
+   "prune_score": 0.25,
+   "score": 0.175,
+   "logic": "Evaluate the left operand (including its arithmetic), then the right operand; if their types differ, promote the narrower one (int to double); then compare and produce true or false.",
    "twin_logic": null,
-   "level": "L3",
-   "way": "relation_to_neighbour"
+   "level": "L2",
+   "way": "line_by_line_trace"
   },
   {
    "depth": 2,
@@ -1826,29 +1835,6 @@ start concepts (3): comparison_operators, println, if_statement
   {
    "depth": 1,
    "source": "comparison_operators",
-   "edge": "lvl:comparison_operators@L3#1",
-   "target": "comparison_operators@L3",
-   "kind": "level",
-   "label": "shown",
-   "clauses": [
-    3,
-    4,
-    5,
-    6,
-    7
-   ],
-   "quote": "x > 0; and thats true; so the else is skipped; x > 10 is false; so big isnt printed either",
-   "confidence": 0.7,
-   "prune_score": 0.35,
-   "score": 0.245,
-   "logic": "Comparisons are the building blocks of conditions: together with boolean logic they provide the basis for decision-making.",
-   "twin_logic": null,
-   "level": "L3",
-   "way": "relation_to_neighbour"
-  },
-  {
-   "depth": 1,
-   "source": "comparison_operators",
    "edge": "lvl:comparison_operators@L2#0",
    "target": "comparison_operators@L2",
    "kind": "level",
@@ -1906,29 +1892,6 @@ start concepts (3): comparison_operators, println, if_statement
    "logic": "The then branch always runs.",
    "twin_logic": "The then branch runs only when the condition is true.",
    "role": "primary"
-  },
-  {
-   "depth": 1,
-   "source": "if_statement",
-   "edge": "lvl:if_statement@L3#1",
-   "target": "if_statement@L3",
-   "kind": "level",
-   "label": "shown",
-   "clauses": [
-    3,
-    4,
-    5,
-    6,
-    7
-   ],
-   "quote": "x > 0; and thats true; so the else is skipped; x > 10 is false; so big isnt printed either",
-   "confidence": 0.7,
-   "prune_score": 0.3,
-   "score": 0.21,
-   "logic": "if-else extends if with a second branch that runs exactly when the condition is false; a lone if has an implicit empty else-case.",
-   "twin_logic": null,
-   "level": "L3",
-   "way": "relation_to_neighbour"
   },
   {
    "depth": 1,
@@ -2449,9 +2412,9 @@ start concepts (3): comparison_operators, println, if_statement
   "The else lines up with if": "mis:dangling_else->ElseMatchesIndentation",
   "x > 0": "mis:comparison_operators->LessGreaterSwapped",
   "and thats true": "mis:comparison_operators->LessGreaterSwapped",
-  "so the else is skipped": "lvl:comparison_operators@L3#1",
+  "so the else is skipped": "lvl:if_statement@L2#0",
   "x > 10 is false": "mis:comparison_operators->LessGreaterSwapped",
-  "so big isnt printed either": "lvl:comparison_operators@L3#1"
+  "so big isnt printed either": "mis:if_statement->BranchChosenByIntent"
  },
  "unexplained_clauses": [],
  "stop_reason": "sufficient",
@@ -2461,6 +2424,79 @@ start concepts (3): comparison_operators, println, if_statement
  "llm_calls_by_step": {
   "prune": 20,
   "label": 41
+ },
+ "level_v2": {
+  "wrong_ways": [
+   {
+    "concept": "comparison_operators",
+    "edge": "lvl:comparison_operators@L3#1",
+    "level": "L3",
+    "way": "relation_to_neighbour",
+    "clauses": [
+     3,
+     4,
+     5,
+     6,
+     7
+    ],
+    "quote": "x > 0; and thats true; so the else is skipped; x > 10 is false; so big isnt printed either",
+    "confidence": 0.7
+   },
+   {
+    "concept": "println",
+    "edge": "lvl:println@L3#0",
+    "level": "L3",
+    "way": "relation_to_neighbour",
+    "clauses": [
+     2,
+     5,
+     7
+    ],
+    "quote": "The else lines up with if; so the else is skipped; so big isnt printed either",
+    "confidence": 0.6
+   },
+   {
+    "concept": "if_statement",
+    "edge": "lvl:if_statement@L3#1",
+    "level": "L3",
+    "way": "relation_to_neighbour",
+    "clauses": [
+     1,
+     2,
+     5
+    ],
+    "quote": "Nothing; The else lines up with if; so the else is skipped",
+    "confidence": 0.85
+   },
+   {
+    "concept": "nested_conditionals",
+    "edge": "lvl:nested_conditionals@L4#2",
+    "level": "L4",
+    "way": "diagnose_an_error",
+    "clauses": [
+     1,
+     2,
+     5
+    ],
+    "quote": "Nothing; The else lines up with if; so the else is skipped",
+    "confidence": 0.8
+   },
+   {
+    "concept": "if_else_statement",
+    "edge": "lvl:if_else_statement@L3#1",
+    "level": "L3",
+    "way": "relation_to_neighbour",
+    "clauses": [
+     2,
+     3,
+     4,
+     5
+    ],
+    "quote": "The else lines up with if; x > 0; and thats true; so the else is skipped",
+    "confidence": 0.85
+   }
+  ],
+  "not_counted": []
  }
 }
 ```

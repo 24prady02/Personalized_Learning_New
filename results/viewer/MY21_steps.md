@@ -204,14 +204,16 @@ Clauses: 1
 Confidence: 0.75
 ```
 
-Label prompt for level way lvl:for_loop@L3#2 (the model saw only the concept, the way's name 'relation to neighbour' and its text; no level):
+Label prompt for level way lvl:for_loop@L3#2 (the model saw the concept, the way's name 'relation to neighbour', its text, where the way stops and whether the words must be correct; no level):
 > for (int i = 0; i < N; i++) gives i each valid index 0..N-1 exactly once in increasing order, the standard way to process every array element.
+>
+> Where this way stops: Two correct but separate rules are L1. Executing the two in sequence is L2. A relational answer may be correct or a relational error.
 
 Model's reply:
 ```
-Label: shown
-Clauses: 1
-Confidence: 0.75
+Label: not shown
+Clauses: none
+Confidence: 0.85
 ```
 
 Parsed labels:
@@ -219,7 +221,7 @@ Parsed labels:
 |---|---|---|---|---|---|---|
 | lvl:for_loop@L2#1 | shown | 0.5 | 0.95 | 0.47 | c1 | The first pass prints 0, the second prints 1, the third prints 2, and then the loop ends |
 | lvl:for_loop@L2#0 | shown | 0.3 | 0.75 | 0.22 | c1 | The first pass prints 0, the second prints 1, the third prints 2, and then the loop ends |
-| lvl:for_loop@L3#2 | shown | 0.2 | 0.75 | 0.15 | c1 | The first pass prints 0, the second prints 1, the third prints 2, and then the loop ends |
+| lvl:for_loop@L3#2 | not applied |  |  | 0.0 |  |  |
 
 #### loop_body, misconceptions: 12 edges offered
 Edges offered:
@@ -635,14 +637,16 @@ Clauses: 1
 Confidence: 0.6
 ```
 
-Label prompt for level way lvl:loop_control@L3#6 (the model saw only the concept, the way's name 'purpose of the whole' and its text; no level):
+Label prompt for level way lvl:loop_control@L3#6 (the model saw the concept, the way's name 'purpose of the whole', its text, where the way stops and whether the words must be correct; no level):
 > Plan: counter-controlled loop - the loop variable is a stepper that walks a predictable sequence of values (0..N-1, 1..N, every 2nd value) and fixes the number of passes in advance.
+>
+> Where this way stops: Narrating the lines is L2. A purpose induced from a few traced cases is L2. A wrong purpose is still L3, but with an error.
 
 Model's reply:
 ```
-Label: shown
-Clauses: 1
-Confidence: 0.7
+Label: not shown
+Clauses: none
+Confidence: 0.85
 ```
 
 Parsed labels:
@@ -650,7 +654,7 @@ Parsed labels:
 |---|---|---|---|---|---|---|
 | lvl:loop_control@L2#1 | shown | 0.5 | 0.85 | 0.42 | c1 | The first pass prints 0, the second prints 1, the third prints 2, and then the loop ends |
 | lvl:loop_control@L2#0 | shown | 0.3 | 0.6 | 0.18 | c1 | The first pass prints 0, the second prints 1, the third prints 2, and then the loop ends |
-| lvl:loop_control@L3#6 | shown | 0.2 | 0.7 | 0.14 | c1 | The first pass prints 0, the second prints 1, the third prints 2, and then the loop ends |
+| lvl:loop_control@L3#6 | not applied |  |  | 0.0 |  |  |
 
 #### for_loop, concept edges: 1 edges offered
 Edges offered:
@@ -696,12 +700,12 @@ Figure 6 (the graph after depth 3): C:\Users\magnu\OneDrive\Desktop\ES_VIterbi_P
 
 ## 4. Diagnosis (rules over the labelled graph, no model)
 Root-cause walk: held on [], broken at [], prerequisites {'increment_operators': ['assignment', 'loop_control'], 'boolean_expression': ['comparison_operators'], 'comparison_operators': ['expression'], 'loop_body': ['for_loop'], 'loop_scope': ['for_loop'], 'for_loop': ['loop_control'], 'loop_control': ['loop_variable'], 'control_flow': ['statement'], 'println': ['statement']}
-- for_loop: L3 via relation_to_neighbour "The first pass prints 0, the second prints 1, the third prints 2, and then the loop ends"
+- for_loop: L2 via output_prediction "The first pass prints 0, the second prints 1, the third prints 2, and then the loop ends"
 - loop_body: L2 via output_prediction "The first pass prints 0, the second prints 1, the third prints 2, and then the loop ends"
-- loop_control: L3 via purpose_of_the_whole "The first pass prints 0, the second prints 1, the third prints 2, and then the loop ends"
+- loop_control: L2 via output_prediction "The first pass prints 0, the second prints 1, the third prints 2, and then the loop ends"
 - loop_variable: L2 via output_prediction "The first pass prints 0, the second prints 1, the third prints 2, and then the loop ends"
 
-**Stop:** max depth at depth 3; prompts {'prune': 11, 'label': 21}, fresh model calls 3, cache hits 29
+**Stop:** max depth at depth 3; prompts {'prune': 11, 'label': 21}, fresh model calls 0, cache hits 32
 
 ### Held misconceptions
 (none)
@@ -714,12 +718,12 @@ Root-cause walk: held on [], broken at [], prerequisites {'increment_operators':
 ### Level per concept
 | concept | level | way | misconception | source | quote | rule | also | note |
 |---|---|---|---|---|---|---|---|---|
-| for_loop | L3 | relation_to_neighbour |  | level_way | The first pass prints 0, the second prints 1, the third prints 2, and then the loop ends |  | L2 output_prediction, L2 line_by_line_trace |  |
+| for_loop | L2 | output_prediction |  | level_way | The first pass prints 0, the second prints 1, the third prints 2, and then the loop ends |  | L2 line_by_line_trace |  |
 | loop_body | L2 | output_prediction |  | level_way | The first pass prints 0, the second prints 1, the third prints 2, and then the loop ends |  | L2 line_by_line_trace, L2 one_step_execution |  |
-| loop_control | L3 | purpose_of_the_whole |  | level_way | The first pass prints 0, the second prints 1, the third prints 2, and then the loop ends |  | L2 output_prediction, L2 line_by_line_trace |  |
+| loop_control | L2 | output_prediction |  | level_way | The first pass prints 0, the second prints 1, the third prints 2, and then the loop ends |  | L2 line_by_line_trace |  |
 | loop_variable | L2 | output_prediction |  | level_way | The first pass prints 0, the second prints 1, the third prints 2, and then the loop ends |  | L2 line_by_line_trace, L1 states_the_rule |  |
 
-### Overall level: L3
+### Overall level: L2
 
 Clause coverage (final):
 | clause | covered by |
@@ -736,7 +740,6 @@ Figure 7 (final picture): C:\Users\magnu\OneDrive\Desktop\ES_VIterbi_Personalize
 | 1 | for_loop | mis:for_loop->ForIsConditional | misconception | correct | 0.3 | 0.95 | 0.285 | [1] | The first pass prints 0, the second prints 1, the third prints 2, and then the loop ends |
 | 1 | for_loop | lvl:for_loop@L2#1 | level | shown | 0.5 | 0.95 | 0.475 | [1] | The first pass prints 0, the second prints 1, the third prints 2, and then the loop ends |
 | 1 | for_loop | lvl:for_loop@L2#0 | level | shown | 0.3 | 0.75 | 0.225 | [1] | The first pass prints 0, the second prints 1, the third prints 2, and then the loop ends |
-| 1 | for_loop | lvl:for_loop@L3#2 | level | shown | 0.2 | 0.75 | 0.15 | [1] | The first pass prints 0, the second prints 1, the third prints 2, and then the loop ends |
 | 1 | loop_body | mis:loop_body->LoopOutputSameEachPass | misconception | correct | 0.6 | 0.95 | 0.57 | [1] | The first pass prints 0, the second prints 1, the third prints 2, and then the loop ends |
 | 1 | loop_body | mis:loop_body->ForLoopPartSkipped | misconception | correct | 0.25 | 0.6 | 0.15 | [1] | The first pass prints 0, the second prints 1, the third prints 2, and then the loop ends |
 | 1 | loop_body | mis:loop_body->LoopBodyStatementOutsideLoop | misconception | correct | 0.15 | 0.75 | 0.1125 | [1] | The first pass prints 0, the second prints 1, the third prints 2, and then the loop ends |
@@ -757,7 +760,6 @@ Figure 7 (final picture): C:\Users\magnu\OneDrive\Desktop\ES_VIterbi_Personalize
 | 3 | loop_control | err:loop_control->WrongIterationCount | error | correct | 0.3 | 0.85 | 0.255 | [1] | The first pass prints 0, the second prints 1, the third prints 2, and then the loop ends |
 | 3 | loop_control | lvl:loop_control@L2#1 | level | shown | 0.5 | 0.85 | 0.425 | [1] | The first pass prints 0, the second prints 1, the third prints 2, and then the loop ends |
 | 3 | loop_control | lvl:loop_control@L2#0 | level | shown | 0.3 | 0.6 | 0.18 | [1] | The first pass prints 0, the second prints 1, the third prints 2, and then the loop ends |
-| 3 | loop_control | lvl:loop_control@L3#6 | level | shown | 0.2 | 0.7 | 0.14 | [1] | The first pass prints 0, the second prints 1, the third prints 2, and then the loop ends |
 
 ## 6. The paths (what the keep step kept, depth by depth)
 | depth | source | edge | kind | label | score | clauses |
@@ -786,7 +788,7 @@ start concepts (3): for_loop, loop_body, loop_variable
   for_loop (level ways): 24 candidates -> kept lvl:for_loop@L2#1 (0.50), lvl:for_loop@L2#0 (0.30), lvl:for_loop@L3#2 (0.20)
     lvl:for_loop@L2#1 -> shown (0.47) "The first pass prints 0, the second prints 1, the third prints 2, and then the loop ends"
     lvl:for_loop@L2#0 -> shown (0.22) "The first pass prints 0, the second prints 1, the third prints 2, and then the loop ends"
-    lvl:for_loop@L3#2 -> shown (0.15) "The first pass prints 0, the second prints 1, the third prints 2, and then the loop ends"
+    lvl:for_loop@L3#2 -> not applied (0.00) ""
   loop_body (misconceptions): 12 candidates -> kept mis:loop_body->LoopOutputSameEachPass (0.60), mis:loop_body->ForLoopPartSkipped (0.25), mis:loop_body->LoopBodyStatementOutsideLoop (0.15)
     mis:loop_body->LoopOutputSameEachPass -> correct (0.57) "The first pass prints 0, the second prints 1, the third prints 2, and then the loop ends"
     mis:loop_body->ForLoopPartSkipped -> correct (0.15) "The first pass prints 0, the second prints 1, the third prints 2, and then the loop ends"
@@ -825,16 +827,16 @@ start concepts (3): for_loop, loop_body, loop_variable
   loop_control (level ways): 19 candidates -> kept lvl:loop_control@L2#1 (0.50), lvl:loop_control@L2#0 (0.30), lvl:loop_control@L3#6 (0.20)
     lvl:loop_control@L2#1 -> shown (0.42) "The first pass prints 0, the second prints 1, the third prints 2, and then the loop ends"
     lvl:loop_control@L2#0 -> shown (0.18) "The first pass prints 0, the second prints 1, the third prints 2, and then the loop ends"
-    lvl:loop_control@L3#6 -> shown (0.14) "The first pass prints 0, the second prints 1, the third prints 2, and then the loop ends"
+    lvl:loop_control@L3#6 -> not applied (0.00) ""
   for_loop (concept edges): 1 candidates -> kept pre:for_loop->loop_scope (1.00)
     pre:for_loop->loop_scope -> not applied (0.00) ""
   kept: lvl:loop_control@L2#1 [shown, tier 2, 0.42], mis:loop_control->OffByOneBound [correct, tier 2, 0.36], mis:loop_control->ForUpdateBeforeBody [correct, tier 2, 0.26]
   clause coverage: c1 <- mis:for_loop->ForUpdateBeforeBody
   not yet read: pre:loop_control->increment_operators
   root-cause walk: held on [], broken at [], prerequisites {'increment_operators': ['assignment', 'loop_control'], 'boolean_expression': ['comparison_operators'], 'comparison_operators': ['expression'], 'loop_body': ['for_loop'], 'loop_scope': ['for_loop'], 'for_loop': ['loop_control'], 'loop_control': ['loop_variable'], 'control_flow': ['statement'], 'println': ['statement']}
-  level for_loop: L3 via relation_to_neighbour "The first pass prints 0, the second prints 1, the third prints 2, and then the loop ends"
+  level for_loop: L2 via output_prediction "The first pass prints 0, the second prints 1, the third prints 2, and then the loop ends"
   level loop_body: L2 via output_prediction "The first pass prints 0, the second prints 1, the third prints 2, and then the loop ends"
-  level loop_control: L3 via purpose_of_the_whole "The first pass prints 0, the second prints 1, the third prints 2, and then the loop ends"
+  level loop_control: L2 via output_prediction "The first pass prints 0, the second prints 1, the third prints 2, and then the loop ends"
   level loop_variable: L2 via output_prediction "The first pass prints 0, the second prints 1, the third prints 2, and then the loop ends"
 ```
 
@@ -847,7 +849,8 @@ start concepts (3): for_loop, loop_body, loop_variable
   "depth": 3,
   "prune_tools": "llm",
   "model": "claude-opus-5-5",
-  "backend": "claude-cli"
+  "backend": "claude-cli",
+  "level_v2": true
  },
  "clauses": [
   "The first pass prints 0, the second prints 1, the third prints 2, and then the loop ends"
@@ -864,13 +867,12 @@ start concepts (3): for_loop, loop_body, loop_variable
  "root_cause": null,
  "levels": {
   "for_loop": {
-   "level": "L3",
-   "way": "relation_to_neighbour",
+   "level": "L2",
+   "way": "output_prediction",
    "quote": "The first pass prints 0, the second prints 1, the third prints 2, and then the loop ends",
-   "edge": "lvl:for_loop@L3#2",
+   "edge": "lvl:for_loop@L2#1",
    "source": "level_way",
    "also_shown": [
-    "L2 output_prediction",
     "L2 line_by_line_trace"
    ]
   },
@@ -886,13 +888,12 @@ start concepts (3): for_loop, loop_body, loop_variable
    ]
   },
   "loop_control": {
-   "level": "L3",
-   "way": "purpose_of_the_whole",
+   "level": "L2",
+   "way": "output_prediction",
    "quote": "The first pass prints 0, the second prints 1, the third prints 2, and then the loop ends",
-   "edge": "lvl:loop_control@L3#6",
+   "edge": "lvl:loop_control@L2#1",
    "source": "level_way",
    "also_shown": [
-    "L2 output_prediction",
     "L2 line_by_line_trace"
    ]
   },
@@ -908,7 +909,7 @@ start concepts (3): for_loop, loop_body, loop_variable
    ]
   }
  },
- "overall_level": "L3",
+ "overall_level": "L2",
  "paths": [
   {
    "depth": 1,
@@ -1164,25 +1165,6 @@ start concepts (3): for_loop, loop_body, loop_variable
    "twin_logic": null,
    "level": "L2",
    "way": "line_by_line_trace"
-  },
-  {
-   "depth": 1,
-   "source": "for_loop",
-   "edge": "lvl:for_loop@L3#2",
-   "target": "for_loop@L3",
-   "kind": "level",
-   "label": "shown",
-   "clauses": [
-    1
-   ],
-   "quote": "The first pass prints 0, the second prints 1, the third prints 2, and then the loop ends",
-   "confidence": 0.75,
-   "prune_score": 0.2,
-   "score": 0.15,
-   "logic": "for (int i = 0; i < N; i++) gives i each valid index 0..N-1 exactly once in increasing order, the standard way to process every array element.",
-   "twin_logic": null,
-   "level": "L3",
-   "way": "relation_to_neighbour"
   },
   {
    "depth": 1,
@@ -1548,25 +1530,6 @@ start concepts (3): for_loop, loop_body, loop_variable
    "twin_logic": null,
    "level": "L2",
    "way": "line_by_line_trace"
-  },
-  {
-   "depth": 3,
-   "source": "loop_control",
-   "edge": "lvl:loop_control@L3#6",
-   "target": "loop_control@L3",
-   "kind": "level",
-   "label": "shown",
-   "clauses": [
-    1
-   ],
-   "quote": "The first pass prints 0, the second prints 1, the third prints 2, and then the loop ends",
-   "confidence": 0.7,
-   "prune_score": 0.2,
-   "score": 0.14,
-   "logic": "Plan: counter-controlled loop - the loop variable is a stepper that walks a predictable sequence of values (0..N-1, 1..N, every 2nd value) and fixes the number of passes in advance.",
-   "twin_logic": null,
-   "level": "L3",
-   "way": "purpose_of_the_whole"
   }
  ],
  "clause_coverage": {
@@ -1575,11 +1538,15 @@ start concepts (3): for_loop, loop_body, loop_variable
  "unexplained_clauses": [],
  "stop_reason": "max depth",
  "depth_reached": 3,
- "llm_calls": 3,
- "llm_cache_hits": 29,
+ "llm_calls": 0,
+ "llm_cache_hits": 32,
  "llm_calls_by_step": {
   "prune": 11,
   "label": 21
+ },
+ "level_v2": {
+  "wrong_ways": [],
+  "not_counted": []
  }
 }
 ```

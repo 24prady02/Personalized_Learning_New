@@ -10,6 +10,7 @@ start concepts (3): integer_division, arithmetic_operators, remainder_operator
   integer_division (level ways): 16 candidates -> kept lvl:integer_division@L0#4 (0.50), lvl:integer_division@L0#0 (0.30), lvl:integer_division@L3#2 (0.20)
     lvl:integer_division@L0#4 -> shown (0.35) "q is a double; so 7 / 2 is done with decimals and gives 3.5, and 7 % 2 is the half that is left over, 0.5"
     lvl:integer_division@L0#0 -> shown (0.27) "so 7 / 2 is done with decimals and gives 3.5, and 7 % 2 is the half that is left over, 0.5"
+    lvl:integer_division@L3#2: wrong (0.80) -> not applied
     lvl:integer_division@L3#2 -> not applied (0.00) ""
   arithmetic_operators (misconceptions): 3 candidates -> kept mis:arithmetic_operators->RemainderIsSubtraction (0.90), mis:arithmetic_operators->ArithmeticOnNumericStrings (0.05), mis:arithmetic_operators->CaretIsPower (0.05)
     mis:arithmetic_operators->RemainderIsSubtraction -> not applied (0.00) ""
@@ -17,6 +18,7 @@ start concepts (3): integer_division, arithmetic_operators, remainder_operator
     mis:arithmetic_operators->CaretIsPower -> not applied (0.00) ""
   arithmetic_operators (level ways): 18 candidates -> kept lvl:arithmetic_operators@L0#0 (0.45), lvl:arithmetic_operators@L3#1 (0.30), lvl:arithmetic_operators@L2#1 (0.25)
     lvl:arithmetic_operators@L0#0 -> shown (0.34) "so 7 / 2 is done with decimals and gives 3.5, and 7 % 2 is the half that is left over, 0.5"
+    lvl:arithmetic_operators@L3#1: wrong (0.75) -> not applied
     lvl:arithmetic_operators@L3#1 -> not applied (0.00) ""
     lvl:arithmetic_operators@L2#1 -> not applied (0.00) ""
   remainder_operator (misconceptions): 3 candidates -> kept mis:remainder_operator->RemainderIsQuotient (0.50), mis:remainder_operator->RemainderIsSubtraction (0.40), mis:remainder_operator->NegativeRemainderSign (0.10)
@@ -25,6 +27,7 @@ start concepts (3): integer_division, arithmetic_operators, remainder_operator
     mis:remainder_operator->NegativeRemainderSign -> not applied (0.00) ""
   remainder_operator (level ways): 14 candidates -> kept lvl:remainder_operator@L0#3 (0.45), lvl:remainder_operator@L3#0 (0.35), lvl:remainder_operator@L1#0 (0.20)
     lvl:remainder_operator@L0#3 -> not applied (0.00) ""
+    lvl:remainder_operator@L3#0: wrong (0.80) -> not applied
     lvl:remainder_operator@L3#0 -> not applied (0.00) ""
     lvl:remainder_operator@L1#0 -> not applied (0.00) ""
   kept: mis:integer_division->TargetTyping [held, tier 0, 0.45], lvl:integer_division@L0#4 [shown, tier 2, 0.35], lvl:arithmetic_operators@L0#0 [shown, tier 2, 0.34]
@@ -50,6 +53,7 @@ start concepts (3): integer_division, arithmetic_operators, remainder_operator
     mis:expression->AssignmentIsEquation -> not applied (0.00) ""
     mis:expression->VariablesHoldExpressions -> not applied (0.00) ""
   expression (level ways): 19 candidates -> kept lvl:expression@L3#1 (0.50), lvl:expression@L0#0 (0.30), lvl:expression@L2#1 (0.20)
+    lvl:expression@L3#1: wrong (0.88) -> not applied
     lvl:expression@L3#1 -> not applied (0.00) ""
     lvl:expression@L0#0 -> shown (0.24) "so 7 / 2 is done with decimals and gives 3.5, and 7 % 2 is the half that is left over, 0.5"
     lvl:expression@L2#1 -> not applied (0.00) ""

@@ -5,7 +5,8 @@
   "depth": 3,
   "prune_tools": "llm",
   "model": "claude-opus-5-5",
-  "backend": "claude-cli"
+  "backend": "claude-cli",
+  "level_v2": true
  },
  "clauses": [
   "A for loop moves i on by one each pass",
@@ -351,10 +352,27 @@
  "unexplained_clauses": [],
  "stop_reason": "sufficient",
  "depth_reached": 2,
- "llm_calls": 3,
- "llm_cache_hits": 21,
+ "llm_calls": 0,
+ "llm_cache_hits": 24,
  "llm_calls_by_step": {
   "prune": 8,
   "label": 16
+ },
+ "level_v2": {
+  "wrong_ways": [
+   {
+    "concept": "loop_control",
+    "edge": "lvl:loop_control@L3#2",
+    "level": "L3",
+    "way": "relation_to_neighbour",
+    "clauses": [
+     1,
+     2
+    ],
+    "quote": "A for loop moves i on by one each pass; so i goes 0, 1, 2 and",
+    "confidence": 0.8
+   }
+  ],
+  "not_counted": []
  }
 }

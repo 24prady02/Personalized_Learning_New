@@ -5,7 +5,8 @@
   "depth": 3,
   "prune_tools": "llm",
   "model": "claude-opus-5-5",
-  "backend": "claude-cli"
+  "backend": "claude-cli",
+  "level_v2": true
  },
  "clauses": [
   "The first pass prints 0, the second prints 1, the third prints 2, and then the loop ends"
@@ -22,13 +23,12 @@
  "root_cause": null,
  "levels": {
   "for_loop": {
-   "level": "L3",
-   "way": "relation_to_neighbour",
+   "level": "L2",
+   "way": "output_prediction",
    "quote": "The first pass prints 0, the second prints 1, the third prints 2, and then the loop ends",
-   "edge": "lvl:for_loop@L3#2",
+   "edge": "lvl:for_loop@L2#1",
    "source": "level_way",
    "also_shown": [
-    "L2 output_prediction",
     "L2 line_by_line_trace"
    ]
   },
@@ -44,13 +44,12 @@
    ]
   },
   "loop_control": {
-   "level": "L3",
-   "way": "purpose_of_the_whole",
+   "level": "L2",
+   "way": "output_prediction",
    "quote": "The first pass prints 0, the second prints 1, the third prints 2, and then the loop ends",
-   "edge": "lvl:loop_control@L3#6",
+   "edge": "lvl:loop_control@L2#1",
    "source": "level_way",
    "also_shown": [
-    "L2 output_prediction",
     "L2 line_by_line_trace"
    ]
   },
@@ -66,7 +65,7 @@
    ]
   }
  },
- "overall_level": "L3",
+ "overall_level": "L2",
  "paths": [
   {
    "depth": 1,
@@ -322,25 +321,6 @@
    "twin_logic": null,
    "level": "L2",
    "way": "line_by_line_trace"
-  },
-  {
-   "depth": 1,
-   "source": "for_loop",
-   "edge": "lvl:for_loop@L3#2",
-   "target": "for_loop@L3",
-   "kind": "level",
-   "label": "shown",
-   "clauses": [
-    1
-   ],
-   "quote": "The first pass prints 0, the second prints 1, the third prints 2, and then the loop ends",
-   "confidence": 0.75,
-   "prune_score": 0.2,
-   "score": 0.15,
-   "logic": "for (int i = 0; i < N; i++) gives i each valid index 0..N-1 exactly once in increasing order, the standard way to process every array element.",
-   "twin_logic": null,
-   "level": "L3",
-   "way": "relation_to_neighbour"
   },
   {
    "depth": 1,
@@ -706,25 +686,6 @@
    "twin_logic": null,
    "level": "L2",
    "way": "line_by_line_trace"
-  },
-  {
-   "depth": 3,
-   "source": "loop_control",
-   "edge": "lvl:loop_control@L3#6",
-   "target": "loop_control@L3",
-   "kind": "level",
-   "label": "shown",
-   "clauses": [
-    1
-   ],
-   "quote": "The first pass prints 0, the second prints 1, the third prints 2, and then the loop ends",
-   "confidence": 0.7,
-   "prune_score": 0.2,
-   "score": 0.14,
-   "logic": "Plan: counter-controlled loop - the loop variable is a stepper that walks a predictable sequence of values (0..N-1, 1..N, every 2nd value) and fixes the number of passes in advance.",
-   "twin_logic": null,
-   "level": "L3",
-   "way": "purpose_of_the_whole"
   }
  ],
  "clause_coverage": {
@@ -733,10 +694,14 @@
  "unexplained_clauses": [],
  "stop_reason": "max depth",
  "depth_reached": 3,
- "llm_calls": 3,
- "llm_cache_hits": 29,
+ "llm_calls": 0,
+ "llm_cache_hits": 32,
  "llm_calls_by_step": {
   "prune": 11,
   "label": 21
+ },
+ "level_v2": {
+  "wrong_ways": [],
+  "not_counted": []
  }
 }

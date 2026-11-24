@@ -41,6 +41,7 @@ start concepts (3): integer_division, println, arithmetic_operators
     mis:expression->AssignmentIsEquation -> not applied (0.00) ""
     mis:expression->VariablesHoldExpressions -> not applied (0.00) ""
   expression (level ways): 19 candidates -> kept lvl:expression@L3#1 (0.50), lvl:expression@L1#1 (0.30), lvl:expression@L2#1 (0.20)
+    lvl:expression@L3#1: wrong (0.85) -> not applied
     lvl:expression@L3#1 -> not applied (0.00) ""
     lvl:expression@L1#1 -> not applied (0.00) ""
     lvl:expression@L2#1 -> not applied (0.00) ""
@@ -50,12 +51,14 @@ start concepts (3): integer_division, println, arithmetic_operators
     mis:type_conversion->NoCastIfSameSize -> not applied (0.00) ""
   type_conversion (level ways): 18 candidates -> kept lvl:type_conversion@L0#0 (0.60), lvl:type_conversion@L4#3 (0.25), lvl:type_conversion@L2#0 (0.15)
     lvl:type_conversion@L0#0 -> shown (0.51) "Because d is a double, Java knows the result should have decimals; so it does the division a / b with decimals and gets 3.0"
+    lvl:type_conversion@L4#3: wrong (0.70) -> not applied
     lvl:type_conversion@L4#3 -> not applied (0.00) ""
     lvl:type_conversion@L2#0 -> not applied (0.00) ""
   widening_conversion (misconceptions): 2 candidates -> kept mis:widening_conversion->NarrowingAssignmentAllowed (0.60), mis:widening_conversion->NoCastIfSameSize (0.40)
     mis:widening_conversion->NarrowingAssignmentAllowed -> not applied (0.00) ""
     mis:widening_conversion->NoCastIfSameSize -> not applied (0.00) ""
   widening_conversion (level ways): 14 candidates -> kept lvl:widening_conversion@L4#3 (0.50), lvl:widening_conversion@L2#0 (0.30), lvl:widening_conversion@L4#1 (0.20)
+    lvl:widening_conversion@L4#3: wrong (0.60) -> not applied
     lvl:widening_conversion@L4#3 -> not applied (0.00) ""
     lvl:widening_conversion@L2#0 -> not applied (0.00) ""
     lvl:widening_conversion@L4#1 -> not applied (0.00) ""
@@ -76,6 +79,7 @@ start concepts (3): integer_division, println, arithmetic_operators
     mis:primitive_type->NewArrayHoldsGarbage -> not applied (0.00) ""
   primitive_type (level ways): 21 candidates -> kept lvl:primitive_type@L2#0 (0.40), lvl:primitive_type@L3#4 (0.35), lvl:primitive_type@L2#1 (0.25)
     lvl:primitive_type@L2#0 -> not applied (0.00) ""
+    lvl:primitive_type@L3#4: wrong (0.85) -> not applied
     lvl:primitive_type@L3#4 -> not applied (0.00) ""
     lvl:primitive_type@L2#1 -> not applied (0.00) ""
   nothing kept at this depth

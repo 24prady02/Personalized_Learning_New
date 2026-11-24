@@ -8,7 +8,7 @@ start concepts (3): arithmetic_operators, remainder_operator, array_initializer
     mis:arithmetic_operators->CaretIsPower -> not applied (0.00) ""
     mis:arithmetic_operators->ArithmeticOnNumericStrings -> not applied (0.00) ""
   arithmetic_operators (level ways): 18 candidates -> kept lvl:arithmetic_operators@L3#4 (0.50), lvl:arithmetic_operators@L3#1 (0.30), lvl:arithmetic_operators@L2#1 (0.20)
-    lvl:arithmetic_operators@L3#4 -> shown (0.38) "counts[r] is how many numbers leave remainder r when divided by 3; The % 3 turns each number into an index 0, 1 or 2; so it fits the array"
+    lvl:arithmetic_operators@L3#4 -> shown (0.44) "counts[r] is how many numbers leave remainder r when divided by 3; The % 3 turns each number into an index 0, 1 or 2; so it fits the array"
     lvl:arithmetic_operators@L3#1 -> not applied (0.00) ""
     lvl:arithmetic_operators@L2#1 -> shown (0.12) "counts[r] is how many numbers leave remainder r when divided by 3; The % 3 turns each number into an index 0, 1 or 2"
   remainder_operator (misconceptions): 3 candidates -> kept mis:remainder_operator->RemainderIsQuotient (0.45), mis:remainder_operator->RemainderIsSubtraction (0.40), mis:remainder_operator->NegativeRemainderSign (0.15)
@@ -16,7 +16,7 @@ start concepts (3): arithmetic_operators, remainder_operator, array_initializer
     mis:remainder_operator->RemainderIsSubtraction -> correct (0.30) "counts[r] is how many numbers leave remainder r when divided by 3; The % 3 turns each number into an index 0, 1 or 2"
     mis:remainder_operator->NegativeRemainderSign -> not applied (0.00) ""
   remainder_operator (level ways): 14 candidates -> kept lvl:remainder_operator@L3#1 (0.50), lvl:remainder_operator@L1#0 (0.30), lvl:remainder_operator@L2#2 (0.20)
-    lvl:remainder_operator@L3#1 -> shown (0.42) "counts[r] is how many numbers leave remainder r when divided by 3; The % 3 turns each number into an index 0, 1 or 2; so it fits the array"
+    lvl:remainder_operator@L3#1 -> shown (0.45) "counts[r] is how many numbers leave remainder r when divided by 3; The % 3 turns each number into an index 0, 1 or 2; so it fits the array"
     lvl:remainder_operator@L1#0 -> shown (0.24) "counts[r] is how many numbers leave remainder r when divided by 3; The % 3 turns each number into an index 0, 1 or 2"
     lvl:remainder_operator@L2#2 -> shown (0.14) "The % 3 turns each number into an index 0, 1 or 2; so it fits the array"
   array_initializer (misconceptions): 2 candidates -> kept mis:array_initializer->ArrayBracketCountIsLength (0.60), mis:array_initializer->ArrayInitializerContentsInBrackets (0.40)
@@ -26,7 +26,7 @@ start concepts (3): arithmetic_operators, remainder_operator, array_initializer
     lvl:array_initializer@L2#2 -> not applied (0.00) ""
     lvl:array_initializer@L1#0 -> not applied (0.00) ""
     lvl:array_initializer@L3#1 -> not applied (0.00) ""
-  kept: mis:arithmetic_operators->RemainderIsSubtraction [correct, tier 2, 0.81], lvl:remainder_operator@L3#1 [shown, tier 2, 0.42], lvl:arithmetic_operators@L3#4 [shown, tier 2, 0.38]
+  kept: mis:arithmetic_operators->RemainderIsSubtraction [correct, tier 2, 0.81], lvl:remainder_operator@L3#1 [shown, tier 2, 0.45], lvl:arithmetic_operators@L3#4 [shown, tier 2, 0.44]
   clause coverage: c1 <- mis:arithmetic_operators->RemainderIsSubtraction; c2 <- mis:arithmetic_operators->RemainderIsSubtraction; c3 uncovered
   uncovered clauses bring in: length_field (2.50), array_creation (2.48), indexing (2.38)
   not yet read: own edges of array_creation, own edges of indexing, own edges of length_field, par:string_concatenation~arithmetic_operators, pre:arithmetic_operators->expression, pre:arithmetic_operators->remainder_operator, pre:array_creation->array_initializer, pre:array_declaration->array_initializer, pre:array_initializer->indexing, pre:array_initializer->length_field
@@ -43,7 +43,7 @@ start concepts (3): arithmetic_operators, remainder_operator, array_initializer
     mis:length_field->ArrayHasLengthMethod -> not applied (0.00) ""
     mis:length_field->ArrayLengthCannotBeZero -> not applied (0.00) ""
   length_field (level ways): 15 candidates -> kept lvl:length_field@L3#0 (0.40), lvl:length_field@L1#1 (0.35), lvl:length_field@L3#2 (0.25)
-    lvl:length_field@L3#0 -> not applied (0.00) ""
+    lvl:length_field@L3#0 -> shown (0.24) "The % 3 turns each number into an index 0, 1 or 2; so it fits the array"
     lvl:length_field@L1#1 -> not applied (0.00) ""
     lvl:length_field@L3#2 -> not applied (0.00) ""
   array_creation (misconceptions): 9 candidates -> kept mis:array_creation->ArrayRangeInclusive (0.60), mis:array_creation->ArraysGrow (0.25), mis:array_creation->ArrayAllocationWithoutNew (0.15)
@@ -52,16 +52,16 @@ start concepts (3): arithmetic_operators, remainder_operator, array_initializer
     mis:array_creation->ArrayAllocationWithoutNew -> not applied (0.00) ""
   array_creation (level ways): 21 candidates -> kept lvl:array_creation@L3#1 (0.60), lvl:array_creation@L3#7 (0.25), lvl:array_creation@L3#3 (0.15)
     lvl:array_creation@L3#1 -> shown (0.48) "The % 3 turns each number into an index 0, 1 or 2; so it fits the array"
-    lvl:array_creation@L3#7 -> not applied (0.00) ""
-    lvl:array_creation@L3#3 -> shown (0.08) "The % 3 turns each number into an index 0, 1 or 2; so it fits the array"
+    lvl:array_creation@L3#7 -> shown (0.15) "counts[r] is how many numbers leave remainder r when divided by 3; so it fits the array"
+    lvl:array_creation@L3#3 -> shown (0.11) "The % 3 turns each number into an index 0, 1 or 2; so it fits the array"
   indexing (misconceptions): 8 candidates -> kept mis:indexing->IndexIsValue (0.40), mis:indexing->ArrayRangeInclusive (0.35), mis:indexing->ArrayElementNotVariable (0.25)
     mis:indexing->IndexIsValue -> correct (0.32) "counts[r] is how many numbers leave remainder r when divided by 3"
     mis:indexing->ArrayRangeInclusive -> correct (0.28) "The % 3 turns each number into an index 0, 1 or 2; so it fits the array"
     mis:indexing->ArrayElementNotVariable -> correct (0.15) "The % 3 turns each number into an index 0, 1 or 2"
   indexing (level ways): 21 candidates -> kept lvl:indexing@L3#5 (0.50), lvl:indexing@L4#1 (0.30), lvl:indexing@L3#7 (0.20)
-    lvl:indexing@L3#5 -> shown (0.42) "counts[r] is how many numbers leave remainder r when divided by 3; The % 3 turns each number into an index 0, 1 or 2; so it fits the array"
-    lvl:indexing@L4#1 -> shown (0.22) "counts[r] is how many numbers leave remainder r when divided by 3; The % 3 turns each number into an index 0, 1 or 2; so it fits the array"
-    lvl:indexing@L3#7 -> shown (0.12) "counts[r] is how many numbers leave remainder r when divided by 3; The % 3 turns each number into an index 0, 1 or 2"
+    lvl:indexing@L3#5 -> shown (0.42) "The % 3 turns each number into an index 0, 1 or 2; so it fits the array"
+    lvl:indexing@L4#1 -> not applied (0.00) ""
+    lvl:indexing@L3#7 -> shown (0.17) "counts[r] is how many numbers leave remainder r when divided by 3; The % 3 turns each number into an index 0, 1 or 2; so it fits the array"
   kept: pre:arithmetic_operators->remainder_operator [confirmed, tier 2, 0.64], mis:array_creation->ArrayRangeInclusive [correct, tier 2, 0.48], lvl:array_creation@L3#1 [shown, tier 2, 0.48]
   clause coverage: c1 <- mis:arithmetic_operators->RemainderIsSubtraction; c2 <- mis:arithmetic_operators->RemainderIsSubtraction; c3 <- pre:arithmetic_operators->expression
   not yet read: pre:array_creation->array_default_values, pre:array_creation->indexing, pre:array_creation->length_field, pre:array_declaration->array_creation, pre:indexing->array_bounds, pre:indexing->array_traversal, pre:length_field->array_traversal
@@ -92,23 +92,26 @@ start concepts (3): arithmetic_operators, remainder_operator, array_initializer
     mis:expression->AssignmentIsEquation -> not applied (0.00) ""
     mis:expression->VariablesHoldExpressions -> not applied (0.00) ""
   expression (level ways): 19 candidates -> kept lvl:expression@L3#5 (0.40), lvl:expression@L3#1 (0.35), lvl:expression@L4#1 (0.25)
-    lvl:expression@L3#5 -> shown (0.32) "The % 3 turns each number into an index 0, 1 or 2; so it fits the array"
-    lvl:expression@L3#1 -> shown (0.24) "The % 3 turns each number into an index 0, 1 or 2; so it fits the array"
-    lvl:expression@L4#1 -> shown (0.15) "The % 3 turns each number into an index 0, 1 or 2; so it fits the array"
+    lvl:expression@L3#5 -> shown (0.34) "counts[r] is how many numbers leave remainder r when divided by 3; The % 3 turns each number into an index 0, 1 or 2; so it fits the array"
+    lvl:expression@L3#1 -> shown (0.25) "The % 3 turns each number into an index 0, 1 or 2; so it fits the array"
+    lvl:expression@L4#1 -> not applied (0.00) ""
   array_bounds (misconceptions): 2 candidates -> kept mis:array_bounds->OutOfBoundsElementsAreNull (0.60), mis:array_bounds->OffByOneBound (0.40)
     mis:array_bounds->OutOfBoundsElementsAreNull -> not applied (0.00) ""
     mis:array_bounds->OffByOneBound -> correct (0.24) "The % 3 turns each number into an index 0, 1 or 2; so it fits the array"
   array_bounds (level ways): 14 candidates -> kept lvl:array_bounds@L3#0 (0.45), lvl:array_bounds@L4#1 (0.35), lvl:array_bounds@L1#0 (0.20)
-    lvl:array_bounds@L3#0 -> shown (0.32) "The % 3 turns each number into an index 0, 1 or 2; so it fits the array"
-    lvl:array_bounds@L4#1 -> shown (0.24) "The % 3 turns each number into an index 0, 1 or 2; so it fits the array"
+    lvl:array_bounds@L3#0 -> shown (0.36) "The % 3 turns each number into an index 0, 1 or 2; so it fits the array"
+    lvl:array_bounds@L4#1 -> shown (0.21) "The % 3 turns each number into an index 0, 1 or 2; so it fits the array"
     lvl:array_bounds@L1#0 -> shown (0.16) "The % 3 turns each number into an index 0, 1 or 2; so it fits the array"
-  kept: lvl:array_bounds@L3#0 [shown, tier 2, 0.32], lvl:expression@L3#5 [shown, tier 2, 0.32], lvl:expression@L3#1 [shown, tier 2, 0.24]
+  kept: lvl:array_bounds@L3#0 [shown, tier 2, 0.36], lvl:expression@L3#5 [shown, tier 2, 0.34], lvl:expression@L3#1 [shown, tier 2, 0.25]
   clause coverage: c1 <- mis:arithmetic_operators->RemainderIsSubtraction; c2 <- mis:arithmetic_operators->RemainderIsSubtraction; c3 <- pre:arithmetic_operators->expression
   not yet read: pre:expression->comparison_operators
   root-cause walk: held on [], broken at [], prerequisites {'expression': ['arithmetic_operators'], 'remainder_operator': ['arithmetic_operators'], 'array_default_values': ['array_creation'], 'array_initializer': ['array_creation', 'array_declaration'], 'indexing': ['array_creation', 'array_initializer'], 'length_field': ['array_creation', 'array_initializer'], 'array_creation': ['array_declaration'], 'increment_operators': ['assignment', 'loop_control'], 'boolean_expression': ['comparison_operators'], 'array_declaration': ['data_structure'], 'data_structure': ['data_type'], 'comparison_operators': ['expression'], 'array_traversal': ['for_loop', 'indexing', 'length_field'], 'loop_body': ['for_loop'], 'loop_scope': ['for_loop'], 'counter_pattern': ['increment_operators', 'loop_body'], 'array_bounds': ['indexing'], 'for_loop': ['loop_control'], 'loop_control': ['loop_variable'], 'control_flow': ['statement'], 'println': ['statement', 'string_literal'], 'string_conversion': ['string_concatenation']}
+  level way lvl:length_field@L3#0 not counted: confidence 0.60 is not above 0.60
+  level way lvl:array_creation@L3#7 not counted: confidence 0.60 is not above 0.60
+  level way lvl:array_bounds@L4#1 not counted: confidence 0.60 is not above 0.60
   level arithmetic_operators: L3 via purpose_of_the_whole "counts[r] is how many numbers leave remainder r when divided by 3; The % 3 turns each number into an index 0, 1 or 2; so it fits the array"
-  level array_bounds: L4 via transfer_to_a_new_program "The % 3 turns each number into an index 0, 1 or 2; so it fits the array"
+  level array_bounds: L3 via relation_to_neighbour "The % 3 turns each number into an index 0, 1 or 2; so it fits the array"
   level array_creation: L3 via relation_to_neighbour "The % 3 turns each number into an index 0, 1 or 2; so it fits the array"
-  level expression: L4 via transfer_to_a_new_program "The % 3 turns each number into an index 0, 1 or 2; so it fits the array"
-  level indexing: L4 via transfer_to_a_new_program "counts[r] is how many numbers leave remainder r when divided by 3; The % 3 turns each number into an index 0, 1 or 2; so it fits the array"
+  level expression: L3 via purpose_of_the_whole "counts[r] is how many numbers leave remainder r when divided by 3; The % 3 turns each number into an index 0, 1 or 2; so it fits the array"
+  level indexing: L3 via relation_to_neighbour "The % 3 turns each number into an index 0, 1 or 2; so it fits the array"
   level remainder_operator: L3 via purpose_of_the_whole "counts[r] is how many numbers leave remainder r when divided by 3; The % 3 turns each number into an index 0, 1 or 2; so it fits the array"

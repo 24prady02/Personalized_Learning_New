@@ -27,7 +27,7 @@ System.out.println(sum / count);
 - **Wrong rules held:** AverageWithoutZeroGuard at `sentinel_loop`, AverageWithoutZeroGuard at `division_by_zero`
 - **Root cause:** `division_by_zero` / AverageWithoutZeroGuard
 - **Overall level:** None
-- **Level per concept:** `accumulator_pattern` L3, `compound_assignment` L3, `sentinel_loop` L3, `while_loop` L4
+- **Level per concept:** `accumulator_pattern` L2, `sentinel_loop` L2, `while_loop` L2
 
 **Check of this result (read by hand, 2026-11-13).** Partly right. The error found (AverageWithoutZeroGuard) is the right one, but the overall level is empty where it should be L0: a held error node sets no level. The student's belief that 0 divided by 0 is 0 has no misconception in the graph.
 
@@ -81,13 +81,13 @@ At each depth, for each current concept, the following happens.
 
 *One of the outputs at this stage:* at `division_by_zero` the misconception family is pruned to: AverageWithoutZeroGuard 0.60, ZeroDivisionAlwaysCrashes 0.30, DivisionByZeroIsCompileError 0.10.
 
-**3.3 Label (model, second question).** Each edge that survived is now read against the numbered clauses and gets a **label**. For a misconception or error edge: **held** (the student's words state this wrong rule), **correct** (they state the right rule, its twin) or **not applied** (the answer says nothing about it). For a level way: **shown** or not applied. For a prerequisite or parallel edge: **confirmed** (the answer carries the rule from one concept into the other) or **broken** (it fails to). The misconception edges of one concept are judged together in a single question, because the same sentence can fit several wrong rules and the model should give *held* only to the one the student really claims. With the label the model must return the **clause numbers** it rests on and a **confidence** from 0 to 1. A label with no clause is discarded. This is the safeguard of the method: the model never diagnoses from its own knowledge; every label is attached to one edge of G and to the student's words.
+**3.3 Label (model, second question).** Each edge that survived is now read against the numbered clauses and gets a **label**. For a misconception or error edge: **held** (the student's words state this wrong rule), **correct** (they state the right rule, its twin) or **not applied** (the answer says nothing about it). For a level way: **shown** or not applied. For a way above L2 the question also gives where the way stops (its boundary, stored in the graph) and whether the words must be correct, and the model may answer **wrong** (the student does this kind of thing, but what is said contradicts Java); a wrong way is not shown. For a prerequisite or parallel edge: **confirmed** (the answer carries the rule from one concept into the other) or **broken** (it fails to). The misconception edges of one concept are judged together in a single question, because the same sentence can fit several wrong rules and the model should give *held* only to the one the student really claims. With the label the model must return the **clause numbers** it rests on and a **confidence** from 0 to 1. A label with no clause is discarded. This is the safeguard of the method: the model never diagnoses from its own knowledge; every label is attached to one edge of G and to the student's words.
 
 *One of the outputs at this stage:* AverageWithoutZeroGuard at `division_by_zero` is labelled **held** on clauses 1, 3 (“0; so sum and count are both 0, and 0 divided by 0 is just 0”) with confidence 0.85. The rule on that edge: “Computes sum / count without checking that count is above 0.”
 
 **3.4 Score and keep.** The **score** of a labelled edge is prune score × confidence: an edge counts for much only if it was both relevant and confidently labelled. The edges are then ranked in **tiers**. Tier 0 is a held misconception or a broken edge: these are findings about a fault and are always kept. Tier 1 is a held error. Tier 2 is everything that only confirms understanding (correct, confirmed, shown); these fill whatever is left of the N = 3 places, best score first. Kept edges are added to the paths. Every edge with a label other than *not applied*, kept or not, is added to the evidence, because the levels in stage 6 are read from all of it.
 
-*One of the outputs at this stage:* the score of AverageWithoutZeroGuard is 0.60 × 0.85 = 0.51. At depth 1 the kept edges are: AverageWithoutZeroGuard (held, tier 1, 0.74); AverageWithoutZeroGuard (held, tier 1, 0.51); L3 way “purpose of the whole” (shown, tier 2, 0.28).
+*One of the outputs at this stage:* the score of AverageWithoutZeroGuard is 0.60 × 0.85 = 0.51. At depth 1 the kept edges are: AverageWithoutZeroGuard (held, tier 1, 0.74); AverageWithoutZeroGuard (held, tier 1, 0.51); L2 way “one step execution” (shown, tier 2, 0.24).
 
 **3.5 Move to the next concepts.** Three things decide where the walk goes next. A kept prerequisite or parallel edge leads to the concept at its other end; that concept is **entered** and will be read inwards at the next depth, so it gets misconceptions and a level of its own. A concept with a held misconception stays current, so that its prerequisites are examined: the fault may begin further back. And any entered concept whose outward edges have not been read yet stays current until they are.
 
@@ -164,7 +164,7 @@ Every concept has five **levels**, taken from the SOLO taxonomy: **L0** prestruc
 
 The model is never asked for a level. In stage 3 it only said whether a way was *shown*; the level is read from where that way sits in the graph, in two steps.
 
-**6.1 Gather the evidence per concept.** Take every concept that appears in the evidence of stage 3 (kept in 3.4 or not). For each one collect two lists: the misconceptions held on it that are not shadows, and the ways shown on it.
+**6.1 Gather the evidence per concept.** Take every concept that appears in the evidence of stage 3 (kept in 3.4 or not). For each one collect two lists: the misconceptions held on it that are not shadows, and the ways shown on it. A shown way above L2 is counted only if two things hold: the model's confidence in it is above 0.60, and its clauses are not all clauses that a held misconception rests on. So a weak yes, or a wrong sentence already counted as a misconception, cannot lift a concept to L3 or L4.
 
 *One of the outputs at this stage:* 7 concepts appear in the evidence: `accumulator_pattern`, `arithmetic_operators`, `compound_assignment`, `division_by_zero`, `run_time_error`, `sentinel_loop`, `while_loop`.
 
@@ -181,13 +181,13 @@ A held error node is not a misconception, so rule (a) does not apply to it.
 
 | Concept | Level | Rule | Why |
 |---|---|---|---|
-| `accumulator_pattern` | L3 | (c) | ways shown: L2 “line by line trace”, L2 “output prediction”, L3 “relation to neighbour” |
-| `arithmetic_operators` | none | (d) | nothing held, no way shown |
-| `compound_assignment` | L3 | (c) | ways shown: L3 “purpose of the whole” |
-| `division_by_zero` | none | (d) | nothing held, no way shown |
-| `run_time_error` | none | (d) | nothing held, no way shown |
-| `sentinel_loop` | L3 | (c) | ways shown: L2 “one step execution”, L3 “relation to neighbour” |
-| `while_loop` | L4 | (c) | ways shown: L2 “one step execution”, L2 “line by line trace”, L4 “predict a change” |
+| `accumulator_pattern` | L2 | (c) | ways shown: L2 “line by line trace”, L2 “output prediction”; not counted: L3 “relation to neighbour” (confidence 0.60) |
+| `arithmetic_operators` | none | (d) | nothing held, no counted way; answered wrong: L4 “diagnose an error”, L3 “relation to neighbour” |
+| `compound_assignment` | none | (d) | nothing held, no way shown |
+| `division_by_zero` | none | (d) | nothing held, no counted way; answered wrong: L4 “diagnose an error” |
+| `run_time_error` | none | (d) | nothing held, no counted way; answered wrong: L4 “diagnose an error” |
+| `sentinel_loop` | L2 | (c) | ways shown: L2 “one step execution”; answered wrong: L4 “diagnose an error”, L3 “relation to neighbour” |
+| `while_loop` | L2 | (c) | ways shown: L2 “one step execution”, L2 “line by line trace” |
 
 ## Stage 7. Overall level (rule, no model)
 

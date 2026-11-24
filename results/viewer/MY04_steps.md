@@ -257,23 +257,27 @@ Prune: the model's reply (edge id and score; the kept edges sum to 1):
 ```
 Kept by pruning: lvl:println@L3#0 (0.40), lvl:println@L3#1 (0.35), lvl:println@L2#1 (0.25)
 
-Label prompt for level way lvl:println@L3#0 (the model saw only the concept, the way's name 'relation to neighbour' and its text; no level):
+Label prompt for level way lvl:println@L3#0 (the model saw the concept, the way's name 'relation to neighbour', its text, where the way stops and whether the words must be correct; no level):
 > System.out.println(s); is a statement, so its line of output appears at its own place in the sequence.
+>
+> Where this way stops: Two correct but separate rules are L1. Executing the two in sequence is L2. A relational answer may be correct or a relational error.
 
 Model's reply:
 ```
 Label: not shown
 Clauses: none
-Confidence: 0.8
+Confidence: 0.6
 ```
 
-Label prompt for level way lvl:println@L3#1 (the model saw only the concept, the way's name 'relation to neighbour' and its text; no level):
+Label prompt for level way lvl:println@L3#1 (the model saw the concept, the way's name 'relation to neighbour', its text, where the way stops and whether the words must be correct; no level):
 > println("s") outputs exactly the characters between the quotes and then ends the line.
+>
+> Where this way stops: Two correct but separate rules are L1. Executing the two in sequence is L2. A relational answer may be correct or a relational error.
 
 Model's reply:
 ```
-Label: shown
-Clauses: 1, 3
+Label: not shown
+Clauses: none
 Confidence: 0.6
 ```
 
@@ -291,7 +295,7 @@ Parsed labels:
 | edge | label | prune score | confidence | score | clauses | words |
 |---|---|---|---|---|---|---|
 | lvl:println@L3#0 | not applied |  |  | 0.0 |  |  |
-| lvl:println@L3#1 | shown | 0.35 | 0.6 | 0.21 | c1, c3 | It prints only Tue; so the switch jumps to case 2, prints Tue, and then the switch is finished |
+| lvl:println@L3#1 | not applied |  |  | 0.0 |  |  |
 | lvl:println@L2#1 | shown | 0.25 | 0.6 | 0.15 | c1, c3 | It prints only Tue; so the switch jumps to case 2, prints Tue, and then the switch is finished |
 
 #### switch_statement, misconceptions: 1 edges offered
@@ -613,14 +617,16 @@ Clauses: none
 Confidence: 0.6
 ```
 
-Label prompt for level way lvl:statement@L3#4 (the model saw only the concept, the way's name 'relation to neighbour' and its text; no level):
+Label prompt for level way lvl:statement@L3#4 (the model saw the concept, the way's name 'relation to neighbour', its text, where the way stops and whether the words must be correct; no level):
 > Control flow is the order in which statements run; without control statements it is straight-line, each once in order.
+>
+> Where this way stops: Two correct but separate rules are L1. Executing the two in sequence is L2. A relational answer may be correct or a relational error.
 
 Model's reply:
 ```
-Label: not shown
-Clauses: none
-Confidence: 0.7
+Label: wrong
+Clauses: 1, 3, 4
+Confidence: 0.8
 ```
 
 Parsed labels:
@@ -628,7 +634,6 @@ Parsed labels:
 |---|---|---|---|---|---|---|
 | lvl:statement@L0#2 | shown | 0.5 | 0.72 | 0.36 | c1, c3, c4 | It prints only Tue; so the switch jumps to case 2, prints Tue, and then the switch is finished; The other cases are skipped |
 | lvl:statement@L0#0 | not applied |  |  | 0.0 |  |  |
-| lvl:statement@L3#4 | not applied |  |  | 0.0 |  |  |
 
 #### string_literal, misconceptions: 4 edges offered
 Edges offered:
@@ -696,14 +701,16 @@ Prune: the model's reply (edge id and score; the kept edges sum to 1):
 ```
 Kept by pruning: lvl:string_literal@L3#1 (0.45), lvl:string_literal@L2#1 (0.35), lvl:string_literal@L2#0 (0.20)
 
-Label prompt for level way lvl:string_literal@L3#1 (the model saw only the concept, the way's name 'relation to neighbour' and its text; no level):
+Label prompt for level way lvl:string_literal@L3#1 (the model saw the concept, the way's name 'relation to neighbour', its text, where the way stops and whether the words must be correct; no level):
 > println("s") outputs exactly the characters between the quotes and then ends the line.
+>
+> Where this way stops: Two correct but separate rules are L1. Executing the two in sequence is L2. A relational answer may be correct or a relational error.
 
 Model's reply:
 ```
-Label: shown
-Clauses: 1, 3
-Confidence: 0.6
+Label: not shown
+Clauses: none
+Confidence: 0.75
 ```
 
 Label prompt for level way lvl:string_literal@L2#1 (the model saw only the concept, the way's name 'output prediction' and its text; no level):
@@ -729,7 +736,7 @@ Confidence: 0.8
 Parsed labels:
 | edge | label | prune score | confidence | score | clauses | words |
 |---|---|---|---|---|---|---|
-| lvl:string_literal@L3#1 | shown | 0.45 | 0.6 | 0.27 | c1, c3 | It prints only Tue; so the switch jumps to case 2, prints Tue, and then the switch is finished |
+| lvl:string_literal@L3#1 | not applied |  |  | 0.0 |  |  |
 | lvl:string_literal@L2#1 | shown | 0.35 | 0.55 | 0.19 | c1, c3 | It prints only Tue; so the switch jumps to case 2, prints Tue, and then the switch is finished |
 | lvl:string_literal@L2#0 | not applied |  |  | 0.0 |  |  |
 
@@ -763,7 +770,7 @@ Parsed labels:
 
 **Kept on a path at this depth** (best N in tiers: held misconception / broken edge, then held error, then correct / confirmed / shown):
 
-mis:statement->ComputerFillsInIntent [held, tier 0, 0.33], lvl:statement@L0#2 [shown, tier 2, 0.36], lvl:string_literal@L3#1 [shown, tier 2, 0.27]
+mis:statement->ComputerFillsInIntent [held, tier 0, 0.33], lvl:statement@L0#2 [shown, tier 2, 0.36], lvl:string_literal@L2#1 [shown, tier 2, 0.19]
 
 **Clause coverage after this depth:**
 | clause | text | covered by |
@@ -781,12 +788,12 @@ Shadows (a held label on a prerequisite, on a generic concept, or at a concept w
 ## 4. Diagnosis (rules over the labelled graph, no model)
 Root-cause walk: held on ['switch_statement'], broken at [] (consequences: pre:statement->control_flow), prerequisites {'switch_statement': ['control_flow'], 'control_flow': ['statement'], 'println': ['statement', 'string_literal']}
 - control_flow: L0 via everyday_reading "It prints only Tue; so the switch jumps to case 2, prints Tue, and then the switch is finished; The other cases are skipped; because they do not match"
-- println: L3 via relation_to_neighbour "It prints only Tue; so the switch jumps to case 2, prints Tue, and then the switch is finished"
+- println: L2 via output_prediction "It prints only Tue; so the switch jumps to case 2, prints Tue, and then the switch is finished"
 - statement: L0 via inconsistent_trace "It prints only Tue; so the switch jumps to case 2, prints Tue, and then the switch is finished; The other cases are skipped"
-- string_literal: L3 via relation_to_neighbour "It prints only Tue; so the switch jumps to case 2, prints Tue, and then the switch is finished"
+- string_literal: L2 via output_prediction "It prints only Tue; so the switch jumps to case 2, prints Tue, and then the switch is finished"
 - switch_statement: L0 via misconception "It prints only Tue; so the switch jumps to case 2, prints Tue, and then the switch is finished; The other cases are skipped; because they do not match"
 
-**Stop:** sufficient at depth 3; prompts {'prune': 14, 'label': 25}, fresh model calls 2, cache hits 37
+**Stop:** sufficient at depth 3; prompts {'prune': 14, 'label': 25}, fresh model calls 0, cache hits 39
 
 ### Held misconceptions
 | concept | misconception | kind | quote | score | shares_evidence_with |
@@ -809,10 +816,15 @@ Root-cause walk: held on ['switch_statement'], broken at [] (consequences: pre:s
 | concept | level | way | misconception | source | quote | rule | also | note |
 |---|---|---|---|---|---|---|---|---|
 | control_flow | L0 | everyday_reading |  | level_way | It prints only Tue; so the switch jumps to case 2, prints Tue, and then the switch is finished; The other cases are skipped; because they do not match |  |  |  |
-| println | L3 | relation_to_neighbour |  | level_way | It prints only Tue; so the switch jumps to case 2, prints Tue, and then the switch is finished |  | L2 output_prediction |  |
+| println | L2 | output_prediction |  | level_way | It prints only Tue; so the switch jumps to case 2, prints Tue, and then the switch is finished |  |  |  |
 | statement | L0 | inconsistent_trace |  | level_way | It prints only Tue; so the switch jumps to case 2, prints Tue, and then the switch is finished; The other cases are skipped |  |  |  |
-| string_literal | L3 | relation_to_neighbour |  | level_way | It prints only Tue; so the switch jumps to case 2, prints Tue, and then the switch is finished |  | L2 output_prediction |  |
+| string_literal | L2 | output_prediction |  | level_way | It prints only Tue; so the switch jumps to case 2, prints Tue, and then the switch is finished |  |  |  |
 | switch_statement | L0 | misconception | SwitchNoFallThrough | level_mis_links | It prints only Tue; so the switch jumps to case 2, prints Tue, and then the switch is finished; The other cases are skipped; because they do not match | wrong rule: After the matching case runs, the switch ends even without break. Right rule: Without break, all the statements after the matching label run, including those under later case labels, until a break or the end of the switch. |  |  |
+
+Ways above L2 the model answered "wrong" (the kind of thing is done, but what is said contradicts Java; not shown):
+| concept | edge | level | way | confidence | clauses | quote |
+|---|---|---|---|---|---|---|
+| statement | lvl:statement@L3#4 | L3 | relation_to_neighbour | 0.8 | [1, 3, 4] | It prints only Tue; so the switch jumps to case 2, prints Tue, and then the switch is finished; The other cases are skipped |
 
 ### Overall level: L0
 
@@ -831,7 +843,6 @@ Figure 7 (final picture): C:\Users\magnu\OneDrive\Desktop\ES_VIterbi_Personalize
 | depth | source | edge | kind | label | prune_score | confidence | score | clauses | quote |
 |---|---|---|---|---|---|---|---|---|---|
 | 1 | control_flow | lvl:control_flow@L0#0 | level | shown | 0.3 | 0.7 | 0.21 | [1, 3, 4, 5] | It prints only Tue; so the switch jumps to case 2, prints Tue, and then the switch is finished; The other cases are skipped; because they do not match |
-| 1 | println | lvl:println@L3#1 | level | shown | 0.35 | 0.6 | 0.21 | [1, 3] | It prints only Tue; so the switch jumps to case 2, prints Tue, and then the switch is finished |
 | 1 | println | lvl:println@L2#1 | level | shown | 0.25 | 0.6 | 0.15 | [1, 3] | It prints only Tue; so the switch jumps to case 2, prints Tue, and then the switch is finished |
 | 1 | switch_statement | mis:switch_statement->SwitchNoFallThrough | misconception | held | 1.0 | 0.96 | 0.96 | [1, 3, 4, 5] | It prints only Tue; so the switch jumps to case 2, prints Tue, and then the switch is finished; The other cases are skipped; because they do not match |
 | 1 | switch_statement | lvl:switch_statement@L0#0 | level | shown | 0.6 | 0.93 | 0.558 | [1, 3, 4, 5] | It prints only Tue; so the switch jumps to case 2, prints Tue, and then the switch is finished; The other cases are skipped; because they do not match |
@@ -842,7 +853,6 @@ Figure 7 (final picture): C:\Users\magnu\OneDrive\Desktop\ES_VIterbi_Personalize
 | 2 | println | pre:string_literal->println | prerequisite | confirmed | 0.4 | 0.7 | 0.28 | [1, 3] | It prints only Tue; so the switch jumps to case 2, prints Tue, and then the switch is finished |
 | 3 | statement | mis:statement->ComputerFillsInIntent | misconception | held | 0.6 | 0.55 | 0.33 | [1, 3] | It prints only Tue; so the switch jumps to case 2, prints Tue, and then the switch is finished |
 | 3 | statement | lvl:statement@L0#2 | level | shown | 0.5 | 0.72 | 0.36 | [1, 3, 4] | It prints only Tue; so the switch jumps to case 2, prints Tue, and then the switch is finished; The other cases are skipped |
-| 3 | string_literal | lvl:string_literal@L3#1 | level | shown | 0.45 | 0.6 | 0.27 | [1, 3] | It prints only Tue; so the switch jumps to case 2, prints Tue, and then the switch is finished |
 | 3 | string_literal | lvl:string_literal@L2#1 | level | shown | 0.35 | 0.55 | 0.1925 | [1, 3] | It prints only Tue; so the switch jumps to case 2, prints Tue, and then the switch is finished |
 
 ## 6. The paths (what the keep step kept, depth by depth)
@@ -856,7 +866,7 @@ Figure 7 (final picture): C:\Users\magnu\OneDrive\Desktop\ES_VIterbi_Personalize
 | 2 | println | pre:string_literal->println | prerequisite | confirmed | 0.28 | [1, 3] |
 | 3 | statement | mis:statement->ComputerFillsInIntent | misconception | held | 0.33 | [1, 3] |
 | 3 | statement | lvl:statement@L0#2 | level | shown | 0.36 | [1, 3, 4] |
-| 3 | string_literal | lvl:string_literal@L3#1 | level | shown | 0.27 | [1, 3] |
+| 3 | string_literal | lvl:string_literal@L2#1 | level | shown | 0.1925 | [1, 3] |
 
 ## 7. Raw traversal log
 ```
@@ -878,7 +888,7 @@ start concepts (3): control_flow, println, switch_statement
     mis:println->PrintEqualsPrintln -> not applied (0.00) ""
   println (level ways): 17 candidates -> kept lvl:println@L3#0 (0.40), lvl:println@L3#1 (0.35), lvl:println@L2#1 (0.25)
     lvl:println@L3#0 -> not applied (0.00) ""
-    lvl:println@L3#1 -> shown (0.21) "It prints only Tue; so the switch jumps to case 2, prints Tue, and then the switch is finished"
+    lvl:println@L3#1 -> not applied (0.00) ""
     lvl:println@L2#1 -> shown (0.15) "It prints only Tue; so the switch jumps to case 2, prints Tue, and then the switch is finished"
   switch_statement (misconceptions): 1 candidates -> kept mis:switch_statement->SwitchNoFallThrough (1.00)
     mis:switch_statement->SwitchNoFallThrough -> held (0.96) "It prints only Tue; so the switch jumps to case 2, prints Tue, and then the switch is finished; The other cases are skipped; because they do not match"
@@ -910,25 +920,26 @@ start concepts (3): control_flow, println, switch_statement
   statement (level ways): 19 candidates -> kept lvl:statement@L0#2 (0.50), lvl:statement@L0#0 (0.30), lvl:statement@L3#4 (0.20)
     lvl:statement@L0#2 -> shown (0.36) "It prints only Tue; so the switch jumps to case 2, prints Tue, and then the switch is finished; The other cases are skipped"
     lvl:statement@L0#0 -> not applied (0.00) ""
+    lvl:statement@L3#4: wrong (0.80) -> not applied
     lvl:statement@L3#4 -> not applied (0.00) ""
   string_literal (misconceptions): 4 candidates -> kept mis:string_literal->PrintedTextIsExecuted (0.80), err:string_literal->UnclosedStringLiteral (0.10), err:string_literal->SingleQuotedString (0.10)
     mis:string_literal->PrintedTextIsExecuted -> not applied (0.00) ""
     err:string_literal->UnclosedStringLiteral -> not applied (0.00) ""
     err:string_literal->SingleQuotedString -> not applied (0.00) ""
   string_literal (level ways): 16 candidates -> kept lvl:string_literal@L3#1 (0.45), lvl:string_literal@L2#1 (0.35), lvl:string_literal@L2#0 (0.20)
-    lvl:string_literal@L3#1 -> shown (0.27) "It prints only Tue; so the switch jumps to case 2, prints Tue, and then the switch is finished"
+    lvl:string_literal@L3#1 -> not applied (0.00) ""
     lvl:string_literal@L2#1 -> shown (0.19) "It prints only Tue; so the switch jumps to case 2, prints Tue, and then the switch is finished"
     lvl:string_literal@L2#0 -> not applied (0.00) ""
   println (concept edges): 1 candidates -> kept pre:statement->println (1.00)
     pre:statement->println -> not applied (0.00) ""
-  kept: mis:statement->ComputerFillsInIntent [held, tier 0, 0.33], lvl:statement@L0#2 [shown, tier 2, 0.36], lvl:string_literal@L3#1 [shown, tier 2, 0.27]
+  kept: mis:statement->ComputerFillsInIntent [held, tier 0, 0.33], lvl:statement@L0#2 [shown, tier 2, 0.36], lvl:string_literal@L2#1 [shown, tier 2, 0.19]
   clause coverage: c1 <- mis:switch_statement->SwitchNoFallThrough; c2 <- pre:control_flow->switch_statement; c3 <- mis:switch_statement->SwitchNoFallThrough; c4 <- mis:switch_statement->SwitchNoFallThrough; c5 <- mis:switch_statement->SwitchNoFallThrough
   shadows: mis:statement->ComputerFillsInIntent (shadow of mis:switch_statement->SwitchNoFallThrough)
   root-cause walk: held on ['switch_statement'], broken at [] (consequences: pre:statement->control_flow), prerequisites {'switch_statement': ['control_flow'], 'control_flow': ['statement'], 'println': ['statement', 'string_literal']}
   level control_flow: L0 via everyday_reading "It prints only Tue; so the switch jumps to case 2, prints Tue, and then the switch is finished; The other cases are skipped; because they do not match"
-  level println: L3 via relation_to_neighbour "It prints only Tue; so the switch jumps to case 2, prints Tue, and then the switch is finished"
+  level println: L2 via output_prediction "It prints only Tue; so the switch jumps to case 2, prints Tue, and then the switch is finished"
   level statement: L0 via inconsistent_trace "It prints only Tue; so the switch jumps to case 2, prints Tue, and then the switch is finished; The other cases are skipped"
-  level string_literal: L3 via relation_to_neighbour "It prints only Tue; so the switch jumps to case 2, prints Tue, and then the switch is finished"
+  level string_literal: L2 via output_prediction "It prints only Tue; so the switch jumps to case 2, prints Tue, and then the switch is finished"
   level switch_statement: L0 via misconception "It prints only Tue; so the switch jumps to case 2, prints Tue, and then the switch is finished; The other cases are skipped; because they do not match"
 ```
 
@@ -941,7 +952,8 @@ start concepts (3): control_flow, println, switch_statement
   "depth": 3,
   "prune_tools": "llm",
   "model": "claude-opus-5-5",
-  "backend": "claude-cli"
+  "backend": "claude-cli",
+  "level_v2": true
  },
  "clauses": [
   "It prints only Tue",
@@ -996,14 +1008,12 @@ start concepts (3): control_flow, println, switch_statement
    "also_shown": []
   },
   "println": {
-   "level": "L3",
-   "way": "relation_to_neighbour",
+   "level": "L2",
+   "way": "output_prediction",
    "quote": "It prints only Tue; so the switch jumps to case 2, prints Tue, and then the switch is finished",
-   "edge": "lvl:println@L3#1",
+   "edge": "lvl:println@L2#1",
    "source": "level_way",
-   "also_shown": [
-    "L2 output_prediction"
-   ]
+   "also_shown": []
   },
   "statement": {
    "level": "L0",
@@ -1014,14 +1024,12 @@ start concepts (3): control_flow, println, switch_statement
    "also_shown": []
   },
   "string_literal": {
-   "level": "L3",
-   "way": "relation_to_neighbour",
+   "level": "L2",
+   "way": "output_prediction",
    "quote": "It prints only Tue; so the switch jumps to case 2, prints Tue, and then the switch is finished",
-   "edge": "lvl:string_literal@L3#1",
+   "edge": "lvl:string_literal@L2#1",
    "source": "level_way",
-   "also_shown": [
-    "L2 output_prediction"
-   ]
+   "also_shown": []
   },
   "switch_statement": {
    "level": "L0",
@@ -1199,8 +1207,8 @@ start concepts (3): control_flow, println, switch_statement
   {
    "depth": 3,
    "source": "string_literal",
-   "edge": "lvl:string_literal@L3#1",
-   "target": "string_literal@L3",
+   "edge": "lvl:string_literal@L2#1",
+   "target": "string_literal@L2",
    "kind": "level",
    "label": "shown",
    "clauses": [
@@ -1208,13 +1216,13 @@ start concepts (3): control_flow, println, switch_statement
     3
    ],
    "quote": "It prints only Tue; so the switch jumps to case 2, prints Tue, and then the switch is finished",
-   "confidence": 0.6,
-   "prune_score": 0.45,
-   "score": 0.27,
-   "logic": "println(\"s\") outputs exactly the characters between the quotes and then ends the line.",
+   "confidence": 0.55,
+   "prune_score": 0.35,
+   "score": 0.1925,
+   "logic": "Value is the String of the characters between the quotes (escape sequences replaced by the characters they stand for), without the quotes: \"Hi, \" has 4 characters, and printing it shows Hi, followed by a space.",
    "twin_logic": null,
-   "level": "L3",
-   "way": "relation_to_neighbour"
+   "level": "L2",
+   "way": "output_prediction"
   }
  ],
  "evidence": [
@@ -1239,26 +1247,6 @@ start concepts (3): control_flow, println, switch_statement
    "twin_logic": null,
    "level": "L0",
    "way": "everyday_reading"
-  },
-  {
-   "depth": 1,
-   "source": "println",
-   "edge": "lvl:println@L3#1",
-   "target": "println@L3",
-   "kind": "level",
-   "label": "shown",
-   "clauses": [
-    1,
-    3
-   ],
-   "quote": "It prints only Tue; so the switch jumps to case 2, prints Tue, and then the switch is finished",
-   "confidence": 0.6,
-   "prune_score": 0.35,
-   "score": 0.21,
-   "logic": "println(\"s\") outputs exactly the characters between the quotes and then ends the line.",
-   "twin_logic": null,
-   "level": "L3",
-   "way": "relation_to_neighbour"
   },
   {
    "depth": 1,
@@ -1463,26 +1451,6 @@ start concepts (3): control_flow, println, switch_statement
   {
    "depth": 3,
    "source": "string_literal",
-   "edge": "lvl:string_literal@L3#1",
-   "target": "string_literal@L3",
-   "kind": "level",
-   "label": "shown",
-   "clauses": [
-    1,
-    3
-   ],
-   "quote": "It prints only Tue; so the switch jumps to case 2, prints Tue, and then the switch is finished",
-   "confidence": 0.6,
-   "prune_score": 0.45,
-   "score": 0.27,
-   "logic": "println(\"s\") outputs exactly the characters between the quotes and then ends the line.",
-   "twin_logic": null,
-   "level": "L3",
-   "way": "relation_to_neighbour"
-  },
-  {
-   "depth": 3,
-   "source": "string_literal",
    "edge": "lvl:string_literal@L2#1",
    "target": "string_literal@L2",
    "kind": "level",
@@ -1511,11 +1479,29 @@ start concepts (3): control_flow, println, switch_statement
  "unexplained_clauses": [],
  "stop_reason": "sufficient",
  "depth_reached": 3,
- "llm_calls": 2,
- "llm_cache_hits": 37,
+ "llm_calls": 0,
+ "llm_cache_hits": 39,
  "llm_calls_by_step": {
   "prune": 14,
   "label": 25
+ },
+ "level_v2": {
+  "wrong_ways": [
+   {
+    "concept": "statement",
+    "edge": "lvl:statement@L3#4",
+    "level": "L3",
+    "way": "relation_to_neighbour",
+    "clauses": [
+     1,
+     3,
+     4
+    ],
+    "quote": "It prints only Tue; so the switch jumps to case 2, prints Tue, and then the switch is finished; The other cases are skipped",
+    "confidence": 0.8
+   }
+  ],
+  "not_counted": []
  }
 }
 ```

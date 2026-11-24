@@ -25,7 +25,7 @@ start concepts (3): explicit_cast, integer_division, arithmetic_operators
     mis:arithmetic_operators->CaretIsPower -> not applied (0.00) ""
     mis:arithmetic_operators->ArithmeticOnNumericStrings -> not applied (0.00) ""
   arithmetic_operators (level ways): 18 candidates -> kept lvl:arithmetic_operators@L4#0 (0.45), lvl:arithmetic_operators@L2#0 (0.30), lvl:arithmetic_operators@L2#1 (0.25)
-    lvl:arithmetic_operators@L4#0 -> shown (0.27) "the cast comes first; so the division is a decimal one; so 7 / 2 is 3.5"
+    lvl:arithmetic_operators@L4#0 -> not applied (0.00) ""
     lvl:arithmetic_operators@L2#0 -> not applied (0.00) ""
     lvl:arithmetic_operators@L2#1 -> not applied (0.00) ""
   kept: mis:explicit_cast->CastAfterIntDivision [held, tier 0, 0.65], mis:integer_division->CastAfterIntDivision [held, tier 0, 0.56], lvl:integer_division@L0#4 [shown, tier 2, 0.30]
@@ -45,8 +45,10 @@ start concepts (3): explicit_cast, integer_division, arithmetic_operators
     mis:expression->OutsideInMethodNesting -> held (0.28) "the cast comes first; so the division is a decimal one; so 7 / 2 is 3.5"
     mis:expression->AssignmentIsEquation -> not applied (0.00) ""
   expression (level ways): 19 candidates -> kept lvl:expression@L3#2 (0.45), lvl:expression@L3#1 (0.35), lvl:expression@L2#0 (0.20)
+    lvl:expression@L3#2: wrong (0.90) -> not applied
     lvl:expression@L3#2 -> not applied (0.00) ""
-    lvl:expression@L3#1 -> shown (0.21) "so the division is a decimal one; so 7 / 2 is 3.5"
+    lvl:expression@L3#1: wrong (0.85) -> not applied
+    lvl:expression@L3#1 -> not applied (0.00) ""
     lvl:expression@L2#0 -> not applied (0.00) ""
   type_conversion (misconceptions): 3 candidates -> kept mis:type_conversion->TargetTyping (0.80), mis:type_conversion->NarrowingAssignmentAllowed (0.10), mis:type_conversion->NoCastIfSameSize (0.10)
     mis:type_conversion->TargetTyping -> held (0.48) "the cast comes first; so the division is a decimal one; so 7 / 2 is 3.5"
@@ -54,6 +56,7 @@ start concepts (3): explicit_cast, integer_division, arithmetic_operators
     mis:type_conversion->NoCastIfSameSize -> not applied (0.00) ""
   type_conversion (level ways): 18 candidates -> kept lvl:type_conversion@L2#0 (0.40), lvl:type_conversion@L4#3 (0.35), lvl:type_conversion@L4#0 (0.25)
     lvl:type_conversion@L2#0 -> not applied (0.00) ""
+    lvl:type_conversion@L4#3: wrong (0.80) -> not applied
     lvl:type_conversion@L4#3 -> not applied (0.00) ""
     lvl:type_conversion@L4#0 -> not applied (0.00) ""
   println (misconceptions): 6 candidates -> kept mis:println->PrintNewLineFirst (0.40), mis:println->PrintEqualsPrintln (0.30), mis:println->PrintedTextIsExecuted (0.30)
@@ -93,16 +96,14 @@ start concepts (3): explicit_cast, integer_division, arithmetic_operators
     mis:primitive_type->NewArrayHoldsGarbage -> not applied (0.00) ""
   primitive_type (level ways): 21 candidates -> kept lvl:primitive_type@L0#2 (0.45), lvl:primitive_type@L3#4 (0.30), lvl:primitive_type@L2#0 (0.25)
     lvl:primitive_type@L0#2 -> not applied (0.00) ""
-    lvl:primitive_type@L3#4 -> shown (0.18) "so the division is a decimal one; so 7 / 2 is 3.5"
+    lvl:primitive_type@L3#4: wrong (0.85) -> not applied
+    lvl:primitive_type@L3#4 -> not applied (0.00) ""
     lvl:primitive_type@L2#0 -> not applied (0.00) ""
-  kept: lvl:primitive_type@L3#4 [shown, tier 2, 0.18]
+  nothing kept at this depth
   clause coverage: c1 uncovered; c2 uncovered; c3 <- mis:explicit_cast->CastAfterIntDivision; c4 <- mis:explicit_cast->CastAfterIntDivision; c5 <- mis:explicit_cast->CastAfterIntDivision
   no next nodes -> half_stop
   held: mis:explicit_cast->CastAfterIntDivision, mis:type_conversion->TargetTyping, mis:expression->OutsideInMethodNesting; filed at the dependent concept: mis:integer_division->CastAfterIntDivision
   shadows: mis:expression->OutsideInMethodNesting (shadow of mis:type_conversion->TargetTyping), mis:type_conversion->TargetTyping (shadow of mis:explicit_cast->CastAfterIntDivision), mis:integer_division->CastAfterIntDivision (shadow of mis:explicit_cast->CastAfterIntDivision)
   root-cause walk: held on ['explicit_cast'], broken at [] (consequences: pre:arithmetic_operators->integer_division, pre:integer_division->explicit_cast, pre:arithmetic_operators->expression, pre:primitive_type->type_conversion), prerequisites {'expression': ['arithmetic_operators'], 'integer_division': ['arithmetic_operators'], 'explicit_cast': ['integer_division', 'type_conversion'], 'type_conversion': ['primitive_type'], 'println': ['statement']}
-  level arithmetic_operators: L4 via predict_a_change "the cast comes first; so the division is a decimal one; so 7 / 2 is 3.5"
   level explicit_cast: L0 via misconception "the cast comes first; so the division is a decimal one; so 7 / 2 is 3.5"
-  level expression: L3 via relation_to_neighbour "so the division is a decimal one; so 7 / 2 is 3.5"
   level integer_division: L0 via inconsistent_trace "the cast comes first; so the division is a decimal one; so 7 / 2 is 3.5"
-  level primitive_type: L3 via relation_to_neighbour "so the division is a decimal one; so 7 / 2 is 3.5"

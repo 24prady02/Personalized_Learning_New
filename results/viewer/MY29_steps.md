@@ -172,14 +172,16 @@ Prune: the model's reply (edge id and score; the kept edges sum to 1):
 ```
 Kept by pruning: lvl:double@L3#0 (0.50), lvl:double@L1#1 (0.30), lvl:double@L4#3 (0.20)
 
-Label prompt for level way lvl:double@L3#0 (the model saw only the concept, the way's name 'relation to neighbour' and its text; no level):
+Label prompt for level way lvl:double@L3#0 (the model saw the concept, the way's name 'relation to neighbour', its text, where the way stops and whether the words must be correct; no level):
 > Type flow decides the division: with two int operands a / b discards the fraction (10/3 is 3, and double d = 10/3; stores 3.0); if either operand is double the other is promoted and the fraction is kept (10/3.0 is 3.3333333333333335).
+>
+> Where this way stops: Two correct but separate rules are L1. Executing the two in sequence is L2. A relational answer may be correct or a relational error.
 
 Model's reply:
 ```
-Label: shown
-Clauses: 2, 3
-Confidence: 0.7
+Label: not shown
+Clauses: none
+Confidence: 0.6
 ```
 
 Label prompt for level way lvl:double@L1#1 (the model saw only the concept, the way's name 'states the rule' and its text; no level):
@@ -192,22 +194,24 @@ Clauses: 2, 3
 Confidence: 0.7
 ```
 
-Label prompt for level way lvl:double@L4#3 (the model saw only the concept, the way's name 'diagnose an error' and its text; no level):
+Label prompt for level way lvl:double@L4#3 (the model saw the concept, the way's name 'diagnose an error', its text, where the way stops and whether the words must be correct; no level):
 > rule broken: Floating-point division needs at least one double operand. Kind: silent logic error. Trigger class: A formula assigned to a double whose division has only int operands, e.g. double y = 1 / 3; (gives 0.0) or (9/5)*c + 32.
+>
+> Where this way stops: Locating and fixing the mistake for one given failing case is L3. A compiler-flagged slip fixed from the message is weak evidence.
 
 Model's reply:
 ```
-Label: shown
-Clauses: 2, 3
-Confidence: 0.6
+Label: not shown
+Clauses: none
+Confidence: 0.8
 ```
 
 Parsed labels:
 | edge | label | prune score | confidence | score | clauses | words |
 |---|---|---|---|---|---|---|
-| lvl:double@L3#0 | shown | 0.5 | 0.7 | 0.35 | c2, c3 | The cast makes it a double division; so you get the decimal part |
+| lvl:double@L3#0 | not applied |  |  | 0.0 |  |  |
 | lvl:double@L1#1 | shown | 0.3 | 0.7 | 0.21 | c2, c3 | The cast makes it a double division; so you get the decimal part |
-| lvl:double@L4#3 | shown | 0.2 | 0.6 | 0.12 | c2, c3 | The cast makes it a double division; so you get the decimal part |
+| lvl:double@L4#3 | not applied |  |  | 0.0 |  |  |
 
 #### arithmetic_operators, misconceptions: 3 edges offered
 Edges offered:
@@ -257,14 +261,16 @@ Prune: the model's reply (edge id and score; the kept edges sum to 1):
 ```
 Kept by pruning: lvl:arithmetic_operators@L4#0 (0.45), lvl:arithmetic_operators@L2#1 (0.35), lvl:arithmetic_operators@L1#1 (0.20)
 
-Label prompt for level way lvl:arithmetic_operators@L4#0 (the model saw only the concept, the way's name 'predict a change' and its text; no level):
+Label prompt for level way lvl:arithmetic_operators@L4#0 (the model saw the concept, the way's name 'predict a change', its text, where the way stops and whether the words must be correct; no level):
 > Changing an operand's type changes the operator's meaning (int / versus double /). Reordering * and / changes integer results (59 * 100 / 60 is 98, 59 / 60 * 100 is 0). Replacing ^ with Math.pow gives a real power.
+>
+> Where this way stops: Re-tracing the changed code value by value is L2 on the new code. Adapting given code to a familiar variant may be only relational.
 
 Model's reply:
 ```
-Label: shown
-Clauses: 2, 3
-Confidence: 0.75
+Label: not shown
+Clauses: none
+Confidence: 0.7
 ```
 
 Label prompt for level way lvl:arithmetic_operators@L2#1 (the model saw only the concept, the way's name 'output prediction' and its text; no level):
@@ -290,7 +296,7 @@ Confidence: 0.55
 Parsed labels:
 | edge | label | prune score | confidence | score | clauses | words |
 |---|---|---|---|---|---|---|
-| lvl:arithmetic_operators@L4#0 | shown | 0.45 | 0.75 | 0.34 | c2, c3 | The cast makes it a double division; so you get the decimal part |
+| lvl:arithmetic_operators@L4#0 | not applied |  |  | 0.0 |  |  |
 | lvl:arithmetic_operators@L2#1 | shown | 0.35 | 0.6 | 0.21 | c1, c2, c3 | 3.5; The cast makes it a double division; so you get the decimal part |
 | lvl:arithmetic_operators@L1#1 | shown | 0.2 | 0.55 | 0.11 | c2, c3 | The cast makes it a double division; so you get the decimal part |
 
@@ -389,14 +395,16 @@ Clauses: none
 Confidence: 0.95
 ```
 
-Label prompt for level way lvl:if_statement@L3#1 (the model saw only the concept, the way's name 'relation to neighbour' and its text; no level):
+Label prompt for level way lvl:if_statement@L3#1 (the model saw the concept, the way's name 'relation to neighbour', its text, where the way stops and whether the words must be correct; no level):
 > if-else extends if with a second branch that runs exactly when the condition is false; a lone if has an implicit empty else-case.
+>
+> Where this way stops: Two correct but separate rules are L1. Executing the two in sequence is L2. A relational answer may be correct or a relational error.
 
 Model's reply:
 ```
 Label: not shown
 Clauses: none
-Confidence: 0.95
+Confidence: 0.93
 ```
 
 Label prompt for level way lvl:if_statement@L0#14 (the model saw only the concept, the way's name 'inconsistent trace' and its text; no level):
@@ -418,7 +426,7 @@ Parsed labels:
 
 **Kept on a path at this depth** (best N in tiers: held misconception / broken edge, then held error, then correct / confirmed / shown):
 
-lvl:double@L3#0 [shown, tier 2, 0.35], lvl:arithmetic_operators@L4#0 [shown, tier 2, 0.34], lvl:double@L1#1 [shown, tier 2, 0.21]
+lvl:double@L1#1 [shown, tier 2, 0.21], lvl:arithmetic_operators@L2#1 [shown, tier 2, 0.21], lvl:arithmetic_operators@L1#1 [shown, tier 2, 0.11]
 
 **Clause coverage after this depth:**
 | clause | text | covered by |
@@ -619,24 +627,28 @@ Clauses: none
 Confidence: 0.6
 ```
 
-Label prompt for level way lvl:println@L3#1 (the model saw only the concept, the way's name 'relation to neighbour' and its text; no level):
+Label prompt for level way lvl:println@L3#1 (the model saw the concept, the way's name 'relation to neighbour', its text, where the way stops and whether the words must be correct; no level):
 > println("s") outputs exactly the characters between the quotes and then ends the line.
+>
+> Where this way stops: Two correct but separate rules are L1. Executing the two in sequence is L2. A relational answer may be correct or a relational error.
 
 Model's reply:
 ```
 Label: not shown
 Clauses: none
-Confidence: 0.95
+Confidence: 0.85
 ```
 
-Label prompt for level way lvl:println@L3#3 (the model saw only the concept, the way's name 'relation to neighbour' and its text; no level):
+Label prompt for level way lvl:println@L3#3 (the model saw the concept, the way's name 'relation to neighbour', its text, where the way stops and whether the words must be correct; no level):
 > println prints numbers with all their digits and always ends the line; printf formats each value by its conversion code and ends the line only where the format has %n or \n.
+>
+> Where this way stops: Two correct but separate rules are L1. Executing the two in sequence is L2. A relational answer may be correct or a relational error.
 
 Model's reply:
 ```
 Label: not shown
 Clauses: none
-Confidence: 0.95
+Confidence: 0.93
 ```
 
 Parsed labels:
@@ -727,14 +739,16 @@ Clauses: none
 Confidence: 0.95
 ```
 
-Label prompt for level way lvl:boolean_expression@L3#2 (the model saw only the concept, the way's name 'relation to neighbour' and its text; no level):
+Label prompt for level way lvl:boolean_expression@L3#2 (the model saw the concept, the way's name 'relation to neighbour', its text, where the way stops and whether the words must be correct; no level):
 > The if statement evaluates its boolean expression once and runs its block only when the value is true; the expression must have type boolean, so if (x = 5) with int x does not compile.
+>
+> Where this way stops: Two correct but separate rules are L1. Executing the two in sequence is L2. A relational answer may be correct or a relational error.
 
 Model's reply:
 ```
 Label: not shown
 Clauses: none
-Confidence: 0.95
+Confidence: 0.93
 ```
 
 Label prompt for level way lvl:boolean_expression@L0#5 (the model saw only the concept, the way's name 'inconsistent trace' and its text; no level):
@@ -1013,14 +1027,16 @@ Prune: the model's reply (edge id and score; the kept edges sum to 1):
 ```
 Kept by pruning: lvl:comparison_operators@L4#6 (0.40), lvl:comparison_operators@L2#0 (0.35), lvl:comparison_operators@L2#1 (0.25)
 
-Label prompt for level way lvl:comparison_operators@L4#6 (the model saw only the concept, the way's name 'diagnose an error' and its text; no level):
+Label prompt for level way lvl:comparison_operators@L4#6 (the model saw the concept, the way's name 'diagnose an error', its text, where the way stops and whether the words must be correct; no level):
 > rule broken: Computed doubles should not be compared with ==. Kind: silent logic error. Trigger class: == between doubles produced by arithmetic, e.g. (0.1 + 0.1 + 0.1 == 0.3).
+>
+> Where this way stops: Locating and fixing the mistake for one given failing case is L3. A compiler-flagged slip fixed from the message is weak evidence.
 
 Model's reply:
 ```
 Label: not shown
 Clauses: none
-Confidence: 0.97
+Confidence: 0.93
 ```
 
 Label prompt for level way lvl:comparison_operators@L2#0 (the model saw only the concept, the way's name 'line by line trace' and its text; no level):
@@ -1356,24 +1372,28 @@ Clauses: none
 Confidence: 0.95
 ```
 
-Label prompt for level way lvl:string_literal@L3#1 (the model saw only the concept, the way's name 'relation to neighbour' and its text; no level):
+Label prompt for level way lvl:string_literal@L3#1 (the model saw the concept, the way's name 'relation to neighbour', its text, where the way stops and whether the words must be correct; no level):
 > println("s") outputs exactly the characters between the quotes and then ends the line.
+>
+> Where this way stops: Two correct but separate rules are L1. Executing the two in sequence is L2. A relational answer may be correct or a relational error.
 
 Model's reply:
 ```
 Label: not shown
 Clauses: none
-Confidence: 0.97
+Confidence: 0.9
 ```
 
-Label prompt for level way lvl:string_literal@L3#3 (the model saw only the concept, the way's name 'purpose of the whole' and its text; no level):
+Label prompt for level way lvl:string_literal@L3#3 (the model saw the concept, the way's name 'purpose of the whole', its text, where the way stops and whether the words must be correct; no level):
 > Purpose: state fixed text exactly, such as messages, labels and prompts, so you can precisely specify what gets printed.
+>
+> Where this way stops: Narrating the lines is L2. A purpose induced from a few traced cases is L2. A wrong purpose is still L3, but with an error.
 
 Model's reply:
 ```
 Label: not shown
 Clauses: none
-Confidence: 0.97
+Confidence: 0.93
 ```
 
 Parsed labels:
@@ -1398,8 +1418,8 @@ Figure 7 (the graph after depth 4): C:\Users\magnu\OneDrive\Desktop\ES_VIterbi_P
 
 ## 4. Diagnosis (rules over the labelled graph, no model)
 Root-cause walk: held on [], broken at ['println'], prerequisites {'expression': ['arithmetic_operators'], 'if_statement': ['boolean_expression', 'control_flow'], 'boolean_expression': ['comparison_operators'], 'floating_point_precision': ['double'], 'comparison_operators': ['expression'], 'if_else_statement': ['if_statement'], 'control_flow': ['statement'], 'println': ['statement', 'string_literal']}
-- arithmetic_operators: L4 via predict_a_change "The cast makes it a double division; so you get the decimal part"
-- double: L4 via diagnose_an_error "The cast makes it a double division; so you get the decimal part"
+- arithmetic_operators: L2 via output_prediction "3.5; The cast makes it a double division; so you get the decimal part"
+- double: L1 via states_the_rule "The cast makes it a double division; so you get the decimal part"
 
 **Stop:** max depth at depth 4; prompts {'prune': 25, 'label': 48}, fresh model calls 0, cache hits 73
 
@@ -1416,27 +1436,24 @@ Root-cause walk: held on [], broken at ['println'], prerequisites {'expression':
 ### Level per concept
 | concept | level | way | misconception | source | quote | rule | also | note |
 |---|---|---|---|---|---|---|---|---|
-| arithmetic_operators | L4 | predict_a_change |  | level_way | The cast makes it a double division; so you get the decimal part |  | L2 output_prediction, L1 states_the_rule |  |
-| double | L4 | diagnose_an_error |  | level_way | The cast makes it a double division; so you get the decimal part |  | L3 relation_to_neighbour, L1 states_the_rule |  |
+| arithmetic_operators | L2 | output_prediction |  | level_way | 3.5; The cast makes it a double division; so you get the decimal part |  | L1 states_the_rule |  |
+| double | L1 | states_the_rule |  | level_way | The cast makes it a double division; so you get the decimal part |  |  |  |
 
-### Overall level: L4
+### Overall level: L2
 
 Clause coverage (final):
 | clause | covered by |
 |---|---|
 | 3.5 | lvl:arithmetic_operators@L2#1 |
-| The cast makes it a double division | lvl:double@L3#0 |
-| so you get the decimal part | lvl:double@L3#0 |
+| The cast makes it a double division | lvl:double@L1#1 |
+| so you get the decimal part | lvl:double@L1#1 |
 
 Figure 8 (final picture): C:\Users\magnu\OneDrive\Desktop\ES_VIterbi_Personalized_Learning\results\viewer\MY29_figure08.png
 
 ## 5. Every labelled edge (the evidence list, kept or not)
 | depth | source | edge | kind | label | prune_score | confidence | score | clauses | quote |
 |---|---|---|---|---|---|---|---|---|---|
-| 1 | double | lvl:double@L3#0 | level | shown | 0.5 | 0.7 | 0.35 | [2, 3] | The cast makes it a double division; so you get the decimal part |
 | 1 | double | lvl:double@L1#1 | level | shown | 0.3 | 0.7 | 0.21 | [2, 3] | The cast makes it a double division; so you get the decimal part |
-| 1 | double | lvl:double@L4#3 | level | shown | 0.2 | 0.6 | 0.12 | [2, 3] | The cast makes it a double division; so you get the decimal part |
-| 1 | arithmetic_operators | lvl:arithmetic_operators@L4#0 | level | shown | 0.45 | 0.75 | 0.3375 | [2, 3] | The cast makes it a double division; so you get the decimal part |
 | 1 | arithmetic_operators | lvl:arithmetic_operators@L2#1 | level | shown | 0.35 | 0.6 | 0.21 | [1, 2, 3] | 3.5; The cast makes it a double division; so you get the decimal part |
 | 1 | arithmetic_operators | lvl:arithmetic_operators@L1#1 | level | shown | 0.2 | 0.55 | 0.11 | [2, 3] | The cast makes it a double division; so you get the decimal part |
 | 3 | println | pre:string_literal->println | prerequisite | broken | 0.7 | 0.55 | 0.385 | [1] | 3.5 |
@@ -1444,9 +1461,9 @@ Figure 8 (final picture): C:\Users\magnu\OneDrive\Desktop\ES_VIterbi_Personalize
 ## 6. The paths (what the keep step kept, depth by depth)
 | depth | source | edge | kind | label | score | clauses |
 |---|---|---|---|---|---|---|
-| 1 | double | lvl:double@L3#0 | level | shown | 0.35 | [2, 3] |
-| 1 | arithmetic_operators | lvl:arithmetic_operators@L4#0 | level | shown | 0.3375 | [2, 3] |
 | 1 | double | lvl:double@L1#1 | level | shown | 0.21 | [2, 3] |
+| 1 | arithmetic_operators | lvl:arithmetic_operators@L2#1 | level | shown | 0.21 | [1, 2, 3] |
+| 1 | arithmetic_operators | lvl:arithmetic_operators@L1#1 | level | shown | 0.11 | [2, 3] |
 | 3 | println | pre:string_literal->println | prerequisite | broken | 0.385 | [1] |
 
 ## 7. Raw traversal log
@@ -1461,12 +1478,12 @@ start concepts (3): double, arithmetic_operators, if_statement
     mis:double->WholeNumberLiteralIsInt -> not applied (0.00) ""
     mis:double->FloatingPointIsExact -> not applied (0.00) ""
   double (level ways): 19 candidates -> kept lvl:double@L3#0 (0.50), lvl:double@L1#1 (0.30), lvl:double@L4#3 (0.20)
-    lvl:double@L3#0 -> shown (0.35) "The cast makes it a double division; so you get the decimal part"
+    lvl:double@L3#0 -> not applied (0.00) ""
     lvl:double@L1#1 -> shown (0.21) "The cast makes it a double division; so you get the decimal part"
-    lvl:double@L4#3 -> shown (0.12) "The cast makes it a double division; so you get the decimal part"
+    lvl:double@L4#3 -> not applied (0.00) ""
   arithmetic_operators (misconceptions): 3 candidates -> kept 
   arithmetic_operators (level ways): 18 candidates -> kept lvl:arithmetic_operators@L4#0 (0.45), lvl:arithmetic_operators@L2#1 (0.35), lvl:arithmetic_operators@L1#1 (0.20)
-    lvl:arithmetic_operators@L4#0 -> shown (0.34) "The cast makes it a double division; so you get the decimal part"
+    lvl:arithmetic_operators@L4#0 -> not applied (0.00) ""
     lvl:arithmetic_operators@L2#1 -> shown (0.21) "3.5; The cast makes it a double division; so you get the decimal part"
     lvl:arithmetic_operators@L1#1 -> shown (0.11) "The cast makes it a double division; so you get the decimal part"
   if_statement (misconceptions): 22 candidates -> kept mis:if_statement->BranchChosenByIntent (0.50), mis:if_statement->ThenAlwaysExecutes (0.30), mis:if_statement->ProgramLooksAhead (0.20)
@@ -1477,7 +1494,7 @@ start concepts (3): double, arithmetic_operators, if_statement
     lvl:if_statement@L2#1 -> not applied (0.00) ""
     lvl:if_statement@L3#1 -> not applied (0.00) ""
     lvl:if_statement@L0#14 -> not applied (0.00) ""
-  kept: lvl:double@L3#0 [shown, tier 2, 0.35], lvl:arithmetic_operators@L4#0 [shown, tier 2, 0.34], lvl:double@L1#1 [shown, tier 2, 0.21]
+  kept: lvl:double@L1#1 [shown, tier 2, 0.21], lvl:arithmetic_operators@L2#1 [shown, tier 2, 0.21], lvl:arithmetic_operators@L1#1 [shown, tier 2, 0.11]
   clause coverage: c1 uncovered; c2 uncovered; c3 uncovered
   uncovered clauses bring in: println (5.41), boolean_expression (4.02), floating_point_precision (3.16)
   not yet read: own edges of boolean_expression, own edges of floating_point_precision, own edges of println, pre:arithmetic_operators->expression, pre:boolean_expression->if_statement, pre:control_flow->if_statement, pre:double->floating_point_precision, pre:if_statement->if_else_statement
@@ -1564,8 +1581,8 @@ start concepts (3): double, arithmetic_operators, if_statement
   clause coverage: c1 <- pre:string_literal->println; c2 uncovered; c3 uncovered
   not yet read: par:assignment~comparison_operators, pre:expression->comparison_operators, pre:statement->control_flow
   root-cause walk: held on [], broken at ['println'], prerequisites {'expression': ['arithmetic_operators'], 'if_statement': ['boolean_expression', 'control_flow'], 'boolean_expression': ['comparison_operators'], 'floating_point_precision': ['double'], 'comparison_operators': ['expression'], 'if_else_statement': ['if_statement'], 'control_flow': ['statement'], 'println': ['statement', 'string_literal']}
-  level arithmetic_operators: L4 via predict_a_change "The cast makes it a double division; so you get the decimal part"
-  level double: L4 via diagnose_an_error "The cast makes it a double division; so you get the decimal part"
+  level arithmetic_operators: L2 via output_prediction "3.5; The cast makes it a double division; so you get the decimal part"
+  level double: L1 via states_the_rule "The cast makes it a double division; so you get the decimal part"
 ```
 
 ## 8. Full diagnosis JSON
@@ -1577,7 +1594,8 @@ start concepts (3): double, arithmetic_operators, if_statement
   "depth": 3,
   "prune_tools": "llm",
   "model": "claude-opus-5-5",
-  "backend": "claude-cli"
+  "backend": "claude-cli",
+  "level_v2": true
  },
  "clauses": [
   "3.5",
@@ -1602,70 +1620,26 @@ start concepts (3): double, arithmetic_operators, if_statement
  "root_cause": null,
  "levels": {
   "arithmetic_operators": {
-   "level": "L4",
-   "way": "predict_a_change",
-   "quote": "The cast makes it a double division; so you get the decimal part",
-   "edge": "lvl:arithmetic_operators@L4#0",
+   "level": "L2",
+   "way": "output_prediction",
+   "quote": "3.5; The cast makes it a double division; so you get the decimal part",
+   "edge": "lvl:arithmetic_operators@L2#1",
    "source": "level_way",
    "also_shown": [
-    "L2 output_prediction",
     "L1 states_the_rule"
    ]
   },
   "double": {
-   "level": "L4",
-   "way": "diagnose_an_error",
+   "level": "L1",
+   "way": "states_the_rule",
    "quote": "The cast makes it a double division; so you get the decimal part",
-   "edge": "lvl:double@L4#3",
+   "edge": "lvl:double@L1#1",
    "source": "level_way",
-   "also_shown": [
-    "L3 relation_to_neighbour",
-    "L1 states_the_rule"
-   ]
+   "also_shown": []
   }
  },
- "overall_level": "L4",
+ "overall_level": "L2",
  "paths": [
-  {
-   "depth": 1,
-   "source": "double",
-   "edge": "lvl:double@L3#0",
-   "target": "double@L3",
-   "kind": "level",
-   "label": "shown",
-   "clauses": [
-    2,
-    3
-   ],
-   "quote": "The cast makes it a double division; so you get the decimal part",
-   "confidence": 0.7,
-   "prune_score": 0.5,
-   "score": 0.35,
-   "logic": "Type flow decides the division: with two int operands a / b discards the fraction (10/3 is 3, and double d = 10/3; stores 3.0); if either operand is double the other is promoted and the fraction is kept (10/3.0 is 3.3333333333333335).",
-   "twin_logic": null,
-   "level": "L3",
-   "way": "relation_to_neighbour"
-  },
-  {
-   "depth": 1,
-   "source": "arithmetic_operators",
-   "edge": "lvl:arithmetic_operators@L4#0",
-   "target": "arithmetic_operators@L4",
-   "kind": "level",
-   "label": "shown",
-   "clauses": [
-    2,
-    3
-   ],
-   "quote": "The cast makes it a double division; so you get the decimal part",
-   "confidence": 0.75,
-   "prune_score": 0.45,
-   "score": 0.3375,
-   "logic": "Changing an operand's type changes the operator's meaning (int / versus double /). Reordering * and / changes integer results (59 * 100 / 60 is 98, 59 / 60 * 100 is 0). Replacing ^ with Math.pow gives a real power.",
-   "twin_logic": null,
-   "level": "L4",
-   "way": "predict_a_change"
-  },
   {
    "depth": 1,
    "source": "double",
@@ -1682,6 +1656,47 @@ start concepts (3): double, arithmetic_operators, if_statement
    "prune_score": 0.3,
    "score": 0.21,
    "logic": "Values are 64-bit IEEE 754 numbers (about 15 significant digits) plus the special values Infinity and NaN; +, -, *, / (and %) are defined; if at least one operand of a binary arithmetic operator is double, the operation is a floating-point operation.",
+   "twin_logic": null,
+   "level": "L1",
+   "way": "states_the_rule"
+  },
+  {
+   "depth": 1,
+   "source": "arithmetic_operators",
+   "edge": "lvl:arithmetic_operators@L2#1",
+   "target": "arithmetic_operators@L2",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    1,
+    2,
+    3
+   ],
+   "quote": "3.5; The cast makes it a double division; so you get the decimal part",
+   "confidence": 0.6,
+   "prune_score": 0.35,
+   "score": 0.21,
+   "logic": "With ints, 17 / 3 is 5 and 17 % 3 is 2. With doubles, 5.0 / 3.0 is 1.6666666666666667. With mixed operands, the int is promoted first (10 / 3.0 is 3.333...).",
+   "twin_logic": null,
+   "level": "L2",
+   "way": "output_prediction"
+  },
+  {
+   "depth": 1,
+   "source": "arithmetic_operators",
+   "edge": "lvl:arithmetic_operators@L1#1",
+   "target": "arithmetic_operators@L1",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    2,
+    3
+   ],
+   "quote": "The cast makes it a double division; so you get the decimal part",
+   "confidence": 0.55,
+   "prune_score": 0.2,
+   "score": 0.11,
+   "logic": "Both operands must be numeric, and the result has the promoted type (int, long or double). * / % bind tighter than + -, all group left to right, and int / or % by zero throws ArithmeticException. Unary minus negates its operand (-x) and unary plus leaves it unchanged; they bind more tightly than * and /, so -a * b is (-a) * b.",
    "twin_logic": null,
    "level": "L1",
    "way": "states_the_rule"
@@ -1708,26 +1723,6 @@ start concepts (3): double, arithmetic_operators, if_statement
   {
    "depth": 1,
    "source": "double",
-   "edge": "lvl:double@L3#0",
-   "target": "double@L3",
-   "kind": "level",
-   "label": "shown",
-   "clauses": [
-    2,
-    3
-   ],
-   "quote": "The cast makes it a double division; so you get the decimal part",
-   "confidence": 0.7,
-   "prune_score": 0.5,
-   "score": 0.35,
-   "logic": "Type flow decides the division: with two int operands a / b discards the fraction (10/3 is 3, and double d = 10/3; stores 3.0); if either operand is double the other is promoted and the fraction is kept (10/3.0 is 3.3333333333333335).",
-   "twin_logic": null,
-   "level": "L3",
-   "way": "relation_to_neighbour"
-  },
-  {
-   "depth": 1,
-   "source": "double",
    "edge": "lvl:double@L1#1",
    "target": "double@L1",
    "kind": "level",
@@ -1744,46 +1739,6 @@ start concepts (3): double, arithmetic_operators, if_statement
    "twin_logic": null,
    "level": "L1",
    "way": "states_the_rule"
-  },
-  {
-   "depth": 1,
-   "source": "double",
-   "edge": "lvl:double@L4#3",
-   "target": "double@L4",
-   "kind": "level",
-   "label": "shown",
-   "clauses": [
-    2,
-    3
-   ],
-   "quote": "The cast makes it a double division; so you get the decimal part",
-   "confidence": 0.6,
-   "prune_score": 0.2,
-   "score": 0.12,
-   "logic": "rule broken: Floating-point division needs at least one double operand. Kind: silent logic error. Trigger class: A formula assigned to a double whose division has only int operands, e.g. double y = 1 / 3; (gives 0.0) or (9/5)*c + 32.",
-   "twin_logic": null,
-   "level": "L4",
-   "way": "diagnose_an_error"
-  },
-  {
-   "depth": 1,
-   "source": "arithmetic_operators",
-   "edge": "lvl:arithmetic_operators@L4#0",
-   "target": "arithmetic_operators@L4",
-   "kind": "level",
-   "label": "shown",
-   "clauses": [
-    2,
-    3
-   ],
-   "quote": "The cast makes it a double division; so you get the decimal part",
-   "confidence": 0.75,
-   "prune_score": 0.45,
-   "score": 0.3375,
-   "logic": "Changing an operand's type changes the operator's meaning (int / versus double /). Reordering * and / changes integer results (59 * 100 / 60 is 98, 59 / 60 * 100 is 0). Replacing ^ with Math.pow gives a real power.",
-   "twin_logic": null,
-   "level": "L4",
-   "way": "predict_a_change"
   },
   {
    "depth": 1,
@@ -1846,8 +1801,8 @@ start concepts (3): double, arithmetic_operators, if_statement
  ],
  "clause_coverage": {
   "3.5": "lvl:arithmetic_operators@L2#1",
-  "The cast makes it a double division": "lvl:double@L3#0",
-  "so you get the decimal part": "lvl:double@L3#0"
+  "The cast makes it a double division": "lvl:double@L1#1",
+  "so you get the decimal part": "lvl:double@L1#1"
  },
  "unexplained_clauses": [],
  "stop_reason": "max depth",
@@ -1857,6 +1812,10 @@ start concepts (3): double, arithmetic_operators, if_statement
  "llm_calls_by_step": {
   "prune": 25,
   "label": 48
+ },
+ "level_v2": {
+  "wrong_ways": [],
+  "not_counted": []
  }
 }
 ```

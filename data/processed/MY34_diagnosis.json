@@ -5,7 +5,8 @@
   "depth": 3,
   "prune_tools": "llm",
   "model": "claude-opus-5-5",
-  "backend": "claude-cli"
+  "backend": "claude-cli",
+  "level_v2": true
  },
  "clauses": [
   "Nothing",
@@ -60,13 +61,12 @@
  },
  "levels": {
   "comparison_operators": {
-   "level": "L3",
-   "way": "relation_to_neighbour",
-   "quote": "x > 0; and thats true; so the else is skipped; x > 10 is false; so big isnt printed either",
-   "edge": "lvl:comparison_operators@L3#1",
+   "level": "L2",
+   "way": "output_prediction",
+   "quote": "x > 0; and thats true; x > 10 is false",
+   "edge": "lvl:comparison_operators@L2#1",
    "source": "level_way",
    "also_shown": [
-    "L2 output_prediction",
     "L2 line_by_line_trace"
    ]
   },
@@ -100,14 +100,12 @@
    ]
   },
   "if_statement": {
-   "level": "L3",
-   "way": "relation_to_neighbour",
+   "level": "L2",
+   "way": "line_by_line_trace",
    "quote": "x > 0; and thats true; so the else is skipped; x > 10 is false; so big isnt printed either",
-   "edge": "lvl:if_statement@L3#1",
+   "edge": "lvl:if_statement@L2#0",
    "source": "level_way",
-   "also_shown": [
-    "L2 line_by_line_trace"
-   ]
+   "also_shown": []
   },
   "nested_conditionals": {
    "level": "L0",
@@ -166,25 +164,23 @@
   {
    "depth": 1,
    "source": "comparison_operators",
-   "edge": "lvl:comparison_operators@L3#1",
-   "target": "comparison_operators@L3",
+   "edge": "lvl:comparison_operators@L2#0",
+   "target": "comparison_operators@L2",
    "kind": "level",
    "label": "shown",
    "clauses": [
     3,
     4,
-    5,
-    6,
-    7
+    6
    ],
-   "quote": "x > 0; and thats true; so the else is skipped; x > 10 is false; so big isnt printed either",
+   "quote": "x > 0; and thats true; x > 10 is false",
    "confidence": 0.7,
-   "prune_score": 0.35,
-   "score": 0.245,
-   "logic": "Comparisons are the building blocks of conditions: together with boolean logic they provide the basis for decision-making.",
+   "prune_score": 0.25,
+   "score": 0.175,
+   "logic": "Evaluate the left operand (including its arithmetic), then the right operand; if their types differ, promote the narrower one (int to double); then compare and produce true or false.",
    "twin_logic": null,
-   "level": "L3",
-   "way": "relation_to_neighbour"
+   "level": "L2",
+   "way": "line_by_line_trace"
   },
   {
    "depth": 2,
@@ -420,29 +416,6 @@
   {
    "depth": 1,
    "source": "comparison_operators",
-   "edge": "lvl:comparison_operators@L3#1",
-   "target": "comparison_operators@L3",
-   "kind": "level",
-   "label": "shown",
-   "clauses": [
-    3,
-    4,
-    5,
-    6,
-    7
-   ],
-   "quote": "x > 0; and thats true; so the else is skipped; x > 10 is false; so big isnt printed either",
-   "confidence": 0.7,
-   "prune_score": 0.35,
-   "score": 0.245,
-   "logic": "Comparisons are the building blocks of conditions: together with boolean logic they provide the basis for decision-making.",
-   "twin_logic": null,
-   "level": "L3",
-   "way": "relation_to_neighbour"
-  },
-  {
-   "depth": 1,
-   "source": "comparison_operators",
    "edge": "lvl:comparison_operators@L2#0",
    "target": "comparison_operators@L2",
    "kind": "level",
@@ -500,29 +473,6 @@
    "logic": "The then branch always runs.",
    "twin_logic": "The then branch runs only when the condition is true.",
    "role": "primary"
-  },
-  {
-   "depth": 1,
-   "source": "if_statement",
-   "edge": "lvl:if_statement@L3#1",
-   "target": "if_statement@L3",
-   "kind": "level",
-   "label": "shown",
-   "clauses": [
-    3,
-    4,
-    5,
-    6,
-    7
-   ],
-   "quote": "x > 0; and thats true; so the else is skipped; x > 10 is false; so big isnt printed either",
-   "confidence": 0.7,
-   "prune_score": 0.3,
-   "score": 0.21,
-   "logic": "if-else extends if with a second branch that runs exactly when the condition is false; a lone if has an implicit empty else-case.",
-   "twin_logic": null,
-   "level": "L3",
-   "way": "relation_to_neighbour"
   },
   {
    "depth": 1,
@@ -1043,9 +993,9 @@
   "The else lines up with if": "mis:dangling_else->ElseMatchesIndentation",
   "x > 0": "mis:comparison_operators->LessGreaterSwapped",
   "and thats true": "mis:comparison_operators->LessGreaterSwapped",
-  "so the else is skipped": "lvl:comparison_operators@L3#1",
+  "so the else is skipped": "lvl:if_statement@L2#0",
   "x > 10 is false": "mis:comparison_operators->LessGreaterSwapped",
-  "so big isnt printed either": "lvl:comparison_operators@L3#1"
+  "so big isnt printed either": "mis:if_statement->BranchChosenByIntent"
  },
  "unexplained_clauses": [],
  "stop_reason": "sufficient",
@@ -1055,5 +1005,78 @@
  "llm_calls_by_step": {
   "prune": 20,
   "label": 41
+ },
+ "level_v2": {
+  "wrong_ways": [
+   {
+    "concept": "comparison_operators",
+    "edge": "lvl:comparison_operators@L3#1",
+    "level": "L3",
+    "way": "relation_to_neighbour",
+    "clauses": [
+     3,
+     4,
+     5,
+     6,
+     7
+    ],
+    "quote": "x > 0; and thats true; so the else is skipped; x > 10 is false; so big isnt printed either",
+    "confidence": 0.7
+   },
+   {
+    "concept": "println",
+    "edge": "lvl:println@L3#0",
+    "level": "L3",
+    "way": "relation_to_neighbour",
+    "clauses": [
+     2,
+     5,
+     7
+    ],
+    "quote": "The else lines up with if; so the else is skipped; so big isnt printed either",
+    "confidence": 0.6
+   },
+   {
+    "concept": "if_statement",
+    "edge": "lvl:if_statement@L3#1",
+    "level": "L3",
+    "way": "relation_to_neighbour",
+    "clauses": [
+     1,
+     2,
+     5
+    ],
+    "quote": "Nothing; The else lines up with if; so the else is skipped",
+    "confidence": 0.85
+   },
+   {
+    "concept": "nested_conditionals",
+    "edge": "lvl:nested_conditionals@L4#2",
+    "level": "L4",
+    "way": "diagnose_an_error",
+    "clauses": [
+     1,
+     2,
+     5
+    ],
+    "quote": "Nothing; The else lines up with if; so the else is skipped",
+    "confidence": 0.8
+   },
+   {
+    "concept": "if_else_statement",
+    "edge": "lvl:if_else_statement@L3#1",
+    "level": "L3",
+    "way": "relation_to_neighbour",
+    "clauses": [
+     2,
+     3,
+     4,
+     5
+    ],
+    "quote": "The else lines up with if; x > 0; and thats true; so the else is skipped",
+    "confidence": 0.85
+   }
+  ],
+  "not_counted": []
  }
 }

@@ -10,12 +10,14 @@ start concepts (3): if_statement, control_flow, println
   if_statement (level ways): 19 candidates -> kept lvl:if_statement@L0#14 (0.60), lvl:if_statement@L2#0 (0.25), lvl:if_statement@L3#2 (0.15)
     lvl:if_statement@L0#14 -> not applied (0.00) ""
     lvl:if_statement@L2#0 -> not applied (0.00) ""
+    lvl:if_statement@L3#2: wrong (0.70) -> not applied
     lvl:if_statement@L3#2 -> not applied (0.00) ""
   control_flow (misconceptions): 11 candidates -> kept mis:control_flow->FalseConditionRestartsProgram (0.50), mis:control_flow->StatementsRunInAnyOrder (0.30), mis:control_flow->CodeAfterIfSkipped (0.20)
     mis:control_flow->FalseConditionRestartsProgram -> not applied (0.00) ""
     mis:control_flow->StatementsRunInAnyOrder -> correct (0.21) "The program runs every line from top to bottom"
     mis:control_flow->CodeAfterIfSkipped -> correct (0.15) "so the println inside the if runs too, and then done is printed"
   control_flow (level ways): 15 candidates -> kept lvl:control_flow@L3#1 (0.45), lvl:control_flow@L2#0 (0.30), lvl:control_flow@L1#1 (0.25)
+    lvl:control_flow@L3#1: wrong (0.80) -> not applied
     lvl:control_flow@L3#1 -> not applied (0.00) ""
     lvl:control_flow@L2#0 -> not applied (0.00) ""
     lvl:control_flow@L1#1 -> not applied (0.00) ""
@@ -24,10 +26,11 @@ start concepts (3): if_statement, control_flow, println
     mis:println->PrintEqualsPrintln -> not applied (0.00) ""
     mis:println->PrintNewLineFirst -> not applied (0.00) ""
   println (level ways): 17 candidates -> kept lvl:println@L3#0 (0.50), lvl:println@L2#1 (0.30), lvl:println@L2#0 (0.20)
-    lvl:println@L3#0 -> shown (0.33) "so the println inside the if runs too, and then done is printed"
+    lvl:println@L3#0: wrong (0.70) -> not applied
+    lvl:println@L3#0 -> not applied (0.00) ""
     lvl:println@L2#1 -> shown (0.18) "so the println inside the if runs too, and then done is printed"
     lvl:println@L2#0 -> not applied (0.00) ""
-  kept: mis:if_statement->ThenAlwaysExecutes [held, tier 0, 0.59], lvl:println@L3#0 [shown, tier 2, 0.33], mis:control_flow->StatementsRunInAnyOrder [correct, tier 2, 0.21]
+  kept: mis:if_statement->ThenAlwaysExecutes [held, tier 0, 0.59], mis:control_flow->StatementsRunInAnyOrder [correct, tier 2, 0.21], lvl:println@L2#1 [shown, tier 2, 0.18]
   clause coverage: c1 <- mis:if_statement->ThenAlwaysExecutes; c2 <- mis:if_statement->ThenAlwaysExecutes
   not yet read: pre:boolean_expression->if_statement, pre:control_flow->if_statement, pre:statement->control_flow, pre:statement->println, pre:string_literal->println
 --- depth 2: current concepts ['if_statement', 'control_flow', 'println']
@@ -50,7 +53,8 @@ start concepts (3): if_statement, control_flow, println
     mis:statement->ProgramLooksAhead -> not applied (0.00) ""
     mis:statement->WhitespaceIsSignificant -> not applied (0.00) ""
   statement (level ways): 19 candidates -> kept lvl:statement@L3#4 (0.50), lvl:statement@L2#0 (0.30), lvl:statement@L0#2 (0.20)
-    lvl:statement@L3#4 -> shown (0.30) "The program runs every line from top to bottom"
+    lvl:statement@L3#4: wrong (0.80) -> not applied
+    lvl:statement@L3#4 -> not applied (0.00) ""
     lvl:statement@L2#0 -> shown (0.21) "The program runs every line from top to bottom; so the println inside the if runs too, and then done is printed"
     lvl:statement@L0#2 -> not applied (0.00) ""
   boolean_expression (misconceptions): 8 candidates -> kept mis:boolean_expression->ArithmeticInsteadOfBoolean (0.50), mis:boolean_expression->ComparisonWithBooleanLiteral (0.25), mis:boolean_expression->LoopForOneTimeTest (0.25)
@@ -58,13 +62,14 @@ start concepts (3): if_statement, control_flow, println
     mis:boolean_expression->ComparisonWithBooleanLiteral -> not applied (0.00) ""
     mis:boolean_expression->LoopForOneTimeTest -> not applied (0.00) ""
   boolean_expression (level ways): 19 candidates -> kept lvl:boolean_expression@L3#2 (0.60), lvl:boolean_expression@L3#6 (0.20), lvl:boolean_expression@L2#1 (0.20)
+    lvl:boolean_expression@L3#2: wrong (0.60) -> not applied
     lvl:boolean_expression@L3#2 -> not applied (0.00) ""
     lvl:boolean_expression@L3#6 -> not applied (0.00) ""
     lvl:boolean_expression@L2#1 -> not applied (0.00) ""
-  kept: mis:statement->StatementsRunInAnyOrder [correct, tier 2, 0.39], lvl:statement@L3#4 [shown, tier 2, 0.30], lvl:statement@L2#0 [shown, tier 2, 0.21]
+  kept: mis:statement->StatementsRunInAnyOrder [correct, tier 2, 0.39], lvl:statement@L2#0 [shown, tier 2, 0.21]
   clause coverage: c1 <- mis:if_statement->ThenAlwaysExecutes; c2 <- mis:if_statement->ThenAlwaysExecutes
   not yet read: pre:comparison_operators->boolean_expression
   root-cause walk: held on ['if_statement'], broken at [] (consequences: pre:statement->control_flow, pre:control_flow->if_statement, pre:boolean_expression->if_statement), prerequisites {'if_statement': ['boolean_expression', 'control_flow'], 'boolean_expression': ['comparison_operators'], 'comparison_operators': ['expression'], 'control_flow': ['statement'], 'println': ['statement', 'string_literal']}
   level if_statement: L0 via misconception "The program runs every line from top to bottom; so the println inside the if runs too, and then done is printed"
-  level println: L3 via relation_to_neighbour "so the println inside the if runs too, and then done is printed"
-  level statement: L3 via relation_to_neighbour "The program runs every line from top to bottom"
+  level println: L2 via output_prediction "so the println inside the if runs too, and then done is printed"
+  level statement: L2 via line_by_line_trace "The program runs every line from top to bottom; so the println inside the if runs too, and then done is printed"

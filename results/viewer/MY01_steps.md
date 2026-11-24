@@ -173,14 +173,16 @@ Clauses: none
 Confidence: 0.95
 ```
 
-Label prompt for level way lvl:explicit_cast@L4#1 (the model saw only the concept, the way's name 'transfer to a new program' and its text; no level):
+Label prompt for level way lvl:explicit_cast@L4#1 (the model saw the concept, the way's name 'transfer to a new program', its text, where the way stops and whether the words must be correct; no level):
 > Use a cast when you intend to truncate or narrow (random indices, integer parts, char codes); use Math.round to round, Integer.parseInt for Strings, and put a double into the division itself rather than casting its int result.
+>
+> Where this way stops: Reproducing or slightly varying a familiar program is L1 to L3.
 
 Model's reply:
 ```
 Label: not shown
 Clauses: none
-Confidence: 0.95
+Confidence: 0.8
 ```
 
 Parsed labels:
@@ -351,14 +353,16 @@ Clauses: none
 Confidence: 0.93
 ```
 
-Label prompt for level way lvl:arithmetic_operators@L4#0 (the model saw only the concept, the way's name 'predict a change' and its text; no level):
+Label prompt for level way lvl:arithmetic_operators@L4#0 (the model saw the concept, the way's name 'predict a change', its text, where the way stops and whether the words must be correct; no level):
 > Changing an operand's type changes the operator's meaning (int / versus double /). Reordering * and / changes integer results (59 * 100 / 60 is 98, 59 / 60 * 100 is 0). Replacing ^ with Math.pow gives a real power.
+>
+> Where this way stops: Re-tracing the changed code value by value is L2 on the new code. Adapting given code to a familiar variant may be only relational.
 
 Model's reply:
 ```
 Label: not shown
 Clauses: none
-Confidence: 0.75
+Confidence: 0.7
 ```
 
 Label prompt for level way lvl:arithmetic_operators@L2#0 (the model saw only the concept, the way's name 'line by line trace' and its text; no level):
@@ -613,32 +617,34 @@ Clauses: none
 Confidence: 0.93
 ```
 
-Label prompt for level way lvl:type_conversion@L4#3 (the model saw only the concept, the way's name 'diagnose an error' and its text; no level):
+Label prompt for level way lvl:type_conversion@L4#3 (the model saw the concept, the way's name 'diagnose an error', its text, where the way stops and whether the words must be correct; no level):
 > rule broken: Promotion happens per operator, after an int division has already truncated. Kind: silent logic error. Trigger class: All-int division inside a double formula, e.g. double y = 1 / 3; or (9/5) * c + 32.
+>
+> Where this way stops: Locating and fixing the mistake for one given failing case is L3. A compiler-flagged slip fixed from the message is weak evidence.
 
 Model's reply:
 ```
-Label: not shown
-Clauses: none
-Confidence: 0.97
+Label: wrong
+Clauses: 1, 2, 3
+Confidence: 0.75
 ```
 
-Label prompt for level way lvl:type_conversion@L4#0 (the model saw only the concept, the way's name 'predict a change' and its text; no level):
+Label prompt for level way lvl:type_conversion@L4#0 (the model saw the concept, the way's name 'predict a change', its text, where the way stops and whether the words must be correct; no level):
 > Moving the point of conversion changes the result: (double) (a / b) differs from (double) a / b, and (int) 11 * 0.3 differs from (int) (11 * 0.3). Widening int to double and back is reversible for int values; narrowing double to int loses the fraction irreversibly.
+>
+> Where this way stops: Re-tracing the changed code value by value is L2 on the new code. Adapting given code to a familiar variant may be only relational.
 
 Model's reply:
 ```
 Label: not shown
 Clauses: none
-Confidence: 0.95
+Confidence: 0.7
 ```
 
 Parsed labels:
 | edge | label | prune score | confidence | score | clauses | words |
 |---|---|---|---|---|---|---|
 | lvl:type_conversion@L2#0 | not applied |  |  | 0.0 |  |  |
-| lvl:type_conversion@L4#3 | not applied |  |  | 0.0 |  |  |
-| lvl:type_conversion@L4#0 | not applied |  |  | 0.0 |  |  |
 
 **Kept on a path at this depth** (best N in tiers: held misconception / broken edge, then held error, then correct / confirmed / shown):
 
@@ -740,32 +746,34 @@ Clauses: 1, 3
 Confidence: 0.8
 ```
 
-Label prompt for level way lvl:expression@L3#1 (the model saw only the concept, the way's name 'relation to neighbour' and its text; no level):
+Label prompt for level way lvl:expression@L3#1 (the model saw the concept, the way's name 'relation to neighbour', its text, where the way stops and whether the words must be correct; no level):
 > Operators combine operand values into a new value, and the operand types choose the operation (int / truncates, double / does not).
+>
+> Where this way stops: Two correct but separate rules are L1. Executing the two in sequence is L2. A relational answer may be correct or a relational error.
 
 Model's reply:
 ```
-Label: not shown
-Clauses: none
+Label: wrong
+Clauses: 2, 3
 Confidence: 0.85
 ```
 
-Label prompt for level way lvl:expression@L3#2 (the model saw only the concept, the way's name 'relation to neighbour' and its text; no level):
+Label prompt for level way lvl:expression@L3#2 (the model saw the concept, the way's name 'relation to neighbour', its text, where the way stops and whether the words must be correct; no level):
 > With several operators, precedence and left associativity decide the grouping, and parentheses override both.
+>
+> Where this way stops: Two correct but separate rules are L1. Executing the two in sequence is L2. A relational answer may be correct or a relational error.
 
 Model's reply:
 ```
-Label: not shown
-Clauses: none
-Confidence: 0.9
+Label: wrong
+Clauses: 2, 3
+Confidence: 0.88
 ```
 
 Parsed labels:
 | edge | label | prune score | confidence | score | clauses | words |
 |---|---|---|---|---|---|---|
 | lvl:expression@L0#0 | shown | 0.5 | 0.8 | 0.4 | c1, c3 | It prints 3.5; so 7 / 2 gives 3.5 and that is stored in avg |
-| lvl:expression@L3#1 | not applied |  |  | 0.0 |  |  |
-| lvl:expression@L3#2 | not applied |  |  | 0.0 |  |  |
 
 **Kept on a path at this depth** (best N in tiers: held misconception / broken edge, then held error, then correct / confirmed / shown):
 
@@ -792,7 +800,7 @@ Root-cause walk: held on ['explicit_cast'], broken at [] (consequences: pre:arit
 - expression: L0 via everyday_reading "It prints 3.5; so 7 / 2 gives 3.5 and that is stored in avg"
 - integer_division: L0 via inconsistent_trace "The (double) cast turns the division into a decimal division; so 7 / 2 gives 3.5 and that is stored in avg"
 
-**Stop:** max depth at depth 4; prompts {'prune': 14, 'label': 24}, fresh model calls 7, cache hits 31
+**Stop:** max depth at depth 4; prompts {'prune': 14, 'label': 24}, fresh model calls 0, cache hits 38
 
 ### Held misconceptions
 | concept | misconception | kind | quote | score | shares_evidence_with |
@@ -821,6 +829,13 @@ Root-cause walk: held on ['explicit_cast'], broken at [] (consequences: pre:arit
 | explicit_cast | L0 | misconception | CastAfterIntDivision | level_mis_links | It prints 3.5; The (double) cast turns the division into a decimal division; so 7 / 2 gives 3.5 and that is stored in avg | wrong rule: (double) (3 / 5) is 0.6. Right rule: The integer division 3 / 5 = 0 happens inside the parentheses before the cast, so the result is 0.0; write (double) 3 / 5 to get 0.6. |  |  |
 | expression | L0 | everyday_reading |  | level_way | It prints 3.5; so 7 / 2 gives 3.5 and that is stored in avg |  |  |  |
 | integer_division | L0 | inconsistent_trace |  | level_way | The (double) cast turns the division into a decimal division; so 7 / 2 gives 3.5 and that is stored in avg |  |  |  |
+
+Ways above L2 the model answered "wrong" (the kind of thing is done, but what is said contradicts Java; not shown):
+| concept | edge | level | way | confidence | clauses | quote |
+|---|---|---|---|---|---|---|
+| type_conversion | lvl:type_conversion@L4#3 | L4 | diagnose_an_error | 0.75 | [1, 2, 3] | It prints 3.5; The (double) cast turns the division into a decimal division; so 7 / 2 gives 3.5 and that is stored in avg |
+| expression | lvl:expression@L3#1 | L3 | relation_to_neighbour | 0.85 | [2, 3] | The (double) cast turns the division into a decimal division; so 7 / 2 gives 3.5 and that is stored in avg |
+| expression | lvl:expression@L3#2 | L3 | relation_to_neighbour | 0.88 | [2, 3] | The (double) cast turns the division into a decimal division; so 7 / 2 gives 3.5 and that is stored in avg |
 
 ### Overall level: L0
 
@@ -914,6 +929,7 @@ start concepts (3): explicit_cast, integer_division, arithmetic_operators
     mis:type_conversion->NarrowingAssignmentAllowed -> not applied (0.00) ""
   type_conversion (level ways): 18 candidates -> kept lvl:type_conversion@L2#0 (0.45), lvl:type_conversion@L4#3 (0.30), lvl:type_conversion@L4#0 (0.25)
     lvl:type_conversion@L2#0 -> not applied (0.00) ""
+    lvl:type_conversion@L4#3: wrong (0.75) -> not applied
     lvl:type_conversion@L4#3 -> not applied (0.00) ""
     lvl:type_conversion@L4#0 -> not applied (0.00) ""
   kept: mis:type_conversion->TargetTyping [held, tier 0, 0.68], pre:arithmetic_operators->expression [confirmed, tier 2, 0.60]
@@ -927,7 +943,9 @@ start concepts (3): explicit_cast, integer_division, arithmetic_operators
     mis:expression->VariablesHoldExpressions -> not applied (0.00) ""
   expression (level ways): 19 candidates -> kept lvl:expression@L0#0 (0.50), lvl:expression@L3#1 (0.30), lvl:expression@L3#2 (0.20)
     lvl:expression@L0#0 -> shown (0.40) "It prints 3.5; so 7 / 2 gives 3.5 and that is stored in avg"
+    lvl:expression@L3#1: wrong (0.85) -> not applied
     lvl:expression@L3#1 -> not applied (0.00) ""
+    lvl:expression@L3#2: wrong (0.88) -> not applied
     lvl:expression@L3#2 -> not applied (0.00) ""
   kept: mis:expression->TargetTyping [held, tier 0, 0.56], lvl:expression@L0#0 [shown, tier 2, 0.40]
   clause coverage: c1 <- mis:explicit_cast->CastAfterIntDivision; c2 <- mis:explicit_cast->CastAfterIntDivision; c3 <- mis:explicit_cast->CastAfterIntDivision
@@ -949,7 +967,8 @@ start concepts (3): explicit_cast, integer_division, arithmetic_operators
   "depth": 3,
   "prune_tools": "llm",
   "model": "claude-opus-5-5",
-  "backend": "claude-cli"
+  "backend": "claude-cli",
+  "level_v2": true
  },
  "clauses": [
   "It prints 3.5",
@@ -1463,11 +1482,53 @@ start concepts (3): explicit_cast, integer_division, arithmetic_operators
  "unexplained_clauses": [],
  "stop_reason": "max depth",
  "depth_reached": 4,
- "llm_calls": 7,
- "llm_cache_hits": 31,
+ "llm_calls": 0,
+ "llm_cache_hits": 38,
  "llm_calls_by_step": {
   "prune": 14,
   "label": 24
+ },
+ "level_v2": {
+  "wrong_ways": [
+   {
+    "concept": "type_conversion",
+    "edge": "lvl:type_conversion@L4#3",
+    "level": "L4",
+    "way": "diagnose_an_error",
+    "clauses": [
+     1,
+     2,
+     3
+    ],
+    "quote": "It prints 3.5; The (double) cast turns the division into a decimal division; so 7 / 2 gives 3.5 and that is stored in avg",
+    "confidence": 0.75
+   },
+   {
+    "concept": "expression",
+    "edge": "lvl:expression@L3#1",
+    "level": "L3",
+    "way": "relation_to_neighbour",
+    "clauses": [
+     2,
+     3
+    ],
+    "quote": "The (double) cast turns the division into a decimal division; so 7 / 2 gives 3.5 and that is stored in avg",
+    "confidence": 0.85
+   },
+   {
+    "concept": "expression",
+    "edge": "lvl:expression@L3#2",
+    "level": "L3",
+    "way": "relation_to_neighbour",
+    "clauses": [
+     2,
+     3
+    ],
+    "quote": "The (double) cast turns the division into a decimal division; so 7 / 2 gives 3.5 and that is stored in avg",
+    "confidence": 0.88
+   }
+  ],
+  "not_counted": []
  }
 }
 ```

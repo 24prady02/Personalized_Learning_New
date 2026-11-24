@@ -228,18 +228,22 @@ Clauses: 2, 4
 Confidence: 0.9
 ```
 
-Label prompt for level way lvl:array_traversal@L4#0 (the model saw only the concept, the way's name 'predict a change' and its text; no level):
+Label prompt for level way lvl:array_traversal@L4#0 (the model saw the concept, the way's name 'predict a change', its text, where the way stops and whether the words must be correct; no level):
 > Conservation: running the index downward (a.length-1 to 0) visits the same set of elements in reverse order, harmless for a sum but not for a shift. Starting at 1 or stopping at a.length-1 drops an element. Invariant: before pass i, elements 0..i-1 have been processed.
+>
+> Where this way stops: Re-tracing the changed code value by value is L2 on the new code. Adapting given code to a familiar variant may be only relational.
 
 Model's reply:
 ```
 Label: shown
 Clauses: 3, 4
-Confidence: 0.8
+Confidence: 0.85
 ```
 
-Label prompt for level way lvl:array_traversal@L3#2 (the model saw only the concept, the way's name 'relation to neighbour' and its text; no level):
+Label prompt for level way lvl:array_traversal@L3#2 (the model saw the concept, the way's name 'relation to neighbour', its text, where the way stops and whether the words must be correct; no level):
 > for (int i = 0; i < a.length; i++) gives i every valid index exactly once, in increasing order; the bound must be < a.length, not <=.
+>
+> Where this way stops: Two correct but separate rules are L1. Executing the two in sequence is L2. A relational answer may be correct or a relational error.
 
 Model's reply:
 ```
@@ -252,7 +256,7 @@ Parsed labels:
 | edge | label | prune score | confidence | score | clauses | words |
 |---|---|---|---|---|---|---|
 | lvl:array_traversal@L2#1 | shown | 0.45 | 0.9 | 0.41 | c2, c4 | so it prints Total: 12; so the loop runs once more and prints Total: 20, with no other change to the code |
-| lvl:array_traversal@L4#0 | shown | 0.3 | 0.8 | 0.24 | c3, c4 | With 8 added, a.length becomes 4; so the loop runs once more and prints Total: 20, with no other change to the code |
+| lvl:array_traversal@L4#0 | shown | 0.3 | 0.85 | 0.26 | c3, c4 | With 8 added, a.length becomes 4; so the loop runs once more and prints Total: 20, with no other change to the code |
 | lvl:array_traversal@L3#2 | shown | 0.25 | 0.8 | 0.2 | c1, c3, c4 | The loop visits each index from 0 to a.length - 1 and adds that element to sum; With 8 added, a.length becomes 4; so the loop runs once more and prints Total: 20, with no other change to the code |
 
 #### for_loop, misconceptions: 21 edges offered
@@ -344,24 +348,28 @@ Prune: the model's reply (edge id and score; the kept edges sum to 1):
 ```
 Kept by pruning: lvl:for_loop@L3#2 (0.40), lvl:for_loop@L4#0 (0.35), lvl:for_loop@L2#1 (0.25)
 
-Label prompt for level way lvl:for_loop@L3#2 (the model saw only the concept, the way's name 'relation to neighbour' and its text; no level):
+Label prompt for level way lvl:for_loop@L3#2 (the model saw the concept, the way's name 'relation to neighbour', its text, where the way stops and whether the words must be correct; no level):
 > for (int i = 0; i < N; i++) gives i each valid index 0..N-1 exactly once in increasing order, the standard way to process every array element.
+>
+> Where this way stops: Two correct but separate rules are L1. Executing the two in sequence is L2. A relational answer may be correct or a relational error.
 
 Model's reply:
 ```
 Label: shown
 Clauses: 1, 3, 4
-Confidence: 0.9
+Confidence: 0.75
 ```
 
-Label prompt for level way lvl:for_loop@L4#0 (the model saw only the concept, the way's name 'predict a change' and its text; no level):
+Label prompt for level way lvl:for_loop@L4#0 (the model saw the concept, the way's name 'predict a change', its text, where the way stops and whether the words must be correct; no level):
 > Rewriting a for as the equivalent while (init before, update at the end of the body) keeps behaviour, except that continue then skips the update and the loop variable stays in scope after the loop. Changing the bound or the step changes the pass count predictably (< to <= adds one pass).
+>
+> Where this way stops: Re-tracing the changed code value by value is L2 on the new code. Adapting given code to a familiar variant may be only relational.
 
 Model's reply:
 ```
 Label: shown
 Clauses: 3, 4
-Confidence: 0.75
+Confidence: 0.85
 ```
 
 Label prompt for level way lvl:for_loop@L2#1 (the model saw only the concept, the way's name 'output prediction' and its text; no level):
@@ -377,8 +385,8 @@ Confidence: 0.9
 Parsed labels:
 | edge | label | prune score | confidence | score | clauses | words |
 |---|---|---|---|---|---|---|
-| lvl:for_loop@L3#2 | shown | 0.4 | 0.9 | 0.36 | c1, c3, c4 | The loop visits each index from 0 to a.length - 1 and adds that element to sum; With 8 added, a.length becomes 4; so the loop runs once more and prints Total: 20, with no other change to the code |
-| lvl:for_loop@L4#0 | shown | 0.35 | 0.75 | 0.26 | c3, c4 | With 8 added, a.length becomes 4; so the loop runs once more and prints Total: 20, with no other change to the code |
+| lvl:for_loop@L3#2 | shown | 0.4 | 0.75 | 0.3 | c1, c3, c4 | The loop visits each index from 0 to a.length - 1 and adds that element to sum; With 8 added, a.length becomes 4; so the loop runs once more and prints Total: 20, with no other change to the code |
+| lvl:for_loop@L4#0 | shown | 0.35 | 0.85 | 0.3 | c3, c4 | With 8 added, a.length becomes 4; so the loop runs once more and prints Total: 20, with no other change to the code |
 | lvl:for_loop@L2#1 | shown | 0.25 | 0.9 | 0.23 | c1, c2, c3, c4 | The loop visits each index from 0 to a.length - 1 and adds that element to sum; so it prints Total: 12; With 8 added, a.length becomes 4; so the loop runs once more and prints Total: 20, with no other change to the code |
 
 #### loop_control, misconceptions: 11 edges offered
@@ -465,8 +473,10 @@ Clauses: 1, 2, 4
 Confidence: 0.9
 ```
 
-Label prompt for level way lvl:loop_control@L3#5 (the model saw only the concept, the way's name 'relation to neighbour' and its text; no level):
+Label prompt for level way lvl:loop_control@L3#5 (the model saw the concept, the way's name 'relation to neighbour', its text, where the way stops and whether the words must be correct; no level):
 > The initialization and the condition of a loop fix how many times it runs; one wrong bound makes it run once too many or too few.
+>
+> Where this way stops: Two correct but separate rules are L1. Executing the two in sequence is L2. A relational answer may be correct or a relational error.
 
 Model's reply:
 ```
@@ -475,14 +485,16 @@ Clauses: 1, 3, 4
 Confidence: 0.8
 ```
 
-Label prompt for level way lvl:loop_control@L4#0 (the model saw only the concept, the way's name 'predict a change' and its text; no level):
+Label prompt for level way lvl:loop_control@L4#0 (the model saw the concept, the way's name 'predict a change', its text, where the way stops and whether the words must be correct; no level):
 > Changing < to <= adds one pass; starting at 1 instead of 0 removes one; doubling the step halves the passes; reversing init and bound with i-- visits the same values in reverse order (and still processes the same set only if both ends are adjusted).
+>
+> Where this way stops: Re-tracing the changed code value by value is L2 on the new code. Adapting given code to a familiar variant may be only relational.
 
 Model's reply:
 ```
 Label: shown
 Clauses: 3, 4
-Confidence: 0.7
+Confidence: 0.8
 ```
 
 Parsed labels:
@@ -490,7 +502,7 @@ Parsed labels:
 |---|---|---|---|---|---|---|
 | lvl:loop_control@L2#1 | shown | 0.4 | 0.9 | 0.36 | c1, c2, c4 | The loop visits each index from 0 to a.length - 1 and adds that element to sum; so it prints Total: 12; so the loop runs once more and prints Total: 20, with no other change to the code |
 | lvl:loop_control@L3#5 | shown | 0.35 | 0.8 | 0.28 | c1, c3, c4 | The loop visits each index from 0 to a.length - 1 and adds that element to sum; With 8 added, a.length becomes 4; so the loop runs once more and prints Total: 20, with no other change to the code |
-| lvl:loop_control@L4#0 | shown | 0.25 | 0.7 | 0.17 | c3, c4 | With 8 added, a.length becomes 4; so the loop runs once more and prints Total: 20, with no other change to the code |
+| lvl:loop_control@L4#0 | shown | 0.25 | 0.8 | 0.2 | c3, c4 | With 8 added, a.length becomes 4; so the loop runs once more and prints Total: 20, with no other change to the code |
 
 **Kept on a path at this depth** (best N in tiers: held misconception / broken edge, then held error, then correct / confirmed / shown):
 
@@ -754,32 +766,36 @@ Clauses: 1, 4
 Confidence: 0.7
 ```
 
-Label prompt for level way lvl:loop_variable@L3#2 (the model saw only the concept, the way's name 'purpose of the whole' and its text; no level):
+Label prompt for level way lvl:loop_variable@L3#2 (the model saw the concept, the way's name 'purpose of the whole', its text, where the way stops and whether the words must be correct; no level):
 > Role: stepper - a variable stepping through a systematic, predictable succession of values; it counts passes and often serves as an index.
+>
+> Where this way stops: Narrating the lines is L2. A purpose induced from a few traced cases is L2. A wrong purpose is still L3, but with an error.
 
 Model's reply:
 ```
 Label: shown
 Clauses: 1, 4
-Confidence: 0.85
+Confidence: 0.8
 ```
 
-Label prompt for level way lvl:loop_variable@L4#0 (the model saw only the concept, the way's name 'predict a change' and its text; no level):
+Label prompt for level way lvl:loop_variable@L4#0 (the model saw the concept, the way's name 'predict a change', its text, where the way stops and whether the words must be correct; no level):
 > Shifting the start and the bound by the same amount keeps the number of passes but changes the values the body sees; assigning to the loop variable inside the body changes the pass count.
+>
+> Where this way stops: Re-tracing the changed code value by value is L2 on the new code. Adapting given code to a familiar variant may be only relational.
 
 Model's reply:
 ```
-Label: not shown
-Clauses: none
-Confidence: 0.75
+Label: shown
+Clauses: 3, 4
+Confidence: 0.7
 ```
 
 Parsed labels:
 | edge | label | prune score | confidence | score | clauses | words |
 |---|---|---|---|---|---|---|
 | lvl:loop_variable@L2#1 | shown | 0.4 | 0.7 | 0.28 | c1, c4 | The loop visits each index from 0 to a.length - 1 and adds that element to sum; so the loop runs once more and prints Total: 20, with no other change to the code |
-| lvl:loop_variable@L3#2 | shown | 0.3 | 0.85 | 0.26 | c1, c4 | The loop visits each index from 0 to a.length - 1 and adds that element to sum; so the loop runs once more and prints Total: 20, with no other change to the code |
-| lvl:loop_variable@L4#0 | not applied |  |  | 0.0 |  |  |
+| lvl:loop_variable@L3#2 | shown | 0.3 | 0.8 | 0.24 | c1, c4 | The loop visits each index from 0 to a.length - 1 and adds that element to sum; so the loop runs once more and prints Total: 20, with no other change to the code |
+| lvl:loop_variable@L4#0 | shown | 0.3 | 0.7 | 0.21 | c3, c4 | With 8 added, a.length becomes 4; so the loop runs once more and prints Total: 20, with no other change to the code |
 
 #### loop_control, concept edges: 2 edges offered
 Edges offered:
@@ -881,24 +897,28 @@ Prune: the model's reply (edge id and score; the kept edges sum to 1):
 ```
 Kept by pruning: lvl:length_field@L4#0 (0.50), lvl:length_field@L3#2 (0.30), lvl:length_field@L1#1 (0.20)
 
-Label prompt for level way lvl:length_field@L4#0 (the model saw only the concept, the way's name 'predict a change' and its text; no level):
+Label prompt for level way lvl:length_field@L4#0 (the model saw the concept, the way's name 'predict a change', its text, where the way stops and whether the words must be correct; no level):
 > Conservation: for a given array object a.length never changes, so loops bounded by a.length stay correct when the array is created with a different size. Reassigning a to another array changes a.length.
-
-Model's reply:
-```
-Label: shown
-Clauses: 3, 4
-Confidence: 0.88
-```
-
-Label prompt for level way lvl:length_field@L3#2 (the model saw only the concept, the way's name 'purpose of the whole' and its text; no level):
-> Plan/role: a fixed value (Sajaniemi) that lets code adapt to any array size instead of a hard-coded magic number, e.g. loop bounds and the last element.
+>
+> Where this way stops: Re-tracing the changed code value by value is L2 on the new code. Adapting given code to a familiar variant may be only relational.
 
 Model's reply:
 ```
 Label: shown
 Clauses: 3, 4
 Confidence: 0.85
+```
+
+Label prompt for level way lvl:length_field@L3#2 (the model saw the concept, the way's name 'purpose of the whole', its text, where the way stops and whether the words must be correct; no level):
+> Plan/role: a fixed value (Sajaniemi) that lets code adapt to any array size instead of a hard-coded magic number, e.g. loop bounds and the last element.
+>
+> Where this way stops: Narrating the lines is L2. A purpose induced from a few traced cases is L2. A wrong purpose is still L3, but with an error.
+
+Model's reply:
+```
+Label: shown
+Clauses: 3, 4
+Confidence: 0.6
 ```
 
 Label prompt for level way lvl:length_field@L1#1 (the model saw only the concept, the way's name 'states the rule' and its text; no level):
@@ -914,8 +934,8 @@ Confidence: 0.8
 Parsed labels:
 | edge | label | prune score | confidence | score | clauses | words |
 |---|---|---|---|---|---|---|
-| lvl:length_field@L4#0 | shown | 0.5 | 0.88 | 0.44 | c3, c4 | With 8 added, a.length becomes 4; so the loop runs once more and prints Total: 20, with no other change to the code |
-| lvl:length_field@L3#2 | shown | 0.3 | 0.85 | 0.26 | c3, c4 | With 8 added, a.length becomes 4; so the loop runs once more and prints Total: 20, with no other change to the code |
+| lvl:length_field@L4#0 | shown | 0.5 | 0.85 | 0.42 | c3, c4 | With 8 added, a.length becomes 4; so the loop runs once more and prints Total: 20, with no other change to the code |
+| lvl:length_field@L3#2 | shown | 0.3 | 0.6 | 0.18 | c3, c4 | With 8 added, a.length becomes 4; so the loop runs once more and prints Total: 20, with no other change to the code |
 | lvl:length_field@L1#1 | shown | 0.2 | 0.8 | 0.16 | c1, c3 | The loop visits each index from 0 to a.length - 1 and adds that element to sum; With 8 added, a.length becomes 4 |
 
 #### array_traversal, concept edges: 2 edges offered
@@ -1029,14 +1049,16 @@ Prune: the model's reply (edge id and score; the kept edges sum to 1):
 ```
 Kept by pruning: lvl:loop_body@L3#0 (0.40), lvl:loop_body@L2#1 (0.35), lvl:loop_body@L4#0 (0.25)
 
-Label prompt for level way lvl:loop_body@L3#0 (the model saw only the concept, the way's name 'relation to neighbour' and its text; no level):
+Label prompt for level way lvl:loop_body@L3#0 (the model saw the concept, the way's name 'relation to neighbour', its text, where the way stops and whether the words must be correct; no level):
 > The accumulator update (sum += x) is placed inside the body so it runs once per pass, while the accumulator is declared and initialized before the loop.
+>
+> Where this way stops: Two correct but separate rules are L1. Executing the two in sequence is L2. A relational answer may be correct or a relational error.
 
 Model's reply:
 ```
-Label: shown
-Clauses: 1, 4
-Confidence: 0.6
+Label: not shown
+Clauses: none
+Confidence: 0.55
 ```
 
 Label prompt for level way lvl:loop_body@L2#1 (the model saw only the concept, the way's name 'output prediction' and its text; no level):
@@ -1049,20 +1071,22 @@ Clauses: 1, 4
 Confidence: 0.7
 ```
 
-Label prompt for level way lvl:loop_body@L4#0 (the model saw only the concept, the way's name 'predict a change' and its text; no level):
+Label prompt for level way lvl:loop_body@L4#0 (the model saw the concept, the way's name 'predict a change', its text, where the way stops and whether the words must be correct; no level):
 > Moving a statement from inside the body to after the loop changes it from running once per pass to once in total (and vice versa); reordering two body statements that share a variable changes the results (e.g. increment before vs after use).
+>
+> Where this way stops: Re-tracing the changed code value by value is L2 on the new code. Adapting given code to a familiar variant may be only relational.
 
 Model's reply:
 ```
 Label: not shown
 Clauses: none
-Confidence: 0.85
+Confidence: 0.7
 ```
 
 Parsed labels:
 | edge | label | prune score | confidence | score | clauses | words |
 |---|---|---|---|---|---|---|
-| lvl:loop_body@L3#0 | shown | 0.4 | 0.6 | 0.24 | c1, c4 | The loop visits each index from 0 to a.length - 1 and adds that element to sum; so the loop runs once more and prints Total: 20, with no other change to the code |
+| lvl:loop_body@L3#0 | not applied |  |  | 0.0 |  |  |
 | lvl:loop_body@L2#1 | shown | 0.35 | 0.7 | 0.24 | c1, c4 | The loop visits each index from 0 to a.length - 1 and adds that element to sum; so the loop runs once more and prints Total: 20, with no other change to the code |
 | lvl:loop_body@L4#0 | not applied |  |  | 0.0 |  |  |
 
@@ -1114,14 +1138,15 @@ Figure 6 (the graph after depth 3): C:\Users\magnu\OneDrive\Desktop\ES_VIterbi_P
 
 ## 4. Diagnosis (rules over the labelled graph, no model)
 Root-cause walk: held on [], broken at [], prerequisites {'array_initializer': ['array_declaration'], 'indexing': ['array_initializer'], 'length_field': ['array_initializer'], 'compound_assignment': ['assignment'], 'increment_operators': ['assignment', 'loop_control'], 'boolean_expression': ['comparison_operators'], 'accumulator_pattern': ['compound_assignment', 'loop_body'], 'array_declaration': ['data_structure'], 'data_structure': ['data_type'], 'comparison_operators': ['expression'], 'array_traversal': ['for_loop', 'indexing', 'length_field'], 'loop_body': ['for_loop'], 'loop_scope': ['for_loop'], 'array_bounds': ['indexing'], 'for_loop': ['loop_control'], 'loop_control': ['loop_variable'], 'control_flow': ['statement'], 'println': ['statement', 'string_literal'], 'string_conversion': ['string_concatenation']}
+- way lvl:length_field@L3#2 not counted: confidence 0.60 is not above 0.60
 - array_traversal: L4 via predict_a_change "With 8 added, a.length becomes 4; so the loop runs once more and prints Total: 20, with no other change to the code"
 - for_loop: L4 via predict_a_change "With 8 added, a.length becomes 4; so the loop runs once more and prints Total: 20, with no other change to the code"
 - length_field: L4 via predict_a_change "With 8 added, a.length becomes 4; so the loop runs once more and prints Total: 20, with no other change to the code"
-- loop_body: L3 via relation_to_neighbour "The loop visits each index from 0 to a.length - 1 and adds that element to sum; so the loop runs once more and prints Total: 20, with no other change to the code"
+- loop_body: L2 via output_prediction "The loop visits each index from 0 to a.length - 1 and adds that element to sum; so the loop runs once more and prints Total: 20, with no other change to the code"
 - loop_control: L4 via predict_a_change "With 8 added, a.length becomes 4; so the loop runs once more and prints Total: 20, with no other change to the code"
-- loop_variable: L3 via purpose_of_the_whole "The loop visits each index from 0 to a.length - 1 and adds that element to sum; so the loop runs once more and prints Total: 20, with no other change to the code"
+- loop_variable: L4 via predict_a_change "With 8 added, a.length becomes 4; so the loop runs once more and prints Total: 20, with no other change to the code"
 
-**Stop:** max depth at depth 3; prompts {'prune': 18, 'label': 37}, fresh model calls 4, cache hits 51
+**Stop:** max depth at depth 3; prompts {'prune': 18, 'label': 37}, fresh model calls 0, cache hits 55
 
 ### Held misconceptions
 (none)
@@ -1136,10 +1161,15 @@ Root-cause walk: held on [], broken at [], prerequisites {'array_initializer': [
 |---|---|---|---|---|---|---|---|---|
 | array_traversal | L4 | predict_a_change |  | level_way | With 8 added, a.length becomes 4; so the loop runs once more and prints Total: 20, with no other change to the code |  | L3 relation_to_neighbour, L2 output_prediction |  |
 | for_loop | L4 | predict_a_change |  | level_way | With 8 added, a.length becomes 4; so the loop runs once more and prints Total: 20, with no other change to the code |  | L3 relation_to_neighbour, L2 output_prediction |  |
-| length_field | L4 | predict_a_change |  | level_way | With 8 added, a.length becomes 4; so the loop runs once more and prints Total: 20, with no other change to the code |  | L3 purpose_of_the_whole, L1 states_the_rule |  |
-| loop_body | L3 | relation_to_neighbour |  | level_way | The loop visits each index from 0 to a.length - 1 and adds that element to sum; so the loop runs once more and prints Total: 20, with no other change to the code |  | L2 output_prediction |  |
+| length_field | L4 | predict_a_change |  | level_way | With 8 added, a.length becomes 4; so the loop runs once more and prints Total: 20, with no other change to the code |  | L1 states_the_rule |  |
+| loop_body | L2 | output_prediction |  | level_way | The loop visits each index from 0 to a.length - 1 and adds that element to sum; so the loop runs once more and prints Total: 20, with no other change to the code |  |  |  |
 | loop_control | L4 | predict_a_change |  | level_way | With 8 added, a.length becomes 4; so the loop runs once more and prints Total: 20, with no other change to the code |  | L3 relation_to_neighbour, L2 output_prediction |  |
-| loop_variable | L3 | purpose_of_the_whole |  | level_way | The loop visits each index from 0 to a.length - 1 and adds that element to sum; so the loop runs once more and prints Total: 20, with no other change to the code |  | L2 output_prediction |  |
+| loop_variable | L4 | predict_a_change |  | level_way | With 8 added, a.length becomes 4; so the loop runs once more and prints Total: 20, with no other change to the code |  | L3 purpose_of_the_whole, L2 output_prediction |  |
+
+Shown ways above L2 that do not count for the level:
+| concept | edge | level | way | confidence | reason | quote |
+|---|---|---|---|---|---|---|
+| length_field | lvl:length_field@L3#2 | L3 | purpose_of_the_whole | 0.6 | confidence 0.60 is not above 0.60 | With 8 added, a.length becomes 4; so the loop runs once more and prints Total: 20, with no other change to the code |
 
 ### Overall level: L4
 
@@ -1159,18 +1189,18 @@ Figure 7 (final picture): C:\Users\magnu\OneDrive\Desktop\ES_VIterbi_Personalize
 | 1 | array_traversal | mis:array_traversal->OffByOneBound | misconception | correct | 0.45 | 0.85 | 0.3825 | [1, 3, 4] | The loop visits each index from 0 to a.length - 1 and adds that element to sum; With 8 added, a.length becomes 4; so the loop runs once more and prints Total: 20, with no other change to the code |
 | 1 | array_traversal | mis:array_traversal->ElementBoundToOldIndex | misconception | correct | 0.25 | 0.75 | 0.1875 | [1, 2, 4] | The loop visits each index from 0 to a.length - 1 and adds that element to sum; so it prints Total: 12; so the loop runs once more and prints Total: 20, with no other change to the code |
 | 1 | array_traversal | lvl:array_traversal@L2#1 | level | shown | 0.45 | 0.9 | 0.405 | [2, 4] | so it prints Total: 12; so the loop runs once more and prints Total: 20, with no other change to the code |
-| 1 | array_traversal | lvl:array_traversal@L4#0 | level | shown | 0.3 | 0.8 | 0.24 | [3, 4] | With 8 added, a.length becomes 4; so the loop runs once more and prints Total: 20, with no other change to the code |
+| 1 | array_traversal | lvl:array_traversal@L4#0 | level | shown | 0.3 | 0.85 | 0.255 | [3, 4] | With 8 added, a.length becomes 4; so the loop runs once more and prints Total: 20, with no other change to the code |
 | 1 | array_traversal | lvl:array_traversal@L3#2 | level | shown | 0.25 | 0.8 | 0.2 | [1, 3, 4] | The loop visits each index from 0 to a.length - 1 and adds that element to sum; With 8 added, a.length becomes 4; so the loop runs once more and prints Total: 20, with no other change to the code |
 | 1 | for_loop | err:for_loop->WrongIterationCount | error | correct | 0.45 | 0.85 | 0.3825 | [1, 2, 3, 4] | The loop visits each index from 0 to a.length - 1 and adds that element to sum; so it prints Total: 12; With 8 added, a.length becomes 4; so the loop runs once more and prints Total: 20, with no other change to the code |
 | 1 | for_loop | mis:for_loop->ForIsConditional | misconception | correct | 0.25 | 0.85 | 0.2125 | [1, 2, 4] | The loop visits each index from 0 to a.length - 1 and adds that element to sum; so it prints Total: 12; so the loop runs once more and prints Total: 20, with no other change to the code |
-| 1 | for_loop | lvl:for_loop@L3#2 | level | shown | 0.4 | 0.9 | 0.36 | [1, 3, 4] | The loop visits each index from 0 to a.length - 1 and adds that element to sum; With 8 added, a.length becomes 4; so the loop runs once more and prints Total: 20, with no other change to the code |
-| 1 | for_loop | lvl:for_loop@L4#0 | level | shown | 0.35 | 0.75 | 0.2625 | [3, 4] | With 8 added, a.length becomes 4; so the loop runs once more and prints Total: 20, with no other change to the code |
+| 1 | for_loop | lvl:for_loop@L3#2 | level | shown | 0.4 | 0.75 | 0.3 | [1, 3, 4] | The loop visits each index from 0 to a.length - 1 and adds that element to sum; With 8 added, a.length becomes 4; so the loop runs once more and prints Total: 20, with no other change to the code |
+| 1 | for_loop | lvl:for_loop@L4#0 | level | shown | 0.35 | 0.85 | 0.2975 | [3, 4] | With 8 added, a.length becomes 4; so the loop runs once more and prints Total: 20, with no other change to the code |
 | 1 | for_loop | lvl:for_loop@L2#1 | level | shown | 0.25 | 0.9 | 0.225 | [1, 2, 3, 4] | The loop visits each index from 0 to a.length - 1 and adds that element to sum; so it prints Total: 12; With 8 added, a.length becomes 4; so the loop runs once more and prints Total: 20, with no other change to the code |
 | 1 | loop_control | mis:loop_control->OffByOneBound | misconception | correct | 0.45 | 0.85 | 0.3825 | [1, 2, 4] | The loop visits each index from 0 to a.length - 1 and adds that element to sum; so it prints Total: 12; so the loop runs once more and prints Total: 20, with no other change to the code |
 | 1 | loop_control | err:loop_control->WrongIterationCount | error | correct | 0.35 | 0.8 | 0.28 | [3, 4] | With 8 added, a.length becomes 4; so the loop runs once more and prints Total: 20, with no other change to the code |
 | 1 | loop_control | lvl:loop_control@L2#1 | level | shown | 0.4 | 0.9 | 0.36 | [1, 2, 4] | The loop visits each index from 0 to a.length - 1 and adds that element to sum; so it prints Total: 12; so the loop runs once more and prints Total: 20, with no other change to the code |
 | 1 | loop_control | lvl:loop_control@L3#5 | level | shown | 0.35 | 0.8 | 0.28 | [1, 3, 4] | The loop visits each index from 0 to a.length - 1 and adds that element to sum; With 8 added, a.length becomes 4; so the loop runs once more and prints Total: 20, with no other change to the code |
-| 1 | loop_control | lvl:loop_control@L4#0 | level | shown | 0.25 | 0.7 | 0.175 | [3, 4] | With 8 added, a.length becomes 4; so the loop runs once more and prints Total: 20, with no other change to the code |
+| 1 | loop_control | lvl:loop_control@L4#0 | level | shown | 0.25 | 0.8 | 0.2 | [3, 4] | With 8 added, a.length becomes 4; so the loop runs once more and prints Total: 20, with no other change to the code |
 | 2 | array_traversal | pre:length_field->array_traversal | prerequisite | confirmed | 0.45 | 0.95 | 0.4275 | [1, 3, 4] | The loop visits each index from 0 to a.length - 1 and adds that element to sum; With 8 added, a.length becomes 4; so the loop runs once more and prints Total: 20, with no other change to the code |
 | 2 | array_traversal | pre:for_loop->array_traversal | prerequisite | confirmed | 0.3 | 0.93 | 0.279 | [1, 3, 4] | The loop visits each index from 0 to a.length - 1 and adds that element to sum; With 8 added, a.length becomes 4; so the loop runs once more and prints Total: 20, with no other change to the code |
 | 2 | array_traversal | pre:indexing->array_traversal | prerequisite | confirmed | 0.25 | 0.9 | 0.225 | [1, 4] | The loop visits each index from 0 to a.length - 1 and adds that element to sum; so the loop runs once more and prints Total: 20, with no other change to the code |
@@ -1181,18 +1211,18 @@ Figure 7 (final picture): C:\Users\magnu\OneDrive\Desktop\ES_VIterbi_Personalize
 | 3 | loop_variable | mis:loop_variable->LoopUpdateChangesDirection | misconception | correct | 0.25 | 0.6 | 0.15 | [1] | The loop visits each index from 0 to a.length - 1 and adds that element to sum |
 | 3 | loop_variable | mis:loop_variable->LoopVariableLimitsValues | misconception | correct | 0.25 | 0.7 | 0.175 | [2, 4] | so it prints Total: 12; so the loop runs once more and prints Total: 20, with no other change to the code |
 | 3 | loop_variable | lvl:loop_variable@L2#1 | level | shown | 0.4 | 0.7 | 0.28 | [1, 4] | The loop visits each index from 0 to a.length - 1 and adds that element to sum; so the loop runs once more and prints Total: 20, with no other change to the code |
-| 3 | loop_variable | lvl:loop_variable@L3#2 | level | shown | 0.3 | 0.85 | 0.255 | [1, 4] | The loop visits each index from 0 to a.length - 1 and adds that element to sum; so the loop runs once more and prints Total: 20, with no other change to the code |
+| 3 | loop_variable | lvl:loop_variable@L3#2 | level | shown | 0.3 | 0.8 | 0.24 | [1, 4] | The loop visits each index from 0 to a.length - 1 and adds that element to sum; so the loop runs once more and prints Total: 20, with no other change to the code |
+| 3 | loop_variable | lvl:loop_variable@L4#0 | level | shown | 0.3 | 0.7 | 0.21 | [3, 4] | With 8 added, a.length becomes 4; so the loop runs once more and prints Total: 20, with no other change to the code |
 | 3 | loop_control | pre:loop_control->for_loop | prerequisite | confirmed | 0.75 | 0.6 | 0.45 | [1, 4] | The loop visits each index from 0 to a.length - 1 and adds that element to sum; so the loop runs once more and prints Total: 20, with no other change to the code |
 | 3 | length_field | mis:length_field->ArrayHasLengthMethod | misconception | correct | 0.9 | 0.8 | 0.72 | [1, 3] | The loop visits each index from 0 to a.length - 1 and adds that element to sum; With 8 added, a.length becomes 4 |
-| 3 | length_field | lvl:length_field@L4#0 | level | shown | 0.5 | 0.88 | 0.44 | [3, 4] | With 8 added, a.length becomes 4; so the loop runs once more and prints Total: 20, with no other change to the code |
-| 3 | length_field | lvl:length_field@L3#2 | level | shown | 0.3 | 0.85 | 0.255 | [3, 4] | With 8 added, a.length becomes 4; so the loop runs once more and prints Total: 20, with no other change to the code |
+| 3 | length_field | lvl:length_field@L4#0 | level | shown | 0.5 | 0.85 | 0.425 | [3, 4] | With 8 added, a.length becomes 4; so the loop runs once more and prints Total: 20, with no other change to the code |
+| 3 | length_field | lvl:length_field@L3#2 | level | shown | 0.3 | 0.6 | 0.18 | [3, 4] | With 8 added, a.length becomes 4; so the loop runs once more and prints Total: 20, with no other change to the code |
 | 3 | length_field | lvl:length_field@L1#1 | level | shown | 0.2 | 0.8 | 0.16 | [1, 3] | The loop visits each index from 0 to a.length - 1 and adds that element to sum; With 8 added, a.length becomes 4 |
 | 3 | array_traversal | pre:for_loop->array_traversal | prerequisite | confirmed | 0.6 | 0.93 | 0.558 | [1, 3, 4] | The loop visits each index from 0 to a.length - 1 and adds that element to sum; With 8 added, a.length becomes 4; so the loop runs once more and prints Total: 20, with no other change to the code |
 | 3 | array_traversal | pre:indexing->array_traversal | prerequisite | confirmed | 0.4 | 0.9 | 0.36 | [1, 4] | The loop visits each index from 0 to a.length - 1 and adds that element to sum; so the loop runs once more and prints Total: 20, with no other change to the code |
 | 3 | loop_body | mis:loop_body->StateChangeIgnoredAcrossPasses | misconception | correct | 0.5 | 0.9 | 0.45 | [1, 2, 4] | The loop visits each index from 0 to a.length - 1 and adds that element to sum; so it prints Total: 12; so the loop runs once more and prints Total: 20, with no other change to the code |
 | 3 | loop_body | mis:loop_body->LoopOutputSameEachPass | misconception | correct | 0.3 | 0.6 | 0.18 | [1] | The loop visits each index from 0 to a.length - 1 and adds that element to sum |
 | 3 | loop_body | mis:loop_body->StatementAfterLoopInBody | misconception | correct | 0.2 | 0.75 | 0.15 | [2, 4] | so it prints Total: 12; so the loop runs once more and prints Total: 20, with no other change to the code |
-| 3 | loop_body | lvl:loop_body@L3#0 | level | shown | 0.4 | 0.6 | 0.24 | [1, 4] | The loop visits each index from 0 to a.length - 1 and adds that element to sum; so the loop runs once more and prints Total: 20, with no other change to the code |
 | 3 | loop_body | lvl:loop_body@L2#1 | level | shown | 0.35 | 0.7 | 0.245 | [1, 4] | The loop visits each index from 0 to a.length - 1 and adds that element to sum; so the loop runs once more and prints Total: 20, with no other change to the code |
 
 ## 6. The paths (what the keep step kept, depth by depth)
@@ -1221,15 +1251,15 @@ start concepts (3): array_traversal, for_loop, loop_control
     mis:array_traversal->ElementBoundToOldIndex -> correct (0.19) "The loop visits each index from 0 to a.length - 1 and adds that element to sum; so it prints Total: 12; so the loop runs once more and prints Total: 20, with no other change to the code"
   array_traversal (level ways): 22 candidates -> kept lvl:array_traversal@L2#1 (0.45), lvl:array_traversal@L4#0 (0.30), lvl:array_traversal@L3#2 (0.25)
     lvl:array_traversal@L2#1 -> shown (0.41) "so it prints Total: 12; so the loop runs once more and prints Total: 20, with no other change to the code"
-    lvl:array_traversal@L4#0 -> shown (0.24) "With 8 added, a.length becomes 4; so the loop runs once more and prints Total: 20, with no other change to the code"
+    lvl:array_traversal@L4#0 -> shown (0.26) "With 8 added, a.length becomes 4; so the loop runs once more and prints Total: 20, with no other change to the code"
     lvl:array_traversal@L3#2 -> shown (0.20) "The loop visits each index from 0 to a.length - 1 and adds that element to sum; With 8 added, a.length becomes 4; so the loop runs once more and prints Total: 20, with no other change to the code"
   for_loop (misconceptions): 21 candidates -> kept err:for_loop->WrongIterationCount (0.45), mis:for_loop->IdiomOverridesCode (0.30), mis:for_loop->ForIsConditional (0.25)
     err:for_loop->WrongIterationCount -> correct (0.38) "The loop visits each index from 0 to a.length - 1 and adds that element to sum; so it prints Total: 12; With 8 added, a.length becomes 4; so the loop runs once more and prints Total: 20, with no other change to the code"
     mis:for_loop->IdiomOverridesCode -> not applied (0.00) ""
     mis:for_loop->ForIsConditional -> correct (0.21) "The loop visits each index from 0 to a.length - 1 and adds that element to sum; so it prints Total: 12; so the loop runs once more and prints Total: 20, with no other change to the code"
   for_loop (level ways): 24 candidates -> kept lvl:for_loop@L3#2 (0.40), lvl:for_loop@L4#0 (0.35), lvl:for_loop@L2#1 (0.25)
-    lvl:for_loop@L3#2 -> shown (0.36) "The loop visits each index from 0 to a.length - 1 and adds that element to sum; With 8 added, a.length becomes 4; so the loop runs once more and prints Total: 20, with no other change to the code"
-    lvl:for_loop@L4#0 -> shown (0.26) "With 8 added, a.length becomes 4; so the loop runs once more and prints Total: 20, with no other change to the code"
+    lvl:for_loop@L3#2 -> shown (0.30) "The loop visits each index from 0 to a.length - 1 and adds that element to sum; With 8 added, a.length becomes 4; so the loop runs once more and prints Total: 20, with no other change to the code"
+    lvl:for_loop@L4#0 -> shown (0.30) "With 8 added, a.length becomes 4; so the loop runs once more and prints Total: 20, with no other change to the code"
     lvl:for_loop@L2#1 -> shown (0.23) "The loop visits each index from 0 to a.length - 1 and adds that element to sum; so it prints Total: 12; With 8 added, a.length becomes 4; so the loop runs once more and prints Total: 20, with no other change to the code"
   loop_control (misconceptions): 11 candidates -> kept mis:loop_control->OffByOneBound (0.45), err:loop_control->WrongIterationCount (0.35), mis:loop_control->IdiomOverridesCode (0.20)
     mis:loop_control->OffByOneBound -> correct (0.38) "The loop visits each index from 0 to a.length - 1 and adds that element to sum; so it prints Total: 12; so the loop runs once more and prints Total: 20, with no other change to the code"
@@ -1238,7 +1268,7 @@ start concepts (3): array_traversal, for_loop, loop_control
   loop_control (level ways): 19 candidates -> kept lvl:loop_control@L2#1 (0.40), lvl:loop_control@L3#5 (0.35), lvl:loop_control@L4#0 (0.25)
     lvl:loop_control@L2#1 -> shown (0.36) "The loop visits each index from 0 to a.length - 1 and adds that element to sum; so it prints Total: 12; so the loop runs once more and prints Total: 20, with no other change to the code"
     lvl:loop_control@L3#5 -> shown (0.28) "The loop visits each index from 0 to a.length - 1 and adds that element to sum; With 8 added, a.length becomes 4; so the loop runs once more and prints Total: 20, with no other change to the code"
-    lvl:loop_control@L4#0 -> shown (0.17) "With 8 added, a.length becomes 4; so the loop runs once more and prints Total: 20, with no other change to the code"
+    lvl:loop_control@L4#0 -> shown (0.20) "With 8 added, a.length becomes 4; so the loop runs once more and prints Total: 20, with no other change to the code"
   kept: lvl:array_traversal@L2#1 [shown, tier 2, 0.41], mis:array_traversal->OffByOneBound [correct, tier 2, 0.38], err:for_loop->WrongIterationCount [correct, tier 2, 0.38]
   clause coverage: c1 <- mis:array_traversal->OffByOneBound; c2 <- mis:array_traversal->ElementBoundToOldIndex; c3 <- mis:array_traversal->OffByOneBound; c4 <- mis:array_traversal->OffByOneBound
   not yet read: pre:for_loop->array_traversal, pre:for_loop->loop_body, pre:for_loop->loop_scope, pre:indexing->array_traversal, pre:length_field->array_traversal, pre:loop_control->for_loop, pre:loop_control->increment_operators, pre:loop_variable->loop_control
@@ -1267,8 +1297,8 @@ start concepts (3): array_traversal, for_loop, loop_control
     mis:loop_variable->LoopVariableLimitsValues -> correct (0.17) "so it prints Total: 12; so the loop runs once more and prints Total: 20, with no other change to the code"
   loop_variable (level ways): 13 candidates -> kept lvl:loop_variable@L2#1 (0.40), lvl:loop_variable@L3#2 (0.30), lvl:loop_variable@L4#0 (0.30)
     lvl:loop_variable@L2#1 -> shown (0.28) "The loop visits each index from 0 to a.length - 1 and adds that element to sum; so the loop runs once more and prints Total: 20, with no other change to the code"
-    lvl:loop_variable@L3#2 -> shown (0.26) "The loop visits each index from 0 to a.length - 1 and adds that element to sum; so the loop runs once more and prints Total: 20, with no other change to the code"
-    lvl:loop_variable@L4#0 -> not applied (0.00) ""
+    lvl:loop_variable@L3#2 -> shown (0.24) "The loop visits each index from 0 to a.length - 1 and adds that element to sum; so the loop runs once more and prints Total: 20, with no other change to the code"
+    lvl:loop_variable@L4#0 -> shown (0.21) "With 8 added, a.length becomes 4; so the loop runs once more and prints Total: 20, with no other change to the code"
   loop_control (concept edges): 2 candidates -> kept pre:loop_control->for_loop (0.75), pre:loop_control->increment_operators (0.25)
     pre:loop_control->for_loop -> confirmed (0.45) "The loop visits each index from 0 to a.length - 1 and adds that element to sum; so the loop runs once more and prints Total: 20, with no other change to the code"
     pre:loop_control->increment_operators -> not applied (0.00) ""
@@ -1276,8 +1306,8 @@ start concepts (3): array_traversal, for_loop, loop_control
     mis:length_field->ArrayHasLengthMethod -> correct (0.72) "The loop visits each index from 0 to a.length - 1 and adds that element to sum; With 8 added, a.length becomes 4"
     mis:length_field->ArrayLengthCannotBeZero -> not applied (0.00) ""
   length_field (level ways): 15 candidates -> kept lvl:length_field@L4#0 (0.50), lvl:length_field@L3#2 (0.30), lvl:length_field@L1#1 (0.20)
-    lvl:length_field@L4#0 -> shown (0.44) "With 8 added, a.length becomes 4; so the loop runs once more and prints Total: 20, with no other change to the code"
-    lvl:length_field@L3#2 -> shown (0.26) "With 8 added, a.length becomes 4; so the loop runs once more and prints Total: 20, with no other change to the code"
+    lvl:length_field@L4#0 -> shown (0.42) "With 8 added, a.length becomes 4; so the loop runs once more and prints Total: 20, with no other change to the code"
+    lvl:length_field@L3#2 -> shown (0.18) "With 8 added, a.length becomes 4; so the loop runs once more and prints Total: 20, with no other change to the code"
     lvl:length_field@L1#1 -> shown (0.16) "The loop visits each index from 0 to a.length - 1 and adds that element to sum; With 8 added, a.length becomes 4"
   array_traversal (concept edges): 2 candidates -> kept pre:for_loop->array_traversal (0.60), pre:indexing->array_traversal (0.40)
     pre:for_loop->array_traversal -> confirmed (0.56) "The loop visits each index from 0 to a.length - 1 and adds that element to sum; With 8 added, a.length becomes 4; so the loop runs once more and prints Total: 20, with no other change to the code"
@@ -1287,7 +1317,7 @@ start concepts (3): array_traversal, for_loop, loop_control
     mis:loop_body->LoopOutputSameEachPass -> correct (0.18) "The loop visits each index from 0 to a.length - 1 and adds that element to sum"
     mis:loop_body->StatementAfterLoopInBody -> correct (0.15) "so it prints Total: 12; so the loop runs once more and prints Total: 20, with no other change to the code"
   loop_body (level ways): 14 candidates -> kept lvl:loop_body@L3#0 (0.40), lvl:loop_body@L2#1 (0.35), lvl:loop_body@L4#0 (0.25)
-    lvl:loop_body@L3#0 -> shown (0.24) "The loop visits each index from 0 to a.length - 1 and adds that element to sum; so the loop runs once more and prints Total: 20, with no other change to the code"
+    lvl:loop_body@L3#0 -> not applied (0.00) ""
     lvl:loop_body@L2#1 -> shown (0.24) "The loop visits each index from 0 to a.length - 1 and adds that element to sum; so the loop runs once more and prints Total: 20, with no other change to the code"
     lvl:loop_body@L4#0 -> not applied (0.00) ""
   for_loop (concept edges): 1 candidates -> kept pre:for_loop->loop_scope (1.00)
@@ -1296,12 +1326,13 @@ start concepts (3): array_traversal, for_loop, loop_control
   clause coverage: c1 <- mis:array_traversal->OffByOneBound; c2 <- mis:array_traversal->ElementBoundToOldIndex; c3 <- mis:array_traversal->OffByOneBound; c4 <- mis:array_traversal->OffByOneBound
   not yet read: pre:array_initializer->length_field, pre:loop_body->accumulator_pattern
   root-cause walk: held on [], broken at [], prerequisites {'array_initializer': ['array_declaration'], 'indexing': ['array_initializer'], 'length_field': ['array_initializer'], 'compound_assignment': ['assignment'], 'increment_operators': ['assignment', 'loop_control'], 'boolean_expression': ['comparison_operators'], 'accumulator_pattern': ['compound_assignment', 'loop_body'], 'array_declaration': ['data_structure'], 'data_structure': ['data_type'], 'comparison_operators': ['expression'], 'array_traversal': ['for_loop', 'indexing', 'length_field'], 'loop_body': ['for_loop'], 'loop_scope': ['for_loop'], 'array_bounds': ['indexing'], 'for_loop': ['loop_control'], 'loop_control': ['loop_variable'], 'control_flow': ['statement'], 'println': ['statement', 'string_literal'], 'string_conversion': ['string_concatenation']}
+  level way lvl:length_field@L3#2 not counted: confidence 0.60 is not above 0.60
   level array_traversal: L4 via predict_a_change "With 8 added, a.length becomes 4; so the loop runs once more and prints Total: 20, with no other change to the code"
   level for_loop: L4 via predict_a_change "With 8 added, a.length becomes 4; so the loop runs once more and prints Total: 20, with no other change to the code"
   level length_field: L4 via predict_a_change "With 8 added, a.length becomes 4; so the loop runs once more and prints Total: 20, with no other change to the code"
-  level loop_body: L3 via relation_to_neighbour "The loop visits each index from 0 to a.length - 1 and adds that element to sum; so the loop runs once more and prints Total: 20, with no other change to the code"
+  level loop_body: L2 via output_prediction "The loop visits each index from 0 to a.length - 1 and adds that element to sum; so the loop runs once more and prints Total: 20, with no other change to the code"
   level loop_control: L4 via predict_a_change "With 8 added, a.length becomes 4; so the loop runs once more and prints Total: 20, with no other change to the code"
-  level loop_variable: L3 via purpose_of_the_whole "The loop visits each index from 0 to a.length - 1 and adds that element to sum; so the loop runs once more and prints Total: 20, with no other change to the code"
+  level loop_variable: L4 via predict_a_change "With 8 added, a.length becomes 4; so the loop runs once more and prints Total: 20, with no other change to the code"
 ```
 
 ## 8. Full diagnosis JSON
@@ -1313,7 +1344,8 @@ start concepts (3): array_traversal, for_loop, loop_control
   "depth": 3,
   "prune_tools": "llm",
   "model": "claude-opus-5-5",
-  "backend": "claude-cli"
+  "backend": "claude-cli",
+  "level_v2": true
  },
  "clauses": [
   "The loop visits each index from 0 to a.length - 1 and adds that element to sum",
@@ -1361,19 +1393,16 @@ start concepts (3): array_traversal, for_loop, loop_control
    "edge": "lvl:length_field@L4#0",
    "source": "level_way",
    "also_shown": [
-    "L3 purpose_of_the_whole",
     "L1 states_the_rule"
    ]
   },
   "loop_body": {
-   "level": "L3",
-   "way": "relation_to_neighbour",
+   "level": "L2",
+   "way": "output_prediction",
    "quote": "The loop visits each index from 0 to a.length - 1 and adds that element to sum; so the loop runs once more and prints Total: 20, with no other change to the code",
-   "edge": "lvl:loop_body@L3#0",
+   "edge": "lvl:loop_body@L2#1",
    "source": "level_way",
-   "also_shown": [
-    "L2 output_prediction"
-   ]
+   "also_shown": []
   },
   "loop_control": {
    "level": "L4",
@@ -1387,12 +1416,13 @@ start concepts (3): array_traversal, for_loop, loop_control
    ]
   },
   "loop_variable": {
-   "level": "L3",
-   "way": "purpose_of_the_whole",
-   "quote": "The loop visits each index from 0 to a.length - 1 and adds that element to sum; so the loop runs once more and prints Total: 20, with no other change to the code",
-   "edge": "lvl:loop_variable@L3#2",
+   "level": "L4",
+   "way": "predict_a_change",
+   "quote": "With 8 added, a.length becomes 4; so the loop runs once more and prints Total: 20, with no other change to the code",
+   "edge": "lvl:loop_variable@L4#0",
    "source": "level_way",
    "also_shown": [
+    "L3 purpose_of_the_whole",
     "L2 output_prediction"
    ]
   }
@@ -1645,9 +1675,9 @@ start concepts (3): array_traversal, for_loop, loop_control
     4
    ],
    "quote": "With 8 added, a.length becomes 4; so the loop runs once more and prints Total: 20, with no other change to the code",
-   "confidence": 0.8,
+   "confidence": 0.85,
    "prune_score": 0.3,
-   "score": 0.24,
+   "score": 0.255,
    "logic": "Conservation: running the index downward (a.length-1 to 0) visits the same set of elements in reverse order, harmless for a sum but not for a shift. Starting at 1 or stopping at a.length-1 drops an element. Invariant: before pass i, elements 0..i-1 have been processed.",
    "twin_logic": null,
    "level": "L4",
@@ -1728,9 +1758,9 @@ start concepts (3): array_traversal, for_loop, loop_control
     4
    ],
    "quote": "The loop visits each index from 0 to a.length - 1 and adds that element to sum; With 8 added, a.length becomes 4; so the loop runs once more and prints Total: 20, with no other change to the code",
-   "confidence": 0.9,
+   "confidence": 0.75,
    "prune_score": 0.4,
-   "score": 0.36,
+   "score": 0.3,
    "logic": "for (int i = 0; i < N; i++) gives i each valid index 0..N-1 exactly once in increasing order, the standard way to process every array element.",
    "twin_logic": null,
    "level": "L3",
@@ -1748,9 +1778,9 @@ start concepts (3): array_traversal, for_loop, loop_control
     4
    ],
    "quote": "With 8 added, a.length becomes 4; so the loop runs once more and prints Total: 20, with no other change to the code",
-   "confidence": 0.75,
+   "confidence": 0.85,
    "prune_score": 0.35,
-   "score": 0.2625,
+   "score": 0.2975,
    "logic": "Rewriting a for as the equivalent while (init before, update at the end of the body) keeps behaviour, except that continue then skips the update and the loop variable stays in scope after the loop. Changing the bound or the step changes the pass count predictably (< to <= adds one pass).",
    "twin_logic": null,
    "level": "L4",
@@ -1871,9 +1901,9 @@ start concepts (3): array_traversal, for_loop, loop_control
     4
    ],
    "quote": "With 8 added, a.length becomes 4; so the loop runs once more and prints Total: 20, with no other change to the code",
-   "confidence": 0.7,
+   "confidence": 0.8,
    "prune_score": 0.25,
-   "score": 0.175,
+   "score": 0.2,
    "logic": "Changing < to <= adds one pass; starting at 1 instead of 0 removes one; doubling the step halves the passes; reversing init and bound with i-- visits the same values in reverse order (and still processes the same set only if both ends are adjusted).",
    "twin_logic": null,
    "level": "L4",
@@ -2077,13 +2107,33 @@ start concepts (3): array_traversal, for_loop, loop_control
     4
    ],
    "quote": "The loop visits each index from 0 to a.length - 1 and adds that element to sum; so the loop runs once more and prints Total: 20, with no other change to the code",
-   "confidence": 0.85,
+   "confidence": 0.8,
    "prune_score": 0.3,
-   "score": 0.255,
+   "score": 0.24,
    "logic": "Role: stepper - a variable stepping through a systematic, predictable succession of values; it counts passes and often serves as an index.",
    "twin_logic": null,
    "level": "L3",
    "way": "purpose_of_the_whole"
+  },
+  {
+   "depth": 3,
+   "source": "loop_variable",
+   "edge": "lvl:loop_variable@L4#0",
+   "target": "loop_variable@L4",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    3,
+    4
+   ],
+   "quote": "With 8 added, a.length becomes 4; so the loop runs once more and prints Total: 20, with no other change to the code",
+   "confidence": 0.7,
+   "prune_score": 0.3,
+   "score": 0.21,
+   "logic": "Shifting the start and the bound by the same amount keeps the number of passes but changes the values the body sees; assigning to the loop variable inside the body changes the pass count.",
+   "twin_logic": null,
+   "level": "L4",
+   "way": "predict_a_change"
   },
   {
    "depth": 3,
@@ -2134,9 +2184,9 @@ start concepts (3): array_traversal, for_loop, loop_control
     4
    ],
    "quote": "With 8 added, a.length becomes 4; so the loop runs once more and prints Total: 20, with no other change to the code",
-   "confidence": 0.88,
+   "confidence": 0.85,
    "prune_score": 0.5,
-   "score": 0.44,
+   "score": 0.425,
    "logic": "Conservation: for a given array object a.length never changes, so loops bounded by a.length stay correct when the array is created with a different size. Reassigning a to another array changes a.length.",
    "twin_logic": null,
    "level": "L4",
@@ -2154,9 +2204,9 @@ start concepts (3): array_traversal, for_loop, loop_control
     4
    ],
    "quote": "With 8 added, a.length becomes 4; so the loop runs once more and prints Total: 20, with no other change to the code",
-   "confidence": 0.85,
+   "confidence": 0.6,
    "prune_score": 0.3,
-   "score": 0.255,
+   "score": 0.18,
    "logic": "Plan/role: a fixed value (Sajaniemi) that lets code adapt to any array size instead of a hard-coded magic number, e.g. loop bounds and the last element.",
    "twin_logic": null,
    "level": "L3",
@@ -2279,26 +2329,6 @@ start concepts (3): array_traversal, for_loop, loop_control
   {
    "depth": 3,
    "source": "loop_body",
-   "edge": "lvl:loop_body@L3#0",
-   "target": "loop_body@L3",
-   "kind": "level",
-   "label": "shown",
-   "clauses": [
-    1,
-    4
-   ],
-   "quote": "The loop visits each index from 0 to a.length - 1 and adds that element to sum; so the loop runs once more and prints Total: 20, with no other change to the code",
-   "confidence": 0.6,
-   "prune_score": 0.4,
-   "score": 0.24,
-   "logic": "The accumulator update (sum += x) is placed inside the body so it runs once per pass, while the accumulator is declared and initialized before the loop.",
-   "twin_logic": null,
-   "level": "L3",
-   "way": "relation_to_neighbour"
-  },
-  {
-   "depth": 3,
-   "source": "loop_body",
    "edge": "lvl:loop_body@L2#1",
    "target": "loop_body@L2",
    "kind": "level",
@@ -2326,11 +2356,25 @@ start concepts (3): array_traversal, for_loop, loop_control
  "unexplained_clauses": [],
  "stop_reason": "max depth",
  "depth_reached": 3,
- "llm_calls": 4,
- "llm_cache_hits": 51,
+ "llm_calls": 0,
+ "llm_cache_hits": 55,
  "llm_calls_by_step": {
   "prune": 18,
   "label": 37
+ },
+ "level_v2": {
+  "wrong_ways": [],
+  "not_counted": [
+   {
+    "concept": "length_field",
+    "edge": "lvl:length_field@L3#2",
+    "level": "L3",
+    "way": "purpose_of_the_whole",
+    "quote": "With 8 added, a.length becomes 4; so the loop runs once more and prints Total: 20, with no other change to the code",
+    "confidence": 0.6,
+    "reason": "confidence 0.60 is not above 0.60"
+   }
+  ]
  }
 }
 ```

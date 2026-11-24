@@ -788,24 +788,28 @@ Prune: the model's reply (edge id and score; the kept edges sum to 1):
 ```
 Kept by pruning: lvl:assignment@L3#6 (0.50), lvl:assignment@L3#9 (0.30), lvl:assignment@L0#9 (0.20)
 
-Label prompt for level way lvl:assignment@L3#6 (the model saw only the concept, the way's name 'relation to neighbour' and its text; no level):
+Label prompt for level way lvl:assignment@L3#6 (the model saw the concept, the way's name 'relation to neighbour', its text, where the way stops and whether the words must be correct; no level):
 > As a statement, i++ has the same effect as the assignment i = i + 1.
+>
+> Where this way stops: Two correct but separate rules are L1. Executing the two in sequence is L2. A relational answer may be correct or a relational error.
 
 Model's reply:
 ```
-Label: not shown
-Clauses: none
-Confidence: 0.9
+Label: wrong
+Clauses: 2
+Confidence: 0.55
 ```
 
-Label prompt for level way lvl:assignment@L3#9 (the model saw only the concept, the way's name 'purpose of the whole' and its text; no level):
+Label prompt for level way lvl:assignment@L3#9 (the model saw the concept, the way's name 'purpose of the whole', its text, where the way stops and whether the words must be correct; no level):
 > Assignment gives a variable its value in each role: initialization, counter update (n = n + 1), gatherer update (sum = sum + x), most-wanted holder update (max = x), or temporary (t = a).
+>
+> Where this way stops: Narrating the lines is L2. A purpose induced from a few traced cases is L2. A wrong purpose is still L3, but with an error.
 
 Model's reply:
 ```
 Label: not shown
 Clauses: none
-Confidence: 0.7
+Confidence: 0.8
 ```
 
 Label prompt for level way lvl:assignment@L0#9 (the model saw only the concept, the way's name 'inconsistent trace' and its text; no level):
@@ -819,11 +823,7 @@ Confidence: 0.8
 ```
 
 Parsed labels:
-| edge | label | prune score | confidence | score | clauses | words |
-|---|---|---|---|---|---|---|
-| lvl:assignment@L3#6 | not applied |  |  | 0.0 |  |  |
-| lvl:assignment@L3#9 | not applied |  |  | 0.0 |  |  |
-| lvl:assignment@L0#9 | not applied |  |  | 0.0 |  |  |
+(none)
 
 #### for_loop, concept edges: 1 edges offered
 Edges offered:
@@ -988,7 +988,7 @@ Root-cause walk: held on ['for_loop', 'increment_operators'], broken at [] (cons
 - loop_control: L0 via inconsistent_trace "Each pass starts by setting i = 1 again; Then i++ runs before the body and adds 2; so i is 3; So every pass prints the same thing, 3"
 - loop_variable: L0 via inconsistent_trace "Each pass starts by setting i = 1 again; Then i++ runs before the body and adds 2; So every pass prints the same thing, 3"
 
-**Stop:** max depth at depth 3; prompts {'prune': 16, 'label': 31}, fresh model calls 9, cache hits 38
+**Stop:** max depth at depth 3; prompts {'prune': 16, 'label': 31}, fresh model calls 0, cache hits 47
 
 ### Held misconceptions
 | concept | misconception | kind | quote | score | shares_evidence_with |
@@ -1022,6 +1022,11 @@ Root-cause walk: held on ['for_loop', 'increment_operators'], broken at [] (cons
 | increment_operators | L0 | misconception | IncrementByTwo | level_mis_links | Then i++ runs before the body and adds 2; so i is 3 | wrong rule: i++ increases i by 2. Right rule: i++ (and ++i) increases i by exactly 1. | PreIncrementBeforeLoop |  |
 | loop_control | L0 | inconsistent_trace |  | level_way | Each pass starts by setting i = 1 again; Then i++ runs before the body and adds 2; so i is 3; So every pass prints the same thing, 3 |  |  |  |
 | loop_variable | L0 | inconsistent_trace |  | level_way | Each pass starts by setting i = 1 again; Then i++ runs before the body and adds 2; So every pass prints the same thing, 3 |  |  |  |
+
+Ways above L2 the model answered "wrong" (the kind of thing is done, but what is said contradicts Java; not shown):
+| concept | edge | level | way | confidence | clauses | quote |
+|---|---|---|---|---|---|---|
+| assignment | lvl:assignment@L3#6 | L3 | relation_to_neighbour | 0.55 | [2] | Then i++ runs before the body and adds 2 |
 
 ### Overall level: L0
 
@@ -1139,6 +1144,7 @@ start concepts (3): loop_control, increment_operators, for_loop
     mis:assignment->AssignmentAddsToTarget -> correct (0.17) "Each pass starts by setting i = 1 again"
     mis:assignment->AssignmentIsEquation -> not applied (0.00) ""
   assignment (level ways): 24 candidates -> kept lvl:assignment@L3#6 (0.50), lvl:assignment@L3#9 (0.30), lvl:assignment@L0#9 (0.20)
+    lvl:assignment@L3#6: wrong (0.55) -> not applied
     lvl:assignment@L3#6 -> not applied (0.00) ""
     lvl:assignment@L3#9 -> not applied (0.00) ""
     lvl:assignment@L0#9 -> not applied (0.00) ""
@@ -1173,7 +1179,8 @@ start concepts (3): loop_control, increment_operators, for_loop
   "depth": 3,
   "prune_tools": "llm",
   "model": "claude-opus-5-5",
-  "backend": "claude-cli"
+  "backend": "claude-cli",
+  "level_v2": true
  },
  "clauses": [
   "Each pass starts by setting i = 1 again",
@@ -1921,11 +1928,27 @@ start concepts (3): loop_control, increment_operators, for_loop
  "unexplained_clauses": [],
  "stop_reason": "max depth",
  "depth_reached": 3,
- "llm_calls": 9,
- "llm_cache_hits": 38,
+ "llm_calls": 0,
+ "llm_cache_hits": 47,
  "llm_calls_by_step": {
   "prune": 16,
   "label": 31
+ },
+ "level_v2": {
+  "wrong_ways": [
+   {
+    "concept": "assignment",
+    "edge": "lvl:assignment@L3#6",
+    "level": "L3",
+    "way": "relation_to_neighbour",
+    "clauses": [
+     2
+    ],
+    "quote": "Then i++ runs before the body and adds 2",
+    "confidence": 0.55
+   }
+  ],
+  "not_counted": []
  }
 }
 ```

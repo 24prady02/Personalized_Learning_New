@@ -5,7 +5,8 @@
   "depth": 3,
   "prune_tools": "llm",
   "model": "claude-opus-5-5",
-  "backend": "claude-cli"
+  "backend": "claude-cli",
+  "level_v2": true
  },
  "clauses": [
   "It does not compile",
@@ -70,14 +71,6 @@
    "way": "everyday_reading",
    "quote": "c is a letter, not a number; so you cannot add 1 to it; Java will give an error that a char and an int cannot be added",
    "edge": "lvl:char_arithmetic@L0#0",
-   "source": "level_way",
-   "also_shown": []
-  },
-  "expression": {
-   "level": "L4",
-   "way": "diagnose_an_error",
-   "quote": "It does not compile; c is a letter, not a number; so you cannot add 1 to it; Java will give an error that a char and an int cannot be added",
-   "edge": "lvl:expression@L4#4",
    "source": "level_way",
    "also_shown": []
   }
@@ -206,28 +199,6 @@
    "twin_logic": null,
    "level": "L0",
    "way": "everyday_reading"
-  },
-  {
-   "depth": 3,
-   "source": "expression",
-   "edge": "lvl:expression@L4#4",
-   "target": "expression@L4",
-   "kind": "level",
-   "label": "shown",
-   "clauses": [
-    1,
-    2,
-    3,
-    4
-   ],
-   "quote": "It does not compile; c is a letter, not a number; so you cannot add 1 to it; Java will give an error that a char and an int cannot be added",
-   "confidence": 0.8,
-   "prune_score": 0.5,
-   "score": 0.4,
-   "logic": "rule broken: Operators accept only operands of suitable types. Kind: compile-time. Trigger class: Applying arithmetic to Strings (\"Hello\" - 1) or comparing booleans with <: 'bad operand types'.",
-   "twin_logic": null,
-   "level": "L4",
-   "way": "diagnose_an_error"
   }
  ],
  "evidence": [
@@ -353,28 +324,6 @@
    "twin_logic": null,
    "level": "L0",
    "way": "everyday_reading"
-  },
-  {
-   "depth": 3,
-   "source": "expression",
-   "edge": "lvl:expression@L4#4",
-   "target": "expression@L4",
-   "kind": "level",
-   "label": "shown",
-   "clauses": [
-    1,
-    2,
-    3,
-    4
-   ],
-   "quote": "It does not compile; c is a letter, not a number; so you cannot add 1 to it; Java will give an error that a char and an int cannot be added",
-   "confidence": 0.8,
-   "prune_score": 0.5,
-   "score": 0.4,
-   "logic": "rule broken: Operators accept only operands of suitable types. Kind: compile-time. Trigger class: Applying arithmetic to Strings (\"Hello\" - 1) or comparing booleans with <: 'bad operand types'.",
-   "twin_logic": null,
-   "level": "L4",
-   "way": "diagnose_an_error"
   }
  ],
  "clause_coverage": {
@@ -386,10 +335,80 @@
  "unexplained_clauses": [],
  "stop_reason": "sufficient",
  "depth_reached": 3,
- "llm_calls": 1,
- "llm_cache_hits": 35,
+ "llm_calls": 0,
+ "llm_cache_hits": 36,
  "llm_calls_by_step": {
   "prune": 13,
   "label": 23
+ },
+ "level_v2": {
+  "wrong_ways": [
+   {
+    "concept": "arithmetic_operators",
+    "edge": "lvl:arithmetic_operators@L4#3",
+    "level": "L4",
+    "way": "diagnose_an_error",
+    "clauses": [
+     1,
+     3,
+     4
+    ],
+    "quote": "It does not compile; so you cannot add 1 to it; Java will give an error that a char and an int cannot be added",
+    "confidence": 0.85
+   },
+   {
+    "concept": "char",
+    "edge": "lvl:char@L3#0",
+    "level": "L3",
+    "way": "relation_to_neighbour",
+    "clauses": [
+     2,
+     3,
+     4
+    ],
+    "quote": "c is a letter, not a number; so you cannot add 1 to it; Java will give an error that a char and an int cannot be added",
+    "confidence": 0.8
+   },
+   {
+    "concept": "char_arithmetic",
+    "edge": "lvl:char_arithmetic@L4#2",
+    "level": "L4",
+    "way": "diagnose_an_error",
+    "clauses": [
+     1,
+     3,
+     4
+    ],
+    "quote": "It does not compile; so you cannot add 1 to it; Java will give an error that a char and an int cannot be added",
+    "confidence": 0.85
+   },
+   {
+    "concept": "expression",
+    "edge": "lvl:expression@L4#4",
+    "level": "L4",
+    "way": "diagnose_an_error",
+    "clauses": [
+     1,
+     3,
+     4
+    ],
+    "quote": "It does not compile; so you cannot add 1 to it; Java will give an error that a char and an int cannot be added",
+    "confidence": 0.85
+   },
+   {
+    "concept": "expression",
+    "edge": "lvl:expression@L3#1",
+    "level": "L3",
+    "way": "relation_to_neighbour",
+    "clauses": [
+     2,
+     3,
+     4
+    ],
+    "quote": "c is a letter, not a number; so you cannot add 1 to it; Java will give an error that a char and an int cannot be added",
+    "confidence": 0.8
+   }
+  ],
+  "not_counted": []
  }
 }

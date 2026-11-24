@@ -8,25 +8,29 @@ start concepts (3): sentinel_loop, division_by_zero, compound_assignment
     mis:sentinel_loop->SentinelProcessed -> correct (0.13) "Nothing was added"
     err:sentinel_loop->NegativeNotFiltered -> not applied (0.00) ""
   sentinel_loop (level ways): 16 candidates -> kept lvl:sentinel_loop@L4#1 (0.50), lvl:sentinel_loop@L2#2 (0.30), lvl:sentinel_loop@L3#1 (0.20)
+    lvl:sentinel_loop@L4#1: wrong (0.80) -> not applied
     lvl:sentinel_loop@L4#1 -> not applied (0.00) ""
     lvl:sentinel_loop@L2#2 -> shown (0.24) "Nothing was added; so sum and count are both 0, and 0 divided by 0 is just 0"
-    lvl:sentinel_loop@L3#1 -> shown (0.16) "Nothing was added; so sum and count are both 0, and 0 divided by 0 is just 0"
+    lvl:sentinel_loop@L3#1: wrong (0.85) -> not applied
+    lvl:sentinel_loop@L3#1 -> not applied (0.00) ""
   division_by_zero (misconceptions): 3 candidates -> kept err:division_by_zero->AverageWithoutZeroGuard (0.60), mis:division_by_zero->ZeroDivisionAlwaysCrashes (0.30), mis:division_by_zero->DivisionByZeroIsCompileError (0.10)
     err:division_by_zero->AverageWithoutZeroGuard -> held (0.51) "0; so sum and count are both 0, and 0 divided by 0 is just 0"
     mis:division_by_zero->ZeroDivisionAlwaysCrashes -> not applied (0.00) ""
     mis:division_by_zero->DivisionByZeroIsCompileError -> not applied (0.00) ""
   division_by_zero (level ways): 15 candidates -> kept lvl:division_by_zero@L4#1 (0.50), lvl:division_by_zero@L2#1 (0.30), lvl:division_by_zero@L4#3 (0.20)
+    lvl:division_by_zero@L4#1: wrong (0.85) -> not applied
     lvl:division_by_zero@L4#1 -> not applied (0.00) ""
     lvl:division_by_zero@L2#1 -> not applied (0.00) ""
+    lvl:division_by_zero@L4#3: wrong (0.90) -> not applied
     lvl:division_by_zero@L4#3 -> not applied (0.00) ""
   compound_assignment (misconceptions): 2 candidates -> kept mis:compound_assignment->CompoundAssignmentNoCast (0.60), mis:compound_assignment->CompoundSubtractIsAssignNegative (0.40)
     mis:compound_assignment->CompoundAssignmentNoCast -> not applied (0.00) ""
     mis:compound_assignment->CompoundSubtractIsAssignNegative -> not applied (0.00) ""
   compound_assignment (level ways): 15 candidates -> kept lvl:compound_assignment@L3#3 (0.50), lvl:compound_assignment@L2#2 (0.30), lvl:compound_assignment@L3#0 (0.20)
-    lvl:compound_assignment@L3#3 -> shown (0.28) "Nothing was added"
+    lvl:compound_assignment@L3#3 -> not applied (0.00) ""
     lvl:compound_assignment@L2#2 -> not applied (0.00) ""
     lvl:compound_assignment@L3#0 -> not applied (0.00) ""
-  kept: err:sentinel_loop->AverageWithoutZeroGuard [held, tier 1, 0.74], err:division_by_zero->AverageWithoutZeroGuard [held, tier 1, 0.51], lvl:compound_assignment@L3#3 [shown, tier 2, 0.28]
+  kept: err:sentinel_loop->AverageWithoutZeroGuard [held, tier 1, 0.74], err:division_by_zero->AverageWithoutZeroGuard [held, tier 1, 0.51], lvl:sentinel_loop@L2#2 [shown, tier 2, 0.24]
   clause coverage: c1 <- err:sentinel_loop->AverageWithoutZeroGuard; c2 <- mis:sentinel_loop->SentinelProcessed; c3 <- err:sentinel_loop->AverageWithoutZeroGuard
   not yet read: par:increment_operators~compound_assignment, pre:accumulator_pattern->sentinel_loop, pre:arithmetic_operators->division_by_zero, pre:assignment->compound_assignment, pre:compound_assignment->accumulator_pattern, pre:division_by_zero->run_time_error, pre:while_loop->sentinel_loop
 --- depth 2: current concepts ['sentinel_loop', 'division_by_zero', 'compound_assignment']
@@ -50,7 +54,9 @@ start concepts (3): sentinel_loop, division_by_zero, compound_assignment
   arithmetic_operators (misconceptions): 3 candidates -> kept mis:arithmetic_operators->RemainderIsSubtraction (1.00)
     mis:arithmetic_operators->RemainderIsSubtraction -> not applied (0.00) ""
   arithmetic_operators (level ways): 18 candidates -> kept lvl:arithmetic_operators@L4#2 (0.50), lvl:arithmetic_operators@L3#2 (0.30), lvl:arithmetic_operators@L1#1 (0.20)
+    lvl:arithmetic_operators@L4#2: wrong (0.80) -> not applied
     lvl:arithmetic_operators@L4#2 -> not applied (0.00) ""
+    lvl:arithmetic_operators@L3#2: wrong (0.60) -> not applied
     lvl:arithmetic_operators@L3#2 -> not applied (0.00) ""
     lvl:arithmetic_operators@L1#1 -> not applied (0.00) ""
   run_time_error (misconceptions): 7 candidates -> kept mis:run_time_error->DivisionByZeroIsCompileError (0.60), mis:run_time_error->CompilesMeansWorks (0.30), err:run_time_error->InputTypeMismatch (0.10)
@@ -58,6 +64,7 @@ start concepts (3): sentinel_loop, division_by_zero, compound_assignment
     mis:run_time_error->CompilesMeansWorks -> not applied (0.00) ""
     err:run_time_error->InputTypeMismatch -> not applied (0.00) ""
   run_time_error (level ways): 19 candidates -> kept lvl:run_time_error@L4#6 (0.60), lvl:run_time_error@L0#0 (0.25), lvl:run_time_error@L2#1 (0.15)
+    lvl:run_time_error@L4#6: wrong (0.85) -> not applied
     lvl:run_time_error@L4#6 -> not applied (0.00) ""
     lvl:run_time_error@L0#0 -> not applied (0.00) ""
     lvl:run_time_error@L2#1 -> not applied (0.00) ""
@@ -66,12 +73,12 @@ start concepts (3): sentinel_loop, division_by_zero, compound_assignment
     mis:accumulator_pattern->VariableRolesInferred -> not applied (0.00) ""
     mis:accumulator_pattern->StateChangeIgnoredAcrossPasses -> not applied (0.00) ""
   accumulator_pattern (level ways): 17 candidates -> kept lvl:accumulator_pattern@L3#2 (0.50), lvl:accumulator_pattern@L2#0 (0.30), lvl:accumulator_pattern@L2#1 (0.20)
-    lvl:accumulator_pattern@L3#2 -> shown (0.40) "Nothing was added; so sum and count are both 0, and 0 divided by 0 is just 0"
+    lvl:accumulator_pattern@L3#2 -> shown (0.30) "Nothing was added; so sum and count are both 0, and 0 divided by 0 is just 0"
     lvl:accumulator_pattern@L2#0 -> shown (0.21) "Nothing was added; so sum and count are both 0, and 0 divided by 0 is just 0"
     lvl:accumulator_pattern@L2#1 -> shown (0.14) "Nothing was added; so sum and count are both 0, and 0 divided by 0 is just 0"
   sentinel_loop (concept edges): 1 candidates -> kept pre:while_loop->sentinel_loop (1.00)
     pre:while_loop->sentinel_loop -> confirmed (0.75) "Nothing was added"
-  kept: pre:while_loop->sentinel_loop [confirmed, tier 2, 0.75], lvl:accumulator_pattern@L3#2 [shown, tier 2, 0.40], lvl:accumulator_pattern@L2#0 [shown, tier 2, 0.21]
+  kept: pre:while_loop->sentinel_loop [confirmed, tier 2, 0.75], lvl:accumulator_pattern@L3#2 [shown, tier 2, 0.30], lvl:accumulator_pattern@L2#0 [shown, tier 2, 0.21]
   reached across pre:while_loop->sentinel_loop, entered next: while_loop
   clause coverage: c1 <- err:sentinel_loop->AverageWithoutZeroGuard; c2 <- mis:sentinel_loop->SentinelProcessed; c3 <- err:sentinel_loop->AverageWithoutZeroGuard
   not yet read: own edges of while_loop, par:accumulator_pattern~counter_pattern, pre:arithmetic_operators->expression, pre:arithmetic_operators->integer_division, pre:loop_body->accumulator_pattern
@@ -82,13 +89,13 @@ start concepts (3): sentinel_loop, division_by_zero, compound_assignment
     mis:while_loop->ProgramEndsAfterLoop -> correct (0.20) "0; so sum and count are both 0, and 0 divided by 0 is just 0"
   while_loop (level ways): 24 candidates -> kept lvl:while_loop@L2#2 (0.40), lvl:while_loop@L4#0 (0.35), lvl:while_loop@L2#0 (0.25)
     lvl:while_loop@L2#2 -> shown (0.30) "Nothing was added; so sum and count are both 0, and 0 divided by 0 is just 0"
-    lvl:while_loop@L4#0 -> shown (0.24) "Nothing was added; so sum and count are both 0, and 0 divided by 0 is just 0"
+    lvl:while_loop@L4#0 -> not applied (0.00) ""
     lvl:while_loop@L2#0 -> shown (0.17) "Nothing was added; so sum and count are both 0, and 0 divided by 0 is just 0"
-  kept: mis:while_loop->LoopBodyAlwaysOnce [correct, tier 2, 0.41], lvl:while_loop@L2#2 [shown, tier 2, 0.30], lvl:while_loop@L4#0 [shown, tier 2, 0.24]
+  kept: mis:while_loop->LoopBodyAlwaysOnce [correct, tier 2, 0.41], lvl:while_loop@L2#2 [shown, tier 2, 0.30], err:while_loop->LoopIgnoresCodeBefore [correct, tier 2, 0.21]
   clause coverage: c1 <- err:sentinel_loop->AverageWithoutZeroGuard; c2 <- mis:sentinel_loop->SentinelProcessed; c3 <- err:sentinel_loop->AverageWithoutZeroGuard
   not yet read: par:accumulator_pattern~counter_pattern, pre:arithmetic_operators->expression, pre:arithmetic_operators->integer_division, pre:boolean_expression->while_loop, pre:loop_body->accumulator_pattern, pre:while_loop->loop_body, pre:while_loop->loop_control
   root-cause walk: held on ['division_by_zero', 'sentinel_loop'], broken at ['division_by_zero', 'run_time_error'], prerequisites {'sentinel_loop': ['accumulator_pattern', 'while_loop'], 'division_by_zero': ['arithmetic_operators'], 'expression': ['arithmetic_operators'], 'integer_division': ['arithmetic_operators'], 'compound_assignment': ['assignment'], 'increment_operators': ['assignment', 'loop_control'], 'while_loop': ['boolean_expression'], 'boolean_expression': ['comparison_operators'], 'accumulator_pattern': ['compound_assignment', 'loop_body'], 'assignment': ['declaration'], 'named_constants': ['declaration'], 'run_time_error': ['division_by_zero'], 'comparison_operators': ['expression'], 'method_call': ['expression'], 'counter_pattern': ['increment_operators', 'loop_body'], 'api': ['method_call'], 'filter': ['standard_input'], 'input_format': ['standard_input'], 'control_flow': ['statement'], 'println': ['statement'], 'standard_input': ['stream_model'], 'standard_output': ['stream_model'], 'loop_body': ['while_loop'], 'loop_control': ['while_loop']}
-  level accumulator_pattern: L3 via relation_to_neighbour "Nothing was added; so sum and count are both 0, and 0 divided by 0 is just 0"
-  level compound_assignment: L3 via purpose_of_the_whole "Nothing was added"
-  level sentinel_loop: L3 via relation_to_neighbour "Nothing was added; so sum and count are both 0, and 0 divided by 0 is just 0"
-  level while_loop: L4 via predict_a_change "Nothing was added; so sum and count are both 0, and 0 divided by 0 is just 0"
+  level way lvl:accumulator_pattern@L3#2 not counted: confidence 0.60 is not above 0.60
+  level accumulator_pattern: L2 via line_by_line_trace "Nothing was added; so sum and count are both 0, and 0 divided by 0 is just 0"
+  level sentinel_loop: L2 via one_step_execution "Nothing was added; so sum and count are both 0, and 0 divided by 0 is just 0"
+  level while_loop: L2 via one_step_execution "Nothing was added; so sum and count are both 0, and 0 divided by 0 is just 0"

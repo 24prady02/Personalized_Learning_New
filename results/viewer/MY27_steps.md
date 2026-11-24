@@ -136,13 +136,15 @@ Prune: the model's reply (edge id and score; the kept edges sum to 1):
 ```
 Kept by pruning: lvl:arithmetic_operators@L3#3 (0.60), lvl:arithmetic_operators@L1#1 (0.20), lvl:arithmetic_operators@L2#0 (0.20)
 
-Label prompt for level way lvl:arithmetic_operators@L3#3 (the model saw only the concept, the way's name 'relation to neighbour' and its text; no level):
+Label prompt for level way lvl:arithmetic_operators@L3#3 (the model saw the concept, the way's name 'relation to neighbour', its text, where the way stops and whether the words must be correct; no level):
 > + adds when both operands are numbers and concatenates when either operand is a String, converting the other operand to a String. It is left-associative, so 1 + 2 + "3" is "33" but "1" + 2 + 3 is "123".
+>
+> Where this way stops: Two correct but separate rules are L1. Executing the two in sequence is L2. A relational answer may be correct or a relational error.
 
 Model's reply:
 ```
-Label: not shown
-Clauses: none
+Label: wrong
+Clauses: 1, 2, 3
 Confidence: 0.85
 ```
 
@@ -167,11 +169,7 @@ Confidence: 0.85
 ```
 
 Parsed labels:
-| edge | label | prune score | confidence | score | clauses | words |
-|---|---|---|---|---|---|---|
-| lvl:arithmetic_operators@L3#3 | not applied |  |  | 0.0 |  |  |
-| lvl:arithmetic_operators@L1#1 | not applied |  |  | 0.0 |  |  |
-| lvl:arithmetic_operators@L2#0 | not applied |  |  | 0.0 |  |  |
+(none)
 
 #### string_concatenation, misconceptions: 3 edges offered
 Edges offered:
@@ -246,24 +244,28 @@ Clauses: 1, 2, 3
 Confidence: 0.85
 ```
 
-Label prompt for level way lvl:string_concatenation@L4#2 (the model saw only the concept, the way's name 'diagnose an error' and its text; no level):
+Label prompt for level way lvl:string_concatenation@L4#2 (the model saw the concept, the way's name 'diagnose an error', its text, where the way stops and whether the words must be correct; no level):
 > rule broken: Once a String appears in a + chain, every later + concatenates. Kind: silent logic error. Trigger class: "Sum: " + a + b with numbers a and b prints both digit strings side by side (e.g. Sum: 23).
+>
+> Where this way stops: Locating and fixing the mistake for one given failing case is L3. A compiler-flagged slip fixed from the message is weak evidence.
 
 Model's reply:
 ```
 Label: not shown
 Clauses: none
-Confidence: 0.9
+Confidence: 0.8
 ```
 
-Label prompt for level way lvl:string_concatenation@L3#2 (the model saw only the concept, the way's name 'relation to neighbour' and its text; no level):
+Label prompt for level way lvl:string_concatenation@L3#2 (the model saw the concept, the way's name 'relation to neighbour', its text, where the way stops and whether the words must be correct; no level):
 > + adds when both operands are numbers and concatenates when either operand is a String, converting the other operand to a String. It is left-associative, so 1 + 2 + "3" is "33" but "1" + 2 + 3 is "123".
+>
+> Where this way stops: Two correct but separate rules are L1. Executing the two in sequence is L2. A relational answer may be correct or a relational error.
 
 Model's reply:
 ```
-Label: not shown
-Clauses: none
-Confidence: 0.9
+Label: wrong
+Clauses: 2, 3
+Confidence: 0.85
 ```
 
 Parsed labels:
@@ -271,7 +273,6 @@ Parsed labels:
 |---|---|---|---|---|---|---|
 | lvl:string_concatenation@L0#3 | shown | 0.6 | 0.85 | 0.51 | c1, c2, c3 | 339; Java adds the numbers first; so 1 + 2 is 3 and 4 + 5 is 9, then it joins them with the 3 |
 | lvl:string_concatenation@L4#2 | not applied |  |  | 0.0 |  |  |
-| lvl:string_concatenation@L3#2 | not applied |  |  | 0.0 |  |  |
 
 #### string_conversion, misconceptions: 1 edges offered
 Edges offered:
@@ -345,14 +346,16 @@ Clauses: 1, 2, 3
 Confidence: 0.85
 ```
 
-Label prompt for level way lvl:string_conversion@L4#2 (the model saw only the concept, the way's name 'diagnose an error' and its text; no level):
+Label prompt for level way lvl:string_conversion@L4#2 (the model saw the concept, the way's name 'diagnose an error', its text, where the way stops and whether the words must be correct; no level):
 > rule broken: + is left-associative, so terms after a String are concatenated, not added. Kind: silent logic error. Trigger class: A numeric sum written after a String without parentheses, e.g. "Sum: " + a + b printing "Sum: 34" for a = 3, b = 4.
+>
+> Where this way stops: Locating and fixing the mistake for one given failing case is L3. A compiler-flagged slip fixed from the message is weak evidence.
 
 Model's reply:
 ```
 Label: not shown
 Clauses: none
-Confidence: 0.9
+Confidence: 0.8
 ```
 
 Parsed labels:
@@ -552,13 +555,15 @@ Prune: the model's reply (edge id and score; the kept edges sum to 1):
 ```
 Kept by pruning: lvl:expression@L3#2 (0.50), lvl:expression@L0#2 (0.30), lvl:expression@L3#1 (0.20)
 
-Label prompt for level way lvl:expression@L3#2 (the model saw only the concept, the way's name 'relation to neighbour' and its text; no level):
+Label prompt for level way lvl:expression@L3#2 (the model saw the concept, the way's name 'relation to neighbour', its text, where the way stops and whether the words must be correct; no level):
 > With several operators, precedence and left associativity decide the grouping, and parentheses override both.
+>
+> Where this way stops: Two correct but separate rules are L1. Executing the two in sequence is L2. A relational answer may be correct or a relational error.
 
 Model's reply:
 ```
-Label: not shown
-Clauses: none
+Label: wrong
+Clauses: 1, 2, 3
 Confidence: 0.85
 ```
 
@@ -572,26 +577,24 @@ Clauses: 1, 3
 Confidence: 0.6
 ```
 
-Label prompt for level way lvl:expression@L3#1 (the model saw only the concept, the way's name 'relation to neighbour' and its text; no level):
+Label prompt for level way lvl:expression@L3#1 (the model saw the concept, the way's name 'relation to neighbour', its text, where the way stops and whether the words must be correct; no level):
 > Operators combine operand values into a new value, and the operand types choose the operation (int / truncates, double / does not).
+>
+> Where this way stops: Two correct but separate rules are L1. Executing the two in sequence is L2. A relational answer may be correct or a relational error.
 
 Model's reply:
 ```
-Label: shown
+Label: wrong
 Clauses: 2, 3
-Confidence: 0.6
+Confidence: 0.75
 ```
 
 Parsed labels:
-| edge | label | prune score | confidence | score | clauses | words |
-|---|---|---|---|---|---|---|
-| lvl:expression@L3#2 | not applied |  |  | 0.0 |  |  |
-| lvl:expression@L0#2 | shown | 0.3 | 0.6 | 0.18 | c1, c3 | 339; so 1 + 2 is 3 and 4 + 5 is 9, then it joins them with the 3 |
-| lvl:expression@L3#1 | shown | 0.2 | 0.6 | 0.12 | c2, c3 | Java adds the numbers first; so 1 + 2 is 3 and 4 + 5 is 9, then it joins them with the 3 |
+(none)
 
 **Kept on a path at this depth** (best N in tiers: held misconception / broken edge, then held error, then correct / confirmed / shown):
 
-lvl:expression@L0#2 [shown, tier 2, 0.18], lvl:expression@L3#1 [shown, tier 2, 0.12]
+lvl:expression@L0#2 [shown, tier 2, 0.18]
 
 **Clause coverage after this depth:**
 | clause | text | covered by |
@@ -604,7 +607,7 @@ Figure 6 (the graph after depth 3): C:\Users\magnu\OneDrive\Desktop\ES_VIterbi_P
 
 ## 4. Diagnosis (rules over the labelled graph, no model)
 Root-cause walk: held on ['string_concatenation', 'string_conversion'], broken at [] (consequences: par:string_concatenation~arithmetic_operators, pre:string_concatenation->string_conversion), prerequisites {'expression': ['arithmetic_operators'], 'println': ['statement', 'string_literal'], 'string_conversion': ['string_concatenation']}
-- expression: L3 via relation_to_neighbour "Java adds the numbers first; so 1 + 2 is 3 and 4 + 5 is 9, then it joins them with the 3"
+- expression: L0 via inconsistent_trace "339; so 1 + 2 is 3 and 4 + 5 is 9, then it joins them with the 3"
 - string_concatenation: L0 via misconception "339; Java adds the numbers first; so 1 + 2 is 3 and 4 + 5 is 9, then it joins them with the 3"
 - string_conversion: L0 via misconception "339; Java adds the numbers first; so 1 + 2 is 3 and 4 + 5 is 9, then it joins them with the 3"
 
@@ -627,9 +630,17 @@ Root-cause walk: held on ['string_concatenation', 'string_conversion'], broken a
 ### Level per concept
 | concept | level | way | misconception | source | quote | rule | also | note |
 |---|---|---|---|---|---|---|---|---|
-| expression | L3 | relation_to_neighbour |  | level_way | Java adds the numbers first; so 1 + 2 is 3 and 4 + 5 is 9, then it joins them with the 3 |  | L0 inconsistent_trace |  |
+| expression | L0 | inconsistent_trace |  | level_way | 339; so 1 + 2 is 3 and 4 + 5 is 9, then it joins them with the 3 |  |  |  |
 | string_concatenation | L0 | misconception | ArithmeticPlusPrecedes | level_mis_links | 339; Java adds the numbers first; so 1 + 2 is 3 and 4 + 5 is 9, then it joins them with the 3 | wrong rule: arithmetic + binds tighter than string-concatenation +. Right rule: Both uses of + have the same precedence and are evaluated left to right, so "s" + a + b joins a and then b as text; only "s" + (a + b) adds them first. |  |  |
 | string_conversion | L0 | misconception | StringPlusLeftToRight | level_mis_links | 339; Java adds the numbers first; so 1 + 2 is 3 and 4 + 5 is 9, then it joins them with the 3 | wrong rule: 2 + 3 + "bc" and "bc" + 2 + 3 give the same text. Right rule: + is evaluated left to right: 2 + 3 + "bc" is "5bc" but "bc" + 2 + 3 is "bc23". |  |  |
+
+Ways above L2 the model answered "wrong" (the kind of thing is done, but what is said contradicts Java; not shown):
+| concept | edge | level | way | confidence | clauses | quote |
+|---|---|---|---|---|---|---|
+| arithmetic_operators | lvl:arithmetic_operators@L3#3 | L3 | relation_to_neighbour | 0.85 | [1, 2, 3] | 339; Java adds the numbers first; so 1 + 2 is 3 and 4 + 5 is 9, then it joins them with the 3 |
+| string_concatenation | lvl:string_concatenation@L3#2 | L3 | relation_to_neighbour | 0.85 | [2, 3] | Java adds the numbers first; so 1 + 2 is 3 and 4 + 5 is 9, then it joins them with the 3 |
+| expression | lvl:expression@L3#2 | L3 | relation_to_neighbour | 0.85 | [1, 2, 3] | 339; Java adds the numbers first; so 1 + 2 is 3 and 4 + 5 is 9, then it joins them with the 3 |
+| expression | lvl:expression@L3#1 | L3 | relation_to_neighbour | 0.75 | [2, 3] | Java adds the numbers first; so 1 + 2 is 3 and 4 + 5 is 9, then it joins them with the 3 |
 
 ### Overall level: L0
 
@@ -654,7 +665,6 @@ Figure 7 (final picture): C:\Users\magnu\OneDrive\Desktop\ES_VIterbi_Personalize
 | 2 | string_concatenation | par:string_concatenation~arithmetic_operators | parallel | broken | 1.0 | 0.95 | 0.95 | [1, 2, 3] | 339; Java adds the numbers first; so 1 + 2 is 3 and 4 + 5 is 9, then it joins them with the 3 |
 | 2 | arithmetic_operators | pre:arithmetic_operators->expression | prerequisite | confirmed | 1.0 | 0.6 | 0.6 | [3] | so 1 + 2 is 3 and 4 + 5 is 9, then it joins them with the 3 |
 | 3 | expression | lvl:expression@L0#2 | level | shown | 0.3 | 0.6 | 0.18 | [1, 3] | 339; so 1 + 2 is 3 and 4 + 5 is 9, then it joins them with the 3 |
-| 3 | expression | lvl:expression@L3#1 | level | shown | 0.2 | 0.6 | 0.12 | [2, 3] | Java adds the numbers first; so 1 + 2 is 3 and 4 + 5 is 9, then it joins them with the 3 |
 
 ## 6. The paths (what the keep step kept, depth by depth)
 | depth | source | edge | kind | label | score | clauses |
@@ -666,7 +676,6 @@ Figure 7 (final picture): C:\Users\magnu\OneDrive\Desktop\ES_VIterbi_Personalize
 | 2 | string_conversion | pre:string_concatenation->string_conversion | prerequisite | broken | 0.85 | [1, 3] |
 | 2 | arithmetic_operators | pre:arithmetic_operators->expression | prerequisite | confirmed | 0.6 | [3] |
 | 3 | expression | lvl:expression@L0#2 | level | shown | 0.18 | [1, 3] |
-| 3 | expression | lvl:expression@L3#1 | level | shown | 0.12 | [2, 3] |
 
 ## 7. Raw traversal log
 ```
@@ -679,6 +688,7 @@ start concepts (3): arithmetic_operators, string_concatenation, string_conversio
   arithmetic_operators (misconceptions): 3 candidates -> kept mis:arithmetic_operators->ArithmeticOnNumericStrings (1.00)
     mis:arithmetic_operators->ArithmeticOnNumericStrings -> not applied (0.00) ""
   arithmetic_operators (level ways): 18 candidates -> kept lvl:arithmetic_operators@L3#3 (0.60), lvl:arithmetic_operators@L1#1 (0.20), lvl:arithmetic_operators@L2#0 (0.20)
+    lvl:arithmetic_operators@L3#3: wrong (0.85) -> not applied
     lvl:arithmetic_operators@L3#3 -> not applied (0.00) ""
     lvl:arithmetic_operators@L1#1 -> not applied (0.00) ""
     lvl:arithmetic_operators@L2#0 -> not applied (0.00) ""
@@ -689,6 +699,7 @@ start concepts (3): arithmetic_operators, string_concatenation, string_conversio
   string_concatenation (level ways): 16 candidates -> kept lvl:string_concatenation@L0#3 (0.60), lvl:string_concatenation@L4#2 (0.25), lvl:string_concatenation@L3#2 (0.15)
     lvl:string_concatenation@L0#3 -> shown (0.51) "339; Java adds the numbers first; so 1 + 2 is 3 and 4 + 5 is 9, then it joins them with the 3"
     lvl:string_concatenation@L4#2 -> not applied (0.00) ""
+    lvl:string_concatenation@L3#2: wrong (0.85) -> not applied
     lvl:string_concatenation@L3#2 -> not applied (0.00) ""
   string_conversion (misconceptions): 1 candidates -> kept mis:string_conversion->StringPlusLeftToRight (1.00)
     mis:string_conversion->StringPlusLeftToRight -> held (0.90) "339; Java adds the numbers first; so 1 + 2 is 3 and 4 + 5 is 9, then it joins them with the 3"
@@ -716,13 +727,15 @@ start concepts (3): arithmetic_operators, string_concatenation, string_conversio
     mis:expression->OutsideInMethodNesting -> not applied (0.00) ""
     mis:expression->NoAtomicExpression -> not applied (0.00) ""
   expression (level ways): 19 candidates -> kept lvl:expression@L3#2 (0.50), lvl:expression@L0#2 (0.30), lvl:expression@L3#1 (0.20)
+    lvl:expression@L3#2: wrong (0.85) -> not applied
     lvl:expression@L3#2 -> not applied (0.00) ""
     lvl:expression@L0#2 -> shown (0.18) "339; so 1 + 2 is 3 and 4 + 5 is 9, then it joins them with the 3"
-    lvl:expression@L3#1 -> shown (0.12) "Java adds the numbers first; so 1 + 2 is 3 and 4 + 5 is 9, then it joins them with the 3"
-  kept: lvl:expression@L0#2 [shown, tier 2, 0.18], lvl:expression@L3#1 [shown, tier 2, 0.12]
+    lvl:expression@L3#1: wrong (0.75) -> not applied
+    lvl:expression@L3#1 -> not applied (0.00) ""
+  kept: lvl:expression@L0#2 [shown, tier 2, 0.18]
   clause coverage: c1 <- mis:string_concatenation->ArithmeticPlusPrecedes; c2 <- mis:string_concatenation->ArithmeticPlusPrecedes; c3 <- mis:string_concatenation->ArithmeticPlusPrecedes
   root-cause walk: held on ['string_concatenation', 'string_conversion'], broken at [] (consequences: par:string_concatenation~arithmetic_operators, pre:string_concatenation->string_conversion), prerequisites {'expression': ['arithmetic_operators'], 'println': ['statement', 'string_literal'], 'string_conversion': ['string_concatenation']}
-  level expression: L3 via relation_to_neighbour "Java adds the numbers first; so 1 + 2 is 3 and 4 + 5 is 9, then it joins them with the 3"
+  level expression: L0 via inconsistent_trace "339; so 1 + 2 is 3 and 4 + 5 is 9, then it joins them with the 3"
   level string_concatenation: L0 via misconception "339; Java adds the numbers first; so 1 + 2 is 3 and 4 + 5 is 9, then it joins them with the 3"
   level string_conversion: L0 via misconception "339; Java adds the numbers first; so 1 + 2 is 3 and 4 + 5 is 9, then it joins them with the 3"
 ```
@@ -736,7 +749,8 @@ start concepts (3): arithmetic_operators, string_concatenation, string_conversio
   "depth": 3,
   "prune_tools": "llm",
   "model": "claude-opus-5-5",
-  "backend": "claude-cli"
+  "backend": "claude-cli",
+  "level_v2": true
  },
  "clauses": [
   "339",
@@ -786,14 +800,12 @@ start concepts (3): arithmetic_operators, string_concatenation, string_conversio
  },
  "levels": {
   "expression": {
-   "level": "L3",
-   "way": "relation_to_neighbour",
-   "quote": "Java adds the numbers first; so 1 + 2 is 3 and 4 + 5 is 9, then it joins them with the 3",
-   "edge": "lvl:expression@L3#1",
+   "level": "L0",
+   "way": "inconsistent_trace",
+   "quote": "339; so 1 + 2 is 3 and 4 + 5 is 9, then it joins them with the 3",
+   "edge": "lvl:expression@L0#2",
    "source": "level_way",
-   "also_shown": [
-    "L0 inconsistent_trace"
-   ]
+   "also_shown": []
   },
   "string_concatenation": {
    "level": "L0",
@@ -952,26 +964,6 @@ start concepts (3): arithmetic_operators, string_concatenation, string_conversio
    "twin_logic": null,
    "level": "L0",
    "way": "inconsistent_trace"
-  },
-  {
-   "depth": 3,
-   "source": "expression",
-   "edge": "lvl:expression@L3#1",
-   "target": "expression@L3",
-   "kind": "level",
-   "label": "shown",
-   "clauses": [
-    2,
-    3
-   ],
-   "quote": "Java adds the numbers first; so 1 + 2 is 3 and 4 + 5 is 9, then it joins them with the 3",
-   "confidence": 0.6,
-   "prune_score": 0.2,
-   "score": 0.12,
-   "logic": "Operators combine operand values into a new value, and the operand types choose the operation (int / truncates, double / does not).",
-   "twin_logic": null,
-   "level": "L3",
-   "way": "relation_to_neighbour"
   }
  ],
  "evidence": [
@@ -1152,26 +1144,6 @@ start concepts (3): arithmetic_operators, string_concatenation, string_conversio
    "twin_logic": null,
    "level": "L0",
    "way": "inconsistent_trace"
-  },
-  {
-   "depth": 3,
-   "source": "expression",
-   "edge": "lvl:expression@L3#1",
-   "target": "expression@L3",
-   "kind": "level",
-   "label": "shown",
-   "clauses": [
-    2,
-    3
-   ],
-   "quote": "Java adds the numbers first; so 1 + 2 is 3 and 4 + 5 is 9, then it joins them with the 3",
-   "confidence": 0.6,
-   "prune_score": 0.2,
-   "score": 0.12,
-   "logic": "Operators combine operand values into a new value, and the operand types choose the operation (int / truncates, double / does not).",
-   "twin_logic": null,
-   "level": "L3",
-   "way": "relation_to_neighbour"
   }
  ],
  "clause_coverage": {
@@ -1187,6 +1159,61 @@ start concepts (3): arithmetic_operators, string_concatenation, string_conversio
  "llm_calls_by_step": {
   "prune": 11,
   "label": 19
+ },
+ "level_v2": {
+  "wrong_ways": [
+   {
+    "concept": "arithmetic_operators",
+    "edge": "lvl:arithmetic_operators@L3#3",
+    "level": "L3",
+    "way": "relation_to_neighbour",
+    "clauses": [
+     1,
+     2,
+     3
+    ],
+    "quote": "339; Java adds the numbers first; so 1 + 2 is 3 and 4 + 5 is 9, then it joins them with the 3",
+    "confidence": 0.85
+   },
+   {
+    "concept": "string_concatenation",
+    "edge": "lvl:string_concatenation@L3#2",
+    "level": "L3",
+    "way": "relation_to_neighbour",
+    "clauses": [
+     2,
+     3
+    ],
+    "quote": "Java adds the numbers first; so 1 + 2 is 3 and 4 + 5 is 9, then it joins them with the 3",
+    "confidence": 0.85
+   },
+   {
+    "concept": "expression",
+    "edge": "lvl:expression@L3#2",
+    "level": "L3",
+    "way": "relation_to_neighbour",
+    "clauses": [
+     1,
+     2,
+     3
+    ],
+    "quote": "339; Java adds the numbers first; so 1 + 2 is 3 and 4 + 5 is 9, then it joins them with the 3",
+    "confidence": 0.85
+   },
+   {
+    "concept": "expression",
+    "edge": "lvl:expression@L3#1",
+    "level": "L3",
+    "way": "relation_to_neighbour",
+    "clauses": [
+     2,
+     3
+    ],
+    "quote": "Java adds the numbers first; so 1 + 2 is 3 and 4 + 5 is 9, then it joins them with the 3",
+    "confidence": 0.75
+   }
+  ],
+  "not_counted": []
  }
 }
 ```

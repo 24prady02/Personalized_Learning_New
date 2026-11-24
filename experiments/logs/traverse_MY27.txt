@@ -7,6 +7,7 @@ start concepts (3): arithmetic_operators, string_concatenation, string_conversio
   arithmetic_operators (misconceptions): 3 candidates -> kept mis:arithmetic_operators->ArithmeticOnNumericStrings (1.00)
     mis:arithmetic_operators->ArithmeticOnNumericStrings -> not applied (0.00) ""
   arithmetic_operators (level ways): 18 candidates -> kept lvl:arithmetic_operators@L3#3 (0.60), lvl:arithmetic_operators@L1#1 (0.20), lvl:arithmetic_operators@L2#0 (0.20)
+    lvl:arithmetic_operators@L3#3: wrong (0.85) -> not applied
     lvl:arithmetic_operators@L3#3 -> not applied (0.00) ""
     lvl:arithmetic_operators@L1#1 -> not applied (0.00) ""
     lvl:arithmetic_operators@L2#0 -> not applied (0.00) ""
@@ -17,6 +18,7 @@ start concepts (3): arithmetic_operators, string_concatenation, string_conversio
   string_concatenation (level ways): 16 candidates -> kept lvl:string_concatenation@L0#3 (0.60), lvl:string_concatenation@L4#2 (0.25), lvl:string_concatenation@L3#2 (0.15)
     lvl:string_concatenation@L0#3 -> shown (0.51) "339; Java adds the numbers first; so 1 + 2 is 3 and 4 + 5 is 9, then it joins them with the 3"
     lvl:string_concatenation@L4#2 -> not applied (0.00) ""
+    lvl:string_concatenation@L3#2: wrong (0.85) -> not applied
     lvl:string_concatenation@L3#2 -> not applied (0.00) ""
   string_conversion (misconceptions): 1 candidates -> kept mis:string_conversion->StringPlusLeftToRight (1.00)
     mis:string_conversion->StringPlusLeftToRight -> held (0.90) "339; Java adds the numbers first; so 1 + 2 is 3 and 4 + 5 is 9, then it joins them with the 3"
@@ -44,12 +46,14 @@ start concepts (3): arithmetic_operators, string_concatenation, string_conversio
     mis:expression->OutsideInMethodNesting -> not applied (0.00) ""
     mis:expression->NoAtomicExpression -> not applied (0.00) ""
   expression (level ways): 19 candidates -> kept lvl:expression@L3#2 (0.50), lvl:expression@L0#2 (0.30), lvl:expression@L3#1 (0.20)
+    lvl:expression@L3#2: wrong (0.85) -> not applied
     lvl:expression@L3#2 -> not applied (0.00) ""
     lvl:expression@L0#2 -> shown (0.18) "339; so 1 + 2 is 3 and 4 + 5 is 9, then it joins them with the 3"
-    lvl:expression@L3#1 -> shown (0.12) "Java adds the numbers first; so 1 + 2 is 3 and 4 + 5 is 9, then it joins them with the 3"
-  kept: lvl:expression@L0#2 [shown, tier 2, 0.18], lvl:expression@L3#1 [shown, tier 2, 0.12]
+    lvl:expression@L3#1: wrong (0.75) -> not applied
+    lvl:expression@L3#1 -> not applied (0.00) ""
+  kept: lvl:expression@L0#2 [shown, tier 2, 0.18]
   clause coverage: c1 <- mis:string_concatenation->ArithmeticPlusPrecedes; c2 <- mis:string_concatenation->ArithmeticPlusPrecedes; c3 <- mis:string_concatenation->ArithmeticPlusPrecedes
   root-cause walk: held on ['string_concatenation', 'string_conversion'], broken at [] (consequences: par:string_concatenation~arithmetic_operators, pre:string_concatenation->string_conversion), prerequisites {'expression': ['arithmetic_operators'], 'println': ['statement', 'string_literal'], 'string_conversion': ['string_concatenation']}
-  level expression: L3 via relation_to_neighbour "Java adds the numbers first; so 1 + 2 is 3 and 4 + 5 is 9, then it joins them with the 3"
+  level expression: L0 via inconsistent_trace "339; so 1 + 2 is 3 and 4 + 5 is 9, then it joins them with the 3"
   level string_concatenation: L0 via misconception "339; Java adds the numbers first; so 1 + 2 is 3 and 4 + 5 is 9, then it joins them with the 3"
   level string_conversion: L0 via misconception "339; Java adds the numbers first; so 1 + 2 is 3 and 4 + 5 is 9, then it joins them with the 3"
