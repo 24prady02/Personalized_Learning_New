@@ -14,6 +14,31 @@ through the whole pipeline (Stage 1 to Stage 7) and has its own folder under `ru
 not by independent human raters, so these numbers measure agreement with the design, not accuracy against graded
 answers.
 
+## How the overall level is calculated, in simple words
+
+Every run in `runs/` gets its overall level in the same four steps. The README and the notebook of each run show
+these steps with that run's own numbers.
+
+1. **Find the parts of the answer.** One answer touches several concepts, for example the `for` loop, its body and
+   `i++`. Each concept the student says something about gets its own level, L0 to L4, from what the student wrote
+   about it. These are the *components*. Very general concepts (such as "statement") are left out.
+2. **Is a real mistake held?** If the student holds a wrong rule about Java (a misconception or an error), the
+   overall level is **L0**, however well the other parts are done. An answer built on a wrong rule is L0.
+3. **If there is no mistake, count.** Count how many components are at each level. The level that most components
+   have is the overall level. If two levels have the same count, the lower one is taken.
+4. **Check how far apart the parts are.** If all components are within one level of each other, the answer is
+   *coherent*. If they are two or more levels apart, it is marked *LOW coherence*: the one number hides real
+   differences, so read the component table too.
+
+Two examples from this folder:
+
+- **LP04** (a mistake is held). Seven components: 3 at L0 and 4 at L2. The student holds the wrong rule
+  BodyChangeIgnoredByCondition, so the overall level is **L0**, with LOW coherence.
+- **LP15** (no mistake). Five components: 4 at L3 and 1 at L2. Most are at L3, so the overall level is **L3**,
+  coherent.
+
+If no concept gets a level at all (LP20: the bare output "5 5" with no reason), the answer gets no level.
+
 ## The rule
 
 **Per component.** A component is a concept the answer touches. Its level is decided as in the main README

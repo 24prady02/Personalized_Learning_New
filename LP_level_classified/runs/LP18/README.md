@@ -12,6 +12,13 @@ This scenario tests **L0: misconception**. How the overall level is decided is e
 - **Expected by design:** overall L0; components `identifier` L0, `statement` L0; held IdentifierCaseInsensitive, StatementNeedsNoTerminator; root statement
 - **Overall level matches the expected one:** yes
 
+### How the overall level of this run was calculated
+
+1. **Find the parts of the answer.** The answer touches 4 concepts (the components in the table below). Each one got its own level from what the student wrote about it.
+2. **Is a real mistake held?** Yes. The student holds the wrong rule **StatementNeedsNoTerminator** at `statement`.
+3. **Result.** An answer that is built on a wrong rule is **L0**, however well the other parts are done. So the overall level is **L0**.
+4. **For information, the count of the parts:** 3 at L0, 1 at L2. The parts are far apart (LOW coherence): the student handles some parts well and holds a wrong rule on others.
+
 | Component | Level | Decided by | Student's words |
 |---|---|---|---|
 | `compile_time_error` | L0 | way: inconsistent trace | Yes, it compiles and prints 5 twice; The missing; do not matter; because each statement is on its own line, and system.out is the same as System.out |

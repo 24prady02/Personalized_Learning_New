@@ -12,6 +12,14 @@ This scenario tests **L2: one step execution**. How the overall level is decided
 - **Expected by design:** overall L2; components `for_loop` L2; held none; root none
 - **Overall level matches the expected one:** yes
 
+### How the overall level of this run was calculated
+
+1. **Find the parts of the answer.** The answer touches 5 concepts (the components in the table below). Each one got its own level from what the student wrote about it.
+2. **Is a real mistake held?** No wrong rule is held.
+3. **Count the parts at each level:** 5 at L2.
+4. **Result.** Most parts (5 of 5) are at L2, so the overall level is **L2**.
+5. **Check.** The levels of the parts are next to each other, so the answer is coherent.
+
 | Component | Level | Decided by | Student's words |
 |---|---|---|---|
 | `for_loop` | L2 | way: one step execution | On one pass i goes up by 2: once by the i++ in the body and once by the i++ in the update; So after the first pass i is 3 instead of 2 |

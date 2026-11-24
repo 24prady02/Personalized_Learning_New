@@ -12,6 +12,14 @@ This scenario tests **L4: diagnose an error**. How the overall level is decided 
 - **Expected by design:** overall L4; components `for_loop` L4, `statement` L4, `identifier` L4; held none; root none
 - **Overall level matches the expected one:** yes
 
+### How the overall level of this run was calculated
+
+1. **Find the parts of the answer.** The answer touches 5 concepts (the components in the table below). Each one got its own level from what the student wrote about it.
+2. **Is a real mistake held?** No wrong rule is held.
+3. **Count the parts at each level:** 1 at L3, 4 at L4.
+4. **Result.** Most parts (4 of 5) are at L4, so the overall level is **L4**.
+5. **Check.** The levels of the parts are next to each other, so the answer is coherent.
+
 | Component | Level | Decided by | Student's words |
 |---|---|---|---|
 | `compile_time_error` | L4 | way: diagnose an error | It does not compile; Line 1 and line 4 are missing the; at the end; so javac reports; expected |

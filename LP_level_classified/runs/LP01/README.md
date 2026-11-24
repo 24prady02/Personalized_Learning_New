@@ -12,6 +12,13 @@ This scenario tests **L0: everyday reading**. How the overall level is decided i
 - **Expected by design:** overall L0; components `for_loop` L0; held none; root none
 - **Overall level matches the expected one:** yes
 
+### How the overall level of this run was calculated
+
+1. **Find the parts of the answer.** The answer touches 5 concepts (the components in the table below). Each one got its own level from what the student wrote about it.
+2. **Is a real mistake held?** Yes. The student holds the wrong rule **BodyChangeIgnoredByCondition** at `loop_variable`.
+3. **Result.** An answer that is built on a wrong rule is **L0**, however well the other parts are done. So the overall level is **L0**.
+4. **For information, the count of the parts:** 5 at L0. The parts are close together.
+
 | Component | Level | Decided by | Student's words |
 |---|---|---|---|
 | `for_loop` | L0 | way: everyday reading | It counts from 1 to 5; so it prints 1, 2, 3, 4, 5; For i from 1 to n means do it for each number |

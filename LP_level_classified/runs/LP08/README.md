@@ -12,6 +12,14 @@ This scenario tests **L1: names the element**. How the overall level is decided 
 - **Expected by design:** overall L1; components `for_loop` L1; held none; root none
 - **Overall level matches the expected one:** yes
 
+### How the overall level of this run was calculated
+
+1. **Find the parts of the answer.** The answer touches 5 concepts (the components in the table below). Each one got its own level from what the student wrote about it.
+2. **Is a real mistake held?** No wrong rule is held.
+3. **Count the parts at each level:** 5 at L1.
+4. **Result.** Most parts (5 of 5) are at L1, so the overall level is **L1**.
+5. **Check.** The levels of the parts are next to each other, so the answer is coherent.
+
 | Component | Level | Decided by | Student's words |
 |---|---|---|---|
 | `control_flow` | L1 | way: names the element | The program has two System.out.println statements and one for loop; The for loop has a header with a start, a condition and an update, and a body |

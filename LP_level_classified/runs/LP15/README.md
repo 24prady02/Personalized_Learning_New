@@ -12,6 +12,14 @@ This scenario tests **L3: purpose of the whole**. How the overall level is decid
 - **Expected by design:** overall L3; components `for_loop` L3; held none; root none
 - **Overall level matches the expected one:** yes
 
+### How the overall level of this run was calculated
+
+1. **Find the parts of the answer.** The answer touches 5 concepts (the components in the table below). Each one got its own level from what the student wrote about it.
+2. **Is a real mistake held?** No wrong rule is held.
+3. **Count the parts at each level:** 1 at L2, 4 at L3.
+4. **Result.** Most parts (4 of 5) are at L3, so the overall level is **L3**.
+5. **Check.** The levels of the parts are next to each other, so the answer is coherent.
+
 | Component | Level | Decided by | Student's words |
 |---|---|---|---|
 | `for_loop` | L3 | way: purpose of the whole | Whatever n is, i starts at 1 and goes up by 2 on every pass; so the loop stops at the first odd number that is n or more; The program prints that number twice |

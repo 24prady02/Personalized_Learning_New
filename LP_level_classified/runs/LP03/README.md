@@ -12,6 +12,13 @@ This scenario tests **L0: misconception**. How the overall level is decided is e
 - **Expected by design:** overall L0; components `loop_variable` L0; held BodyChangeIgnoredByCondition; root loop_variable
 - **Overall level matches the expected one:** yes
 
+### How the overall level of this run was calculated
+
+1. **Find the parts of the answer.** The answer touches 5 concepts (the components in the table below). Each one got its own level from what the student wrote about it.
+2. **Is a real mistake held?** Yes. The student holds the wrong rule **BodyChangeIgnoredByCondition** at `loop_variable`.
+3. **Result.** An answer that is built on a wrong rule is **L0**, however well the other parts are done. So the overall level is **L0**.
+4. **For information, the count of the parts:** 4 at L0, 1 at L2. The parts are far apart (LOW coherence): the student handles some parts well and holds a wrong rule on others.
+
 | Component | Level | Decided by | Student's words |
 |---|---|---|---|
 | `for_loop` | L2 | way: output prediction | The body runs 4 times, for i = 1, 2, 3 and 4; The header says i < 5 and i++; so it runs 4 times; the i++ inside the body does not change how many times the loop runs |

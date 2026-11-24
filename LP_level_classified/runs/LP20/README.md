@@ -12,6 +12,11 @@ This scenario tests **no level: none (bare correct output)**. How the overall le
 - **Expected by design:** overall no level; components none; held none; root none
 - **Overall level matches the expected one:** yes
 
+### How the overall level of this run was calculated
+
+1. **Find the parts of the answer.** The answer gives no reason, only an output, so no component got a level (very general concepts such as statement are not counted).
+2. **Result.** With nothing to count, the answer gets **no level**.
+
 No component has a level.
 
 Generic concepts with a level (not counted as components): `statement` L2.

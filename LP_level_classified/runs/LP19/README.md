@@ -12,6 +12,14 @@ This scenario tests **L4: transfer to a new program**. How the overall level is 
 - **Expected by design:** overall L4; components `for_loop` L4; held none; root none
 - **Overall level matches the expected one:** yes
 
+### How the overall level of this run was calculated
+
+1. **Find the parts of the answer.** The answer touches 4 concepts (the components in the table below). Each one got its own level from what the student wrote about it.
+2. **Is a real mistake held?** No wrong rule is held.
+3. **Count the parts at each level:** 1 at L2, 3 at L4.
+4. **Result.** Most parts (3 of 4) are at L4, so the overall level is **L4**.
+5. **Check.** The levels of the parts are two or more apart (LOW coherence), so this one number hides real differences between the parts.
+
 | Component | Level | Decided by | Student's words |
 |---|---|---|---|
 | `increment_operators` | L4 | way: transfer to a new program | for (int i = 1; i < n; i += 2) System.out.println(i); This does on purpose what the given loop does by accident: the given loop also steps i by 2; because i++ is in both the body and the header |

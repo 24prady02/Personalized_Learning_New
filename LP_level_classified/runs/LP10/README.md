@@ -12,6 +12,14 @@ This scenario tests **L2: line by line trace**. How the overall level is decided
 - **Expected by design:** overall L2; components `for_loop` L2, `loop_body` L2; held none; root none
 - **Overall level matches the expected one:** yes
 
+### How the overall level of this run was calculated
+
+1. **Find the parts of the answer.** The answer touches 6 concepts (the components in the table below). Each one got its own level from what the student wrote about it.
+2. **Is a real mistake held?** No wrong rule is held.
+3. **Count the parts at each level:** 4 at L2, 2 at L3.
+4. **Result.** Most parts (4 of 6) are at L2, so the overall level is **L2**.
+5. **Check.** The levels of the parts are next to each other, so the answer is coherent.
+
 | Component | Level | Decided by | Student's words |
 |---|---|---|---|
 | `for_loop` | L3 | way: relation to neighbour | 1 < 5 is true, the body i++ makes i 2, the update makes it 3; 3 < 5 is true, the body makes it 4, the update makes it 5; Only i++ was in the loop |

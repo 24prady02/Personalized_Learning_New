@@ -12,6 +12,14 @@ This scenario tests **L3: relation to neighbour**. How the overall level is deci
 - **Expected by design:** overall L3; components `for_loop` L3, `increment_operators` L3; held none; root none
 - **Overall level matches the expected one:** yes
 
+### How the overall level of this run was calculated
+
+1. **Find the parts of the answer.** The answer touches 5 concepts (the components in the table below). Each one got its own level from what the student wrote about it.
+2. **Is a real mistake held?** No wrong rule is held.
+3. **Count the parts at each level:** 1 at L2, 2 at L3, 2 at L4.
+4. **Result.** L3 and L4 have the same number of parts (2 each). On a tie the lower level is taken, the one the answer reliably reaches, so the overall level is **L3**.
+5. **Check.** The levels of the parts are two or more apart (LOW coherence), so this one number hides real differences between the parts.
+
 | Component | Level | Decided by | Student's words |
 |---|---|---|---|
 | `for_loop` | L4 | way: diagnose an error | Because there are no braces the body is only i++; the indented println is after the loop |
