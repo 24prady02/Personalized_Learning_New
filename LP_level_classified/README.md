@@ -68,6 +68,50 @@ The code is `src/overall_level.py`.
 | Step 3: largest share; step 4: shares and coherence | LP test instructions, after Jin et al. 2019 (Table 4, pp. 1337 to 1338) |
 | Tie goes to the lower level | LP test instructions (their own adaptation, because one number is required) |
 
+## Sources of the logic
+
+The quotations and page numbers below are those given in the LP test instructions for these scenarios; they were not
+checked again against the papers here.
+
+**The three papers by Jin et al., and what is taken from each**
+
+| Paper | What it says (as quoted) | What is taken from it |
+|---|---|---|
+| Jin et al. 2019, *IJSE*, p. 1325 | “some researchers identify multiple progress variables of an LP, with each progress variable elaborating the development in one dimension of the LP” | Each component is one progress variable and gets its own level. |
+| Jin, Lima & Wang 2025, *EM:IP*, p. 2 | “Analytic rubrics specify indicators to be detected from students’ responses”; analytic scoring “often results in greater details and precision” | Score by indicators (the ways) for each component, not by one overall impression. |
+| Jin, Lima & Wang 2025, p. 5 | “analytical rubrics that contain item-specific indicators for each LP level”; multi-part answers “were combined into a single response to allow for a comprehensive analysis of student reasoning” | One answer is one unit of evidence; its components are read together to give it one level. |
+| Jin et al. 2019, p. 1337 | “Most students in our study provided responses at different levels for different assessment items” | A single level can hide real differences, so check before giving one. |
+| Jin et al. 2019, p. 1337 | “If the result shows evidence of ‘knowledge-in-pieces’ (e.g. probabilities of responses at different levels are about the same) … we cannot make any inferences about the students’ levels” | The coherence check; when it fails, the single level is flagged. |
+| Jin et al. 2019, p. 1338 | “each student produced responses at adjacent levels, suggesting that those students’ ideas are coherent to a certain degree” | Adjacent levels mean coherent. |
+| Jin et al. 2019, pp. 1338–1339, Table 4 | Level classification probabilities per student, for example Student 210: L2 .68, L3 .32; Student 220: L1 .50, L2 .50, described as “rely on Level 1 and Level 2 reasoning” | Report the share at each level; the level with the largest share is the level; a 50/50 split covers both. |
+| Jin et al. 2017, *JRST*, pp. 862–863 | Scores fitted with the partial credit model (Wright Map); “we used the resulting person proficiencies from the item response model analysis” | With many students and items, the full method is a partial credit model. |
+
+**The level of one component**
+
+| Rule | Source |
+|---|---|
+| A misconception is held on the concept (not a shadow): L0, whatever else is shown | Lister et al. 2006, p. 2: a prestructural response manifests “a significant misconception of programming”; Teague & Lister 2014, p. 1; ProgMiscon (Chiodini et al. 2021), p. 2 |
+| Only L0 ways are shown (everyday reading, inconsistent trace): L0 | Pea 1986, p. 2; Teague & Lister 2014, p. 1 (“cannot trace code”) |
+| Otherwise the highest level at which a way is shown; one shown way is enough | Lister et al. 2006, p. 2 (the SOLO levels build on each other); Jin, Lima & Wang 2025, p. 6 (an answer is scored at the level whose indicator it shows) |
+| No way shown and no mistake: no level | Workbook boundary: “a bare correct output is not levelled” |
+
+The levels, their ways and their indicators are defined before any student data (Jin et al. 2019, p. 6) and are the
+SOLO levels for code (Lister et al. 2006) matched to the neo-Piagetian stages (Lister 2011; Teague & Lister 2014).
+
+**What is from Jin et al. and what is adapted or added**
+
+- *From Jin et al.:* levels per progress variable, analytic indicators, the coherence check, adjacent levels meaning
+  coherent, and reporting the shares across levels.
+- *Adapted (by the LP test instructions):* Jin et al. apply this across many items and students with a partial
+  credit model and posterior probabilities; here it is applied across the components of one answer with simple
+  shares, and a tie is resolved to the lower level because one number is required.
+- *Added by this project, with no source:* step 2 of the rule, that a held mistake makes the whole answer L0. It
+  extends the component rule of Lister et al. 2006 to the whole answer. Under Jin et al. 2019, p. 1337, an answer
+  whose components are far apart would get no single level, which is why the shares and the coherence flag are always
+  reported beside the L0. The confidence limit of 0.60 for ways above L2 is also this project's own.
+- *Where the sources disagree:* Jimoyiannis (2011) codes some misconception-driven answers at L1 to L2, not L0, and
+  modifying given code as L3, not L4 (also Vrachnos & Jimoyiannis 2017).
+
 ## How the rule was made
 
 Each row is one step, run on LP01 to LP20 and scored against the expected results.
