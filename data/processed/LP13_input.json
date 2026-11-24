@@ -1,0 +1,5 @@
+{
+ "code": "int i, n = 5;\nfor (i = 1; i < n; i++)\n    i++;\n    System.out.println(i);\nSystem.out.println(i);",
+ "question": "What is printed? Explain, pass by pass, what happens to i.",
+ "answer": "i starts at 1. 1 < 5, the body makes i 2, the update makes it 3. 3 < 5, the body makes it 4, the update makes it 5. 5 < 5 is false, so it stops. Then it prints 5 and 4."
+}

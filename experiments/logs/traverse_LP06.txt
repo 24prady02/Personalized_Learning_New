@@ -1,0 +1,91 @@
+clauses: It never stops | Each pass starts again with i = 1 | so i goes 1, 2, 3 and back to 1, and the println lines are never reached
+start: generic concepts whose tagging text occurs in the answer: assignment
+start: BM25 of the answer against each tagged concept: loop_control 16.72 (hits 1), for_loop 15.47 (hits 1), increment_operators 13.32 (hits 1), control_flow 10.84 (hits 1), loop_variable 10.02 (hits 1), assignment 9.13 (hits 1), loop_body 7.91 (hits 1), println 6.85 (hits 1), boolean_expression 3.25 (hits 1), comparison_operators 1.91 (hits 1)
+start: chosen loop_control, for_loop, increment_operators
+start concepts (3): loop_control, for_loop, increment_operators
+--- depth 1: current concepts ['loop_control', 'for_loop', 'increment_operators']
+  loop_control (misconceptions): 11 candidates -> kept mis:loop_control->ForLoopPartSkipped (0.50), err:loop_control->WrongIterationCount (0.30), mis:loop_control->LoopHeaderIsEquations (0.20)
+    mis:loop_control->ForLoopPartSkipped -> not applied (0.00) ""
+    err:loop_control->WrongIterationCount -> held (0.24) "It never stops; Each pass starts again with i = 1; so i goes 1, 2, 3 and back to 1, and the println lines are never reached"
+    mis:loop_control->LoopHeaderIsEquations -> held (0.09) "Each pass starts again with i = 1; so i goes 1, 2, 3 and back to 1, and the println lines are never reached"
+  loop_control (level ways): 19 candidates -> kept lvl:loop_control@L0#3 (0.60), lvl:loop_control@L2#0 (0.20), lvl:loop_control@L3#3 (0.20)
+    lvl:loop_control@L0#3 -> shown (0.51) "Each pass starts again with i = 1; so i goes 1, 2, 3 and back to 1, and the println lines are never reached"
+    lvl:loop_control@L2#0 -> not applied (0.00) ""
+    lvl:loop_control@L3#3: wrong (0.60) -> not applied
+    lvl:loop_control@L3#3 -> not applied (0.00) ""
+  for_loop (misconceptions): 20 candidates -> kept mis:for_loop->ForInitRepeats (0.75), err:for_loop->WrongIterationCount (0.15), err:for_loop->BracelessMultiStatementBody (0.10)
+    mis:for_loop->ForInitRepeats -> held (0.71) "Each pass starts again with i = 1; so i goes 1, 2, 3 and back to 1, and the println lines are never reached"
+    err:for_loop->WrongIterationCount -> not applied (0.00) ""
+    err:for_loop->BracelessMultiStatementBody -> not applied (0.00) ""
+  for_loop (level ways): 24 candidates -> kept lvl:for_loop@L0#11 (0.60), lvl:for_loop@L2#2 (0.25), lvl:for_loop@L2#0 (0.15)
+    lvl:for_loop@L0#11 -> shown (0.51) "Each pass starts again with i = 1; so i goes 1, 2, 3 and back to 1, and the println lines are never reached"
+    lvl:for_loop@L2#2 -> not applied (0.00) ""
+    lvl:for_loop@L2#0 -> not applied (0.00) ""
+  increment_operators (misconceptions): 5 candidates -> kept mis:increment_operators->IdiomOverridesCode (0.50), mis:increment_operators->IncrementByTwo (0.30), mis:increment_operators->PreIncrementBeforeLoop (0.20)
+    mis:increment_operators->IdiomOverridesCode -> not applied (0.00) ""
+    mis:increment_operators->IncrementByTwo -> not applied (0.00) ""
+    mis:increment_operators->PreIncrementBeforeLoop -> not applied (0.00) ""
+  increment_operators (level ways): 16 candidates -> kept lvl:increment_operators@L0#3 (0.50), lvl:increment_operators@L3#0 (0.30), lvl:increment_operators@L2#2 (0.20)
+    lvl:increment_operators@L0#3 -> not applied (0.00) ""
+    lvl:increment_operators@L3#0 -> not applied (0.00) ""
+    lvl:increment_operators@L2#2 -> shown (0.11) "so i goes 1, 2, 3 and back to 1, and the println lines are never reached"
+  kept: mis:for_loop->ForInitRepeats [held, tier 0, 0.71], mis:loop_control->LoopHeaderIsEquations [held, tier 0, 0.09], err:loop_control->WrongIterationCount [held, tier 1, 0.24]
+  clause coverage: c1 <- err:loop_control->WrongIterationCount; c2 <- err:loop_control->WrongIterationCount; c3 <- err:loop_control->WrongIterationCount
+  not yet read: pre:assignment->increment_operators, pre:for_loop->loop_body, pre:loop_control->for_loop, pre:loop_control->increment_operators, pre:loop_variable->loop_control
+--- depth 2: current concepts ['for_loop', 'loop_control', 'increment_operators']
+  for_loop (concept edges): 2 candidates -> kept pre:loop_control->for_loop (0.70), pre:for_loop->loop_body (0.30)
+    pre:loop_control->for_loop -> broken (0.63) "Each pass starts again with i = 1; so i goes 1, 2, 3 and back to 1, and the println lines are never reached"
+    pre:for_loop->loop_body -> broken (0.21) "Each pass starts again with i = 1; so i goes 1, 2, 3 and back to 1, and the println lines are never reached"
+  loop_control (concept edges): 2 candidates -> kept pre:loop_variable->loop_control (0.80), pre:loop_control->increment_operators (0.20)
+    pre:loop_variable->loop_control -> broken (0.68) "Each pass starts again with i = 1; so i goes 1, 2, 3 and back to 1, and the println lines are never reached"
+    pre:loop_control->increment_operators -> broken (0.12) "Each pass starts again with i = 1; so i goes 1, 2, 3 and back to 1, and the println lines are never reached"
+  increment_operators (concept edges): 1 candidates -> kept pre:assignment->increment_operators (1.00)
+    pre:assignment->increment_operators -> confirmed (0.55) "so i goes 1, 2, 3 and back to 1, and the println lines are never reached"
+  kept: pre:loop_variable->loop_control [broken, tier 0, 0.68], pre:loop_control->for_loop [broken, tier 0, 0.63], pre:for_loop->loop_body [broken, tier 0, 0.21], pre:loop_control->increment_operators [broken, tier 0, 0.12]
+  reached across pre:loop_variable->loop_control, entered next: loop_variable
+  reached across pre:for_loop->loop_body, entered next: loop_body
+  clause coverage: c1 <- err:loop_control->WrongIterationCount; c2 <- err:loop_control->WrongIterationCount; c3 <- err:loop_control->WrongIterationCount
+  not yet read: own edges of loop_body, own edges of loop_variable
+--- depth 3: current concepts ['loop_variable', 'loop_control', 'for_loop', 'loop_body', 'increment_operators']
+  loop_variable (misconceptions): 7 candidates -> kept mis:loop_variable->ForInitRepeats (0.70), mis:loop_variable->LoopVariableLifetimeScope (0.20), mis:loop_variable->BodyChangeIgnoredByCondition (0.10)
+    mis:loop_variable->ForInitRepeats -> held (0.63) "Each pass starts again with i = 1; so i goes 1, 2, 3 and back to 1, and the println lines are never reached"
+    mis:loop_variable->LoopVariableLifetimeScope -> not applied (0.00) ""
+    mis:loop_variable->BodyChangeIgnoredByCondition -> not applied (0.00) ""
+  loop_variable (level ways): 13 candidates -> kept lvl:loop_variable@L0#5 (0.60), lvl:loop_variable@L1#1 (0.25), lvl:loop_variable@L2#0 (0.15)
+    lvl:loop_variable@L0#5 -> shown (0.54) "Each pass starts again with i = 1; so i goes 1, 2, 3 and back to 1, and the println lines are never reached"
+    lvl:loop_variable@L1#1 -> not applied (0.00) ""
+    lvl:loop_variable@L2#0 -> not applied (0.00) ""
+  loop_body (misconceptions): 12 candidates -> kept mis:loop_body->ForLoopPartSkipped (0.45), mis:loop_body->StateChangeIgnoredAcrossPasses (0.40), err:loop_body->BracelessMultiStatementBody (0.15)
+    mis:loop_body->ForLoopPartSkipped -> not applied (0.00) ""
+    mis:loop_body->StateChangeIgnoredAcrossPasses -> held (0.24) "Each pass starts again with i = 1; so i goes 1, 2, 3 and back to 1, and the println lines are never reached"
+    err:loop_body->BracelessMultiStatementBody -> correct (0.08) "so i goes 1, 2, 3 and back to 1, and the println lines are never reached"
+  loop_body (level ways): 14 candidates -> kept lvl:loop_body@L0#6 (0.45), lvl:loop_body@L2#0 (0.35), lvl:loop_body@L2#2 (0.20)
+    lvl:loop_body@L0#6 -> not applied (0.00) ""
+    lvl:loop_body@L2#0 -> not applied (0.00) ""
+    lvl:loop_body@L2#2 -> not applied (0.00) ""
+  increment_operators (concept edges): 1 candidates -> kept pre:assignment->increment_operators (1.00)
+    pre:assignment->increment_operators -> confirmed (0.55) "so i goes 1, 2, 3 and back to 1, and the println lines are never reached"
+  kept: mis:loop_variable->ForInitRepeats [held, tier 0, 0.63], mis:loop_body->StateChangeIgnoredAcrossPasses [held, tier 0, 0.24], pre:assignment->increment_operators [confirmed, tier 2, 0.55]
+  reached across pre:assignment->increment_operators, entered next: assignment
+  clause coverage: c1 <- err:loop_control->WrongIterationCount; c2 <- err:loop_control->WrongIterationCount; c3 <- err:loop_control->WrongIterationCount
+  not yet read: own edges of assignment
+--- depth 4: current concepts ['assignment'] (closing round: own edges only)
+  assignment (misconceptions): 15 candidates -> kept mis:assignment->VariableKeepsOldValue (0.45), mis:assignment->AssignmentIsEquation (0.35), mis:assignment->VariablesHoldExpressions (0.20)
+    mis:assignment->VariableKeepsOldValue -> correct (0.27) "so i goes 1, 2, 3 and back to 1, and the println lines are never reached"
+    mis:assignment->AssignmentIsEquation -> not applied (0.00) ""
+    mis:assignment->VariablesHoldExpressions -> not applied (0.00) ""
+  assignment (level ways): 24 candidates -> kept lvl:assignment@L0#9 (0.45), lvl:assignment@L0#0 (0.30), lvl:assignment@L3#6 (0.25)
+    lvl:assignment@L0#9 -> not applied (0.00) ""
+    lvl:assignment@L0#0 -> not applied (0.00) ""
+    lvl:assignment@L3#6 -> not applied (0.00) ""
+  kept: mis:assignment->VariableKeepsOldValue [correct, tier 2, 0.27]
+  clause coverage: c1 <- err:loop_control->WrongIterationCount; c2 <- err:loop_control->WrongIterationCount; c3 <- err:loop_control->WrongIterationCount
+  not yet read: par:assignment~comparison_operators
+  held: mis:for_loop->ForInitRepeats, mis:loop_body->StateChangeIgnoredAcrossPasses, mis:loop_control->LoopHeaderIsEquations; filed at the dependent concept: mis:loop_variable->ForInitRepeats
+  shadows: mis:loop_control->LoopHeaderIsEquations (shadow of mis:loop_body->StateChangeIgnoredAcrossPasses), mis:loop_variable->ForInitRepeats (shadow of mis:for_loop->ForInitRepeats)
+  root-cause walk: held on ['for_loop', 'loop_body'], broken at [] (consequences: pre:loop_variable->loop_control, pre:loop_control->for_loop, pre:for_loop->loop_body, pre:loop_control->increment_operators), prerequisites {'increment_operators': ['assignment', 'loop_control'], 'boolean_expression': ['comparison_operators'], 'comparison_operators': ['expression'], 'loop_body': ['for_loop'], 'for_loop': ['loop_control'], 'loop_control': ['loop_variable'], 'control_flow': ['statement'], 'println': ['statement']}
+  level for_loop: L0 via misconception "Each pass starts again with i = 1; so i goes 1, 2, 3 and back to 1, and the println lines are never reached"
+  level increment_operators: L2 via one_step_execution "so i goes 1, 2, 3 and back to 1, and the println lines are never reached"
+  level loop_body: L0 via misconception "Each pass starts again with i = 1; so i goes 1, 2, 3 and back to 1, and the println lines are never reached"
+  level loop_control: L0 via inconsistent_trace "Each pass starts again with i = 1; so i goes 1, 2, 3 and back to 1, and the println lines are never reached"
+  level loop_variable: L0 via inconsistent_trace "Each pass starts again with i = 1; so i goes 1, 2, 3 and back to 1, and the println lines are never reached"

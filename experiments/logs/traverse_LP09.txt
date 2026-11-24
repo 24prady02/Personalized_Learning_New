@@ -1,0 +1,61 @@
+clauses: Without braces a for loop repeats only the one statement right after its header | The indentation does not matter | so the println lines are not part of the loop
+start: BM25 of the answer against each tagged concept: for_loop 15.63 (hits 1), loop_body 14.04 (hits 1), control_flow 10.95 (hits 1), println 10.75 (hits 1), loop_control 7.94 (hits 1), loop_variable 5.91 (hits 1), boolean_expression 5.07 (hits 1), comparison_operators 4.46 (hits 1), increment_operators 4.03 (hits 1)
+start: chosen for_loop, loop_body, control_flow
+start concepts (3): for_loop, loop_body, control_flow
+--- depth 1: current concepts ['for_loop', 'loop_body', 'control_flow']
+  for_loop (misconceptions): 20 candidates -> kept err:for_loop->BracelessMultiStatementBody (0.70), mis:for_loop->FalseLoopRepeatsNextCode (0.20), mis:for_loop->ProgramEndsAfterLoop (0.10)
+    err:for_loop->BracelessMultiStatementBody -> correct (0.67) "Without braces a for loop repeats only the one statement right after its header; The indentation does not matter; so the println lines are not part of the loop"
+    mis:for_loop->FalseLoopRepeatsNextCode -> not applied (0.00) ""
+    mis:for_loop->ProgramEndsAfterLoop -> not applied (0.00) ""
+  for_loop (level ways): 24 candidates -> kept lvl:for_loop@L4#6 (0.70), lvl:for_loop@L1#1 (0.15), lvl:for_loop@L3#0 (0.15)
+    lvl:for_loop@L4#6 -> shown (0.56) "Without braces a for loop repeats only the one statement right after its header; The indentation does not matter; so the println lines are not part of the loop"
+    lvl:for_loop@L1#1 -> shown (0.09) "Without braces a for loop repeats only the one statement right after its header"
+    lvl:for_loop@L3#0 -> shown (0.10) "Without braces a for loop repeats only the one statement right after its header; The indentation does not matter; so the println lines are not part of the loop"
+  loop_body (misconceptions): 12 candidates -> kept err:loop_body->BracelessMultiStatementBody (0.60), mis:loop_body->StatementAfterLoopInBody (0.30), mis:loop_body->ComputerFillsInIntent (0.10)
+    err:loop_body->BracelessMultiStatementBody -> correct (0.57) "Without braces a for loop repeats only the one statement right after its header; The indentation does not matter; so the println lines are not part of the loop"
+    mis:loop_body->StatementAfterLoopInBody -> correct (0.24) "Without braces a for loop repeats only the one statement right after its header; so the println lines are not part of the loop"
+    mis:loop_body->ComputerFillsInIntent -> not applied (0.00) ""
+  loop_body (level ways): 14 candidates -> kept lvl:loop_body@L1#1 (0.45), lvl:loop_body@L4#1 (0.40), lvl:loop_body@L1#0 (0.15)
+    lvl:loop_body@L1#1 -> shown (0.41) "Without braces a for loop repeats only the one statement right after its header; so the println lines are not part of the loop"
+    lvl:loop_body@L4#1 -> shown (0.28) "Without braces a for loop repeats only the one statement right after its header; The indentation does not matter; so the println lines are not part of the loop"
+    lvl:loop_body@L1#0 -> shown (0.13) "Without braces a for loop repeats only the one statement right after its header; so the println lines are not part of the loop"
+  control_flow (misconceptions): 11 candidates -> kept mis:control_flow->FalseLoopRepeatsNextCode (0.60), mis:control_flow->ProgramEndsAfterLoop (0.25), mis:control_flow->StatementsRunInAnyOrder (0.15)
+    mis:control_flow->FalseLoopRepeatsNextCode -> correct (0.36) "Without braces a for loop repeats only the one statement right after its header; so the println lines are not part of the loop"
+    mis:control_flow->ProgramEndsAfterLoop -> not applied (0.00) ""
+    mis:control_flow->StatementsRunInAnyOrder -> not applied (0.00) ""
+  control_flow (level ways): 15 candidates -> kept lvl:control_flow@L1#1 (0.50), lvl:control_flow@L4#0 (0.30), lvl:control_flow@L3#0 (0.20)
+    lvl:control_flow@L1#1 -> shown (0.35) "Without braces a for loop repeats only the one statement right after its header; so the println lines are not part of the loop"
+    lvl:control_flow@L4#0 -> not applied (0.00) ""
+    lvl:control_flow@L3#0 -> shown (0.16) "Without braces a for loop repeats only the one statement right after its header; The indentation does not matter; so the println lines are not part of the loop"
+  kept: err:for_loop->BracelessMultiStatementBody [correct, tier 2, 0.67], err:loop_body->BracelessMultiStatementBody [correct, tier 2, 0.57], lvl:for_loop@L4#6 [shown, tier 2, 0.56]
+  clause coverage: c1 <- err:for_loop->BracelessMultiStatementBody; c2 <- err:for_loop->BracelessMultiStatementBody; c3 <- err:for_loop->BracelessMultiStatementBody
+  not yet read: pre:for_loop->loop_body, pre:loop_control->for_loop, pre:statement->control_flow
+--- depth 2: current concepts ['for_loop', 'loop_body', 'control_flow']
+  for_loop (concept edges): 2 candidates -> kept pre:for_loop->loop_body (0.70), pre:loop_control->for_loop (0.30)
+    pre:for_loop->loop_body -> confirmed (0.59) "Without braces a for loop repeats only the one statement right after its header; The indentation does not matter; so the println lines are not part of the loop"
+    pre:loop_control->for_loop -> not applied (0.00) ""
+  control_flow (concept edges): 1 candidates -> kept pre:statement->control_flow (1.00)
+    pre:statement->control_flow -> confirmed (0.80) "Without braces a for loop repeats only the one statement right after its header; so the println lines are not part of the loop"
+  kept: pre:statement->control_flow [confirmed, tier 2, 0.80], pre:for_loop->loop_body [confirmed, tier 2, 0.59]
+  reached across pre:statement->control_flow, entered next: statement
+  clause coverage: c1 <- err:for_loop->BracelessMultiStatementBody; c2 <- err:for_loop->BracelessMultiStatementBody; c3 <- err:for_loop->BracelessMultiStatementBody
+  not yet read: own edges of statement
+--- depth 3: current concepts ['statement', 'control_flow', 'loop_body', 'for_loop']
+  statement (misconceptions): 5 candidates -> kept mis:statement->WhitespaceIsSignificant (0.60), mis:statement->ComputerFillsInIntent (0.25), mis:statement->StatementsRunInAnyOrder (0.15)
+    mis:statement->WhitespaceIsSignificant -> correct (0.57) "Without braces a for loop repeats only the one statement right after its header; The indentation does not matter; so the println lines are not part of the loop"
+    mis:statement->ComputerFillsInIntent -> correct (0.15) "Without braces a for loop repeats only the one statement right after its header; so the println lines are not part of the loop"
+    mis:statement->StatementsRunInAnyOrder -> not applied (0.00) ""
+  statement (level ways): 19 candidates -> kept lvl:statement@L4#0 (0.45), lvl:statement@L3#1 (0.30), lvl:statement@L3#4 (0.25)
+    lvl:statement@L4#0 -> not applied (0.00) ""
+    lvl:statement@L3#1 -> shown (0.21) "Without braces a for loop repeats only the one statement right after its header; The indentation does not matter; so the println lines are not part of the loop"
+    lvl:statement@L3#4 -> shown (0.17) "Without braces a for loop repeats only the one statement right after its header; The indentation does not matter; so the println lines are not part of the loop"
+  for_loop (concept edges): 1 candidates -> kept pre:loop_control->for_loop (1.00)
+    pre:loop_control->for_loop -> not applied (0.00) ""
+  kept: mis:statement->WhitespaceIsSignificant [correct, tier 2, 0.57], lvl:statement@L3#1 [shown, tier 2, 0.21], lvl:statement@L3#4 [shown, tier 2, 0.17]
+  clause coverage: c1 <- err:for_loop->BracelessMultiStatementBody; c2 <- err:for_loop->BracelessMultiStatementBody; c3 <- err:for_loop->BracelessMultiStatementBody
+  not yet read: pre:statement->println
+  root-cause walk: held on [], broken at [], prerequisites {'increment_operators': ['assignment', 'loop_control'], 'boolean_expression': ['comparison_operators'], 'comparison_operators': ['expression'], 'loop_body': ['for_loop'], 'for_loop': ['loop_control'], 'loop_control': ['loop_variable'], 'control_flow': ['statement'], 'println': ['statement']}
+  level control_flow: L3 via relation_to_neighbour "Without braces a for loop repeats only the one statement right after its header; The indentation does not matter; so the println lines are not part of the loop"
+  level for_loop: L4 via diagnose_an_error "Without braces a for loop repeats only the one statement right after its header; The indentation does not matter; so the println lines are not part of the loop"
+  level loop_body: L4 via diagnose_an_error "Without braces a for loop repeats only the one statement right after its header; The indentation does not matter; so the println lines are not part of the loop"
+  level statement: L3 via relation_to_neighbour "Without braces a for loop repeats only the one statement right after its header; The indentation does not matter; so the println lines are not part of the loop"

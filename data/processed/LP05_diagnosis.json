@@ -1,0 +1,752 @@
+{
+ "scenario": "LP05",
+ "settings": {
+  "width": 3,
+  "depth": 3,
+  "prune_tools": "llm",
+  "model": "claude-opus-5-5",
+  "backend": "claude-cli",
+  "rule_fixes": true,
+  "level_v2": true
+ },
+ "clauses": [
+  "The body runs once",
+  "i++ adds 2",
+  "so after the body i is 3, and the update makes it 5",
+  "Then 5 < 5 is false",
+  "so the loop stops"
+ ],
+ "start_concepts": [
+  "loop_control",
+  "for_loop",
+  "increment_operators"
+ ],
+ "held_misconceptions": [
+  {
+   "concept": "increment_operators",
+   "misconception": "IncrementByTwo",
+   "kind": "misconception",
+   "quote": "i++ adds 2; so after the body i is 3, and the update makes it 5",
+   "score": 0.76
+  },
+  {
+   "concept": "for_loop",
+   "misconception": "WrongIterationCount",
+   "kind": "error",
+   "quote": "The body runs once; i++ adds 2; so after the body i is 3, and the update makes it 5",
+   "score": 0.425
+  },
+  {
+   "concept": "loop_control",
+   "misconception": "WrongIterationCount",
+   "kind": "error",
+   "quote": "The body runs once; i++ adds 2; so after the body i is 3, and the update makes it 5; Then 5 < 5 is false; so the loop stops",
+   "score": 0.375
+  }
+ ],
+ "error_evidence": [],
+ "shadowed": [],
+ "broken_edges": [
+  {
+   "edge": "pre:loop_variable->loop_control",
+   "quote": "i++ adds 2; so after the body i is 3, and the update makes it 5",
+   "score": 0.6,
+   "consequence_of": "mis:increment_operators->IncrementByTwo"
+  },
+  {
+   "edge": "pre:assignment->increment_operators",
+   "quote": "i++ adds 2; so after the body i is 3, and the update makes it 5",
+   "score": 0.54,
+   "consequence_of": "mis:increment_operators->IncrementByTwo"
+  },
+  {
+   "edge": "pre:loop_control->increment_operators",
+   "quote": "The body runs once; i++ adds 2; so after the body i is 3, and the update makes it 5",
+   "score": 0.34,
+   "consequence_of": "mis:increment_operators->IncrementByTwo"
+  }
+ ],
+ "root_cause": {
+  "concept": "loop_control",
+  "misconception": "WrongIterationCount"
+ },
+ "levels": {
+  "for_loop": {
+   "level": "L2",
+   "way": "line_by_line_trace",
+   "quote": "so after the body i is 3, and the update makes it 5; Then 5 < 5 is false; so the loop stops",
+   "edge": "lvl:for_loop@L2#0",
+   "source": "level_way",
+   "also_shown": [
+    "L0 inconsistent_trace"
+   ]
+  },
+  "increment_operators": {
+   "level": "L0",
+   "way": "misconception",
+   "misconception": "IncrementByTwo",
+   "quote": "i++ adds 2; so after the body i is 3, and the update makes it 5",
+   "edge": "mis:increment_operators->IncrementByTwo",
+   "rule": "wrong rule: i++ increases i by 2. Right rule: i++ (and ++i) increases i by exactly 1.",
+   "source": "level_mis_links"
+  },
+  "loop_control": {
+   "level": "L0",
+   "way": "error",
+   "error": "WrongIterationCount",
+   "quote": "The body runs once; i++ adds 2; so after the body i is 3, and the update makes it 5; Then 5 < 5 is false; so the loop stops",
+   "edge": "err:loop_control->WrongIterationCount",
+   "rule": "Updates the loop counter so that the loop runs the wrong number of times.",
+   "source": "held_error",
+   "level_from_ways": "L2"
+  },
+  "loop_variable": {
+   "level": "L2",
+   "way": "line_by_line_trace",
+   "quote": "so after the body i is 3, and the update makes it 5; Then 5 < 5 is false; so the loop stops",
+   "edge": "lvl:loop_variable@L2#0",
+   "source": "level_way",
+   "also_shown": [
+    "L0 inconsistent_trace"
+   ]
+  }
+ },
+ "overall_level": "L0",
+ "paths": [
+  {
+   "depth": 1,
+   "source": "increment_operators",
+   "edge": "mis:increment_operators->IncrementByTwo",
+   "target": "IncrementByTwo",
+   "kind": "misconception",
+   "label": "held",
+   "clauses": [
+    2,
+    3
+   ],
+   "quote": "i++ adds 2; so after the body i is 3, and the update makes it 5",
+   "confidence": 0.95,
+   "prune_score": 0.8,
+   "score": 0.76,
+   "logic": "i++ increases i by 2.",
+   "twin_logic": "i++ (and ++i) increases i by exactly 1.",
+   "role": "primary"
+  },
+  {
+   "depth": 1,
+   "source": "for_loop",
+   "edge": "err:for_loop->WrongIterationCount",
+   "target": "WrongIterationCount",
+   "kind": "error",
+   "label": "held",
+   "clauses": [
+    1,
+    2,
+    3
+   ],
+   "quote": "The body runs once; i++ adds 2; so after the body i is 3, and the update makes it 5",
+   "confidence": 0.85,
+   "prune_score": 0.5,
+   "score": 0.425,
+   "logic": "Updates the loop counter so that the loop runs the wrong number of times.",
+   "twin_logic": "The init, test and update together decide the number of passes; trace them to check the count.",
+   "role": "primary"
+  },
+  {
+   "depth": 1,
+   "source": "loop_control",
+   "edge": "err:loop_control->WrongIterationCount",
+   "target": "WrongIterationCount",
+   "kind": "error",
+   "label": "held",
+   "clauses": [
+    1,
+    2,
+    3,
+    4,
+    5
+   ],
+   "quote": "The body runs once; i++ adds 2; so after the body i is 3, and the update makes it 5; Then 5 < 5 is false; so the loop stops",
+   "confidence": 0.75,
+   "prune_score": 0.5,
+   "score": 0.375,
+   "logic": "Updates the loop counter so that the loop runs the wrong number of times.",
+   "twin_logic": "The init, test and update together decide the number of passes; trace them to check the count.",
+   "role": "context"
+  },
+  {
+   "depth": 2,
+   "source": "loop_control",
+   "edge": "pre:loop_variable->loop_control",
+   "target": "loop_variable",
+   "kind": "prerequisite",
+   "label": "broken",
+   "clauses": [
+    2,
+    3
+   ],
+   "quote": "i++ adds 2; so after the body i is 3, and the update makes it 5",
+   "confidence": 0.6,
+   "prune_score": 1.0,
+   "score": 0.6,
+   "logic": "The init, condition and update all act on the loop variable: the init sets it, the condition tests it, the update changes it.",
+   "twin_logic": null,
+   "consequence_of": "mis:increment_operators->IncrementByTwo"
+  },
+  {
+   "depth": 2,
+   "source": "increment_operators",
+   "edge": "pre:assignment->increment_operators",
+   "target": "assignment",
+   "kind": "prerequisite",
+   "label": "broken",
+   "clauses": [
+    2,
+    3
+   ],
+   "quote": "i++ adds 2; so after the body i is 3, and the update makes it 5",
+   "confidence": 0.9,
+   "prune_score": 0.6,
+   "score": 0.54,
+   "logic": "i++ is shorthand for the assignment i = i + 1.",
+   "twin_logic": null,
+   "consequence_of": "mis:increment_operators->IncrementByTwo"
+  },
+  {
+   "depth": 2,
+   "source": "increment_operators",
+   "edge": "pre:loop_control->increment_operators",
+   "target": "loop_control",
+   "kind": "prerequisite",
+   "label": "broken",
+   "clauses": [
+    1,
+    2,
+    3
+   ],
+   "quote": "The body runs once; i++ adds 2; so after the body i is 3, and the update makes it 5",
+   "confidence": 0.85,
+   "prune_score": 0.4,
+   "score": 0.34,
+   "logic": "The loop update i = i + 1 comes first; ++ (and +=) are then introduced as shorthand for that update.",
+   "twin_logic": null,
+   "consequence_of": "mis:increment_operators->IncrementByTwo"
+  },
+  {
+   "depth": 3,
+   "source": "loop_control",
+   "edge": "pre:loop_control->for_loop",
+   "target": "for_loop",
+   "kind": "prerequisite",
+   "label": "confirmed",
+   "clauses": [
+    3,
+    4,
+    5
+   ],
+   "quote": "so after the body i is 3, and the update makes it 5; Then 5 < 5 is false; so the loop stops",
+   "confidence": 0.6,
+   "prune_score": 1.0,
+   "score": 0.6,
+   "logic": "The for header is exactly the three control slots, and the body runs after the test and before the update on each pass.",
+   "twin_logic": null
+  },
+  {
+   "depth": 3,
+   "source": "loop_variable",
+   "edge": "mis:loop_variable->BodyChangeIgnoredByCondition",
+   "target": "BodyChangeIgnoredByCondition",
+   "kind": "misconception",
+   "label": "correct",
+   "clauses": [
+    3,
+    4,
+    5
+   ],
+   "quote": "so after the body i is 3, and the update makes it 5; Then 5 < 5 is false; so the loop stops",
+   "confidence": 0.85,
+   "prune_score": 0.6,
+   "score": 0.51,
+   "logic": "Changing the loop variable inside the body does not affect the loop condition; the loop still runs its planned number of times.",
+   "twin_logic": "The condition is tested with the current value of the variable, including changes made in the body.",
+   "role": "primary"
+  },
+  {
+   "depth": 3,
+   "source": "assignment",
+   "edge": "mis:assignment->VariableKeepsOldValue",
+   "target": "VariableKeepsOldValue",
+   "kind": "misconception",
+   "label": "correct",
+   "clauses": [
+    3
+   ],
+   "quote": "so after the body i is 3, and the update makes it 5",
+   "confidence": 0.7,
+   "prune_score": 0.5,
+   "score": 0.35,
+   "logic": "A variable keeps its first value after a new assignment (the static model).",
+   "twin_logic": "Each assignment or read replaces the variable's current value.",
+   "role": "context"
+  }
+ ],
+ "evidence": [
+  {
+   "depth": 1,
+   "source": "loop_control",
+   "edge": "err:loop_control->WrongIterationCount",
+   "target": "WrongIterationCount",
+   "kind": "error",
+   "label": "held",
+   "clauses": [
+    1,
+    2,
+    3,
+    4,
+    5
+   ],
+   "quote": "The body runs once; i++ adds 2; so after the body i is 3, and the update makes it 5; Then 5 < 5 is false; so the loop stops",
+   "confidence": 0.75,
+   "prune_score": 0.5,
+   "score": 0.375,
+   "logic": "Updates the loop counter so that the loop runs the wrong number of times.",
+   "twin_logic": "The init, test and update together decide the number of passes; trace them to check the count.",
+   "role": "context"
+  },
+  {
+   "depth": 1,
+   "source": "loop_control",
+   "edge": "mis:loop_control->ForUpdateBeforeBody",
+   "target": "ForUpdateBeforeBody",
+   "kind": "misconception",
+   "label": "correct",
+   "clauses": [
+    3
+   ],
+   "quote": "so after the body i is 3, and the update makes it 5",
+   "confidence": 0.8,
+   "prune_score": 0.2,
+   "score": 0.16,
+   "logic": "The update part of a for header (e.g. i = i - 4) runs before the body on each pass, so the first pass already sees the updated value.",
+   "twin_logic": "The update runs after the body, before the next condition test; the first pass uses the initial value.",
+   "role": "context"
+  },
+  {
+   "depth": 1,
+   "source": "loop_control",
+   "edge": "lvl:loop_control@L2#0",
+   "target": "loop_control@L2",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    3,
+    4,
+    5
+   ],
+   "quote": "so after the body i is 3, and the update makes it 5; Then 5 < 5 is false; so the loop stops",
+   "confidence": 0.7,
+   "prune_score": 0.3,
+   "score": 0.21,
+   "logic": "init (once) -> test -> body -> update -> test -> body -> update ... -> test false -> exit.",
+   "twin_logic": null,
+   "level": "L2",
+   "way": "line_by_line_trace"
+  },
+  {
+   "depth": 1,
+   "source": "for_loop",
+   "edge": "err:for_loop->WrongIterationCount",
+   "target": "WrongIterationCount",
+   "kind": "error",
+   "label": "held",
+   "clauses": [
+    1,
+    2,
+    3
+   ],
+   "quote": "The body runs once; i++ adds 2; so after the body i is 3, and the update makes it 5",
+   "confidence": 0.85,
+   "prune_score": 0.5,
+   "score": 0.425,
+   "logic": "Updates the loop counter so that the loop runs the wrong number of times.",
+   "twin_logic": "The init, test and update together decide the number of passes; trace them to check the count.",
+   "role": "primary"
+  },
+  {
+   "depth": 1,
+   "source": "for_loop",
+   "edge": "mis:for_loop->ForIsConditional",
+   "target": "ForIsConditional",
+   "kind": "misconception",
+   "label": "correct",
+   "clauses": [
+    3,
+    4,
+    5
+   ],
+   "quote": "so after the body i is 3, and the update makes it 5; Then 5 < 5 is false; so the loop stops",
+   "confidence": 0.6,
+   "prune_score": 0.2,
+   "score": 0.12,
+   "logic": "The body of a for statement executes at most once.",
+   "twin_logic": "The body of a for statement runs once for every pass on which the condition is true, which can be many times.",
+   "role": "primary"
+  },
+  {
+   "depth": 1,
+   "source": "for_loop",
+   "edge": "lvl:for_loop@L0#11",
+   "target": "for_loop@L0",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    1,
+    2,
+    3
+   ],
+   "quote": "The body runs once; i++ adds 2; so after the body i is 3, and the update makes it 5",
+   "confidence": 0.6,
+   "prune_score": 0.45,
+   "score": 0.27,
+   "logic": "Applies the for sequencing rule (LT) unevenly: updates before the body on the first pass only, re-runs the init after a pass, or skips the test on some passes. (here mixing in: \"The body of a for statement executes at most once\")",
+   "twin_logic": null,
+   "level": "L0",
+   "way": "inconsistent_trace"
+  },
+  {
+   "depth": 1,
+   "source": "for_loop",
+   "edge": "lvl:for_loop@L2#0",
+   "target": "for_loop@L2",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    3,
+    4,
+    5
+   ],
+   "quote": "so after the body i is 3, and the update makes it 5; Then 5 < 5 is false; so the loop stops",
+   "confidence": 0.7,
+   "prune_score": 0.25,
+   "score": 0.175,
+   "logic": "Run the initializer once; then repeatedly: test the condition (stop if false), execute the body, run the update.",
+   "twin_logic": null,
+   "level": "L2",
+   "way": "line_by_line_trace"
+  },
+  {
+   "depth": 1,
+   "source": "increment_operators",
+   "edge": "mis:increment_operators->IncrementByTwo",
+   "target": "IncrementByTwo",
+   "kind": "misconception",
+   "label": "held",
+   "clauses": [
+    2,
+    3
+   ],
+   "quote": "i++ adds 2; so after the body i is 3, and the update makes it 5",
+   "confidence": 0.95,
+   "prune_score": 0.8,
+   "score": 0.76,
+   "logic": "i++ increases i by 2.",
+   "twin_logic": "i++ (and ++i) increases i by exactly 1.",
+   "role": "primary"
+  },
+  {
+   "depth": 1,
+   "source": "increment_operators",
+   "edge": "mis:increment_operators->PreIncrementBeforeLoop",
+   "target": "PreIncrementBeforeLoop",
+   "kind": "misconception",
+   "label": "correct",
+   "clauses": [
+    3
+   ],
+   "quote": "so after the body i is 3, and the update makes it 5",
+   "confidence": 0.6,
+   "prune_score": 0.12,
+   "score": 0.072,
+   "logic": "++i in the for-update runs before the body each pass",
+   "twin_logic": "The update runs after each pass of the body, so with either ++i or i++ the first pass uses i = s.",
+   "role": "context"
+  },
+  {
+   "depth": 1,
+   "source": "increment_operators",
+   "edge": "lvl:increment_operators@L0#0",
+   "target": "increment_operators@L0",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    2,
+    3
+   ],
+   "quote": "i++ adds 2; so after the body i is 3, and the update makes it 5",
+   "confidence": 0.9,
+   "prune_score": 0.7,
+   "score": 0.63,
+   "logic": "Folk meaning: '++' reads as 'plus plus' (add twice) or as a maths symbol with no effect, and i++ inside an expression is read as 'add 1 at some later time'. In Java i++ and ++i each add exactly 1 to i immediately when evaluated; they differ only in the value the expression yields.",
+   "twin_logic": null,
+   "level": "L0",
+   "way": "everyday_reading"
+  },
+  {
+   "depth": 2,
+   "source": "increment_operators",
+   "edge": "pre:assignment->increment_operators",
+   "target": "assignment",
+   "kind": "prerequisite",
+   "label": "broken",
+   "clauses": [
+    2,
+    3
+   ],
+   "quote": "i++ adds 2; so after the body i is 3, and the update makes it 5",
+   "confidence": 0.9,
+   "prune_score": 0.6,
+   "score": 0.54,
+   "logic": "i++ is shorthand for the assignment i = i + 1.",
+   "twin_logic": null,
+   "consequence_of": "mis:increment_operators->IncrementByTwo"
+  },
+  {
+   "depth": 2,
+   "source": "increment_operators",
+   "edge": "pre:loop_control->increment_operators",
+   "target": "loop_control",
+   "kind": "prerequisite",
+   "label": "broken",
+   "clauses": [
+    1,
+    2,
+    3
+   ],
+   "quote": "The body runs once; i++ adds 2; so after the body i is 3, and the update makes it 5",
+   "confidence": 0.85,
+   "prune_score": 0.4,
+   "score": 0.34,
+   "logic": "The loop update i = i + 1 comes first; ++ (and +=) are then introduced as shorthand for that update.",
+   "twin_logic": null,
+   "consequence_of": "mis:increment_operators->IncrementByTwo"
+  },
+  {
+   "depth": 2,
+   "source": "for_loop",
+   "edge": "pre:loop_control->for_loop",
+   "target": "loop_control",
+   "kind": "prerequisite",
+   "label": "confirmed",
+   "clauses": [
+    3,
+    4,
+    5
+   ],
+   "quote": "so after the body i is 3, and the update makes it 5; Then 5 < 5 is false; so the loop stops",
+   "confidence": 0.6,
+   "prune_score": 0.6,
+   "score": 0.36,
+   "logic": "The for header is exactly the three control slots, and the body runs after the test and before the update on each pass.",
+   "twin_logic": null
+  },
+  {
+   "depth": 2,
+   "source": "for_loop",
+   "edge": "pre:for_loop->loop_body",
+   "target": "loop_body",
+   "kind": "prerequisite",
+   "label": "confirmed",
+   "clauses": [
+    3,
+    4,
+    5
+   ],
+   "quote": "so after the body i is 3, and the update makes it 5; Then 5 < 5 is false; so the loop stops",
+   "confidence": 0.6,
+   "prune_score": 0.4,
+   "score": 0.24,
+   "logic": "The statements in braces after the for header are the loop body; they run once on every pass, between the test and the increment, exactly as in a while loop.",
+   "twin_logic": null
+  },
+  {
+   "depth": 2,
+   "source": "loop_control",
+   "edge": "pre:loop_variable->loop_control",
+   "target": "loop_variable",
+   "kind": "prerequisite",
+   "label": "broken",
+   "clauses": [
+    2,
+    3
+   ],
+   "quote": "i++ adds 2; so after the body i is 3, and the update makes it 5",
+   "confidence": 0.6,
+   "prune_score": 1.0,
+   "score": 0.6,
+   "logic": "The init, condition and update all act on the loop variable: the init sets it, the condition tests it, the update changes it.",
+   "twin_logic": null,
+   "consequence_of": "mis:increment_operators->IncrementByTwo"
+  },
+  {
+   "depth": 3,
+   "source": "loop_variable",
+   "edge": "mis:loop_variable->BodyChangeIgnoredByCondition",
+   "target": "BodyChangeIgnoredByCondition",
+   "kind": "misconception",
+   "label": "correct",
+   "clauses": [
+    3,
+    4,
+    5
+   ],
+   "quote": "so after the body i is 3, and the update makes it 5; Then 5 < 5 is false; so the loop stops",
+   "confidence": 0.85,
+   "prune_score": 0.6,
+   "score": 0.51,
+   "logic": "Changing the loop variable inside the body does not affect the loop condition; the loop still runs its planned number of times.",
+   "twin_logic": "The condition is tested with the current value of the variable, including changes made in the body.",
+   "role": "primary"
+  },
+  {
+   "depth": 3,
+   "source": "loop_variable",
+   "edge": "mis:loop_variable->LoopVariableLifetimeScope",
+   "target": "LoopVariableLifetimeScope",
+   "kind": "misconception",
+   "label": "correct",
+   "clauses": [
+    3
+   ],
+   "quote": "so after the body i is 3, and the update makes it 5",
+   "confidence": 0.6,
+   "prune_score": 0.2,
+   "score": 0.12,
+   "logic": "The for variable i is a new variable on every pass rather than one variable changed by the update.",
+   "twin_logic": "The for variable i is created once by the init, and the update changes that same variable on every pass.",
+   "role": "context"
+  },
+  {
+   "depth": 3,
+   "source": "loop_variable",
+   "edge": "lvl:loop_variable@L0#5",
+   "target": "loop_variable@L0",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    2,
+    3
+   ],
+   "quote": "i++ adds 2; so after the body i is 3, and the update makes it 5",
+   "confidence": 0.55,
+   "prune_score": 0.6,
+   "score": 0.33,
+   "logic": "Applies the init-test-update rule (LT, loop_control) unevenly to the loop variable: forgets one update, applies a different step on some passes, or re-initializes it mid-loop. (here mixing in: \"The update of the loop variable can change from pass to pass (e.g. switch direction) although the code is the same\")",
+   "twin_logic": null,
+   "level": "L0",
+   "way": "inconsistent_trace"
+  },
+  {
+   "depth": 3,
+   "source": "loop_variable",
+   "edge": "lvl:loop_variable@L2#0",
+   "target": "loop_variable@L2",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    3,
+    4,
+    5
+   ],
+   "quote": "so after the body i is 3, and the update makes it 5; Then 5 < 5 is false; so the loop stops",
+   "confidence": 0.6,
+   "prune_score": 0.2,
+   "score": 0.12,
+   "logic": "Its value is set by the init, read by the test, read by the body, then changed by the update, and the cycle repeats; the body sees the value set by the previous update.",
+   "twin_logic": null,
+   "level": "L2",
+   "way": "line_by_line_trace"
+  },
+  {
+   "depth": 3,
+   "source": "loop_control",
+   "edge": "pre:loop_control->for_loop",
+   "target": "for_loop",
+   "kind": "prerequisite",
+   "label": "confirmed",
+   "clauses": [
+    3,
+    4,
+    5
+   ],
+   "quote": "so after the body i is 3, and the update makes it 5; Then 5 < 5 is false; so the loop stops",
+   "confidence": 0.6,
+   "prune_score": 1.0,
+   "score": 0.6,
+   "logic": "The for header is exactly the three control slots, and the body runs after the test and before the update on each pass.",
+   "twin_logic": null
+  },
+  {
+   "depth": 3,
+   "source": "assignment",
+   "edge": "mis:assignment->VariableKeepsOldValue",
+   "target": "VariableKeepsOldValue",
+   "kind": "misconception",
+   "label": "correct",
+   "clauses": [
+    3
+   ],
+   "quote": "so after the body i is 3, and the update makes it 5",
+   "confidence": 0.7,
+   "prune_score": 0.5,
+   "score": 0.35,
+   "logic": "A variable keeps its first value after a new assignment (the static model).",
+   "twin_logic": "Each assignment or read replaces the variable's current value.",
+   "role": "context"
+  }
+ ],
+ "clause_coverage": {
+  "The body runs once": "err:loop_control->WrongIterationCount",
+  "i++ adds 2": "err:loop_control->WrongIterationCount",
+  "so after the body i is 3, and the update makes it 5": "err:loop_control->WrongIterationCount",
+  "Then 5 < 5 is false": "err:loop_control->WrongIterationCount",
+  "so the loop stops": "err:loop_control->WrongIterationCount"
+ },
+ "unexplained_clauses": [],
+ "stop_reason": "max depth",
+ "depth_reached": 3,
+ "llm_calls": 0,
+ "llm_cache_hits": 40,
+ "llm_calls_by_step": {
+  "prune": 14,
+  "label": 26
+ },
+ "level_v2": {
+  "wrong_ways": [
+   {
+    "concept": "assignment",
+    "edge": "lvl:assignment@L3#6",
+    "level": "L3",
+    "way": "relation_to_neighbour",
+    "clauses": [
+     2,
+     3
+    ],
+    "quote": "i++ adds 2; so after the body i is 3, and the update makes it 5",
+    "confidence": 0.8
+   },
+   {
+    "concept": "assignment",
+    "edge": "lvl:assignment@L3#7",
+    "level": "L3",
+    "way": "relation_to_neighbour",
+    "clauses": [
+     2,
+     3
+    ],
+    "quote": "i++ adds 2; so after the body i is 3, and the update makes it 5",
+    "confidence": 0.75
+   }
+  ],
+  "not_counted": []
+ }
+}

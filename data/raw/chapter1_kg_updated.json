@@ -102919,7 +102919,9 @@
     "for_loop",
     "while_loop",
     "block"
-   ]
+   ],
+   "style_only": true,
+   "style_only_note": "Braces around a single-statement body are optional in Java (both books say so); leaving them out is a style choice, not a wrong belief, so the record is kept but is not offered to the walk as a misconception."
   },
   {
    "id": "MissingClarifyingParentheses",
@@ -119608,7 +119610,8 @@
     "TJ-2e",
     "SW-1e"
    ],
-   "evidence_type": "a breach of a rule or convention stated in a rule dictionary (Oracle Java Tutorials, Oracle Code Conventions, Google Java Style)"
+   "evidence_type": "a breach of a rule or convention stated in a rule dictionary (Oracle Java Tutorials, Oracle Code Conventions, Google Java Style)",
+   "style_only": true
   },
   {
    "source": "for_loop",
@@ -119630,7 +119633,8 @@
     "SW-1e"
    ],
    "evidence_type": "a breach of a rule or convention stated in a rule dictionary (Oracle Java Tutorials, Oracle Code Conventions, Google Java Style)",
-   "role_note": "v3.9.6 fix 3 (S9c): primary only at if_statement, the concept whose rule the misconception violates; kept here as context because if_statement and for_loop are not on one prerequisite path"
+   "role_note": "v3.9.6 fix 3 (S9c): primary only at if_statement, the concept whose rule the misconception violates; kept here as context because if_statement and for_loop are not on one prerequisite path",
+   "style_only": true
   },
   {
    "source": "while_loop",
@@ -119652,7 +119656,8 @@
     "SW-1e"
    ],
    "evidence_type": "a breach of a rule or convention stated in a rule dictionary (Oracle Java Tutorials, Oracle Code Conventions, Google Java Style)",
-   "role_note": "v3.9.6 fix 3 (S9c): primary only at if_statement, the concept whose rule the misconception violates; kept here as context because if_statement and while_loop are not on one prerequisite path"
+   "role_note": "v3.9.6 fix 3 (S9c): primary only at if_statement, the concept whose rule the misconception violates; kept here as context because if_statement and while_loop are not on one prerequisite path",
+   "style_only": true
   },
   {
    "source": "block",
@@ -119674,7 +119679,8 @@
     "SW-1e"
    ],
    "evidence_type": "a breach of a rule or convention stated in a rule dictionary (Oracle Java Tutorials, Oracle Code Conventions, Google Java Style)",
-   "role_note": "v3.9.6 fix 3 (S9c): primary only at if_statement, the concept whose rule the misconception violates; kept here as context because if_statement and block are not on one prerequisite path"
+   "role_note": "v3.9.6 fix 3 (S9c): primary only at if_statement, the concept whose rule the misconception violates; kept here as context because if_statement and block are not on one prerequisite path",
+   "style_only": true
   },
   {
    "source": "control_flow",
@@ -292042,5 +292048,16 @@
    "prerequisite do_while_loop -> loop_control (S9b)",
    "prerequisite for_loop -> infinite_loop (S9b)"
   ]
+ },
+ "revision_style_only": {
+  "date": "2026-11-24",
+  "based_on": "3.9.8",
+  "records": [
+   "MissingBraces"
+  ],
+  "edges": 4,
+  "why": "Braces around a single-statement body are optional in Java (both books say so); leaving them out is a style choice, not a wrong belief, so the record is kept but is not offered to the walk as a misconception.",
+  "found_by": "LP19: a correct braceless one-statement for loop was labelled as holding MissingBraces, which made a correct L4 answer L0.",
+  "effect": "src/model.py leaves style_only misconception edges out of the subgraph G; the node and edge counts of the graph file are unchanged."
  }
 }

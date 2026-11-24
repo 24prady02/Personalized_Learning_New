@@ -1,0 +1,106 @@
+clauses: println runs 3 times | The indented println is inside the loop | so it runs on both passes and prints 2 and 4, and then the last println prints 5
+start: BM25 of the answer against each tagged concept: println 20.09 (hits 1), for_loop 15.42 (hits 1), loop_control 11.73 (hits 1), loop_body 11.73 (hits 1), loop_variable 9.97 (hits 1), control_flow 8.83 (hits 1), increment_operators 6.97 (hits 1), boolean_expression 1.96 (hits 1), comparison_operators 1.29 (hits 1)
+start: chosen println, for_loop, loop_control
+start concepts (3): println, for_loop, loop_control
+--- depth 1: current concepts ['println', 'for_loop', 'loop_control']
+  println (misconceptions): 6 candidates -> kept mis:println->PrintedTextIsExecuted (0.40), mis:println->PrintNewLineFirst (0.30), mis:println->PrintEqualsPrintln (0.30)
+    mis:println->PrintedTextIsExecuted -> not applied (0.00) ""
+    mis:println->PrintNewLineFirst -> not applied (0.00) ""
+    mis:println->PrintEqualsPrintln -> not applied (0.00) ""
+  println (level ways): 17 candidates -> kept lvl:println@L3#0 (0.50), lvl:println@L2#1 (0.30), lvl:println@L2#2 (0.20)
+    lvl:println@L3#0: wrong (0.85) -> not applied
+    lvl:println@L3#0 -> not applied (0.00) ""
+    lvl:println@L2#1 -> shown (0.21) "so it runs on both passes and prints 2 and 4, and then the last println prints 5"
+    lvl:println@L2#2 -> shown (0.12) "so it runs on both passes and prints 2 and 4, and then the last println prints 5"
+  for_loop (misconceptions): 20 candidates -> kept err:for_loop->BracelessMultiStatementBody (0.70), err:for_loop->WrongIterationCount (0.15), mis:for_loop->ForUpdateBeforeBody (0.15)
+    err:for_loop->BracelessMultiStatementBody -> held (0.66) "The indented println is inside the loop; so it runs on both passes and prints 2 and 4, and then the last println prints 5"
+    err:for_loop->WrongIterationCount -> correct (0.12) "so it runs on both passes and prints 2 and 4, and then the last println prints 5"
+    mis:for_loop->ForUpdateBeforeBody -> correct (0.11) "so it runs on both passes and prints 2 and 4, and then the last println prints 5"
+  for_loop (level ways): 24 candidates -> kept lvl:for_loop@L4#6 (0.60), lvl:for_loop@L2#0 (0.25), lvl:for_loop@L4#5 (0.15)
+    lvl:for_loop@L4#6: wrong (0.70) -> not applied
+    lvl:for_loop@L4#6 -> not applied (0.00) ""
+    lvl:for_loop@L2#0 -> shown (0.17) "so it runs on both passes and prints 2 and 4, and then the last println prints 5"
+    lvl:for_loop@L4#5 -> not applied (0.00) ""
+  loop_control (misconceptions): 11 candidates -> kept err:loop_control->WrongIterationCount (0.50), mis:loop_control->ForUpdateBeforeBody (0.25), mis:loop_control->LoopStepAlwaysOne (0.25)
+    err:loop_control->WrongIterationCount -> correct (0.38) "so it runs on both passes and prints 2 and 4, and then the last println prints 5"
+    mis:loop_control->ForUpdateBeforeBody -> correct (0.19) "so it runs on both passes and prints 2 and 4, and then the last println prints 5"
+    mis:loop_control->LoopStepAlwaysOne -> not applied (0.00) ""
+  loop_control (level ways): 19 candidates -> kept lvl:loop_control@L2#0 (0.45), lvl:loop_control@L4#1 (0.30), lvl:loop_control@L2#1 (0.25)
+    lvl:loop_control@L2#0 -> shown (0.32) "so it runs on both passes and prints 2 and 4, and then the last println prints 5"
+    lvl:loop_control@L4#1 -> not applied (0.00) ""
+    lvl:loop_control@L2#1 -> shown (0.17) "so it runs on both passes and prints 2 and 4, and then the last println prints 5"
+  kept: err:for_loop->BracelessMultiStatementBody [held, tier 1, 0.67], err:loop_control->WrongIterationCount [correct, tier 2, 0.38], lvl:loop_control@L2#0 [shown, tier 2, 0.32]
+  clause coverage: c1 uncovered; c2 <- err:for_loop->BracelessMultiStatementBody; c3 <- err:for_loop->BracelessMultiStatementBody
+  uncovered clauses bring in: loop_body (2.68), loop_variable (2.36), control_flow (0.82)
+  not yet read: own edges of control_flow, own edges of loop_body, own edges of loop_variable, pre:for_loop->loop_body, pre:loop_control->for_loop, pre:loop_control->increment_operators, pre:loop_variable->loop_control, pre:statement->println
+--- depth 2: current concepts ['for_loop', 'println', 'loop_control', 'loop_body', 'loop_variable', 'control_flow']
+  for_loop (concept edges): 2 candidates -> kept pre:for_loop->loop_body (0.75), pre:loop_control->for_loop (0.25)
+    pre:for_loop->loop_body -> broken (0.64) "The indented println is inside the loop; so it runs on both passes and prints 2 and 4, and then the last println prints 5"
+    pre:loop_control->for_loop -> confirmed (0.15) "so it runs on both passes and prints 2 and 4, and then the last println prints 5"
+  println (concept edges): 1 candidates -> kept pre:statement->println (1.00)
+    pre:statement->println -> broken (0.70) "The indented println is inside the loop; so it runs on both passes and prints 2 and 4, and then the last println prints 5"
+  loop_control (concept edges): 2 candidates -> kept pre:loop_variable->loop_control (0.70), pre:loop_control->increment_operators (0.30)
+    pre:loop_variable->loop_control -> confirmed (0.52) "so it runs on both passes and prints 2 and 4, and then the last println prints 5"
+    pre:loop_control->increment_operators -> confirmed (0.21) "so it runs on both passes and prints 2 and 4, and then the last println prints 5"
+  loop_body (misconceptions): 12 candidates -> kept err:loop_body->BracelessMultiStatementBody (0.60), mis:loop_body->StatementAfterLoopInBody (0.25), mis:loop_body->ForLoopPartSkipped (0.15)
+    err:loop_body->BracelessMultiStatementBody -> held (0.56) "The indented println is inside the loop; so it runs on both passes and prints 2 and 4, and then the last println prints 5"
+    mis:loop_body->StatementAfterLoopInBody -> correct (0.15) "so it runs on both passes and prints 2 and 4, and then the last println prints 5"
+    mis:loop_body->ForLoopPartSkipped -> correct (0.09) "so it runs on both passes and prints 2 and 4, and then the last println prints 5"
+  loop_body (level ways): 14 candidates -> kept lvl:loop_body@L4#1 (0.45), lvl:loop_body@L1#1 (0.30), lvl:loop_body@L0#0 (0.25)
+    lvl:loop_body@L4#1 -> not applied (0.00) ""
+    lvl:loop_body@L1#1 -> not applied (0.00) ""
+    lvl:loop_body@L0#0 -> not applied (0.00) ""
+  loop_variable (misconceptions): 7 candidates -> kept mis:loop_variable->BodyChangeIgnoredByCondition (0.50), mis:loop_variable->LoopOutputSameEachPass (0.35), mis:loop_variable->LoopVariableLifetimeScope (0.15)
+    mis:loop_variable->BodyChangeIgnoredByCondition -> correct (0.40) "so it runs on both passes and prints 2 and 4, and then the last println prints 5"
+    mis:loop_variable->LoopOutputSameEachPass -> correct (0.30) "so it runs on both passes and prints 2 and 4, and then the last println prints 5"
+    mis:loop_variable->LoopVariableLifetimeScope -> correct (0.10) "so it runs on both passes and prints 2 and 4, and then the last println prints 5"
+  loop_variable (level ways): 13 candidates -> kept lvl:loop_variable@L2#2 (0.40), lvl:loop_variable@L2#1 (0.35), lvl:loop_variable@L2#0 (0.25)
+    lvl:loop_variable@L2#2 -> shown (0.30) "so it runs on both passes and prints 2 and 4, and then the last println prints 5"
+    lvl:loop_variable@L2#1 -> shown (0.28) "so it runs on both passes and prints 2 and 4, and then the last println prints 5"
+    lvl:loop_variable@L2#0 -> shown (0.17) "so it runs on both passes and prints 2 and 4, and then the last println prints 5"
+  control_flow (misconceptions): 11 candidates -> kept mis:control_flow->ProgramEndsAfterLoop (0.45), mis:control_flow->FalseLoopRepeatsNextCode (0.35), mis:control_flow->StatementsRunInAnyOrder (0.20)
+    mis:control_flow->ProgramEndsAfterLoop -> correct (0.38) "so it runs on both passes and prints 2 and 4, and then the last println prints 5"
+    mis:control_flow->FalseLoopRepeatsNextCode -> correct (0.24) "so it runs on both passes and prints 2 and 4, and then the last println prints 5"
+    mis:control_flow->StatementsRunInAnyOrder -> not applied (0.00) ""
+  control_flow (level ways): 15 candidates -> kept lvl:control_flow@L0#0 (0.45), lvl:control_flow@L2#1 (0.30), lvl:control_flow@L2#0 (0.25)
+    lvl:control_flow@L0#0 -> shown (0.36) "The indented println is inside the loop; so it runs on both passes and prints 2 and 4, and then the last println prints 5"
+    lvl:control_flow@L2#1 -> shown (0.26) "println runs 3 times; so it runs on both passes and prints 2 and 4, and then the last println prints 5"
+    lvl:control_flow@L2#0 -> shown (0.15) "so it runs on both passes and prints 2 and 4, and then the last println prints 5"
+  kept: pre:statement->println [broken, tier 0, 0.70], pre:for_loop->loop_body [broken, tier 0, 0.64], err:loop_body->BracelessMultiStatementBody [held, tier 1, 0.56]
+  reached across pre:statement->println, entered next: statement
+  clause coverage: c1 uncovered; c2 <- err:for_loop->BracelessMultiStatementBody; c3 <- err:for_loop->BracelessMultiStatementBody
+  uncovered clauses bring in: increment_operators (1.52)
+  not yet read: own edges of increment_operators, own edges of statement, pre:statement->control_flow
+--- depth 3: current concepts ['statement', 'println', 'loop_body', 'for_loop', 'control_flow', 'increment_operators']
+  statement (misconceptions): 5 candidates -> kept mis:statement->WhitespaceIsSignificant (0.70), mis:statement->ComputerFillsInIntent (0.20), mis:statement->StatementsRunInAnyOrder (0.10)
+    mis:statement->WhitespaceIsSignificant -> held (0.64) "println runs 3 times; The indented println is inside the loop; so it runs on both passes and prints 2 and 4, and then the last println prints 5"
+    mis:statement->ComputerFillsInIntent -> not applied (0.00) ""
+    mis:statement->StatementsRunInAnyOrder -> not applied (0.00) ""
+  statement (level ways): 19 candidates -> kept lvl:statement@L0#0 (0.45), lvl:statement@L3#1 (0.35), lvl:statement@L0#2 (0.20)
+    lvl:statement@L0#0 -> shown (0.27) "The indented println is inside the loop; so it runs on both passes and prints 2 and 4, and then the last println prints 5"
+    lvl:statement@L3#1: wrong (0.85) -> not applied
+    lvl:statement@L3#1 -> not applied (0.00) ""
+    lvl:statement@L0#2 -> not applied (0.00) ""
+  for_loop (concept edges): 1 candidates -> kept pre:loop_control->for_loop (1.00)
+    pre:loop_control->for_loop -> confirmed (0.60) "so it runs on both passes and prints 2 and 4, and then the last println prints 5"
+  control_flow (concept edges): 1 candidates -> kept pre:statement->control_flow (1.00)
+    pre:statement->control_flow -> broken (0.80) "The indented println is inside the loop; so it runs on both passes and prints 2 and 4, and then the last println prints 5"
+  increment_operators (misconceptions): 5 candidates -> kept mis:increment_operators->IncrementByTwo (0.50), mis:increment_operators->PreIncrementBeforeLoop (0.30), mis:increment_operators->IdiomOverridesCode (0.20)
+    mis:increment_operators->IncrementByTwo -> correct (0.40) "so it runs on both passes and prints 2 and 4, and then the last println prints 5"
+    mis:increment_operators->PreIncrementBeforeLoop -> correct (0.18) "so it runs on both passes and prints 2 and 4, and then the last println prints 5"
+    mis:increment_operators->IdiomOverridesCode -> not applied (0.00) ""
+  increment_operators (level ways): 16 candidates -> kept lvl:increment_operators@L2#2 (0.40), lvl:increment_operators@L2#0 (0.30), lvl:increment_operators@L3#0 (0.30)
+    lvl:increment_operators@L2#2 -> shown (0.24) "so it runs on both passes and prints 2 and 4, and then the last println prints 5"
+    lvl:increment_operators@L2#0 -> shown (0.18) "so it runs on both passes and prints 2 and 4, and then the last println prints 5"
+    lvl:increment_operators@L3#0 -> not applied (0.00) ""
+  kept: pre:statement->control_flow [broken, tier 0, 0.80], mis:statement->WhitespaceIsSignificant [held, tier 0, 0.64], pre:loop_control->for_loop [confirmed, tier 2, 0.60]
+  clause coverage: c1 <- mis:statement->WhitespaceIsSignificant; c2 <- err:for_loop->BracelessMultiStatementBody; c3 <- err:for_loop->BracelessMultiStatementBody
+  not yet read: pre:assignment->increment_operators
+  root-cause walk: held on ['for_loop', 'loop_body', 'statement'], broken at [] (consequences: pre:statement->println, pre:for_loop->loop_body, pre:statement->control_flow), prerequisites {'increment_operators': ['assignment', 'loop_control'], 'boolean_expression': ['comparison_operators'], 'comparison_operators': ['expression'], 'loop_body': ['for_loop'], 'for_loop': ['loop_control'], 'loop_control': ['loop_variable'], 'control_flow': ['statement'], 'println': ['statement']}
+  level control_flow: L2 via output_prediction "println runs 3 times; so it runs on both passes and prints 2 and 4, and then the last println prints 5"
+  level for_loop: L2 via line_by_line_trace "so it runs on both passes and prints 2 and 4, and then the last println prints 5"
+  level increment_operators: L2 via one_step_execution "so it runs on both passes and prints 2 and 4, and then the last println prints 5"
+  level loop_control: L2 via line_by_line_trace "so it runs on both passes and prints 2 and 4, and then the last println prints 5"
+  level loop_variable: L2 via one_step_execution "so it runs on both passes and prints 2 and 4, and then the last println prints 5"
+  level println: L2 via output_prediction "so it runs on both passes and prints 2 and 4, and then the last println prints 5"
+  level statement: L0 via misconception "println runs 3 times; The indented println is inside the loop; so it runs on both passes and prints 2 and 4, and then the last println prints 5"

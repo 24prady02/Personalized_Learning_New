@@ -1,0 +1,93 @@
+clauses: for (int i = 1 | i < n | i += 2) System.out.println(i) | This does on purpose what the given loop does by accident: the given loop also steps i by 2 | because i++ is in both the body and the header | If I wanted more than one statement repeated I would add braces
+start: generic concepts whose tagging text occurs in the answer: assignment, expression, statement
+start: BM25 of the answer against each tagged concept: loop_control 42.07 (hits 1), for_loop 41.85 (hits 1), increment_operators 34.98 (hits 1), assignment 31.53 (hits 1), loop_variable 28.46 (hits 1), loop_body 22.94 (hits 1), expression 17.61 (hits 2), control_flow 14.66 (hits 1), statement 13.87 (hits 1), comparison_operators 10.94 (hits 1), println 9.62 (hits 1), boolean_expression 9.39 (hits 1)
+start: chosen loop_control, for_loop, increment_operators
+start concepts (3): loop_control, for_loop, increment_operators
+--- depth 1: current concepts ['loop_control', 'for_loop', 'increment_operators']
+  loop_control (misconceptions): 11 candidates -> kept mis:loop_control->LoopStepAlwaysOne (0.45), mis:loop_control->ForLoopPartSkipped (0.30), err:loop_control->WrongIterationCount (0.25)
+    mis:loop_control->LoopStepAlwaysOne -> correct (0.38) "i += 2) System.out.println(i); This does on purpose what the given loop does by accident: the given loop also steps i by 2; because i++ is in both the body and the header"
+    mis:loop_control->ForLoopPartSkipped -> correct (0.21) "This does on purpose what the given loop does by accident: the given loop also steps i by 2; because i++ is in both the body and the header"
+    err:loop_control->WrongIterationCount -> correct (0.20) "for (int i = 1; i < n; i += 2) System.out.println(i)"
+  loop_control (level ways): 19 candidates -> kept lvl:loop_control@L4#1 (0.45), lvl:loop_control@L2#1 (0.35), lvl:loop_control@L3#6 (0.20)
+    lvl:loop_control@L4#1 -> shown (0.32) "This does on purpose what the given loop does by accident: the given loop also steps i by 2; because i++ is in both the body and the header"
+    lvl:loop_control@L2#1 -> shown (0.24) "i += 2) System.out.println(i); This does on purpose what the given loop does by accident: the given loop also steps i by 2; because i++ is in both the body and the header"
+    lvl:loop_control@L3#6 -> shown (0.15) "for (int i = 1; i < n; i += 2) System.out.println(i); This does on purpose what the given loop does by accident: the given loop also steps i by 2; because i++ is in both the body and the header"
+  for_loop (misconceptions): 20 candidates -> kept mis:for_loop->LoopStepAlwaysOne (0.40), err:for_loop->BracelessMultiStatementBody (0.35), err:for_loop->WrongIterationCount (0.25)
+    mis:for_loop->LoopStepAlwaysOne -> correct (0.36) "i += 2) System.out.println(i); This does on purpose what the given loop does by accident: the given loop also steps i by 2"
+    err:for_loop->BracelessMultiStatementBody -> correct (0.28) "because i++ is in both the body and the header; If I wanted more than one statement repeated I would add braces"
+    err:for_loop->WrongIterationCount -> correct (0.20) "for (int i = 1; i < n; i += 2) System.out.println(i)"
+  for_loop (level ways): 24 candidates -> kept lvl:for_loop@L4#5 (0.50), lvl:for_loop@L4#6 (0.30), lvl:for_loop@L4#0 (0.20)
+    lvl:for_loop@L4#5 -> shown (0.30) "This does on purpose what the given loop does by accident: the given loop also steps i by 2; because i++ is in both the body and the header"
+    lvl:for_loop@L4#6 -> not applied (0.00) ""
+    lvl:for_loop@L4#0 -> not applied (0.00) ""
+  increment_operators (misconceptions): 5 candidates -> kept mis:increment_operators->IncrementByTwo (0.60), mis:increment_operators->IdiomOverridesCode (0.30), mis:increment_operators->PreIncrementBeforeLoop (0.10)
+    mis:increment_operators->IncrementByTwo -> correct (0.51) "This does on purpose what the given loop does by accident: the given loop also steps i by 2; because i++ is in both the body and the header"
+    mis:increment_operators->IdiomOverridesCode -> not applied (0.00) ""
+    mis:increment_operators->PreIncrementBeforeLoop -> not applied (0.00) ""
+  increment_operators (level ways): 16 candidates -> kept lvl:increment_operators@L4#1 (0.45), lvl:increment_operators@L3#3 (0.30), lvl:increment_operators@L3#0 (0.25)
+    lvl:increment_operators@L4#1 -> shown (0.32) "for (int i = 1; i < n; i += 2) System.out.println(i); This does on purpose what the given loop does by accident: the given loop also steps i by 2; because i++ is in both the body and the header"
+    lvl:increment_operators@L3#3 -> shown (0.22) "i += 2) System.out.println(i); This does on purpose what the given loop does by accident: the given loop also steps i by 2; because i++ is in both the body and the header"
+    lvl:increment_operators@L3#0 -> shown (0.19) "i += 2) System.out.println(i); This does on purpose what the given loop does by accident: the given loop also steps i by 2; because i++ is in both the body and the header"
+  kept: mis:increment_operators->IncrementByTwo [correct, tier 2, 0.51], mis:loop_control->LoopStepAlwaysOne [correct, tier 2, 0.38], mis:for_loop->LoopStepAlwaysOne [correct, tier 2, 0.36]
+  clause coverage: c1 <- err:loop_control->WrongIterationCount; c2 <- err:loop_control->WrongIterationCount; c3 <- mis:loop_control->LoopStepAlwaysOne; c4 <- mis:loop_control->LoopStepAlwaysOne; c5 <- mis:loop_control->LoopStepAlwaysOne; c6 <- err:for_loop->BracelessMultiStatementBody
+  not yet read: pre:assignment->increment_operators, pre:for_loop->loop_body, pre:loop_control->for_loop, pre:loop_control->increment_operators, pre:loop_variable->loop_control
+--- depth 2: current concepts ['loop_control', 'for_loop', 'increment_operators']
+  loop_control (concept edges): 3 candidates -> kept pre:loop_control->for_loop (0.45), pre:loop_control->increment_operators (0.30), pre:loop_variable->loop_control (0.25)
+    pre:loop_control->for_loop -> confirmed (0.36) "for (int i = 1; i < n; i += 2) System.out.println(i); because i++ is in both the body and the header"
+    pre:loop_control->increment_operators -> confirmed (0.24) "i += 2) System.out.println(i); because i++ is in both the body and the header"
+    pre:loop_variable->loop_control -> confirmed (0.21) "for (int i = 1; i < n; i += 2) System.out.println(i); because i++ is in both the body and the header"
+  for_loop (concept edges): 1 candidates -> kept pre:for_loop->loop_body (1.00)
+    pre:for_loop->loop_body -> confirmed (0.80) "This does on purpose what the given loop does by accident: the given loop also steps i by 2; because i++ is in both the body and the header; If I wanted more than one statement repeated I would add braces"
+  increment_operators (concept edges): 1 candidates -> kept pre:assignment->increment_operators (1.00)
+    pre:assignment->increment_operators -> confirmed (0.75) "i += 2) System.out.println(i); This does on purpose what the given loop does by accident: the given loop also steps i by 2; because i++ is in both the body and the header"
+  kept: pre:for_loop->loop_body [confirmed, tier 2, 0.80], pre:assignment->increment_operators [confirmed, tier 2, 0.75], pre:loop_control->for_loop [confirmed, tier 2, 0.36]
+  reached across pre:for_loop->loop_body, entered next: loop_body
+  reached across pre:assignment->increment_operators, entered next: assignment
+  clause coverage: c1 <- err:loop_control->WrongIterationCount; c2 <- err:loop_control->WrongIterationCount; c3 <- mis:loop_control->LoopStepAlwaysOne; c4 <- mis:loop_control->LoopStepAlwaysOne; c5 <- mis:loop_control->LoopStepAlwaysOne; c6 <- err:for_loop->BracelessMultiStatementBody
+  not yet read: own edges of assignment, own edges of loop_body
+--- depth 3: current concepts ['loop_body', 'for_loop', 'assignment', 'increment_operators', 'loop_control']
+  loop_body (misconceptions): 12 candidates -> kept err:loop_body->BracelessMultiStatementBody (0.50), mis:loop_body->ForLoopPartSkipped (0.30), mis:loop_body->LoopOutputSameEachPass (0.20)
+    err:loop_body->BracelessMultiStatementBody -> not applied (0.00) ""
+    mis:loop_body->ForLoopPartSkipped -> correct (0.21) "This does on purpose what the given loop does by accident: the given loop also steps i by 2; because i++ is in both the body and the header"
+    mis:loop_body->LoopOutputSameEachPass -> correct (0.14) "i += 2) System.out.println(i)"
+  loop_body (level ways): 14 candidates -> kept lvl:loop_body@L4#1 (0.40), lvl:loop_body@L4#2 (0.35), lvl:loop_body@L2#2 (0.25)
+    lvl:loop_body@L4#1 -> not applied (0.00) ""
+    lvl:loop_body@L4#2 -> shown (0.21) "for (int i = 1; i < n; i += 2) System.out.println(i); If I wanted more than one statement repeated I would add braces"
+    lvl:loop_body@L2#2 -> shown (0.17) "This does on purpose what the given loop does by accident: the given loop also steps i by 2; because i++ is in both the body and the header"
+  assignment (misconceptions): 15 candidates -> kept mis:assignment->VariableKeepsOldValue (0.50), mis:assignment->AssignmentIsEquation (0.30), mis:assignment->AssignmentAddsToTarget (0.20)
+    mis:assignment->VariableKeepsOldValue -> correct (0.38) "i += 2) System.out.println(i); This does on purpose what the given loop does by accident: the given loop also steps i by 2; because i++ is in both the body and the header"
+    mis:assignment->AssignmentIsEquation -> correct (0.17) "i += 2) System.out.println(i)"
+    mis:assignment->AssignmentAddsToTarget -> not applied (0.00) ""
+  assignment (level ways): 24 candidates -> kept lvl:assignment@L3#6 (0.40), lvl:assignment@L3#4 (0.35), lvl:assignment@L4#2 (0.25)
+    lvl:assignment@L3#6 -> shown (0.24) "i += 2) System.out.println(i); This does on purpose what the given loop does by accident: the given loop also steps i by 2; because i++ is in both the body and the header"
+    lvl:assignment@L3#4 -> shown (0.22) "i += 2) System.out.println(i); This does on purpose what the given loop does by accident: the given loop also steps i by 2; because i++ is in both the body and the header"
+    lvl:assignment@L4#2 -> not applied (0.00) ""
+  increment_operators (concept edges): 1 candidates -> kept pre:loop_control->increment_operators (1.00)
+    pre:loop_control->increment_operators -> confirmed (0.80) "i += 2) System.out.println(i); because i++ is in both the body and the header"
+  loop_control (concept edges): 1 candidates -> kept pre:loop_variable->loop_control (1.00)
+    pre:loop_variable->loop_control -> confirmed (0.85) "for (int i = 1; i < n; i += 2) System.out.println(i); because i++ is in both the body and the header"
+  kept: pre:loop_variable->loop_control [confirmed, tier 2, 0.85], pre:loop_control->increment_operators [confirmed, tier 2, 0.80], mis:assignment->VariableKeepsOldValue [correct, tier 2, 0.38]
+  reached across pre:loop_variable->loop_control, entered next: loop_variable
+  clause coverage: c1 <- err:loop_control->WrongIterationCount; c2 <- err:loop_control->WrongIterationCount; c3 <- mis:loop_control->LoopStepAlwaysOne; c4 <- mis:loop_control->LoopStepAlwaysOne; c5 <- mis:loop_control->LoopStepAlwaysOne; c6 <- err:for_loop->BracelessMultiStatementBody
+  not yet read: own edges of loop_variable, par:assignment~comparison_operators
+--- depth 4: current concepts ['loop_variable'] (closing round: own edges only)
+  loop_variable (misconceptions): 7 candidates -> kept mis:loop_variable->BodyChangeIgnoredByCondition (0.50), mis:loop_variable->LoopOutputSameEachPass (0.30), mis:loop_variable->LoopUpdateChangesDirection (0.20)
+    mis:loop_variable->BodyChangeIgnoredByCondition -> correct (0.40) "This does on purpose what the given loop does by accident: the given loop also steps i by 2; because i++ is in both the body and the header"
+    mis:loop_variable->LoopOutputSameEachPass -> correct (0.22) "for (int i = 1; i < n; i += 2) System.out.println(i)"
+    mis:loop_variable->LoopUpdateChangesDirection -> not applied (0.00) ""
+  loop_variable (level ways): 13 candidates -> kept lvl:loop_variable@L4#2 (0.50), lvl:loop_variable@L4#1 (0.30), lvl:loop_variable@L2#1 (0.20)
+    lvl:loop_variable@L4#2 -> shown (0.35) "This does on purpose what the given loop does by accident: the given loop also steps i by 2; because i++ is in both the body and the header"
+    lvl:loop_variable@L4#1 -> not applied (0.00) ""
+    lvl:loop_variable@L2#1 -> shown (0.12) "This does on purpose what the given loop does by accident: the given loop also steps i by 2; because i++ is in both the body and the header"
+  kept: mis:loop_variable->BodyChangeIgnoredByCondition [correct, tier 2, 0.40], lvl:loop_variable@L4#2 [shown, tier 2, 0.35], mis:loop_variable->LoopOutputSameEachPass [correct, tier 2, 0.23]
+  clause coverage: c1 <- err:loop_control->WrongIterationCount; c2 <- err:loop_control->WrongIterationCount; c3 <- mis:loop_control->LoopStepAlwaysOne; c4 <- mis:loop_control->LoopStepAlwaysOne; c5 <- mis:loop_control->LoopStepAlwaysOne; c6 <- err:for_loop->BracelessMultiStatementBody
+  not yet read: par:assignment~comparison_operators
+  root-cause walk: held on [], broken at [], prerequisites {'increment_operators': ['assignment', 'loop_control'], 'boolean_expression': ['comparison_operators'], 'comparison_operators': ['expression'], 'loop_body': ['for_loop'], 'for_loop': ['loop_control'], 'loop_control': ['loop_variable'], 'control_flow': ['statement'], 'println': ['statement']}
+  level way lvl:for_loop@L4#5 not counted: confidence 0.60 is not above 0.60
+  level way lvl:loop_body@L4#2 not counted: confidence 0.60 is not above 0.60
+  level way lvl:assignment@L3#6 not counted: confidence 0.60 is not above 0.60
+  level assignment: L3 via relation_to_neighbour "i += 2) System.out.println(i); This does on purpose what the given loop does by accident: the given loop also steps i by 2; because i++ is in both the body and the header"
+  level increment_operators: L4 via transfer_to_a_new_program "for (int i = 1; i < n; i += 2) System.out.println(i); This does on purpose what the given loop does by accident: the given loop also steps i by 2; because i++ is in both the body and the header"
+  level loop_body: L2 via one_step_execution "This does on purpose what the given loop does by accident: the given loop also steps i by 2; because i++ is in both the body and the header"
+  level loop_control: L4 via diagnose_an_error "This does on purpose what the given loop does by accident: the given loop also steps i by 2; because i++ is in both the body and the header"
+  level loop_variable: L4 via diagnose_an_error "This does on purpose what the given loop does by accident: the given loop also steps i by 2; because i++ is in both the body and the header"

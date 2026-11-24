@@ -1,0 +1,5 @@
+{
+ "code": "int i, n = 5;\nfor (i = 1; i < n; i++)\n    i++;\n    System.out.println(i);\nSystem.out.println(i);",
+ "question": "What is the value of i when the second println runs? Explain how i gets that value.",
+ "answer": "i is 5. The loop runs for i = 1, 2, 3, 4 and stops when i reaches 5; the i++ in the body does not affect the count."
+}

@@ -1,0 +1,88 @@
+clauses: Twice | The bodys i++ and the headers i++ change the same variable | so the condition sees i as 1, then 3, then 5 and fails on the third test | Because there are no braces the body is only i++ | the indented println is after the loop
+start: generic concepts whose tagging text occurs in the answer: statement
+start: BM25 of the answer against each tagged concept: loop_control 40.21 (hits 1), for_loop 33.18 (hits 1), increment_operators 32.54 (hits 1), loop_variable 24.38 (hits 1), control_flow 18.25 (hits 1), statement 17.35 (hits 1), println 17.24 (hits 1), loop_body 16.81 (hits 1), comparison_operators 7.18 (hits 1), boolean_expression 6.70 (hits 1)
+start: chosen loop_control, for_loop, increment_operators
+start concepts (3): loop_control, for_loop, increment_operators
+--- depth 1: current concepts ['loop_control', 'for_loop', 'increment_operators']
+  loop_control (misconceptions): 11 candidates -> kept err:loop_control->WrongIterationCount (0.50), mis:loop_control->ForLoopPartSkipped (0.30), mis:loop_control->LoopStepAlwaysOne (0.20)
+    err:loop_control->WrongIterationCount -> correct (0.45) "Twice; so the condition sees i as 1, then 3, then 5 and fails on the third test"
+    mis:loop_control->ForLoopPartSkipped -> correct (0.24) "The bodys i++ and the headers i++ change the same variable; so the condition sees i as 1, then 3, then 5 and fails on the third test"
+    mis:loop_control->LoopStepAlwaysOne -> not applied (0.00) ""
+  loop_control (level ways): 19 candidates -> kept lvl:loop_control@L2#0 (0.45), lvl:loop_control@L4#1 (0.35), lvl:loop_control@L3#0 (0.20)
+    lvl:loop_control@L2#0 -> shown (0.38) "The bodys i++ and the headers i++ change the same variable; so the condition sees i as 1, then 3, then 5 and fails on the third test"
+    lvl:loop_control@L4#1 -> not applied (0.00) ""
+    lvl:loop_control@L3#0 -> shown (0.14) "The bodys i++ and the headers i++ change the same variable; so the condition sees i as 1, then 3, then 5 and fails on the third test"
+  for_loop (misconceptions): 20 candidates -> kept err:for_loop->BracelessMultiStatementBody (0.45), err:for_loop->WrongIterationCount (0.35), mis:for_loop->LoopStepAlwaysOne (0.20)
+    err:for_loop->BracelessMultiStatementBody -> correct (0.43) "Because there are no braces the body is only i++; the indented println is after the loop"
+    err:for_loop->WrongIterationCount -> correct (0.32) "Twice; The bodys i++ and the headers i++ change the same variable; so the condition sees i as 1, then 3, then 5 and fails on the third test"
+    mis:for_loop->LoopStepAlwaysOne -> correct (0.12) "The bodys i++ and the headers i++ change the same variable; so the condition sees i as 1, then 3, then 5 and fails on the third test"
+  for_loop (level ways): 24 candidates -> kept lvl:for_loop@L4#6 (0.40), lvl:for_loop@L4#5 (0.35), lvl:for_loop@L2#0 (0.25)
+    lvl:for_loop@L4#6 -> shown (0.26) "Because there are no braces the body is only i++; the indented println is after the loop"
+    lvl:for_loop@L4#5 -> not applied (0.00) ""
+    lvl:for_loop@L2#0 -> shown (0.23) "The bodys i++ and the headers i++ change the same variable; so the condition sees i as 1, then 3, then 5 and fails on the third test"
+  increment_operators (misconceptions): 5 candidates -> kept mis:increment_operators->IncrementByTwo (0.45), mis:increment_operators->IdiomOverridesCode (0.35), mis:increment_operators->PreIncrementBeforeLoop (0.20)
+    mis:increment_operators->IncrementByTwo -> correct (0.38) "The bodys i++ and the headers i++ change the same variable; so the condition sees i as 1, then 3, then 5 and fails on the third test"
+    mis:increment_operators->IdiomOverridesCode -> not applied (0.00) ""
+    mis:increment_operators->PreIncrementBeforeLoop -> correct (0.14) "so the condition sees i as 1, then 3, then 5 and fails on the third test"
+  increment_operators (level ways): 16 candidates -> kept lvl:increment_operators@L3#0 (0.45), lvl:increment_operators@L2#2 (0.30), lvl:increment_operators@L3#2 (0.25)
+    lvl:increment_operators@L3#0 -> shown (0.34) "The bodys i++ and the headers i++ change the same variable; so the condition sees i as 1, then 3, then 5 and fails on the third test"
+    lvl:increment_operators@L2#2 -> shown (0.21) "The bodys i++ and the headers i++ change the same variable; so the condition sees i as 1, then 3, then 5 and fails on the third test"
+    lvl:increment_operators@L3#2 -> shown (0.19) "The bodys i++ and the headers i++ change the same variable; so the condition sees i as 1, then 3, then 5 and fails on the third test"
+  kept: err:loop_control->WrongIterationCount [correct, tier 2, 0.45], err:for_loop->BracelessMultiStatementBody [correct, tier 2, 0.43], lvl:loop_control@L2#0 [shown, tier 2, 0.38]
+  clause coverage: c1 <- err:loop_control->WrongIterationCount; c2 <- mis:loop_control->ForLoopPartSkipped; c3 <- err:loop_control->WrongIterationCount; c4 <- err:for_loop->BracelessMultiStatementBody; c5 <- err:for_loop->BracelessMultiStatementBody
+  not yet read: pre:assignment->increment_operators, pre:for_loop->loop_body, pre:loop_control->for_loop, pre:loop_control->increment_operators, pre:loop_variable->loop_control
+--- depth 2: current concepts ['loop_control', 'for_loop', 'increment_operators']
+  loop_control (concept edges): 3 candidates -> kept pre:loop_variable->loop_control (0.45), pre:loop_control->for_loop (0.40), pre:loop_control->increment_operators (0.15)
+    pre:loop_variable->loop_control -> confirmed (0.41) "The bodys i++ and the headers i++ change the same variable; so the condition sees i as 1, then 3, then 5 and fails on the third test"
+    pre:loop_control->for_loop -> confirmed (0.34) "The bodys i++ and the headers i++ change the same variable; so the condition sees i as 1, then 3, then 5 and fails on the third test"
+    pre:loop_control->increment_operators -> confirmed (0.12) "The bodys i++ and the headers i++ change the same variable; so the condition sees i as 1, then 3, then 5 and fails on the third test"
+  for_loop (concept edges): 1 candidates -> kept pre:for_loop->loop_body (1.00)
+    pre:for_loop->loop_body -> confirmed (0.90) "Twice; The bodys i++ and the headers i++ change the same variable; so the condition sees i as 1, then 3, then 5 and fails on the third test; Because there are no braces the body is only i++; the indented println is after the loop"
+  increment_operators (concept edges): 1 candidates -> kept pre:assignment->increment_operators (1.00)
+    pre:assignment->increment_operators -> confirmed (0.80) "The bodys i++ and the headers i++ change the same variable; so the condition sees i as 1, then 3, then 5 and fails on the third test"
+  kept: pre:for_loop->loop_body [confirmed, tier 2, 0.90], pre:assignment->increment_operators [confirmed, tier 2, 0.80], pre:loop_variable->loop_control [confirmed, tier 2, 0.41]
+  reached across pre:for_loop->loop_body, entered next: loop_body
+  reached across pre:assignment->increment_operators, entered next: assignment
+  reached across pre:loop_variable->loop_control, entered next: loop_variable
+  clause coverage: c1 <- err:loop_control->WrongIterationCount; c2 <- mis:loop_control->ForLoopPartSkipped; c3 <- err:loop_control->WrongIterationCount; c4 <- err:for_loop->BracelessMultiStatementBody; c5 <- err:for_loop->BracelessMultiStatementBody
+  not yet read: own edges of assignment, own edges of loop_body, own edges of loop_variable
+--- depth 3: current concepts ['loop_body', 'for_loop', 'assignment', 'increment_operators', 'loop_variable', 'loop_control']
+  loop_body (misconceptions): 12 candidates -> kept err:loop_body->BracelessMultiStatementBody (0.50), mis:loop_body->StatementAfterLoopInBody (0.30), mis:loop_body->ForLoopPartSkipped (0.20)
+    err:loop_body->BracelessMultiStatementBody -> correct (0.47) "Because there are no braces the body is only i++; the indented println is after the loop"
+    mis:loop_body->StatementAfterLoopInBody -> correct (0.21) "the indented println is after the loop"
+    mis:loop_body->ForLoopPartSkipped -> correct (0.16) "Twice; The bodys i++ and the headers i++ change the same variable; so the condition sees i as 1, then 3, then 5 and fails on the third test"
+  loop_body (level ways): 14 candidates -> kept lvl:loop_body@L4#1 (0.45), lvl:loop_body@L2#2 (0.30), lvl:loop_body@L1#1 (0.25)
+    lvl:loop_body@L4#1 -> shown (0.31) "Because there are no braces the body is only i++; the indented println is after the loop"
+    lvl:loop_body@L2#2 -> shown (0.26) "The bodys i++ and the headers i++ change the same variable; so the condition sees i as 1, then 3, then 5 and fails on the third test"
+    lvl:loop_body@L1#1 -> shown (0.23) "Because there are no braces the body is only i++; the indented println is after the loop"
+  for_loop (concept edges): 1 candidates -> kept pre:loop_control->for_loop (1.00)
+    pre:loop_control->for_loop -> confirmed (0.85) "The bodys i++ and the headers i++ change the same variable; so the condition sees i as 1, then 3, then 5 and fails on the third test"
+  assignment (misconceptions): 15 candidates -> kept mis:assignment->VariableKeepsOldValue (0.60), mis:assignment->AssignmentIsEquation (0.25), mis:assignment->VariablesHoldExpressions (0.15)
+    mis:assignment->VariableKeepsOldValue -> correct (0.51) "The bodys i++ and the headers i++ change the same variable; so the condition sees i as 1, then 3, then 5 and fails on the third test"
+    mis:assignment->AssignmentIsEquation -> not applied (0.00) ""
+    mis:assignment->VariablesHoldExpressions -> not applied (0.00) ""
+  assignment (level ways): 24 candidates -> kept lvl:assignment@L3#6 (0.45), lvl:assignment@L3#7 (0.30), lvl:assignment@L2#2 (0.25)
+    lvl:assignment@L3#6 -> shown (0.27) "The bodys i++ and the headers i++ change the same variable; so the condition sees i as 1, then 3, then 5 and fails on the third test"
+    lvl:assignment@L3#7 -> shown (0.21) "The bodys i++ and the headers i++ change the same variable; so the condition sees i as 1, then 3, then 5 and fails on the third test"
+    lvl:assignment@L2#2 -> shown (0.15) "The bodys i++ and the headers i++ change the same variable; so the condition sees i as 1, then 3, then 5 and fails on the third test"
+  increment_operators (concept edges): 1 candidates -> kept pre:loop_control->increment_operators (1.00)
+    pre:loop_control->increment_operators -> confirmed (0.80) "The bodys i++ and the headers i++ change the same variable; so the condition sees i as 1, then 3, then 5 and fails on the third test"
+  loop_variable (misconceptions): 7 candidates -> kept mis:loop_variable->BodyChangeIgnoredByCondition (0.60), mis:loop_variable->LoopVariableLifetimeScope (0.25), mis:loop_variable->ForInitRepeats (0.15)
+    mis:loop_variable->BodyChangeIgnoredByCondition -> correct (0.56) "Twice; The bodys i++ and the headers i++ change the same variable; so the condition sees i as 1, then 3, then 5 and fails on the third test"
+    mis:loop_variable->LoopVariableLifetimeScope -> correct (0.20) "The bodys i++ and the headers i++ change the same variable"
+    mis:loop_variable->ForInitRepeats -> correct (0.10) "so the condition sees i as 1, then 3, then 5 and fails on the third test"
+  loop_variable (level ways): 13 candidates -> kept lvl:loop_variable@L2#2 (0.40), lvl:loop_variable@L4#2 (0.35), lvl:loop_variable@L4#0 (0.25)
+    lvl:loop_variable@L2#2 -> shown (0.36) "The bodys i++ and the headers i++ change the same variable; so the condition sees i as 1, then 3, then 5 and fails on the third test"
+    lvl:loop_variable@L4#2 -> not applied (0.00) ""
+    lvl:loop_variable@L4#0 -> not applied (0.00) ""
+  kept: pre:loop_control->for_loop [confirmed, tier 2, 0.85], pre:loop_control->increment_operators [confirmed, tier 2, 0.80], mis:loop_variable->BodyChangeIgnoredByCondition [correct, tier 2, 0.56]
+  clause coverage: c1 <- err:loop_control->WrongIterationCount; c2 <- mis:loop_control->ForLoopPartSkipped; c3 <- err:loop_control->WrongIterationCount; c4 <- err:for_loop->BracelessMultiStatementBody; c5 <- err:for_loop->BracelessMultiStatementBody
+  not yet read: par:assignment~comparison_operators
+  root-cause walk: held on [], broken at [], prerequisites {'increment_operators': ['assignment', 'loop_control'], 'boolean_expression': ['comparison_operators'], 'comparison_operators': ['expression'], 'loop_body': ['for_loop'], 'for_loop': ['loop_control'], 'loop_control': ['loop_variable'], 'control_flow': ['statement'], 'println': ['statement']}
+  level way lvl:assignment@L3#6 not counted: confidence 0.60 is not above 0.60
+  level assignment: L3 via relation_to_neighbour "The bodys i++ and the headers i++ change the same variable; so the condition sees i as 1, then 3, then 5 and fails on the third test"
+  level for_loop: L4 via diagnose_an_error "Because there are no braces the body is only i++; the indented println is after the loop"
+  level increment_operators: L3 via relation_to_neighbour "The bodys i++ and the headers i++ change the same variable; so the condition sees i as 1, then 3, then 5 and fails on the third test"
+  level loop_body: L4 via diagnose_an_error "Because there are no braces the body is only i++; the indented println is after the loop"
+  level loop_control: L3 via relation_to_neighbour "The bodys i++ and the headers i++ change the same variable; so the condition sees i as 1, then 3, then 5 and fails on the third test"
+  level loop_variable: L2 via one_step_execution "The bodys i++ and the headers i++ change the same variable; so the condition sees i as 1, then 3, then 5 and fails on the third test"

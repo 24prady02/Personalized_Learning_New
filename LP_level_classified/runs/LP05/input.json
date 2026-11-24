@@ -1,0 +1,5 @@
+{
+ "code": "int i, n = 5;\nfor (i = 1; i < n; i++)\n    i++;\n    System.out.println(i);\nSystem.out.println(i);",
+ "question": "How many times does the body of the for loop run? Explain your reasoning.",
+ "answer": "The body runs once. i++ adds 2, so after the body i is 3, and the update makes it 5. Then 5 < 5 is false, so the loop stops."
+}

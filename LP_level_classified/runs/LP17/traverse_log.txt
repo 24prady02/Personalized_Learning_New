@@ -1,0 +1,82 @@
+clauses: It does not compile | Line 1 and line 4 are missing the | at the end | so javac reports | expected | After those are fixed, system.out still fails | because Java is case-sensitive: there is no package called system, it must be System | Even then the indentation is misleading: without braces only i++ is in the loop, a silent logic error whenever a braceless loop is followed by indented lines
+start: generic concepts whose tagging text occurs in the answer: statement
+start: BM25 of the answer against each tagged concept: statement 42.13 (hits 1), compile_time_error 35.62 (hits 1), for_loop 29.91 (hits 1), println 28.82 (hits 1), control_flow 27.93 (hits 1), loop_control 23.02 (hits 1), loop_body 20.00 (hits 1), increment_operators 17.22 (hits 1), loop_variable 16.70 (hits 1), comparison_operators 15.85 (hits 1), boolean_expression 12.62 (hits 1)
+start: chosen statement, compile_time_error, for_loop
+start concepts (3): statement, compile_time_error, for_loop
+--- depth 1: current concepts ['statement', 'compile_time_error', 'for_loop']
+  statement (misconceptions): 5 candidates -> kept err:statement->StatementNeedsNoTerminator (0.50), mis:statement->WhitespaceIsSignificant (0.35), mis:statement->ComputerFillsInIntent (0.15)
+    err:statement->StatementNeedsNoTerminator -> correct (0.45) "It does not compile; Line 1 and line 4 are missing the; at the end; so javac reports; expected"
+    mis:statement->WhitespaceIsSignificant -> correct (0.30) "Even then the indentation is misleading: without braces only i++ is in the loop, a silent logic error whenever a braceless loop is followed by indented lines"
+    mis:statement->ComputerFillsInIntent -> correct (0.09) "After those are fixed, system.out still fails; because Java is case-sensitive: there is no package called system, it must be System; Even then the indentation is misleading: without braces only i++ is in the loop, a silent logic error whenever a braceless loop is followed by indented lines"
+  statement (level ways): 19 candidates -> kept lvl:statement@L4#1 (0.60), lvl:statement@L3#1 (0.25), lvl:statement@L1#0 (0.15)
+    lvl:statement@L4#1 -> shown (0.51) "It does not compile; Line 1 and line 4 are missing the; at the end; so javac reports; expected"
+    lvl:statement@L3#1 -> shown (0.18) "Even then the indentation is misleading: without braces only i++ is in the loop, a silent logic error whenever a braceless loop is followed by indented lines"
+    lvl:statement@L1#0 -> shown (0.12) "Line 1 and line 4 are missing the; at the end; so javac reports; expected"
+  compile_time_error (misconceptions): 10 candidates -> kept err:compile_time_error->StatementNeedsNoTerminator (0.40), err:compile_time_error->MisspelledIdentifier (0.35), mis:compile_time_error->CompilesMeansWorks (0.25)
+    err:compile_time_error->StatementNeedsNoTerminator -> correct (0.36) "It does not compile; Line 1 and line 4 are missing the; at the end; so javac reports; expected"
+    err:compile_time_error->MisspelledIdentifier -> correct (0.33) "After those are fixed, system.out still fails; because Java is case-sensitive: there is no package called system, it must be System"
+    mis:compile_time_error->CompilesMeansWorks -> correct (0.23) "Even then the indentation is misleading: without braces only i++ is in the loop, a silent logic error whenever a braceless loop is followed by indented lines"
+  compile_time_error (level ways): 21 candidates -> kept lvl:compile_time_error@L4#1 (0.40), lvl:compile_time_error@L4#5 (0.35), lvl:compile_time_error@L4#7 (0.25)
+    lvl:compile_time_error@L4#1 -> shown (0.30) "It does not compile; Line 1 and line 4 are missing the; at the end; so javac reports; expected"
+    lvl:compile_time_error@L4#5 -> shown (0.26) "After those are fixed, system.out still fails; because Java is case-sensitive: there is no package called system, it must be System"
+    lvl:compile_time_error@L4#7 -> shown (0.20) "Line 1 and line 4 are missing the; at the end; so javac reports; expected; After those are fixed, system.out still fails; because Java is case-sensitive: there is no package called system, it must be System; Even then the indentation is misleading: without braces only i++ is in the loop, a silent logic error whenever a braceless loop is followed by indented lines"
+  for_loop (misconceptions): 20 candidates -> kept err:for_loop->BracelessMultiStatementBody (0.80), err:for_loop->WrongIterationCount (0.10), mis:for_loop->FalseLoopRepeatsNextCode (0.10)
+    err:for_loop->BracelessMultiStatementBody -> correct (0.76) "Even then the indentation is misleading: without braces only i++ is in the loop, a silent logic error whenever a braceless loop is followed by indented lines"
+    err:for_loop->WrongIterationCount -> not applied (0.00) ""
+    mis:for_loop->FalseLoopRepeatsNextCode -> not applied (0.00) ""
+  for_loop (level ways): 24 candidates -> kept lvl:for_loop@L4#6 (0.75), lvl:for_loop@L1#1 (0.15), lvl:for_loop@L4#5 (0.10)
+    lvl:for_loop@L4#6 -> shown (0.60) "Even then the indentation is misleading: without braces only i++ is in the loop, a silent logic error whenever a braceless loop is followed by indented lines"
+    lvl:for_loop@L1#1 -> not applied (0.00) ""
+    lvl:for_loop@L4#5 -> not applied (0.00) ""
+  kept: err:for_loop->BracelessMultiStatementBody [correct, tier 2, 0.76], lvl:for_loop@L4#6 [shown, tier 2, 0.60], lvl:statement@L4#1 [shown, tier 2, 0.51]
+  clause coverage: c1 <- err:statement->StatementNeedsNoTerminator; c2 <- err:statement->StatementNeedsNoTerminator; c3 <- err:statement->StatementNeedsNoTerminator; c4 <- err:statement->StatementNeedsNoTerminator; c5 <- err:statement->StatementNeedsNoTerminator; c6 <- mis:statement->ComputerFillsInIntent; c7 <- mis:statement->ComputerFillsInIntent; c8 <- mis:statement->WhitespaceIsSignificant
+  not yet read: pre:for_loop->loop_body, pre:loop_control->for_loop, pre:statement->control_flow, pre:statement->println
+--- depth 2: current concepts ['statement', 'for_loop']
+  statement (concept edges): 2 candidates -> kept pre:statement->control_flow (0.80), pre:statement->println (0.20)
+    pre:statement->control_flow -> confirmed (0.64) "Even then the indentation is misleading: without braces only i++ is in the loop, a silent logic error whenever a braceless loop is followed by indented lines"
+    pre:statement->println -> confirmed (0.12) "Even then the indentation is misleading: without braces only i++ is in the loop, a silent logic error whenever a braceless loop is followed by indented lines"
+  for_loop (concept edges): 2 candidates -> kept pre:for_loop->loop_body (0.70), pre:loop_control->for_loop (0.30)
+    pre:for_loop->loop_body -> confirmed (0.56) "Even then the indentation is misleading: without braces only i++ is in the loop, a silent logic error whenever a braceless loop is followed by indented lines"
+    pre:loop_control->for_loop -> not applied (0.00) ""
+  kept: pre:statement->control_flow [confirmed, tier 2, 0.64], pre:for_loop->loop_body [confirmed, tier 2, 0.56], pre:statement->println [confirmed, tier 2, 0.12]
+  reached across pre:statement->control_flow, entered next: control_flow
+  reached across pre:for_loop->loop_body, entered next: loop_body
+  reached across pre:statement->println, entered next: println
+  clause coverage: c1 <- err:statement->StatementNeedsNoTerminator; c2 <- err:statement->StatementNeedsNoTerminator; c3 <- err:statement->StatementNeedsNoTerminator; c4 <- err:statement->StatementNeedsNoTerminator; c5 <- err:statement->StatementNeedsNoTerminator; c6 <- mis:statement->ComputerFillsInIntent; c7 <- mis:statement->ComputerFillsInIntent; c8 <- mis:statement->WhitespaceIsSignificant
+  not yet read: own edges of control_flow, own edges of loop_body, own edges of println
+--- depth 3: current concepts ['control_flow', 'statement', 'loop_body', 'for_loop', 'println']
+  control_flow (misconceptions): 11 candidates -> kept mis:control_flow->FalseLoopRepeatsNextCode (0.50), mis:control_flow->ProgramEndsAfterLoop (0.30), mis:control_flow->StatementsRunInAnyOrder (0.20)
+    mis:control_flow->FalseLoopRepeatsNextCode -> correct (0.35) "Even then the indentation is misleading: without braces only i++ is in the loop, a silent logic error whenever a braceless loop is followed by indented lines"
+    mis:control_flow->ProgramEndsAfterLoop -> not applied (0.00) ""
+    mis:control_flow->StatementsRunInAnyOrder -> not applied (0.00) ""
+  control_flow (level ways): 15 candidates -> kept lvl:control_flow@L4#0 (0.45), lvl:control_flow@L3#0 (0.30), lvl:control_flow@L2#0 (0.25)
+    lvl:control_flow@L4#0 -> not applied (0.00) ""
+    lvl:control_flow@L3#0 -> shown (0.22) "Even then the indentation is misleading: without braces only i++ is in the loop, a silent logic error whenever a braceless loop is followed by indented lines"
+    lvl:control_flow@L2#0 -> shown (0.15) "Even then the indentation is misleading: without braces only i++ is in the loop, a silent logic error whenever a braceless loop is followed by indented lines"
+  loop_body (misconceptions): 12 candidates -> kept err:loop_body->BracelessMultiStatementBody (0.60), mis:loop_body->StatementAfterLoopInBody (0.25), mis:loop_body->ComputerFillsInIntent (0.15)
+    err:loop_body->BracelessMultiStatementBody -> correct (0.57) "Even then the indentation is misleading: without braces only i++ is in the loop, a silent logic error whenever a braceless loop is followed by indented lines"
+    mis:loop_body->StatementAfterLoopInBody -> correct (0.17) "Even then the indentation is misleading: without braces only i++ is in the loop, a silent logic error whenever a braceless loop is followed by indented lines"
+    mis:loop_body->ComputerFillsInIntent -> not applied (0.00) ""
+  loop_body (level ways): 14 candidates -> kept lvl:loop_body@L4#1 (0.60), lvl:loop_body@L1#1 (0.30), lvl:loop_body@L4#2 (0.10)
+    lvl:loop_body@L4#1 -> shown (0.51) "Even then the indentation is misleading: without braces only i++ is in the loop, a silent logic error whenever a braceless loop is followed by indented lines"
+    lvl:loop_body@L1#1 -> shown (0.27) "Even then the indentation is misleading: without braces only i++ is in the loop, a silent logic error whenever a braceless loop is followed by indented lines"
+    lvl:loop_body@L4#2 -> not applied (0.00) ""
+  for_loop (concept edges): 1 candidates -> kept pre:loop_control->for_loop (1.00)
+    pre:loop_control->for_loop -> not applied (0.00) ""
+  println (misconceptions): 6 candidates -> kept mis:println->IdentifierCaseInsensitive (0.80), mis:println->ParenthesesOnlyIfArgument (0.12), err:println->PrintWithoutFinalNewline (0.08)
+    mis:println->IdentifierCaseInsensitive -> correct (0.72) "After those are fixed, system.out still fails; because Java is case-sensitive: there is no package called system, it must be System"
+    mis:println->ParenthesesOnlyIfArgument -> not applied (0.00) ""
+    err:println->PrintWithoutFinalNewline -> not applied (0.00) ""
+  println (level ways): 17 candidates -> kept lvl:println@L4#3 (0.60), lvl:println@L3#0 (0.25), lvl:println@L1#0 (0.15)
+    lvl:println@L4#3 -> shown (0.48) "After those are fixed, system.out still fails; because Java is case-sensitive: there is no package called system, it must be System"
+    lvl:println@L3#0 -> not applied (0.00) ""
+    lvl:println@L1#0 -> not applied (0.00) ""
+  kept: mis:println->IdentifierCaseInsensitive [correct, tier 2, 0.72], err:loop_body->BracelessMultiStatementBody [correct, tier 2, 0.57], lvl:loop_body@L4#1 [shown, tier 2, 0.51]
+  clause coverage: c1 <- err:statement->StatementNeedsNoTerminator; c2 <- err:statement->StatementNeedsNoTerminator; c3 <- err:statement->StatementNeedsNoTerminator; c4 <- err:statement->StatementNeedsNoTerminator; c5 <- err:statement->StatementNeedsNoTerminator; c6 <- mis:statement->ComputerFillsInIntent; c7 <- mis:statement->ComputerFillsInIntent; c8 <- mis:statement->WhitespaceIsSignificant
+  root-cause walk: held on [], broken at [], prerequisites {'increment_operators': ['assignment', 'loop_control'], 'boolean_expression': ['comparison_operators'], 'comparison_operators': ['expression'], 'loop_body': ['for_loop'], 'for_loop': ['loop_control'], 'loop_control': ['loop_variable'], 'control_flow': ['statement'], 'println': ['statement']}
+  level compile_time_error: L4 via diagnose_an_error "It does not compile; Line 1 and line 4 are missing the; at the end; so javac reports; expected"
+  level control_flow: L3 via relation_to_neighbour "Even then the indentation is misleading: without braces only i++ is in the loop, a silent logic error whenever a braceless loop is followed by indented lines"
+  level for_loop: L4 via diagnose_an_error "Even then the indentation is misleading: without braces only i++ is in the loop, a silent logic error whenever a braceless loop is followed by indented lines"
+  level loop_body: L4 via diagnose_an_error "Even then the indentation is misleading: without braces only i++ is in the loop, a silent logic error whenever a braceless loop is followed by indented lines"
+  level println: L4 via diagnose_an_error "After those are fixed, system.out still fails; because Java is case-sensitive: there is no package called system, it must be System"
+  level statement: L4 via diagnose_an_error "It does not compile; Line 1 and line 4 are missing the; at the end; so javac reports; expected"

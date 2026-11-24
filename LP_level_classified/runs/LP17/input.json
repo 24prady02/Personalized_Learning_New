@@ -1,0 +1,5 @@
+{
+ "code": "int i , n= 5\nfor(i=1;i<n;i++)\n    i++;\n    System.out.println(i)\nsystem.out.println(i);",
+ "question": "Will this compile? What happens when you run it? Explain your reasoning.",
+ "answer": "It does not compile. Line 1 and line 4 are missing the ; at the end, so javac reports ';' expected. After those are fixed, system.out still fails because Java is case-sensitive: there is no package called system, it must be System. Even then the indentation is misleading: without braces only i++ is in the loop, a silent logic error whenever a braceless loop is followed by indented lines."
+}

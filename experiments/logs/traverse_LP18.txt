@@ -1,0 +1,66 @@
+clauses: Yes, it compiles and prints 5 twice | The missing | do not matter | because each statement is on its own line, and system.out is the same as System.out
+start: generic concepts whose tagging text occurs in the answer: statement
+start: BM25 of the answer against each tagged concept: println 22.26 (hits 1), statement 17.97 (hits 1), compile_time_error 10.96 (hits 1), for_loop 9.13 (hits 1), control_flow 8.66 (hits 1), loop_body 8.27 (hits 1), loop_control 6.74 (hits 1), loop_variable 6.00 (hits 1), comparison_operators 3.41 (hits 1), increment_operators 3.01 (hits 1), boolean_expression 2.19 (hits 1)
+start: chosen println, statement, compile_time_error
+start concepts (3): println, statement, compile_time_error
+--- depth 1: current concepts ['println', 'statement', 'compile_time_error']
+  println (misconceptions): 6 candidates -> kept mis:println->IdentifierCaseInsensitive (0.80), mis:println->PrintEqualsPrintln (0.10), mis:println->PrintNewLineFirst (0.10)
+    mis:println->IdentifierCaseInsensitive -> held (0.76) "because each statement is on its own line, and system.out is the same as System.out"
+    mis:println->PrintEqualsPrintln -> not applied (0.00) ""
+    mis:println->PrintNewLineFirst -> not applied (0.00) ""
+  println (level ways): 17 candidates -> kept lvl:println@L4#3 (0.60), lvl:println@L2#1 (0.25), lvl:println@L3#0 (0.15)
+    lvl:println@L4#3: wrong (0.90) -> not applied
+    lvl:println@L4#3 -> not applied (0.00) ""
+    lvl:println@L2#1 -> shown (0.15) "Yes, it compiles and prints 5 twice"
+    lvl:println@L3#0: wrong (0.60) -> not applied
+    lvl:println@L3#0 -> not applied (0.00) ""
+  statement (misconceptions): 5 candidates -> kept err:statement->StatementNeedsNoTerminator (0.50), mis:statement->WhitespaceIsSignificant (0.30), mis:statement->ComputerFillsInIntent (0.20)
+    err:statement->StatementNeedsNoTerminator -> held (0.45) "Yes, it compiles and prints 5 twice; The missing; do not matter"
+    mis:statement->WhitespaceIsSignificant -> held (0.24) "because each statement is on its own line, and system.out is the same as System.out"
+    mis:statement->ComputerFillsInIntent -> not applied (0.00) ""
+  statement (level ways): 19 candidates -> kept lvl:statement@L4#1 (0.50), lvl:statement@L0#0 (0.30), lvl:statement@L1#0 (0.20)
+    lvl:statement@L4#1: wrong (0.85) -> not applied
+    lvl:statement@L4#1 -> not applied (0.00) ""
+    lvl:statement@L0#0 -> shown (0.24) "The missing; do not matter; because each statement is on its own line, and system.out is the same as System.out"
+    lvl:statement@L1#0 -> not applied (0.00) ""
+  compile_time_error (misconceptions): 10 candidates -> kept err:compile_time_error->StatementNeedsNoTerminator (0.50), err:compile_time_error->MisspelledIdentifier (0.40), mis:compile_time_error->CompilesMeansWorks (0.10)
+    err:compile_time_error->StatementNeedsNoTerminator -> held (0.42) "The missing; do not matter; because each statement is on its own line, and system.out is the same as System.out"
+    err:compile_time_error->MisspelledIdentifier -> held (0.36) "because each statement is on its own line, and system.out is the same as System.out"
+    mis:compile_time_error->CompilesMeansWorks -> not applied (0.00) ""
+  compile_time_error (level ways): 21 candidates -> kept lvl:compile_time_error@L0#3 (0.40), lvl:compile_time_error@L4#1 (0.30), lvl:compile_time_error@L4#5 (0.30)
+    lvl:compile_time_error@L0#3 -> shown (0.34) "Yes, it compiles and prints 5 twice; The missing; do not matter; because each statement is on its own line, and system.out is the same as System.out"
+    lvl:compile_time_error@L4#1: wrong (0.85) -> not applied
+    lvl:compile_time_error@L4#1 -> not applied (0.00) ""
+    lvl:compile_time_error@L4#5: wrong (0.85) -> not applied
+    lvl:compile_time_error@L4#5 -> not applied (0.00) ""
+  kept: mis:println->IdentifierCaseInsensitive [held, tier 0, 0.76], mis:statement->WhitespaceIsSignificant [held, tier 0, 0.24], err:statement->StatementNeedsNoTerminator [held, tier 1, 0.45]
+  clause coverage: c1 <- err:statement->StatementNeedsNoTerminator; c2 <- err:statement->StatementNeedsNoTerminator; c3 <- err:statement->StatementNeedsNoTerminator; c4 <- mis:println->IdentifierCaseInsensitive
+  not yet read: pre:statement->control_flow, pre:statement->println
+--- depth 2: current concepts ['println', 'statement']
+  println (concept edges): 1 candidates -> kept pre:statement->println (1.00)
+    pre:statement->println -> broken (0.70) "Yes, it compiles and prints 5 twice; The missing; do not matter; because each statement is on its own line, and system.out is the same as System.out"
+  statement (concept edges): 1 candidates -> kept pre:statement->control_flow (1.00)
+    pre:statement->control_flow -> broken (0.60) "Yes, it compiles and prints 5 twice; because each statement is on its own line, and system.out is the same as System.out"
+  kept: pre:statement->println [broken, tier 0, 0.70], pre:statement->control_flow [broken, tier 0, 0.60]
+  reached across pre:statement->control_flow, entered next: control_flow
+  clause coverage: c1 <- err:statement->StatementNeedsNoTerminator; c2 <- err:statement->StatementNeedsNoTerminator; c3 <- err:statement->StatementNeedsNoTerminator; c4 <- mis:println->IdentifierCaseInsensitive
+  not yet read: own edges of control_flow
+--- depth 3: current concepts ['statement', 'println', 'control_flow']
+  control_flow (misconceptions): 11 candidates -> kept mis:control_flow->ProgramEndsAfterLoop (0.40), mis:control_flow->FalseLoopRepeatsNextCode (0.35), mis:control_flow->StatementsRunInAnyOrder (0.25)
+    mis:control_flow->ProgramEndsAfterLoop -> correct (0.32) "Yes, it compiles and prints 5 twice"
+    mis:control_flow->FalseLoopRepeatsNextCode -> correct (0.21) "Yes, it compiles and prints 5 twice"
+    mis:control_flow->StatementsRunInAnyOrder -> not applied (0.00) ""
+  control_flow (level ways): 15 candidates -> kept lvl:control_flow@L2#1 (0.40), lvl:control_flow@L0#0 (0.35), lvl:control_flow@L2#0 (0.25)
+    lvl:control_flow@L2#1 -> shown (0.28) "Yes, it compiles and prints 5 twice"
+    lvl:control_flow@L0#0 -> not applied (0.00) ""
+    lvl:control_flow@L2#0 -> shown (0.15) "Yes, it compiles and prints 5 twice"
+  kept: mis:control_flow->ProgramEndsAfterLoop [correct, tier 2, 0.32], lvl:control_flow@L2#1 [shown, tier 2, 0.28], mis:control_flow->FalseLoopRepeatsNextCode [correct, tier 2, 0.21]
+  clause coverage: c1 <- err:statement->StatementNeedsNoTerminator; c2 <- err:statement->StatementNeedsNoTerminator; c3 <- err:statement->StatementNeedsNoTerminator; c4 <- mis:println->IdentifierCaseInsensitive
+  shadows: mis:statement->WhitespaceIsSignificant (shadow of mis:println->IdentifierCaseInsensitive)
+  errors counted again (the misconceptions on their concept are shadows): err:statement->StatementNeedsNoTerminator
+  root-cause walk: held on ['println', 'statement'], broken at [] (consequences: pre:statement->println, pre:statement->control_flow), prerequisites {'increment_operators': ['assignment', 'loop_control'], 'boolean_expression': ['comparison_operators'], 'comparison_operators': ['expression'], 'loop_body': ['for_loop'], 'for_loop': ['loop_control'], 'loop_control': ['loop_variable'], 'control_flow': ['statement'], 'println': ['statement']}
+  level compile_time_error: L0 via inconsistent_trace "Yes, it compiles and prints 5 twice; The missing; do not matter; because each statement is on its own line, and system.out is the same as System.out"
+  level control_flow: L2 via output_prediction "Yes, it compiles and prints 5 twice"
+  level println: L0 via misconception "because each statement is on its own line, and system.out is the same as System.out"
+  level statement: L0 via everyday_reading "The missing; do not matter; because each statement is on its own line, and system.out is the same as System.out"
+  level statement: L0 via error "Yes, it compiles and prints 5 twice; The missing; do not matter" (root cause carries a held error)

@@ -1,0 +1,78 @@
+clauses: The body runs 4 times, for i = 1, 2, 3 and 4 | The header says i < 5 and i++ | so it runs 4 times | the i++ inside the body does not change how many times the loop runs
+start: generic concepts whose tagging text occurs in the answer: assignment, expression, statement
+start: BM25 of the answer against each tagged concept: loop_control 42.61 (hits 1), for_loop 42.43 (hits 1), loop_variable 27.77 (hits 1), increment_operators 26.88 (hits 1), loop_body 26.86 (hits 1), assignment 21.08 (hits 1), expression 13.81 (hits 2), control_flow 11.13 (hits 1), statement 9.26 (hits 1), println 6.18 (hits 1), boolean_expression 5.86 (hits 1), comparison_operators 4.67 (hits 1)
+start: chosen loop_control, for_loop, loop_variable
+start concepts (3): loop_control, for_loop, loop_variable
+--- depth 1: current concepts ['loop_control', 'for_loop', 'loop_variable']
+  loop_control (misconceptions): 11 candidates -> kept mis:loop_control->IdiomOverridesCode (0.40), err:loop_control->WrongIterationCount (0.35), mis:loop_control->LoopStepAlwaysOne (0.25)
+    mis:loop_control->IdiomOverridesCode -> held (0.32) "The body runs 4 times, for i = 1, 2, 3 and 4; The header says i < 5 and i++; so it runs 4 times; the i++ inside the body does not change how many times the loop runs"
+    err:loop_control->WrongIterationCount -> held (0.19) "The body runs 4 times, for i = 1, 2, 3 and 4; so it runs 4 times"
+    mis:loop_control->LoopStepAlwaysOne -> not applied (0.00) ""
+  loop_control (level ways): 19 candidates -> kept lvl:loop_control@L4#1 (0.50), lvl:loop_control@L2#1 (0.30), lvl:loop_control@L3#5 (0.20)
+    lvl:loop_control@L4#1: wrong (0.60) -> not applied
+    lvl:loop_control@L4#1 -> not applied (0.00) ""
+    lvl:loop_control@L2#1 -> shown (0.22) "The body runs 4 times, for i = 1, 2, 3 and 4; The header says i < 5 and i++; so it runs 4 times"
+    lvl:loop_control@L3#5: wrong (0.85) -> not applied
+    lvl:loop_control@L3#5 -> not applied (0.00) ""
+  for_loop (misconceptions): 20 candidates -> kept err:for_loop->WrongIterationCount (0.45), mis:for_loop->IdiomOverridesCode (0.35), mis:for_loop->LoopStepAlwaysOne (0.20)
+    err:for_loop->WrongIterationCount -> held (0.38) "The body runs 4 times, for i = 1, 2, 3 and 4; so it runs 4 times; the i++ inside the body does not change how many times the loop runs"
+    mis:for_loop->IdiomOverridesCode -> not applied (0.00) ""
+    mis:for_loop->LoopStepAlwaysOne -> not applied (0.00) ""
+  for_loop (level ways): 24 candidates -> kept lvl:for_loop@L4#5 (0.55), lvl:for_loop@L2#1 (0.25), lvl:for_loop@L0#11 (0.20)
+    lvl:for_loop@L4#5: wrong (0.60) -> not applied
+    lvl:for_loop@L4#5 -> not applied (0.00) ""
+    lvl:for_loop@L2#1 -> shown (0.15) "The body runs 4 times, for i = 1, 2, 3 and 4; The header says i < 5 and i++; so it runs 4 times; the i++ inside the body does not change how many times the loop runs"
+    lvl:for_loop@L0#11 -> not applied (0.00) ""
+  loop_variable (misconceptions): 7 candidates -> kept mis:loop_variable->BodyChangeIgnoredByCondition (0.80), mis:loop_variable->LoopUpdateChangesDirection (0.10), mis:loop_variable->ForInitRepeats (0.10)
+    mis:loop_variable->BodyChangeIgnoredByCondition -> held (0.76) "The body runs 4 times, for i = 1, 2, 3 and 4; so it runs 4 times; the i++ inside the body does not change how many times the loop runs"
+    mis:loop_variable->LoopUpdateChangesDirection -> not applied (0.00) ""
+    mis:loop_variable->ForInitRepeats -> correct (0.06) "The body runs 4 times, for i = 1, 2, 3 and 4"
+  loop_variable (level ways): 13 candidates -> kept lvl:loop_variable@L0#5 (0.45), lvl:loop_variable@L4#0 (0.30), lvl:loop_variable@L2#2 (0.25)
+    lvl:loop_variable@L0#5 -> shown (0.27) "The body runs 4 times, for i = 1, 2, 3 and 4; the i++ inside the body does not change how many times the loop runs"
+    lvl:loop_variable@L4#0: wrong (0.60) -> not applied
+    lvl:loop_variable@L4#0 -> not applied (0.00) ""
+    lvl:loop_variable@L2#2 -> not applied (0.00) ""
+  kept: mis:loop_variable->BodyChangeIgnoredByCondition [held, tier 0, 0.76], mis:loop_control->IdiomOverridesCode [held, tier 0, 0.32], err:for_loop->WrongIterationCount [held, tier 1, 0.38]
+  clause coverage: c1 <- mis:loop_control->IdiomOverridesCode; c2 <- mis:loop_control->IdiomOverridesCode; c3 <- mis:loop_control->IdiomOverridesCode; c4 <- mis:loop_control->IdiomOverridesCode
+  not yet read: pre:for_loop->loop_body, pre:loop_control->for_loop, pre:loop_control->increment_operators, pre:loop_variable->loop_control
+--- depth 2: current concepts ['loop_variable', 'loop_control', 'for_loop']
+  loop_variable (concept edges): 1 candidates -> kept pre:loop_variable->loop_control (1.00)
+    pre:loop_variable->loop_control -> broken (0.85) "The body runs 4 times, for i = 1, 2, 3 and 4; so it runs 4 times; the i++ inside the body does not change how many times the loop runs"
+  loop_control (concept edges): 2 candidates -> kept pre:loop_control->for_loop (0.70), pre:loop_control->increment_operators (0.30)
+    pre:loop_control->for_loop -> broken (0.63) "The body runs 4 times, for i = 1, 2, 3 and 4; so it runs 4 times; the i++ inside the body does not change how many times the loop runs"
+    pre:loop_control->increment_operators -> broken (0.24) "The body runs 4 times, for i = 1, 2, 3 and 4; so it runs 4 times; the i++ inside the body does not change how many times the loop runs"
+  for_loop (concept edges): 1 candidates -> kept pre:for_loop->loop_body (1.00)
+    pre:for_loop->loop_body -> broken (0.80) "The body runs 4 times, for i = 1, 2, 3 and 4; so it runs 4 times; the i++ inside the body does not change how many times the loop runs"
+  kept: pre:loop_variable->loop_control [broken, tier 0, 0.85], pre:for_loop->loop_body [broken, tier 0, 0.80], pre:loop_control->for_loop [broken, tier 0, 0.63], pre:loop_control->increment_operators [broken, tier 0, 0.24]
+  reached across pre:for_loop->loop_body, entered next: loop_body
+  reached across pre:loop_control->increment_operators, entered next: increment_operators
+  clause coverage: c1 <- mis:loop_control->IdiomOverridesCode; c2 <- mis:loop_control->IdiomOverridesCode; c3 <- mis:loop_control->IdiomOverridesCode; c4 <- mis:loop_control->IdiomOverridesCode
+  not yet read: own edges of increment_operators, own edges of loop_body
+--- depth 3: current concepts ['loop_control', 'loop_variable', 'loop_body', 'for_loop', 'increment_operators']
+  loop_body (misconceptions): 12 candidates -> kept mis:loop_body->StateChangeIgnoredAcrossPasses (0.60), mis:loop_body->ForLoopPartSkipped (0.25), err:loop_body->BracelessMultiStatementBody (0.15)
+    mis:loop_body->StateChangeIgnoredAcrossPasses -> held (0.42) "The body runs 4 times, for i = 1, 2, 3 and 4; so it runs 4 times; the i++ inside the body does not change how many times the loop runs"
+    mis:loop_body->ForLoopPartSkipped -> not applied (0.00) ""
+    err:loop_body->BracelessMultiStatementBody -> not applied (0.00) ""
+  loop_body (level ways): 14 candidates -> kept lvl:loop_body@L2#2 (0.50), lvl:loop_body@L2#0 (0.30), lvl:loop_body@L0#0 (0.20)
+    lvl:loop_body@L2#2 -> not applied (0.00) ""
+    lvl:loop_body@L2#0 -> not applied (0.00) ""
+    lvl:loop_body@L0#0 -> shown (0.11) "The body runs 4 times, for i = 1, 2, 3 and 4; so it runs 4 times; the i++ inside the body does not change how many times the loop runs"
+  increment_operators (misconceptions): 5 candidates -> kept mis:increment_operators->IdiomOverridesCode (0.70), mis:increment_operators->IncrementByTwo (0.15), mis:increment_operators->PreIncrementBeforeLoop (0.15)
+    mis:increment_operators->IdiomOverridesCode -> held (0.52) "The body runs 4 times, for i = 1, 2, 3 and 4; so it runs 4 times; the i++ inside the body does not change how many times the loop runs"
+    mis:increment_operators->IncrementByTwo -> correct (0.08) "The body runs 4 times, for i = 1, 2, 3 and 4; The header says i < 5 and i++"
+    mis:increment_operators->PreIncrementBeforeLoop -> correct (0.09) "The body runs 4 times, for i = 1, 2, 3 and 4"
+  increment_operators (level ways): 16 candidates -> kept lvl:increment_operators@L0#3 (0.50), lvl:increment_operators@L0#0 (0.30), lvl:increment_operators@L3#0 (0.20)
+    lvl:increment_operators@L0#3 -> not applied (0.00) ""
+    lvl:increment_operators@L0#0 -> shown (0.21) "The body runs 4 times, for i = 1, 2, 3 and 4; the i++ inside the body does not change how many times the loop runs"
+    lvl:increment_operators@L3#0: wrong (0.75) -> not applied
+    lvl:increment_operators@L3#0 -> not applied (0.00) ""
+  kept: mis:increment_operators->IdiomOverridesCode [held, tier 0, 0.53], mis:loop_body->StateChangeIgnoredAcrossPasses [held, tier 0, 0.42], lvl:increment_operators@L0#0 [shown, tier 2, 0.21]
+  clause coverage: c1 <- mis:loop_control->IdiomOverridesCode; c2 <- mis:loop_control->IdiomOverridesCode; c3 <- mis:loop_control->IdiomOverridesCode; c4 <- mis:loop_control->IdiomOverridesCode
+  not yet read: pre:assignment->increment_operators
+  held: mis:loop_variable->BodyChangeIgnoredByCondition, mis:increment_operators->IdiomOverridesCode, mis:loop_body->StateChangeIgnoredAcrossPasses, err:for_loop->WrongIterationCount; filed at the dependent concept: mis:loop_control->IdiomOverridesCode
+  root-cause walk: held on ['for_loop', 'increment_operators', 'loop_body', 'loop_variable'], broken at [] (consequences: pre:loop_variable->loop_control, pre:for_loop->loop_body, pre:loop_control->for_loop, pre:loop_control->increment_operators), prerequisites {'increment_operators': ['assignment', 'loop_control'], 'boolean_expression': ['comparison_operators'], 'comparison_operators': ['expression'], 'loop_body': ['for_loop'], 'for_loop': ['loop_control'], 'loop_control': ['loop_variable'], 'control_flow': ['statement'], 'println': ['statement']}
+  level for_loop: L2 via output_prediction "The body runs 4 times, for i = 1, 2, 3 and 4; The header says i < 5 and i++; so it runs 4 times; the i++ inside the body does not change how many times the loop runs"
+  level increment_operators: L0 via misconception "The body runs 4 times, for i = 1, 2, 3 and 4; so it runs 4 times; the i++ inside the body does not change how many times the loop runs"
+  level loop_body: L0 via misconception "The body runs 4 times, for i = 1, 2, 3 and 4; so it runs 4 times; the i++ inside the body does not change how many times the loop runs"
+  level loop_control: L0 via misconception "The body runs 4 times, for i = 1, 2, 3 and 4; The header says i < 5 and i++; so it runs 4 times; the i++ inside the body does not change how many times the loop runs"
+  level loop_variable: L0 via misconception "The body runs 4 times, for i = 1, 2, 3 and 4; so it runs 4 times; the i++ inside the body does not change how many times the loop runs"

@@ -1,0 +1,5 @@
+{
+ "code": "int i, n = 5;\nfor (i = 1; i < n; i++)\n    i++;\n    System.out.println(i);\nSystem.out.println(i);",
+ "question": "What is printed? Explain, pass by pass, what happens to i.",
+ "answer": "It counts from 1 to 5, so it prints 1, 2, 3, 4, 5. 'For i from 1 to n' means do it for each number."
+}

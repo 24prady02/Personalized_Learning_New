@@ -1,0 +1,6 @@
+{
+ "model": "claude-opus-5-5",
+ "backend": "claude-cli",
+ "prompt": "You check whether a student's answer confirms or breaks the rule that links two Java concepts.\n\nProgram:\nint i, n = 5;\nfor (i = 1; i < n; i++)\n    i++;\n    System.out.println(i);\nSystem.out.println(i);\n\nQuestion: What is printed? Explain, pass by pass, what happens to i.\n\nStudent's answer, split into clauses:\nc1: i starts at 1\nc2: 1 < 5 is true, the body i++ makes i 2, the update makes it 3\nc3: 3 < 5 is true, the body makes it 4, the update makes it 5\nc4: 5 < 5 is false\nc5: so the loop stops\nc6: Only i++ was in the loop\nc7: Then the two println lines print 5 and 5\n\nEdge: pre:loop_control->increment_operators  (loop_control -> increment_operators, prerequisite)\nRule (logic): The loop update i = i + 1 comes first; ++ (and +=) are then introduced as shorthand for that update.\n\nDecide:\n- confirmed: the answer applies this rule correctly;\n- broken: the answer contradicts this rule or fails to carry it over;\n- not applied: the answer does not touch this rule.\n\nReply in exactly three lines and nothing else:\nLabel: confirmed | broken | not applied\nClauses: the numbers of the clauses that show it, e.g. 2, 4 (write none if not applied)\nConfidence: a number from 0 to 1\n",
+ "reply": "Label: confirmed\nClauses: 2, 3\nConfidence: 0.8"
+}

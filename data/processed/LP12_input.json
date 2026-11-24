@@ -1,0 +1,5 @@
+{
+ "code": "int i, n = 5;\nfor (i = 1; i < n; i++)\n    i++;\n    System.out.println(i);\nSystem.out.println(i);",
+ "question": "How many times does the body of the for loop run? Explain your reasoning.",
+ "answer": "On one pass i goes up by 2: once by the i++ in the body and once by the i++ in the update. So after the first pass i is 3 instead of 2."
+}

@@ -53,6 +53,8 @@ DEFAULT_TRAVERSAL = {
     "few_shot_scenario": "S000", "cache_dir": "experiments/llm_cache",
     "stage3_v2": False,   # trial of a changed Stage 3 (see traverse()); off: the walk as documented
     "level_v2": False,    # trial of changed per-concept levels (see traverse()); off: the levels as documented
+    "rule_fixes": False,  # trial: two corrections to the rules of Stages 4 and 6 (see traverse())
+    "label_v3": False,    # trial: stricter Stage 3 questions (see traverse())
     "level_min_conf": 0.60,   # level_v2: a way above L2 counts only with a confidence above this
 }
 
@@ -522,6 +524,19 @@ def traverse(sg: dict[str, Any], sc: dict[str, Any], cfg: dict[str, Any], llm: L
     #      documented question: there a wrong sentence is already read by the L0 ways and the misconception edges;
     #   2. a way above L2 counts for the level only with a confidence above level_min_conf;
     #   3. a way above L2 does not count when all its clauses are clauses a held misconception rests on.
+    # Trial setting rule_fixes (default off): two corrections to the rules of Stages 4 and 6, marked "rule_fixes" below.
+    fixes = bool(cfg.get("rule_fixes", False))
+    if fixes:
+        settings["rule_fixes"] = True
+    # Trial setting label_v3 (default off): two stricter Stage 3 questions.
+    #   A. a misconception / error edge is held only when a clause states the wrong rule or its reason; an answer that
+    #      only gives an output the rule would also predict is "consistent", which is recorded and is not a mistake;
+    #   C. the question for a way above L2 says that stating a rule in general shows only a naming / stating way, and
+    #      what a diagnosis of an error must name.
+    lab3 = bool(cfg.get("label_v3", False))
+    if lab3:
+        settings["label_v3"] = True
+    consistent: list[dict[str, Any]] = []     # label_v3: wrong rules the answer is only consistent with
     lv2 = bool(cfg.get("level_v2", False))
     min_conf = float(cfg.get("level_min_conf", 0.60))
     if lv2:
@@ -672,9 +687,17 @@ def traverse(sg: dict[str, Any], sc: dict[str, Any], cfg: dict[str, Any], llm: L
                 mis_kept = [(eid, s) for eid, s in kept if eid.startswith(("mis:", "err:"))]
                 set_labels: dict[str, tuple[str, list[int], float]] = {}
                 if mis_kept and not v2:
-                    p = prompts.LABEL_MIS.format(code=code, question=question, clauses=clause_text, concept=concept,
-                                                 edges="\n".join("- " + g.edge_text(g.edge_by_id[eid]) for eid, _ in mis_kept), **ex)
-                    set_labels = parse_label_set(llm.ask(p, "label"), {eid for eid, _ in mis_kept}, ("held", "correct", "not applied"), len(clauses))
+                    p = (prompts.LABEL_MIS_V3 if lab3 else prompts.LABEL_MIS).format(
+                        code=code, question=question, clauses=clause_text, concept=concept,
+                        edges="\n".join("- " + g.edge_text(g.edge_by_id[eid]) for eid, _ in mis_kept), **ex)
+                    allowed_mis = ("held", "consistent", "correct", "not applied") if lab3 else ("held", "correct", "not applied")
+                    set_labels = parse_label_set(llm.ask(p, "label"), {eid for eid, _ in mis_kept}, allowed_mis, len(clauses))
+                    for eid, (lab, ids3, conf3) in list(set_labels.items()):
+                        if lab == "consistent":   # label_v3, A: recorded, never evidence and never a mistake
+                            consistent.append({"concept": concept, "edge": eid, "target": g.edge_by_id[eid]["target"], "clauses": [i + 1 for i in ids3],
+                                               "quote": "; ".join(clauses[i] for i in ids3), "confidence": conf3})
+                            log.append(f"    {eid}: consistent ({conf3:.2f}) -> not applied")
+                            set_labels[eid] = ("not applied", [], conf3)
                 for eid, pscore in kept:
                     e = g.edge_by_id[eid]
                     if eid.startswith(("mis:", "err:")):
@@ -687,7 +710,7 @@ def traverse(sg: dict[str, Any], sc: dict[str, Any], cfg: dict[str, Any], llm: L
                         # The level comes from where the way sits in the graph (Part 4).
                         if lv2 and e["level"] > "L2":
                             # level_v2, change 1: boundary, correctness and the answer "wrong", for ways above L2 only
-                            p = prompts.LABEL_WAY_V2.format(
+                            p = (prompts.LABEL_WAY_V3 if lab3 else prompts.LABEL_WAY_V2).format(
                                 code=code, question=question, clauses=clause_text, concept=concept,
                                 way=(e.get("way") or "").replace("_", " "), rule=e.get("logic") or "",
                                 boundary=e.get("boundary") or "not stated",
@@ -832,6 +855,17 @@ def traverse(sg: dict[str, Any], sc: dict[str, Any], cfg: dict[str, Any], llm: L
     if shadow:
         held = [c for c in held if c["edge"] not in shadow]
         log.append("  shadows: " + ", ".join(f"{e} (shadow of {s})" for e, s in shadow.items()))
+    if fixes:
+        # rule_fixes, 1: an error was set aside as evidence because a misconception is held on its concept. If every
+        # misconception held on that concept turned out to be a shadow, nothing is left there, so the error counts again,
+        # unless it rests on the words of a misconception that is counted elsewhere (then it is that one's consequence).
+        left = {c["source"] for c in held_all if c["kind"] == "misconception" and c["edge"] not in shadow}
+        counted = [c for c in held if c["kind"] == "misconception"]
+        back = [c for c in evidence_errors if c["source"] not in left and not any(same_words(h, c) for h in counted)]
+        if back:
+            held += back
+            evidence_errors = [c for c in evidence_errors if c not in back]
+            log.append("  errors counted again (the misconceptions on their concept are shadows): " + ", ".join(c["edge"] for c in back))
     broken = [c for c in paths if c["label"] == "broken"]
     held_by_concept: dict[str, list[str]] = defaultdict(list)
     for c in held:
@@ -931,6 +965,16 @@ def traverse(sg: dict[str, Any], sc: dict[str, Any], cfg: dict[str, Any], llm: L
             continue
         log.append(f"  level {concept}: {levels[concept]['level']} via {levels[concept]['way']} \"{levels[concept]['quote']}\"")
 
+    if fixes and root and not held_mis_ev.get(root["concept"]):
+        # rule_fixes, 2: the root cause carries a counted error and no misconception. An answer that breaks a rule of the
+        # language at the root is L0 there, as with a held misconception (before, the concept kept a level from its
+        # shown ways, or had none, and the overall level came out wrong or empty).
+        err = next((c for c in held if c["kind"] == "error" and c["source"] == root["concept"]), None)
+        if err is not None:
+            was = levels.get(root["concept"], {}).get("level")
+            levels[root["concept"]] = {"level": "L0", "way": "error", "error": err["target"], "quote": err["quote"], "edge": err["edge"],
+                                       "rule": err.get("logic", ""), "source": "held_error", **({"level_from_ways": was} if was else {})}
+            log.append(f"  level {root['concept']}: L0 via error \"{err['quote']}\" (root cause carries a held error)")
     if root:
         overall = levels.get(root["concept"], {}).get("level")
     else:
@@ -966,6 +1010,7 @@ def traverse(sg: dict[str, Any], sc: dict[str, Any], cfg: dict[str, Any], llm: L
         "llm_calls_by_step": calls_by_step(),
         **({"stage3_v2": {"not_offered": not_offered, "offered_at": offered_at}} if v2 else {}),
         **({"level_v2": {"wrong_ways": wrong_ways, "not_counted": not_counted}} if lv2 else {}),
+        **({"label_v3": {"consistent_with": consistent}} if lab3 else {}),
     }
 
 
@@ -987,8 +1032,11 @@ def main(argv=None) -> None:
     ap.add_argument("--tag", default="", help="suffix for the output files, e.g. --tag bm25 -> S007_diagnosis.bm25.json")
     ap.add_argument("--stage3-v2", action="store_true", default=bool(tcfg.get("stage3_v2")), help="trial: the changed Stage 3")
     ap.add_argument("--level-v2", action="store_true", default=bool(tcfg.get("level_v2")), help="trial: the changed per-concept levels")
+    ap.add_argument("--label-v3", action="store_true", default=bool(tcfg.get("label_v3")), help="trial: stricter Stage 3 questions")
+    ap.add_argument("--rule-fixes", action="store_true", default=bool(tcfg.get("rule_fixes")), help="trial: two corrections to the rules of Stages 4 and 6")
     a = ap.parse_args(argv)
-    tcfg.update(prune_tools=a.prune_tools, backend=a.backend, model=a.model, width=a.width, depth=a.depth, stage3_v2=a.stage3_v2, level_v2=a.level_v2)
+    tcfg.update(prune_tools=a.prune_tools, backend=a.backend, model=a.model, width=a.width, depth=a.depth, stage3_v2=a.stage3_v2, level_v2=a.level_v2,
+                rule_fixes=a.rule_fixes, label_v3=a.label_v3)
     tag = f".{a.tag}" if a.tag else ""
 
     scenarios = {s["id"]: s for s in load_scenarios(a.scenarios)}

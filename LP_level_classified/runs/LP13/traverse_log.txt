@@ -1,0 +1,110 @@
+clauses: i starts at 1 | 1 < 5, the body makes i 2, the update makes it 3 | 3 < 5, the body makes it 4, the update makes it 5 | 5 < 5 is false | so it stops | Then it prints 5 and 4
+start: BM25 of the answer against each tagged concept: println 28.21 (hits 1), loop_control 27.66 (hits 1), for_loop 27.59 (hits 1), loop_body 21.63 (hits 1), loop_variable 17.79 (hits 1), increment_operators 14.83 (hits 1), control_flow 11.04 (hits 1), boolean_expression 7.88 (hits 1), comparison_operators 6.45 (hits 1)
+start: chosen println, loop_control, for_loop
+start concepts (3): println, loop_control, for_loop
+--- depth 1: current concepts ['println', 'loop_control', 'for_loop']
+  println (misconceptions): 6 candidates -> kept mis:println->PrintedTextIsExecuted (0.50), mis:println->PrintEqualsPrintln (0.30), mis:println->PrintNewLineFirst (0.20)
+    mis:println->PrintedTextIsExecuted -> not applied (0.00) ""
+    mis:println->PrintEqualsPrintln -> not applied (0.00) ""
+    mis:println->PrintNewLineFirst -> not applied (0.00) ""
+  println (level ways): 17 candidates -> kept lvl:println@L3#0 (0.40), lvl:println@L2#1 (0.35), lvl:println@L0#3 (0.25)
+    lvl:println@L3#0 -> not applied (0.00) ""
+    lvl:println@L2#1 -> shown (0.21) "Then it prints 5 and 4"
+    lvl:println@L0#3 -> not applied (0.00) ""
+  loop_control (misconceptions): 11 candidates -> kept mis:loop_control->ForLoopPartSkipped (0.45), mis:loop_control->ForUpdateBeforeBody (0.30), err:loop_control->WrongIterationCount (0.25)
+    mis:loop_control->ForLoopPartSkipped -> correct (0.38) "1 < 5, the body makes i 2, the update makes it 3; 3 < 5, the body makes it 4, the update makes it 5; 5 < 5 is false"
+    mis:loop_control->ForUpdateBeforeBody -> correct (0.27) "1 < 5, the body makes i 2, the update makes it 3; 3 < 5, the body makes it 4, the update makes it 5"
+    err:loop_control->WrongIterationCount -> correct (0.20) "1 < 5, the body makes i 2, the update makes it 3; 3 < 5, the body makes it 4, the update makes it 5; 5 < 5 is false; so it stops"
+  loop_control (level ways): 19 candidates -> kept lvl:loop_control@L2#0 (0.50), lvl:loop_control@L3#1 (0.30), lvl:loop_control@L2#2 (0.20)
+    lvl:loop_control@L2#0 -> shown (0.47) "i starts at 1; 1 < 5, the body makes i 2, the update makes it 3; 3 < 5, the body makes it 4, the update makes it 5; 5 < 5 is false; so it stops"
+    lvl:loop_control@L3#1 -> shown (0.21) "1 < 5, the body makes i 2, the update makes it 3; 3 < 5, the body makes it 4, the update makes it 5; 5 < 5 is false"
+    lvl:loop_control@L2#2 -> shown (0.17) "1 < 5, the body makes i 2, the update makes it 3; 3 < 5, the body makes it 4, the update makes it 5; 5 < 5 is false"
+  for_loop (misconceptions): 20 candidates -> kept err:for_loop->BracelessMultiStatementBody (0.45), mis:for_loop->ForLoopPartSkipped (0.30), mis:for_loop->ForUpdateBeforeBody (0.25)
+    err:for_loop->BracelessMultiStatementBody -> correct (0.34) "1 < 5, the body makes i 2, the update makes it 3; 3 < 5, the body makes it 4, the update makes it 5; Then it prints 5 and 4"
+    mis:for_loop->ForLoopPartSkipped -> correct (0.26) "1 < 5, the body makes i 2, the update makes it 3; 3 < 5, the body makes it 4, the update makes it 5; 5 < 5 is false"
+    mis:for_loop->ForUpdateBeforeBody -> correct (0.23) "1 < 5, the body makes i 2, the update makes it 3; 3 < 5, the body makes it 4, the update makes it 5"
+  for_loop (level ways): 24 candidates -> kept lvl:for_loop@L2#0 (0.45), lvl:for_loop@L4#6 (0.30), lvl:for_loop@L4#5 (0.25)
+    lvl:for_loop@L2#0 -> shown (0.41) "i starts at 1; 1 < 5, the body makes i 2, the update makes it 3; 3 < 5, the body makes it 4, the update makes it 5; 5 < 5 is false; so it stops"
+    lvl:for_loop@L4#6 -> not applied (0.00) ""
+    lvl:for_loop@L4#5 -> not applied (0.00) ""
+  kept: lvl:loop_control@L2#0 [shown, tier 2, 0.47], lvl:for_loop@L2#0 [shown, tier 2, 0.41], mis:loop_control->ForLoopPartSkipped [correct, tier 2, 0.38]
+  clause coverage: c1 uncovered; c2 <- mis:loop_control->ForLoopPartSkipped; c3 <- mis:loop_control->ForLoopPartSkipped; c4 <- mis:loop_control->ForLoopPartSkipped; c5 <- err:loop_control->WrongIterationCount; c6 <- err:for_loop->BracelessMultiStatementBody
+  uncovered clauses bring in: increment_operators (4.73), loop_variable (2.57), loop_body (2.55)
+  not yet read: own edges of increment_operators, own edges of loop_body, own edges of loop_variable, pre:for_loop->loop_body, pre:loop_control->for_loop, pre:loop_control->increment_operators, pre:loop_variable->loop_control, pre:statement->println
+--- depth 2: current concepts ['println', 'loop_control', 'for_loop', 'increment_operators', 'loop_variable', 'loop_body']
+  println (concept edges): 1 candidates -> kept pre:statement->println (1.00)
+    pre:statement->println -> broken (0.60) "Then it prints 5 and 4"
+  loop_control (concept edges): 3 candidates -> kept pre:loop_control->for_loop (0.50), pre:loop_variable->loop_control (0.35), pre:loop_control->increment_operators (0.15)
+    pre:loop_control->for_loop -> confirmed (0.40) "1 < 5, the body makes i 2, the update makes it 3; 3 < 5, the body makes it 4, the update makes it 5; 5 < 5 is false"
+    pre:loop_variable->loop_control -> confirmed (0.30) "i starts at 1; 1 < 5, the body makes i 2, the update makes it 3; 3 < 5, the body makes it 4, the update makes it 5; 5 < 5 is false"
+    pre:loop_control->increment_operators -> confirmed (0.12) "1 < 5, the body makes i 2, the update makes it 3; 3 < 5, the body makes it 4, the update makes it 5"
+  for_loop (concept edges): 1 candidates -> kept pre:for_loop->loop_body (1.00)
+    pre:for_loop->loop_body -> confirmed (0.70) "1 < 5, the body makes i 2, the update makes it 3; 3 < 5, the body makes it 4, the update makes it 5"
+  increment_operators (misconceptions): 5 candidates -> kept mis:increment_operators->IncrementByTwo (0.40), mis:increment_operators->PreIncrementBeforeLoop (0.35), mis:increment_operators->IdiomOverridesCode (0.25)
+    mis:increment_operators->IncrementByTwo -> correct (0.36) "1 < 5, the body makes i 2, the update makes it 3; 3 < 5, the body makes it 4, the update makes it 5"
+    mis:increment_operators->PreIncrementBeforeLoop -> correct (0.24) "1 < 5, the body makes i 2, the update makes it 3; 3 < 5, the body makes it 4, the update makes it 5"
+    mis:increment_operators->IdiomOverridesCode -> not applied (0.00) ""
+  increment_operators (level ways): 16 candidates -> kept lvl:increment_operators@L2#2 (0.45), lvl:increment_operators@L3#0 (0.35), lvl:increment_operators@L0#3 (0.20)
+    lvl:increment_operators@L2#2 -> shown (0.36) "1 < 5, the body makes i 2, the update makes it 3; 3 < 5, the body makes it 4, the update makes it 5"
+    lvl:increment_operators@L3#0 -> not applied (0.00) ""
+    lvl:increment_operators@L0#3 -> shown (0.12) "Then it prints 5 and 4"
+  loop_variable (misconceptions): 7 candidates -> kept mis:loop_variable->BodyChangeIgnoredByCondition (0.60), mis:loop_variable->LoopVariableLifetimeScope (0.20), mis:loop_variable->ForInitRepeats (0.20)
+    mis:loop_variable->BodyChangeIgnoredByCondition -> correct (0.54) "1 < 5, the body makes i 2, the update makes it 3; 3 < 5, the body makes it 4, the update makes it 5; 5 < 5 is false; so it stops"
+    mis:loop_variable->LoopVariableLifetimeScope -> correct (0.14) "1 < 5, the body makes i 2, the update makes it 3; 3 < 5, the body makes it 4, the update makes it 5"
+    mis:loop_variable->ForInitRepeats -> correct (0.15) "i starts at 1; 3 < 5, the body makes it 4, the update makes it 5"
+  loop_variable (level ways): 13 candidates -> kept lvl:loop_variable@L2#0 (0.45), lvl:loop_variable@L2#2 (0.35), lvl:loop_variable@L0#5 (0.20)
+    lvl:loop_variable@L2#0 -> shown (0.38) "i starts at 1; 1 < 5, the body makes i 2, the update makes it 3; 3 < 5, the body makes it 4, the update makes it 5; 5 < 5 is false"
+    lvl:loop_variable@L2#2 -> shown (0.30) "1 < 5, the body makes i 2, the update makes it 3; 3 < 5, the body makes it 4, the update makes it 5; 5 < 5 is false"
+    lvl:loop_variable@L0#5 -> not applied (0.00) ""
+  loop_body (misconceptions): 12 candidates -> kept err:loop_body->BracelessMultiStatementBody (0.45), mis:loop_body->ForLoopPartSkipped (0.30), mis:loop_body->StatementAfterLoopInBody (0.25)
+    err:loop_body->BracelessMultiStatementBody -> correct (0.34) "1 < 5, the body makes i 2, the update makes it 3; 3 < 5, the body makes it 4, the update makes it 5; Then it prints 5 and 4"
+    mis:loop_body->ForLoopPartSkipped -> correct (0.26) "1 < 5, the body makes i 2, the update makes it 3; 3 < 5, the body makes it 4, the update makes it 5; 5 < 5 is false"
+    mis:loop_body->StatementAfterLoopInBody -> correct (0.17) "so it stops; Then it prints 5 and 4"
+  loop_body (level ways): 14 candidates -> kept lvl:loop_body@L2#0 (0.40), lvl:loop_body@L0#6 (0.35), lvl:loop_body@L1#1 (0.25)
+    lvl:loop_body@L2#0 -> shown (0.34) "1 < 5, the body makes i 2, the update makes it 3; 3 < 5, the body makes it 4, the update makes it 5"
+    lvl:loop_body@L0#6 -> shown (0.21) "Then it prints 5 and 4"
+    lvl:loop_body@L1#1 -> shown (0.15) "1 < 5, the body makes i 2, the update makes it 3; 3 < 5, the body makes it 4, the update makes it 5"
+  kept: pre:statement->println [broken, tier 0, 0.60], pre:for_loop->loop_body [confirmed, tier 2, 0.70], mis:loop_variable->BodyChangeIgnoredByCondition [correct, tier 2, 0.54]
+  reached across pre:statement->println, entered next: statement
+  clause coverage: c1 <- pre:loop_variable->loop_control; c2 <- mis:loop_control->ForLoopPartSkipped; c3 <- mis:loop_control->ForLoopPartSkipped; c4 <- mis:loop_control->ForLoopPartSkipped; c5 <- err:loop_control->WrongIterationCount; c6 <- err:for_loop->BracelessMultiStatementBody
+  not yet read: own edges of statement, pre:assignment->increment_operators
+--- depth 3: current concepts ['statement', 'println', 'loop_body', 'for_loop', 'increment_operators']
+  statement (misconceptions): 5 candidates -> kept mis:statement->WhitespaceIsSignificant (0.50), mis:statement->StatementsRunInAnyOrder (0.30), mis:statement->ComputerFillsInIntent (0.20)
+    mis:statement->WhitespaceIsSignificant -> correct (0.35) "1 < 5, the body makes i 2, the update makes it 3; 3 < 5, the body makes it 4, the update makes it 5; Then it prints 5 and 4"
+    mis:statement->StatementsRunInAnyOrder -> not applied (0.00) ""
+    mis:statement->ComputerFillsInIntent -> not applied (0.00) ""
+  statement (level ways): 19 candidates -> kept lvl:statement@L0#2 (0.50), lvl:statement@L2#0 (0.30), lvl:statement@L2#2 (0.20)
+    lvl:statement@L0#2 -> shown (0.35) "Then it prints 5 and 4"
+    lvl:statement@L2#0 -> shown (0.21) "i starts at 1; 1 < 5, the body makes i 2, the update makes it 3; 3 < 5, the body makes it 4, the update makes it 5; 5 < 5 is false; so it stops"
+    lvl:statement@L2#2 -> shown (0.15) "1 < 5, the body makes i 2, the update makes it 3; 3 < 5, the body makes it 4, the update makes it 5"
+  for_loop (concept edges): 1 candidates -> kept pre:loop_control->for_loop (1.00)
+    pre:loop_control->for_loop -> confirmed (0.80) "1 < 5, the body makes i 2, the update makes it 3; 3 < 5, the body makes it 4, the update makes it 5; 5 < 5 is false"
+  increment_operators (concept edges): 2 candidates -> kept pre:assignment->increment_operators (0.55), pre:loop_control->increment_operators (0.45)
+    pre:assignment->increment_operators -> confirmed (0.47) "1 < 5, the body makes i 2, the update makes it 3; 3 < 5, the body makes it 4, the update makes it 5"
+    pre:loop_control->increment_operators -> confirmed (0.36) "1 < 5, the body makes i 2, the update makes it 3; 3 < 5, the body makes it 4, the update makes it 5"
+  kept: pre:loop_control->for_loop [confirmed, tier 2, 0.80], pre:assignment->increment_operators [confirmed, tier 2, 0.47], pre:loop_control->increment_operators [confirmed, tier 2, 0.36]
+  reached across pre:assignment->increment_operators, entered next: assignment
+  clause coverage: c1 <- pre:loop_variable->loop_control; c2 <- mis:loop_control->ForLoopPartSkipped; c3 <- mis:loop_control->ForLoopPartSkipped; c4 <- mis:loop_control->ForLoopPartSkipped; c5 <- err:loop_control->WrongIterationCount; c6 <- err:for_loop->BracelessMultiStatementBody
+  not yet read: own edges of assignment, pre:statement->control_flow
+--- depth 4: current concepts ['assignment'] (closing round: own edges only)
+  assignment (misconceptions): 15 candidates -> kept mis:assignment->VariableKeepsOldValue (0.60), mis:assignment->AssignmentIsEquation (0.20), mis:assignment->AssignmentAddsToTarget (0.20)
+    mis:assignment->VariableKeepsOldValue -> correct (0.42) "1 < 5, the body makes i 2, the update makes it 3; 3 < 5, the body makes it 4, the update makes it 5"
+    mis:assignment->AssignmentIsEquation -> not applied (0.00) ""
+    mis:assignment->AssignmentAddsToTarget -> not applied (0.00) ""
+  assignment (level ways): 24 candidates -> kept lvl:assignment@L2#0 (0.40), lvl:assignment@L3#6 (0.30), lvl:assignment@L3#7 (0.30)
+    lvl:assignment@L2#0 -> shown (0.30) "i starts at 1; 1 < 5, the body makes i 2, the update makes it 3; 3 < 5, the body makes it 4, the update makes it 5"
+    lvl:assignment@L3#6 -> not applied (0.00) ""
+    lvl:assignment@L3#7 -> shown (0.18) "1 < 5, the body makes i 2, the update makes it 3; 3 < 5, the body makes it 4, the update makes it 5"
+  kept: mis:assignment->VariableKeepsOldValue [correct, tier 2, 0.42], lvl:assignment@L2#0 [shown, tier 2, 0.30], lvl:assignment@L3#7 [shown, tier 2, 0.18]
+  clause coverage: c1 <- pre:loop_variable->loop_control; c2 <- mis:loop_control->ForLoopPartSkipped; c3 <- mis:loop_control->ForLoopPartSkipped; c4 <- mis:loop_control->ForLoopPartSkipped; c5 <- err:loop_control->WrongIterationCount; c6 <- err:for_loop->BracelessMultiStatementBody
+  not yet read: par:assignment~comparison_operators, pre:statement->control_flow
+  root-cause walk: held on [], broken at ['println'], prerequisites {'increment_operators': ['assignment', 'loop_control'], 'boolean_expression': ['comparison_operators'], 'comparison_operators': ['expression'], 'loop_body': ['for_loop'], 'for_loop': ['loop_control'], 'loop_control': ['loop_variable'], 'control_flow': ['statement'], 'println': ['statement']}
+  level way lvl:assignment@L3#7 not counted: confidence 0.60 is not above 0.60
+  level assignment: L2 via line_by_line_trace "i starts at 1; 1 < 5, the body makes i 2, the update makes it 3; 3 < 5, the body makes it 4, the update makes it 5"
+  level for_loop: L2 via line_by_line_trace "i starts at 1; 1 < 5, the body makes i 2, the update makes it 3; 3 < 5, the body makes it 4, the update makes it 5; 5 < 5 is false; so it stops"
+  level increment_operators: L2 via one_step_execution "1 < 5, the body makes i 2, the update makes it 3; 3 < 5, the body makes it 4, the update makes it 5"
+  level loop_body: L2 via line_by_line_trace "1 < 5, the body makes i 2, the update makes it 3; 3 < 5, the body makes it 4, the update makes it 5"
+  level loop_control: L3 via relation_to_neighbour "1 < 5, the body makes i 2, the update makes it 3; 3 < 5, the body makes it 4, the update makes it 5; 5 < 5 is false"
+  level loop_variable: L2 via line_by_line_trace "i starts at 1; 1 < 5, the body makes i 2, the update makes it 3; 3 < 5, the body makes it 4, the update makes it 5; 5 < 5 is false"
+  level println: L2 via output_prediction "Then it prints 5 and 4"
+  level statement: L2 via line_by_line_trace "i starts at 1; 1 < 5, the body makes i 2, the update makes it 3; 3 < 5, the body makes it 4, the update makes it 5; 5 < 5 is false; so it stops"

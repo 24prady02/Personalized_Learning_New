@@ -1,0 +1,302 @@
+{
+ "source": "Loop scenarios LP01-LP20 (test instructions document)",
+ "note": "The 'expected' block is the gold result by design; it is used only for checking (overall_level.py), never as an input.",
+ "scenarios": [
+  {
+   "id": "LP01",
+   "code": "int i, n = 5;\nfor (i = 1; i < n; i++)\n    i++;\n    System.out.println(i);\nSystem.out.println(i);",
+   "question": "What is printed? Explain, pass by pass, what happens to i.",
+   "answer": "It counts from 1 to 5, so it prints 1, 2, 3, 4, 5. 'For i from 1 to n' means do it for each number.",
+   "expected": {
+    "levels": {
+     "for_loop": "L0"
+    },
+    "held": [],
+    "root": null,
+    "way": "everyday reading"
+   }
+  },
+  {
+   "id": "LP02",
+   "code": "int i, n = 5;\nfor (i = 1; i < n; i++)\n    i++;\n    System.out.println(i);\nSystem.out.println(i);",
+   "question": "How many times is System.out.println executed? Explain your reasoning.",
+   "answer": "println runs 3 times. The indented println is inside the loop, so it runs on both passes and prints 2 and 4, and then the last println prints 5.",
+   "expected": {
+    "levels": {
+     "loop_body": "L0"
+    },
+    "held": [
+     "StatementAfterLoopInBody"
+    ],
+    "root": "loop_body",
+    "way": "misconception"
+   }
+  },
+  {
+   "id": "LP03",
+   "code": "int i, n = 5;\nfor (i = 1; i < n; i++)\n    i++;\n    System.out.println(i);\nSystem.out.println(i);",
+   "question": "How many times does the body of the for loop run? Explain your reasoning.",
+   "answer": "The body runs 4 times, for i = 1, 2, 3 and 4. The header says i < 5 and i++, so it runs 4 times; the i++ inside the body does not change how many times the loop runs.",
+   "expected": {
+    "levels": {
+     "loop_variable": "L0"
+    },
+    "held": [
+     "BodyChangeIgnoredByCondition"
+    ],
+    "root": "loop_variable",
+    "way": "misconception"
+   }
+  },
+  {
+   "id": "LP04",
+   "code": "int i, n = 5;\nfor (i = 1; i < n; i++)\n    i++;\n    System.out.println(i);\nSystem.out.println(i);",
+   "question": "What is the value of i when the second println runs? Explain how i gets that value.",
+   "answer": "i is 5. The loop runs for i = 1, 2, 3, 4 and stops when i reaches 5; the i++ in the body does not affect the count.",
+   "expected": {
+    "levels": {
+     "loop_variable": "L0"
+    },
+    "held": [
+     "BodyChangeIgnoredByCondition"
+    ],
+    "root": "loop_variable",
+    "way": "misconception"
+   }
+  },
+  {
+   "id": "LP05",
+   "code": "int i, n = 5;\nfor (i = 1; i < n; i++)\n    i++;\n    System.out.println(i);\nSystem.out.println(i);",
+   "question": "How many times does the body of the for loop run? Explain your reasoning.",
+   "answer": "The body runs once. i++ adds 2, so after the body i is 3, and the update makes it 5. Then 5 < 5 is false, so the loop stops.",
+   "expected": {
+    "levels": {
+     "increment_operators": "L0"
+    },
+    "held": [
+     "IncrementByTwo"
+    ],
+    "root": "increment_operators",
+    "way": "misconception"
+   }
+  },
+  {
+   "id": "LP06",
+   "code": "int i, n = 5;\nfor (i = 1; i < n; i++)\n    i++;\n    System.out.println(i);\nSystem.out.println(i);",
+   "question": "What is printed? Explain, pass by pass, what happens to i.",
+   "answer": "It never stops. Each pass starts again with i = 1, so i goes 1, 2, 3 and back to 1, and the println lines are never reached.",
+   "expected": {
+    "levels": {
+     "for_loop": "L0"
+    },
+    "held": [
+     "ForInitRepeats"
+    ],
+    "root": "for_loop",
+    "way": "misconception"
+   }
+  },
+  {
+   "id": "LP07",
+   "code": "int i, n = 5;\nfor (i = 1; i < n; i++)\n    i++;\n    System.out.println(i);\nSystem.out.println(i);",
+   "question": "What is printed? Explain, pass by pass, what happens to i.",
+   "answer": "Pass 1: i++ makes i 2 and println prints 2, then the update makes it 3. Pass 2: i++ makes it 4 and the update makes it 5. 5 < 5 is false, so the loop stops and the last line prints 5. Output: 2 and 5.",
+   "expected": {
+    "levels": {
+     "loop_body": "L0"
+    },
+    "held": [],
+    "root": null,
+    "way": "inconsistent trace"
+   }
+  },
+  {
+   "id": "LP08",
+   "code": "int i, n = 5;\nfor (i = 1; i < n; i++)\n    i++;\n    System.out.println(i);\nSystem.out.println(i);",
+   "question": "How many times is System.out.println executed? Explain your reasoning.",
+   "answer": "The program has two System.out.println statements and one for loop. The for loop has a header with a start, a condition and an update, and a body.",
+   "expected": {
+    "levels": {
+     "for_loop": "L1"
+    },
+    "held": [],
+    "root": null,
+    "way": "names the element"
+   }
+  },
+  {
+   "id": "LP09",
+   "code": "int i, n = 5;\nfor (i = 1; i < n; i++)\n    i++;\n    System.out.println(i);\nSystem.out.println(i);",
+   "question": "How many times is System.out.println executed? Explain your reasoning.",
+   "answer": "Without braces a for loop repeats only the one statement right after its header. The indentation does not matter, so the println lines are not part of the loop.",
+   "expected": {
+    "levels": {
+     "loop_body": "L1"
+    },
+    "held": [],
+    "root": null,
+    "way": "states the rule"
+   }
+  },
+  {
+   "id": "LP10",
+   "code": "int i, n = 5;\nfor (i = 1; i < n; i++)\n    i++;\n    System.out.println(i);\nSystem.out.println(i);",
+   "question": "What is printed? Explain, pass by pass, what happens to i.",
+   "answer": "i starts at 1. 1 < 5 is true, the body i++ makes i 2, the update makes it 3. 3 < 5 is true, the body makes it 4, the update makes it 5. 5 < 5 is false, so the loop stops. Only i++ was in the loop. Then the two println lines print 5 and 5.",
+   "expected": {
+    "levels": {
+     "for_loop": "L2",
+     "loop_body": "L2"
+    },
+    "held": [],
+    "root": null,
+    "way": "line by line trace"
+   }
+  },
+  {
+   "id": "LP11",
+   "code": "int i, n = 5;\nfor (i = 1; i < n; i++)\n    i++;\n    System.out.println(i);\nSystem.out.println(i);",
+   "question": "What is the value of i when the second println runs? Explain how i gets that value.",
+   "answer": "i is 5. The loop leaves when the test 5 < 5 fails, so i is 5 at that point, and nothing after the loop changes i. Both println lines print 5.",
+   "expected": {
+    "levels": {
+     "for_loop": "L2"
+    },
+    "held": [],
+    "root": null,
+    "way": "output prediction"
+   }
+  },
+  {
+   "id": "LP12",
+   "code": "int i, n = 5;\nfor (i = 1; i < n; i++)\n    i++;\n    System.out.println(i);\nSystem.out.println(i);",
+   "question": "How many times does the body of the for loop run? Explain your reasoning.",
+   "answer": "On one pass i goes up by 2: once by the i++ in the body and once by the i++ in the update. So after the first pass i is 3 instead of 2.",
+   "expected": {
+    "levels": {
+     "for_loop": "L2"
+    },
+    "held": [],
+    "root": null,
+    "way": "one step execution"
+   }
+  },
+  {
+   "id": "LP13",
+   "code": "int i, n = 5;\nfor (i = 1; i < n; i++)\n    i++;\n    System.out.println(i);\nSystem.out.println(i);",
+   "question": "What is printed? Explain, pass by pass, what happens to i.",
+   "answer": "i starts at 1. 1 < 5, the body makes i 2, the update makes it 3. 3 < 5, the body makes it 4, the update makes it 5. 5 < 5 is false, so it stops. Then it prints 5 and 4.",
+   "expected": {
+    "levels": {
+     "for_loop": "L2"
+    },
+    "held": [],
+    "root": null,
+    "way": "line by line trace"
+   }
+  },
+  {
+   "id": "LP14",
+   "code": "int i, n = 5;\nfor (i = 1; i < n; i++)\n    i++;\n    System.out.println(i);\nSystem.out.println(i);",
+   "question": "How many times does the body of the for loop run? Explain your reasoning.",
+   "answer": "Twice. The body's i++ and the header's i++ change the same variable, so the condition sees i as 1, then 3, then 5 and fails on the third test. Because there are no braces the body is only i++; the indented println is after the loop.",
+   "expected": {
+    "levels": {
+     "for_loop": "L3",
+     "increment_operators": "L3"
+    },
+    "held": [],
+    "root": null,
+    "way": "relation to neighbour"
+   }
+  },
+  {
+   "id": "LP15",
+   "code": "int i, n = 5;\nfor (i = 1; i < n; i++)\n    i++;\n    System.out.println(i);\nSystem.out.println(i);",
+   "question": "Without tracing line by line, explain what this code does for any value of n.",
+   "answer": "Whatever n is, i starts at 1 and goes up by 2 on every pass, so the loop stops at the first odd number that is n or more. The program prints that number twice. For n = 5 that is 5; for n = 6 it would be 7.",
+   "expected": {
+    "levels": {
+     "for_loop": "L3"
+    },
+    "held": [],
+    "root": null,
+    "way": "purpose of the whole"
+   }
+  },
+  {
+   "id": "LP16",
+   "code": "int i, n = 5;\nfor (i = 1; i < n; i++)\n    i++;\n    System.out.println(i);\nSystem.out.println(i);",
+   "question": "What would be printed if braces { } were put around the two indented lines? Explain without tracing the new code line by line.",
+   "answer": "Then the println is in the body and runs on every pass, after the i++ and before the update. The passes do not change (the test still sees 1 and then 3), so it prints 2 and 4 inside the loop, and the last println still prints 5.",
+   "expected": {
+    "levels": {
+     "loop_body": "L4"
+    },
+    "held": [],
+    "root": null,
+    "way": "predict a change"
+   }
+  },
+  {
+   "id": "LP17",
+   "code": "int i , n= 5\nfor(i=1;i<n;i++)\n    i++;\n    System.out.println(i)\nsystem.out.println(i);",
+   "question": "Will this compile? What happens when you run it? Explain your reasoning.",
+   "answer": "It does not compile. Line 1 and line 4 are missing the ; at the end, so javac reports ';' expected. After those are fixed, system.out still fails because Java is case-sensitive: there is no package called system, it must be System. Even then the indentation is misleading: without braces only i++ is in the loop, a silent logic error whenever a braceless loop is followed by indented lines.",
+   "expected": {
+    "levels": {
+     "for_loop": "L4",
+     "statement": "L4",
+     "identifier": "L4"
+    },
+    "held": [],
+    "root": null,
+    "way": "diagnose an error"
+   }
+  },
+  {
+   "id": "LP18",
+   "code": "int i , n= 5\nfor(i=1;i<n;i++)\n    i++;\n    System.out.println(i)\nsystem.out.println(i);",
+   "question": "Will this compile? What happens when you run it? Explain your reasoning.",
+   "answer": "Yes, it compiles and prints 5 twice. The missing ; do not matter because each statement is on its own line, and system.out is the same as System.out.",
+   "expected": {
+    "levels": {
+     "identifier": "L0",
+     "statement": "L0"
+    },
+    "held": [
+     "IdentifierCaseInsensitive",
+     "StatementNeedsNoTerminator"
+    ],
+    "root": "statement",
+    "way": "misconception"
+   }
+  },
+  {
+   "id": "LP19",
+   "code": "int i, n = 5;\nfor (i = 1; i < n; i++)\n    i++;\n    System.out.println(i);\nSystem.out.println(i);",
+   "question": "Write a loop that prints every odd number smaller than n, and explain how it relates to this loop.",
+   "answer": "for (int i = 1; i < n; i += 2) System.out.println(i); This does on purpose what the given loop does by accident: the given loop also steps i by 2, because i++ is in both the body and the header. If I wanted more than one statement repeated I would add braces.",
+   "expected": {
+    "levels": {
+     "for_loop": "L4"
+    },
+    "held": [],
+    "root": null,
+    "way": "transfer to a new program"
+   }
+  },
+  {
+   "id": "LP20",
+   "code": "int i, n = 5;\nfor (i = 1; i < n; i++)\n    i++;\n    System.out.println(i);\nSystem.out.println(i);",
+   "question": "What is printed? Explain, pass by pass, what happens to i.",
+   "answer": "5 5",
+   "expected": {
+    "levels": {},
+    "held": [],
+    "root": null,
+    "way": "none (bare correct output)"
+   }
+  }
+ ]
+}

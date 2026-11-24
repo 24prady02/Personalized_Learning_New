@@ -1,0 +1,945 @@
+{
+ "scenario": "LP04",
+ "settings": {
+  "width": 3,
+  "depth": 3,
+  "prune_tools": "llm",
+  "model": "claude-opus-5-5",
+  "backend": "claude-cli",
+  "rule_fixes": true,
+  "level_v2": true
+ },
+ "clauses": [
+  "i is 5",
+  "The loop runs for i = 1, 2, 3, 4 and stops when i reaches 5",
+  "the i++ in the body does not affect the count"
+ ],
+ "start_concepts": [
+  "loop_control",
+  "for_loop",
+  "assignment"
+ ],
+ "held_misconceptions": [
+  {
+   "concept": "loop_variable",
+   "misconception": "BodyChangeIgnoredByCondition",
+   "kind": "misconception",
+   "quote": "The loop runs for i = 1, 2, 3, 4 and stops when i reaches 5; the i++ in the body does not affect the count",
+   "score": 0.744
+  },
+  {
+   "concept": "increment_operators",
+   "misconception": "IdiomOverridesCode",
+   "kind": "misconception",
+   "quote": "The loop runs for i = 1, 2, 3, 4 and stops when i reaches 5; the i++ in the body does not affect the count",
+   "score": 0.525
+  },
+  {
+   "concept": "loop_body",
+   "misconception": "ForLoopPartSkipped",
+   "kind": "misconception",
+   "quote": "The loop runs for i = 1, 2, 3, 4 and stops when i reaches 5; the i++ in the body does not affect the count",
+   "score": 0.315
+  }
+ ],
+ "error_evidence": [],
+ "shadowed": [
+  {
+   "concept": "loop_control",
+   "misconception": "IdiomOverridesCode",
+   "shadow_of": "mis:loop_body->ForLoopPartSkipped",
+   "quote": "The loop runs for i = 1, 2, 3, 4 and stops when i reaches 5; the i++ in the body does not affect the count",
+   "score": 0.27
+  },
+  {
+   "concept": "loop_control",
+   "misconception": "LoopStepAlwaysOne",
+   "shadow_of": "mis:loop_body->ForLoopPartSkipped",
+   "quote": "The loop runs for i = 1, 2, 3, 4 and stops when i reaches 5; the i++ in the body does not affect the count",
+   "score": 0.11
+  },
+  {
+   "concept": "assignment",
+   "misconception": "VariableKeepsOldValue",
+   "shadow_of": "mis:loop_control->LoopStepAlwaysOne",
+   "quote": "The loop runs for i = 1, 2, 3, 4 and stops when i reaches 5; the i++ in the body does not affect the count",
+   "score": 0.385
+  }
+ ],
+ "broken_edges": [
+  {
+   "edge": "pre:for_loop->loop_body",
+   "quote": "The loop runs for i = 1, 2, 3, 4 and stops when i reaches 5; the i++ in the body does not affect the count",
+   "score": 0.85,
+   "consequence_of": "mis:assignment->VariableKeepsOldValue"
+  },
+  {
+   "edge": "pre:assignment->increment_operators",
+   "quote": "The loop runs for i = 1, 2, 3, 4 and stops when i reaches 5; the i++ in the body does not affect the count",
+   "score": 0.7225,
+   "consequence_of": "mis:assignment->VariableKeepsOldValue"
+  },
+  {
+   "edge": "pre:loop_control->for_loop",
+   "quote": "The loop runs for i = 1, 2, 3, 4 and stops when i reaches 5; the i++ in the body does not affect the count",
+   "score": 0.34,
+   "consequence_of": "mis:assignment->VariableKeepsOldValue"
+  },
+  {
+   "edge": "pre:loop_variable->loop_control",
+   "quote": "The loop runs for i = 1, 2, 3, 4 and stops when i reaches 5; the i++ in the body does not affect the count",
+   "score": 0.2625,
+   "consequence_of": "mis:assignment->VariableKeepsOldValue"
+  },
+  {
+   "edge": "pre:loop_control->increment_operators",
+   "quote": "The loop runs for i = 1, 2, 3, 4 and stops when i reaches 5; the i++ in the body does not affect the count",
+   "score": 0.2,
+   "consequence_of": "mis:assignment->VariableKeepsOldValue"
+  }
+ ],
+ "root_cause": {
+  "concept": "loop_variable",
+  "misconception": "BodyChangeIgnoredByCondition"
+ },
+ "levels": {
+  "comparison_operators": {
+   "level": "L2",
+   "way": "output_prediction",
+   "quote": "The loop runs for i = 1, 2, 3, 4 and stops when i reaches 5",
+   "edge": "lvl:comparison_operators@L2#1",
+   "source": "level_way",
+   "also_shown": []
+  },
+  "control_flow": {
+   "level": "L2",
+   "way": "line_by_line_trace",
+   "quote": "The loop runs for i = 1, 2, 3, 4 and stops when i reaches 5",
+   "edge": "lvl:control_flow@L2#0",
+   "source": "level_way",
+   "also_shown": [
+    "L0 everyday_reading"
+   ]
+  },
+  "for_loop": {
+   "level": "L2",
+   "way": "output_prediction",
+   "quote": "i is 5; The loop runs for i = 1, 2, 3, 4 and stops when i reaches 5; the i++ in the body does not affect the count",
+   "edge": "lvl:for_loop@L2#1",
+   "source": "level_way",
+   "also_shown": []
+  },
+  "increment_operators": {
+   "level": "L0",
+   "way": "misconception",
+   "misconception": "IdiomOverridesCode",
+   "quote": "The loop runs for i = 1, 2, 3, 4 and stops when i reaches 5; the i++ in the body does not affect the count",
+   "edge": "mis:increment_operators->IdiomOverridesCode",
+   "rule": "wrong rule: An array loop processes the whole array from index 0 to length-1 and increments its index at the end of the body, whatever the code says. Right rule: The loop visits exactly the indices that its initialisation, guard and update produce, in the order in which its statements are written.",
+   "source": "level_mis_links"
+  },
+  "loop_body": {
+   "level": "L0",
+   "way": "misconception",
+   "misconception": "ForLoopPartSkipped",
+   "quote": "The loop runs for i = 1, 2, 3, 4 and stops when i reaches 5; the i++ in the body does not affect the count",
+   "edge": "mis:loop_body->ForLoopPartSkipped",
+   "rule": "wrong rule: A pass of a loop may leave out one of its parts (the condition test, the body, the update, or the initialization). Right rule: Each pass of a for loop runs test, then body, then update, every time; the initialization runs once, at the start.",
+   "source": "level_mis_links"
+  },
+  "loop_control": {
+   "level": "L2",
+   "way": "output_prediction",
+   "quote": "The loop runs for i = 1, 2, 3, 4 and stops when i reaches 5",
+   "edge": "lvl:loop_control@L2#1",
+   "source": "level_way",
+   "also_shown": []
+  },
+  "loop_variable": {
+   "level": "L0",
+   "way": "misconception",
+   "misconception": "BodyChangeIgnoredByCondition",
+   "quote": "The loop runs for i = 1, 2, 3, 4 and stops when i reaches 5; the i++ in the body does not affect the count",
+   "edge": "mis:loop_variable->BodyChangeIgnoredByCondition",
+   "rule": "wrong rule: Changing the loop variable inside the body does not affect the loop condition; the loop still runs its planned number of times. Right rule: The condition is tested with the current value of the variable, including changes made in the body.",
+   "source": "level_mis_links"
+  }
+ },
+ "overall_level": "L0",
+ "paths": [
+  {
+   "depth": 1,
+   "source": "assignment",
+   "edge": "mis:assignment->VariableKeepsOldValue",
+   "target": "VariableKeepsOldValue",
+   "kind": "misconception",
+   "label": "held",
+   "clauses": [
+    2,
+    3
+   ],
+   "quote": "The loop runs for i = 1, 2, 3, 4 and stops when i reaches 5; the i++ in the body does not affect the count",
+   "confidence": 0.55,
+   "prune_score": 0.7,
+   "score": 0.385,
+   "logic": "A variable keeps its first value after a new assignment (the static model).",
+   "twin_logic": "Each assignment or read replaces the variable's current value.",
+   "role": "context"
+  },
+  {
+   "depth": 1,
+   "source": "loop_control",
+   "edge": "mis:loop_control->IdiomOverridesCode",
+   "target": "IdiomOverridesCode",
+   "kind": "misconception",
+   "label": "held",
+   "clauses": [
+    2,
+    3
+   ],
+   "quote": "The loop runs for i = 1, 2, 3, 4 and stops when i reaches 5; the i++ in the body does not affect the count",
+   "confidence": 0.6,
+   "prune_score": 0.45,
+   "score": 0.27,
+   "logic": "An array loop processes the whole array from index 0 to length-1 and increments its index at the end of the body, whatever the code says.",
+   "twin_logic": "The loop visits exactly the indices that its initialisation, guard and update produce, in the order in which its statements are written.",
+   "role": "context"
+  },
+  {
+   "depth": 1,
+   "source": "loop_control",
+   "edge": "mis:loop_control->LoopStepAlwaysOne",
+   "target": "LoopStepAlwaysOne",
+   "kind": "misconception",
+   "label": "held",
+   "clauses": [
+    2,
+    3
+   ],
+   "quote": "The loop runs for i = 1, 2, 3, 4 and stops when i reaches 5; the i++ in the body does not affect the count",
+   "confidence": 0.55,
+   "prune_score": 0.2,
+   "score": 0.11,
+   "logic": "A loop variable always goes up or down by 1, whatever the update says (so i = i - 4 is read as i--).",
+   "twin_logic": "The loop variable changes exactly as the update expression says (i += 2, i = i - 4, i *= 2, ...).",
+   "role": "context",
+   "shares_evidence_with": "mis:loop_control->IdiomOverridesCode"
+  },
+  {
+   "depth": 2,
+   "source": "for_loop",
+   "edge": "pre:for_loop->loop_body",
+   "target": "loop_body",
+   "kind": "prerequisite",
+   "label": "broken",
+   "clauses": [
+    2,
+    3
+   ],
+   "quote": "The loop runs for i = 1, 2, 3, 4 and stops when i reaches 5; the i++ in the body does not affect the count",
+   "confidence": 0.85,
+   "prune_score": 1.0,
+   "score": 0.85,
+   "logic": "The statements in braces after the for header are the loop body; they run once on every pass, between the test and the increment, exactly as in a while loop.",
+   "twin_logic": null,
+   "consequence_of": "mis:assignment->VariableKeepsOldValue"
+  },
+  {
+   "depth": 2,
+   "source": "loop_variable",
+   "edge": "mis:loop_variable->BodyChangeIgnoredByCondition",
+   "target": "BodyChangeIgnoredByCondition",
+   "kind": "misconception",
+   "label": "held",
+   "clauses": [
+    2,
+    3
+   ],
+   "quote": "The loop runs for i = 1, 2, 3, 4 and stops when i reaches 5; the i++ in the body does not affect the count",
+   "confidence": 0.93,
+   "prune_score": 0.8,
+   "score": 0.744,
+   "logic": "Changing the loop variable inside the body does not affect the loop condition; the loop still runs its planned number of times.",
+   "twin_logic": "The condition is tested with the current value of the variable, including changes made in the body.",
+   "role": "primary"
+  },
+  {
+   "depth": 2,
+   "source": "assignment",
+   "edge": "pre:assignment->increment_operators",
+   "target": "increment_operators",
+   "kind": "prerequisite",
+   "label": "broken",
+   "clauses": [
+    2,
+    3
+   ],
+   "quote": "The loop runs for i = 1, 2, 3, 4 and stops when i reaches 5; the i++ in the body does not affect the count",
+   "confidence": 0.85,
+   "prune_score": 0.85,
+   "score": 0.7225,
+   "logic": "i++ is shorthand for the assignment i = i + 1.",
+   "twin_logic": null,
+   "consequence_of": "mis:assignment->VariableKeepsOldValue"
+  },
+  {
+   "depth": 2,
+   "source": "increment_operators",
+   "edge": "mis:increment_operators->IdiomOverridesCode",
+   "target": "IdiomOverridesCode",
+   "kind": "misconception",
+   "label": "held",
+   "clauses": [
+    2,
+    3
+   ],
+   "quote": "The loop runs for i = 1, 2, 3, 4 and stops when i reaches 5; the i++ in the body does not affect the count",
+   "confidence": 0.75,
+   "prune_score": 0.7000000000000001,
+   "score": 0.525,
+   "logic": "An array loop processes the whole array from index 0 to length-1 and increments its index at the end of the body, whatever the code says.",
+   "twin_logic": "The loop visits exactly the indices that its initialisation, guard and update produce, in the order in which its statements are written.",
+   "role": "context"
+  },
+  {
+   "depth": 2,
+   "source": "loop_control",
+   "edge": "pre:loop_control->for_loop",
+   "target": "for_loop",
+   "kind": "prerequisite",
+   "label": "broken",
+   "clauses": [
+    2,
+    3
+   ],
+   "quote": "The loop runs for i = 1, 2, 3, 4 and stops when i reaches 5; the i++ in the body does not affect the count",
+   "confidence": 0.85,
+   "prune_score": 0.4,
+   "score": 0.34,
+   "logic": "The for header is exactly the three control slots, and the body runs after the test and before the update on each pass.",
+   "twin_logic": null,
+   "consequence_of": "mis:assignment->VariableKeepsOldValue"
+  },
+  {
+   "depth": 2,
+   "source": "loop_control",
+   "edge": "pre:loop_variable->loop_control",
+   "target": "loop_variable",
+   "kind": "prerequisite",
+   "label": "broken",
+   "clauses": [
+    2,
+    3
+   ],
+   "quote": "The loop runs for i = 1, 2, 3, 4 and stops when i reaches 5; the i++ in the body does not affect the count",
+   "confidence": 0.75,
+   "prune_score": 0.35,
+   "score": 0.2625,
+   "logic": "The init, condition and update all act on the loop variable: the init sets it, the condition tests it, the update changes it.",
+   "twin_logic": null,
+   "consequence_of": "mis:assignment->VariableKeepsOldValue"
+  },
+  {
+   "depth": 2,
+   "source": "loop_control",
+   "edge": "pre:loop_control->increment_operators",
+   "target": "increment_operators",
+   "kind": "prerequisite",
+   "label": "broken",
+   "clauses": [
+    2,
+    3
+   ],
+   "quote": "The loop runs for i = 1, 2, 3, 4 and stops when i reaches 5; the i++ in the body does not affect the count",
+   "confidence": 0.8,
+   "prune_score": 0.25,
+   "score": 0.2,
+   "logic": "The loop update i = i + 1 comes first; ++ (and +=) are then introduced as shorthand for that update.",
+   "twin_logic": null,
+   "consequence_of": "mis:assignment->VariableKeepsOldValue"
+  },
+  {
+   "depth": 3,
+   "source": "loop_body",
+   "edge": "mis:loop_body->ForLoopPartSkipped",
+   "target": "ForLoopPartSkipped",
+   "kind": "misconception",
+   "label": "held",
+   "clauses": [
+    2,
+    3
+   ],
+   "quote": "The loop runs for i = 1, 2, 3, 4 and stops when i reaches 5; the i++ in the body does not affect the count",
+   "confidence": 0.7,
+   "prune_score": 0.45,
+   "score": 0.315,
+   "logic": "A pass of a loop may leave out one of its parts (the condition test, the body, the update, or the initialization).",
+   "twin_logic": "Each pass of a for loop runs test, then body, then update, every time; the initialization runs once, at the start.",
+   "role": "context"
+  },
+  {
+   "depth": 3,
+   "source": "comparison_operators",
+   "edge": "mis:comparison_operators->LessGreaterSwapped",
+   "target": "LessGreaterSwapped",
+   "kind": "misconception",
+   "label": "correct",
+   "clauses": [
+    2
+   ],
+   "quote": "The loop runs for i = 1, 2, 3, 4 and stops when i reaches 5",
+   "confidence": 0.8,
+   "prune_score": 0.8,
+   "score": 0.64,
+   "logic": "< and > mean the same thing (or a < b means a is greater than b).",
+   "twin_logic": "a < b is true when a is smaller than b; a > b when a is larger.",
+   "role": "primary"
+  },
+  {
+   "depth": 3,
+   "source": "control_flow",
+   "edge": "mis:control_flow->ProgramEndsAfterLoop",
+   "target": "ProgramEndsAfterLoop",
+   "kind": "misconception",
+   "label": "correct",
+   "clauses": [
+    1,
+    2
+   ],
+   "quote": "i is 5; The loop runs for i = 1, 2, 3, 4 and stops when i reaches 5",
+   "confidence": 0.6,
+   "prune_score": 0.45,
+   "score": 0.27,
+   "logic": "When a loop finishes the program ends, so code after the loop never runs.",
+   "twin_logic": "When the loop condition becomes false, control continues with the first statement after the loop.",
+   "role": "context"
+  }
+ ],
+ "evidence": [
+  {
+   "depth": 1,
+   "source": "loop_control",
+   "edge": "mis:loop_control->IdiomOverridesCode",
+   "target": "IdiomOverridesCode",
+   "kind": "misconception",
+   "label": "held",
+   "clauses": [
+    2,
+    3
+   ],
+   "quote": "The loop runs for i = 1, 2, 3, 4 and stops when i reaches 5; the i++ in the body does not affect the count",
+   "confidence": 0.6,
+   "prune_score": 0.45,
+   "score": 0.27,
+   "logic": "An array loop processes the whole array from index 0 to length-1 and increments its index at the end of the body, whatever the code says.",
+   "twin_logic": "The loop visits exactly the indices that its initialisation, guard and update produce, in the order in which its statements are written.",
+   "role": "context"
+  },
+  {
+   "depth": 1,
+   "source": "loop_control",
+   "edge": "mis:loop_control->LoopStepAlwaysOne",
+   "target": "LoopStepAlwaysOne",
+   "kind": "misconception",
+   "label": "held",
+   "clauses": [
+    2,
+    3
+   ],
+   "quote": "The loop runs for i = 1, 2, 3, 4 and stops when i reaches 5; the i++ in the body does not affect the count",
+   "confidence": 0.55,
+   "prune_score": 0.2,
+   "score": 0.11,
+   "logic": "A loop variable always goes up or down by 1, whatever the update says (so i = i - 4 is read as i--).",
+   "twin_logic": "The loop variable changes exactly as the update expression says (i += 2, i = i - 4, i *= 2, ...).",
+   "role": "context",
+   "shares_evidence_with": "mis:loop_control->IdiomOverridesCode"
+  },
+  {
+   "depth": 1,
+   "source": "loop_control",
+   "edge": "lvl:loop_control@L2#1",
+   "target": "loop_control@L2",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    2
+   ],
+   "quote": "The loop runs for i = 1, 2, 3, 4 and stops when i reaches 5",
+   "confidence": 0.7,
+   "prune_score": 0.2,
+   "score": 0.14,
+   "logic": "The number of passes and the values seen follow from the three parts: for (int i = 0; i <= N; i++) makes N+1 passes with i = 0..N; with i < N it makes N passes; i += 2 visits every second value.",
+   "twin_logic": null,
+   "level": "L2",
+   "way": "output_prediction"
+  },
+  {
+   "depth": 1,
+   "source": "for_loop",
+   "edge": "err:for_loop->WrongIterationCount",
+   "target": "WrongIterationCount",
+   "kind": "error",
+   "label": "held",
+   "clauses": [
+    2,
+    3
+   ],
+   "quote": "The loop runs for i = 1, 2, 3, 4 and stops when i reaches 5; the i++ in the body does not affect the count",
+   "confidence": 0.85,
+   "prune_score": 0.25,
+   "score": 0.2125,
+   "logic": "Updates the loop counter so that the loop runs the wrong number of times.",
+   "twin_logic": "The init, test and update together decide the number of passes; trace them to check the count.",
+   "role": "primary"
+  },
+  {
+   "depth": 1,
+   "source": "for_loop",
+   "edge": "lvl:for_loop@L2#1",
+   "target": "for_loop@L2",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    1,
+    2,
+    3
+   ],
+   "quote": "i is 5; The loop runs for i = 1, 2, 3, 4 and stops when i reaches 5; the i++ in the body does not affect the count",
+   "confidence": 0.6,
+   "prune_score": 0.3,
+   "score": 0.18,
+   "logic": "A for statement has no value; the passes it makes are fixed by its header: for (int i = 1; i <= N; i++) sum += i; leaves sum = N(N+1)/2, and for (int i = 2; i <= 8; i += 2) prints 2, 4, 6, 8,.",
+   "twin_logic": null,
+   "level": "L2",
+   "way": "output_prediction"
+  },
+  {
+   "depth": 1,
+   "source": "assignment",
+   "edge": "mis:assignment->VariableKeepsOldValue",
+   "target": "VariableKeepsOldValue",
+   "kind": "misconception",
+   "label": "held",
+   "clauses": [
+    2,
+    3
+   ],
+   "quote": "The loop runs for i = 1, 2, 3, 4 and stops when i reaches 5; the i++ in the body does not affect the count",
+   "confidence": 0.55,
+   "prune_score": 0.7,
+   "score": 0.385,
+   "logic": "A variable keeps its first value after a new assignment (the static model).",
+   "twin_logic": "Each assignment or read replaces the variable's current value.",
+   "role": "context"
+  },
+  {
+   "depth": 2,
+   "source": "assignment",
+   "edge": "pre:assignment->increment_operators",
+   "target": "increment_operators",
+   "kind": "prerequisite",
+   "label": "broken",
+   "clauses": [
+    2,
+    3
+   ],
+   "quote": "The loop runs for i = 1, 2, 3, 4 and stops when i reaches 5; the i++ in the body does not affect the count",
+   "confidence": 0.85,
+   "prune_score": 0.85,
+   "score": 0.7225,
+   "logic": "i++ is shorthand for the assignment i = i + 1.",
+   "twin_logic": null,
+   "consequence_of": "mis:assignment->VariableKeepsOldValue"
+  },
+  {
+   "depth": 2,
+   "source": "loop_control",
+   "edge": "pre:loop_control->for_loop",
+   "target": "for_loop",
+   "kind": "prerequisite",
+   "label": "broken",
+   "clauses": [
+    2,
+    3
+   ],
+   "quote": "The loop runs for i = 1, 2, 3, 4 and stops when i reaches 5; the i++ in the body does not affect the count",
+   "confidence": 0.85,
+   "prune_score": 0.4,
+   "score": 0.34,
+   "logic": "The for header is exactly the three control slots, and the body runs after the test and before the update on each pass.",
+   "twin_logic": null,
+   "consequence_of": "mis:assignment->VariableKeepsOldValue"
+  },
+  {
+   "depth": 2,
+   "source": "loop_control",
+   "edge": "pre:loop_variable->loop_control",
+   "target": "loop_variable",
+   "kind": "prerequisite",
+   "label": "broken",
+   "clauses": [
+    2,
+    3
+   ],
+   "quote": "The loop runs for i = 1, 2, 3, 4 and stops when i reaches 5; the i++ in the body does not affect the count",
+   "confidence": 0.75,
+   "prune_score": 0.35,
+   "score": 0.2625,
+   "logic": "The init, condition and update all act on the loop variable: the init sets it, the condition tests it, the update changes it.",
+   "twin_logic": null,
+   "consequence_of": "mis:assignment->VariableKeepsOldValue"
+  },
+  {
+   "depth": 2,
+   "source": "loop_control",
+   "edge": "pre:loop_control->increment_operators",
+   "target": "increment_operators",
+   "kind": "prerequisite",
+   "label": "broken",
+   "clauses": [
+    2,
+    3
+   ],
+   "quote": "The loop runs for i = 1, 2, 3, 4 and stops when i reaches 5; the i++ in the body does not affect the count",
+   "confidence": 0.8,
+   "prune_score": 0.25,
+   "score": 0.2,
+   "logic": "The loop update i = i + 1 comes first; ++ (and +=) are then introduced as shorthand for that update.",
+   "twin_logic": null,
+   "consequence_of": "mis:assignment->VariableKeepsOldValue"
+  },
+  {
+   "depth": 2,
+   "source": "for_loop",
+   "edge": "pre:for_loop->loop_body",
+   "target": "loop_body",
+   "kind": "prerequisite",
+   "label": "broken",
+   "clauses": [
+    2,
+    3
+   ],
+   "quote": "The loop runs for i = 1, 2, 3, 4 and stops when i reaches 5; the i++ in the body does not affect the count",
+   "confidence": 0.85,
+   "prune_score": 1.0,
+   "score": 0.85,
+   "logic": "The statements in braces after the for header are the loop body; they run once on every pass, between the test and the increment, exactly as in a while loop.",
+   "twin_logic": null,
+   "consequence_of": "mis:assignment->VariableKeepsOldValue"
+  },
+  {
+   "depth": 2,
+   "source": "increment_operators",
+   "edge": "mis:increment_operators->IdiomOverridesCode",
+   "target": "IdiomOverridesCode",
+   "kind": "misconception",
+   "label": "held",
+   "clauses": [
+    2,
+    3
+   ],
+   "quote": "The loop runs for i = 1, 2, 3, 4 and stops when i reaches 5; the i++ in the body does not affect the count",
+   "confidence": 0.75,
+   "prune_score": 0.7000000000000001,
+   "score": 0.525,
+   "logic": "An array loop processes the whole array from index 0 to length-1 and increments its index at the end of the body, whatever the code says.",
+   "twin_logic": "The loop visits exactly the indices that its initialisation, guard and update produce, in the order in which its statements are written.",
+   "role": "context"
+  },
+  {
+   "depth": 2,
+   "source": "increment_operators",
+   "edge": "lvl:increment_operators@L0#0",
+   "target": "increment_operators@L0",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    2,
+    3
+   ],
+   "quote": "The loop runs for i = 1, 2, 3, 4 and stops when i reaches 5; the i++ in the body does not affect the count",
+   "confidence": 0.7,
+   "prune_score": 0.3,
+   "score": 0.21,
+   "logic": "Folk meaning: '++' reads as 'plus plus' (add twice) or as a maths symbol with no effect, and i++ inside an expression is read as 'add 1 at some later time'. In Java i++ and ++i each add exactly 1 to i immediately when evaluated; they differ only in the value the expression yields.",
+   "twin_logic": null,
+   "level": "L0",
+   "way": "everyday_reading"
+  },
+  {
+   "depth": 2,
+   "source": "loop_variable",
+   "edge": "mis:loop_variable->BodyChangeIgnoredByCondition",
+   "target": "BodyChangeIgnoredByCondition",
+   "kind": "misconception",
+   "label": "held",
+   "clauses": [
+    2,
+    3
+   ],
+   "quote": "The loop runs for i = 1, 2, 3, 4 and stops when i reaches 5; the i++ in the body does not affect the count",
+   "confidence": 0.93,
+   "prune_score": 0.8,
+   "score": 0.744,
+   "logic": "Changing the loop variable inside the body does not affect the loop condition; the loop still runs its planned number of times.",
+   "twin_logic": "The condition is tested with the current value of the variable, including changes made in the body.",
+   "role": "primary"
+  },
+  {
+   "depth": 2,
+   "source": "loop_variable",
+   "edge": "lvl:loop_variable@L0#5",
+   "target": "loop_variable@L0",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    2,
+    3
+   ],
+   "quote": "The loop runs for i = 1, 2, 3, 4 and stops when i reaches 5; the i++ in the body does not affect the count",
+   "confidence": 0.6,
+   "prune_score": 0.5,
+   "score": 0.3,
+   "logic": "Applies the init-test-update rule (LT, loop_control) unevenly to the loop variable: forgets one update, applies a different step on some passes, or re-initializes it mid-loop. (here mixing in: \"The update of the loop variable can change from pass to pass (e.g. switch direction) although the code is the same\")",
+   "twin_logic": null,
+   "level": "L0",
+   "way": "inconsistent_trace"
+  },
+  {
+   "depth": 3,
+   "source": "loop_body",
+   "edge": "mis:loop_body->ForLoopPartSkipped",
+   "target": "ForLoopPartSkipped",
+   "kind": "misconception",
+   "label": "held",
+   "clauses": [
+    2,
+    3
+   ],
+   "quote": "The loop runs for i = 1, 2, 3, 4 and stops when i reaches 5; the i++ in the body does not affect the count",
+   "confidence": 0.7,
+   "prune_score": 0.45,
+   "score": 0.315,
+   "logic": "A pass of a loop may leave out one of its parts (the condition test, the body, the update, or the initialization).",
+   "twin_logic": "Each pass of a for loop runs test, then body, then update, every time; the initialization runs once, at the start.",
+   "role": "context"
+  },
+  {
+   "depth": 3,
+   "source": "loop_body",
+   "edge": "lvl:loop_body@L0#0",
+   "target": "loop_body@L0",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    2,
+    3
+   ],
+   "quote": "The loop runs for i = 1, 2, 3, 4 and stops when i reaches 5; the i++ in the body does not affect the count",
+   "confidence": 0.7,
+   "prune_score": 0.2,
+   "score": 0.14,
+   "logic": "Folk meaning: an everyday 'repeat this' instruction can be read loosely - a helper fills in missing steps, does each step N times in turn, or stops partway. A Java loop body is exactly the statements inside its braces (or one statement), all executed in order on every pass.",
+   "twin_logic": null,
+   "level": "L0",
+   "way": "everyday_reading"
+  },
+  {
+   "depth": 3,
+   "source": "control_flow",
+   "edge": "mis:control_flow->ProgramEndsAfterLoop",
+   "target": "ProgramEndsAfterLoop",
+   "kind": "misconception",
+   "label": "correct",
+   "clauses": [
+    1,
+    2
+   ],
+   "quote": "i is 5; The loop runs for i = 1, 2, 3, 4 and stops when i reaches 5",
+   "confidence": 0.6,
+   "prune_score": 0.45,
+   "score": 0.27,
+   "logic": "When a loop finishes the program ends, so code after the loop never runs.",
+   "twin_logic": "When the loop condition becomes false, control continues with the first statement after the loop.",
+   "role": "context"
+  },
+  {
+   "depth": 3,
+   "source": "control_flow",
+   "edge": "lvl:control_flow@L2#0",
+   "target": "control_flow@L2",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    2
+   ],
+   "quote": "The loop runs for i = 1, 2, 3, 4 and stops when i reaches 5",
+   "confidence": 0.6,
+   "prune_score": 0.3,
+   "score": 0.18,
+   "logic": "Execute the statement at the current point; when it completes normally, control passes to the next statement in the block. An if evaluates its condition once and then runs at most one branch; a loop evaluates its condition before each pass; after an if or a loop finishes, control continues with the statement after it.",
+   "twin_logic": null,
+   "level": "L2",
+   "way": "line_by_line_trace"
+  },
+  {
+   "depth": 3,
+   "source": "control_flow",
+   "edge": "lvl:control_flow@L0#0",
+   "target": "control_flow@L0",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    2,
+    3
+   ],
+   "quote": "The loop runs for i = 1, 2, 3, 4 and stops when i reaches 5; the i++ in the body does not affect the count",
+   "confidence": 0.65,
+   "prune_score": 0.2,
+   "score": 0.13,
+   "logic": "Folk meaning: in everyday instructions a listener reads the whole list at once, does steps in a sensible order and infers what the writer wants. Java instead executes statements one at a time, top to bottom, each only when control reaches it, and nothing later in the program has any effect earlier.",
+   "twin_logic": null,
+   "level": "L0",
+   "way": "everyday_reading"
+  },
+  {
+   "depth": 3,
+   "source": "comparison_operators",
+   "edge": "mis:comparison_operators->LessGreaterSwapped",
+   "target": "LessGreaterSwapped",
+   "kind": "misconception",
+   "label": "correct",
+   "clauses": [
+    2
+   ],
+   "quote": "The loop runs for i = 1, 2, 3, 4 and stops when i reaches 5",
+   "confidence": 0.8,
+   "prune_score": 0.8,
+   "score": 0.64,
+   "logic": "< and > mean the same thing (or a < b means a is greater than b).",
+   "twin_logic": "a < b is true when a is smaller than b; a > b when a is larger.",
+   "role": "primary"
+  },
+  {
+   "depth": 3,
+   "source": "comparison_operators",
+   "edge": "lvl:comparison_operators@L2#1",
+   "target": "comparison_operators@L2",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    2
+   ],
+   "quote": "The loop runs for i = 1, 2, 3, 4 and stops when i reaches 5",
+   "confidence": 0.6,
+   "prune_score": 0.35,
+   "score": 0.21,
+   "logic": "The result is a boolean: (2 <= 2) is true, 2 < 2 is false, (x < 3.1) is true for int x = 3; any comparison involving NaN, even NaN == NaN, is false.",
+   "twin_logic": null,
+   "level": "L2",
+   "way": "output_prediction"
+  }
+ ],
+ "clause_coverage": {
+  "i is 5": "lvl:for_loop@L2#1",
+  "The loop runs for i = 1, 2, 3, 4 and stops when i reaches 5": "mis:loop_control->IdiomOverridesCode",
+  "the i++ in the body does not affect the count": "mis:loop_control->IdiomOverridesCode"
+ },
+ "unexplained_clauses": [],
+ "stop_reason": "max depth",
+ "depth_reached": 3,
+ "llm_calls": 0,
+ "llm_cache_hits": 73,
+ "llm_calls_by_step": {
+  "prune": 25,
+  "label": 48
+ },
+ "level_v2": {
+  "wrong_ways": [
+   {
+    "concept": "loop_control",
+    "edge": "lvl:loop_control@L4#1",
+    "level": "L4",
+    "way": "diagnose_an_error",
+    "clauses": [
+     2,
+     3
+    ],
+    "quote": "The loop runs for i = 1, 2, 3, 4 and stops when i reaches 5; the i++ in the body does not affect the count",
+    "confidence": 0.8
+   },
+   {
+    "concept": "for_loop",
+    "edge": "lvl:for_loop@L4#5",
+    "level": "L4",
+    "way": "diagnose_an_error",
+    "clauses": [
+     2,
+     3
+    ],
+    "quote": "The loop runs for i = 1, 2, 3, 4 and stops when i reaches 5; the i++ in the body does not affect the count",
+    "confidence": 0.8
+   },
+   {
+    "concept": "increment_operators",
+    "edge": "lvl:increment_operators@L3#0",
+    "level": "L3",
+    "way": "relation_to_neighbour",
+    "clauses": [
+     2,
+     3
+    ],
+    "quote": "The loop runs for i = 1, 2, 3, 4 and stops when i reaches 5; the i++ in the body does not affect the count",
+    "confidence": 0.8
+   },
+   {
+    "concept": "loop_variable",
+    "edge": "lvl:loop_variable@L4#2",
+    "level": "L4",
+    "way": "diagnose_an_error",
+    "clauses": [
+     2,
+     3
+    ],
+    "quote": "The loop runs for i = 1, 2, 3, 4 and stops when i reaches 5; the i++ in the body does not affect the count",
+    "confidence": 0.8
+   },
+   {
+    "concept": "loop_variable",
+    "edge": "lvl:loop_variable@L4#0",
+    "level": "L4",
+    "way": "predict_a_change",
+    "clauses": [
+     3
+    ],
+    "quote": "the i++ in the body does not affect the count",
+    "confidence": 0.7
+   },
+   {
+    "concept": "comparison_operators",
+    "edge": "lvl:comparison_operators@L3#5",
+    "level": "L3",
+    "way": "purpose_of_the_whole",
+    "clauses": [
+     2
+    ],
+    "quote": "The loop runs for i = 1, 2, 3, 4 and stops when i reaches 5",
+    "confidence": 0.55
+   },
+   {
+    "concept": "boolean_expression",
+    "edge": "lvl:boolean_expression@L3#3",
+    "level": "L3",
+    "way": "relation_to_neighbour",
+    "clauses": [
+     2,
+     3
+    ],
+    "quote": "The loop runs for i = 1, 2, 3, 4 and stops when i reaches 5; the i++ in the body does not affect the count",
+    "confidence": 0.8
+   }
+  ],
+  "not_counted": []
+ }
+}

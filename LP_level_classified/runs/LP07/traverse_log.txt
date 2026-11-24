@@ -1,0 +1,98 @@
+clauses: Pass 1: i++ makes i 2 and println prints 2, then the update makes it 3 | Pass 2: i++ makes it 4 and the update makes it 5 | 5 < 5 is false | so the loop stops and the last line prints 5 | Output: 2 and 5
+start: BM25 of the answer against each tagged concept: for_loop 35.38 (hits 1), loop_control 35.17 (hits 1), println 32.11 (hits 1), increment_operators 27.53 (hits 1), loop_variable 21.75 (hits 1), loop_body 19.15 (hits 1), control_flow 11.45 (hits 1), boolean_expression 5.24 (hits 1), comparison_operators 3.99 (hits 1)
+start: chosen for_loop, loop_control, println
+start concepts (3): for_loop, loop_control, println
+--- depth 1: current concepts ['for_loop', 'loop_control', 'println']
+  for_loop (misconceptions): 20 candidates -> kept err:for_loop->BracelessMultiStatementBody (0.50), mis:for_loop->LoopCountIsStatementCount (0.30), mis:for_loop->ForUpdateBeforeBody (0.20)
+    err:for_loop->BracelessMultiStatementBody -> not applied (0.00) ""
+    mis:for_loop->LoopCountIsStatementCount -> not applied (0.00) ""
+    mis:for_loop->ForUpdateBeforeBody -> correct (0.17) "Pass 1: i++ makes i 2 and println prints 2, then the update makes it 3; Pass 2: i++ makes it 4 and the update makes it 5"
+  for_loop (level ways): 24 candidates -> kept lvl:for_loop@L4#6 (0.50), lvl:for_loop@L2#0 (0.30), lvl:for_loop@L4#5 (0.20)
+    lvl:for_loop@L4#6 -> not applied (0.00) ""
+    lvl:for_loop@L2#0 -> shown (0.26) "Pass 1: i++ makes i 2 and println prints 2, then the update makes it 3; Pass 2: i++ makes it 4 and the update makes it 5; 5 < 5 is false; so the loop stops and the last line prints 5"
+    lvl:for_loop@L4#5 -> not applied (0.00) ""
+  loop_control (misconceptions): 11 candidates -> kept mis:loop_control->ForLoopPartSkipped (0.45), mis:loop_control->ForUpdateBeforeBody (0.30), err:loop_control->WrongIterationCount (0.25)
+    mis:loop_control->ForLoopPartSkipped -> held (0.25) "Pass 1: i++ makes i 2 and println prints 2, then the update makes it 3; Pass 2: i++ makes it 4 and the update makes it 5"
+    mis:loop_control->ForUpdateBeforeBody -> correct (0.26) "Pass 1: i++ makes i 2 and println prints 2, then the update makes it 3; Pass 2: i++ makes it 4 and the update makes it 5"
+    err:loop_control->WrongIterationCount -> correct (0.20) "Pass 2: i++ makes it 4 and the update makes it 5; 5 < 5 is false; so the loop stops and the last line prints 5"
+  loop_control (level ways): 19 candidates -> kept lvl:loop_control@L2#0 (0.50), lvl:loop_control@L2#2 (0.30), lvl:loop_control@L3#1 (0.20)
+    lvl:loop_control@L2#0 -> shown (0.42) "Pass 1: i++ makes i 2 and println prints 2, then the update makes it 3; Pass 2: i++ makes it 4 and the update makes it 5; 5 < 5 is false; so the loop stops and the last line prints 5"
+    lvl:loop_control@L2#2 -> shown (0.24) "Pass 1: i++ makes i 2 and println prints 2, then the update makes it 3; Pass 2: i++ makes it 4 and the update makes it 5; 5 < 5 is false"
+    lvl:loop_control@L3#1: wrong (0.60) -> not applied
+    lvl:loop_control@L3#1 -> not applied (0.00) ""
+  println (misconceptions): 6 candidates -> kept mis:println->PrintedTextIsExecuted (0.40), mis:println->PrintEqualsPrintln (0.35), mis:println->PrintNewLineFirst (0.25)
+    mis:println->PrintedTextIsExecuted -> not applied (0.00) ""
+    mis:println->PrintEqualsPrintln -> not applied (0.00) ""
+    mis:println->PrintNewLineFirst -> not applied (0.00) ""
+  println (level ways): 17 candidates -> kept lvl:println@L3#0 (0.45), lvl:println@L0#3 (0.30), lvl:println@L2#1 (0.25)
+    lvl:println@L3#0: wrong (0.60) -> not applied
+    lvl:println@L3#0 -> not applied (0.00) ""
+    lvl:println@L0#3 -> not applied (0.00) ""
+    lvl:println@L2#1 -> shown (0.17) "Pass 1: i++ makes i 2 and println prints 2, then the update makes it 3; so the loop stops and the last line prints 5; Output: 2 and 5"
+  kept: mis:loop_control->ForLoopPartSkipped [held, tier 0, 0.25], lvl:loop_control@L2#0 [shown, tier 2, 0.42], lvl:for_loop@L2#0 [shown, tier 2, 0.26]
+  clause coverage: c1 <- mis:for_loop->ForUpdateBeforeBody; c2 <- mis:for_loop->ForUpdateBeforeBody; c3 <- err:loop_control->WrongIterationCount; c4 <- err:loop_control->WrongIterationCount; c5 uncovered
+  uncovered clauses bring in: increment_operators (2.19), loop_variable (1.38), loop_body (1.16)
+  not yet read: own edges of increment_operators, own edges of loop_body, own edges of loop_variable, pre:for_loop->loop_body, pre:loop_control->for_loop, pre:loop_control->increment_operators, pre:loop_variable->loop_control, pre:statement->println
+--- depth 2: current concepts ['loop_control', 'for_loop', 'println', 'increment_operators', 'loop_variable', 'loop_body']
+  loop_control (concept edges): 3 candidates -> kept pre:loop_control->for_loop (0.50), pre:loop_variable->loop_control (0.35), pre:loop_control->increment_operators (0.15)
+    pre:loop_control->for_loop -> confirmed (0.35) "Pass 1: i++ makes i 2 and println prints 2, then the update makes it 3; Pass 2: i++ makes it 4 and the update makes it 5; 5 < 5 is false"
+    pre:loop_variable->loop_control -> confirmed (0.28) "Pass 1: i++ makes i 2 and println prints 2, then the update makes it 3; Pass 2: i++ makes it 4 and the update makes it 5; 5 < 5 is false"
+    pre:loop_control->increment_operators -> confirmed (0.11) "Pass 1: i++ makes i 2 and println prints 2, then the update makes it 3; Pass 2: i++ makes it 4 and the update makes it 5; 5 < 5 is false"
+  for_loop (concept edges): 1 candidates -> kept pre:for_loop->loop_body (1.00)
+    pre:for_loop->loop_body -> broken (0.85) "Pass 1: i++ makes i 2 and println prints 2, then the update makes it 3; Output: 2 and 5"
+  println (concept edges): 1 candidates -> kept pre:statement->println (1.00)
+    pre:statement->println -> broken (0.75) "Pass 1: i++ makes i 2 and println prints 2, then the update makes it 3; Output: 2 and 5"
+  increment_operators (misconceptions): 5 candidates -> kept mis:increment_operators->IdiomOverridesCode (0.45), mis:increment_operators->IncrementByTwo (0.30), mis:increment_operators->PreIncrementBeforeLoop (0.25)
+    mis:increment_operators->IdiomOverridesCode -> not applied (0.00) ""
+    mis:increment_operators->IncrementByTwo -> correct (0.27) "Pass 1: i++ makes i 2 and println prints 2, then the update makes it 3; Pass 2: i++ makes it 4 and the update makes it 5"
+    mis:increment_operators->PreIncrementBeforeLoop -> correct (0.19) "Pass 1: i++ makes i 2 and println prints 2, then the update makes it 3; Pass 2: i++ makes it 4 and the update makes it 5"
+  increment_operators (level ways): 16 candidates -> kept lvl:increment_operators@L2#2 (0.40), lvl:increment_operators@L2#0 (0.35), lvl:increment_operators@L3#0 (0.25)
+    lvl:increment_operators@L2#2 -> shown (0.34) "Pass 1: i++ makes i 2 and println prints 2, then the update makes it 3; Pass 2: i++ makes it 4 and the update makes it 5"
+    lvl:increment_operators@L2#0 -> shown (0.24) "Pass 1: i++ makes i 2 and println prints 2, then the update makes it 3; Pass 2: i++ makes it 4 and the update makes it 5"
+    lvl:increment_operators@L3#0 -> shown (0.15) "Pass 1: i++ makes i 2 and println prints 2, then the update makes it 3; Pass 2: i++ makes it 4 and the update makes it 5"
+  loop_variable (misconceptions): 7 candidates -> kept mis:loop_variable->BodyChangeIgnoredByCondition (0.50), mis:loop_variable->LoopVariableLifetimeScope (0.25), mis:loop_variable->LoopUpdateChangesDirection (0.25)
+    mis:loop_variable->BodyChangeIgnoredByCondition -> correct (0.42) "Pass 2: i++ makes it 4 and the update makes it 5; 5 < 5 is false; so the loop stops and the last line prints 5"
+    mis:loop_variable->LoopVariableLifetimeScope -> correct (0.19) "Pass 1: i++ makes i 2 and println prints 2, then the update makes it 3; Pass 2: i++ makes it 4 and the update makes it 5"
+    mis:loop_variable->LoopUpdateChangesDirection -> correct (0.15) "Pass 1: i++ makes i 2 and println prints 2, then the update makes it 3; Pass 2: i++ makes it 4 and the update makes it 5"
+  loop_variable (level ways): 13 candidates -> kept lvl:loop_variable@L2#0 (0.40), lvl:loop_variable@L2#2 (0.35), lvl:loop_variable@L2#1 (0.25)
+    lvl:loop_variable@L2#0 -> shown (0.32) "Pass 1: i++ makes i 2 and println prints 2, then the update makes it 3; Pass 2: i++ makes it 4 and the update makes it 5; 5 < 5 is false"
+    lvl:loop_variable@L2#2 -> shown (0.30) "Pass 1: i++ makes i 2 and println prints 2, then the update makes it 3; Pass 2: i++ makes it 4 and the update makes it 5; 5 < 5 is false"
+    lvl:loop_variable@L2#1 -> shown (0.19) "Pass 1: i++ makes i 2 and println prints 2, then the update makes it 3; Pass 2: i++ makes it 4 and the update makes it 5; 5 < 5 is false; so the loop stops and the last line prints 5"
+  loop_body (misconceptions): 12 candidates -> kept err:loop_body->BracelessMultiStatementBody (0.55), mis:loop_body->ForLoopPartSkipped (0.25), mis:loop_body->StateChangeIgnoredAcrossPasses (0.20)
+    err:loop_body->BracelessMultiStatementBody -> held (0.47) "Pass 1: i++ makes i 2 and println prints 2, then the update makes it 3; Output: 2 and 5"
+    mis:loop_body->ForLoopPartSkipped -> correct (0.15) "Pass 1: i++ makes i 2 and println prints 2, then the update makes it 3; Pass 2: i++ makes it 4 and the update makes it 5; 5 < 5 is false"
+    mis:loop_body->StateChangeIgnoredAcrossPasses -> not applied (0.00) ""
+  loop_body (level ways): 14 candidates -> kept lvl:loop_body@L0#6 (0.50), lvl:loop_body@L4#1 (0.30), lvl:loop_body@L2#0 (0.20)
+    lvl:loop_body@L0#6 -> shown (0.40) "Pass 1: i++ makes i 2 and println prints 2, then the update makes it 3; Pass 2: i++ makes it 4 and the update makes it 5; Output: 2 and 5"
+    lvl:loop_body@L4#1 -> not applied (0.00) ""
+    lvl:loop_body@L2#0 -> shown (0.16) "Pass 1: i++ makes i 2 and println prints 2, then the update makes it 3; Pass 2: i++ makes it 4 and the update makes it 5"
+  kept: pre:for_loop->loop_body [broken, tier 0, 0.85], pre:statement->println [broken, tier 0, 0.75], err:loop_body->BracelessMultiStatementBody [held, tier 1, 0.47]
+  reached across pre:statement->println, entered next: statement
+  clause coverage: c1 <- mis:for_loop->ForUpdateBeforeBody; c2 <- mis:for_loop->ForUpdateBeforeBody; c3 <- err:loop_control->WrongIterationCount; c4 <- err:loop_control->WrongIterationCount; c5 <- pre:for_loop->loop_body
+  not yet read: own edges of statement, pre:assignment->increment_operators
+--- depth 3: current concepts ['loop_body', 'for_loop', 'statement', 'println', 'increment_operators']
+  for_loop (concept edges): 1 candidates -> kept pre:loop_control->for_loop (1.00)
+    pre:loop_control->for_loop -> confirmed (0.70) "Pass 1: i++ makes i 2 and println prints 2, then the update makes it 3; Pass 2: i++ makes it 4 and the update makes it 5; 5 < 5 is false"
+  statement (misconceptions): 5 candidates -> kept mis:statement->WhitespaceIsSignificant (0.70), mis:statement->ComputerFillsInIntent (0.20), mis:statement->StatementsRunInAnyOrder (0.10)
+    mis:statement->WhitespaceIsSignificant -> held (0.60) "Pass 1: i++ makes i 2 and println prints 2, then the update makes it 3; Output: 2 and 5"
+    mis:statement->ComputerFillsInIntent -> not applied (0.00) ""
+    mis:statement->StatementsRunInAnyOrder -> not applied (0.00) ""
+  statement (level ways): 19 candidates -> kept lvl:statement@L0#2 (0.60), lvl:statement@L0#0 (0.25), lvl:statement@L2#0 (0.15)
+    lvl:statement@L0#2 -> shown (0.48) "Pass 1: i++ makes i 2 and println prints 2, then the update makes it 3; Pass 2: i++ makes it 4 and the update makes it 5; Output: 2 and 5"
+    lvl:statement@L0#0 -> shown (0.15) "Pass 1: i++ makes i 2 and println prints 2, then the update makes it 3; Output: 2 and 5"
+    lvl:statement@L2#0 -> shown (0.12) "Pass 1: i++ makes i 2 and println prints 2, then the update makes it 3; Pass 2: i++ makes it 4 and the update makes it 5; so the loop stops and the last line prints 5"
+  increment_operators (concept edges): 2 candidates -> kept pre:assignment->increment_operators (0.55), pre:loop_control->increment_operators (0.45)
+    pre:assignment->increment_operators -> confirmed (0.47) "Pass 1: i++ makes i 2 and println prints 2, then the update makes it 3; Pass 2: i++ makes it 4 and the update makes it 5"
+    pre:loop_control->increment_operators -> confirmed (0.34) "Pass 1: i++ makes i 2 and println prints 2, then the update makes it 3; Pass 2: i++ makes it 4 and the update makes it 5; 5 < 5 is false"
+  kept: mis:statement->WhitespaceIsSignificant [held, tier 0, 0.59], pre:loop_control->for_loop [confirmed, tier 2, 0.70], lvl:statement@L0#2 [shown, tier 2, 0.48]
+  clause coverage: c1 <- mis:for_loop->ForUpdateBeforeBody; c2 <- mis:for_loop->ForUpdateBeforeBody; c3 <- err:loop_control->WrongIterationCount; c4 <- err:loop_control->WrongIterationCount; c5 <- pre:for_loop->loop_body
+  not yet read: pre:statement->control_flow
+  root-cause walk: held on ['loop_body', 'loop_control', 'statement'], broken at [] (consequences: pre:for_loop->loop_body, pre:statement->println), prerequisites {'increment_operators': ['assignment', 'loop_control'], 'boolean_expression': ['comparison_operators'], 'comparison_operators': ['expression'], 'loop_body': ['for_loop'], 'for_loop': ['loop_control'], 'loop_control': ['loop_variable'], 'control_flow': ['statement'], 'println': ['statement']}
+  level way lvl:increment_operators@L3#0 not counted: confidence 0.60 is not above 0.60
+  level for_loop: L2 via line_by_line_trace "Pass 1: i++ makes i 2 and println prints 2, then the update makes it 3; Pass 2: i++ makes it 4 and the update makes it 5; 5 < 5 is false; so the loop stops and the last line prints 5"
+  level increment_operators: L2 via one_step_execution "Pass 1: i++ makes i 2 and println prints 2, then the update makes it 3; Pass 2: i++ makes it 4 and the update makes it 5"
+  level loop_body: L2 via line_by_line_trace "Pass 1: i++ makes i 2 and println prints 2, then the update makes it 3; Pass 2: i++ makes it 4 and the update makes it 5"
+  level loop_control: L0 via misconception "Pass 1: i++ makes i 2 and println prints 2, then the update makes it 3; Pass 2: i++ makes it 4 and the update makes it 5"
+  level loop_variable: L2 via line_by_line_trace "Pass 1: i++ makes i 2 and println prints 2, then the update makes it 3; Pass 2: i++ makes it 4 and the update makes it 5; 5 < 5 is false"
+  level println: L2 via output_prediction "Pass 1: i++ makes i 2 and println prints 2, then the update makes it 3; so the loop stops and the last line prints 5; Output: 2 and 5"
+  level statement: L0 via misconception "Pass 1: i++ makes i 2 and println prints 2, then the update makes it 3; Output: 2 and 5"

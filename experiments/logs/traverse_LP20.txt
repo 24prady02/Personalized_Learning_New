@@ -1,0 +1,69 @@
+clauses: 5 5
+start: BM25 of the answer against each tagged concept: println 7.03 (hits 1), boolean_expression 0.00 (hits 1), comparison_operators 0.00 (hits 1), control_flow 0.00 (hits 1), for_loop 0.00 (hits 1), increment_operators 0.00 (hits 1), loop_body 0.00 (hits 1), loop_control 0.00 (hits 1), loop_variable 0.00 (hits 1)
+start: chosen println, boolean_expression, comparison_operators
+start concepts (3): println, boolean_expression, comparison_operators
+--- depth 1: current concepts ['println', 'boolean_expression', 'comparison_operators']
+  println (misconceptions): 6 candidates -> kept mis:println->PrintEqualsPrintln (0.60), mis:println->PrintNewLineFirst (0.25), err:println->PrintWithoutFinalNewline (0.15)
+    mis:println->PrintEqualsPrintln -> not applied (0.00) ""
+    mis:println->PrintNewLineFirst -> not applied (0.00) ""
+    err:println->PrintWithoutFinalNewline -> not applied (0.00) ""
+  println (level ways): 17 candidates -> kept lvl:println@L2#1 (0.50), lvl:println@L3#0 (0.30), lvl:println@L0#3 (0.20)
+    lvl:println@L2#1 -> not applied (0.00) ""
+    lvl:println@L3#0 -> not applied (0.00) ""
+    lvl:println@L0#3 -> not applied (0.00) ""
+  boolean_expression (misconceptions): 8 candidates -> kept mis:boolean_expression->ArithmeticInsteadOfBoolean (0.50), mis:boolean_expression->LoopForOneTimeTest (0.30), mis:boolean_expression->ChainedComparison (0.20)
+    mis:boolean_expression->ArithmeticInsteadOfBoolean -> not applied (0.00) ""
+    mis:boolean_expression->LoopForOneTimeTest -> not applied (0.00) ""
+    mis:boolean_expression->ChainedComparison -> not applied (0.00) ""
+  boolean_expression (level ways): 19 candidates -> kept lvl:boolean_expression@L2#1 (0.50), lvl:boolean_expression@L3#3 (0.30), lvl:boolean_expression@L3#6 (0.20)
+    lvl:boolean_expression@L2#1 -> not applied (0.00) ""
+    lvl:boolean_expression@L3#3 -> not applied (0.00) ""
+    lvl:boolean_expression@L3#6 -> not applied (0.00) ""
+  comparison_operators (misconceptions): 8 candidates -> kept mis:comparison_operators->LessGreaterSwapped (0.80), err:comparison_operators->ReversedRelationalOperator (0.10), mis:comparison_operators->AssignCompares (0.10)
+    mis:comparison_operators->LessGreaterSwapped -> correct (0.56) "5 5"
+    err:comparison_operators->ReversedRelationalOperator -> not applied (0.00) ""
+    mis:comparison_operators->AssignCompares -> not applied (0.00) ""
+  comparison_operators (level ways): 20 candidates -> kept lvl:comparison_operators@L2#1 (0.40), lvl:comparison_operators@L3#5 (0.35), lvl:comparison_operators@L2#0 (0.25)
+    lvl:comparison_operators@L2#1 -> not applied (0.00) ""
+    lvl:comparison_operators@L3#5 -> not applied (0.00) ""
+    lvl:comparison_operators@L2#0 -> not applied (0.00) ""
+  kept: mis:comparison_operators->LessGreaterSwapped [correct, tier 2, 0.56]
+  clause coverage: c1 <- mis:comparison_operators->LessGreaterSwapped
+  not yet read: par:assignment~comparison_operators, pre:comparison_operators->boolean_expression, pre:expression->comparison_operators, pre:statement->println
+--- depth 2: current concepts ['println', 'boolean_expression', 'comparison_operators']
+  println (concept edges): 1 candidates -> kept pre:statement->println (1.00)
+    pre:statement->println -> confirmed (0.70) "5 5"
+  boolean_expression (concept edges): 1 candidates -> kept pre:comparison_operators->boolean_expression (1.00)
+    pre:comparison_operators->boolean_expression -> confirmed (0.70) "5 5"
+  comparison_operators (concept edges): 2 candidates -> kept pre:expression->comparison_operators (0.80), par:assignment~comparison_operators (0.20)
+    pre:expression->comparison_operators -> confirmed (0.44) "5 5"
+    par:assignment~comparison_operators -> not applied (0.00) ""
+  kept: pre:statement->println [confirmed, tier 2, 0.70], pre:comparison_operators->boolean_expression [confirmed, tier 2, 0.70], pre:expression->comparison_operators [confirmed, tier 2, 0.44]
+  reached across pre:statement->println, entered next: statement
+  reached across pre:expression->comparison_operators, entered next: expression
+  clause coverage: c1 <- mis:comparison_operators->LessGreaterSwapped
+  not yet read: own edges of expression, own edges of statement
+--- depth 3: current concepts ['statement', 'println', 'comparison_operators', 'boolean_expression', 'expression']
+  statement (misconceptions): 5 candidates -> kept mis:statement->WhitespaceIsSignificant (0.50), mis:statement->ComputerFillsInIntent (0.30), mis:statement->StatementsRunInAnyOrder (0.20)
+    mis:statement->WhitespaceIsSignificant -> correct (0.40) "5 5"
+    mis:statement->ComputerFillsInIntent -> not applied (0.00) ""
+    mis:statement->StatementsRunInAnyOrder -> not applied (0.00) ""
+  statement (level ways): 19 candidates -> kept lvl:statement@L2#1 (0.40), lvl:statement@L3#3 (0.30), lvl:statement@L2#0 (0.30)
+    lvl:statement@L2#1 -> shown (0.28) "5 5"
+    lvl:statement@L3#3 -> not applied (0.00) ""
+    lvl:statement@L2#0 -> shown (0.18) "5 5"
+  comparison_operators (concept edges): 1 candidates -> kept par:assignment~comparison_operators (1.00)
+    par:assignment~comparison_operators -> not applied (0.00) ""
+  expression (misconceptions): 8 candidates -> kept mis:expression->AssignmentIsEquation (0.40), mis:expression->VariablesHoldExpressions (0.35), mis:expression->NoAtomicExpression (0.25)
+    mis:expression->AssignmentIsEquation -> correct (0.22) "5 5"
+    mis:expression->VariablesHoldExpressions -> not applied (0.00) ""
+    mis:expression->NoAtomicExpression -> not applied (0.00) ""
+  expression (level ways): 19 candidates -> kept lvl:expression@L2#1 (0.45), lvl:expression@L3#0 (0.30), lvl:expression@L2#2 (0.25)
+    lvl:expression@L2#1 -> not applied (0.00) ""
+    lvl:expression@L3#0 -> not applied (0.00) ""
+    lvl:expression@L2#2 -> not applied (0.00) ""
+  kept: mis:statement->WhitespaceIsSignificant [correct, tier 2, 0.40], lvl:statement@L2#1 [shown, tier 2, 0.28], mis:expression->AssignmentIsEquation [correct, tier 2, 0.22]
+  clause coverage: c1 <- mis:comparison_operators->LessGreaterSwapped
+  not yet read: pre:statement->control_flow
+  root-cause walk: held on [], broken at [], prerequisites {'increment_operators': ['assignment', 'loop_control'], 'boolean_expression': ['comparison_operators'], 'comparison_operators': ['expression'], 'loop_body': ['for_loop'], 'for_loop': ['loop_control'], 'loop_control': ['loop_variable'], 'control_flow': ['statement'], 'println': ['statement']}
+  level statement: L2 via output_prediction "5 5"

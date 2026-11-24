@@ -1,0 +1,700 @@
+{
+ "scenario": "LP06",
+ "settings": {
+  "width": 3,
+  "depth": 3,
+  "prune_tools": "llm",
+  "model": "claude-opus-5-5",
+  "backend": "claude-cli",
+  "rule_fixes": true,
+  "level_v2": true
+ },
+ "clauses": [
+  "It never stops",
+  "Each pass starts again with i = 1",
+  "so i goes 1, 2, 3 and back to 1, and the println lines are never reached"
+ ],
+ "start_concepts": [
+  "loop_control",
+  "for_loop",
+  "increment_operators"
+ ],
+ "held_misconceptions": [
+  {
+   "concept": "for_loop",
+   "misconception": "ForInitRepeats",
+   "kind": "misconception",
+   "quote": "Each pass starts again with i = 1; so i goes 1, 2, 3 and back to 1, and the println lines are never reached",
+   "score": 0.7125
+  },
+  {
+   "concept": "loop_body",
+   "misconception": "StateChangeIgnoredAcrossPasses",
+   "kind": "misconception",
+   "quote": "Each pass starts again with i = 1; so i goes 1, 2, 3 and back to 1, and the println lines are never reached",
+   "score": 0.24
+  }
+ ],
+ "error_evidence": [
+  {
+   "concept": "loop_control",
+   "error": "WrongIterationCount",
+   "quote": "It never stops; Each pass starts again with i = 1; so i goes 1, 2, 3 and back to 1, and the println lines are never reached"
+  }
+ ],
+ "shadowed": [
+  {
+   "concept": "loop_control",
+   "misconception": "LoopHeaderIsEquations",
+   "shadow_of": "mis:loop_body->StateChangeIgnoredAcrossPasses",
+   "quote": "Each pass starts again with i = 1; so i goes 1, 2, 3 and back to 1, and the println lines are never reached",
+   "score": 0.09
+  },
+  {
+   "concept": "loop_variable",
+   "misconception": "ForInitRepeats",
+   "shadow_of": "mis:for_loop->ForInitRepeats",
+   "quote": "Each pass starts again with i = 1; so i goes 1, 2, 3 and back to 1, and the println lines are never reached",
+   "score": 0.63
+  }
+ ],
+ "broken_edges": [
+  {
+   "edge": "pre:loop_variable->loop_control",
+   "quote": "Each pass starts again with i = 1; so i goes 1, 2, 3 and back to 1, and the println lines are never reached",
+   "score": 0.68,
+   "consequence_of": "mis:for_loop->ForInitRepeats"
+  },
+  {
+   "edge": "pre:loop_control->for_loop",
+   "quote": "Each pass starts again with i = 1; so i goes 1, 2, 3 and back to 1, and the println lines are never reached",
+   "score": 0.63,
+   "consequence_of": "mis:for_loop->ForInitRepeats"
+  },
+  {
+   "edge": "pre:for_loop->loop_body",
+   "quote": "Each pass starts again with i = 1; so i goes 1, 2, 3 and back to 1, and the println lines are never reached",
+   "score": 0.21,
+   "consequence_of": "mis:for_loop->ForInitRepeats"
+  },
+  {
+   "edge": "pre:loop_control->increment_operators",
+   "quote": "Each pass starts again with i = 1; so i goes 1, 2, 3 and back to 1, and the println lines are never reached",
+   "score": 0.12,
+   "consequence_of": "mis:for_loop->ForInitRepeats"
+  }
+ ],
+ "root_cause": {
+  "concept": "for_loop",
+  "misconception": "ForInitRepeats"
+ },
+ "levels": {
+  "for_loop": {
+   "level": "L0",
+   "way": "misconception",
+   "misconception": "ForInitRepeats",
+   "quote": "Each pass starts again with i = 1; so i goes 1, 2, 3 and back to 1, and the println lines are never reached",
+   "edge": "mis:for_loop->ForInitRepeats",
+   "rule": "wrong rule: The initialization of a for loop runs again after a pass of the body. Right rule: The initialization runs exactly once, before the first condition test.",
+   "source": "level_mis_links"
+  },
+  "increment_operators": {
+   "level": "L2",
+   "way": "one_step_execution",
+   "quote": "so i goes 1, 2, 3 and back to 1, and the println lines are never reached",
+   "edge": "lvl:increment_operators@L2#2",
+   "source": "level_way",
+   "also_shown": []
+  },
+  "loop_body": {
+   "level": "L0",
+   "way": "misconception",
+   "misconception": "StateChangeIgnoredAcrossPasses",
+   "quote": "Each pass starts again with i = 1; so i goes 1, 2, 3 and back to 1, and the println lines are never reached",
+   "edge": "mis:loop_body->StateChangeIgnoredAcrossPasses",
+   "rule": "wrong rule: Values changed by one pass of a loop (other than the loop variable) do not affect later passes. Right rule: Each pass starts from the state left by the previous pass, so a change in one pass carries into the next ones.",
+   "source": "level_mis_links"
+  },
+  "loop_control": {
+   "level": "L0",
+   "way": "inconsistent_trace",
+   "quote": "Each pass starts again with i = 1; so i goes 1, 2, 3 and back to 1, and the println lines are never reached",
+   "edge": "lvl:loop_control@L0#3",
+   "source": "level_way",
+   "also_shown": []
+  },
+  "loop_variable": {
+   "level": "L0",
+   "way": "inconsistent_trace",
+   "quote": "Each pass starts again with i = 1; so i goes 1, 2, 3 and back to 1, and the println lines are never reached",
+   "edge": "lvl:loop_variable@L0#5",
+   "source": "level_way",
+   "also_shown": []
+  }
+ },
+ "overall_level": "L0",
+ "paths": [
+  {
+   "depth": 1,
+   "source": "for_loop",
+   "edge": "mis:for_loop->ForInitRepeats",
+   "target": "ForInitRepeats",
+   "kind": "misconception",
+   "label": "held",
+   "clauses": [
+    2,
+    3
+   ],
+   "quote": "Each pass starts again with i = 1; so i goes 1, 2, 3 and back to 1, and the println lines are never reached",
+   "confidence": 0.95,
+   "prune_score": 0.75,
+   "score": 0.7125,
+   "logic": "The initialization of a for loop runs again after a pass of the body.",
+   "twin_logic": "The initialization runs exactly once, before the first condition test.",
+   "role": "primary"
+  },
+  {
+   "depth": 1,
+   "source": "loop_control",
+   "edge": "mis:loop_control->LoopHeaderIsEquations",
+   "target": "LoopHeaderIsEquations",
+   "kind": "misconception",
+   "label": "held",
+   "clauses": [
+    2,
+    3
+   ],
+   "quote": "Each pass starts again with i = 1; so i goes 1, 2, 3 and back to 1, and the println lines are never reached",
+   "confidence": 0.45,
+   "prune_score": 0.2,
+   "score": 0.09,
+   "logic": "The initialization, condition and update of a for header are equations that all hold at the same time.",
+   "twin_logic": "The three header parts are statements run at different moments: init once, then condition test, body, update, repeated.",
+   "role": "context"
+  },
+  {
+   "depth": 1,
+   "source": "loop_control",
+   "edge": "err:loop_control->WrongIterationCount",
+   "target": "WrongIterationCount",
+   "kind": "error",
+   "label": "held",
+   "clauses": [
+    1,
+    2,
+    3
+   ],
+   "quote": "It never stops; Each pass starts again with i = 1; so i goes 1, 2, 3 and back to 1, and the println lines are never reached",
+   "confidence": 0.8,
+   "prune_score": 0.3,
+   "score": 0.24,
+   "logic": "Updates the loop counter so that the loop runs the wrong number of times.",
+   "twin_logic": "The init, test and update together decide the number of passes; trace them to check the count.",
+   "role": "context"
+  },
+  {
+   "depth": 2,
+   "source": "loop_control",
+   "edge": "pre:loop_variable->loop_control",
+   "target": "loop_variable",
+   "kind": "prerequisite",
+   "label": "broken",
+   "clauses": [
+    2,
+    3
+   ],
+   "quote": "Each pass starts again with i = 1; so i goes 1, 2, 3 and back to 1, and the println lines are never reached",
+   "confidence": 0.85,
+   "prune_score": 0.8,
+   "score": 0.68,
+   "logic": "The init, condition and update all act on the loop variable: the init sets it, the condition tests it, the update changes it.",
+   "twin_logic": null,
+   "consequence_of": "mis:for_loop->ForInitRepeats"
+  },
+  {
+   "depth": 2,
+   "source": "for_loop",
+   "edge": "pre:loop_control->for_loop",
+   "target": "loop_control",
+   "kind": "prerequisite",
+   "label": "broken",
+   "clauses": [
+    2,
+    3
+   ],
+   "quote": "Each pass starts again with i = 1; so i goes 1, 2, 3 and back to 1, and the println lines are never reached",
+   "confidence": 0.9,
+   "prune_score": 0.7,
+   "score": 0.63,
+   "logic": "The for header is exactly the three control slots, and the body runs after the test and before the update on each pass.",
+   "twin_logic": null,
+   "consequence_of": "mis:for_loop->ForInitRepeats"
+  },
+  {
+   "depth": 2,
+   "source": "for_loop",
+   "edge": "pre:for_loop->loop_body",
+   "target": "loop_body",
+   "kind": "prerequisite",
+   "label": "broken",
+   "clauses": [
+    2,
+    3
+   ],
+   "quote": "Each pass starts again with i = 1; so i goes 1, 2, 3 and back to 1, and the println lines are never reached",
+   "confidence": 0.7,
+   "prune_score": 0.3,
+   "score": 0.21,
+   "logic": "The statements in braces after the for header are the loop body; they run once on every pass, between the test and the increment, exactly as in a while loop.",
+   "twin_logic": null,
+   "consequence_of": "mis:for_loop->ForInitRepeats"
+  },
+  {
+   "depth": 2,
+   "source": "loop_control",
+   "edge": "pre:loop_control->increment_operators",
+   "target": "increment_operators",
+   "kind": "prerequisite",
+   "label": "broken",
+   "clauses": [
+    2,
+    3
+   ],
+   "quote": "Each pass starts again with i = 1; so i goes 1, 2, 3 and back to 1, and the println lines are never reached",
+   "confidence": 0.6,
+   "prune_score": 0.2,
+   "score": 0.12,
+   "logic": "The loop update i = i + 1 comes first; ++ (and +=) are then introduced as shorthand for that update.",
+   "twin_logic": null,
+   "consequence_of": "mis:for_loop->ForInitRepeats"
+  },
+  {
+   "depth": 3,
+   "source": "loop_variable",
+   "edge": "mis:loop_variable->ForInitRepeats",
+   "target": "ForInitRepeats",
+   "kind": "misconception",
+   "label": "held",
+   "clauses": [
+    2,
+    3
+   ],
+   "quote": "Each pass starts again with i = 1; so i goes 1, 2, 3 and back to 1, and the println lines are never reached",
+   "confidence": 0.9,
+   "prune_score": 0.7000000000000001,
+   "score": 0.63,
+   "logic": "The initialization of a for loop runs again after a pass of the body.",
+   "twin_logic": "The initialization runs exactly once, before the first condition test.",
+   "role": "context"
+  },
+  {
+   "depth": 3,
+   "source": "loop_body",
+   "edge": "mis:loop_body->StateChangeIgnoredAcrossPasses",
+   "target": "StateChangeIgnoredAcrossPasses",
+   "kind": "misconception",
+   "label": "held",
+   "clauses": [
+    2,
+    3
+   ],
+   "quote": "Each pass starts again with i = 1; so i goes 1, 2, 3 and back to 1, and the println lines are never reached",
+   "confidence": 0.6,
+   "prune_score": 0.4,
+   "score": 0.24,
+   "logic": "Values changed by one pass of a loop (other than the loop variable) do not affect later passes.",
+   "twin_logic": "Each pass starts from the state left by the previous pass, so a change in one pass carries into the next ones.",
+   "role": "primary"
+  },
+  {
+   "depth": 3,
+   "source": "increment_operators",
+   "edge": "pre:assignment->increment_operators",
+   "target": "assignment",
+   "kind": "prerequisite",
+   "label": "confirmed",
+   "clauses": [
+    3
+   ],
+   "quote": "so i goes 1, 2, 3 and back to 1, and the println lines are never reached",
+   "confidence": 0.55,
+   "prune_score": 1.0,
+   "score": 0.55,
+   "logic": "i++ is shorthand for the assignment i = i + 1.",
+   "twin_logic": null
+  },
+  {
+   "depth": 4,
+   "source": "assignment",
+   "edge": "mis:assignment->VariableKeepsOldValue",
+   "target": "VariableKeepsOldValue",
+   "kind": "misconception",
+   "label": "correct",
+   "clauses": [
+    3
+   ],
+   "quote": "so i goes 1, 2, 3 and back to 1, and the println lines are never reached",
+   "confidence": 0.6,
+   "prune_score": 0.45,
+   "score": 0.27,
+   "logic": "A variable keeps its first value after a new assignment (the static model).",
+   "twin_logic": "Each assignment or read replaces the variable's current value.",
+   "role": "context"
+  }
+ ],
+ "evidence": [
+  {
+   "depth": 1,
+   "source": "loop_control",
+   "edge": "err:loop_control->WrongIterationCount",
+   "target": "WrongIterationCount",
+   "kind": "error",
+   "label": "held",
+   "clauses": [
+    1,
+    2,
+    3
+   ],
+   "quote": "It never stops; Each pass starts again with i = 1; so i goes 1, 2, 3 and back to 1, and the println lines are never reached",
+   "confidence": 0.8,
+   "prune_score": 0.3,
+   "score": 0.24,
+   "logic": "Updates the loop counter so that the loop runs the wrong number of times.",
+   "twin_logic": "The init, test and update together decide the number of passes; trace them to check the count.",
+   "role": "context"
+  },
+  {
+   "depth": 1,
+   "source": "loop_control",
+   "edge": "mis:loop_control->LoopHeaderIsEquations",
+   "target": "LoopHeaderIsEquations",
+   "kind": "misconception",
+   "label": "held",
+   "clauses": [
+    2,
+    3
+   ],
+   "quote": "Each pass starts again with i = 1; so i goes 1, 2, 3 and back to 1, and the println lines are never reached",
+   "confidence": 0.45,
+   "prune_score": 0.2,
+   "score": 0.09,
+   "logic": "The initialization, condition and update of a for header are equations that all hold at the same time.",
+   "twin_logic": "The three header parts are statements run at different moments: init once, then condition test, body, update, repeated.",
+   "role": "context"
+  },
+  {
+   "depth": 1,
+   "source": "loop_control",
+   "edge": "lvl:loop_control@L0#3",
+   "target": "loop_control@L0",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    2,
+    3
+   ],
+   "quote": "Each pass starts again with i = 1; so i goes 1, 2, 3 and back to 1, and the println lines are never reached",
+   "confidence": 0.85,
+   "prune_score": 0.6,
+   "score": 0.51,
+   "logic": "Applies the init-test-update rule (LT) unevenly: updates before the body on some passes, skips the test or the update on a pass, or re-runs the init. (here mixing in: \"++i in the for-update runs before the body each pass\")",
+   "twin_logic": null,
+   "level": "L0",
+   "way": "inconsistent_trace"
+  },
+  {
+   "depth": 1,
+   "source": "for_loop",
+   "edge": "mis:for_loop->ForInitRepeats",
+   "target": "ForInitRepeats",
+   "kind": "misconception",
+   "label": "held",
+   "clauses": [
+    2,
+    3
+   ],
+   "quote": "Each pass starts again with i = 1; so i goes 1, 2, 3 and back to 1, and the println lines are never reached",
+   "confidence": 0.95,
+   "prune_score": 0.75,
+   "score": 0.7125,
+   "logic": "The initialization of a for loop runs again after a pass of the body.",
+   "twin_logic": "The initialization runs exactly once, before the first condition test.",
+   "role": "primary"
+  },
+  {
+   "depth": 1,
+   "source": "for_loop",
+   "edge": "lvl:for_loop@L0#11",
+   "target": "for_loop@L0",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    2,
+    3
+   ],
+   "quote": "Each pass starts again with i = 1; so i goes 1, 2, 3 and back to 1, and the println lines are never reached",
+   "confidence": 0.85,
+   "prune_score": 0.6,
+   "score": 0.51,
+   "logic": "Applies the for sequencing rule (LT) unevenly: updates before the body on the first pass only, re-runs the init after a pass, or skips the test on some passes. (here mixing in: \"The body of a for statement executes at most once\")",
+   "twin_logic": null,
+   "level": "L0",
+   "way": "inconsistent_trace"
+  },
+  {
+   "depth": 1,
+   "source": "increment_operators",
+   "edge": "lvl:increment_operators@L2#2",
+   "target": "increment_operators@L2",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    3
+   ],
+   "quote": "so i goes 1, 2, 3 and back to 1, and the println lines are never reached",
+   "confidence": 0.55,
+   "prune_score": 0.2,
+   "score": 0.11,
+   "logic": "One execution changes exactly one variable (i) by exactly 1 and returns its old (i++) or new (++i) value.",
+   "twin_logic": null,
+   "level": "L2",
+   "way": "one_step_execution"
+  },
+  {
+   "depth": 2,
+   "source": "for_loop",
+   "edge": "pre:loop_control->for_loop",
+   "target": "loop_control",
+   "kind": "prerequisite",
+   "label": "broken",
+   "clauses": [
+    2,
+    3
+   ],
+   "quote": "Each pass starts again with i = 1; so i goes 1, 2, 3 and back to 1, and the println lines are never reached",
+   "confidence": 0.9,
+   "prune_score": 0.7,
+   "score": 0.63,
+   "logic": "The for header is exactly the three control slots, and the body runs after the test and before the update on each pass.",
+   "twin_logic": null,
+   "consequence_of": "mis:for_loop->ForInitRepeats"
+  },
+  {
+   "depth": 2,
+   "source": "for_loop",
+   "edge": "pre:for_loop->loop_body",
+   "target": "loop_body",
+   "kind": "prerequisite",
+   "label": "broken",
+   "clauses": [
+    2,
+    3
+   ],
+   "quote": "Each pass starts again with i = 1; so i goes 1, 2, 3 and back to 1, and the println lines are never reached",
+   "confidence": 0.7,
+   "prune_score": 0.3,
+   "score": 0.21,
+   "logic": "The statements in braces after the for header are the loop body; they run once on every pass, between the test and the increment, exactly as in a while loop.",
+   "twin_logic": null,
+   "consequence_of": "mis:for_loop->ForInitRepeats"
+  },
+  {
+   "depth": 2,
+   "source": "loop_control",
+   "edge": "pre:loop_variable->loop_control",
+   "target": "loop_variable",
+   "kind": "prerequisite",
+   "label": "broken",
+   "clauses": [
+    2,
+    3
+   ],
+   "quote": "Each pass starts again with i = 1; so i goes 1, 2, 3 and back to 1, and the println lines are never reached",
+   "confidence": 0.85,
+   "prune_score": 0.8,
+   "score": 0.68,
+   "logic": "The init, condition and update all act on the loop variable: the init sets it, the condition tests it, the update changes it.",
+   "twin_logic": null,
+   "consequence_of": "mis:for_loop->ForInitRepeats"
+  },
+  {
+   "depth": 2,
+   "source": "loop_control",
+   "edge": "pre:loop_control->increment_operators",
+   "target": "increment_operators",
+   "kind": "prerequisite",
+   "label": "broken",
+   "clauses": [
+    2,
+    3
+   ],
+   "quote": "Each pass starts again with i = 1; so i goes 1, 2, 3 and back to 1, and the println lines are never reached",
+   "confidence": 0.6,
+   "prune_score": 0.2,
+   "score": 0.12,
+   "logic": "The loop update i = i + 1 comes first; ++ (and +=) are then introduced as shorthand for that update.",
+   "twin_logic": null,
+   "consequence_of": "mis:for_loop->ForInitRepeats"
+  },
+  {
+   "depth": 2,
+   "source": "increment_operators",
+   "edge": "pre:assignment->increment_operators",
+   "target": "assignment",
+   "kind": "prerequisite",
+   "label": "confirmed",
+   "clauses": [
+    3
+   ],
+   "quote": "so i goes 1, 2, 3 and back to 1, and the println lines are never reached",
+   "confidence": 0.55,
+   "prune_score": 1.0,
+   "score": 0.55,
+   "logic": "i++ is shorthand for the assignment i = i + 1.",
+   "twin_logic": null
+  },
+  {
+   "depth": 3,
+   "source": "loop_variable",
+   "edge": "mis:loop_variable->ForInitRepeats",
+   "target": "ForInitRepeats",
+   "kind": "misconception",
+   "label": "held",
+   "clauses": [
+    2,
+    3
+   ],
+   "quote": "Each pass starts again with i = 1; so i goes 1, 2, 3 and back to 1, and the println lines are never reached",
+   "confidence": 0.9,
+   "prune_score": 0.7000000000000001,
+   "score": 0.63,
+   "logic": "The initialization of a for loop runs again after a pass of the body.",
+   "twin_logic": "The initialization runs exactly once, before the first condition test.",
+   "role": "context"
+  },
+  {
+   "depth": 3,
+   "source": "loop_variable",
+   "edge": "lvl:loop_variable@L0#5",
+   "target": "loop_variable@L0",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    2,
+    3
+   ],
+   "quote": "Each pass starts again with i = 1; so i goes 1, 2, 3 and back to 1, and the println lines are never reached",
+   "confidence": 0.9,
+   "prune_score": 0.6,
+   "score": 0.54,
+   "logic": "Applies the init-test-update rule (LT, loop_control) unevenly to the loop variable: forgets one update, applies a different step on some passes, or re-initializes it mid-loop. (here mixing in: \"The update of the loop variable can change from pass to pass (e.g. switch direction) although the code is the same\")",
+   "twin_logic": null,
+   "level": "L0",
+   "way": "inconsistent_trace"
+  },
+  {
+   "depth": 3,
+   "source": "loop_body",
+   "edge": "mis:loop_body->StateChangeIgnoredAcrossPasses",
+   "target": "StateChangeIgnoredAcrossPasses",
+   "kind": "misconception",
+   "label": "held",
+   "clauses": [
+    2,
+    3
+   ],
+   "quote": "Each pass starts again with i = 1; so i goes 1, 2, 3 and back to 1, and the println lines are never reached",
+   "confidence": 0.6,
+   "prune_score": 0.4,
+   "score": 0.24,
+   "logic": "Values changed by one pass of a loop (other than the loop variable) do not affect later passes.",
+   "twin_logic": "Each pass starts from the state left by the previous pass, so a change in one pass carries into the next ones.",
+   "role": "primary"
+  },
+  {
+   "depth": 3,
+   "source": "loop_body",
+   "edge": "err:loop_body->BracelessMultiStatementBody",
+   "target": "BracelessMultiStatementBody",
+   "kind": "error",
+   "label": "correct",
+   "clauses": [
+    3
+   ],
+   "quote": "so i goes 1, 2, 3 and back to 1, and the println lines are never reached",
+   "confidence": 0.55,
+   "prune_score": 0.15,
+   "score": 0.0825,
+   "logic": "Indenting several statements under an if or for makes them all part of its body, even without braces.",
+   "twin_logic": "Without braces only the first statement belongs to the if/for; the rest run once, after it.",
+   "role": "primary"
+  },
+  {
+   "depth": 3,
+   "source": "increment_operators",
+   "edge": "pre:assignment->increment_operators",
+   "target": "assignment",
+   "kind": "prerequisite",
+   "label": "confirmed",
+   "clauses": [
+    3
+   ],
+   "quote": "so i goes 1, 2, 3 and back to 1, and the println lines are never reached",
+   "confidence": 0.55,
+   "prune_score": 1.0,
+   "score": 0.55,
+   "logic": "i++ is shorthand for the assignment i = i + 1.",
+   "twin_logic": null
+  },
+  {
+   "depth": 4,
+   "source": "assignment",
+   "edge": "mis:assignment->VariableKeepsOldValue",
+   "target": "VariableKeepsOldValue",
+   "kind": "misconception",
+   "label": "correct",
+   "clauses": [
+    3
+   ],
+   "quote": "so i goes 1, 2, 3 and back to 1, and the println lines are never reached",
+   "confidence": 0.6,
+   "prune_score": 0.45,
+   "score": 0.27,
+   "logic": "A variable keeps its first value after a new assignment (the static model).",
+   "twin_logic": "Each assignment or read replaces the variable's current value.",
+   "role": "context"
+  }
+ ],
+ "clause_coverage": {
+  "It never stops": "err:loop_control->WrongIterationCount",
+  "Each pass starts again with i = 1": "err:loop_control->WrongIterationCount",
+  "so i goes 1, 2, 3 and back to 1, and the println lines are never reached": "err:loop_control->WrongIterationCount"
+ },
+ "unexplained_clauses": [],
+ "stop_reason": "max depth",
+ "depth_reached": 4,
+ "llm_calls": 0,
+ "llm_cache_hits": 46,
+ "llm_calls_by_step": {
+  "prune": 16,
+  "label": 30
+ },
+ "level_v2": {
+  "wrong_ways": [
+   {
+    "concept": "loop_control",
+    "edge": "lvl:loop_control@L3#3",
+    "level": "L3",
+    "way": "relation_to_neighbour",
+    "clauses": [
+     1,
+     2,
+     3
+    ],
+    "quote": "It never stops; Each pass starts again with i = 1; so i goes 1, 2, 3 and back to 1, and the println lines are never reached",
+    "confidence": 0.6
+   }
+  ],
+  "not_counted": []
+ }
+}

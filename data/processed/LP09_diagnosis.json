@@ -1,0 +1,613 @@
+{
+ "scenario": "LP09",
+ "settings": {
+  "width": 3,
+  "depth": 3,
+  "prune_tools": "llm",
+  "model": "claude-opus-5-5",
+  "backend": "claude-cli",
+  "rule_fixes": true,
+  "level_v2": true
+ },
+ "clauses": [
+  "Without braces a for loop repeats only the one statement right after its header",
+  "The indentation does not matter",
+  "so the println lines are not part of the loop"
+ ],
+ "start_concepts": [
+  "for_loop",
+  "loop_body",
+  "control_flow"
+ ],
+ "held_misconceptions": [],
+ "error_evidence": [],
+ "shadowed": [],
+ "broken_edges": [],
+ "root_cause": null,
+ "levels": {
+  "control_flow": {
+   "level": "L3",
+   "way": "relation_to_neighbour",
+   "quote": "Without braces a for loop repeats only the one statement right after its header; The indentation does not matter; so the println lines are not part of the loop",
+   "edge": "lvl:control_flow@L3#0",
+   "source": "level_way",
+   "also_shown": [
+    "L1 states_the_rule"
+   ]
+  },
+  "for_loop": {
+   "level": "L4",
+   "way": "diagnose_an_error",
+   "quote": "Without braces a for loop repeats only the one statement right after its header; The indentation does not matter; so the println lines are not part of the loop",
+   "edge": "lvl:for_loop@L4#6",
+   "source": "level_way",
+   "also_shown": [
+    "L3 relation_to_neighbour",
+    "L1 states_the_rule"
+   ]
+  },
+  "loop_body": {
+   "level": "L4",
+   "way": "diagnose_an_error",
+   "quote": "Without braces a for loop repeats only the one statement right after its header; The indentation does not matter; so the println lines are not part of the loop",
+   "edge": "lvl:loop_body@L4#1",
+   "source": "level_way",
+   "also_shown": [
+    "L1 states_the_rule",
+    "L1 names_the_element"
+   ]
+  },
+  "statement": {
+   "level": "L3",
+   "way": "relation_to_neighbour",
+   "quote": "Without braces a for loop repeats only the one statement right after its header; The indentation does not matter; so the println lines are not part of the loop",
+   "edge": "lvl:statement@L3#1",
+   "source": "level_way",
+   "also_shown": [
+    "L3 relation_to_neighbour"
+   ]
+  }
+ },
+ "overall_level": "L4",
+ "paths": [
+  {
+   "depth": 1,
+   "source": "for_loop",
+   "edge": "err:for_loop->BracelessMultiStatementBody",
+   "target": "BracelessMultiStatementBody",
+   "kind": "error",
+   "label": "correct",
+   "clauses": [
+    1,
+    2,
+    3
+   ],
+   "quote": "Without braces a for loop repeats only the one statement right after its header; The indentation does not matter; so the println lines are not part of the loop",
+   "confidence": 0.95,
+   "prune_score": 0.7000000000000001,
+   "score": 0.665,
+   "logic": "Indenting several statements under an if or for makes them all part of its body, even without braces.",
+   "twin_logic": "Without braces only the first statement belongs to the if/for; the rest run once, after it.",
+   "role": "context"
+  },
+  {
+   "depth": 1,
+   "source": "loop_body",
+   "edge": "err:loop_body->BracelessMultiStatementBody",
+   "target": "BracelessMultiStatementBody",
+   "kind": "error",
+   "label": "correct",
+   "clauses": [
+    1,
+    2,
+    3
+   ],
+   "quote": "Without braces a for loop repeats only the one statement right after its header; The indentation does not matter; so the println lines are not part of the loop",
+   "confidence": 0.95,
+   "prune_score": 0.6000000000000001,
+   "score": 0.57,
+   "logic": "Indenting several statements under an if or for makes them all part of its body, even without braces.",
+   "twin_logic": "Without braces only the first statement belongs to the if/for; the rest run once, after it.",
+   "role": "primary"
+  },
+  {
+   "depth": 1,
+   "source": "for_loop",
+   "edge": "lvl:for_loop@L4#6",
+   "target": "for_loop@L4",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    1,
+    2,
+    3
+   ],
+   "quote": "Without braces a for loop repeats only the one statement right after its header; The indentation does not matter; so the println lines are not part of the loop",
+   "confidence": 0.8,
+   "prune_score": 0.7,
+   "score": 0.56,
+   "logic": "rule broken: Without braces, the body of an if, while or for is exactly one statement; indentation does not add statements to it. Kind: silent logic error. Trigger class: A braceless header followed by two or more indented statements: only the first is controlled, the others run once, after the if/loop, on every input.",
+   "twin_logic": null,
+   "level": "L4",
+   "way": "diagnose_an_error"
+  },
+  {
+   "depth": 2,
+   "source": "control_flow",
+   "edge": "pre:statement->control_flow",
+   "target": "statement",
+   "kind": "prerequisite",
+   "label": "confirmed",
+   "clauses": [
+    1,
+    3
+   ],
+   "quote": "Without braces a for loop repeats only the one statement right after its header; so the println lines are not part of the loop",
+   "confidence": 0.8,
+   "prune_score": 1.0,
+   "score": 0.8,
+   "logic": "Control flow is the order in which statements run.",
+   "twin_logic": null
+  },
+  {
+   "depth": 2,
+   "source": "for_loop",
+   "edge": "pre:for_loop->loop_body",
+   "target": "loop_body",
+   "kind": "prerequisite",
+   "label": "confirmed",
+   "clauses": [
+    1,
+    2,
+    3
+   ],
+   "quote": "Without braces a for loop repeats only the one statement right after its header; The indentation does not matter; so the println lines are not part of the loop",
+   "confidence": 0.85,
+   "prune_score": 0.7,
+   "score": 0.595,
+   "logic": "The statements in braces after the for header are the loop body; they run once on every pass, between the test and the increment, exactly as in a while loop.",
+   "twin_logic": null
+  },
+  {
+   "depth": 3,
+   "source": "statement",
+   "edge": "mis:statement->WhitespaceIsSignificant",
+   "target": "WhitespaceIsSignificant",
+   "kind": "misconception",
+   "label": "correct",
+   "clauses": [
+    1,
+    2,
+    3
+   ],
+   "quote": "Without braces a for loop repeats only the one statement right after its header; The indentation does not matter; so the println lines are not part of the loop",
+   "confidence": 0.95,
+   "prune_score": 0.6,
+   "score": 0.57,
+   "logic": "Line breaks and indentation change what the program does, so each statement must be on its own line.",
+   "twin_logic": "Java compilers consider all whitespace in program text (outside quotation marks) to be equivalent; layout is for human readers.",
+   "role": "context"
+  },
+  {
+   "depth": 3,
+   "source": "statement",
+   "edge": "lvl:statement@L3#1",
+   "target": "statement@L3",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    1,
+    2,
+    3
+   ],
+   "quote": "Without braces a for loop repeats only the one statement right after its header; The indentation does not matter; so the println lines are not part of the loop",
+   "confidence": 0.7,
+   "prune_score": 0.3,
+   "score": 0.21,
+   "logic": "A block groups a sequence of statements in braces; the body of main() is such a block.",
+   "twin_logic": null,
+   "level": "L3",
+   "way": "relation_to_neighbour"
+  },
+  {
+   "depth": 3,
+   "source": "statement",
+   "edge": "lvl:statement@L3#4",
+   "target": "statement@L3",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    1,
+    2,
+    3
+   ],
+   "quote": "Without braces a for loop repeats only the one statement right after its header; The indentation does not matter; so the println lines are not part of the loop",
+   "confidence": 0.7,
+   "prune_score": 0.25,
+   "score": 0.175,
+   "logic": "Control flow is the order in which statements run; without control statements it is straight-line, each once in order.",
+   "twin_logic": null,
+   "level": "L3",
+   "way": "relation_to_neighbour"
+  }
+ ],
+ "evidence": [
+  {
+   "depth": 1,
+   "source": "for_loop",
+   "edge": "err:for_loop->BracelessMultiStatementBody",
+   "target": "BracelessMultiStatementBody",
+   "kind": "error",
+   "label": "correct",
+   "clauses": [
+    1,
+    2,
+    3
+   ],
+   "quote": "Without braces a for loop repeats only the one statement right after its header; The indentation does not matter; so the println lines are not part of the loop",
+   "confidence": 0.95,
+   "prune_score": 0.7000000000000001,
+   "score": 0.665,
+   "logic": "Indenting several statements under an if or for makes them all part of its body, even without braces.",
+   "twin_logic": "Without braces only the first statement belongs to the if/for; the rest run once, after it.",
+   "role": "context"
+  },
+  {
+   "depth": 1,
+   "source": "for_loop",
+   "edge": "lvl:for_loop@L4#6",
+   "target": "for_loop@L4",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    1,
+    2,
+    3
+   ],
+   "quote": "Without braces a for loop repeats only the one statement right after its header; The indentation does not matter; so the println lines are not part of the loop",
+   "confidence": 0.8,
+   "prune_score": 0.7,
+   "score": 0.56,
+   "logic": "rule broken: Without braces, the body of an if, while or for is exactly one statement; indentation does not add statements to it. Kind: silent logic error. Trigger class: A braceless header followed by two or more indented statements: only the first is controlled, the others run once, after the if/loop, on every input.",
+   "twin_logic": null,
+   "level": "L4",
+   "way": "diagnose_an_error"
+  },
+  {
+   "depth": 1,
+   "source": "for_loop",
+   "edge": "lvl:for_loop@L1#1",
+   "target": "for_loop@L1",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    1
+   ],
+   "quote": "Without braces a for loop repeats only the one statement right after its header",
+   "confidence": 0.6,
+   "prune_score": 0.15,
+   "score": 0.09,
+   "logic": "Syntax: for (<initialize>; <boolean expression>; <increment>) { <statements> }, with the three parts separated by semicolons; it is, with only a few exceptions, equivalent to <initialize>; while (<boolean expression>) { <statements> <increment>; }.",
+   "twin_logic": null,
+   "level": "L1",
+   "way": "states_the_rule"
+  },
+  {
+   "depth": 1,
+   "source": "for_loop",
+   "edge": "lvl:for_loop@L3#0",
+   "target": "for_loop@L3",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    1,
+    2,
+    3
+   ],
+   "quote": "Without braces a for loop repeats only the one statement right after its header; The indentation does not matter; so the println lines are not part of the loop",
+   "confidence": 0.7,
+   "prune_score": 0.15,
+   "score": 0.105,
+   "logic": "The for header is exactly the three loop-control slots; the body runs after the test and before the update on each pass.",
+   "twin_logic": null,
+   "level": "L3",
+   "way": "relation_to_neighbour"
+  },
+  {
+   "depth": 1,
+   "source": "loop_body",
+   "edge": "err:loop_body->BracelessMultiStatementBody",
+   "target": "BracelessMultiStatementBody",
+   "kind": "error",
+   "label": "correct",
+   "clauses": [
+    1,
+    2,
+    3
+   ],
+   "quote": "Without braces a for loop repeats only the one statement right after its header; The indentation does not matter; so the println lines are not part of the loop",
+   "confidence": 0.95,
+   "prune_score": 0.6000000000000001,
+   "score": 0.57,
+   "logic": "Indenting several statements under an if or for makes them all part of its body, even without braces.",
+   "twin_logic": "Without braces only the first statement belongs to the if/for; the rest run once, after it.",
+   "role": "primary"
+  },
+  {
+   "depth": 1,
+   "source": "loop_body",
+   "edge": "mis:loop_body->StatementAfterLoopInBody",
+   "target": "StatementAfterLoopInBody",
+   "kind": "misconception",
+   "label": "correct",
+   "clauses": [
+    1,
+    3
+   ],
+   "quote": "Without braces a for loop repeats only the one statement right after its header; so the println lines are not part of the loop",
+   "confidence": 0.8,
+   "prune_score": 0.30000000000000004,
+   "score": 0.24,
+   "logic": "A statement written after the loop is repeated with the loop body.",
+   "twin_logic": "The body ends at the closing brace (or after its single statement); code after it runs once, after the loop ends.",
+   "role": "primary"
+  },
+  {
+   "depth": 1,
+   "source": "loop_body",
+   "edge": "lvl:loop_body@L1#1",
+   "target": "loop_body@L1",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    1,
+    3
+   ],
+   "quote": "Without braces a for loop repeats only the one statement right after its header; so the println lines are not part of the loop",
+   "confidence": 0.9,
+   "prune_score": 0.45,
+   "score": 0.405,
+   "logic": "The body is the block after the loop header; braces are optional only if it is a single statement, in which case only that one statement is repeated.",
+   "twin_logic": null,
+   "level": "L1",
+   "way": "states_the_rule"
+  },
+  {
+   "depth": 1,
+   "source": "loop_body",
+   "edge": "lvl:loop_body@L4#1",
+   "target": "loop_body@L4",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    1,
+    2,
+    3
+   ],
+   "quote": "Without braces a for loop repeats only the one statement right after its header; The indentation does not matter; so the println lines are not part of the loop",
+   "confidence": 0.7,
+   "prune_score": 0.4,
+   "score": 0.28,
+   "logic": "rule broken: Without braces, the body of an if, while or for is exactly one statement; indentation does not add statements to it. Kind: silent logic error. Trigger class: A braceless header followed by two or more indented statements: only the first is controlled, the others run once, after the if/loop, on every input.",
+   "twin_logic": null,
+   "level": "L4",
+   "way": "diagnose_an_error"
+  },
+  {
+   "depth": 1,
+   "source": "loop_body",
+   "edge": "lvl:loop_body@L1#0",
+   "target": "loop_body@L1",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    1,
+    3
+   ],
+   "quote": "Without braces a for loop repeats only the one statement right after its header; so the println lines are not part of the loop",
+   "confidence": 0.85,
+   "prune_score": 0.15,
+   "score": 0.1275,
+   "logic": "The loop body is the statement block that a loop repeats on each pass.",
+   "twin_logic": null,
+   "level": "L1",
+   "way": "names_the_element"
+  },
+  {
+   "depth": 1,
+   "source": "control_flow",
+   "edge": "mis:control_flow->FalseLoopRepeatsNextCode",
+   "target": "FalseLoopRepeatsNextCode",
+   "kind": "misconception",
+   "label": "correct",
+   "clauses": [
+    1,
+    3
+   ],
+   "quote": "Without braces a for loop repeats only the one statement right after its header; so the println lines are not part of the loop",
+   "confidence": 0.6,
+   "prune_score": 0.6,
+   "score": 0.36,
+   "logic": "A loop is an iterative if-else: while the condition is true the body repeats, and when it is false the code after the loop repeats.",
+   "twin_logic": "Only the body is repeated; once the condition is false the code after the loop runs once.",
+   "role": "context"
+  },
+  {
+   "depth": 1,
+   "source": "control_flow",
+   "edge": "lvl:control_flow@L1#1",
+   "target": "control_flow@L1",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    1,
+    3
+   ],
+   "quote": "Without braces a for loop repeats only the one statement right after its header; so the println lines are not part of the loop",
+   "confidence": 0.7,
+   "prune_score": 0.5,
+   "score": 0.35,
+   "logic": "Without control statements every statement executes once, in the order given; a block executes its statements in order from first to last; if/if-else choose between one or two alternatives and loops repeat statements depending on a condition.",
+   "twin_logic": null,
+   "level": "L1",
+   "way": "states_the_rule"
+  },
+  {
+   "depth": 1,
+   "source": "control_flow",
+   "edge": "lvl:control_flow@L3#0",
+   "target": "control_flow@L3",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    1,
+    2,
+    3
+   ],
+   "quote": "Without braces a for loop repeats only the one statement right after its header; The indentation does not matter; so the println lines are not part of the loop",
+   "confidence": 0.8,
+   "prune_score": 0.2,
+   "score": 0.16,
+   "logic": "Control flow is defined over statements: statements are executed for their effect, and if/while/for are themselves statements that may be used wherever a statement is allowed, so they can nest.",
+   "twin_logic": null,
+   "level": "L3",
+   "way": "relation_to_neighbour"
+  },
+  {
+   "depth": 2,
+   "source": "for_loop",
+   "edge": "pre:for_loop->loop_body",
+   "target": "loop_body",
+   "kind": "prerequisite",
+   "label": "confirmed",
+   "clauses": [
+    1,
+    2,
+    3
+   ],
+   "quote": "Without braces a for loop repeats only the one statement right after its header; The indentation does not matter; so the println lines are not part of the loop",
+   "confidence": 0.85,
+   "prune_score": 0.7,
+   "score": 0.595,
+   "logic": "The statements in braces after the for header are the loop body; they run once on every pass, between the test and the increment, exactly as in a while loop.",
+   "twin_logic": null
+  },
+  {
+   "depth": 2,
+   "source": "control_flow",
+   "edge": "pre:statement->control_flow",
+   "target": "statement",
+   "kind": "prerequisite",
+   "label": "confirmed",
+   "clauses": [
+    1,
+    3
+   ],
+   "quote": "Without braces a for loop repeats only the one statement right after its header; so the println lines are not part of the loop",
+   "confidence": 0.8,
+   "prune_score": 1.0,
+   "score": 0.8,
+   "logic": "Control flow is the order in which statements run.",
+   "twin_logic": null
+  },
+  {
+   "depth": 3,
+   "source": "statement",
+   "edge": "mis:statement->WhitespaceIsSignificant",
+   "target": "WhitespaceIsSignificant",
+   "kind": "misconception",
+   "label": "correct",
+   "clauses": [
+    1,
+    2,
+    3
+   ],
+   "quote": "Without braces a for loop repeats only the one statement right after its header; The indentation does not matter; so the println lines are not part of the loop",
+   "confidence": 0.95,
+   "prune_score": 0.6,
+   "score": 0.57,
+   "logic": "Line breaks and indentation change what the program does, so each statement must be on its own line.",
+   "twin_logic": "Java compilers consider all whitespace in program text (outside quotation marks) to be equivalent; layout is for human readers.",
+   "role": "context"
+  },
+  {
+   "depth": 3,
+   "source": "statement",
+   "edge": "mis:statement->ComputerFillsInIntent",
+   "target": "ComputerFillsInIntent",
+   "kind": "misconception",
+   "label": "correct",
+   "clauses": [
+    1,
+    3
+   ],
+   "quote": "Without braces a for loop repeats only the one statement right after its header; so the println lines are not part of the loop",
+   "confidence": 0.6,
+   "prune_score": 0.25,
+   "score": 0.15,
+   "logic": "The computer fills in omitted steps or values that the programmer meant, e.g. REPEAT 4 [FORWARD 30] draws a square without a turn command.",
+   "twin_logic": "The computer executes only what the code states; every needed step and value must be written.",
+   "role": "primary"
+  },
+  {
+   "depth": 3,
+   "source": "statement",
+   "edge": "lvl:statement@L3#1",
+   "target": "statement@L3",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    1,
+    2,
+    3
+   ],
+   "quote": "Without braces a for loop repeats only the one statement right after its header; The indentation does not matter; so the println lines are not part of the loop",
+   "confidence": 0.7,
+   "prune_score": 0.3,
+   "score": 0.21,
+   "logic": "A block groups a sequence of statements in braces; the body of main() is such a block.",
+   "twin_logic": null,
+   "level": "L3",
+   "way": "relation_to_neighbour"
+  },
+  {
+   "depth": 3,
+   "source": "statement",
+   "edge": "lvl:statement@L3#4",
+   "target": "statement@L3",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    1,
+    2,
+    3
+   ],
+   "quote": "Without braces a for loop repeats only the one statement right after its header; The indentation does not matter; so the println lines are not part of the loop",
+   "confidence": 0.7,
+   "prune_score": 0.25,
+   "score": 0.175,
+   "logic": "Control flow is the order in which statements run; without control statements it is straight-line, each once in order.",
+   "twin_logic": null,
+   "level": "L3",
+   "way": "relation_to_neighbour"
+  }
+ ],
+ "clause_coverage": {
+  "Without braces a for loop repeats only the one statement right after its header": "err:for_loop->BracelessMultiStatementBody",
+  "The indentation does not matter": "err:for_loop->BracelessMultiStatementBody",
+  "so the println lines are not part of the loop": "err:for_loop->BracelessMultiStatementBody"
+ },
+ "unexplained_clauses": [],
+ "stop_reason": "max depth",
+ "depth_reached": 3,
+ "llm_calls": 0,
+ "llm_cache_hits": 31,
+ "llm_calls_by_step": {
+  "prune": 11,
+  "label": 20
+ },
+ "level_v2": {
+  "wrong_ways": [],
+  "not_counted": []
+ }
+}

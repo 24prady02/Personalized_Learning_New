@@ -1,0 +1,5 @@
+{
+ "code": "int i , n= 5\nfor(i=1;i<n;i++)\n    i++;\n    System.out.println(i)\nsystem.out.println(i);",
+ "question": "Will this compile? What happens when you run it? Explain your reasoning.",
+ "answer": "Yes, it compiles and prints 5 twice. The missing ; do not matter because each statement is on its own line, and system.out is the same as System.out."
+}

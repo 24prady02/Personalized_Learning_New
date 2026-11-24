@@ -1,0 +1,99 @@
+clauses: i is 5 | The loop leaves when the test 5 < 5 fails | so i is 5 at that point, and nothing after the loop changes i | Both println lines print 5
+start: BM25 of the answer against each tagged concept: println 31.17 (hits 1), loop_control 13.83 (hits 1), for_loop 12.95 (hits 1), increment_operators 11.42 (hits 1), control_flow 9.90 (hits 1), loop_variable 9.49 (hits 1), loop_body 5.38 (hits 1), comparison_operators 5.05 (hits 1), boolean_expression 4.88 (hits 1)
+start: chosen println, loop_control, for_loop
+start concepts (3): println, loop_control, for_loop
+--- depth 1: current concepts ['println', 'loop_control', 'for_loop']
+  println (misconceptions): 6 candidates -> kept mis:println->PrintedTextIsExecuted (0.70), mis:println->PrintEqualsPrintln (0.20), mis:println->PrintNewLineFirst (0.10)
+    mis:println->PrintedTextIsExecuted -> not applied (0.00) ""
+    mis:println->PrintEqualsPrintln -> not applied (0.00) ""
+    mis:println->PrintNewLineFirst -> not applied (0.00) ""
+  println (level ways): 17 candidates -> kept lvl:println@L2#2 (0.45), lvl:println@L3#0 (0.35), lvl:println@L2#1 (0.20)
+    lvl:println@L2#2 -> shown (0.27) "so i is 5 at that point, and nothing after the loop changes i; Both println lines print 5"
+    lvl:println@L3#0 -> not applied (0.00) ""
+    lvl:println@L2#1 -> shown (0.14) "Both println lines print 5"
+  loop_control (misconceptions): 11 candidates -> kept mis:loop_control->OffByOneBound (0.45), err:loop_control->WrongIterationCount (0.30), mis:loop_control->ForLoopPartSkipped (0.25)
+    mis:loop_control->OffByOneBound -> correct (0.36) "The loop leaves when the test 5 < 5 fails; so i is 5 at that point, and nothing after the loop changes i"
+    err:loop_control->WrongIterationCount -> correct (0.20) "i is 5; The loop leaves when the test 5 < 5 fails; so i is 5 at that point, and nothing after the loop changes i"
+    mis:loop_control->ForLoopPartSkipped -> not applied (0.00) ""
+  loop_control (level ways): 19 candidates -> kept lvl:loop_control@L2#0 (0.50), lvl:loop_control@L2#2 (0.30), lvl:loop_control@L3#0 (0.20)
+    lvl:loop_control@L2#0 -> not applied (0.00) ""
+    lvl:loop_control@L2#2 -> shown (0.18) "The loop leaves when the test 5 < 5 fails"
+    lvl:loop_control@L3#0 -> not applied (0.00) ""
+  for_loop (misconceptions): 20 candidates -> kept err:for_loop->BracelessMultiStatementBody (0.45), err:for_loop->WrongIterationCount (0.30), mis:for_loop->ProgramEndsAfterLoop (0.25)
+    err:for_loop->BracelessMultiStatementBody -> correct (0.36) "Both println lines print 5"
+    err:for_loop->WrongIterationCount -> correct (0.26) "i is 5; The loop leaves when the test 5 < 5 fails; so i is 5 at that point, and nothing after the loop changes i"
+    mis:for_loop->ProgramEndsAfterLoop -> correct (0.20) "so i is 5 at that point, and nothing after the loop changes i; Both println lines print 5"
+  for_loop (level ways): 24 candidates -> kept lvl:for_loop@L2#0 (0.50), lvl:for_loop@L4#6 (0.30), lvl:for_loop@L4#5 (0.20)
+    lvl:for_loop@L2#0 -> not applied (0.00) ""
+    lvl:for_loop@L4#6 -> not applied (0.00) ""
+    lvl:for_loop@L4#5 -> not applied (0.00) ""
+  kept: mis:loop_control->OffByOneBound [correct, tier 2, 0.36], err:for_loop->BracelessMultiStatementBody [correct, tier 2, 0.36], lvl:println@L2#2 [shown, tier 2, 0.27]
+  clause coverage: c1 <- err:loop_control->WrongIterationCount; c2 <- mis:loop_control->OffByOneBound; c3 <- mis:loop_control->OffByOneBound; c4 <- err:for_loop->BracelessMultiStatementBody
+  not yet read: pre:for_loop->loop_body, pre:loop_control->for_loop, pre:loop_control->increment_operators, pre:loop_variable->loop_control, pre:statement->println
+--- depth 2: current concepts ['println', 'loop_control', 'for_loop']
+  println (concept edges): 1 candidates -> kept pre:statement->println (1.00)
+    pre:statement->println -> confirmed (0.75) "Both println lines print 5"
+  loop_control (concept edges): 3 candidates -> kept pre:loop_variable->loop_control (0.50), pre:loop_control->for_loop (0.35), pre:loop_control->increment_operators (0.15)
+    pre:loop_variable->loop_control -> confirmed (0.38) "The loop leaves when the test 5 < 5 fails; so i is 5 at that point, and nothing after the loop changes i"
+    pre:loop_control->for_loop -> confirmed (0.26) "The loop leaves when the test 5 < 5 fails; so i is 5 at that point, and nothing after the loop changes i; Both println lines print 5"
+    pre:loop_control->increment_operators -> confirmed (0.09) "i is 5; The loop leaves when the test 5 < 5 fails; so i is 5 at that point, and nothing after the loop changes i"
+  for_loop (concept edges): 1 candidates -> kept pre:for_loop->loop_body (1.00)
+    pre:for_loop->loop_body -> confirmed (0.70) "The loop leaves when the test 5 < 5 fails; so i is 5 at that point, and nothing after the loop changes i; Both println lines print 5"
+  kept: pre:statement->println [confirmed, tier 2, 0.75], pre:for_loop->loop_body [confirmed, tier 2, 0.70], pre:loop_variable->loop_control [confirmed, tier 2, 0.38]
+  reached across pre:statement->println, entered next: statement
+  reached across pre:for_loop->loop_body, entered next: loop_body
+  reached across pre:loop_variable->loop_control, entered next: loop_variable
+  clause coverage: c1 <- err:loop_control->WrongIterationCount; c2 <- mis:loop_control->OffByOneBound; c3 <- mis:loop_control->OffByOneBound; c4 <- err:for_loop->BracelessMultiStatementBody
+  not yet read: own edges of loop_body, own edges of loop_variable, own edges of statement
+--- depth 3: current concepts ['statement', 'println', 'loop_body', 'for_loop', 'loop_variable', 'loop_control']
+  statement (misconceptions): 5 candidates -> kept mis:statement->WhitespaceIsSignificant (0.60), mis:statement->StatementsRunInAnyOrder (0.20), mis:statement->ComputerFillsInIntent (0.20)
+    mis:statement->WhitespaceIsSignificant -> correct (0.48) "so i is 5 at that point, and nothing after the loop changes i; Both println lines print 5"
+    mis:statement->StatementsRunInAnyOrder -> correct (0.11) "The loop leaves when the test 5 < 5 fails; so i is 5 at that point, and nothing after the loop changes i"
+    mis:statement->ComputerFillsInIntent -> not applied (0.00) ""
+  statement (level ways): 19 candidates -> kept lvl:statement@L2#0 (0.40), lvl:statement@L3#4 (0.35), lvl:statement@L3#3 (0.25)
+    lvl:statement@L2#0 -> shown (0.24) "The loop leaves when the test 5 < 5 fails; so i is 5 at that point, and nothing after the loop changes i; Both println lines print 5"
+    lvl:statement@L3#4 -> shown (0.25) "so i is 5 at that point, and nothing after the loop changes i; Both println lines print 5"
+    lvl:statement@L3#3 -> shown (0.15) "so i is 5 at that point, and nothing after the loop changes i; Both println lines print 5"
+  loop_body (misconceptions): 12 candidates -> kept err:loop_body->BracelessMultiStatementBody (0.50), mis:loop_body->StatementAfterLoopInBody (0.30), mis:loop_body->ForLoopPartSkipped (0.20)
+    err:loop_body->BracelessMultiStatementBody -> not applied (0.00) ""
+    mis:loop_body->StatementAfterLoopInBody -> correct (0.18) "so i is 5 at that point, and nothing after the loop changes i; Both println lines print 5"
+    mis:loop_body->ForLoopPartSkipped -> not applied (0.00) ""
+  loop_body (level ways): 14 candidates -> kept lvl:loop_body@L4#1 (0.50), lvl:loop_body@L1#1 (0.30), lvl:loop_body@L3#2 (0.20)
+    lvl:loop_body@L4#1 -> not applied (0.00) ""
+    lvl:loop_body@L1#1 -> shown (0.21) "Both println lines print 5"
+    lvl:loop_body@L3#2 -> not applied (0.00) ""
+  for_loop (concept edges): 1 candidates -> kept pre:loop_control->for_loop (1.00)
+    pre:loop_control->for_loop -> confirmed (0.75) "The loop leaves when the test 5 < 5 fails; so i is 5 at that point, and nothing after the loop changes i; Both println lines print 5"
+  loop_variable (misconceptions): 7 candidates -> kept mis:loop_variable->BodyChangeIgnoredByCondition (0.50), mis:loop_variable->LoopOutputSameEachPass (0.25), mis:loop_variable->LoopVariableLifetimeScope (0.25)
+    mis:loop_variable->BodyChangeIgnoredByCondition -> not applied (0.00) ""
+    mis:loop_variable->LoopOutputSameEachPass -> not applied (0.00) ""
+    mis:loop_variable->LoopVariableLifetimeScope -> not applied (0.00) ""
+  loop_variable (level ways): 13 candidates -> kept lvl:loop_variable@L2#1 (0.60), lvl:loop_variable@L2#2 (0.20), lvl:loop_variable@L3#1 (0.20)
+    lvl:loop_variable@L2#1 -> shown (0.48) "The loop leaves when the test 5 < 5 fails; so i is 5 at that point, and nothing after the loop changes i; Both println lines print 5"
+    lvl:loop_variable@L2#2 -> shown (0.12) "The loop leaves when the test 5 < 5 fails"
+    lvl:loop_variable@L3#1 -> shown (0.14) "The loop leaves when the test 5 < 5 fails; so i is 5 at that point, and nothing after the loop changes i; Both println lines print 5"
+  loop_control (concept edges): 1 candidates -> kept pre:loop_control->increment_operators (1.00)
+    pre:loop_control->increment_operators -> confirmed (0.60) "i is 5; The loop leaves when the test 5 < 5 fails; so i is 5 at that point, and nothing after the loop changes i"
+  kept: pre:loop_control->for_loop [confirmed, tier 2, 0.75], pre:loop_control->increment_operators [confirmed, tier 2, 0.60], mis:statement->WhitespaceIsSignificant [correct, tier 2, 0.48]
+  reached across pre:loop_control->increment_operators, entered next: increment_operators
+  clause coverage: c1 <- err:loop_control->WrongIterationCount; c2 <- mis:loop_control->OffByOneBound; c3 <- mis:loop_control->OffByOneBound; c4 <- err:for_loop->BracelessMultiStatementBody
+  not yet read: own edges of increment_operators, pre:statement->control_flow
+--- depth 4: current concepts ['increment_operators'] (closing round: own edges only)
+  increment_operators (misconceptions): 5 candidates -> kept mis:increment_operators->IncrementByTwo (0.40), mis:increment_operators->IdiomOverridesCode (0.35), mis:increment_operators->PreIncrementBeforeLoop (0.25)
+    mis:increment_operators->IncrementByTwo -> not applied (0.00) ""
+    mis:increment_operators->IdiomOverridesCode -> not applied (0.00) ""
+    mis:increment_operators->PreIncrementBeforeLoop -> not applied (0.00) ""
+  increment_operators (level ways): 16 candidates -> kept lvl:increment_operators@L3#4 (0.40), lvl:increment_operators@L3#0 (0.35), lvl:increment_operators@L2#2 (0.25)
+    lvl:increment_operators@L3#4 -> not applied (0.00) ""
+    lvl:increment_operators@L3#0 -> not applied (0.00) ""
+    lvl:increment_operators@L2#2 -> not applied (0.00) ""
+  nothing kept at this depth
+  clause coverage: c1 <- err:loop_control->WrongIterationCount; c2 <- mis:loop_control->OffByOneBound; c3 <- mis:loop_control->OffByOneBound; c4 <- err:for_loop->BracelessMultiStatementBody
+  not yet read: pre:assignment->increment_operators, pre:statement->control_flow
+  root-cause walk: held on [], broken at [], prerequisites {'increment_operators': ['assignment', 'loop_control'], 'boolean_expression': ['comparison_operators'], 'comparison_operators': ['expression'], 'loop_body': ['for_loop'], 'for_loop': ['loop_control'], 'loop_control': ['loop_variable'], 'control_flow': ['statement'], 'println': ['statement']}
+  level way lvl:statement@L3#3 not counted: confidence 0.60 is not above 0.60
+  level loop_body: L1 via states_the_rule "Both println lines print 5"
+  level loop_control: L2 via one_step_execution "The loop leaves when the test 5 < 5 fails"
+  level loop_variable: L3 via relation_to_neighbour "The loop leaves when the test 5 < 5 fails; so i is 5 at that point, and nothing after the loop changes i; Both println lines print 5"
+  level println: L2 via one_step_execution "so i is 5 at that point, and nothing after the loop changes i; Both println lines print 5"
+  level statement: L3 via relation_to_neighbour "so i is 5 at that point, and nothing after the loop changes i; Both println lines print 5"

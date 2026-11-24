@@ -1,0 +1,5 @@
+{
+ "code": "int i, n = 5;\nfor (i = 1; i < n; i++)\n    i++;\n    System.out.println(i);\nSystem.out.println(i);",
+ "question": "How many times is System.out.println executed? Explain your reasoning.",
+ "answer": "The program has two System.out.println statements and one for loop. The for loop has a header with a start, a condition and an update, and a body."
+}

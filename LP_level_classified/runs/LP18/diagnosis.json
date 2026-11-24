@@ -1,0 +1,615 @@
+{
+ "scenario": "LP18",
+ "settings": {
+  "width": 3,
+  "depth": 3,
+  "prune_tools": "llm",
+  "model": "claude-opus-5-5",
+  "backend": "claude-cli",
+  "rule_fixes": true,
+  "level_v2": true
+ },
+ "clauses": [
+  "Yes, it compiles and prints 5 twice",
+  "The missing",
+  "do not matter",
+  "because each statement is on its own line, and system.out is the same as System.out"
+ ],
+ "start_concepts": [
+  "println",
+  "statement",
+  "compile_time_error"
+ ],
+ "held_misconceptions": [
+  {
+   "concept": "println",
+   "misconception": "IdentifierCaseInsensitive",
+   "kind": "misconception",
+   "quote": "because each statement is on its own line, and system.out is the same as System.out",
+   "score": 0.76
+  },
+  {
+   "concept": "statement",
+   "misconception": "StatementNeedsNoTerminator",
+   "kind": "error",
+   "quote": "Yes, it compiles and prints 5 twice; The missing; do not matter",
+   "score": 0.45
+  }
+ ],
+ "error_evidence": [],
+ "shadowed": [
+  {
+   "concept": "statement",
+   "misconception": "WhitespaceIsSignificant",
+   "shadow_of": "mis:println->IdentifierCaseInsensitive",
+   "quote": "because each statement is on its own line, and system.out is the same as System.out",
+   "score": 0.24
+  }
+ ],
+ "broken_edges": [
+  {
+   "edge": "pre:statement->println",
+   "quote": "Yes, it compiles and prints 5 twice; The missing; do not matter; because each statement is on its own line, and system.out is the same as System.out",
+   "score": 0.7,
+   "consequence_of": "mis:println->IdentifierCaseInsensitive"
+  },
+  {
+   "edge": "pre:statement->control_flow",
+   "quote": "Yes, it compiles and prints 5 twice; because each statement is on its own line, and system.out is the same as System.out",
+   "score": 0.6,
+   "consequence_of": "mis:println->IdentifierCaseInsensitive"
+  }
+ ],
+ "root_cause": {
+  "concept": "statement",
+  "misconception": "StatementNeedsNoTerminator"
+ },
+ "levels": {
+  "compile_time_error": {
+   "level": "L0",
+   "way": "inconsistent_trace",
+   "quote": "Yes, it compiles and prints 5 twice; The missing; do not matter; because each statement is on its own line, and system.out is the same as System.out",
+   "edge": "lvl:compile_time_error@L0#3",
+   "source": "level_way",
+   "also_shown": []
+  },
+  "control_flow": {
+   "level": "L2",
+   "way": "output_prediction",
+   "quote": "Yes, it compiles and prints 5 twice",
+   "edge": "lvl:control_flow@L2#1",
+   "source": "level_way",
+   "also_shown": [
+    "L2 line_by_line_trace"
+   ]
+  },
+  "println": {
+   "level": "L0",
+   "way": "misconception",
+   "misconception": "IdentifierCaseInsensitive",
+   "quote": "because each statement is on its own line, and system.out is the same as System.out",
+   "edge": "mis:println->IdentifierCaseInsensitive",
+   "rule": "wrong rule: System.out.Println and System.out.println name the same method. Right rule: Java is case-sensitive: names that differ only in capitalization are different names.",
+   "source": "level_mis_links"
+  },
+  "statement": {
+   "level": "L0",
+   "way": "error",
+   "error": "StatementNeedsNoTerminator",
+   "quote": "Yes, it compiles and prints 5 twice; The missing; do not matter",
+   "edge": "err:statement->StatementNeedsNoTerminator",
+   "rule": "A statement still compiles and runs if the semicolon at its end is left out, or if a stray ; is put right after if (c) or for (...).",
+   "source": "held_error",
+   "level_from_ways": "L0"
+  }
+ },
+ "overall_level": "L0",
+ "paths": [
+  {
+   "depth": 1,
+   "source": "println",
+   "edge": "mis:println->IdentifierCaseInsensitive",
+   "target": "IdentifierCaseInsensitive",
+   "kind": "misconception",
+   "label": "held",
+   "clauses": [
+    4
+   ],
+   "quote": "because each statement is on its own line, and system.out is the same as System.out",
+   "confidence": 0.95,
+   "prune_score": 0.8,
+   "score": 0.76,
+   "logic": "System.out.Println and System.out.println name the same method.",
+   "twin_logic": "Java is case-sensitive: names of variables, methods and classes that differ only in capitalization are different names.",
+   "role": "context"
+  },
+  {
+   "depth": 1,
+   "source": "statement",
+   "edge": "mis:statement->WhitespaceIsSignificant",
+   "target": "WhitespaceIsSignificant",
+   "kind": "misconception",
+   "label": "held",
+   "clauses": [
+    4
+   ],
+   "quote": "because each statement is on its own line, and system.out is the same as System.out",
+   "confidence": 0.8,
+   "prune_score": 0.3,
+   "score": 0.24,
+   "logic": "Line breaks and indentation change what the program does, so each statement must be on its own line.",
+   "twin_logic": "Java compilers consider all whitespace in program text (outside quotation marks) to be equivalent; layout is for human readers.",
+   "role": "context"
+  },
+  {
+   "depth": 1,
+   "source": "statement",
+   "edge": "err:statement->StatementNeedsNoTerminator",
+   "target": "StatementNeedsNoTerminator",
+   "kind": "error",
+   "label": "held",
+   "clauses": [
+    1,
+    2,
+    3
+   ],
+   "quote": "Yes, it compiles and prints 5 twice; The missing; do not matter",
+   "confidence": 0.9,
+   "prune_score": 0.5,
+   "score": 0.45,
+   "logic": "A statement still compiles and runs if the semicolon at its end is left out, or if a stray ; is put right after if (c) or for (...).",
+   "twin_logic": "Each statement must end with ;, otherwise javac reports ';' expected.",
+   "role": "primary"
+  },
+  {
+   "depth": 2,
+   "source": "println",
+   "edge": "pre:statement->println",
+   "target": "statement",
+   "kind": "prerequisite",
+   "label": "broken",
+   "clauses": [
+    1,
+    2,
+    3,
+    4
+   ],
+   "quote": "Yes, it compiles and prints 5 twice; The missing; do not matter; because each statement is on its own line, and system.out is the same as System.out",
+   "confidence": 0.7,
+   "prune_score": 1.0,
+   "score": 0.7,
+   "logic": "System.out.println(s); is itself a statement, so its line of output appears at its own place in the sequence.",
+   "twin_logic": null,
+   "consequence_of": "mis:println->IdentifierCaseInsensitive"
+  },
+  {
+   "depth": 2,
+   "source": "statement",
+   "edge": "pre:statement->control_flow",
+   "target": "control_flow",
+   "kind": "prerequisite",
+   "label": "broken",
+   "clauses": [
+    1,
+    4
+   ],
+   "quote": "Yes, it compiles and prints 5 twice; because each statement is on its own line, and system.out is the same as System.out",
+   "confidence": 0.6,
+   "prune_score": 1.0,
+   "score": 0.6,
+   "logic": "Control flow is the order in which statements run.",
+   "twin_logic": null,
+   "consequence_of": "mis:println->IdentifierCaseInsensitive"
+  },
+  {
+   "depth": 3,
+   "source": "control_flow",
+   "edge": "mis:control_flow->ProgramEndsAfterLoop",
+   "target": "ProgramEndsAfterLoop",
+   "kind": "misconception",
+   "label": "correct",
+   "clauses": [
+    1
+   ],
+   "quote": "Yes, it compiles and prints 5 twice",
+   "confidence": 0.8,
+   "prune_score": 0.4,
+   "score": 0.32,
+   "logic": "When a loop finishes the program ends, so code after the loop never runs.",
+   "twin_logic": "When the loop condition becomes false, control continues with the first statement after the loop.",
+   "role": "context"
+  },
+  {
+   "depth": 3,
+   "source": "control_flow",
+   "edge": "lvl:control_flow@L2#1",
+   "target": "control_flow@L2",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    1
+   ],
+   "quote": "Yes, it compiles and prints 5 twice",
+   "confidence": 0.7,
+   "prune_score": 0.4,
+   "score": 0.28,
+   "logic": "The output is the sequence of print statements that control actually reaches, in the order reached: e.g. TenHellos prints 1st, 2nd, 3rd Hello once each, then 4th to 10th Hello from the loop.",
+   "twin_logic": null,
+   "level": "L2",
+   "way": "output_prediction"
+  },
+  {
+   "depth": 3,
+   "source": "control_flow",
+   "edge": "mis:control_flow->FalseLoopRepeatsNextCode",
+   "target": "FalseLoopRepeatsNextCode",
+   "kind": "misconception",
+   "label": "correct",
+   "clauses": [
+    1
+   ],
+   "quote": "Yes, it compiles and prints 5 twice",
+   "confidence": 0.6,
+   "prune_score": 0.35,
+   "score": 0.21,
+   "logic": "A loop is an iterative if-else: while the condition is true the body repeats, and when it is false the code after the loop repeats.",
+   "twin_logic": "Only the body is repeated; once the condition is false the code after the loop runs once.",
+   "role": "context"
+  }
+ ],
+ "evidence": [
+  {
+   "depth": 1,
+   "source": "println",
+   "edge": "mis:println->IdentifierCaseInsensitive",
+   "target": "IdentifierCaseInsensitive",
+   "kind": "misconception",
+   "label": "held",
+   "clauses": [
+    4
+   ],
+   "quote": "because each statement is on its own line, and system.out is the same as System.out",
+   "confidence": 0.95,
+   "prune_score": 0.8,
+   "score": 0.76,
+   "logic": "System.out.Println and System.out.println name the same method.",
+   "twin_logic": "Java is case-sensitive: names of variables, methods and classes that differ only in capitalization are different names.",
+   "role": "context"
+  },
+  {
+   "depth": 1,
+   "source": "println",
+   "edge": "lvl:println@L2#1",
+   "target": "println@L2",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    1
+   ],
+   "quote": "Yes, it compiles and prints 5 twice",
+   "confidence": 0.6,
+   "prune_score": 0.25,
+   "score": 0.15,
+   "logic": "Output is the value's characters followed by a line break: println(\"Hello, \"); println(\"World!\"); prints two lines.",
+   "twin_logic": null,
+   "level": "L2",
+   "way": "output_prediction"
+  },
+  {
+   "depth": 1,
+   "source": "statement",
+   "edge": "err:statement->StatementNeedsNoTerminator",
+   "target": "StatementNeedsNoTerminator",
+   "kind": "error",
+   "label": "held",
+   "clauses": [
+    1,
+    2,
+    3
+   ],
+   "quote": "Yes, it compiles and prints 5 twice; The missing; do not matter",
+   "confidence": 0.9,
+   "prune_score": 0.5,
+   "score": 0.45,
+   "logic": "A statement still compiles and runs if the semicolon at its end is left out, or if a stray ; is put right after if (c) or for (...).",
+   "twin_logic": "Each statement must end with ;, otherwise javac reports ';' expected.",
+   "role": "primary"
+  },
+  {
+   "depth": 1,
+   "source": "statement",
+   "edge": "mis:statement->WhitespaceIsSignificant",
+   "target": "WhitespaceIsSignificant",
+   "kind": "misconception",
+   "label": "held",
+   "clauses": [
+    4
+   ],
+   "quote": "because each statement is on its own line, and system.out is the same as System.out",
+   "confidence": 0.8,
+   "prune_score": 0.3,
+   "score": 0.24,
+   "logic": "Line breaks and indentation change what the program does, so each statement must be on its own line.",
+   "twin_logic": "Java compilers consider all whitespace in program text (outside quotation marks) to be equivalent; layout is for human readers.",
+   "role": "context"
+  },
+  {
+   "depth": 1,
+   "source": "statement",
+   "edge": "lvl:statement@L0#0",
+   "target": "statement@L0",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    2,
+    3,
+    4
+   ],
+   "quote": "The missing; do not matter; because each statement is on its own line, and system.out is the same as System.out",
+   "confidence": 0.8,
+   "prune_score": 0.3,
+   "score": 0.24,
+   "logic": "Everyday reading: a program is read like a text or a list of wishes that the computer takes in all at once, so line order, goals of later lines or what the writer meant can matter. Java rule: each statement is one step, ended by ;, executed once, in written order, using only the current state.",
+   "twin_logic": null,
+   "level": "L0",
+   "way": "everyday_reading"
+  },
+  {
+   "depth": 1,
+   "source": "compile_time_error",
+   "edge": "err:compile_time_error->StatementNeedsNoTerminator",
+   "target": "StatementNeedsNoTerminator",
+   "kind": "error",
+   "label": "held",
+   "clauses": [
+    2,
+    3,
+    4
+   ],
+   "quote": "The missing; do not matter; because each statement is on its own line, and system.out is the same as System.out",
+   "confidence": 0.85,
+   "prune_score": 0.5,
+   "score": 0.425,
+   "logic": "a statement runs without the ;",
+   "twin_logic": "Each statement must end with ;, otherwise javac reports ';' expected.",
+   "role": "context"
+  },
+  {
+   "depth": 1,
+   "source": "compile_time_error",
+   "edge": "err:compile_time_error->MisspelledIdentifier",
+   "target": "MisspelledIdentifier",
+   "kind": "error",
+   "label": "held",
+   "clauses": [
+    4
+   ],
+   "quote": "because each statement is on its own line, and system.out is the same as System.out",
+   "confidence": 0.9,
+   "prune_score": 0.4,
+   "score": 0.36,
+   "logic": "Writes Sytem.out.prinln or a misspelled variable name.",
+   "twin_logic": "Every name must be spelled exactly, including capitalization.",
+   "role": "context"
+  },
+  {
+   "depth": 1,
+   "source": "compile_time_error",
+   "edge": "lvl:compile_time_error@L0#3",
+   "target": "compile_time_error@L0",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    1,
+    2,
+    3,
+    4
+   ],
+   "quote": "Yes, it compiles and prints 5 twice; The missing; do not matter; because each statement is on its own line, and system.out is the same as System.out",
+   "confidence": 0.85,
+   "prune_score": 0.4,
+   "score": 0.34,
+   "logic": "Applies the 'javac checks before running' rule unevenly: predicts output for a program that would not compile, or expects a compile error from a fault (such as division by zero) that only shows at run time. (here mixing in: \"Code that compiles is code that works\")",
+   "twin_logic": null,
+   "level": "L0",
+   "way": "inconsistent_trace"
+  },
+  {
+   "depth": 2,
+   "source": "println",
+   "edge": "pre:statement->println",
+   "target": "statement",
+   "kind": "prerequisite",
+   "label": "broken",
+   "clauses": [
+    1,
+    2,
+    3,
+    4
+   ],
+   "quote": "Yes, it compiles and prints 5 twice; The missing; do not matter; because each statement is on its own line, and system.out is the same as System.out",
+   "confidence": 0.7,
+   "prune_score": 1.0,
+   "score": 0.7,
+   "logic": "System.out.println(s); is itself a statement, so its line of output appears at its own place in the sequence.",
+   "twin_logic": null,
+   "consequence_of": "mis:println->IdentifierCaseInsensitive"
+  },
+  {
+   "depth": 2,
+   "source": "statement",
+   "edge": "pre:statement->control_flow",
+   "target": "control_flow",
+   "kind": "prerequisite",
+   "label": "broken",
+   "clauses": [
+    1,
+    4
+   ],
+   "quote": "Yes, it compiles and prints 5 twice; because each statement is on its own line, and system.out is the same as System.out",
+   "confidence": 0.6,
+   "prune_score": 1.0,
+   "score": 0.6,
+   "logic": "Control flow is the order in which statements run.",
+   "twin_logic": null,
+   "consequence_of": "mis:println->IdentifierCaseInsensitive"
+  },
+  {
+   "depth": 3,
+   "source": "control_flow",
+   "edge": "mis:control_flow->ProgramEndsAfterLoop",
+   "target": "ProgramEndsAfterLoop",
+   "kind": "misconception",
+   "label": "correct",
+   "clauses": [
+    1
+   ],
+   "quote": "Yes, it compiles and prints 5 twice",
+   "confidence": 0.8,
+   "prune_score": 0.4,
+   "score": 0.32,
+   "logic": "When a loop finishes the program ends, so code after the loop never runs.",
+   "twin_logic": "When the loop condition becomes false, control continues with the first statement after the loop.",
+   "role": "context"
+  },
+  {
+   "depth": 3,
+   "source": "control_flow",
+   "edge": "mis:control_flow->FalseLoopRepeatsNextCode",
+   "target": "FalseLoopRepeatsNextCode",
+   "kind": "misconception",
+   "label": "correct",
+   "clauses": [
+    1
+   ],
+   "quote": "Yes, it compiles and prints 5 twice",
+   "confidence": 0.6,
+   "prune_score": 0.35,
+   "score": 0.21,
+   "logic": "A loop is an iterative if-else: while the condition is true the body repeats, and when it is false the code after the loop repeats.",
+   "twin_logic": "Only the body is repeated; once the condition is false the code after the loop runs once.",
+   "role": "context"
+  },
+  {
+   "depth": 3,
+   "source": "control_flow",
+   "edge": "lvl:control_flow@L2#1",
+   "target": "control_flow@L2",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    1
+   ],
+   "quote": "Yes, it compiles and prints 5 twice",
+   "confidence": 0.7,
+   "prune_score": 0.4,
+   "score": 0.28,
+   "logic": "The output is the sequence of print statements that control actually reaches, in the order reached: e.g. TenHellos prints 1st, 2nd, 3rd Hello once each, then 4th to 10th Hello from the loop.",
+   "twin_logic": null,
+   "level": "L2",
+   "way": "output_prediction"
+  },
+  {
+   "depth": 3,
+   "source": "control_flow",
+   "edge": "lvl:control_flow@L2#0",
+   "target": "control_flow@L2",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    1
+   ],
+   "quote": "Yes, it compiles and prints 5 twice",
+   "confidence": 0.6,
+   "prune_score": 0.25,
+   "score": 0.15,
+   "logic": "Execute the statement at the current point; when it completes normally, control passes to the next statement in the block. An if evaluates its condition once and then runs at most one branch; a loop evaluates its condition before each pass; after an if or a loop finishes, control continues with the statement after it.",
+   "twin_logic": null,
+   "level": "L2",
+   "way": "line_by_line_trace"
+  }
+ ],
+ "clause_coverage": {
+  "Yes, it compiles and prints 5 twice": "lvl:println@L2#1",
+  "The missing": "err:statement->StatementNeedsNoTerminator",
+  "do not matter": "err:statement->StatementNeedsNoTerminator",
+  "because each statement is on its own line, and system.out is the same as System.out": "mis:println->IdentifierCaseInsensitive"
+ },
+ "unexplained_clauses": [],
+ "stop_reason": "sufficient",
+ "depth_reached": 3,
+ "llm_calls": 0,
+ "llm_cache_hits": 28,
+ "llm_calls_by_step": {
+  "prune": 10,
+  "label": 18
+ },
+ "level_v2": {
+  "wrong_ways": [
+   {
+    "concept": "println",
+    "edge": "lvl:println@L4#3",
+    "level": "L4",
+    "way": "diagnose_an_error",
+    "clauses": [
+     4
+    ],
+    "quote": "because each statement is on its own line, and system.out is the same as System.out",
+    "confidence": 0.9
+   },
+   {
+    "concept": "println",
+    "edge": "lvl:println@L3#0",
+    "level": "L3",
+    "way": "relation_to_neighbour",
+    "clauses": [
+     1,
+     4
+    ],
+    "quote": "Yes, it compiles and prints 5 twice; because each statement is on its own line, and system.out is the same as System.out",
+    "confidence": 0.6
+   },
+   {
+    "concept": "statement",
+    "edge": "lvl:statement@L4#1",
+    "level": "L4",
+    "way": "diagnose_an_error",
+    "clauses": [
+     1,
+     2,
+     3,
+     4
+    ],
+    "quote": "Yes, it compiles and prints 5 twice; The missing; do not matter; because each statement is on its own line, and system.out is the same as System.out",
+    "confidence": 0.85
+   },
+   {
+    "concept": "compile_time_error",
+    "edge": "lvl:compile_time_error@L4#1",
+    "level": "L4",
+    "way": "diagnose_an_error",
+    "clauses": [
+     1,
+     2,
+     3,
+     4
+    ],
+    "quote": "Yes, it compiles and prints 5 twice; The missing; do not matter; because each statement is on its own line, and system.out is the same as System.out",
+    "confidence": 0.85
+   },
+   {
+    "concept": "compile_time_error",
+    "edge": "lvl:compile_time_error@L4#5",
+    "level": "L4",
+    "way": "diagnose_an_error",
+    "clauses": [
+     1,
+     4
+    ],
+    "quote": "Yes, it compiles and prints 5 twice; because each statement is on its own line, and system.out is the same as System.out",
+    "confidence": 0.85
+   }
+  ],
+  "not_counted": []
+ }
+}

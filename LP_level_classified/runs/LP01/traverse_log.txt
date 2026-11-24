@@ -1,0 +1,74 @@
+clauses: It counts from 1 to 5 | so it prints 1, 2, 3, 4, 5 | For i from 1 to n means do it for each number
+start: BM25 of the answer against each tagged concept: loop_control 18.08 (hits 1), for_loop 14.91 (hits 1), loop_variable 14.43 (hits 1), println 12.27 (hits 1), control_flow 11.93 (hits 1), increment_operators 10.52 (hits 1), loop_body 9.44 (hits 1), boolean_expression 4.55 (hits 1), comparison_operators 3.50 (hits 1)
+start: chosen loop_control, for_loop, loop_variable
+start concepts (3): loop_control, for_loop, loop_variable
+--- depth 1: current concepts ['loop_control', 'for_loop', 'loop_variable']
+  loop_control (misconceptions): 11 candidates -> kept mis:loop_control->IdiomOverridesCode (0.40), mis:loop_control->OffByOneBound (0.35), mis:loop_control->LoopStepAlwaysOne (0.25)
+    mis:loop_control->IdiomOverridesCode -> held (0.32) "It counts from 1 to 5; so it prints 1, 2, 3, 4, 5; For i from 1 to n means do it for each number"
+    mis:loop_control->OffByOneBound -> held (0.26) "It counts from 1 to 5; so it prints 1, 2, 3, 4, 5"
+    mis:loop_control->LoopStepAlwaysOne -> not applied (0.00) ""
+  loop_control (level ways): 19 candidates -> kept lvl:loop_control@L0#0 (0.60), lvl:loop_control@L2#1 (0.25), lvl:loop_control@L4#1 (0.15)
+    lvl:loop_control@L0#0 -> shown (0.51) "It counts from 1 to 5; so it prints 1, 2, 3, 4, 5; For i from 1 to n means do it for each number"
+    lvl:loop_control@L2#1 -> not applied (0.00) ""
+    lvl:loop_control@L4#1 -> not applied (0.00) ""
+  for_loop (misconceptions): 20 candidates -> kept mis:for_loop->IdiomOverridesCode (0.40), err:for_loop->BracelessMultiStatementBody (0.35), mis:for_loop->LoopStepAlwaysOne (0.25)
+    mis:for_loop->IdiomOverridesCode -> held (0.24) "It counts from 1 to 5; For i from 1 to n means do it for each number"
+    err:for_loop->BracelessMultiStatementBody -> held (0.26) "so it prints 1, 2, 3, 4, 5"
+    mis:for_loop->LoopStepAlwaysOne -> not applied (0.00) ""
+  for_loop (level ways): 24 candidates -> kept lvl:for_loop@L0#0 (0.60), lvl:for_loop@L4#5 (0.20), lvl:for_loop@L4#6 (0.20)
+    lvl:for_loop@L0#0 -> shown (0.51) "It counts from 1 to 5; so it prints 1, 2, 3, 4, 5; For i from 1 to n means do it for each number"
+    lvl:for_loop@L4#5 -> not applied (0.00) ""
+    lvl:for_loop@L4#6 -> not applied (0.00) ""
+  loop_variable (misconceptions): 7 candidates -> kept mis:loop_variable->BodyChangeIgnoredByCondition (0.60), mis:loop_variable->LoopOutputSameEachPass (0.25), mis:loop_variable->LoopVariableLimitsValues (0.15)
+    mis:loop_variable->BodyChangeIgnoredByCondition -> held (0.51) "It counts from 1 to 5; For i from 1 to n means do it for each number"
+    mis:loop_variable->LoopOutputSameEachPass -> correct (0.15) "so it prints 1, 2, 3, 4, 5"
+    mis:loop_variable->LoopVariableLimitsValues -> not applied (0.00) ""
+  loop_variable (level ways): 13 candidates -> kept lvl:loop_variable@L0#0 (0.60), lvl:loop_variable@L0#5 (0.25), lvl:loop_variable@L4#2 (0.15)
+    lvl:loop_variable@L0#0 -> shown (0.51) "It counts from 1 to 5; so it prints 1, 2, 3, 4, 5; For i from 1 to n means do it for each number"
+    lvl:loop_variable@L0#5 -> not applied (0.00) ""
+    lvl:loop_variable@L4#2 -> not applied (0.00) ""
+  kept: mis:loop_variable->BodyChangeIgnoredByCondition [held, tier 0, 0.51], mis:loop_control->IdiomOverridesCode [held, tier 0, 0.32], mis:loop_control->OffByOneBound [held, tier 0, 0.26], mis:for_loop->IdiomOverridesCode [held, tier 0, 0.24]
+  clause coverage: c1 <- mis:loop_control->IdiomOverridesCode; c2 <- mis:loop_control->IdiomOverridesCode; c3 <- mis:loop_control->IdiomOverridesCode
+  not yet read: pre:for_loop->loop_body, pre:loop_control->for_loop, pre:loop_control->increment_operators, pre:loop_variable->loop_control
+--- depth 2: current concepts ['loop_variable', 'loop_control', 'for_loop']
+  loop_variable (concept edges): 1 candidates -> kept pre:loop_variable->loop_control (1.00)
+    pre:loop_variable->loop_control -> broken (0.80) "It counts from 1 to 5; so it prints 1, 2, 3, 4, 5; For i from 1 to n means do it for each number"
+  loop_control (concept edges): 2 candidates -> kept pre:loop_control->for_loop (0.70), pre:loop_control->increment_operators (0.30)
+    pre:loop_control->for_loop -> broken (0.59) "It counts from 1 to 5; so it prints 1, 2, 3, 4, 5; For i from 1 to n means do it for each number"
+    pre:loop_control->increment_operators -> broken (0.21) "It counts from 1 to 5; so it prints 1, 2, 3, 4, 5"
+  for_loop (concept edges): 1 candidates -> kept pre:for_loop->loop_body (1.00)
+    pre:for_loop->loop_body -> broken (0.80) "It counts from 1 to 5; so it prints 1, 2, 3, 4, 5"
+  kept: pre:loop_variable->loop_control [broken, tier 0, 0.80], pre:for_loop->loop_body [broken, tier 0, 0.80], pre:loop_control->for_loop [broken, tier 0, 0.59], pre:loop_control->increment_operators [broken, tier 0, 0.21]
+  reached across pre:for_loop->loop_body, entered next: loop_body
+  reached across pre:loop_control->increment_operators, entered next: increment_operators
+  clause coverage: c1 <- mis:loop_control->IdiomOverridesCode; c2 <- mis:loop_control->IdiomOverridesCode; c3 <- mis:loop_control->IdiomOverridesCode
+  not yet read: own edges of increment_operators, own edges of loop_body
+--- depth 3: current concepts ['loop_control', 'loop_variable', 'loop_body', 'for_loop', 'increment_operators']
+  loop_body (misconceptions): 12 candidates -> kept err:loop_body->BracelessMultiStatementBody (0.50), mis:loop_body->ComputerFillsInIntent (0.30), mis:loop_body->ForLoopPartSkipped (0.20)
+    err:loop_body->BracelessMultiStatementBody -> held (0.38) "so it prints 1, 2, 3, 4, 5"
+    mis:loop_body->ComputerFillsInIntent -> held (0.21) "It counts from 1 to 5; so it prints 1, 2, 3, 4, 5; For i from 1 to n means do it for each number"
+    mis:loop_body->ForLoopPartSkipped -> not applied (0.00) ""
+  loop_body (level ways): 14 candidates -> kept lvl:loop_body@L0#0 (0.60), lvl:loop_body@L4#1 (0.25), lvl:loop_body@L2#0 (0.15)
+    lvl:loop_body@L0#0 -> shown (0.45) "so it prints 1, 2, 3, 4, 5; For i from 1 to n means do it for each number"
+    lvl:loop_body@L4#1 -> not applied (0.00) ""
+    lvl:loop_body@L2#0 -> not applied (0.00) ""
+  increment_operators (misconceptions): 5 candidates -> kept mis:increment_operators->IdiomOverridesCode (0.70), mis:increment_operators->IncrementByTwo (0.15), mis:increment_operators->PreIncrementBeforeLoop (0.15)
+    mis:increment_operators->IdiomOverridesCode -> held (0.56) "It counts from 1 to 5; so it prints 1, 2, 3, 4, 5; For i from 1 to n means do it for each number"
+    mis:increment_operators->IncrementByTwo -> not applied (0.00) ""
+    mis:increment_operators->PreIncrementBeforeLoop -> not applied (0.00) ""
+  increment_operators (level ways): 16 candidates -> kept lvl:increment_operators@L0#3 (0.50), lvl:increment_operators@L3#4 (0.25), lvl:increment_operators@L0#0 (0.25)
+    lvl:increment_operators@L0#3 -> not applied (0.00) ""
+    lvl:increment_operators@L3#4: wrong (0.75) -> not applied
+    lvl:increment_operators@L3#4 -> not applied (0.00) ""
+    lvl:increment_operators@L0#0 -> not applied (0.00) ""
+  kept: mis:increment_operators->IdiomOverridesCode [held, tier 0, 0.56], mis:loop_body->ComputerFillsInIntent [held, tier 0, 0.21], err:loop_body->BracelessMultiStatementBody [held, tier 1, 0.38]
+  clause coverage: c1 <- mis:loop_control->IdiomOverridesCode; c2 <- mis:loop_control->IdiomOverridesCode; c3 <- mis:loop_control->IdiomOverridesCode
+  not yet read: pre:assignment->increment_operators
+  held: mis:increment_operators->IdiomOverridesCode, mis:loop_variable->BodyChangeIgnoredByCondition, mis:loop_control->OffByOneBound (same words as mis:loop_control->IdiomOverridesCode), mis:for_loop->IdiomOverridesCode, mis:loop_body->ComputerFillsInIntent; filed at the dependent concept: mis:loop_control->IdiomOverridesCode
+  shadows: mis:for_loop->IdiomOverridesCode (shadow of mis:loop_body->ComputerFillsInIntent), mis:loop_control->OffByOneBound (shadow of mis:increment_operators->IdiomOverridesCode), mis:loop_control->IdiomOverridesCode (shadow of mis:increment_operators->IdiomOverridesCode)
+  root-cause walk: held on ['increment_operators', 'loop_body', 'loop_variable'], broken at [] (consequences: pre:loop_variable->loop_control, pre:for_loop->loop_body, pre:loop_control->for_loop, pre:loop_control->increment_operators), prerequisites {'increment_operators': ['assignment', 'loop_control'], 'boolean_expression': ['comparison_operators'], 'comparison_operators': ['expression'], 'loop_body': ['for_loop'], 'for_loop': ['loop_control'], 'loop_control': ['loop_variable'], 'control_flow': ['statement'], 'println': ['statement']}
+  level for_loop: L0 via everyday_reading "It counts from 1 to 5; so it prints 1, 2, 3, 4, 5; For i from 1 to n means do it for each number"
+  level increment_operators: L0 via misconception "It counts from 1 to 5; so it prints 1, 2, 3, 4, 5; For i from 1 to n means do it for each number"
+  level loop_body: L0 via misconception "It counts from 1 to 5; so it prints 1, 2, 3, 4, 5; For i from 1 to n means do it for each number"
+  level loop_control: L0 via everyday_reading "It counts from 1 to 5; so it prints 1, 2, 3, 4, 5; For i from 1 to n means do it for each number"
+  level loop_variable: L0 via misconception "It counts from 1 to 5; For i from 1 to n means do it for each number"

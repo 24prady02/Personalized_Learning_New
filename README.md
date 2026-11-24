@@ -37,6 +37,8 @@ Every scenario has its own folder, `scenario_explanations/runs/MYnn/`:
 | `input.json`, `subgraph.json`, `diagnosis.json`, `traverse_log.txt` | the input, the Stage 1 subgraph, the result of Stages 2 to 7 and the trace |
 | `figureNN.png` | the pictures of the walk, depth by depth |
 
+**One overall level per answer.** The rule that turns the per-concept levels into one overall level, how it was arrived at, and its test on 20 loop scenarios (LP01 to LP20, each with its own run folder and notebook) are in [`LP_level_classified/`](LP_level_classified/). That work also marked the graph record MissingBraces as a style note (`style_only`), which Stage 1 no longer offers to the walk; the 40 runs below were made before that.
+
 Results. In 29 of the 40 the walk holds at least one wrong rule; in 11 it holds none.
 
 | Scenario | Wrong rules held | Root cause | Overall level |

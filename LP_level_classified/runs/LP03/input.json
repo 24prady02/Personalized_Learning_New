@@ -1,0 +1,5 @@
+{
+ "code": "int i, n = 5;\nfor (i = 1; i < n; i++)\n    i++;\n    System.out.println(i);\nSystem.out.println(i);",
+ "question": "How many times does the body of the for loop run? Explain your reasoning.",
+ "answer": "The body runs 4 times, for i = 1, 2, 3 and 4. The header says i < 5 and i++, so it runs 4 times; the i++ inside the body does not change how many times the loop runs."
+}

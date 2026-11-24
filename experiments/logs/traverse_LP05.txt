@@ -1,0 +1,76 @@
+clauses: The body runs once | i++ adds 2 | so after the body i is 3, and the update makes it 5 | Then 5 < 5 is false | so the loop stops
+start: BM25 of the answer against each tagged concept: loop_control 20.47 (hits 1), for_loop 18.72 (hits 1), increment_operators 15.85 (hits 1), println 13.82 (hits 1), loop_variable 13.05 (hits 1), loop_body 11.66 (hits 1), control_flow 9.36 (hits 1), boolean_expression 6.37 (hits 1), comparison_operators 4.96 (hits 1)
+start: chosen loop_control, for_loop, increment_operators
+start concepts (3): loop_control, for_loop, increment_operators
+--- depth 1: current concepts ['loop_control', 'for_loop', 'increment_operators']
+  loop_control (misconceptions): 11 candidates -> kept err:loop_control->WrongIterationCount (0.50), mis:loop_control->LoopStepAlwaysOne (0.30), mis:loop_control->ForUpdateBeforeBody (0.20)
+    err:loop_control->WrongIterationCount -> held (0.38) "The body runs once; i++ adds 2; so after the body i is 3, and the update makes it 5; Then 5 < 5 is false; so the loop stops"
+    mis:loop_control->LoopStepAlwaysOne -> not applied (0.00) ""
+    mis:loop_control->ForUpdateBeforeBody -> correct (0.16) "so after the body i is 3, and the update makes it 5"
+  loop_control (level ways): 19 candidates -> kept lvl:loop_control@L2#2 (0.45), lvl:loop_control@L2#0 (0.30), lvl:loop_control@L4#1 (0.25)
+    lvl:loop_control@L2#2 -> not applied (0.00) ""
+    lvl:loop_control@L2#0 -> shown (0.21) "so after the body i is 3, and the update makes it 5; Then 5 < 5 is false; so the loop stops"
+    lvl:loop_control@L4#1 -> not applied (0.00) ""
+  for_loop (misconceptions): 20 candidates -> kept err:for_loop->WrongIterationCount (0.50), mis:for_loop->LoopStepAlwaysOne (0.30), mis:for_loop->ForIsConditional (0.20)
+    err:for_loop->WrongIterationCount -> held (0.42) "The body runs once; i++ adds 2; so after the body i is 3, and the update makes it 5"
+    mis:for_loop->LoopStepAlwaysOne -> not applied (0.00) ""
+    mis:for_loop->ForIsConditional -> correct (0.12) "so after the body i is 3, and the update makes it 5; Then 5 < 5 is false; so the loop stops"
+  for_loop (level ways): 24 candidates -> kept lvl:for_loop@L0#11 (0.45), lvl:for_loop@L4#5 (0.30), lvl:for_loop@L2#0 (0.25)
+    lvl:for_loop@L0#11 -> shown (0.27) "The body runs once; i++ adds 2; so after the body i is 3, and the update makes it 5"
+    lvl:for_loop@L4#5 -> not applied (0.00) ""
+    lvl:for_loop@L2#0 -> shown (0.17) "so after the body i is 3, and the update makes it 5; Then 5 < 5 is false; so the loop stops"
+  increment_operators (misconceptions): 5 candidates -> kept mis:increment_operators->IncrementByTwo (0.80), mis:increment_operators->PreIncrementBeforeLoop (0.12), mis:increment_operators->IdiomOverridesCode (0.08)
+    mis:increment_operators->IncrementByTwo -> held (0.76) "i++ adds 2; so after the body i is 3, and the update makes it 5"
+    mis:increment_operators->PreIncrementBeforeLoop -> correct (0.07) "so after the body i is 3, and the update makes it 5"
+    mis:increment_operators->IdiomOverridesCode -> not applied (0.00) ""
+  increment_operators (level ways): 16 candidates -> kept lvl:increment_operators@L0#0 (0.70), lvl:increment_operators@L3#0 (0.15), lvl:increment_operators@L2#2 (0.15)
+    lvl:increment_operators@L0#0 -> shown (0.63) "i++ adds 2; so after the body i is 3, and the update makes it 5"
+    lvl:increment_operators@L3#0 -> not applied (0.00) ""
+    lvl:increment_operators@L2#2 -> not applied (0.00) ""
+  kept: mis:increment_operators->IncrementByTwo [held, tier 0, 0.76], err:for_loop->WrongIterationCount [held, tier 1, 0.42], err:loop_control->WrongIterationCount [held, tier 1, 0.38]
+  clause coverage: c1 <- err:loop_control->WrongIterationCount; c2 <- err:loop_control->WrongIterationCount; c3 <- err:loop_control->WrongIterationCount; c4 <- err:loop_control->WrongIterationCount; c5 <- err:loop_control->WrongIterationCount
+  not yet read: pre:assignment->increment_operators, pre:for_loop->loop_body, pre:loop_control->for_loop, pre:loop_control->increment_operators, pre:loop_variable->loop_control
+--- depth 2: current concepts ['increment_operators', 'for_loop', 'loop_control']
+  increment_operators (concept edges): 2 candidates -> kept pre:assignment->increment_operators (0.60), pre:loop_control->increment_operators (0.40)
+    pre:assignment->increment_operators -> broken (0.54) "i++ adds 2; so after the body i is 3, and the update makes it 5"
+    pre:loop_control->increment_operators -> broken (0.34) "The body runs once; i++ adds 2; so after the body i is 3, and the update makes it 5"
+  for_loop (concept edges): 2 candidates -> kept pre:loop_control->for_loop (0.60), pre:for_loop->loop_body (0.40)
+    pre:loop_control->for_loop -> confirmed (0.36) "so after the body i is 3, and the update makes it 5; Then 5 < 5 is false; so the loop stops"
+    pre:for_loop->loop_body -> confirmed (0.24) "so after the body i is 3, and the update makes it 5; Then 5 < 5 is false; so the loop stops"
+  loop_control (concept edges): 1 candidates -> kept pre:loop_variable->loop_control (1.00)
+    pre:loop_variable->loop_control -> broken (0.60) "i++ adds 2; so after the body i is 3, and the update makes it 5"
+  kept: pre:loop_variable->loop_control [broken, tier 0, 0.60], pre:assignment->increment_operators [broken, tier 0, 0.54], pre:loop_control->increment_operators [broken, tier 0, 0.34]
+  reached across pre:loop_variable->loop_control, entered next: loop_variable
+  reached across pre:assignment->increment_operators, entered next: assignment
+  clause coverage: c1 <- err:loop_control->WrongIterationCount; c2 <- err:loop_control->WrongIterationCount; c3 <- err:loop_control->WrongIterationCount; c4 <- err:loop_control->WrongIterationCount; c5 <- err:loop_control->WrongIterationCount
+  not yet read: own edges of assignment, own edges of loop_variable
+--- depth 3: current concepts ['loop_variable', 'loop_control', 'assignment', 'increment_operators']
+  loop_variable (misconceptions): 7 candidates -> kept mis:loop_variable->BodyChangeIgnoredByCondition (0.60), mis:loop_variable->LoopVariableLifetimeScope (0.20), mis:loop_variable->LoopUpdateChangesDirection (0.20)
+    mis:loop_variable->BodyChangeIgnoredByCondition -> correct (0.51) "so after the body i is 3, and the update makes it 5; Then 5 < 5 is false; so the loop stops"
+    mis:loop_variable->LoopVariableLifetimeScope -> correct (0.12) "so after the body i is 3, and the update makes it 5"
+    mis:loop_variable->LoopUpdateChangesDirection -> not applied (0.00) ""
+  loop_variable (level ways): 13 candidates -> kept lvl:loop_variable@L0#5 (0.60), lvl:loop_variable@L2#0 (0.20), lvl:loop_variable@L2#2 (0.20)
+    lvl:loop_variable@L0#5 -> shown (0.33) "i++ adds 2; so after the body i is 3, and the update makes it 5"
+    lvl:loop_variable@L2#0 -> shown (0.12) "so after the body i is 3, and the update makes it 5; Then 5 < 5 is false; so the loop stops"
+    lvl:loop_variable@L2#2 -> not applied (0.00) ""
+  loop_control (concept edges): 1 candidates -> kept pre:loop_control->for_loop (1.00)
+    pre:loop_control->for_loop -> confirmed (0.60) "so after the body i is 3, and the update makes it 5; Then 5 < 5 is false; so the loop stops"
+  assignment (misconceptions): 15 candidates -> kept mis:assignment->VariableKeepsOldValue (0.50), mis:assignment->AssignmentAddsToTarget (0.30), mis:assignment->AssignmentIsEquation (0.20)
+    mis:assignment->VariableKeepsOldValue -> correct (0.35) "so after the body i is 3, and the update makes it 5"
+    mis:assignment->AssignmentAddsToTarget -> not applied (0.00) ""
+    mis:assignment->AssignmentIsEquation -> not applied (0.00) ""
+  assignment (level ways): 24 candidates -> kept lvl:assignment@L3#6 (0.50), lvl:assignment@L3#7 (0.30), lvl:assignment@L2#0 (0.20)
+    lvl:assignment@L3#6: wrong (0.80) -> not applied
+    lvl:assignment@L3#6 -> not applied (0.00) ""
+    lvl:assignment@L3#7: wrong (0.75) -> not applied
+    lvl:assignment@L3#7 -> not applied (0.00) ""
+    lvl:assignment@L2#0 -> not applied (0.00) ""
+  kept: pre:loop_control->for_loop [confirmed, tier 2, 0.60], mis:loop_variable->BodyChangeIgnoredByCondition [correct, tier 2, 0.51], mis:assignment->VariableKeepsOldValue [correct, tier 2, 0.35]
+  clause coverage: c1 <- err:loop_control->WrongIterationCount; c2 <- err:loop_control->WrongIterationCount; c3 <- err:loop_control->WrongIterationCount; c4 <- err:loop_control->WrongIterationCount; c5 <- err:loop_control->WrongIterationCount
+  not yet read: par:assignment~comparison_operators
+  root-cause walk: held on ['for_loop', 'increment_operators', 'loop_control'], broken at [] (consequences: pre:loop_variable->loop_control, pre:assignment->increment_operators, pre:loop_control->increment_operators), prerequisites {'increment_operators': ['assignment', 'loop_control'], 'boolean_expression': ['comparison_operators'], 'comparison_operators': ['expression'], 'loop_body': ['for_loop'], 'for_loop': ['loop_control'], 'loop_control': ['loop_variable'], 'control_flow': ['statement'], 'println': ['statement']}
+  level for_loop: L2 via line_by_line_trace "so after the body i is 3, and the update makes it 5; Then 5 < 5 is false; so the loop stops"
+  level increment_operators: L0 via misconception "i++ adds 2; so after the body i is 3, and the update makes it 5"
+  level loop_control: L2 via line_by_line_trace "so after the body i is 3, and the update makes it 5; Then 5 < 5 is false; so the loop stops"
+  level loop_variable: L2 via line_by_line_trace "so after the body i is 3, and the update makes it 5; Then 5 < 5 is false; so the loop stops"
+  level loop_control: L0 via error "The body runs once; i++ adds 2; so after the body i is 3, and the update makes it 5; Then 5 < 5 is false; so the loop stops" (root cause carries a held error)

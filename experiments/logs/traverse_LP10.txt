@@ -1,0 +1,95 @@
+clauses: i starts at 1 | 1 < 5 is true, the body i++ makes i 2, the update makes it 3 | 3 < 5 is true, the body makes it 4, the update makes it 5 | 5 < 5 is false | so the loop stops | Only i++ was in the loop | Then the two println lines print 5 and 5
+start: BM25 of the answer against each tagged concept: println 39.72 (hits 1), loop_control 37.67 (hits 1), for_loop 36.95 (hits 1), increment_operators 28.25 (hits 1), loop_variable 23.71 (hits 1), loop_body 22.07 (hits 1), control_flow 15.77 (hits 1), comparison_operators 13.63 (hits 1), boolean_expression 12.23 (hits 1)
+start: chosen println, loop_control, for_loop
+start concepts (3): println, loop_control, for_loop
+--- depth 1: current concepts ['println', 'loop_control', 'for_loop']
+  println (misconceptions): 6 candidates -> kept mis:println->PrintEqualsPrintln (0.40), mis:println->PrintedTextIsExecuted (0.35), mis:println->PrintNewLineFirst (0.25)
+    mis:println->PrintEqualsPrintln -> not applied (0.00) ""
+    mis:println->PrintedTextIsExecuted -> not applied (0.00) ""
+    mis:println->PrintNewLineFirst -> not applied (0.00) ""
+  println (level ways): 17 candidates -> kept lvl:println@L3#0 (0.50), lvl:println@L2#1 (0.30), lvl:println@L2#0 (0.20)
+    lvl:println@L3#0 -> shown (0.35) "Only i++ was in the loop; Then the two println lines print 5 and 5"
+    lvl:println@L2#1 -> shown (0.22) "Then the two println lines print 5 and 5"
+    lvl:println@L2#0 -> shown (0.12) "Then the two println lines print 5 and 5"
+  loop_control (misconceptions): 11 candidates -> kept mis:loop_control->ForLoopPartSkipped (0.40), mis:loop_control->ForUpdateBeforeBody (0.30), err:loop_control->WrongIterationCount (0.30)
+    mis:loop_control->ForLoopPartSkipped -> correct (0.34) "1 < 5 is true, the body i++ makes i 2, the update makes it 3; 3 < 5 is true, the body makes it 4, the update makes it 5; 5 < 5 is false"
+    mis:loop_control->ForUpdateBeforeBody -> correct (0.26) "1 < 5 is true, the body i++ makes i 2, the update makes it 3; 3 < 5 is true, the body makes it 4, the update makes it 5"
+    err:loop_control->WrongIterationCount -> correct (0.26) "1 < 5 is true, the body i++ makes i 2, the update makes it 3; 3 < 5 is true, the body makes it 4, the update makes it 5; 5 < 5 is false; so the loop stops"
+  loop_control (level ways): 19 candidates -> kept lvl:loop_control@L2#0 (0.50), lvl:loop_control@L3#1 (0.30), lvl:loop_control@L2#2 (0.20)
+    lvl:loop_control@L2#0 -> shown (0.47) "i starts at 1; 1 < 5 is true, the body i++ makes i 2, the update makes it 3; 3 < 5 is true, the body makes it 4, the update makes it 5; 5 < 5 is false; so the loop stops"
+    lvl:loop_control@L3#1 -> not applied (0.00) ""
+    lvl:loop_control@L2#2 -> shown (0.18) "1 < 5 is true, the body i++ makes i 2, the update makes it 3; 3 < 5 is true, the body makes it 4, the update makes it 5; 5 < 5 is false"
+  for_loop (misconceptions): 20 candidates -> kept err:for_loop->BracelessMultiStatementBody (0.50), mis:for_loop->ForUpdateBeforeBody (0.25), mis:for_loop->ForLoopPartSkipped (0.25)
+    err:for_loop->BracelessMultiStatementBody -> correct (0.47) "Only i++ was in the loop; Then the two println lines print 5 and 5"
+    mis:for_loop->ForUpdateBeforeBody -> correct (0.23) "1 < 5 is true, the body i++ makes i 2, the update makes it 3; 3 < 5 is true, the body makes it 4, the update makes it 5"
+    mis:for_loop->ForLoopPartSkipped -> correct (0.21) "1 < 5 is true, the body i++ makes i 2, the update makes it 3; 3 < 5 is true, the body makes it 4, the update makes it 5; 5 < 5 is false"
+  for_loop (level ways): 24 candidates -> kept lvl:for_loop@L2#0 (0.45), lvl:for_loop@L4#6 (0.35), lvl:for_loop@L3#0 (0.20)
+    lvl:for_loop@L2#0 -> shown (0.43) "i starts at 1; 1 < 5 is true, the body i++ makes i 2, the update makes it 3; 3 < 5 is true, the body makes it 4, the update makes it 5; 5 < 5 is false; so the loop stops"
+    lvl:for_loop@L4#6 -> not applied (0.00) ""
+    lvl:for_loop@L3#0 -> shown (0.14) "1 < 5 is true, the body i++ makes i 2, the update makes it 3; 3 < 5 is true, the body makes it 4, the update makes it 5; Only i++ was in the loop"
+  kept: lvl:loop_control@L2#0 [shown, tier 2, 0.47], err:for_loop->BracelessMultiStatementBody [correct, tier 2, 0.47], lvl:for_loop@L2#0 [shown, tier 2, 0.43]
+  clause coverage: c1 uncovered; c2 <- mis:loop_control->ForLoopPartSkipped; c3 <- mis:loop_control->ForLoopPartSkipped; c4 <- mis:loop_control->ForLoopPartSkipped; c5 <- err:loop_control->WrongIterationCount; c6 <- err:for_loop->BracelessMultiStatementBody; c7 <- err:for_loop->BracelessMultiStatementBody
+  uncovered clauses bring in: increment_operators (4.73), loop_variable (2.57), loop_body (2.55)
+  not yet read: own edges of increment_operators, own edges of loop_body, own edges of loop_variable, pre:for_loop->loop_body, pre:loop_control->for_loop, pre:loop_control->increment_operators, pre:loop_variable->loop_control, pre:statement->println
+--- depth 2: current concepts ['println', 'loop_control', 'for_loop', 'increment_operators', 'loop_variable', 'loop_body']
+  println (concept edges): 1 candidates -> kept pre:statement->println (1.00)
+    pre:statement->println -> confirmed (0.85) "Only i++ was in the loop; Then the two println lines print 5 and 5"
+  loop_control (concept edges): 3 candidates -> kept pre:loop_control->for_loop (0.50), pre:loop_variable->loop_control (0.35), pre:loop_control->increment_operators (0.15)
+    pre:loop_control->for_loop -> confirmed (0.45) "1 < 5 is true, the body i++ makes i 2, the update makes it 3; 3 < 5 is true, the body makes it 4, the update makes it 5; 5 < 5 is false; Only i++ was in the loop"
+    pre:loop_variable->loop_control -> confirmed (0.32) "i starts at 1; 1 < 5 is true, the body i++ makes i 2, the update makes it 3; 3 < 5 is true, the body makes it 4, the update makes it 5; 5 < 5 is false"
+    pre:loop_control->increment_operators -> confirmed (0.12) "1 < 5 is true, the body i++ makes i 2, the update makes it 3; 3 < 5 is true, the body makes it 4, the update makes it 5"
+  for_loop (concept edges): 1 candidates -> kept pre:for_loop->loop_body (1.00)
+    pre:for_loop->loop_body -> confirmed (0.90) "1 < 5 is true, the body i++ makes i 2, the update makes it 3; 3 < 5 is true, the body makes it 4, the update makes it 5; Only i++ was in the loop"
+  increment_operators (misconceptions): 5 candidates -> kept mis:increment_operators->IncrementByTwo (0.45), mis:increment_operators->PreIncrementBeforeLoop (0.30), mis:increment_operators->IdiomOverridesCode (0.25)
+    mis:increment_operators->IncrementByTwo -> correct (0.41) "1 < 5 is true, the body i++ makes i 2, the update makes it 3; 3 < 5 is true, the body makes it 4, the update makes it 5"
+    mis:increment_operators->PreIncrementBeforeLoop -> correct (0.21) "1 < 5 is true, the body i++ makes i 2, the update makes it 3; 3 < 5 is true, the body makes it 4, the update makes it 5"
+    mis:increment_operators->IdiomOverridesCode -> not applied (0.00) ""
+  increment_operators (level ways): 16 candidates -> kept lvl:increment_operators@L2#2 (0.40), lvl:increment_operators@L3#0 (0.35), lvl:increment_operators@L2#0 (0.25)
+    lvl:increment_operators@L2#2 -> shown (0.30) "1 < 5 is true, the body i++ makes i 2, the update makes it 3; 3 < 5 is true, the body makes it 4, the update makes it 5"
+    lvl:increment_operators@L3#0 -> not applied (0.00) ""
+    lvl:increment_operators@L2#0 -> shown (0.17) "1 < 5 is true, the body i++ makes i 2, the update makes it 3; 3 < 5 is true, the body makes it 4, the update makes it 5"
+  loop_variable (misconceptions): 7 candidates -> kept mis:loop_variable->BodyChangeIgnoredByCondition (0.60), mis:loop_variable->LoopVariableLifetimeScope (0.25), mis:loop_variable->ForInitRepeats (0.15)
+    mis:loop_variable->BodyChangeIgnoredByCondition -> correct (0.54) "1 < 5 is true, the body i++ makes i 2, the update makes it 3; 3 < 5 is true, the body makes it 4, the update makes it 5; 5 < 5 is false; so the loop stops"
+    mis:loop_variable->LoopVariableLifetimeScope -> correct (0.19) "1 < 5 is true, the body i++ makes i 2, the update makes it 3; 3 < 5 is true, the body makes it 4, the update makes it 5; Then the two println lines print 5 and 5"
+    mis:loop_variable->ForInitRepeats -> correct (0.12) "i starts at 1; 3 < 5 is true, the body makes it 4, the update makes it 5"
+  loop_variable (level ways): 13 candidates -> kept lvl:loop_variable@L2#0 (0.40), lvl:loop_variable@L2#2 (0.35), lvl:loop_variable@L2#1 (0.25)
+    lvl:loop_variable@L2#0 -> shown (0.36) "i starts at 1; 1 < 5 is true, the body i++ makes i 2, the update makes it 3; 3 < 5 is true, the body makes it 4, the update makes it 5; 5 < 5 is false"
+    lvl:loop_variable@L2#2 -> shown (0.32) "1 < 5 is true, the body i++ makes i 2, the update makes it 3; 3 < 5 is true, the body makes it 4, the update makes it 5; 5 < 5 is false"
+    lvl:loop_variable@L2#1 -> shown (0.23) "i starts at 1; 1 < 5 is true, the body i++ makes i 2, the update makes it 3; 3 < 5 is true, the body makes it 4, the update makes it 5; 5 < 5 is false; Then the two println lines print 5 and 5"
+  loop_body (misconceptions): 12 candidates -> kept err:loop_body->BracelessMultiStatementBody (0.50), mis:loop_body->StatementAfterLoopInBody (0.30), mis:loop_body->ForLoopPartSkipped (0.20)
+    err:loop_body->BracelessMultiStatementBody -> correct (0.45) "Only i++ was in the loop; Then the two println lines print 5 and 5"
+    mis:loop_body->StatementAfterLoopInBody -> correct (0.22) "Only i++ was in the loop; Then the two println lines print 5 and 5"
+    mis:loop_body->ForLoopPartSkipped -> correct (0.18) "1 < 5 is true, the body i++ makes i 2, the update makes it 3; 3 < 5 is true, the body makes it 4, the update makes it 5; 5 < 5 is false"
+  loop_body (level ways): 14 candidates -> kept lvl:loop_body@L4#1 (0.50), lvl:loop_body@L2#0 (0.30), lvl:loop_body@L1#1 (0.20)
+    lvl:loop_body@L4#1 -> not applied (0.00) ""
+    lvl:loop_body@L2#0 -> shown (0.27) "1 < 5 is true, the body i++ makes i 2, the update makes it 3; 3 < 5 is true, the body makes it 4, the update makes it 5"
+    lvl:loop_body@L1#1 -> shown (0.17) "Only i++ was in the loop; Then the two println lines print 5 and 5"
+  kept: pre:for_loop->loop_body [confirmed, tier 2, 0.90], pre:statement->println [confirmed, tier 2, 0.85], mis:loop_variable->BodyChangeIgnoredByCondition [correct, tier 2, 0.54]
+  reached across pre:statement->println, entered next: statement
+  clause coverage: c1 <- pre:loop_variable->loop_control; c2 <- mis:loop_control->ForLoopPartSkipped; c3 <- mis:loop_control->ForLoopPartSkipped; c4 <- mis:loop_control->ForLoopPartSkipped; c5 <- err:loop_control->WrongIterationCount; c6 <- err:for_loop->BracelessMultiStatementBody; c7 <- err:for_loop->BracelessMultiStatementBody
+  not yet read: own edges of statement, pre:assignment->increment_operators
+--- depth 3: current concepts ['loop_body', 'for_loop', 'statement', 'println', 'increment_operators']
+  for_loop (concept edges): 1 candidates -> kept pre:loop_control->for_loop (1.00)
+    pre:loop_control->for_loop -> confirmed (0.90) "1 < 5 is true, the body i++ makes i 2, the update makes it 3; 3 < 5 is true, the body makes it 4, the update makes it 5; 5 < 5 is false; Only i++ was in the loop"
+  statement (misconceptions): 5 candidates -> kept mis:statement->WhitespaceIsSignificant (0.60), mis:statement->ComputerFillsInIntent (0.20), mis:statement->StatementsRunInAnyOrder (0.20)
+    mis:statement->WhitespaceIsSignificant -> correct (0.54) "Only i++ was in the loop; Then the two println lines print 5 and 5"
+    mis:statement->ComputerFillsInIntent -> not applied (0.00) ""
+    mis:statement->StatementsRunInAnyOrder -> not applied (0.00) ""
+  statement (level ways): 19 candidates -> kept lvl:statement@L2#0 (0.40), lvl:statement@L2#2 (0.30), lvl:statement@L3#4 (0.30)
+    lvl:statement@L2#0 -> shown (0.34) "i starts at 1; 1 < 5 is true, the body i++ makes i 2, the update makes it 3; 3 < 5 is true, the body makes it 4, the update makes it 5; 5 < 5 is false; so the loop stops; Then the two println lines print 5 and 5"
+    lvl:statement@L2#2 -> shown (0.24) "1 < 5 is true, the body i++ makes i 2, the update makes it 3; 3 < 5 is true, the body makes it 4, the update makes it 5; Then the two println lines print 5 and 5"
+    lvl:statement@L3#4 -> shown (0.22) "Only i++ was in the loop; Then the two println lines print 5 and 5"
+  increment_operators (concept edges): 2 candidates -> kept pre:loop_control->increment_operators (0.60), pre:assignment->increment_operators (0.40)
+    pre:loop_control->increment_operators -> confirmed (0.48) "1 < 5 is true, the body i++ makes i 2, the update makes it 3; 3 < 5 is true, the body makes it 4, the update makes it 5"
+    pre:assignment->increment_operators -> confirmed (0.34) "1 < 5 is true, the body i++ makes i 2, the update makes it 3; 3 < 5 is true, the body makes it 4, the update makes it 5"
+  kept: pre:loop_control->for_loop [confirmed, tier 2, 0.90], mis:statement->WhitespaceIsSignificant [correct, tier 2, 0.54], pre:loop_control->increment_operators [confirmed, tier 2, 0.48]
+  clause coverage: c1 <- pre:loop_variable->loop_control; c2 <- mis:loop_control->ForLoopPartSkipped; c3 <- mis:loop_control->ForLoopPartSkipped; c4 <- mis:loop_control->ForLoopPartSkipped; c5 <- err:loop_control->WrongIterationCount; c6 <- err:for_loop->BracelessMultiStatementBody; c7 <- err:for_loop->BracelessMultiStatementBody
+  not yet read: pre:statement->control_flow
+  root-cause walk: held on [], broken at [], prerequisites {'increment_operators': ['assignment', 'loop_control'], 'boolean_expression': ['comparison_operators'], 'comparison_operators': ['expression'], 'loop_body': ['for_loop'], 'for_loop': ['loop_control'], 'loop_control': ['loop_variable'], 'control_flow': ['statement'], 'println': ['statement']}
+  level for_loop: L3 via relation_to_neighbour "1 < 5 is true, the body i++ makes i 2, the update makes it 3; 3 < 5 is true, the body makes it 4, the update makes it 5; Only i++ was in the loop"
+  level increment_operators: L2 via one_step_execution "1 < 5 is true, the body i++ makes i 2, the update makes it 3; 3 < 5 is true, the body makes it 4, the update makes it 5"
+  level loop_body: L2 via line_by_line_trace "1 < 5 is true, the body i++ makes i 2, the update makes it 3; 3 < 5 is true, the body makes it 4, the update makes it 5"
+  level loop_control: L2 via line_by_line_trace "i starts at 1; 1 < 5 is true, the body i++ makes i 2, the update makes it 3; 3 < 5 is true, the body makes it 4, the update makes it 5; 5 < 5 is false; so the loop stops"
+  level loop_variable: L2 via line_by_line_trace "i starts at 1; 1 < 5 is true, the body i++ makes i 2, the update makes it 3; 3 < 5 is true, the body makes it 4, the update makes it 5; 5 < 5 is false"
+  level println: L3 via relation_to_neighbour "Only i++ was in the loop; Then the two println lines print 5 and 5"
+  level statement: L3 via relation_to_neighbour "Only i++ was in the loop; Then the two println lines print 5 and 5"

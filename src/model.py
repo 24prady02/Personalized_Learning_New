@@ -202,6 +202,8 @@ def extract_subgraph(kg: dict[str, Any], tags: dict[str, list[Hit]], scenario: s
         for e in idx.out_edges.get(cid, []):
             if e["type"] not in ("misconception", "error"):
                 continue
+            if e.get("style_only"):          # a style note, not a wrong belief (e.g. MissingBraces): never offered to the walk
+                continue
             pre = "mis" if e["type"] == "misconception" else "err"
             mis_edges.append({"id": f"{pre}:{e['source']}->{e['target']}", "type": e["type"], "source": e["source"],
                               "target": e["target"], "role": e.get("role"), "logic": e.get("logic"), "twin_logic": e.get("twin_logic")})

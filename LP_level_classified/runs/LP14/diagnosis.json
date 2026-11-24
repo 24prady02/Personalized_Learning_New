@@ -1,0 +1,971 @@
+{
+ "scenario": "LP14",
+ "settings": {
+  "width": 3,
+  "depth": 3,
+  "prune_tools": "llm",
+  "model": "claude-opus-5-5",
+  "backend": "claude-cli",
+  "rule_fixes": true,
+  "level_v2": true
+ },
+ "clauses": [
+  "Twice",
+  "The bodys i++ and the headers i++ change the same variable",
+  "so the condition sees i as 1, then 3, then 5 and fails on the third test",
+  "Because there are no braces the body is only i++",
+  "the indented println is after the loop"
+ ],
+ "start_concepts": [
+  "loop_control",
+  "for_loop",
+  "increment_operators"
+ ],
+ "held_misconceptions": [],
+ "error_evidence": [],
+ "shadowed": [],
+ "broken_edges": [],
+ "root_cause": null,
+ "levels": {
+  "assignment": {
+   "level": "L3",
+   "way": "relation_to_neighbour",
+   "quote": "The bodys i++ and the headers i++ change the same variable; so the condition sees i as 1, then 3, then 5 and fails on the third test",
+   "edge": "lvl:assignment@L3#7",
+   "source": "level_way",
+   "also_shown": [
+    "L2 one_step_execution"
+   ]
+  },
+  "for_loop": {
+   "level": "L4",
+   "way": "diagnose_an_error",
+   "quote": "Because there are no braces the body is only i++; the indented println is after the loop",
+   "edge": "lvl:for_loop@L4#6",
+   "source": "level_way",
+   "also_shown": [
+    "L2 line_by_line_trace"
+   ]
+  },
+  "increment_operators": {
+   "level": "L3",
+   "way": "relation_to_neighbour",
+   "quote": "The bodys i++ and the headers i++ change the same variable; so the condition sees i as 1, then 3, then 5 and fails on the third test",
+   "edge": "lvl:increment_operators@L3#0",
+   "source": "level_way",
+   "also_shown": [
+    "L3 relation_to_neighbour",
+    "L2 one_step_execution"
+   ]
+  },
+  "loop_body": {
+   "level": "L4",
+   "way": "diagnose_an_error",
+   "quote": "Because there are no braces the body is only i++; the indented println is after the loop",
+   "edge": "lvl:loop_body@L4#1",
+   "source": "level_way",
+   "also_shown": [
+    "L2 one_step_execution",
+    "L1 states_the_rule"
+   ]
+  },
+  "loop_control": {
+   "level": "L3",
+   "way": "relation_to_neighbour",
+   "quote": "The bodys i++ and the headers i++ change the same variable; so the condition sees i as 1, then 3, then 5 and fails on the third test",
+   "edge": "lvl:loop_control@L3#0",
+   "source": "level_way",
+   "also_shown": [
+    "L2 line_by_line_trace"
+   ]
+  },
+  "loop_variable": {
+   "level": "L2",
+   "way": "one_step_execution",
+   "quote": "The bodys i++ and the headers i++ change the same variable; so the condition sees i as 1, then 3, then 5 and fails on the third test",
+   "edge": "lvl:loop_variable@L2#2",
+   "source": "level_way",
+   "also_shown": []
+  }
+ },
+ "overall_level": "L3",
+ "paths": [
+  {
+   "depth": 1,
+   "source": "loop_control",
+   "edge": "err:loop_control->WrongIterationCount",
+   "target": "WrongIterationCount",
+   "kind": "error",
+   "label": "correct",
+   "clauses": [
+    1,
+    3
+   ],
+   "quote": "Twice; so the condition sees i as 1, then 3, then 5 and fails on the third test",
+   "confidence": 0.9,
+   "prune_score": 0.5,
+   "score": 0.45,
+   "logic": "Updates the loop counter so that the loop runs the wrong number of times.",
+   "twin_logic": "The init, test and update together decide the number of passes; trace them to check the count.",
+   "role": "context"
+  },
+  {
+   "depth": 1,
+   "source": "for_loop",
+   "edge": "err:for_loop->BracelessMultiStatementBody",
+   "target": "BracelessMultiStatementBody",
+   "kind": "error",
+   "label": "correct",
+   "clauses": [
+    4,
+    5
+   ],
+   "quote": "Because there are no braces the body is only i++; the indented println is after the loop",
+   "confidence": 0.95,
+   "prune_score": 0.45,
+   "score": 0.4275,
+   "logic": "Indenting several statements under an if or for makes them all part of its body, even without braces.",
+   "twin_logic": "Without braces only the first statement belongs to the if/for; the rest run once, after it.",
+   "role": "context"
+  },
+  {
+   "depth": 1,
+   "source": "loop_control",
+   "edge": "lvl:loop_control@L2#0",
+   "target": "loop_control@L2",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    2,
+    3
+   ],
+   "quote": "The bodys i++ and the headers i++ change the same variable; so the condition sees i as 1, then 3, then 5 and fails on the third test",
+   "confidence": 0.85,
+   "prune_score": 0.45,
+   "score": 0.3825,
+   "logic": "init (once) -> test -> body -> update -> test -> body -> update ... -> test false -> exit.",
+   "twin_logic": null,
+   "level": "L2",
+   "way": "line_by_line_trace"
+  },
+  {
+   "depth": 2,
+   "source": "for_loop",
+   "edge": "pre:for_loop->loop_body",
+   "target": "loop_body",
+   "kind": "prerequisite",
+   "label": "confirmed",
+   "clauses": [
+    1,
+    2,
+    3,
+    4,
+    5
+   ],
+   "quote": "Twice; The bodys i++ and the headers i++ change the same variable; so the condition sees i as 1, then 3, then 5 and fails on the third test; Because there are no braces the body is only i++; the indented println is after the loop",
+   "confidence": 0.9,
+   "prune_score": 1.0,
+   "score": 0.9,
+   "logic": "The statements in braces after the for header are the loop body; they run once on every pass, between the test and the increment, exactly as in a while loop.",
+   "twin_logic": null
+  },
+  {
+   "depth": 2,
+   "source": "increment_operators",
+   "edge": "pre:assignment->increment_operators",
+   "target": "assignment",
+   "kind": "prerequisite",
+   "label": "confirmed",
+   "clauses": [
+    2,
+    3
+   ],
+   "quote": "The bodys i++ and the headers i++ change the same variable; so the condition sees i as 1, then 3, then 5 and fails on the third test",
+   "confidence": 0.8,
+   "prune_score": 1.0,
+   "score": 0.8,
+   "logic": "i++ is shorthand for the assignment i = i + 1.",
+   "twin_logic": null
+  },
+  {
+   "depth": 2,
+   "source": "loop_control",
+   "edge": "pre:loop_variable->loop_control",
+   "target": "loop_variable",
+   "kind": "prerequisite",
+   "label": "confirmed",
+   "clauses": [
+    2,
+    3
+   ],
+   "quote": "The bodys i++ and the headers i++ change the same variable; so the condition sees i as 1, then 3, then 5 and fails on the third test",
+   "confidence": 0.92,
+   "prune_score": 0.45,
+   "score": 0.414,
+   "logic": "The init, condition and update all act on the loop variable: the init sets it, the condition tests it, the update changes it.",
+   "twin_logic": null
+  },
+  {
+   "depth": 3,
+   "source": "for_loop",
+   "edge": "pre:loop_control->for_loop",
+   "target": "loop_control",
+   "kind": "prerequisite",
+   "label": "confirmed",
+   "clauses": [
+    2,
+    3
+   ],
+   "quote": "The bodys i++ and the headers i++ change the same variable; so the condition sees i as 1, then 3, then 5 and fails on the third test",
+   "confidence": 0.85,
+   "prune_score": 1.0,
+   "score": 0.85,
+   "logic": "The for header is exactly the three control slots, and the body runs after the test and before the update on each pass.",
+   "twin_logic": null
+  },
+  {
+   "depth": 3,
+   "source": "increment_operators",
+   "edge": "pre:loop_control->increment_operators",
+   "target": "loop_control",
+   "kind": "prerequisite",
+   "label": "confirmed",
+   "clauses": [
+    2,
+    3
+   ],
+   "quote": "The bodys i++ and the headers i++ change the same variable; so the condition sees i as 1, then 3, then 5 and fails on the third test",
+   "confidence": 0.8,
+   "prune_score": 1.0,
+   "score": 0.8,
+   "logic": "The loop update i = i + 1 comes first; ++ (and +=) are then introduced as shorthand for that update.",
+   "twin_logic": null
+  },
+  {
+   "depth": 3,
+   "source": "loop_variable",
+   "edge": "mis:loop_variable->BodyChangeIgnoredByCondition",
+   "target": "BodyChangeIgnoredByCondition",
+   "kind": "misconception",
+   "label": "correct",
+   "clauses": [
+    1,
+    2,
+    3
+   ],
+   "quote": "Twice; The bodys i++ and the headers i++ change the same variable; so the condition sees i as 1, then 3, then 5 and fails on the third test",
+   "confidence": 0.93,
+   "prune_score": 0.6,
+   "score": 0.558,
+   "logic": "Changing the loop variable inside the body does not affect the loop condition; the loop still runs its planned number of times.",
+   "twin_logic": "The condition is tested with the current value of the variable, including changes made in the body.",
+   "role": "primary"
+  }
+ ],
+ "evidence": [
+  {
+   "depth": 1,
+   "source": "loop_control",
+   "edge": "err:loop_control->WrongIterationCount",
+   "target": "WrongIterationCount",
+   "kind": "error",
+   "label": "correct",
+   "clauses": [
+    1,
+    3
+   ],
+   "quote": "Twice; so the condition sees i as 1, then 3, then 5 and fails on the third test",
+   "confidence": 0.9,
+   "prune_score": 0.5,
+   "score": 0.45,
+   "logic": "Updates the loop counter so that the loop runs the wrong number of times.",
+   "twin_logic": "The init, test and update together decide the number of passes; trace them to check the count.",
+   "role": "context"
+  },
+  {
+   "depth": 1,
+   "source": "loop_control",
+   "edge": "mis:loop_control->ForLoopPartSkipped",
+   "target": "ForLoopPartSkipped",
+   "kind": "misconception",
+   "label": "correct",
+   "clauses": [
+    2,
+    3
+   ],
+   "quote": "The bodys i++ and the headers i++ change the same variable; so the condition sees i as 1, then 3, then 5 and fails on the third test",
+   "confidence": 0.8,
+   "prune_score": 0.3,
+   "score": 0.24,
+   "logic": "A pass of a loop may leave out one of its parts (the condition test, the body, the update, or the initialization).",
+   "twin_logic": "Each pass of a for loop runs test, then body, then update, every time; the initialization runs once, at the start.",
+   "role": "context"
+  },
+  {
+   "depth": 1,
+   "source": "loop_control",
+   "edge": "lvl:loop_control@L2#0",
+   "target": "loop_control@L2",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    2,
+    3
+   ],
+   "quote": "The bodys i++ and the headers i++ change the same variable; so the condition sees i as 1, then 3, then 5 and fails on the third test",
+   "confidence": 0.85,
+   "prune_score": 0.45,
+   "score": 0.3825,
+   "logic": "init (once) -> test -> body -> update -> test -> body -> update ... -> test false -> exit.",
+   "twin_logic": null,
+   "level": "L2",
+   "way": "line_by_line_trace"
+  },
+  {
+   "depth": 1,
+   "source": "loop_control",
+   "edge": "lvl:loop_control@L3#0",
+   "target": "loop_control@L3",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    2,
+    3
+   ],
+   "quote": "The bodys i++ and the headers i++ change the same variable; so the condition sees i as 1, then 3, then 5 and fails on the third test",
+   "confidence": 0.72,
+   "prune_score": 0.2,
+   "score": 0.144,
+   "logic": "All three control parts act on the loop variable: the init sets it, the condition tests it, the update changes it.",
+   "twin_logic": null,
+   "level": "L3",
+   "way": "relation_to_neighbour"
+  },
+  {
+   "depth": 1,
+   "source": "for_loop",
+   "edge": "err:for_loop->BracelessMultiStatementBody",
+   "target": "BracelessMultiStatementBody",
+   "kind": "error",
+   "label": "correct",
+   "clauses": [
+    4,
+    5
+   ],
+   "quote": "Because there are no braces the body is only i++; the indented println is after the loop",
+   "confidence": 0.95,
+   "prune_score": 0.45,
+   "score": 0.4275,
+   "logic": "Indenting several statements under an if or for makes them all part of its body, even without braces.",
+   "twin_logic": "Without braces only the first statement belongs to the if/for; the rest run once, after it.",
+   "role": "context"
+  },
+  {
+   "depth": 1,
+   "source": "for_loop",
+   "edge": "err:for_loop->WrongIterationCount",
+   "target": "WrongIterationCount",
+   "kind": "error",
+   "label": "correct",
+   "clauses": [
+    1,
+    2,
+    3
+   ],
+   "quote": "Twice; The bodys i++ and the headers i++ change the same variable; so the condition sees i as 1, then 3, then 5 and fails on the third test",
+   "confidence": 0.92,
+   "prune_score": 0.35,
+   "score": 0.322,
+   "logic": "Updates the loop counter so that the loop runs the wrong number of times.",
+   "twin_logic": "The init, test and update together decide the number of passes; trace them to check the count.",
+   "role": "primary"
+  },
+  {
+   "depth": 1,
+   "source": "for_loop",
+   "edge": "mis:for_loop->LoopStepAlwaysOne",
+   "target": "LoopStepAlwaysOne",
+   "kind": "misconception",
+   "label": "correct",
+   "clauses": [
+    2,
+    3
+   ],
+   "quote": "The bodys i++ and the headers i++ change the same variable; so the condition sees i as 1, then 3, then 5 and fails on the third test",
+   "confidence": 0.6,
+   "prune_score": 0.2,
+   "score": 0.12,
+   "logic": "A loop variable always goes up or down by 1, whatever the update says (so i = i - 4 is read as i--).",
+   "twin_logic": "The loop variable changes exactly as the update expression says (i += 2, i = i - 4, i *= 2, ...).",
+   "role": "primary"
+  },
+  {
+   "depth": 1,
+   "source": "for_loop",
+   "edge": "lvl:for_loop@L4#6",
+   "target": "for_loop@L4",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    4,
+    5
+   ],
+   "quote": "Because there are no braces the body is only i++; the indented println is after the loop",
+   "confidence": 0.65,
+   "prune_score": 0.4,
+   "score": 0.26,
+   "logic": "rule broken: Without braces, the body of an if, while or for is exactly one statement; indentation does not add statements to it. Kind: silent logic error. Trigger class: A braceless header followed by two or more indented statements: only the first is controlled, the others run once, after the if/loop, on every input.",
+   "twin_logic": null,
+   "level": "L4",
+   "way": "diagnose_an_error"
+  },
+  {
+   "depth": 1,
+   "source": "for_loop",
+   "edge": "lvl:for_loop@L2#0",
+   "target": "for_loop@L2",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    2,
+    3
+   ],
+   "quote": "The bodys i++ and the headers i++ change the same variable; so the condition sees i as 1, then 3, then 5 and fails on the third test",
+   "confidence": 0.9,
+   "prune_score": 0.25,
+   "score": 0.225,
+   "logic": "Run the initializer once; then repeatedly: test the condition (stop if false), execute the body, run the update.",
+   "twin_logic": null,
+   "level": "L2",
+   "way": "line_by_line_trace"
+  },
+  {
+   "depth": 1,
+   "source": "increment_operators",
+   "edge": "mis:increment_operators->IncrementByTwo",
+   "target": "IncrementByTwo",
+   "kind": "misconception",
+   "label": "correct",
+   "clauses": [
+    2,
+    3
+   ],
+   "quote": "The bodys i++ and the headers i++ change the same variable; so the condition sees i as 1, then 3, then 5 and fails on the third test",
+   "confidence": 0.85,
+   "prune_score": 0.45,
+   "score": 0.3825,
+   "logic": "i++ increases i by 2.",
+   "twin_logic": "i++ (and ++i) increases i by exactly 1.",
+   "role": "primary"
+  },
+  {
+   "depth": 1,
+   "source": "increment_operators",
+   "edge": "mis:increment_operators->PreIncrementBeforeLoop",
+   "target": "PreIncrementBeforeLoop",
+   "kind": "misconception",
+   "label": "correct",
+   "clauses": [
+    3
+   ],
+   "quote": "so the condition sees i as 1, then 3, then 5 and fails on the third test",
+   "confidence": 0.7,
+   "prune_score": 0.2,
+   "score": 0.14,
+   "logic": "++i in the for-update runs before the body each pass",
+   "twin_logic": "The update runs after each pass of the body, so with either ++i or i++ the first pass uses i = s.",
+   "role": "context"
+  },
+  {
+   "depth": 1,
+   "source": "increment_operators",
+   "edge": "lvl:increment_operators@L3#0",
+   "target": "increment_operators@L3",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    2,
+    3
+   ],
+   "quote": "The bodys i++ and the headers i++ change the same variable; so the condition sees i as 1, then 3, then 5 and fails on the third test",
+   "confidence": 0.75,
+   "prune_score": 0.45,
+   "score": 0.3375,
+   "logic": "The usual for-loop update is i++ (shorthand for i = i + 1); as a stand-alone update statement ++i and i++ give the same loop.",
+   "twin_logic": null,
+   "level": "L3",
+   "way": "relation_to_neighbour"
+  },
+  {
+   "depth": 1,
+   "source": "increment_operators",
+   "edge": "lvl:increment_operators@L2#2",
+   "target": "increment_operators@L2",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    2,
+    3
+   ],
+   "quote": "The bodys i++ and the headers i++ change the same variable; so the condition sees i as 1, then 3, then 5 and fails on the third test",
+   "confidence": 0.7,
+   "prune_score": 0.3,
+   "score": 0.21,
+   "logic": "One execution changes exactly one variable (i) by exactly 1 and returns its old (i++) or new (++i) value.",
+   "twin_logic": null,
+   "level": "L2",
+   "way": "one_step_execution"
+  },
+  {
+   "depth": 1,
+   "source": "increment_operators",
+   "edge": "lvl:increment_operators@L3#2",
+   "target": "increment_operators@L3",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    2,
+    3
+   ],
+   "quote": "The bodys i++ and the headers i++ change the same variable; so the condition sees i as 1, then 3, then 5 and fails on the third test",
+   "confidence": 0.75,
+   "prune_score": 0.25,
+   "score": 0.1875,
+   "logic": "i++ is shorthand for the assignment i = i + 1 (and i += k for i = i + k), so it changes the variable's stored value.",
+   "twin_logic": null,
+   "level": "L3",
+   "way": "relation_to_neighbour"
+  },
+  {
+   "depth": 2,
+   "source": "loop_control",
+   "edge": "pre:loop_variable->loop_control",
+   "target": "loop_variable",
+   "kind": "prerequisite",
+   "label": "confirmed",
+   "clauses": [
+    2,
+    3
+   ],
+   "quote": "The bodys i++ and the headers i++ change the same variable; so the condition sees i as 1, then 3, then 5 and fails on the third test",
+   "confidence": 0.92,
+   "prune_score": 0.45,
+   "score": 0.414,
+   "logic": "The init, condition and update all act on the loop variable: the init sets it, the condition tests it, the update changes it.",
+   "twin_logic": null
+  },
+  {
+   "depth": 2,
+   "source": "loop_control",
+   "edge": "pre:loop_control->for_loop",
+   "target": "for_loop",
+   "kind": "prerequisite",
+   "label": "confirmed",
+   "clauses": [
+    2,
+    3
+   ],
+   "quote": "The bodys i++ and the headers i++ change the same variable; so the condition sees i as 1, then 3, then 5 and fails on the third test",
+   "confidence": 0.85,
+   "prune_score": 0.4,
+   "score": 0.34,
+   "logic": "The for header is exactly the three control slots, and the body runs after the test and before the update on each pass.",
+   "twin_logic": null
+  },
+  {
+   "depth": 2,
+   "source": "loop_control",
+   "edge": "pre:loop_control->increment_operators",
+   "target": "increment_operators",
+   "kind": "prerequisite",
+   "label": "confirmed",
+   "clauses": [
+    2,
+    3
+   ],
+   "quote": "The bodys i++ and the headers i++ change the same variable; so the condition sees i as 1, then 3, then 5 and fails on the third test",
+   "confidence": 0.8,
+   "prune_score": 0.15,
+   "score": 0.12,
+   "logic": "The loop update i = i + 1 comes first; ++ (and +=) are then introduced as shorthand for that update.",
+   "twin_logic": null
+  },
+  {
+   "depth": 2,
+   "source": "for_loop",
+   "edge": "pre:for_loop->loop_body",
+   "target": "loop_body",
+   "kind": "prerequisite",
+   "label": "confirmed",
+   "clauses": [
+    1,
+    2,
+    3,
+    4,
+    5
+   ],
+   "quote": "Twice; The bodys i++ and the headers i++ change the same variable; so the condition sees i as 1, then 3, then 5 and fails on the third test; Because there are no braces the body is only i++; the indented println is after the loop",
+   "confidence": 0.9,
+   "prune_score": 1.0,
+   "score": 0.9,
+   "logic": "The statements in braces after the for header are the loop body; they run once on every pass, between the test and the increment, exactly as in a while loop.",
+   "twin_logic": null
+  },
+  {
+   "depth": 2,
+   "source": "increment_operators",
+   "edge": "pre:assignment->increment_operators",
+   "target": "assignment",
+   "kind": "prerequisite",
+   "label": "confirmed",
+   "clauses": [
+    2,
+    3
+   ],
+   "quote": "The bodys i++ and the headers i++ change the same variable; so the condition sees i as 1, then 3, then 5 and fails on the third test",
+   "confidence": 0.8,
+   "prune_score": 1.0,
+   "score": 0.8,
+   "logic": "i++ is shorthand for the assignment i = i + 1.",
+   "twin_logic": null
+  },
+  {
+   "depth": 3,
+   "source": "loop_body",
+   "edge": "err:loop_body->BracelessMultiStatementBody",
+   "target": "BracelessMultiStatementBody",
+   "kind": "error",
+   "label": "correct",
+   "clauses": [
+    4,
+    5
+   ],
+   "quote": "Because there are no braces the body is only i++; the indented println is after the loop",
+   "confidence": 0.93,
+   "prune_score": 0.5,
+   "score": 0.465,
+   "logic": "Indenting several statements under an if or for makes them all part of its body, even without braces.",
+   "twin_logic": "Without braces only the first statement belongs to the if/for; the rest run once, after it.",
+   "role": "primary"
+  },
+  {
+   "depth": 3,
+   "source": "loop_body",
+   "edge": "mis:loop_body->StatementAfterLoopInBody",
+   "target": "StatementAfterLoopInBody",
+   "kind": "misconception",
+   "label": "correct",
+   "clauses": [
+    5
+   ],
+   "quote": "the indented println is after the loop",
+   "confidence": 0.7,
+   "prune_score": 0.3,
+   "score": 0.21,
+   "logic": "A statement written after the loop is repeated with the loop body.",
+   "twin_logic": "The body ends at the closing brace (or after its single statement); code after it runs once, after the loop ends.",
+   "role": "primary"
+  },
+  {
+   "depth": 3,
+   "source": "loop_body",
+   "edge": "mis:loop_body->ForLoopPartSkipped",
+   "target": "ForLoopPartSkipped",
+   "kind": "misconception",
+   "label": "correct",
+   "clauses": [
+    1,
+    2,
+    3
+   ],
+   "quote": "Twice; The bodys i++ and the headers i++ change the same variable; so the condition sees i as 1, then 3, then 5 and fails on the third test",
+   "confidence": 0.8,
+   "prune_score": 0.2,
+   "score": 0.16,
+   "logic": "A pass of a loop may leave out one of its parts (the condition test, the body, the update, or the initialization).",
+   "twin_logic": "Each pass of a for loop runs test, then body, then update, every time; the initialization runs once, at the start.",
+   "role": "context"
+  },
+  {
+   "depth": 3,
+   "source": "loop_body",
+   "edge": "lvl:loop_body@L4#1",
+   "target": "loop_body@L4",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    4,
+    5
+   ],
+   "quote": "Because there are no braces the body is only i++; the indented println is after the loop",
+   "confidence": 0.68,
+   "prune_score": 0.45,
+   "score": 0.306,
+   "logic": "rule broken: Without braces, the body of an if, while or for is exactly one statement; indentation does not add statements to it. Kind: silent logic error. Trigger class: A braceless header followed by two or more indented statements: only the first is controlled, the others run once, after the if/loop, on every input.",
+   "twin_logic": null,
+   "level": "L4",
+   "way": "diagnose_an_error"
+  },
+  {
+   "depth": 3,
+   "source": "loop_body",
+   "edge": "lvl:loop_body@L2#2",
+   "target": "loop_body@L2",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    2,
+    3
+   ],
+   "quote": "The bodys i++ and the headers i++ change the same variable; so the condition sees i as 1, then 3, then 5 and fails on the third test",
+   "confidence": 0.85,
+   "prune_score": 0.3,
+   "score": 0.255,
+   "logic": "One pass of the body changes exactly the variables it assigns (e.g. print i and v, double v, increment i) and these changes carry into the next test and pass.",
+   "twin_logic": null,
+   "level": "L2",
+   "way": "one_step_execution"
+  },
+  {
+   "depth": 3,
+   "source": "loop_body",
+   "edge": "lvl:loop_body@L1#1",
+   "target": "loop_body@L1",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    4,
+    5
+   ],
+   "quote": "Because there are no braces the body is only i++; the indented println is after the loop",
+   "confidence": 0.92,
+   "prune_score": 0.25,
+   "score": 0.23,
+   "logic": "The body is the block after the loop header; braces are optional only if it is a single statement, in which case only that one statement is repeated.",
+   "twin_logic": null,
+   "level": "L1",
+   "way": "states_the_rule"
+  },
+  {
+   "depth": 3,
+   "source": "for_loop",
+   "edge": "pre:loop_control->for_loop",
+   "target": "loop_control",
+   "kind": "prerequisite",
+   "label": "confirmed",
+   "clauses": [
+    2,
+    3
+   ],
+   "quote": "The bodys i++ and the headers i++ change the same variable; so the condition sees i as 1, then 3, then 5 and fails on the third test",
+   "confidence": 0.85,
+   "prune_score": 1.0,
+   "score": 0.85,
+   "logic": "The for header is exactly the three control slots, and the body runs after the test and before the update on each pass.",
+   "twin_logic": null
+  },
+  {
+   "depth": 3,
+   "source": "assignment",
+   "edge": "mis:assignment->VariableKeepsOldValue",
+   "target": "VariableKeepsOldValue",
+   "kind": "misconception",
+   "label": "correct",
+   "clauses": [
+    2,
+    3
+   ],
+   "quote": "The bodys i++ and the headers i++ change the same variable; so the condition sees i as 1, then 3, then 5 and fails on the third test",
+   "confidence": 0.85,
+   "prune_score": 0.6,
+   "score": 0.51,
+   "logic": "A variable keeps its first value after a new assignment (the static model).",
+   "twin_logic": "Each assignment or read replaces the variable's current value.",
+   "role": "context"
+  },
+  {
+   "depth": 3,
+   "source": "assignment",
+   "edge": "lvl:assignment@L3#6",
+   "target": "assignment@L3",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    2,
+    3
+   ],
+   "quote": "The bodys i++ and the headers i++ change the same variable; so the condition sees i as 1, then 3, then 5 and fails on the third test",
+   "confidence": 0.6,
+   "prune_score": 0.45,
+   "score": 0.27,
+   "logic": "As a statement, i++ has the same effect as the assignment i = i + 1.",
+   "twin_logic": null,
+   "level": "L3",
+   "way": "relation_to_neighbour"
+  },
+  {
+   "depth": 3,
+   "source": "assignment",
+   "edge": "lvl:assignment@L3#7",
+   "target": "assignment@L3",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    2,
+    3
+   ],
+   "quote": "The bodys i++ and the headers i++ change the same variable; so the condition sees i as 1, then 3, then 5 and fails on the third test",
+   "confidence": 0.7,
+   "prune_score": 0.3,
+   "score": 0.21,
+   "logic": "A trace records the value of each variable after each assignment runs, one row per statement.",
+   "twin_logic": null,
+   "level": "L3",
+   "way": "relation_to_neighbour"
+  },
+  {
+   "depth": 3,
+   "source": "assignment",
+   "edge": "lvl:assignment@L2#2",
+   "target": "assignment@L2",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    2,
+    3
+   ],
+   "quote": "The bodys i++ and the headers i++ change the same variable; so the condition sees i as 1, then 3, then 5 and fails on the third test",
+   "confidence": 0.6,
+   "prune_score": 0.25,
+   "score": 0.15,
+   "logic": "Exactly one variable, the left one, changes, and its old value is lost. Variables on the right keep their values: x = x + 5; with x = 5 makes x 10.",
+   "twin_logic": null,
+   "level": "L2",
+   "way": "one_step_execution"
+  },
+  {
+   "depth": 3,
+   "source": "increment_operators",
+   "edge": "pre:loop_control->increment_operators",
+   "target": "loop_control",
+   "kind": "prerequisite",
+   "label": "confirmed",
+   "clauses": [
+    2,
+    3
+   ],
+   "quote": "The bodys i++ and the headers i++ change the same variable; so the condition sees i as 1, then 3, then 5 and fails on the third test",
+   "confidence": 0.8,
+   "prune_score": 1.0,
+   "score": 0.8,
+   "logic": "The loop update i = i + 1 comes first; ++ (and +=) are then introduced as shorthand for that update.",
+   "twin_logic": null
+  },
+  {
+   "depth": 3,
+   "source": "loop_variable",
+   "edge": "mis:loop_variable->BodyChangeIgnoredByCondition",
+   "target": "BodyChangeIgnoredByCondition",
+   "kind": "misconception",
+   "label": "correct",
+   "clauses": [
+    1,
+    2,
+    3
+   ],
+   "quote": "Twice; The bodys i++ and the headers i++ change the same variable; so the condition sees i as 1, then 3, then 5 and fails on the third test",
+   "confidence": 0.93,
+   "prune_score": 0.6,
+   "score": 0.558,
+   "logic": "Changing the loop variable inside the body does not affect the loop condition; the loop still runs its planned number of times.",
+   "twin_logic": "The condition is tested with the current value of the variable, including changes made in the body.",
+   "role": "primary"
+  },
+  {
+   "depth": 3,
+   "source": "loop_variable",
+   "edge": "mis:loop_variable->LoopVariableLifetimeScope",
+   "target": "LoopVariableLifetimeScope",
+   "kind": "misconception",
+   "label": "correct",
+   "clauses": [
+    2
+   ],
+   "quote": "The bodys i++ and the headers i++ change the same variable",
+   "confidence": 0.8,
+   "prune_score": 0.25,
+   "score": 0.2,
+   "logic": "The for variable i is a new variable on every pass rather than one variable changed by the update.",
+   "twin_logic": "The for variable i is created once by the init, and the update changes that same variable on every pass.",
+   "role": "context"
+  },
+  {
+   "depth": 3,
+   "source": "loop_variable",
+   "edge": "mis:loop_variable->ForInitRepeats",
+   "target": "ForInitRepeats",
+   "kind": "misconception",
+   "label": "correct",
+   "clauses": [
+    3
+   ],
+   "quote": "so the condition sees i as 1, then 3, then 5 and fails on the third test",
+   "confidence": 0.7,
+   "prune_score": 0.15,
+   "score": 0.105,
+   "logic": "The initialization of a for loop runs again after a pass of the body.",
+   "twin_logic": "The initialization runs exactly once, before the first condition test.",
+   "role": "context"
+  },
+  {
+   "depth": 3,
+   "source": "loop_variable",
+   "edge": "lvl:loop_variable@L2#2",
+   "target": "loop_variable@L2",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    2,
+    3
+   ],
+   "quote": "The bodys i++ and the headers i++ change the same variable; so the condition sees i as 1, then 3, then 5 and fails on the third test",
+   "confidence": 0.9,
+   "prune_score": 0.4,
+   "score": 0.36,
+   "logic": "One update changes only the loop variable (i = i + 1 turns 4 into 5); one test reads it and yields true or false; an assignment to it in the body changes what the next test sees.",
+   "twin_logic": null,
+   "level": "L2",
+   "way": "one_step_execution"
+  }
+ ],
+ "clause_coverage": {
+  "Twice": "err:loop_control->WrongIterationCount",
+  "The bodys i++ and the headers i++ change the same variable": "mis:loop_control->ForLoopPartSkipped",
+  "so the condition sees i as 1, then 3, then 5 and fails on the third test": "err:loop_control->WrongIterationCount",
+  "Because there are no braces the body is only i++": "err:for_loop->BracelessMultiStatementBody",
+  "the indented println is after the loop": "err:for_loop->BracelessMultiStatementBody"
+ },
+ "unexplained_clauses": [],
+ "stop_reason": "max depth",
+ "depth_reached": 3,
+ "llm_calls": 0,
+ "llm_cache_hits": 48,
+ "llm_calls_by_step": {
+  "prune": 17,
+  "label": 31
+ },
+ "level_v2": {
+  "wrong_ways": [],
+  "not_counted": [
+   {
+    "concept": "assignment",
+    "edge": "lvl:assignment@L3#6",
+    "level": "L3",
+    "way": "relation_to_neighbour",
+    "quote": "The bodys i++ and the headers i++ change the same variable; so the condition sees i as 1, then 3, then 5 and fails on the third test",
+    "confidence": 0.6,
+    "reason": "confidence 0.60 is not above 0.60"
+   }
+  ]
+ }
+}

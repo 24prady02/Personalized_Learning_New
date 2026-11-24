@@ -1,0 +1,733 @@
+{
+ "scenario": "LP01",
+ "settings": {
+  "width": 3,
+  "depth": 3,
+  "prune_tools": "llm",
+  "model": "claude-opus-5-5",
+  "backend": "claude-cli",
+  "rule_fixes": true,
+  "level_v2": true
+ },
+ "clauses": [
+  "It counts from 1 to 5",
+  "so it prints 1, 2, 3, 4, 5",
+  "For i from 1 to n means do it for each number"
+ ],
+ "start_concepts": [
+  "loop_control",
+  "for_loop",
+  "loop_variable"
+ ],
+ "held_misconceptions": [
+  {
+   "concept": "increment_operators",
+   "misconception": "IdiomOverridesCode",
+   "kind": "misconception",
+   "quote": "It counts from 1 to 5; so it prints 1, 2, 3, 4, 5; For i from 1 to n means do it for each number",
+   "score": 0.56
+  },
+  {
+   "concept": "loop_variable",
+   "misconception": "BodyChangeIgnoredByCondition",
+   "kind": "misconception",
+   "quote": "It counts from 1 to 5; For i from 1 to n means do it for each number",
+   "score": 0.51
+  },
+  {
+   "concept": "loop_body",
+   "misconception": "ComputerFillsInIntent",
+   "kind": "misconception",
+   "quote": "It counts from 1 to 5; so it prints 1, 2, 3, 4, 5; For i from 1 to n means do it for each number",
+   "score": 0.21
+  }
+ ],
+ "error_evidence": [
+  {
+   "concept": "loop_body",
+   "error": "BracelessMultiStatementBody",
+   "quote": "so it prints 1, 2, 3, 4, 5"
+  }
+ ],
+ "shadowed": [
+  {
+   "concept": "loop_control",
+   "misconception": "IdiomOverridesCode",
+   "shadow_of": "mis:increment_operators->IdiomOverridesCode",
+   "quote": "It counts from 1 to 5; so it prints 1, 2, 3, 4, 5; For i from 1 to n means do it for each number",
+   "score": 0.32
+  },
+  {
+   "concept": "loop_control",
+   "misconception": "OffByOneBound",
+   "shadow_of": "mis:increment_operators->IdiomOverridesCode",
+   "quote": "It counts from 1 to 5; so it prints 1, 2, 3, 4, 5",
+   "score": 0.2625
+  },
+  {
+   "concept": "for_loop",
+   "misconception": "IdiomOverridesCode",
+   "shadow_of": "mis:loop_body->ComputerFillsInIntent",
+   "quote": "It counts from 1 to 5; For i from 1 to n means do it for each number",
+   "score": 0.24
+  }
+ ],
+ "broken_edges": [
+  {
+   "edge": "pre:loop_variable->loop_control",
+   "quote": "It counts from 1 to 5; so it prints 1, 2, 3, 4, 5; For i from 1 to n means do it for each number",
+   "score": 0.8,
+   "consequence_of": "mis:loop_variable->BodyChangeIgnoredByCondition"
+  },
+  {
+   "edge": "pre:for_loop->loop_body",
+   "quote": "It counts from 1 to 5; so it prints 1, 2, 3, 4, 5",
+   "score": 0.8,
+   "consequence_of": "mis:loop_variable->BodyChangeIgnoredByCondition"
+  },
+  {
+   "edge": "pre:loop_control->for_loop",
+   "quote": "It counts from 1 to 5; so it prints 1, 2, 3, 4, 5; For i from 1 to n means do it for each number",
+   "score": 0.595,
+   "consequence_of": "mis:loop_variable->BodyChangeIgnoredByCondition"
+  },
+  {
+   "edge": "pre:loop_control->increment_operators",
+   "quote": "It counts from 1 to 5; so it prints 1, 2, 3, 4, 5",
+   "score": 0.21,
+   "consequence_of": "mis:loop_variable->BodyChangeIgnoredByCondition"
+  }
+ ],
+ "root_cause": {
+  "concept": "loop_variable",
+  "misconception": "BodyChangeIgnoredByCondition"
+ },
+ "levels": {
+  "for_loop": {
+   "level": "L0",
+   "way": "everyday_reading",
+   "quote": "It counts from 1 to 5; so it prints 1, 2, 3, 4, 5; For i from 1 to n means do it for each number",
+   "edge": "lvl:for_loop@L0#0",
+   "source": "level_way",
+   "also_shown": []
+  },
+  "increment_operators": {
+   "level": "L0",
+   "way": "misconception",
+   "misconception": "IdiomOverridesCode",
+   "quote": "It counts from 1 to 5; so it prints 1, 2, 3, 4, 5; For i from 1 to n means do it for each number",
+   "edge": "mis:increment_operators->IdiomOverridesCode",
+   "rule": "wrong rule: An array loop processes the whole array from index 0 to length-1 and increments its index at the end of the body, whatever the code says. Right rule: The loop visits exactly the indices that its initialisation, guard and update produce, in the order in which its statements are written.",
+   "source": "level_mis_links"
+  },
+  "loop_body": {
+   "level": "L0",
+   "way": "misconception",
+   "misconception": "ComputerFillsInIntent",
+   "quote": "It counts from 1 to 5; so it prints 1, 2, 3, 4, 5; For i from 1 to n means do it for each number",
+   "edge": "mis:loop_body->ComputerFillsInIntent",
+   "rule": "wrong rule: The computer fills in omitted steps or values that the programmer meant, e.g. REPEAT 4 [FORWARD 30] draws a square without a turn command. Right rule: The computer executes only what the code states; every needed step and value must be written.",
+   "source": "level_mis_links"
+  },
+  "loop_control": {
+   "level": "L0",
+   "way": "everyday_reading",
+   "quote": "It counts from 1 to 5; so it prints 1, 2, 3, 4, 5; For i from 1 to n means do it for each number",
+   "edge": "lvl:loop_control@L0#0",
+   "source": "level_way",
+   "also_shown": []
+  },
+  "loop_variable": {
+   "level": "L0",
+   "way": "misconception",
+   "misconception": "BodyChangeIgnoredByCondition",
+   "quote": "It counts from 1 to 5; For i from 1 to n means do it for each number",
+   "edge": "mis:loop_variable->BodyChangeIgnoredByCondition",
+   "rule": "wrong rule: Changing the loop variable inside the body does not affect the loop condition; the loop still runs its planned number of times. Right rule: The condition is tested with the current value of the variable, including changes made in the body.",
+   "source": "level_mis_links"
+  }
+ },
+ "overall_level": "L0",
+ "paths": [
+  {
+   "depth": 1,
+   "source": "loop_variable",
+   "edge": "mis:loop_variable->BodyChangeIgnoredByCondition",
+   "target": "BodyChangeIgnoredByCondition",
+   "kind": "misconception",
+   "label": "held",
+   "clauses": [
+    1,
+    3
+   ],
+   "quote": "It counts from 1 to 5; For i from 1 to n means do it for each number",
+   "confidence": 0.85,
+   "prune_score": 0.6,
+   "score": 0.51,
+   "logic": "Changing the loop variable inside the body does not affect the loop condition; the loop still runs its planned number of times.",
+   "twin_logic": "The condition is tested with the current value of the variable, including changes made in the body.",
+   "role": "primary"
+  },
+  {
+   "depth": 1,
+   "source": "loop_control",
+   "edge": "mis:loop_control->IdiomOverridesCode",
+   "target": "IdiomOverridesCode",
+   "kind": "misconception",
+   "label": "held",
+   "clauses": [
+    1,
+    2,
+    3
+   ],
+   "quote": "It counts from 1 to 5; so it prints 1, 2, 3, 4, 5; For i from 1 to n means do it for each number",
+   "confidence": 0.8,
+   "prune_score": 0.4,
+   "score": 0.32,
+   "logic": "An array loop processes the whole array from index 0 to length-1 and increments its index at the end of the body, whatever the code says.",
+   "twin_logic": "The loop visits exactly the indices that its initialisation, guard and update produce, in the order in which its statements are written.",
+   "role": "context"
+  },
+  {
+   "depth": 1,
+   "source": "loop_control",
+   "edge": "mis:loop_control->OffByOneBound",
+   "target": "OffByOneBound",
+   "kind": "misconception",
+   "label": "held",
+   "clauses": [
+    1,
+    2
+   ],
+   "quote": "It counts from 1 to 5; so it prints 1, 2, 3, 4, 5",
+   "confidence": 0.75,
+   "prune_score": 0.35,
+   "score": 0.2625,
+   "logic": "i < n and i <= n mean the same, so the loop runs until i equals n and the last pass can use a[n].",
+   "twin_logic": "for (i = 0; i < n; i++) runs n times with i going up to n - 1; with <= it runs n + 1 times and reaches i = n.",
+   "role": "primary",
+   "shares_evidence_with": "mis:loop_control->IdiomOverridesCode"
+  },
+  {
+   "depth": 1,
+   "source": "for_loop",
+   "edge": "mis:for_loop->IdiomOverridesCode",
+   "target": "IdiomOverridesCode",
+   "kind": "misconception",
+   "label": "held",
+   "clauses": [
+    1,
+    3
+   ],
+   "quote": "It counts from 1 to 5; For i from 1 to n means do it for each number",
+   "confidence": 0.6,
+   "prune_score": 0.4,
+   "score": 0.24,
+   "logic": "An array loop processes the whole array from index 0 to length-1 and increments its index at the end of the body, whatever the code says.",
+   "twin_logic": "The loop visits exactly the indices that its initialisation, guard and update produce, in the order in which its statements are written.",
+   "role": "context"
+  },
+  {
+   "depth": 2,
+   "source": "loop_variable",
+   "edge": "pre:loop_variable->loop_control",
+   "target": "loop_control",
+   "kind": "prerequisite",
+   "label": "broken",
+   "clauses": [
+    1,
+    2,
+    3
+   ],
+   "quote": "It counts from 1 to 5; so it prints 1, 2, 3, 4, 5; For i from 1 to n means do it for each number",
+   "confidence": 0.8,
+   "prune_score": 1.0,
+   "score": 0.8,
+   "logic": "The init, condition and update all act on the loop variable: the init sets it, the condition tests it, the update changes it.",
+   "twin_logic": null,
+   "consequence_of": "mis:loop_variable->BodyChangeIgnoredByCondition"
+  },
+  {
+   "depth": 2,
+   "source": "for_loop",
+   "edge": "pre:for_loop->loop_body",
+   "target": "loop_body",
+   "kind": "prerequisite",
+   "label": "broken",
+   "clauses": [
+    1,
+    2
+   ],
+   "quote": "It counts from 1 to 5; so it prints 1, 2, 3, 4, 5",
+   "confidence": 0.8,
+   "prune_score": 1.0,
+   "score": 0.8,
+   "logic": "The statements in braces after the for header are the loop body; they run once on every pass, between the test and the increment, exactly as in a while loop.",
+   "twin_logic": null,
+   "consequence_of": "mis:loop_variable->BodyChangeIgnoredByCondition"
+  },
+  {
+   "depth": 2,
+   "source": "loop_control",
+   "edge": "pre:loop_control->for_loop",
+   "target": "for_loop",
+   "kind": "prerequisite",
+   "label": "broken",
+   "clauses": [
+    1,
+    2,
+    3
+   ],
+   "quote": "It counts from 1 to 5; so it prints 1, 2, 3, 4, 5; For i from 1 to n means do it for each number",
+   "confidence": 0.85,
+   "prune_score": 0.7,
+   "score": 0.595,
+   "logic": "The for header is exactly the three control slots, and the body runs after the test and before the update on each pass.",
+   "twin_logic": null,
+   "consequence_of": "mis:loop_variable->BodyChangeIgnoredByCondition"
+  },
+  {
+   "depth": 2,
+   "source": "loop_control",
+   "edge": "pre:loop_control->increment_operators",
+   "target": "increment_operators",
+   "kind": "prerequisite",
+   "label": "broken",
+   "clauses": [
+    1,
+    2
+   ],
+   "quote": "It counts from 1 to 5; so it prints 1, 2, 3, 4, 5",
+   "confidence": 0.7,
+   "prune_score": 0.3,
+   "score": 0.21,
+   "logic": "The loop update i = i + 1 comes first; ++ (and +=) are then introduced as shorthand for that update.",
+   "twin_logic": null,
+   "consequence_of": "mis:loop_variable->BodyChangeIgnoredByCondition"
+  },
+  {
+   "depth": 3,
+   "source": "increment_operators",
+   "edge": "mis:increment_operators->IdiomOverridesCode",
+   "target": "IdiomOverridesCode",
+   "kind": "misconception",
+   "label": "held",
+   "clauses": [
+    1,
+    2,
+    3
+   ],
+   "quote": "It counts from 1 to 5; so it prints 1, 2, 3, 4, 5; For i from 1 to n means do it for each number",
+   "confidence": 0.8,
+   "prune_score": 0.7,
+   "score": 0.56,
+   "logic": "An array loop processes the whole array from index 0 to length-1 and increments its index at the end of the body, whatever the code says.",
+   "twin_logic": "The loop visits exactly the indices that its initialisation, guard and update produce, in the order in which its statements are written.",
+   "role": "context"
+  },
+  {
+   "depth": 3,
+   "source": "loop_body",
+   "edge": "mis:loop_body->ComputerFillsInIntent",
+   "target": "ComputerFillsInIntent",
+   "kind": "misconception",
+   "label": "held",
+   "clauses": [
+    1,
+    2,
+    3
+   ],
+   "quote": "It counts from 1 to 5; so it prints 1, 2, 3, 4, 5; For i from 1 to n means do it for each number",
+   "confidence": 0.7,
+   "prune_score": 0.3,
+   "score": 0.21,
+   "logic": "The computer fills in omitted steps or values that the programmer meant, e.g. REPEAT 4 [FORWARD 30] draws a square without a turn command.",
+   "twin_logic": "The computer executes only what the code states; every needed step and value must be written.",
+   "role": "context"
+  },
+  {
+   "depth": 3,
+   "source": "loop_body",
+   "edge": "err:loop_body->BracelessMultiStatementBody",
+   "target": "BracelessMultiStatementBody",
+   "kind": "error",
+   "label": "held",
+   "clauses": [
+    2
+   ],
+   "quote": "so it prints 1, 2, 3, 4, 5",
+   "confidence": 0.75,
+   "prune_score": 0.5,
+   "score": 0.375,
+   "logic": "Indenting several statements under an if or for makes them all part of its body, even without braces.",
+   "twin_logic": "Without braces only the first statement belongs to the if/for; the rest run once, after it.",
+   "role": "primary"
+  }
+ ],
+ "evidence": [
+  {
+   "depth": 1,
+   "source": "loop_control",
+   "edge": "mis:loop_control->IdiomOverridesCode",
+   "target": "IdiomOverridesCode",
+   "kind": "misconception",
+   "label": "held",
+   "clauses": [
+    1,
+    2,
+    3
+   ],
+   "quote": "It counts from 1 to 5; so it prints 1, 2, 3, 4, 5; For i from 1 to n means do it for each number",
+   "confidence": 0.8,
+   "prune_score": 0.4,
+   "score": 0.32,
+   "logic": "An array loop processes the whole array from index 0 to length-1 and increments its index at the end of the body, whatever the code says.",
+   "twin_logic": "The loop visits exactly the indices that its initialisation, guard and update produce, in the order in which its statements are written.",
+   "role": "context"
+  },
+  {
+   "depth": 1,
+   "source": "loop_control",
+   "edge": "mis:loop_control->OffByOneBound",
+   "target": "OffByOneBound",
+   "kind": "misconception",
+   "label": "held",
+   "clauses": [
+    1,
+    2
+   ],
+   "quote": "It counts from 1 to 5; so it prints 1, 2, 3, 4, 5",
+   "confidence": 0.75,
+   "prune_score": 0.35,
+   "score": 0.2625,
+   "logic": "i < n and i <= n mean the same, so the loop runs until i equals n and the last pass can use a[n].",
+   "twin_logic": "for (i = 0; i < n; i++) runs n times with i going up to n - 1; with <= it runs n + 1 times and reaches i = n.",
+   "role": "primary",
+   "shares_evidence_with": "mis:loop_control->IdiomOverridesCode"
+  },
+  {
+   "depth": 1,
+   "source": "loop_control",
+   "edge": "lvl:loop_control@L0#0",
+   "target": "loop_control@L0",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    1,
+    2,
+    3
+   ],
+   "quote": "It counts from 1 to 5; so it prints 1, 2, 3, 4, 5; For i from 1 to n means do it for each number",
+   "confidence": 0.85,
+   "prune_score": 0.6,
+   "score": 0.51,
+   "logic": "Folk meaning: in mathematics i = 0, i < n and i = i + 1 are equations or constraints that hold at the same time (and i = i + 1 is nonsense). In Java they are three actions run at different moments: init once, test before each pass, update after each pass.",
+   "twin_logic": null,
+   "level": "L0",
+   "way": "everyday_reading"
+  },
+  {
+   "depth": 1,
+   "source": "for_loop",
+   "edge": "mis:for_loop->IdiomOverridesCode",
+   "target": "IdiomOverridesCode",
+   "kind": "misconception",
+   "label": "held",
+   "clauses": [
+    1,
+    3
+   ],
+   "quote": "It counts from 1 to 5; For i from 1 to n means do it for each number",
+   "confidence": 0.6,
+   "prune_score": 0.4,
+   "score": 0.24,
+   "logic": "An array loop processes the whole array from index 0 to length-1 and increments its index at the end of the body, whatever the code says.",
+   "twin_logic": "The loop visits exactly the indices that its initialisation, guard and update produce, in the order in which its statements are written.",
+   "role": "context"
+  },
+  {
+   "depth": 1,
+   "source": "for_loop",
+   "edge": "err:for_loop->BracelessMultiStatementBody",
+   "target": "BracelessMultiStatementBody",
+   "kind": "error",
+   "label": "held",
+   "clauses": [
+    2
+   ],
+   "quote": "so it prints 1, 2, 3, 4, 5",
+   "confidence": 0.75,
+   "prune_score": 0.35,
+   "score": 0.2625,
+   "logic": "Indenting several statements under an if or for makes them all part of its body, even without braces.",
+   "twin_logic": "Without braces only the first statement belongs to the if/for; the rest run once, after it.",
+   "role": "context"
+  },
+  {
+   "depth": 1,
+   "source": "for_loop",
+   "edge": "lvl:for_loop@L0#0",
+   "target": "for_loop@L0",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    1,
+    2,
+    3
+   ],
+   "quote": "It counts from 1 to 5; so it prints 1, 2, 3, 4, 5; For i from 1 to n means do it for each number",
+   "confidence": 0.85,
+   "prune_score": 0.6,
+   "score": 0.51,
+   "logic": "Folk meaning: English 'for each ...' or 'for 10 times' names a whole collection or a count to be handled at once, and a maths reading treats the header as simultaneous conditions. A Java for is a while loop in compact form: one init, then test-body-update repeated, one pass at a time.",
+   "twin_logic": null,
+   "level": "L0",
+   "way": "everyday_reading"
+  },
+  {
+   "depth": 1,
+   "source": "loop_variable",
+   "edge": "mis:loop_variable->BodyChangeIgnoredByCondition",
+   "target": "BodyChangeIgnoredByCondition",
+   "kind": "misconception",
+   "label": "held",
+   "clauses": [
+    1,
+    3
+   ],
+   "quote": "It counts from 1 to 5; For i from 1 to n means do it for each number",
+   "confidence": 0.85,
+   "prune_score": 0.6,
+   "score": 0.51,
+   "logic": "Changing the loop variable inside the body does not affect the loop condition; the loop still runs its planned number of times.",
+   "twin_logic": "The condition is tested with the current value of the variable, including changes made in the body.",
+   "role": "primary"
+  },
+  {
+   "depth": 1,
+   "source": "loop_variable",
+   "edge": "mis:loop_variable->LoopOutputSameEachPass",
+   "target": "LoopOutputSameEachPass",
+   "kind": "misconception",
+   "label": "correct",
+   "clauses": [
+    2
+   ],
+   "quote": "so it prints 1, 2, 3, 4, 5",
+   "confidence": 0.6,
+   "prune_score": 0.25,
+   "score": 0.15,
+   "logic": "A loop prints the same thing on every pass; the changing loop variable does not affect what the body does.",
+   "twin_logic": "The body uses the current value of the loop variable, so its output can differ on each pass.",
+   "role": "primary"
+  },
+  {
+   "depth": 1,
+   "source": "loop_variable",
+   "edge": "lvl:loop_variable@L0#0",
+   "target": "loop_variable@L0",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    1,
+    2,
+    3
+   ],
+   "quote": "It counts from 1 to 5; so it prints 1, 2, 3, 4, 5; For i from 1 to n means do it for each number",
+   "confidence": 0.85,
+   "prune_score": 0.6,
+   "score": 0.51,
+   "logic": "Folk meaning: in maths a variable like the i in a sum ranges over all its values at once, and 'i from 1 to 10' is a set. A Java loop variable is one storage location holding one value at a time, changed step by step by the update.",
+   "twin_logic": null,
+   "level": "L0",
+   "way": "everyday_reading"
+  },
+  {
+   "depth": 2,
+   "source": "loop_variable",
+   "edge": "pre:loop_variable->loop_control",
+   "target": "loop_control",
+   "kind": "prerequisite",
+   "label": "broken",
+   "clauses": [
+    1,
+    2,
+    3
+   ],
+   "quote": "It counts from 1 to 5; so it prints 1, 2, 3, 4, 5; For i from 1 to n means do it for each number",
+   "confidence": 0.8,
+   "prune_score": 1.0,
+   "score": 0.8,
+   "logic": "The init, condition and update all act on the loop variable: the init sets it, the condition tests it, the update changes it.",
+   "twin_logic": null,
+   "consequence_of": "mis:loop_variable->BodyChangeIgnoredByCondition"
+  },
+  {
+   "depth": 2,
+   "source": "loop_control",
+   "edge": "pre:loop_control->for_loop",
+   "target": "for_loop",
+   "kind": "prerequisite",
+   "label": "broken",
+   "clauses": [
+    1,
+    2,
+    3
+   ],
+   "quote": "It counts from 1 to 5; so it prints 1, 2, 3, 4, 5; For i from 1 to n means do it for each number",
+   "confidence": 0.85,
+   "prune_score": 0.7,
+   "score": 0.595,
+   "logic": "The for header is exactly the three control slots, and the body runs after the test and before the update on each pass.",
+   "twin_logic": null,
+   "consequence_of": "mis:loop_variable->BodyChangeIgnoredByCondition"
+  },
+  {
+   "depth": 2,
+   "source": "loop_control",
+   "edge": "pre:loop_control->increment_operators",
+   "target": "increment_operators",
+   "kind": "prerequisite",
+   "label": "broken",
+   "clauses": [
+    1,
+    2
+   ],
+   "quote": "It counts from 1 to 5; so it prints 1, 2, 3, 4, 5",
+   "confidence": 0.7,
+   "prune_score": 0.3,
+   "score": 0.21,
+   "logic": "The loop update i = i + 1 comes first; ++ (and +=) are then introduced as shorthand for that update.",
+   "twin_logic": null,
+   "consequence_of": "mis:loop_variable->BodyChangeIgnoredByCondition"
+  },
+  {
+   "depth": 2,
+   "source": "for_loop",
+   "edge": "pre:for_loop->loop_body",
+   "target": "loop_body",
+   "kind": "prerequisite",
+   "label": "broken",
+   "clauses": [
+    1,
+    2
+   ],
+   "quote": "It counts from 1 to 5; so it prints 1, 2, 3, 4, 5",
+   "confidence": 0.8,
+   "prune_score": 1.0,
+   "score": 0.8,
+   "logic": "The statements in braces after the for header are the loop body; they run once on every pass, between the test and the increment, exactly as in a while loop.",
+   "twin_logic": null,
+   "consequence_of": "mis:loop_variable->BodyChangeIgnoredByCondition"
+  },
+  {
+   "depth": 3,
+   "source": "loop_body",
+   "edge": "err:loop_body->BracelessMultiStatementBody",
+   "target": "BracelessMultiStatementBody",
+   "kind": "error",
+   "label": "held",
+   "clauses": [
+    2
+   ],
+   "quote": "so it prints 1, 2, 3, 4, 5",
+   "confidence": 0.75,
+   "prune_score": 0.5,
+   "score": 0.375,
+   "logic": "Indenting several statements under an if or for makes them all part of its body, even without braces.",
+   "twin_logic": "Without braces only the first statement belongs to the if/for; the rest run once, after it.",
+   "role": "primary"
+  },
+  {
+   "depth": 3,
+   "source": "loop_body",
+   "edge": "mis:loop_body->ComputerFillsInIntent",
+   "target": "ComputerFillsInIntent",
+   "kind": "misconception",
+   "label": "held",
+   "clauses": [
+    1,
+    2,
+    3
+   ],
+   "quote": "It counts from 1 to 5; so it prints 1, 2, 3, 4, 5; For i from 1 to n means do it for each number",
+   "confidence": 0.7,
+   "prune_score": 0.3,
+   "score": 0.21,
+   "logic": "The computer fills in omitted steps or values that the programmer meant, e.g. REPEAT 4 [FORWARD 30] draws a square without a turn command.",
+   "twin_logic": "The computer executes only what the code states; every needed step and value must be written.",
+   "role": "context"
+  },
+  {
+   "depth": 3,
+   "source": "loop_body",
+   "edge": "lvl:loop_body@L0#0",
+   "target": "loop_body@L0",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    2,
+    3
+   ],
+   "quote": "so it prints 1, 2, 3, 4, 5; For i from 1 to n means do it for each number",
+   "confidence": 0.75,
+   "prune_score": 0.6,
+   "score": 0.45,
+   "logic": "Folk meaning: an everyday 'repeat this' instruction can be read loosely - a helper fills in missing steps, does each step N times in turn, or stops partway. A Java loop body is exactly the statements inside its braces (or one statement), all executed in order on every pass.",
+   "twin_logic": null,
+   "level": "L0",
+   "way": "everyday_reading"
+  },
+  {
+   "depth": 3,
+   "source": "increment_operators",
+   "edge": "mis:increment_operators->IdiomOverridesCode",
+   "target": "IdiomOverridesCode",
+   "kind": "misconception",
+   "label": "held",
+   "clauses": [
+    1,
+    2,
+    3
+   ],
+   "quote": "It counts from 1 to 5; so it prints 1, 2, 3, 4, 5; For i from 1 to n means do it for each number",
+   "confidence": 0.8,
+   "prune_score": 0.7,
+   "score": 0.56,
+   "logic": "An array loop processes the whole array from index 0 to length-1 and increments its index at the end of the body, whatever the code says.",
+   "twin_logic": "The loop visits exactly the indices that its initialisation, guard and update produce, in the order in which its statements are written.",
+   "role": "context"
+  }
+ ],
+ "clause_coverage": {
+  "It counts from 1 to 5": "mis:loop_control->IdiomOverridesCode",
+  "so it prints 1, 2, 3, 4, 5": "mis:loop_control->IdiomOverridesCode",
+  "For i from 1 to n means do it for each number": "mis:loop_control->IdiomOverridesCode"
+ },
+ "unexplained_clauses": [],
+ "stop_reason": "max depth",
+ "depth_reached": 3,
+ "llm_calls": 0,
+ "llm_cache_hits": 37,
+ "llm_calls_by_step": {
+  "prune": 13,
+  "label": 24
+ },
+ "level_v2": {
+  "wrong_ways": [
+   {
+    "concept": "increment_operators",
+    "edge": "lvl:increment_operators@L3#4",
+    "level": "L3",
+    "way": "purpose_of_the_whole",
+    "clauses": [
+     1,
+     3
+    ],
+    "quote": "It counts from 1 to 5; For i from 1 to n means do it for each number",
+    "confidence": 0.75
+   }
+  ],
+  "not_counted": []
+ }
+}

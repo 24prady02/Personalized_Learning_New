@@ -1,0 +1,5 @@
+{
+ "code": "int i, n = 5;\nfor (i = 1; i < n; i++)\n    i++;\n    System.out.println(i);\nSystem.out.println(i);",
+ "question": "How many times is System.out.println executed? Explain your reasoning.",
+ "answer": "Without braces a for loop repeats only the one statement right after its header. The indentation does not matter, so the println lines are not part of the loop."
+}

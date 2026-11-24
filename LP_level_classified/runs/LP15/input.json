@@ -1,0 +1,5 @@
+{
+ "code": "int i, n = 5;\nfor (i = 1; i < n; i++)\n    i++;\n    System.out.println(i);\nSystem.out.println(i);",
+ "question": "Without tracing line by line, explain what this code does for any value of n.",
+ "answer": "Whatever n is, i starts at 1 and goes up by 2 on every pass, so the loop stops at the first odd number that is n or more. The program prints that number twice. For n = 5 that is 5; for n = 6 it would be 7."
+}

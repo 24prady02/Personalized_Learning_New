@@ -1,0 +1,1058 @@
+{
+ "scenario": "LP02",
+ "settings": {
+  "width": 3,
+  "depth": 3,
+  "prune_tools": "llm",
+  "model": "claude-opus-5-5",
+  "backend": "claude-cli",
+  "rule_fixes": true,
+  "level_v2": true
+ },
+ "clauses": [
+  "println runs 3 times",
+  "The indented println is inside the loop",
+  "so it runs on both passes and prints 2 and 4, and then the last println prints 5"
+ ],
+ "start_concepts": [
+  "println",
+  "for_loop",
+  "loop_control"
+ ],
+ "held_misconceptions": [
+  {
+   "concept": "for_loop",
+   "misconception": "BracelessMultiStatementBody",
+   "kind": "error",
+   "quote": "The indented println is inside the loop; so it runs on both passes and prints 2 and 4, and then the last println prints 5",
+   "score": 0.665
+  },
+  {
+   "concept": "statement",
+   "misconception": "WhitespaceIsSignificant",
+   "kind": "misconception",
+   "quote": "println runs 3 times; The indented println is inside the loop; so it runs on both passes and prints 2 and 4, and then the last println prints 5",
+   "score": 0.644
+  },
+  {
+   "concept": "loop_body",
+   "misconception": "BracelessMultiStatementBody",
+   "kind": "error",
+   "quote": "The indented println is inside the loop; so it runs on both passes and prints 2 and 4, and then the last println prints 5",
+   "score": 0.558
+  }
+ ],
+ "error_evidence": [],
+ "shadowed": [],
+ "broken_edges": [
+  {
+   "edge": "pre:statement->println",
+   "quote": "The indented println is inside the loop; so it runs on both passes and prints 2 and 4, and then the last println prints 5",
+   "score": 0.7,
+   "consequence_of": "mis:statement->WhitespaceIsSignificant"
+  },
+  {
+   "edge": "pre:for_loop->loop_body",
+   "quote": "The indented println is inside the loop; so it runs on both passes and prints 2 and 4, and then the last println prints 5",
+   "score": 0.6375,
+   "consequence_of": "mis:statement->WhitespaceIsSignificant"
+  },
+  {
+   "edge": "pre:statement->control_flow",
+   "quote": "The indented println is inside the loop; so it runs on both passes and prints 2 and 4, and then the last println prints 5",
+   "score": 0.8,
+   "consequence_of": "mis:statement->WhitespaceIsSignificant"
+  }
+ ],
+ "root_cause": {
+  "concept": "statement",
+  "misconception": "WhitespaceIsSignificant"
+ },
+ "levels": {
+  "control_flow": {
+   "level": "L2",
+   "way": "output_prediction",
+   "quote": "println runs 3 times; so it runs on both passes and prints 2 and 4, and then the last println prints 5",
+   "edge": "lvl:control_flow@L2#1",
+   "source": "level_way",
+   "also_shown": [
+    "L2 line_by_line_trace",
+    "L0 everyday_reading"
+   ]
+  },
+  "for_loop": {
+   "level": "L2",
+   "way": "line_by_line_trace",
+   "quote": "so it runs on both passes and prints 2 and 4, and then the last println prints 5",
+   "edge": "lvl:for_loop@L2#0",
+   "source": "level_way",
+   "also_shown": []
+  },
+  "increment_operators": {
+   "level": "L2",
+   "way": "one_step_execution",
+   "quote": "so it runs on both passes and prints 2 and 4, and then the last println prints 5",
+   "edge": "lvl:increment_operators@L2#2",
+   "source": "level_way",
+   "also_shown": [
+    "L2 line_by_line_trace"
+   ]
+  },
+  "loop_control": {
+   "level": "L2",
+   "way": "line_by_line_trace",
+   "quote": "so it runs on both passes and prints 2 and 4, and then the last println prints 5",
+   "edge": "lvl:loop_control@L2#0",
+   "source": "level_way",
+   "also_shown": [
+    "L2 output_prediction"
+   ]
+  },
+  "loop_variable": {
+   "level": "L2",
+   "way": "one_step_execution",
+   "quote": "so it runs on both passes and prints 2 and 4, and then the last println prints 5",
+   "edge": "lvl:loop_variable@L2#2",
+   "source": "level_way",
+   "also_shown": [
+    "L2 output_prediction",
+    "L2 line_by_line_trace"
+   ]
+  },
+  "println": {
+   "level": "L2",
+   "way": "output_prediction",
+   "quote": "so it runs on both passes and prints 2 and 4, and then the last println prints 5",
+   "edge": "lvl:println@L2#1",
+   "source": "level_way",
+   "also_shown": [
+    "L2 one_step_execution"
+   ]
+  },
+  "statement": {
+   "level": "L0",
+   "way": "misconception",
+   "misconception": "WhitespaceIsSignificant",
+   "quote": "println runs 3 times; The indented println is inside the loop; so it runs on both passes and prints 2 and 4, and then the last println prints 5",
+   "edge": "mis:statement->WhitespaceIsSignificant",
+   "rule": "wrong rule: Line breaks and indentation change what the program does, so each statement must be on its own line. Right rule: Java compilers treat all whitespace outside quotes as equivalent; statements are separated by ;, not by line breaks.",
+   "source": "level_mis_links"
+  }
+ },
+ "overall_level": "L0",
+ "paths": [
+  {
+   "depth": 1,
+   "source": "for_loop",
+   "edge": "err:for_loop->BracelessMultiStatementBody",
+   "target": "BracelessMultiStatementBody",
+   "kind": "error",
+   "label": "held",
+   "clauses": [
+    2,
+    3
+   ],
+   "quote": "The indented println is inside the loop; so it runs on both passes and prints 2 and 4, and then the last println prints 5",
+   "confidence": 0.95,
+   "prune_score": 0.7,
+   "score": 0.665,
+   "logic": "Indenting several statements under an if or for makes them all part of its body, even without braces.",
+   "twin_logic": "Without braces only the first statement belongs to the if/for; the rest run once, after it.",
+   "role": "context"
+  },
+  {
+   "depth": 1,
+   "source": "loop_control",
+   "edge": "err:loop_control->WrongIterationCount",
+   "target": "WrongIterationCount",
+   "kind": "error",
+   "label": "correct",
+   "clauses": [
+    3
+   ],
+   "quote": "so it runs on both passes and prints 2 and 4, and then the last println prints 5",
+   "confidence": 0.75,
+   "prune_score": 0.5,
+   "score": 0.375,
+   "logic": "Updates the loop counter so that the loop runs the wrong number of times.",
+   "twin_logic": "The init, test and update together decide the number of passes; trace them to check the count.",
+   "role": "context"
+  },
+  {
+   "depth": 1,
+   "source": "loop_control",
+   "edge": "lvl:loop_control@L2#0",
+   "target": "loop_control@L2",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    3
+   ],
+   "quote": "so it runs on both passes and prints 2 and 4, and then the last println prints 5",
+   "confidence": 0.7,
+   "prune_score": 0.45,
+   "score": 0.315,
+   "logic": "init (once) -> test -> body -> update -> test -> body -> update ... -> test false -> exit.",
+   "twin_logic": null,
+   "level": "L2",
+   "way": "line_by_line_trace"
+  },
+  {
+   "depth": 2,
+   "source": "println",
+   "edge": "pre:statement->println",
+   "target": "statement",
+   "kind": "prerequisite",
+   "label": "broken",
+   "clauses": [
+    2,
+    3
+   ],
+   "quote": "The indented println is inside the loop; so it runs on both passes and prints 2 and 4, and then the last println prints 5",
+   "confidence": 0.7,
+   "prune_score": 1.0,
+   "score": 0.7,
+   "logic": "System.out.println(s); is itself a statement, so its line of output appears at its own place in the sequence.",
+   "twin_logic": null,
+   "consequence_of": "mis:statement->WhitespaceIsSignificant"
+  },
+  {
+   "depth": 2,
+   "source": "for_loop",
+   "edge": "pre:for_loop->loop_body",
+   "target": "loop_body",
+   "kind": "prerequisite",
+   "label": "broken",
+   "clauses": [
+    2,
+    3
+   ],
+   "quote": "The indented println is inside the loop; so it runs on both passes and prints 2 and 4, and then the last println prints 5",
+   "confidence": 0.85,
+   "prune_score": 0.75,
+   "score": 0.6375,
+   "logic": "The statements in braces after the for header are the loop body; they run once on every pass, between the test and the increment, exactly as in a while loop.",
+   "twin_logic": null,
+   "consequence_of": "mis:statement->WhitespaceIsSignificant"
+  },
+  {
+   "depth": 2,
+   "source": "loop_body",
+   "edge": "err:loop_body->BracelessMultiStatementBody",
+   "target": "BracelessMultiStatementBody",
+   "kind": "error",
+   "label": "held",
+   "clauses": [
+    2,
+    3
+   ],
+   "quote": "The indented println is inside the loop; so it runs on both passes and prints 2 and 4, and then the last println prints 5",
+   "confidence": 0.93,
+   "prune_score": 0.6,
+   "score": 0.558,
+   "logic": "Indenting several statements under an if or for makes them all part of its body, even without braces.",
+   "twin_logic": "Without braces only the first statement belongs to the if/for; the rest run once, after it.",
+   "role": "primary"
+  },
+  {
+   "depth": 3,
+   "source": "control_flow",
+   "edge": "pre:statement->control_flow",
+   "target": "statement",
+   "kind": "prerequisite",
+   "label": "broken",
+   "clauses": [
+    2,
+    3
+   ],
+   "quote": "The indented println is inside the loop; so it runs on both passes and prints 2 and 4, and then the last println prints 5",
+   "confidence": 0.8,
+   "prune_score": 1.0,
+   "score": 0.8,
+   "logic": "Control flow is the order in which statements run.",
+   "twin_logic": null,
+   "consequence_of": "mis:statement->WhitespaceIsSignificant"
+  },
+  {
+   "depth": 3,
+   "source": "statement",
+   "edge": "mis:statement->WhitespaceIsSignificant",
+   "target": "WhitespaceIsSignificant",
+   "kind": "misconception",
+   "label": "held",
+   "clauses": [
+    1,
+    2,
+    3
+   ],
+   "quote": "println runs 3 times; The indented println is inside the loop; so it runs on both passes and prints 2 and 4, and then the last println prints 5",
+   "confidence": 0.92,
+   "prune_score": 0.7000000000000001,
+   "score": 0.644,
+   "logic": "Line breaks and indentation change what the program does, so each statement must be on its own line.",
+   "twin_logic": "Java compilers consider all whitespace in program text (outside quotation marks) to be equivalent; layout is for human readers.",
+   "role": "context"
+  },
+  {
+   "depth": 3,
+   "source": "for_loop",
+   "edge": "pre:loop_control->for_loop",
+   "target": "loop_control",
+   "kind": "prerequisite",
+   "label": "confirmed",
+   "clauses": [
+    3
+   ],
+   "quote": "so it runs on both passes and prints 2 and 4, and then the last println prints 5",
+   "confidence": 0.6,
+   "prune_score": 1.0,
+   "score": 0.6,
+   "logic": "The for header is exactly the three control slots, and the body runs after the test and before the update on each pass.",
+   "twin_logic": null
+  }
+ ],
+ "evidence": [
+  {
+   "depth": 1,
+   "source": "println",
+   "edge": "lvl:println@L2#1",
+   "target": "println@L2",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    3
+   ],
+   "quote": "so it runs on both passes and prints 2 and 4, and then the last println prints 5",
+   "confidence": 0.7,
+   "prune_score": 0.3,
+   "score": 0.21,
+   "logic": "Output is the value's characters followed by a line break: println(\"Hello, \"); println(\"World!\"); prints two lines.",
+   "twin_logic": null,
+   "level": "L2",
+   "way": "output_prediction"
+  },
+  {
+   "depth": 1,
+   "source": "println",
+   "edge": "lvl:println@L2#2",
+   "target": "println@L2",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    3
+   ],
+   "quote": "so it runs on both passes and prints 2 and 4, and then the last println prints 5",
+   "confidence": 0.6,
+   "prune_score": 0.2,
+   "score": 0.12,
+   "logic": "One call appends the text and a line separator to the output; the cursor ends at the start of the next line; no variable changes and nothing is returned.",
+   "twin_logic": null,
+   "level": "L2",
+   "way": "one_step_execution"
+  },
+  {
+   "depth": 1,
+   "source": "for_loop",
+   "edge": "err:for_loop->BracelessMultiStatementBody",
+   "target": "BracelessMultiStatementBody",
+   "kind": "error",
+   "label": "held",
+   "clauses": [
+    2,
+    3
+   ],
+   "quote": "The indented println is inside the loop; so it runs on both passes and prints 2 and 4, and then the last println prints 5",
+   "confidence": 0.95,
+   "prune_score": 0.7,
+   "score": 0.665,
+   "logic": "Indenting several statements under an if or for makes them all part of its body, even without braces.",
+   "twin_logic": "Without braces only the first statement belongs to the if/for; the rest run once, after it.",
+   "role": "context"
+  },
+  {
+   "depth": 1,
+   "source": "for_loop",
+   "edge": "err:for_loop->WrongIterationCount",
+   "target": "WrongIterationCount",
+   "kind": "error",
+   "label": "correct",
+   "clauses": [
+    3
+   ],
+   "quote": "so it runs on both passes and prints 2 and 4, and then the last println prints 5",
+   "confidence": 0.8,
+   "prune_score": 0.15,
+   "score": 0.12,
+   "logic": "Updates the loop counter so that the loop runs the wrong number of times.",
+   "twin_logic": "The init, test and update together decide the number of passes; trace them to check the count.",
+   "role": "primary"
+  },
+  {
+   "depth": 1,
+   "source": "for_loop",
+   "edge": "mis:for_loop->ForUpdateBeforeBody",
+   "target": "ForUpdateBeforeBody",
+   "kind": "misconception",
+   "label": "correct",
+   "clauses": [
+    3
+   ],
+   "quote": "so it runs on both passes and prints 2 and 4, and then the last println prints 5",
+   "confidence": 0.75,
+   "prune_score": 0.15,
+   "score": 0.1125,
+   "logic": "The update part of a for header (e.g. i = i - 4) runs before the body on each pass, so the first pass already sees the updated value.",
+   "twin_logic": "The update runs after the body, before the next condition test; the first pass uses the initial value.",
+   "role": "primary"
+  },
+  {
+   "depth": 1,
+   "source": "for_loop",
+   "edge": "lvl:for_loop@L2#0",
+   "target": "for_loop@L2",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    3
+   ],
+   "quote": "so it runs on both passes and prints 2 and 4, and then the last println prints 5",
+   "confidence": 0.7,
+   "prune_score": 0.25,
+   "score": 0.175,
+   "logic": "Run the initializer once; then repeatedly: test the condition (stop if false), execute the body, run the update.",
+   "twin_logic": null,
+   "level": "L2",
+   "way": "line_by_line_trace"
+  },
+  {
+   "depth": 1,
+   "source": "loop_control",
+   "edge": "err:loop_control->WrongIterationCount",
+   "target": "WrongIterationCount",
+   "kind": "error",
+   "label": "correct",
+   "clauses": [
+    3
+   ],
+   "quote": "so it runs on both passes and prints 2 and 4, and then the last println prints 5",
+   "confidence": 0.75,
+   "prune_score": 0.5,
+   "score": 0.375,
+   "logic": "Updates the loop counter so that the loop runs the wrong number of times.",
+   "twin_logic": "The init, test and update together decide the number of passes; trace them to check the count.",
+   "role": "context"
+  },
+  {
+   "depth": 1,
+   "source": "loop_control",
+   "edge": "mis:loop_control->ForUpdateBeforeBody",
+   "target": "ForUpdateBeforeBody",
+   "kind": "misconception",
+   "label": "correct",
+   "clauses": [
+    3
+   ],
+   "quote": "so it runs on both passes and prints 2 and 4, and then the last println prints 5",
+   "confidence": 0.75,
+   "prune_score": 0.25,
+   "score": 0.1875,
+   "logic": "The update part of a for header (e.g. i = i - 4) runs before the body on each pass, so the first pass already sees the updated value.",
+   "twin_logic": "The update runs after the body, before the next condition test; the first pass uses the initial value.",
+   "role": "context"
+  },
+  {
+   "depth": 1,
+   "source": "loop_control",
+   "edge": "lvl:loop_control@L2#0",
+   "target": "loop_control@L2",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    3
+   ],
+   "quote": "so it runs on both passes and prints 2 and 4, and then the last println prints 5",
+   "confidence": 0.7,
+   "prune_score": 0.45,
+   "score": 0.315,
+   "logic": "init (once) -> test -> body -> update -> test -> body -> update ... -> test false -> exit.",
+   "twin_logic": null,
+   "level": "L2",
+   "way": "line_by_line_trace"
+  },
+  {
+   "depth": 1,
+   "source": "loop_control",
+   "edge": "lvl:loop_control@L2#1",
+   "target": "loop_control@L2",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    3
+   ],
+   "quote": "so it runs on both passes and prints 2 and 4, and then the last println prints 5",
+   "confidence": 0.7,
+   "prune_score": 0.25,
+   "score": 0.175,
+   "logic": "The number of passes and the values seen follow from the three parts: for (int i = 0; i <= N; i++) makes N+1 passes with i = 0..N; with i < N it makes N passes; i += 2 visits every second value.",
+   "twin_logic": null,
+   "level": "L2",
+   "way": "output_prediction"
+  },
+  {
+   "depth": 2,
+   "source": "for_loop",
+   "edge": "pre:for_loop->loop_body",
+   "target": "loop_body",
+   "kind": "prerequisite",
+   "label": "broken",
+   "clauses": [
+    2,
+    3
+   ],
+   "quote": "The indented println is inside the loop; so it runs on both passes and prints 2 and 4, and then the last println prints 5",
+   "confidence": 0.85,
+   "prune_score": 0.75,
+   "score": 0.6375,
+   "logic": "The statements in braces after the for header are the loop body; they run once on every pass, between the test and the increment, exactly as in a while loop.",
+   "twin_logic": null,
+   "consequence_of": "mis:statement->WhitespaceIsSignificant"
+  },
+  {
+   "depth": 2,
+   "source": "for_loop",
+   "edge": "pre:loop_control->for_loop",
+   "target": "loop_control",
+   "kind": "prerequisite",
+   "label": "confirmed",
+   "clauses": [
+    3
+   ],
+   "quote": "so it runs on both passes and prints 2 and 4, and then the last println prints 5",
+   "confidence": 0.6,
+   "prune_score": 0.25,
+   "score": 0.15,
+   "logic": "The for header is exactly the three control slots, and the body runs after the test and before the update on each pass.",
+   "twin_logic": null
+  },
+  {
+   "depth": 2,
+   "source": "println",
+   "edge": "pre:statement->println",
+   "target": "statement",
+   "kind": "prerequisite",
+   "label": "broken",
+   "clauses": [
+    2,
+    3
+   ],
+   "quote": "The indented println is inside the loop; so it runs on both passes and prints 2 and 4, and then the last println prints 5",
+   "confidence": 0.7,
+   "prune_score": 1.0,
+   "score": 0.7,
+   "logic": "System.out.println(s); is itself a statement, so its line of output appears at its own place in the sequence.",
+   "twin_logic": null,
+   "consequence_of": "mis:statement->WhitespaceIsSignificant"
+  },
+  {
+   "depth": 2,
+   "source": "loop_control",
+   "edge": "pre:loop_variable->loop_control",
+   "target": "loop_variable",
+   "kind": "prerequisite",
+   "label": "confirmed",
+   "clauses": [
+    3
+   ],
+   "quote": "so it runs on both passes and prints 2 and 4, and then the last println prints 5",
+   "confidence": 0.75,
+   "prune_score": 0.7,
+   "score": 0.525,
+   "logic": "The init, condition and update all act on the loop variable: the init sets it, the condition tests it, the update changes it.",
+   "twin_logic": null
+  },
+  {
+   "depth": 2,
+   "source": "loop_control",
+   "edge": "pre:loop_control->increment_operators",
+   "target": "increment_operators",
+   "kind": "prerequisite",
+   "label": "confirmed",
+   "clauses": [
+    3
+   ],
+   "quote": "so it runs on both passes and prints 2 and 4, and then the last println prints 5",
+   "confidence": 0.7,
+   "prune_score": 0.3,
+   "score": 0.21,
+   "logic": "The loop update i = i + 1 comes first; ++ (and +=) are then introduced as shorthand for that update.",
+   "twin_logic": null
+  },
+  {
+   "depth": 2,
+   "source": "loop_body",
+   "edge": "err:loop_body->BracelessMultiStatementBody",
+   "target": "BracelessMultiStatementBody",
+   "kind": "error",
+   "label": "held",
+   "clauses": [
+    2,
+    3
+   ],
+   "quote": "The indented println is inside the loop; so it runs on both passes and prints 2 and 4, and then the last println prints 5",
+   "confidence": 0.93,
+   "prune_score": 0.6,
+   "score": 0.558,
+   "logic": "Indenting several statements under an if or for makes them all part of its body, even without braces.",
+   "twin_logic": "Without braces only the first statement belongs to the if/for; the rest run once, after it.",
+   "role": "primary"
+  },
+  {
+   "depth": 2,
+   "source": "loop_body",
+   "edge": "mis:loop_body->StatementAfterLoopInBody",
+   "target": "StatementAfterLoopInBody",
+   "kind": "misconception",
+   "label": "correct",
+   "clauses": [
+    3
+   ],
+   "quote": "so it runs on both passes and prints 2 and 4, and then the last println prints 5",
+   "confidence": 0.6,
+   "prune_score": 0.25,
+   "score": 0.15,
+   "logic": "A statement written after the loop is repeated with the loop body.",
+   "twin_logic": "The body ends at the closing brace (or after its single statement); code after it runs once, after the loop ends.",
+   "role": "primary"
+  },
+  {
+   "depth": 2,
+   "source": "loop_body",
+   "edge": "mis:loop_body->ForLoopPartSkipped",
+   "target": "ForLoopPartSkipped",
+   "kind": "misconception",
+   "label": "correct",
+   "clauses": [
+    3
+   ],
+   "quote": "so it runs on both passes and prints 2 and 4, and then the last println prints 5",
+   "confidence": 0.6,
+   "prune_score": 0.15,
+   "score": 0.09,
+   "logic": "A pass of a loop may leave out one of its parts (the condition test, the body, the update, or the initialization).",
+   "twin_logic": "Each pass of a for loop runs test, then body, then update, every time; the initialization runs once, at the start.",
+   "role": "context"
+  },
+  {
+   "depth": 2,
+   "source": "loop_variable",
+   "edge": "mis:loop_variable->BodyChangeIgnoredByCondition",
+   "target": "BodyChangeIgnoredByCondition",
+   "kind": "misconception",
+   "label": "correct",
+   "clauses": [
+    3
+   ],
+   "quote": "so it runs on both passes and prints 2 and 4, and then the last println prints 5",
+   "confidence": 0.8,
+   "prune_score": 0.5,
+   "score": 0.4,
+   "logic": "Changing the loop variable inside the body does not affect the loop condition; the loop still runs its planned number of times.",
+   "twin_logic": "The condition is tested with the current value of the variable, including changes made in the body.",
+   "role": "primary"
+  },
+  {
+   "depth": 2,
+   "source": "loop_variable",
+   "edge": "mis:loop_variable->LoopOutputSameEachPass",
+   "target": "LoopOutputSameEachPass",
+   "kind": "misconception",
+   "label": "correct",
+   "clauses": [
+    3
+   ],
+   "quote": "so it runs on both passes and prints 2 and 4, and then the last println prints 5",
+   "confidence": 0.85,
+   "prune_score": 0.35,
+   "score": 0.2975,
+   "logic": "A loop prints the same thing on every pass; the changing loop variable does not affect what the body does.",
+   "twin_logic": "The body uses the current value of the loop variable, so its output can differ on each pass.",
+   "role": "primary"
+  },
+  {
+   "depth": 2,
+   "source": "loop_variable",
+   "edge": "mis:loop_variable->LoopVariableLifetimeScope",
+   "target": "LoopVariableLifetimeScope",
+   "kind": "misconception",
+   "label": "correct",
+   "clauses": [
+    3
+   ],
+   "quote": "so it runs on both passes and prints 2 and 4, and then the last println prints 5",
+   "confidence": 0.65,
+   "prune_score": 0.15,
+   "score": 0.0975,
+   "logic": "The for variable i is a new variable on every pass rather than one variable changed by the update.",
+   "twin_logic": "The for variable i is created once by the init, and the update changes that same variable on every pass.",
+   "role": "context"
+  },
+  {
+   "depth": 2,
+   "source": "loop_variable",
+   "edge": "lvl:loop_variable@L2#2",
+   "target": "loop_variable@L2",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    3
+   ],
+   "quote": "so it runs on both passes and prints 2 and 4, and then the last println prints 5",
+   "confidence": 0.75,
+   "prune_score": 0.4,
+   "score": 0.3,
+   "logic": "One update changes only the loop variable (i = i + 1 turns 4 into 5); one test reads it and yields true or false; an assignment to it in the body changes what the next test sees.",
+   "twin_logic": null,
+   "level": "L2",
+   "way": "one_step_execution"
+  },
+  {
+   "depth": 2,
+   "source": "loop_variable",
+   "edge": "lvl:loop_variable@L2#1",
+   "target": "loop_variable@L2",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    3
+   ],
+   "quote": "so it runs on both passes and prints 2 and 4, and then the last println prints 5",
+   "confidence": 0.8,
+   "prune_score": 0.35,
+   "score": 0.28,
+   "logic": "Across passes the loop variable takes a predictable sequence of values, e.g. 4, 5, ..., 10 in TenHellos, and after a while loop it holds the first value that failed the test (11).",
+   "twin_logic": null,
+   "level": "L2",
+   "way": "output_prediction"
+  },
+  {
+   "depth": 2,
+   "source": "loop_variable",
+   "edge": "lvl:loop_variable@L2#0",
+   "target": "loop_variable@L2",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    3
+   ],
+   "quote": "so it runs on both passes and prints 2 and 4, and then the last println prints 5",
+   "confidence": 0.7,
+   "prune_score": 0.25,
+   "score": 0.175,
+   "logic": "Its value is set by the init, read by the test, read by the body, then changed by the update, and the cycle repeats; the body sees the value set by the previous update.",
+   "twin_logic": null,
+   "level": "L2",
+   "way": "line_by_line_trace"
+  },
+  {
+   "depth": 2,
+   "source": "control_flow",
+   "edge": "mis:control_flow->ProgramEndsAfterLoop",
+   "target": "ProgramEndsAfterLoop",
+   "kind": "misconception",
+   "label": "correct",
+   "clauses": [
+    3
+   ],
+   "quote": "so it runs on both passes and prints 2 and 4, and then the last println prints 5",
+   "confidence": 0.85,
+   "prune_score": 0.45,
+   "score": 0.3825,
+   "logic": "When a loop finishes the program ends, so code after the loop never runs.",
+   "twin_logic": "When the loop condition becomes false, control continues with the first statement after the loop.",
+   "role": "context"
+  },
+  {
+   "depth": 2,
+   "source": "control_flow",
+   "edge": "mis:control_flow->FalseLoopRepeatsNextCode",
+   "target": "FalseLoopRepeatsNextCode",
+   "kind": "misconception",
+   "label": "correct",
+   "clauses": [
+    3
+   ],
+   "quote": "so it runs on both passes and prints 2 and 4, and then the last println prints 5",
+   "confidence": 0.7,
+   "prune_score": 0.35,
+   "score": 0.245,
+   "logic": "A loop is an iterative if-else: while the condition is true the body repeats, and when it is false the code after the loop repeats.",
+   "twin_logic": "Only the body is repeated; once the condition is false the code after the loop runs once.",
+   "role": "context"
+  },
+  {
+   "depth": 2,
+   "source": "control_flow",
+   "edge": "lvl:control_flow@L0#0",
+   "target": "control_flow@L0",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    2,
+    3
+   ],
+   "quote": "The indented println is inside the loop; so it runs on both passes and prints 2 and 4, and then the last println prints 5",
+   "confidence": 0.8,
+   "prune_score": 0.45,
+   "score": 0.36,
+   "logic": "Folk meaning: in everyday instructions a listener reads the whole list at once, does steps in a sensible order and infers what the writer wants. Java instead executes statements one at a time, top to bottom, each only when control reaches it, and nothing later in the program has any effect earlier.",
+   "twin_logic": null,
+   "level": "L0",
+   "way": "everyday_reading"
+  },
+  {
+   "depth": 2,
+   "source": "control_flow",
+   "edge": "lvl:control_flow@L2#1",
+   "target": "control_flow@L2",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    1,
+    3
+   ],
+   "quote": "println runs 3 times; so it runs on both passes and prints 2 and 4, and then the last println prints 5",
+   "confidence": 0.85,
+   "prune_score": 0.3,
+   "score": 0.255,
+   "logic": "The output is the sequence of print statements that control actually reaches, in the order reached: e.g. TenHellos prints 1st, 2nd, 3rd Hello once each, then 4th to 10th Hello from the loop.",
+   "twin_logic": null,
+   "level": "L2",
+   "way": "output_prediction"
+  },
+  {
+   "depth": 2,
+   "source": "control_flow",
+   "edge": "lvl:control_flow@L2#0",
+   "target": "control_flow@L2",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    3
+   ],
+   "quote": "so it runs on both passes and prints 2 and 4, and then the last println prints 5",
+   "confidence": 0.6,
+   "prune_score": 0.25,
+   "score": 0.15,
+   "logic": "Execute the statement at the current point; when it completes normally, control passes to the next statement in the block. An if evaluates its condition once and then runs at most one branch; a loop evaluates its condition before each pass; after an if or a loop finishes, control continues with the statement after it.",
+   "twin_logic": null,
+   "level": "L2",
+   "way": "line_by_line_trace"
+  },
+  {
+   "depth": 3,
+   "source": "statement",
+   "edge": "mis:statement->WhitespaceIsSignificant",
+   "target": "WhitespaceIsSignificant",
+   "kind": "misconception",
+   "label": "held",
+   "clauses": [
+    1,
+    2,
+    3
+   ],
+   "quote": "println runs 3 times; The indented println is inside the loop; so it runs on both passes and prints 2 and 4, and then the last println prints 5",
+   "confidence": 0.92,
+   "prune_score": 0.7000000000000001,
+   "score": 0.644,
+   "logic": "Line breaks and indentation change what the program does, so each statement must be on its own line.",
+   "twin_logic": "Java compilers consider all whitespace in program text (outside quotation marks) to be equivalent; layout is for human readers.",
+   "role": "context"
+  },
+  {
+   "depth": 3,
+   "source": "statement",
+   "edge": "lvl:statement@L0#0",
+   "target": "statement@L0",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    2,
+    3
+   ],
+   "quote": "The indented println is inside the loop; so it runs on both passes and prints 2 and 4, and then the last println prints 5",
+   "confidence": 0.6,
+   "prune_score": 0.45,
+   "score": 0.27,
+   "logic": "Everyday reading: a program is read like a text or a list of wishes that the computer takes in all at once, so line order, goals of later lines or what the writer meant can matter. Java rule: each statement is one step, ended by ;, executed once, in written order, using only the current state.",
+   "twin_logic": null,
+   "level": "L0",
+   "way": "everyday_reading"
+  },
+  {
+   "depth": 3,
+   "source": "for_loop",
+   "edge": "pre:loop_control->for_loop",
+   "target": "loop_control",
+   "kind": "prerequisite",
+   "label": "confirmed",
+   "clauses": [
+    3
+   ],
+   "quote": "so it runs on both passes and prints 2 and 4, and then the last println prints 5",
+   "confidence": 0.6,
+   "prune_score": 1.0,
+   "score": 0.6,
+   "logic": "The for header is exactly the three control slots, and the body runs after the test and before the update on each pass.",
+   "twin_logic": null
+  },
+  {
+   "depth": 3,
+   "source": "control_flow",
+   "edge": "pre:statement->control_flow",
+   "target": "statement",
+   "kind": "prerequisite",
+   "label": "broken",
+   "clauses": [
+    2,
+    3
+   ],
+   "quote": "The indented println is inside the loop; so it runs on both passes and prints 2 and 4, and then the last println prints 5",
+   "confidence": 0.8,
+   "prune_score": 1.0,
+   "score": 0.8,
+   "logic": "Control flow is the order in which statements run.",
+   "twin_logic": null,
+   "consequence_of": "mis:statement->WhitespaceIsSignificant"
+  },
+  {
+   "depth": 3,
+   "source": "increment_operators",
+   "edge": "mis:increment_operators->IncrementByTwo",
+   "target": "IncrementByTwo",
+   "kind": "misconception",
+   "label": "correct",
+   "clauses": [
+    3
+   ],
+   "quote": "so it runs on both passes and prints 2 and 4, and then the last println prints 5",
+   "confidence": 0.8,
+   "prune_score": 0.5,
+   "score": 0.4,
+   "logic": "i++ increases i by 2.",
+   "twin_logic": "i++ (and ++i) increases i by exactly 1.",
+   "role": "primary"
+  },
+  {
+   "depth": 3,
+   "source": "increment_operators",
+   "edge": "mis:increment_operators->PreIncrementBeforeLoop",
+   "target": "PreIncrementBeforeLoop",
+   "kind": "misconception",
+   "label": "correct",
+   "clauses": [
+    3
+   ],
+   "quote": "so it runs on both passes and prints 2 and 4, and then the last println prints 5",
+   "confidence": 0.6,
+   "prune_score": 0.3,
+   "score": 0.18,
+   "logic": "++i in the for-update runs before the body each pass",
+   "twin_logic": "The update runs after each pass of the body, so with either ++i or i++ the first pass uses i = s.",
+   "role": "context"
+  },
+  {
+   "depth": 3,
+   "source": "increment_operators",
+   "edge": "lvl:increment_operators@L2#2",
+   "target": "increment_operators@L2",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    3
+   ],
+   "quote": "so it runs on both passes and prints 2 and 4, and then the last println prints 5",
+   "confidence": 0.6,
+   "prune_score": 0.4,
+   "score": 0.24,
+   "logic": "One execution changes exactly one variable (i) by exactly 1 and returns its old (i++) or new (++i) value.",
+   "twin_logic": null,
+   "level": "L2",
+   "way": "one_step_execution"
+  },
+  {
+   "depth": 3,
+   "source": "increment_operators",
+   "edge": "lvl:increment_operators@L2#0",
+   "target": "increment_operators@L2",
+   "kind": "level",
+   "label": "shown",
+   "clauses": [
+    3
+   ],
+   "quote": "so it runs on both passes and prints 2 and 4, and then the last println prints 5",
+   "confidence": 0.6,
+   "prune_score": 0.3,
+   "score": 0.18,
+   "logic": "i++: fetch the value of i (that is the expression's value), then store i + 1 into i. ++i: store i + 1 into i, and the new value is the expression's value. Both happen before the rest of the enclosing expression continues.",
+   "twin_logic": null,
+   "level": "L2",
+   "way": "line_by_line_trace"
+  }
+ ],
+ "clause_coverage": {
+  "println runs 3 times": "lvl:control_flow@L2#1",
+  "The indented println is inside the loop": "err:for_loop->BracelessMultiStatementBody",
+  "so it runs on both passes and prints 2 and 4, and then the last println prints 5": "lvl:println@L2#1"
+ },
+ "unexplained_clauses": [],
+ "stop_reason": "max depth",
+ "depth_reached": 3,
+ "llm_calls": 0,
+ "llm_cache_hits": 60,
+ "llm_calls_by_step": {
+  "prune": 21,
+  "label": 39
+ },
+ "level_v2": {
+  "wrong_ways": [
+   {
+    "concept": "println",
+    "edge": "lvl:println@L3#0",
+    "level": "L3",
+    "way": "relation_to_neighbour",
+    "clauses": [
+     1,
+     2,
+     3
+    ],
+    "quote": "println runs 3 times; The indented println is inside the loop; so it runs on both passes and prints 2 and 4, and then the last println prints 5",
+    "confidence": 0.85
+   },
+   {
+    "concept": "for_loop",
+    "edge": "lvl:for_loop@L4#6",
+    "level": "L4",
+    "way": "diagnose_an_error",
+    "clauses": [
+     2,
+     3
+    ],
+    "quote": "The indented println is inside the loop; so it runs on both passes and prints 2 and 4, and then the last println prints 5",
+    "confidence": 0.7
+   },
+   {
+    "concept": "statement",
+    "edge": "lvl:statement@L3#1",
+    "level": "L3",
+    "way": "relation_to_neighbour",
+    "clauses": [
+     2,
+     3
+    ],
+    "quote": "The indented println is inside the loop; so it runs on both passes and prints 2 and 4, and then the last println prints 5",
+    "confidence": 0.85
+   }
+  ],
+  "not_counted": []
+ }
+}
