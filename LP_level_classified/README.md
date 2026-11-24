@@ -211,30 +211,218 @@ each, written at the level the question asks for; LP18 answers the L4 question Q
 rule puts them on the right side: LP04 (the right value for a wrong reason: L0, not L2), LP13 (a correct trace with
 one slip: L2, not L0) and LP20 (a bare correct output: no level).
 
-### How each question provides each type
+### The logic that points each question and answer to its level
 
-| Scenario | Level and way tested | Question | Student answer | Why the answer is this way |
-|---|---|---|---|---|
-| [LP01](runs/LP01/) | L0: everyday reading | What is printed? Explain, pass by pass, what happens to i. | It counts from 1 to 5, so it prints 1, 2, 3, 4, 5. 'For i from 1 to n' means do it for each number. | Reads the header as English 'for each number 1 to 5'; no Java rule applied. |
-| [LP02](runs/LP02/) | L0: misconception | How many times is System.out.println executed? Explain your reasoning. | println runs 3 times. The indented println is inside the loop, so it runs on both passes and prints 2 and 4, and then the last println prints 5. | The key trap: indentation read as the body. The real body is only i++. Wrong rule: StatementAfterLoopInBody. |
-| [LP03](runs/LP03/) | L0: misconception | How many times does the body of the for loop run? Explain your reasoning. | The body runs 4 times, for i = 1, 2, 3 and 4. The header says i < 5 and i++, so it runs 4 times; the i++ inside the body does not change how many times the loop runs. | States the wrong rule: the i++ in the body does not change the count. Wrong rule: BodyChangeIgnoredByCondition. |
-| [LP04](runs/LP04/) | L0: misconception | What is the value of i when the second println runs? Explain how i gets that value. | i is 5. The loop runs for i = 1, 2, 3, 4 and stops when i reaches 5; the i++ in the body does not affect the count. | Boundary case: the value (5) is right but the reason is the wrong rule, so it is L0, not L2. Wrong rule: BodyChangeIgnoredByCondition. |
-| [LP05](runs/LP05/) | L0: misconception | How many times does the body of the for loop run? Explain your reasoning. | The body runs once. i++ adds 2, so after the body i is 3, and the update makes it 5. Then 5 < 5 is false, so the loop stops. | States the wrong rule: i++ adds 2. Wrong rule: IncrementByTwo. |
-| [LP06](runs/LP06/) | L0: misconception | What is printed? Explain, pass by pass, what happens to i. | It never stops. Each pass starts again with i = 1, so i goes 1, 2, 3 and back to 1, and the println lines are never reached. | States the wrong rule: each pass starts again with i = 1. Wrong rule: ForInitRepeats. |
-| [LP07](runs/LP07/) | L0: inconsistent trace | What is printed? Explain, pass by pass, what happens to i. | Pass 1: i++ makes i 2 and println prints 2, then the update makes it 3. Pass 2: i++ makes it 4 and the update makes it 5. 5 < 5 is false, so the loop stops and the last line prints 5. Output: 2 and 5. | Treats println as part of the body on pass 1 only: the right rule in one place, a wrong one in another. |
-| [LP08](runs/LP08/) | L1: names the element | How many times is System.out.println executed? Explain your reasoning. | The program has two System.out.println statements and one for loop. The for loop has a header with a start, a condition and an update, and a body. | Names the parts correctly; gives no count. Covering every part in order would be L2. |
-| [LP09](runs/LP09/) | L1: states the rule | How many times is System.out.println executed? Explain your reasoning. | Without braces a for loop repeats only the one statement right after its header. The indentation does not matter, so the println lines are not part of the loop. | States the right rule but never applies it to the values (no count). Applying it would be L2. |
-| [LP10](runs/LP10/) | L2: line by line trace | What is printed? Explain, pass by pass, what happens to i. | i starts at 1. 1 < 5 is true, the body i++ makes i 2, the update makes it 3. 3 < 5 is true, the body makes it 4, the update makes it 5. 5 < 5 is false, so the loop stops. Only i++ was in the loop. Then the two println lines print 5 and 5. | Executes every statement in order with its values. |
-| [LP11](runs/LP11/) | L2: output prediction | What is the value of i when the second println runs? Explain how i gets that value. | i is 5. The loop leaves when the test 5 < 5 fails, so i is 5 at that point, and nothing after the loop changes i. Both println lines print 5. | Gives the value and justifies it from the failed test. |
-| [LP12](runs/LP12/) | L2: one step execution | How many times does the body of the for loop run? Explain your reasoning. | On one pass i goes up by 2: once by the i++ in the body and once by the i++ in the update. So after the first pass i is 3 instead of 2. | Gives the change one pass makes; does not finish the count. |
-| [LP13](runs/LP13/) | L2: line by line trace | What is printed? Explain, pass by pass, what happens to i. | i starts at 1. 1 < 5, the body makes i 2, the update makes it 3. 3 < 5, the body makes it 4, the update makes it 5. 5 < 5 is false, so it stops. Then it prints 5 and 4. | Boundary case: a correct, consistent trace with one slip at the end is L2 with an error, not L0. |
-| [LP14](runs/LP14/) | L3: relation to neighbour | How many times does the body of the for loop run? Explain your reasoning. | Twice. The body's i++ and the header's i++ change the same variable, so the condition sees i as 1, then 3, then 5 and fails on the third test. Because there are no braces the body is only i++; the indented println is after the loop. | Explains how the body's i++ and the header's i++ work on the same variable, and what the missing braces mean for the body. |
-| [LP15](runs/LP15/) | L3: purpose of the whole | Without tracing line by line, explain what this code does for any value of n. | Whatever n is, i starts at 1 and goes up by 2 on every pass, so the loop stops at the first odd number that is n or more. The program prints that number twice. For n = 5 that is 5; for n = 6 it would be 7. | Purpose deduced from the code for all n, not guessed from traced cases (that would be L2). |
-| [LP16](runs/LP16/) | L4: predict a change | What would be printed if braces { } were put around the two indented lines? Explain without tracing the new code line by line. | Then the println is in the body and runs on every pass, after the i++ and before the update. The passes do not change (the test still sees 1 and then 3), so it prints 2 and 4 inside the loop, and the last println still prints 5. | Predicts what braces would change without re-tracing. Expected output 2, 4, 5. |
-| [LP17](runs/LP17/) | L4: diagnose an error | Will this compile? What happens when you run it? Explain your reasoning. | It does not compile. Line 1 and line 4 are missing the ; at the end, so javac reports ';' expected. After those are fixed, system.out still fails because Java is case-sensitive: there is no package called system, it must be System. Even then the indentation is misleading: without braces only i++ is in the loop, a silent logic error whenever a braceless loop is followed by indented lines. | Names the rules broken, the kind of each error and when it bites (program as written, with the missing ; and system). |
-| [LP18](runs/LP18/) | L0: misconception | Will this compile? What happens when you run it? Explain your reasoning. | Yes, it compiles and prints 5 twice. The missing ; do not matter because each statement is on its own line, and system.out is the same as System.out. | Two mistakes: a statement needs no ; and system is the same as System (program as written). Wrong rule: IdentifierCaseInsensitive, StatementNeedsNoTerminator. |
-| [LP19](runs/LP19/) | L4: transfer to a new program | Write a loop that prints every odd number smaller than n, and explain how it relates to this loop. | for (int i = 1; i < n; i += 2) System.out.println(i); This does on purpose what the given loop does by accident: the given loop also steps i by 2, because i++ is in both the body and the header. If I wanted more than one statement repeated I would add braces. | Uses the construct in a new problem and relates it to the given loop. |
-| [LP20](runs/LP20/) | not levelled: none (bare correct output) | What is printed? Explain, pass by pass, what happens to i. | 5 5 | Boundary case: a bare correct output with no reason is not levelled. |
+For each of the 20 scenarios: the question, the student's answer, the words in the answer that decide the level, the
+indicator of that level (the "way") with the line where the level stops, and the reasoning from the words to the
+level. The indicators and the lines between levels are those of the LP test instructions.
+
+#### [LP01](runs/LP01/): L0, everyday reading
+
+- **Question.** What is printed? Explain, pass by pass, what happens to i.
+- **Student's answer.** It counts from 1 to 5, so it prints 1, 2, 3, 4, 5. 'For i from 1 to n' means do it for each number.
+- **Words that decide.** “'For i from 1 to n' means do it for each number”
+- **Indicator of this level.** The answer reads the code with the everyday or maths meaning of its words.
+- **Where this level stops.** Any correct, programming-specific statement makes it L1 or higher.
+- **Why the answer points to this level.** The student explains the header by what the English words mean, not by any rule of Java: no test, no update, no body is mentioned. Nothing in the answer is a programming statement, so it cannot be L1. That is the everyday reading, L0.
+- **What the run gave.** Overall L0 (held mistake); expected L0; match: yes. The calculation is in the [run's README](runs/LP01/).
+
+#### [LP02](runs/LP02/): L0, misconception
+
+- **Question.** How many times is System.out.println executed? Explain your reasoning.
+- **Student's answer.** println runs 3 times. The indented println is inside the loop, so it runs on both passes and prints 2 and 4, and then the last println prints 5.
+- **Words that decide.** “The indented println is inside the loop, so it runs on both passes”
+- **Indicator of this level.** The answer applies a documented wrong rule that the language disproves.
+- **Where this level stops.** A single slip in an otherwise rule-correct trace is L2 with an error.
+- **Why the answer points to this level.** The student states a rule: indentation puts a statement in the loop body. Java disproves it (without braces the body is one statement). The passes themselves are counted correctly, but the answer rests on the wrong rule, so it is L0 and not an L2 trace with a slip.
+- **Wrong rule expected.** StatementAfterLoopInBody, at `loop_body`.
+- **What the run gave.** Overall L0 (held mistake); expected L0; match: yes. The calculation is in the [run's README](runs/LP02/).
+
+#### [LP03](runs/LP03/): L0, misconception
+
+- **Question.** How many times does the body of the for loop run? Explain your reasoning.
+- **Student's answer.** The body runs 4 times, for i = 1, 2, 3 and 4. The header says i < 5 and i++, so it runs 4 times; the i++ inside the body does not change how many times the loop runs.
+- **Words that decide.** “the i++ inside the body does not change how many times the loop runs”
+- **Indicator of this level.** The answer applies a documented wrong rule that the language disproves.
+- **Where this level stops.** A single slip in an otherwise rule-correct trace is L2 with an error.
+- **Why the answer points to this level.** The student says outright that a change to the loop variable in the body does not reach the condition. That is a wrong rule (BodyChangeIgnoredByCondition), stated as the reason for the count of 4. L0.
+- **Wrong rule expected.** BodyChangeIgnoredByCondition, at `loop_variable`.
+- **What the run gave.** Overall L0 (held mistake); expected L0; match: yes. The calculation is in the [run's README](runs/LP03/).
+
+#### [LP04](runs/LP04/): L0, misconception
+
+- **Question.** What is the value of i when the second println runs? Explain how i gets that value.
+- **Student's answer.** i is 5. The loop runs for i = 1, 2, 3, 4 and stops when i reaches 5; the i++ in the body does not affect the count.
+- **Words that decide.** “the i++ in the body does not affect the count”
+- **Indicator of this level.** The answer applies a documented wrong rule that the language disproves.
+- **Where this level stops.** A single slip in an otherwise rule-correct trace is L2 with an error.
+- **Why the answer points to this level.** Boundary case. The value given, 5, is correct, so a reader looking only at the output would say L2. But the reason is the same wrong rule as in LP03, and under that rule the loop would run for i = 1, 2, 3, 4. A right value reached by a wrong rule is L0, not L2.
+- **Wrong rule expected.** BodyChangeIgnoredByCondition, at `loop_variable`.
+- **What the run gave.** Overall L0 (held mistake); expected L0; match: yes. The calculation is in the [run's README](runs/LP04/).
+
+#### [LP05](runs/LP05/): L0, misconception
+
+- **Question.** How many times does the body of the for loop run? Explain your reasoning.
+- **Student's answer.** The body runs once. i++ adds 2, so after the body i is 3, and the update makes it 5. Then 5 < 5 is false, so the loop stops.
+- **Words that decide.** “i++ adds 2”
+- **Indicator of this level.** The answer applies a documented wrong rule that the language disproves.
+- **Where this level stops.** A single slip in an otherwise rule-correct trace is L2 with an error.
+- **Why the answer points to this level.** The student states a wrong rule about the operator itself (IncrementByTwo) and builds the whole count on it. The rest of the reasoning is consistent with that rule, so it is a held misconception, L0, not a slip.
+- **Wrong rule expected.** IncrementByTwo, at `increment_operators`.
+- **What the run gave.** Overall L0 (held mistake); expected L0; match: yes. The calculation is in the [run's README](runs/LP05/).
+
+#### [LP06](runs/LP06/): L0, misconception
+
+- **Question.** What is printed? Explain, pass by pass, what happens to i.
+- **Student's answer.** It never stops. Each pass starts again with i = 1, so i goes 1, 2, 3 and back to 1, and the println lines are never reached.
+- **Words that decide.** “Each pass starts again with i = 1”
+- **Indicator of this level.** The answer applies a documented wrong rule that the language disproves.
+- **Where this level stops.** A single slip in an otherwise rule-correct trace is L2 with an error.
+- **Why the answer points to this level.** The student says the initialisation of the for header runs again on every pass (ForInitRepeats), which Java disproves: it runs once. The conclusion (it never stops) follows from that wrong rule. L0.
+- **Wrong rule expected.** ForInitRepeats, at `for_loop`.
+- **What the run gave.** Overall L0 (held mistake); expected L0; match: yes. The calculation is in the [run's README](runs/LP06/).
+
+#### [LP07](runs/LP07/): L0, inconsistent trace
+
+- **Question.** What is printed? Explain, pass by pass, what happens to i.
+- **Student's answer.** Pass 1: i++ makes i 2 and println prints 2, then the update makes it 3. Pass 2: i++ makes it 4 and the update makes it 5. 5 < 5 is false, so the loop stops and the last line prints 5. Output: 2 and 5.
+- **Words that decide.** “Pass 1: i++ makes i 2 and println prints 2 … Pass 2: i++ makes it 4 and the update makes it 5”
+- **Indicator of this level.** The answer applies the right rule at one place and a wrong rule at another in the same trace.
+- **Where this level stops.** A slip under one consistent, correct rule is L2 with an error.
+- **Why the answer points to this level.** On pass 1 the println is treated as part of the body; on pass 2 it is not. The same trace applies the right rule in one place and a wrong one in another, with no rule stated. That is an inconsistent trace, L0. It is not L2, because a slip under one consistent rule would treat both passes the same way.
+- **What the run gave.** Overall L0 (held mistake); expected L0; match: yes. The calculation is in the [run's README](runs/LP07/).
+
+#### [LP08](runs/LP08/): L1, names the element
+
+- **Question.** How many times is System.out.println executed? Explain your reasoning.
+- **Student's answer.** The program has two System.out.println statements and one for loop. The for loop has a header with a start, a condition and an update, and a body.
+- **Words that decide.** “The for loop has a header with a start, a condition and an update, and a body”
+- **Indicator of this level.** The answer names or describes the construct correctly.
+- **Where this level stops.** Covering every part of the code in order is L2.
+- **Why the answer points to this level.** The student names the parts of the program correctly and stops there: no count is given, although the question asks for one. Naming the construct is L1. Going through every part in order with its values would be L2.
+- **What the run gave.** Overall L1 (largest share); expected L1; match: yes. The calculation is in the [run's README](runs/LP08/).
+
+#### [LP09](runs/LP09/): L1, states the rule
+
+- **Question.** How many times is System.out.println executed? Explain your reasoning.
+- **Student's answer.** Without braces a for loop repeats only the one statement right after its header. The indentation does not matter, so the println lines are not part of the loop.
+- **Words that decide.** “Without braces a for loop repeats only the one statement right after its header”
+- **Indicator of this level.** The answer states the rule, without applying it to the values.
+- **Where this level stops.** Applying it to this code's values is L2.
+- **Why the answer points to this level.** The student states the correct rule in general terms. The rule is never applied to the values of this program (no count of println is given). Stating a rule without applying it is L1; applying it to this code's values would be L2.
+- **What the run gave.** Overall L4 (largest share); expected L1; match: NO. The calculation is in the [run's README](runs/LP09/).
+
+#### [LP10](runs/LP10/): L2, line by line trace
+
+- **Question.** What is printed? Explain, pass by pass, what happens to i.
+- **Student's answer.** i starts at 1. 1 < 5 is true, the body i++ makes i 2, the update makes it 3. 3 < 5 is true, the body makes it 4, the update makes it 5. 5 < 5 is false, so the loop stops. Only i++ was in the loop. Then the two println lines print 5 and 5.
+- **Words that decide.** “1 < 5 is true, the body i++ makes i 2, the update makes it 3. 3 < 5 is true …”
+- **Indicator of this level.** The answer executes each statement in order with its values.
+- **Where this level stops.** Stating the purpose of the whole is L3.
+- **Why the answer points to this level.** Every statement is executed in order with its value: test, body, update, test again, then the two println lines. All of it is correct and consistent. That is a line-by-line trace, L2. The student does not say what the code is for, which would be L3.
+- **What the run gave.** Overall L2 (largest share); expected L2; match: yes. The calculation is in the [run's README](runs/LP10/).
+
+#### [LP11](runs/LP11/): L2, output prediction
+
+- **Question.** What is the value of i when the second println runs? Explain how i gets that value.
+- **Student's answer.** i is 5. The loop leaves when the test 5 < 5 fails, so i is 5 at that point, and nothing after the loop changes i. Both println lines print 5.
+- **Words that decide.** “The loop leaves when the test 5 < 5 fails, so i is 5 at that point”
+- **Indicator of this level.** The answer gives the output and justifies it value by value.
+- **Where this level stops.** A bare correct output is not levelled.
+- **Why the answer points to this level.** The student gives the output and justifies it from a value of the program (the failed test). An output with a value-by-value reason is output prediction, L2. The same output with no reason (LP20) is not levelled.
+- **What the run gave.** Overall L2 (largest share); expected L2; match: yes. The calculation is in the [run's README](runs/LP11/).
+
+#### [LP12](runs/LP12/): L2, one step execution
+
+- **Question.** How many times does the body of the for loop run? Explain your reasoning.
+- **Student's answer.** On one pass i goes up by 2: once by the i++ in the body and once by the i++ in the update. So after the first pass i is 3 instead of 2.
+- **Words that decide.** “On one pass i goes up by 2: once by the i++ in the body and once by the i++ in the update”
+- **Indicator of this level.** The answer gives the change one execution makes.
+- **Where this level stops.** One step of a longer fragment is L1.
+- **Why the answer points to this level.** The student gives the change that one pass makes, correctly, and does not go on to the count the question asks for. The change of one execution is one-step execution, L2.
+- **What the run gave.** Overall L2 (largest share); expected L2; match: yes. The calculation is in the [run's README](runs/LP12/).
+
+#### [LP13](runs/LP13/): L2, line by line trace
+
+- **Question.** What is printed? Explain, pass by pass, what happens to i.
+- **Student's answer.** i starts at 1. 1 < 5, the body makes i 2, the update makes it 3. 3 < 5, the body makes it 4, the update makes it 5. 5 < 5 is false, so it stops. Then it prints 5 and 4.
+- **Words that decide.** “5 < 5 is false, so it stops. Then it prints 5 and 4”
+- **Indicator of this level.** The answer executes each statement in order with its values.
+- **Where this level stops.** Stating the purpose of the whole is L3.
+- **Why the answer points to this level.** Boundary case. The trace is correct and consistent to the end of the loop; only the last value (4) is a slip. One slip under one correct rule is L2 with an error. It is not L0, because no wrong rule is applied and the right rule is not dropped anywhere else.
+- **What the run gave.** Overall L2 (largest share); expected L2; match: yes. The calculation is in the [run's README](runs/LP13/).
+
+#### [LP14](runs/LP14/): L3, relation to neighbour
+
+- **Question.** How many times does the body of the for loop run? Explain your reasoning.
+- **Student's answer.** Twice. The body's i++ and the header's i++ change the same variable, so the condition sees i as 1, then 3, then 5 and fails on the third test. Because there are no braces the body is only i++; the indented println is after the loop.
+- **Words that decide.** “The body's i++ and the header's i++ change the same variable, so the condition sees i as 1, then 3, then 5”
+- **Indicator of this level.** The answer explains how the concept works with another construct in the same code.
+- **Where this level stops.** Two separate correct rules are L1; running them in sequence is L2.
+- **Why the answer points to this level.** The student explains how two constructs of the same code work together (the increment in the body and the one in the header, on one variable, as seen by the condition) and what the missing braces mean for the body. Relating one concept to its neighbour is L3. Two correct rules stated side by side would be L1, and running them in sequence L2.
+- **What the run gave.** Overall L3 (largest share); expected L3; match: yes. The calculation is in the [run's README](runs/LP14/).
+
+#### [LP15](runs/LP15/): L3, purpose of the whole
+
+- **Question.** Without tracing line by line, explain what this code does for any value of n.
+- **Student's answer.** Whatever n is, i starts at 1 and goes up by 2 on every pass, so the loop stops at the first odd number that is n or more. The program prints that number twice. For n = 5 that is 5; for n = 6 it would be 7.
+- **Words that decide.** “Whatever n is … the loop stops at the first odd number that is n or more”
+- **Indicator of this level.** The answer says what the code does for all inputs, deduced from the code.
+- **Where this level stops.** A purpose guessed from traced cases is L2.
+- **Why the answer points to this level.** The student says what the code does for every n, deduced from the code (i goes up by 2 from 1), and checks it on two values. A purpose for all inputs is L3. Had the purpose been guessed from the traced case n = 5 only, it would be L2.
+- **What the run gave.** Overall L3 (largest share); expected L3; match: yes. The calculation is in the [run's README](runs/LP15/).
+
+#### [LP16](runs/LP16/): L4, predict a change
+
+- **Question.** What would be printed if braces { } were put around the two indented lines? Explain without tracing the new code line by line.
+- **Student's answer.** Then the println is in the body and runs on every pass, after the i++ and before the update. The passes do not change (the test still sees 1 and then 3), so it prints 2 and 4 inside the loop, and the last println still prints 5.
+- **Words that decide.** “Then the println is in the body and runs on every pass … The passes do not change”
+- **Indicator of this level.** The answer predicts what a change keeps or breaks, without re-tracing.
+- **Where this level stops.** Re-tracing the changed code is L2.
+- **Why the answer points to this level.** The student predicts what the braces change (the println is repeated) and what they keep (the passes), without tracing the new code. Predicting a change is L4. Re-tracing the changed program step by step would be L2.
+- **What the run gave.** Overall L4 (largest share); expected L4; match: yes. The calculation is in the [run's README](runs/LP16/).
+
+#### [LP17](runs/LP17/): L4, diagnose an error
+
+- **Question.** Will this compile? What happens when you run it? Explain your reasoning.
+- **Student's answer.** It does not compile. Line 1 and line 4 are missing the ; at the end, so javac reports ';' expected. After those are fixed, system.out still fails because Java is case-sensitive: there is no package called system, it must be System. Even then the indentation is misleading: without braces only i++ is in the loop, a silent logic error whenever a braceless loop is followed by indented lines.
+- **Words that decide.** “javac reports ';' expected … Java is case-sensitive … a silent logic error whenever a braceless loop is followed by indented lines”
+- **Indicator of this level.** The answer names the rule broken, the kind of error and the inputs that trigger it.
+- **Where this level stops.** Fixing one given failing case is L3.
+- **Why the answer points to this level.** For each fault the student names the rule broken, the kind of error (two compile errors and a silent logic error) and when it occurs. That is diagnosing an error, L4. Repairing one failing case without naming the rule would be L3.
+- **What the run gave.** Overall L4 (largest share); expected L4; match: yes. The calculation is in the [run's README](runs/LP17/).
+
+#### [LP18](runs/LP18/): L0, misconception
+
+- **Question.** Will this compile? What happens when you run it? Explain your reasoning.
+- **Student's answer.** Yes, it compiles and prints 5 twice. The missing ; do not matter because each statement is on its own line, and system.out is the same as System.out.
+- **Words that decide.** “The missing ; do not matter … system.out is the same as System.out”
+- **Indicator of this level.** The answer applies a documented wrong rule that the language disproves.
+- **Where this level stops.** A single slip in an otherwise rule-correct trace is L2 with an error.
+- **Why the answer points to this level.** The question is the L4 question of LP17, but the answer states two wrong rules: a statement needs no terminator, and names are not case-sensitive. Java disproves both (the program does not compile). Wrong rules held: L0, whatever the question was built for.
+- **Wrong rule expected.** IdentifierCaseInsensitive, StatementNeedsNoTerminator, at `statement`.
+- **What the run gave.** Overall L0 (held mistake); expected L0; match: yes. The calculation is in the [run's README](runs/LP18/).
+
+#### [LP19](runs/LP19/): L4, transfer to a new program
+
+- **Question.** Write a loop that prints every odd number smaller than n, and explain how it relates to this loop.
+- **Student's answer.** for (int i = 1; i < n; i += 2) System.out.println(i); This does on purpose what the given loop does by accident: the given loop also steps i by 2, because i++ is in both the body and the header. If I wanted more than one statement repeated I would add braces.
+- **Words that decide.** “for (int i = 1; i < n; i += 2) … This does on purpose what the given loop does by accident”
+- **Indicator of this level.** The answer uses the construct in an unseen problem, knowing when it is the right tool.
+- **Where this level stops.** Reproducing a familiar program is L1 to L3.
+- **Why the answer points to this level.** The student writes a loop for a problem that is not on the page, chooses the right construct for it (a step of 2 in the header) and relates it to the given loop. Using the construct in a new problem is transfer, L4.
+- **What the run gave.** Overall L4 (largest share); expected L4; match: yes. The calculation is in the [run's README](runs/LP19/).
+
+#### [LP20](runs/LP20/): not levelled
+
+- **Question.** What is printed? Explain, pass by pass, what happens to i.
+- **Student's answer.** 5 5
+- **Words that decide.** “5 5”
+- **Indicator.** No indicator of any level is shown.
+- **Where this level stops.** An output with a reason, value by value, would be L2 (output prediction).
+- **Why the answer points to this level.** Boundary case. The output is correct, but there is no reason at all, so nothing can be read from it: it may be a guess, and it may hide a wrong rule that happens to give the same output. A bare correct output is not levelled.
+- **What the run gave.** Overall no level (no component); expected no level; match: yes. The calculation is in the [run's README](runs/LP20/).
+
 
 ### Results
 
